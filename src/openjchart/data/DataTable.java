@@ -1,11 +1,35 @@
 package openjchart.data;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
-public class DataTable {
+public class DataTable implements Iterable<Object[]> {
 	private final ArrayList<Number[]> data;
 
 	private Class<?>[] types;
+
+	private static class DataTableIterator implements Iterator<Object[]> {
+		private final DataTable data;
+		private int row;
+
+		public DataTableIterator(DataTable data) {
+			this.data = data;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return row < data.getRowCount();
+		}
+
+		@Override
+		public Object[] next() {
+			return data.get(row++);
+		}
+
+		@Override
+		public void remove() {
+		}
+	}
 
 	public DataTable(Class<?>... types) {
 		this.types = new Class[types.length];
@@ -109,5 +133,10 @@ public class DataTable {
 	 */
 	public int getRowCount() {
 		return data.size();
+	}
+
+	@Override
+	public Iterator<Object[]> iterator() {
+		return new DataTableIterator(this);
 	}
 }

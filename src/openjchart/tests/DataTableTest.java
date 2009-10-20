@@ -1,5 +1,6 @@
 package openjchart.tests;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import openjchart.data.DataTable;
 
@@ -42,4 +43,12 @@ public class DataTableTest {
 		assertEquals(11.0, table.getMax(1));
 	}
 
+	@Test
+	public void testIterator() {
+		int rowNo = 0;
+		for (Object[] row : table) {
+			assertArrayEquals(table.get(rowNo), row);
+			rowNo++;
+		}
+	}
 }
