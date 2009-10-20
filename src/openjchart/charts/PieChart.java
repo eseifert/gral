@@ -43,14 +43,13 @@ public class PieChart implements Chart {
 	public JComponent getChartRenderer(final DataTable data, final DataMapper mapper) {
 		// Calculate sum of all values
 		double colYSum = 0.0;
-		for (int i = 0; i < data.getRowCount(); i++) {
-			colYSum += data.get(0, i).doubleValue();
+		for (Number[] row : data) {
+			colYSum += row[0].doubleValue();
 		}
 
 		final double degreesPerValue;
 		if (rotation == Rotation.CLOCKWISE) {
 			degreesPerValue = -360.0/colYSum;
-			//start = start-360;
 		}
 		else {
 			degreesPerValue = 360.0/colYSum;

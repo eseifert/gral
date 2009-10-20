@@ -3,12 +3,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class DataTable implements Iterable<Object[]> {
+public class DataTable implements Iterable<Number[]> {
 	private final ArrayList<Number[]> data;
 
 	private Class<?>[] types;
 
-	private static class DataTableIterator implements Iterator<Object[]> {
+	private static class DataTableIterator implements Iterator<Number[]> {
 		private final DataTable data;
 		private int row;
 
@@ -22,7 +22,7 @@ public class DataTable implements Iterable<Object[]> {
 		}
 
 		@Override
-		public Object[] next() {
+		public Number[] next() {
 			return data.get(row++);
 		}
 
@@ -136,7 +136,7 @@ public class DataTable implements Iterable<Object[]> {
 	}
 
 	@Override
-	public Iterator<Object[]> iterator() {
+	public Iterator<Number[]> iterator() {
 		return new DataTableIterator(this);
 	}
 }

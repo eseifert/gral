@@ -46,7 +46,7 @@ public class DataTableTest {
 	@Test
 	public void testIterator() {
 		int rowNo = 0;
-		for (Object[] row : table) {
+		for (Number[] row : table) {
 			assertArrayEquals(table.get(rowNo), row);
 			rowNo++;
 		}
