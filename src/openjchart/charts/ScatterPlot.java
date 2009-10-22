@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -75,9 +73,9 @@ public class ScatterPlot implements Chart {
 					g2d.translate(transInsetsX, -transInsetsY);
 				}*/
 
-				double axisOffsetX = axisXComp.getHeight()/2;
-				double axisOffsetY = axisYComp.getWidth()/2;
-				double baseLineX = getHeight() - axisOffsetX;
+				double axisOffsetX = axisXComp.getHeight()/2.0;
+				double axisOffsetY = axisYComp.getWidth()/2.0;
+				double baseLineX = getHeight() - 1 - axisOffsetX;
 				double baseLineY = axisOffsetY;
 				double w = getWidth() - 1 - axisOffsetY;
 				double h = getHeight() - 1 - axisOffsetX;
@@ -117,28 +115,25 @@ public class ScatterPlot implements Chart {
 				}
 				g2d.setColor(colorDefault);
 			}
-		};
 
-		// Do axis layout
-		plotArea.addComponentListener(new ComponentAdapter() {
 			@Override
-			public void componentResized(ComponentEvent e) {
-				super.componentResized(e);
+			public void setBounds(int x, int y, int width, int height) {
+				super.setBounds(x, y, width, height);
 
 				double xHeight = 50;
 				double yWidth = 100;
-				double xWidth = plotArea.getWidth() - yWidth/2;
-				double yHeight = plotArea.getHeight() - xHeight/2;
+				double xWidth = getWidth() - yWidth/2;
+				double yHeight = getHeight() - xHeight/2;
 
-				double x = yWidth/2;
-				double y = plotArea.getHeight() - xHeight;
-				axisXComp.setBounds(new Rectangle2D.Double(x, y, xWidth, xHeight));
+				double xPos = yWidth/2;
+				double yPos = getHeight() - xHeight;
+				axisXComp.setBounds(new Rectangle2D.Double(xPos, yPos, xWidth, xHeight));
 
-				x = 0.0;
-				y = 0.0;
-				axisYComp.setBounds(new Rectangle2D.Double(x, y, yWidth, yHeight));
+				xPos = 0.0;
+				yPos = 0.0;
+				axisYComp.setBounds(new Rectangle2D.Double(xPos, yPos, yWidth, yHeight));
 			}
-		});
+		};
 
 		plotArea.addAxis(axisX, axisXComp);
 		plotArea.addAxis(axisY, axisYComp);
