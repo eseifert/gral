@@ -1,6 +1,7 @@
 package openjchart.charts.axes;
 
 import java.awt.Color;
+import java.text.Format;
 
 import openjchart.Drawable;
 
@@ -8,6 +9,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	protected double tickSpacing;
 	protected int tickLength;
 	protected Color axisColor;
+	protected Format labelFormat;
 
 	/**
 	 * Default constructor.
@@ -55,6 +57,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 	public void setAxisColor(Color axisColor) {
 		this.axisColor = axisColor;
+	}
+
+	public Format getLabelFormat() {
+		return labelFormat;
+	}
+
+	public void setLabelFormat(Format labelFormat) {
+		this.labelFormat = labelFormat;
 	}
 
 }

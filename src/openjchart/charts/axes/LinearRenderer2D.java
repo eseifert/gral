@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.text.NumberFormat;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
@@ -19,6 +20,10 @@ import openjchart.Drawable;
  *
  */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
+
+	public LinearRenderer2D() {
+		labelFormat = NumberFormat.getInstance();
+	}
 
 	@Override
 	public Drawable getRendererComponent(final Axis axis, final Orientation orientation) {
@@ -48,7 +53,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 						// Draw numbers
 						FontMetrics metrics = g2d.getFontMetrics();
 						int textHeight = metrics.getHeight();
-						String label = String.valueOf(i);
+						String label = labelFormat.format(i);
 						float stringOffsetX = -metrics.stringWidth(label)/2f;
 						float stringOffsetY = (float) (getHeight()/2.0 + tickLength/2.0 + textHeight);
 						g2d.drawString(label, stringOffsetX, stringOffsetY);
@@ -69,7 +74,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 						// Draw numbers
 						FontMetrics metrics = g2d.getFontMetrics();
 						int textHeight = metrics.getAscent();
-						String label = String.valueOf(i);
+						String label = labelFormat.format(i);
 						float stringOffsetX = (float) (getWidth()/2.0 - tickLength/2.0 - textHeight/4.0 - metrics.stringWidth(label));
 						float stringOffsetY = textHeight/4f;
 						g2d.drawString(label, stringOffsetX, stringOffsetY);
