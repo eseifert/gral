@@ -51,6 +51,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		return Math.floor(axisMax/tickSpacing) * tickSpacing;
 	}
 
+	public abstract double getPos(Axis axis, double value);
+
 	public Color getAxisColor() {
 		return axisColor;
 	}

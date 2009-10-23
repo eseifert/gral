@@ -1,14 +1,12 @@
 package openjchart.charts;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
+import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.AbstractAxisRenderer2D;
@@ -62,38 +60,27 @@ public class ScatterPlot implements Chart {
 				AffineTransform txOld = g2d.getTransform();
 				Color colorDefault = g2d.getColor();
 
-				// TODO Take the Component's insets into consideration
-				/*Border border = getBorder();
-				double scaleInsetsX = 0.0;
-				double scaleInsetsY = 0.0;
-				double transInsetsX = 0.0;
-				double transInsetsY = 0.0;
-				if (border != null) {
-					Insets insets = border.getBorderInsets(this);
-					scaleInsetsX = 1 - (insets.left + insets.right)/getWidth();
-					scaleInsetsY = 1 - (insets.bottom + insets.top)/getHeight();
-					transInsetsX = (insets.left + insets.right)/2;
-					transInsetsY = (insets.bottom + insets.top)/2;
-					g2d.scale(scaleInsetsX, scaleInsetsY);
-					g2d.translate(transInsetsX, -transInsetsY);
-				}*/
+				// Take the Component's insets into consideration
+				Insets insets = getInsets();
 
-				double axisOffsetX = axisXComp.getHeight()/2.0;
-				double axisOffsetY = axisYComp.getWidth()/2.0;
-				double w = getWidth() - 1 - axisOffsetY;
-				double h = getHeight() - 1 - axisOffsetX;
-				double baseLineX = getHeight() - 1 - axisOffsetX;
-				double baseLineY = axisOffsetY;
+				double axisXOffset = axisXComp.getHeight()/2.0;
+				double axisYOffset = axisYComp.getWidth()/2.0;
+				double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
+				double h = getHeight() - 1 - axisXOffset - insets.top - insets.bottom;
+				double plotXMin = axisYOffset + insets.left;
+				double plotXMax = plotXMin + w;
+				double plotYMin = insets.top;
+				double plotYMax = plotYMin + h;
 				if (gridEnabled) {
 					int tickOffset = axisXRenderer.getTickLength()/2;
 					// Draw gridX
 					g2d.setColor(Color.LIGHT_GRAY);
 					double minTick = axisXRenderer.getMinTick(minX.doubleValue());
 					double maxTick = axisXRenderer.getMaxTick(maxX.doubleValue());
-					Line2D gridLineVert = new Line2D.Double(0, 0, 0, h-tickOffset);
+					Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-tickOffset);
 					for (double i = minTick; i < maxTick; i += axisXRenderer.getTickSpacing()) {
-						double translateX = w * axisX.getPos(i) + baseLineY;
-						if (translateX == baseLineY) {
+						double translateX = w * axisXRenderer.getPos(axisX, i) + plotXMin;
+						if (translateX == plotYMin) {
 							continue;
 						}
 						g2d.translate(translateX, 0);
@@ -104,13 +91,13 @@ public class ScatterPlot implements Chart {
 					// Draw gridY
 					minTick = axisYRenderer.getMinTick(minY.doubleValue());
 					maxTick = axisYRenderer.getMaxTick(maxY.doubleValue());
-					Line2D gridLineHoriz = new Line2D.Double(tickOffset, 0, w-tickOffset, 0);
+					Line2D gridLineHoriz = new Line2D.Double(plotXMin+tickOffset, 0, plotXMax, 0);
 					for (double i = minTick; i <= maxTick; i += axisYRenderer.getTickSpacing()) {
-						double translateY = -h * axisY.getPos(i) + baseLineX;
-						if (translateY == baseLineX) {
+						double translateY = -h * axisYRenderer.getPos(axisY, i) + plotYMax;
+						if (translateY == plotXMin) {
 							continue;
 						}
-						g2d.translate(baseLineY, translateY);
+						g2d.translate(0, translateY);
 						g2d.draw(gridLineHoriz);
 						g2d.setTransform(txOld);
 					}
@@ -121,8 +108,8 @@ public class ScatterPlot implements Chart {
 				for (int i = 0; i < data.getRowCount(); i++) {
 					double valueX = data.get(colX, i).doubleValue();
 					double valueY = data.get(colY, i).doubleValue();
-					double translateX = w * axisX.getPos(valueX) + baseLineY;
-					double translateY = -h * axisY.getPos(valueY) + baseLineX;
+					double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotYMax;
+					double translateY = -h * axisYRenderer.getPos(axisY, valueY) + plotXMin;
 					g2d.translate(translateX, translateY);
 					g2d.fill(shape);
 					g2d.setTransform(txOld);
@@ -134,18 +121,30 @@ public class ScatterPlot implements Chart {
 			public void setBounds(int x, int y, int width, int height) {
 				super.setBounds(x, y, width, height);
 
+				Insets insets = getInsets();
+
 				double xHeight = 50;
 				double yWidth = 100;
-				double xWidth = getWidth() - yWidth/2;
-				double yHeight = getHeight() - xHeight/2;
+				double xWidth = getWidth() - yWidth/2 - insets.left - insets.right;
+				double yHeight = getHeight() - xHeight/2  - insets.top - insets.bottom;
 
-				double xPos = yWidth/2;
-				double yPos = getHeight() - xHeight;
-				axisXComp.setBounds(new Rectangle2D.Double(xPos, yPos, xWidth, xHeight));
+				double posX = yWidth/2 + insets.left;
+				double posY = getHeight() - xHeight  - insets.bottom;
+				axisXComp.setBounds(new Rectangle2D.Double(posX, posY, xWidth, xHeight));
 
-				xPos = 0.0;
-				yPos = 0.0;
-				axisYComp.setBounds(new Rectangle2D.Double(xPos, yPos, yWidth, yHeight));
+				posX = insets.left;
+				posY = insets.top;
+				axisYComp.setBounds(new Rectangle2D.Double(posX, posY, yWidth, yHeight));
+			}
+
+			@Override
+			public Insets getInsets() {
+				Border border = getBorder();
+				if (border != null) {
+					return border.getBorderInsets(this);
+				}
+
+				return new Insets(0, 0, 0, 0);
 			}
 		};
 
