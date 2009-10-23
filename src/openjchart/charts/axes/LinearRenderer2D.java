@@ -40,8 +40,9 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 					// Draw ticks
 					Line2D tick = new Line2D.Double(0.0, getHeight()/2.0 - tickLength/2.0, 0.0, getHeight()/2.0 + tickLength/2.0);
+					double w = getWidth()-1;
 					for (double i = minTick; i <= maxTick; i += tickSpacing) {
-						double translateX = (getWidth()-1)*axis.getPos(i);
+						double translateX = w*axis.getPos(i);
 						g2d.translate(translateX, 0.0);
 						g2d.draw(tick);
 						// Draw numbers
@@ -60,8 +61,9 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 					// Draw ticks
 					Line2D tick = new Line2D.Double(getWidth()/2.0 - tickLength/2.0, 0, getWidth()/2.0 + tickLength/2.0, 0);
+					double h = getHeight()-1;
 					for (double i = minTick; i <= maxTick; i += tickSpacing) {
-						double translateY = (getHeight() - 1)*(1.0 - axis.getPos(i));
+						double translateY = h*(1.0 - axis.getPos(i));
 						g2d.translate(0.0, translateY);
 						g2d.draw(tick);
 						// Draw numbers
