@@ -20,14 +20,16 @@ import openjchart.data.DataTable;
 public class ScatterPlot implements Chart {
 	private final LinearRenderer2D axisRenderer;
 
-	private Shape valueShape;
+	private Shape shape;
 	private Color shapeColor;
+	private boolean gridEnabled;
 
 	public ScatterPlot() {
 		axisRenderer = new LinearRenderer2D();
 
-		valueShape = new Rectangle2D.Float(-4f, -4f, 8f, 8f);
+		shape = new Rectangle2D.Float(-4f, -4f, 8f, 8f);
 		shapeColor = Color.BLACK;
+		gridEnabled = true;
 	}
 
 	@Override
@@ -75,31 +77,33 @@ public class ScatterPlot implements Chart {
 
 				double axisOffsetX = axisXComp.getHeight()/2.0;
 				double axisOffsetY = axisYComp.getWidth()/2.0;
-				double baseLineX = getHeight() - 1 - axisOffsetX;
-				double baseLineY = axisOffsetY;
 				double w = getWidth() - 1 - axisOffsetY;
 				double h = getHeight() - 1 - axisOffsetX;
-				// Draw gridX
-				g2d.setColor(Color.LIGHT_GRAY);
-				double minTick = axisRenderer.getMinTick(minX.doubleValue());
-				double maxTick = axisRenderer.getMaxTick(maxX.doubleValue());
-				Line2D gridLineVert = new Line2D.Double(0, 0, 0, h);
-				for (double i = minTick; i < maxTick; i += axisRenderer.getTickSpacing()) {
-					double translateX = w * axisX.getPos(i) + baseLineY;
-					g2d.translate(translateX, 0);
-					g2d.draw(gridLineVert);
-					g2d.setTransform(txOld);
-				}
+				double baseLineX = getHeight() - 1 - axisOffsetX;
+				double baseLineY = axisOffsetY;
+				if (gridEnabled) {
+					// Draw gridX
+					g2d.setColor(Color.LIGHT_GRAY);
+					double minTick = axisRenderer.getMinTick(minX.doubleValue());
+					double maxTick = axisRenderer.getMaxTick(maxX.doubleValue());
+					Line2D gridLineVert = new Line2D.Double(0, 0, 0, h);
+					for (double i = minTick; i < maxTick; i += axisRenderer.getTickSpacing()) {
+						double translateX = w * axisX.getPos(i) + baseLineY;
+						g2d.translate(translateX, 0);
+						g2d.draw(gridLineVert);
+						g2d.setTransform(txOld);
+					}
 
-				// Draw gridY
-				minTick = axisRenderer.getMinTick(minY.doubleValue());
-				maxTick = axisRenderer.getMaxTick(maxY.doubleValue());
-				Line2D gridLineHoriz = new Line2D.Double(0, 0, w, 0);
-				for (double i = minTick; i <= maxTick; i += axisRenderer.getTickSpacing()) {
-					double translateY = -h * axisY.getPos(i) + baseLineX;
-					g2d.translate(baseLineY, translateY);
-					g2d.draw(gridLineHoriz);
-					g2d.setTransform(txOld);
+					// Draw gridY
+					minTick = axisRenderer.getMinTick(minY.doubleValue());
+					maxTick = axisRenderer.getMaxTick(maxY.doubleValue());
+					Line2D gridLineHoriz = new Line2D.Double(0, 0, w, 0);
+					for (double i = minTick; i <= maxTick; i += axisRenderer.getTickSpacing()) {
+						double translateY = -h * axisY.getPos(i) + baseLineX;
+						g2d.translate(baseLineY, translateY);
+						g2d.draw(gridLineHoriz);
+						g2d.setTransform(txOld);
+					}
 				}
 
 				// Paint shapes
@@ -110,7 +114,7 @@ public class ScatterPlot implements Chart {
 					double translateX = w * axisX.getPos(valueX) + baseLineY;
 					double translateY = -h * axisY.getPos(valueY) + baseLineX;
 					g2d.translate(translateX, translateY);
-					g2d.fill(valueShape);
+					g2d.fill(shape);
 					g2d.setTransform(txOld);
 				}
 				g2d.setColor(colorDefault);
@@ -139,5 +143,29 @@ public class ScatterPlot implements Chart {
 		plotArea.addAxis(axisY, axisYComp);
 
 		return plotArea;
+	}
+
+	public Shape getShape() {
+		return shape;
+	}
+
+	public void setShape(Shape shape) {
+		this.shape = shape;
+	}
+
+	public Color getShapeColor() {
+		return shapeColor;
+	}
+
+	public void setShapeColor(Color shapeColor) {
+		this.shapeColor = shapeColor;
+	}
+
+	public boolean isGridEnabled() {
+		return gridEnabled;
+	}
+
+	public void setGridEnabled(boolean gridEnabled) {
+		this.gridEnabled = gridEnabled;
 	}
 }

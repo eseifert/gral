@@ -1,8 +1,6 @@
 package openjchart.examples;
 
 import java.awt.BorderLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -24,28 +22,18 @@ public class SimpleXYChart extends JFrame {
 		data.add(6, 8);
 		data.add(7, 9);
 		data.add(8, 11);
-		/*Random r = new Random();
-		for (int i = 0; i < 30; i++) {
-			data.add(r.nextDouble()*10, r.nextDouble()*20);
-		}*/
 		DataMapper mapper = new DataMapper();
 		mapper.put(DataMapper.X, 0);
 		mapper.put(DataMapper.Y, 1);
 
 		ScatterPlot chart = new ScatterPlot();
+		// Custom shape
+		//chart.setShape(new Ellipse2D.Double(-5.0, -5.0, 10, 10));
+		// Custom shape coloring
+		//chart.setShapeColor(Color.RED);
+		// Grid disabled
+		//chart.setGridEnabled(false);
 		final JComponent plotArea = chart.getChartRenderer(data, mapper);
-		plotArea.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				/*data.clear();
-				Random r = new Random();
-				for (int i = 0; i < 30000; i++) {
-					data.add(r.nextDouble()*10, r.nextDouble()*20);
-				}
-
-				plotArea.repaint();*/
-			}
-		});
 		//plotArea.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(plotArea, BorderLayout.CENTER);
 
