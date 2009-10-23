@@ -15,19 +15,15 @@ import openjchart.data.DataMapper;
 import openjchart.data.DataTable;
 
 public class PieChart implements Chart {
-	public static enum Rotation {
-		CLOCKWISE, COUNTER_CLOCKWISE
-	}
-
 	private int radius;
 	private List<Color> colorList;
-	private Rotation rotation;
+	private boolean clockwise;
 	private int start;
 
 	public PieChart() {
 		radius = 200;
 		start = 0;
-		rotation = Rotation.CLOCKWISE;
+		clockwise = true;
 		colorList = new ArrayList<Color>();
 		colorList.add(Color.RED);
 		colorList.add(Color.BLUE);
@@ -48,7 +44,7 @@ public class PieChart implements Chart {
 		}
 
 		final double degreesPerValue;
-		if (rotation == Rotation.CLOCKWISE) {
+		if (clockwise) {
 			degreesPerValue = -360.0/colYSum;
 		}
 		else {
@@ -66,12 +62,12 @@ public class PieChart implements Chart {
 				// Paint pie
 				Color colorOld = g2d.getColor();
 				g2d.translate((getWidth()-radius) / 2, (getHeight()-radius) / 2);
-				double angleStart = 0.0d;
-				double angleStop = 0.0d;
+				double angleStart = start;
+				double angleStop = angleStart;
 				for (int i = 0; i < data.getRowCount();  i++) {
 					angleStop = data.get(0, i).doubleValue() * degreesPerValue;
 					g2d.setColor(colorList.get(i));
-					g2d.fill(new Arc2D.Double(0, 0, radius, radius, angleStart+start, angleStop+start, Arc2D.PIE));
+					g2d.fill(new Arc2D.Double(0, 0, radius, radius, angleStart, angleStop, Arc2D.PIE));
 					angleStart += angleStop;
 				}
 				g2d.setTransform(txOld);
@@ -80,6 +76,38 @@ public class PieChart implements Chart {
 		};
 
 		return plotArea;
+	}
+
+	public int getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public List<Color> getColorList() {
+		return colorList;
+	}
+
+	public void setColorList(List<Color> colorList) {
+		this.colorList = colorList;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public boolean isClockwise() {
+		return clockwise;
+	}
+
+	public void setClockwise(boolean clockwise) {
+		this.clockwise = clockwise;
 	}
 
 }

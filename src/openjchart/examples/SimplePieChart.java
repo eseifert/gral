@@ -27,6 +27,10 @@ public class SimplePieChart extends JFrame {
 		mapper.put(DataMapper.Y, 1);
 
 		PieChart chart = new PieChart();
+		// Change rotation
+		//chart.setClockwise(false);
+		// Custom start angle
+		//chart.setStart(70);
 		final JComponent plotArea = chart.getChartRenderer(data, mapper);
 		getContentPane().add(plotArea, BorderLayout.CENTER);
 
