@@ -82,11 +82,12 @@ public class ScatterPlot implements Chart {
 				double baseLineX = getHeight() - 1 - axisOffsetX;
 				double baseLineY = axisOffsetY;
 				if (gridEnabled) {
+					int tickOffset = axisRenderer.getTickLength()/2;
 					// Draw gridX
 					g2d.setColor(Color.LIGHT_GRAY);
 					double minTick = axisRenderer.getMinTick(minX.doubleValue());
 					double maxTick = axisRenderer.getMaxTick(maxX.doubleValue());
-					Line2D gridLineVert = new Line2D.Double(0, 0, 0, h);
+					Line2D gridLineVert = new Line2D.Double(0, 0, 0, h-tickOffset);
 					for (double i = minTick; i < maxTick; i += axisRenderer.getTickSpacing()) {
 						double translateX = w * axisX.getPos(i) + baseLineY;
 						if (translateX == baseLineY) {
@@ -100,7 +101,7 @@ public class ScatterPlot implements Chart {
 					// Draw gridY
 					minTick = axisRenderer.getMinTick(minY.doubleValue());
 					maxTick = axisRenderer.getMaxTick(maxY.doubleValue());
-					Line2D gridLineHoriz = new Line2D.Double(0, 0, w, 0);
+					Line2D gridLineHoriz = new Line2D.Double(tickOffset, 0, w-tickOffset, 0);
 					for (double i = minTick; i <= maxTick; i += axisRenderer.getTickSpacing()) {
 						double translateY = -h * axisY.getPos(i) + baseLineX;
 						if (translateY == baseLineX) {
