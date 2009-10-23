@@ -89,6 +89,9 @@ public class ScatterPlot implements Chart {
 					Line2D gridLineVert = new Line2D.Double(0, 0, 0, h);
 					for (double i = minTick; i < maxTick; i += axisRenderer.getTickSpacing()) {
 						double translateX = w * axisX.getPos(i) + baseLineY;
+						if (translateX == baseLineY) {
+							continue;
+						}
 						g2d.translate(translateX, 0);
 						g2d.draw(gridLineVert);
 						g2d.setTransform(txOld);
@@ -100,6 +103,9 @@ public class ScatterPlot implements Chart {
 					Line2D gridLineHoriz = new Line2D.Double(0, 0, w, 0);
 					for (double i = minTick; i <= maxTick; i += axisRenderer.getTickSpacing()) {
 						double translateY = -h * axisY.getPos(i) + baseLineX;
+						if (translateY == baseLineX) {
+							continue;
+						}
 						g2d.translate(baseLineY, translateY);
 						g2d.draw(gridLineHoriz);
 						g2d.setTransform(txOld);
