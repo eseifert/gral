@@ -15,13 +15,13 @@ import openjchart.data.DataMapper;
 import openjchart.data.DataTable;
 
 public class PieChart implements Chart {
-	private int radius;
+	private double radius;
 	private List<Color> colorList;
 	private boolean clockwise;
 	private int start;
 
 	public PieChart() {
-		radius = 200;
+		radius = 1.0;
 		start = 0;
 		clockwise = true;
 		colorList = new ArrayList<Color>();
@@ -61,13 +61,14 @@ public class PieChart implements Chart {
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				// Paint pie
 				Color colorOld = g2d.getColor();
-				g2d.translate((getWidth()-radius) / 2, (getHeight()-radius) / 2);
+				double size = Math.min(getWidth(), getHeight()) * radius;
+				g2d.translate(getWidth()/2, getHeight()/2);
 				double angleStart = start;
 				double angleStop = angleStart;
 				for (int i = 0; i < data.getRowCount();  i++) {
 					angleStop = data.get(0, i).doubleValue() * degreesPerValue;
 					g2d.setColor(colorList.get(i));
-					g2d.fill(new Arc2D.Double(0, 0, radius, radius, angleStart, angleStop, Arc2D.PIE));
+					g2d.fill(new Arc2D.Double(-size/2, -size/2, size, size, angleStart, angleStop, Arc2D.PIE));
 					angleStart += angleStop;
 				}
 				g2d.setTransform(txOld);
@@ -78,11 +79,11 @@ public class PieChart implements Chart {
 		return plotArea;
 	}
 
-	public int getRadius() {
+	public double getRadius() {
 		return radius;
 	}
 
-	public void setRadius(int radius) {
+	public void setRadius(double radius) {
 		this.radius = radius;
 	}
 
