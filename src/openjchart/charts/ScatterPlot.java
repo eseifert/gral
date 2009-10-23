@@ -93,7 +93,7 @@ public class ScatterPlot implements Chart {
 					maxTick = axisYRenderer.getMaxTick(maxY.doubleValue());
 					Line2D gridLineHoriz = new Line2D.Double(plotXMin+tickOffset, 0, plotXMax, 0);
 					for (double i = minTick; i <= maxTick; i += axisYRenderer.getTickSpacing()) {
-						double translateY = -h * axisYRenderer.getPos(axisY, i) + plotYMax;
+						double translateY = plotYMax - h*axisYRenderer.getPos(axisY, i);
 						if (translateY == plotXMin) {
 							continue;
 						}
@@ -108,8 +108,8 @@ public class ScatterPlot implements Chart {
 				for (int i = 0; i < data.getRowCount(); i++) {
 					double valueX = data.get(colX, i).doubleValue();
 					double valueY = data.get(colY, i).doubleValue();
-					double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotYMax;
-					double translateY = -h * axisYRenderer.getPos(axisY, valueY) + plotXMin;
+					double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotXMin;
+					double translateY = plotYMax - h*axisYRenderer.getPos(axisY, valueY);
 					g2d.translate(translateX, translateY);
 					g2d.fill(shape);
 					g2d.setTransform(txOld);
