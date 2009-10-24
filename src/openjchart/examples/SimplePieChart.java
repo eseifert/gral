@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.PieChart;
-import openjchart.data.DataMapper;
 import openjchart.data.DataTable;
 
 public class SimplePieChart extends JFrame {
@@ -22,10 +21,6 @@ public class SimplePieChart extends JFrame {
 		data.add(6, 8);
 		data.add(7, 9);
 		data.add(8, 11);
-		DataMapper mapper = new DataMapper();
-		mapper.put(DataMapper.X, 0);
-		mapper.put(DataMapper.Y, 1);
-
 		PieChart chart = new PieChart(data);
 		// Change rotation
 		//chart.setClockwise(false);

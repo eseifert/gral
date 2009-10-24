@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.ScatterPlot;
-import openjchart.data.DataMapper;
+import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
 public class SimpleXYChart extends JFrame {
@@ -39,11 +39,8 @@ public class SimpleXYChart extends JFrame {
 		data.add(6.0, 1.79175946923);
 		data.add(7.0, 1.94591014906);
 		data.add(8.0, 2.07944154168);
-		DataMapper mapper = new DataMapper();
-		mapper.put(DataMapper.X, 0);
-		mapper.put(DataMapper.Y, 1);
-
-		ScatterPlot chart = new ScatterPlot(data, mapper);
+		DataSeries series = new DataSeries(0, 1);
+		ScatterPlot chart = new ScatterPlot(data, series);
 		// Custom shape
 		//chart.setShape(new Ellipse2D.Double(-5.0, -5.0, 10, 10));
 		// Custom shape coloring

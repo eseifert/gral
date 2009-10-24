@@ -12,7 +12,7 @@ import openjchart.charts.axes.AbstractAxisRenderer2D;
 import openjchart.charts.axes.Axis;
 import openjchart.charts.axes.LinearRenderer2D;
 import openjchart.charts.axes.AxisRenderer2D.Orientation;
-import openjchart.data.DataMapper;
+import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
 public class ScatterPlot extends Chart {
@@ -36,7 +36,7 @@ public class ScatterPlot extends Chart {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	public ScatterPlot(DataTable data, DataMapper mapper) {
+	public ScatterPlot(DataTable data, DataSeries series) {
 		this.data = data;
 		axisXRenderer = new LinearRenderer2D();
 		axisYRenderer = new LinearRenderer2D();
@@ -46,8 +46,8 @@ public class ScatterPlot extends Chart {
 		gridEnabled = true;
 
 		// Retrieve the columns mapped to X and Y axes
-		colX = mapper.get(DataMapper.X);
-		colY = mapper.get(DataMapper.Y);
+		colX = series.get(DataSeries.X);
+		colY = series.get(DataSeries.Y);
 
 		// Set the minimal and maximal value of the axes
 		minX = data.getMin(colX);
