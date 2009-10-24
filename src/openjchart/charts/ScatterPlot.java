@@ -1,6 +1,9 @@
 package openjchart.charts;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -23,8 +26,8 @@ public class ScatterPlot extends Chart {
 	private AbstractAxisRenderer2D axisXRenderer;
 	private AbstractAxisRenderer2D axisYRenderer;
 
-	private Shape shape;
-	private Color shapeColor;
+	private ShapeRenderer shapeRenderer;
+
 	private boolean gridEnabled;
 
 	private List<DataSeries> series;
@@ -41,6 +44,7 @@ public class ScatterPlot extends Chart {
 		this.data = data;
 		axisXRenderer = new LinearRenderer2D();
 		axisYRenderer = new LinearRenderer2D();
+		shapeRenderer = new DefaultShapeRenderer();
 
 		minX = Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
@@ -60,8 +64,6 @@ public class ScatterPlot extends Chart {
 			maxY = Math.max(maxY.doubleValue(), data.getMax(colY).doubleValue());
 		}
 
-		shape = new Rectangle2D.Float(-4f, -4f, 8f, 8f);
-		shapeColor = Color.BLACK;
 		gridEnabled = true;
 
 		// Create axes
@@ -127,7 +129,6 @@ public class ScatterPlot extends Chart {
 
 		// Paint shapes
 		for (DataSeries s : series) {
-			g2d.setColor(shapeColor);
 			// Retrieve the columns mapped to X and Y axes
 			int colX = s.get(DataSeries.X);
 			int colY = s.get(DataSeries.Y);
@@ -138,7 +139,8 @@ public class ScatterPlot extends Chart {
 				double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotXMin;
 				double translateY = plotYMax - h*axisYRenderer.getPos(axisY, valueY);
 				g2d.translate(translateX, translateY);
-				g2d.fill(shape);
+				Drawable shape = shapeRenderer.getShape(data, s, i);
+				shape.draw(g2d);
 				g2d.setTransform(txOld);
 			}
 		}
@@ -173,22 +175,6 @@ public class ScatterPlot extends Chart {
 		}
 
 		return new Insets(0, 0, 0, 0);
-	}
-
-	public Shape getShape() {
-		return shape;
-	}
-
-	public void setShape(Shape shape) {
-		this.shape = shape;
-	}
-
-	public Color getShapeColor() {
-		return shapeColor;
-	}
-
-	public void setShapeColor(Color shapeColor) {
-		this.shapeColor = shapeColor;
 	}
 
 	public boolean isGridEnabled() {
