@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.border.Border;
 
@@ -25,8 +27,7 @@ public class ScatterPlot extends Chart {
 	private Color shapeColor;
 	private boolean gridEnabled;
 
-	private int colX;
-	private int colY;
+	private List<DataSeries> series;
 	private Number minX;
 	private Number maxX;
 	private Number minY;
@@ -36,24 +37,32 @@ public class ScatterPlot extends Chart {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	public ScatterPlot(DataTable data, DataSeries series) {
+	public ScatterPlot(DataTable data, DataSeries... series) {
 		this.data = data;
 		axisXRenderer = new LinearRenderer2D();
 		axisYRenderer = new LinearRenderer2D();
 
+		minX = Double.MAX_VALUE;
+		maxX = -Double.MAX_VALUE;
+		minY = Double.MAX_VALUE;
+		maxY = -Double.MAX_VALUE;
+
+		this.series = new ArrayList<DataSeries>(series.length);
+		for (DataSeries s : series) {
+			this.series.add(s);
+
+			// Set the minimal and maximal value of the axes
+			int colX = s.get(DataSeries.X);
+			minX = Math.min(minX.doubleValue(), data.getMin(colX).doubleValue());
+			maxX = Math.max(maxX.doubleValue(), data.getMax(colX).doubleValue());
+			int colY = s.get(DataSeries.Y);
+			minY = Math.min(minY.doubleValue(), data.getMin(colY).doubleValue());
+			maxY = Math.max(maxY.doubleValue(), data.getMax(colY).doubleValue());
+		}
+
 		shape = new Rectangle2D.Float(-4f, -4f, 8f, 8f);
 		shapeColor = Color.BLACK;
 		gridEnabled = true;
-
-		// Retrieve the columns mapped to X and Y axes
-		colX = series.get(DataSeries.X);
-		colY = series.get(DataSeries.Y);
-
-		// Set the minimal and maximal value of the axes
-		minX = data.getMin(colX);
-		maxX = data.getMax(colX);
-		minY = data.getMin(colY);
-		maxY = data.getMax(colY);
 
 		// Create axes
 		axisX = new Axis(minX, maxX);
@@ -117,15 +126,21 @@ public class ScatterPlot extends Chart {
 		}
 
 		// Paint shapes
-		g2d.setColor(shapeColor);
-		for (int i = 0; i < data.getRowCount(); i++) {
-			double valueX = data.get(colX, i).doubleValue();
-			double valueY = data.get(colY, i).doubleValue();
-			double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotXMin;
-			double translateY = plotYMax - h*axisYRenderer.getPos(axisY, valueY);
-			g2d.translate(translateX, translateY);
-			g2d.fill(shape);
-			g2d.setTransform(txOld);
+		for (DataSeries s : series) {
+			g2d.setColor(shapeColor);
+			// Retrieve the columns mapped to X and Y axes
+			int colX = s.get(DataSeries.X);
+			int colY = s.get(DataSeries.Y);
+
+			for (int i = 0; i < data.getRowCount(); i++) {
+				double valueX = data.get(colX, i).doubleValue();
+				double valueY = data.get(colY, i).doubleValue();
+				double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotXMin;
+				double translateY = plotYMax - h*axisYRenderer.getPos(axisY, valueY);
+				g2d.translate(translateX, translateY);
+				g2d.fill(shape);
+				g2d.setTransform(txOld);
+			}
 		}
 		g2d.setColor(colorDefault);
 	}
