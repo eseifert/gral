@@ -24,15 +24,7 @@ public class PieChart extends Chart {
 		radius = 1.0;
 		start = 0;
 		clockwise = true;
-		colorList = new ArrayList<Color>();
-		colorList.add(Color.RED);
-		colorList.add(Color.BLUE);
-		colorList.add(Color.CYAN);
-		colorList.add(Color.YELLOW);
-		colorList.add(Color.MAGENTA);
-		colorList.add(Color.GREEN);
-		colorList.add(Color.GRAY);
-		colorList.add(Color.DARK_GRAY);
+		colorList = generateColors(data.getRowCount());
 
 		// Calculate sum of all values
 		double colYSum = 0.0;
@@ -105,4 +97,21 @@ public class PieChart extends Chart {
 		this.clockwise = clockwise;
 	}
 
+	private List<Color> generateColors(int count) {
+		List<Color> colors = new ArrayList<Color>(count);
+		float hueStep = 1f / count;
+		for (int i = 0; i < count; i++) {
+			float h;
+			if ((i & 1) == 0) {
+				h = i/2 * hueStep;
+			}
+			else {
+				h = 0.5f + i/2 * hueStep;
+			}
+			Color color = Color.getHSBColor(h, 1f, 1f);
+			colors.add(color);
+		}
+
+		return colors;
+	}
 }
