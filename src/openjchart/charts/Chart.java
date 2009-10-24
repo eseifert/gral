@@ -3,6 +3,7 @@ package openjchart.charts;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,13 @@ public class Chart extends JPanel {
 	private final Map<Axis, Drawable> axes;
 
 	private Color backgroundColor;
+	private boolean antialiasingEnabled;
 
 	public Chart() {
 		axes = new HashMap<Axis, Drawable>();
-
 		backgroundColor = Color.WHITE;
 		setBackground(backgroundColor);
+		antialiasingEnabled = true;
 	}
 
 	@Override
@@ -29,6 +31,12 @@ public class Chart extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
+		if (antialiasingEnabled) {
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		}
+		else {
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		}
 		AffineTransform txOld = g2d.getTransform();
 
 		// Draw axes
@@ -57,5 +65,13 @@ public class Chart extends JPanel {
 
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
+	}
+
+	public boolean isAntialiasingEnabled() {
+		return antialiasingEnabled;
+	}
+
+	public void setAntialiasingEnabled(boolean antialiasingEnabled) {
+		this.antialiasingEnabled = antialiasingEnabled;
 	}
 }
