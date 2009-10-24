@@ -3,6 +3,7 @@ package openjchart.examples;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.BarChart;
 import openjchart.data.DataSeries;
@@ -26,7 +27,7 @@ public class SimpleBarChart extends JFrame {
 		series.put("1", 1);
 		series.put("2", 2);
 		BarChart chart = new BarChart(data, series);
-		//chart.setBorder(new EmptyBorder(20, 20, 20, 20));
+		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

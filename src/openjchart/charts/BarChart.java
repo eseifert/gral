@@ -2,6 +2,7 @@ package openjchart.charts;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
@@ -47,18 +48,21 @@ public class BarChart extends Chart {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform txOld = g2d.getTransform();
 
-		double w = getWidth() - axisYComp.getWidth()/2.0;
-		double h = getHeight();
+		Insets insets = getInsets();
+		double w = getWidth() - axisYComp.getWidth()/2.0 - insets.left - insets.right;
+		double h = getHeight() - insets.top - insets.bottom;
 		double barGap = w / series.size();
-		double plotXMin = axisYComp.getWidth() / 2;
+		double plotXMin = axisYComp.getWidth()/2 + insets.left;
 		double plotXMax = plotXMin + w;
+		double plotYMin = insets.top;
+		double plotYMax = plotYMin + h;
 		Rectangle2D bar = new Rectangle2D.Double();
 		Iterator<Integer> cols = series.values().iterator();
 		for (int i = 0; cols.hasNext(); i++) {
 			double barWidth = barGap / 2.0;
 			double barHeight = h * data.getMax(cols.next()).doubleValue() / maxY;
 			double barX = plotXMin - barWidth/2.0;
-			double barY = h - barHeight;
+			double barY = plotYMax - barHeight;
 			bar.setFrame(barX, barY, barWidth, barHeight);
 
 			double transformX = barGap*i + barGap/2;
@@ -74,10 +78,11 @@ public class BarChart extends Chart {
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 
+		Insets insets = getInsets();
 		double w = 100.0;
-		double h = height;
-		double yCompX = 0.0;
-		double yCompY = 0.0;
-		axisYComp.setBounds(new Rectangle2D.Double(yCompX, yCompY, w, h));
+		double h = height - insets.top - insets.bottom;
+		double axisYCompX = insets.left;
+		double axisYCompY = insets.top;
+		axisYComp.setBounds(new Rectangle2D.Double(axisYCompX, axisYCompY, w, h));
 	}
 }
