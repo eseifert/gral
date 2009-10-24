@@ -1,29 +1,14 @@
 package openjchart.data;
 
+import java.util.HashMap;
 
-public class DataSeries {
+
+public class DataSeries extends HashMap<String, Integer> {
 	public static final String X = "x";
 	public static final String Y = "y";
+	public static final String Z = "z";
+	public static final String SIZE = "size";
 
-	private int[] cols;
-
-	public DataSeries(int... columns) {
-		cols = new int[columns.length];
-		System.arraycopy(columns, 0, cols, 0, columns.length);
-	}
-
-	public int get(String col) {
-		if (X.equals(col)) {
-			return cols[0];
-		}
-		else if (Y.equals(col)) {
-			return cols[1];
-		}
-
-		return -1;
-	}
-
-	public int getColCount() {
-		return cols.length;
+	public DataSeries() {
 	}
 }
