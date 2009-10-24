@@ -10,9 +10,7 @@ import openjchart.Drawable;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
-public class DefaultShapeRenderer implements ShapeRenderer {
-	private Rectangle2D bounds;
-	private Color color;
+public class DefaultShapeRenderer extends AbstractShapeRenderer implements ShapeRenderer {
 
 	public DefaultShapeRenderer() {
 		bounds = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
@@ -42,25 +40,5 @@ public class DefaultShapeRenderer implements ShapeRenderer {
 		};
 
 		return drawable;
-	}
-
-	@Override
-	public Rectangle2D getBounds() {
-		return bounds.getBounds2D();
-	}
-
-	@Override
-	public Color getColor() {
-		return color;
-	}
-
-	@Override
-	public void setBounds(Rectangle2D bounds) {
-		this.bounds.setFrame(bounds.getBounds2D());
-	}
-
-	@Override
-	public void setColor(Color color) {
-		this.color = color;
 	}
 }
