@@ -3,6 +3,7 @@ package openjchart.examples;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.PieChart;
 import openjchart.data.DataMapper;
@@ -30,6 +31,7 @@ public class SimplePieChart extends JFrame {
 		//chart.setClockwise(false);
 		// Custom start angle
 		//chart.setStart(70);
+		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

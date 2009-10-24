@@ -3,6 +3,7 @@ package openjchart.charts;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
@@ -55,7 +56,10 @@ public class PieChart extends Chart {
 		AffineTransform txOld = g2d.getTransform();
 		// Paint pie
 		Color colorOld = g2d.getColor();
-		double size = Math.min(getWidth(), getHeight()) * radius;
+		Insets insets = getInsets();
+		double w = getWidth() - insets.left - insets.right;
+		double h = getHeight() - insets.top - insets.bottom;
+		double size = Math.min(w, h) * radius;
 		g2d.translate(getWidth()/2, getHeight()/2);
 		double angleStart = start;
 		double angleStop = angleStart;
