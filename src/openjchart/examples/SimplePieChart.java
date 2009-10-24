@@ -2,7 +2,6 @@ package openjchart.examples;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import openjchart.charts.PieChart;
@@ -26,13 +25,12 @@ public class SimplePieChart extends JFrame {
 		mapper.put(DataMapper.X, 0);
 		mapper.put(DataMapper.Y, 1);
 
-		PieChart chart = new PieChart();
+		PieChart chart = new PieChart(data);
 		// Change rotation
 		//chart.setClockwise(false);
 		// Custom start angle
 		//chart.setStart(70);
-		final JComponent plotArea = chart.getChartRenderer(data, mapper);
-		getContentPane().add(plotArea, BorderLayout.CENTER);
+		getContentPane().add(chart, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);

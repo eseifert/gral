@@ -2,7 +2,6 @@ package openjchart.examples;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
@@ -44,19 +43,18 @@ public class SimpleXYChart extends JFrame {
 		mapper.put(DataMapper.X, 0);
 		mapper.put(DataMapper.Y, 1);
 
-		ScatterPlot chart = new ScatterPlot();
+		ScatterPlot chart = new ScatterPlot(data, mapper);
 		// Custom shape
 		//chart.setShape(new Ellipse2D.Double(-5.0, -5.0, 10, 10));
 		// Custom shape coloring
 		//chart.setShapeColor(Color.RED);
 		// Grid disabled
 		//chart.setGridEnabled(false);
-		// Custom y-axis renderer
+		// Custom axis renderers
 		//chart.setAxisXRenderer(new LogarithmicRenderer2D());
 		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
-		final JComponent plotArea = chart.getChartRenderer(data, mapper);
-		plotArea.setBorder(new EmptyBorder(20, 20, 20, 20));
-		getContentPane().add(plotArea, BorderLayout.CENTER);
+		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
+		getContentPane().add(chart, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
