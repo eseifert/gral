@@ -11,11 +11,11 @@ import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
 public class DefaultShapeRenderer implements ShapeRenderer {
-	private double sizeDefault;
+	private Rectangle2D bounds;
 	private Color color;
 
 	public DefaultShapeRenderer() {
-		sizeDefault = 8.0;
+		bounds = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
 		color = Color.BLACK;
 	}
 
@@ -34,7 +34,7 @@ public class DefaultShapeRenderer implements ShapeRenderer {
 					shape = new Rectangle2D.Double(-size/2.0, -size/2.0, size, size);
 				}
 				else {
-					shape = new Rectangle2D.Double(-sizeDefault/2.0, -sizeDefault/2.0, sizeDefault, sizeDefault);
+					shape = bounds;
 				}
 				graphics.fill(shape);
 				graphics.setColor(colorOld);
@@ -44,4 +44,23 @@ public class DefaultShapeRenderer implements ShapeRenderer {
 		return drawable;
 	}
 
+	@Override
+	public Rectangle2D getBounds() {
+		return bounds.getBounds2D();
+	}
+
+	@Override
+	public Color getColor() {
+		return color;
+	}
+
+	@Override
+	public void setBounds(Rectangle2D bounds) {
+		this.bounds.setFrame(bounds.getBounds2D());
+	}
+
+	@Override
+	public void setColor(Color color) {
+		this.color = color;
+	}
 }

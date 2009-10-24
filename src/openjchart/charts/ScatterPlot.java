@@ -200,4 +200,12 @@ public class ScatterPlot extends Chart {
 	public void setAxisYRenderer(AbstractAxisRenderer2D axisYRenderer) {
 		this.axisYRenderer = axisYRenderer;
 	}
+
+	public ShapeRenderer getShapeRenderer() {
+		return shapeRenderer;
+	}
+
+	public void setShapeRenderer(ShapeRenderer shapeRenderer) {
+		this.shapeRenderer = shapeRenderer;
+	}
 }

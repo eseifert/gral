@@ -47,10 +47,10 @@ public class SimpleXYChart extends JFrame {
 		seriesLin.put(DataSeries.Y, 0);
 		seriesLin.put(DataSeries.SIZE, 2);
 		ScatterPlot chart = new ScatterPlot(data, seriesLog, seriesLin);
-		// Custom shape
-		//chart.setShape(new Ellipse2D.Double(-5.0, -5.0, 10, 10));
+		// Custom shape bounds
+		//chart.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom shape coloring
-		//chart.setShapeColor(Color.RED);
+		//chart.getShapeRenderer().setColor(Color.RED);
 		// Grid disabled
 		//chart.setGridEnabled(false);
 		// Custom axis renderers
