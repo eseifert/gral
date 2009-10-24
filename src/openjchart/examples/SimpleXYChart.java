@@ -22,7 +22,7 @@ public class SimpleXYChart extends JFrame {
 		data.add(6, 8);
 		data.add(7, 9);
 		data.add(8, 11);*/
-		final DataTable data = new DataTable(Double.class, Double.class, Integer.class);
+		final DataTable data = new DataTable(Double.class, Double.class, Double.class);
 		/*data.add(-8.0, 2.07944154168);
 		data.add(-7.0, 1.94591014906);
 		data.add(-6.0, 1.79175946923);
@@ -31,14 +31,14 @@ public class SimpleXYChart extends JFrame {
 		data.add(-3.0, 1.09861228867);
 		data.add(-2.0, 0.69314718056);
 		data.add(-1.0, 0.0);*/
-		data.add(1.0, 0.0, 3);
-		data.add(2.0, 0.69314718056, 3);
-		data.add(3.0, 1.09861228867, 1);
-		data.add(4.0, 1.38629436112, 5);
-		data.add(5.0, 1.60943791243, 3);
-		data.add(6.0, 1.79175946923, 7);
-		data.add(7.0, 1.94591014906, 3);
-		data.add(8.0, 2.07944154168, 4);
+		data.add(1.0, 0.0, 3.0);
+		data.add(2.0, 0.69314718056, 3.0);
+		data.add(3.0, 1.09861228867, 1.0);
+		data.add(4.0, 1.38629436112, 5.0);
+		data.add(5.0, 1.60943791243, 3.0);
+		data.add(6.0, 1.79175946923, 7.0);
+		data.add(7.0, 1.94591014906, 3.0);
+		data.add(8.0, 2.07944154168, 4.0);
 		DataSeries seriesLog = new DataSeries();
 		seriesLog.put(DataSeries.X, 0);
 		seriesLog.put(DataSeries.Y, 1);

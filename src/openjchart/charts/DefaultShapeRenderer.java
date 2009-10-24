@@ -27,6 +27,11 @@ public class DefaultShapeRenderer implements ShapeRenderer {
 				Color colorOld = graphics.getColor();
 
 				graphics.setColor(color);
+				Integer sizeCol = series.get(DataSeries.SIZE);
+				if (sizeCol != null) {
+					double size = data.get(sizeCol, row).doubleValue();
+					shape = new Rectangle2D.Double(-size/2.0, -size/2.0, size, size);
+				}
 				graphics.fill(shape);
 				graphics.setColor(colorOld);
 			}
