@@ -115,7 +115,7 @@ public class ScatterPlot extends Chart {
 			maxTick = axisYRenderer.getMaxTick(axisY);
 			Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
 			for (double i = minTick; i <= maxTick; i += axisYRenderer.getTickSpacing()) {
-				double translateY = plotYMax - axisYRenderer.worldToView(axisY, i);
+				double translateY = plotYMax - axisYRenderer.worldToView(axisY, i) + 1.0;
 				// Do not draw a grid line on the axis
 				if (translateY == plotYMin) {
 					continue;
@@ -136,7 +136,7 @@ public class ScatterPlot extends Chart {
 				double valueX = data.get(colX, i).doubleValue();
 				double valueY = data.get(colY, i).doubleValue();
 				double translateX = axisXRenderer.worldToView(axisX, valueX) + plotXMin;
-				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY);
+				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY) + 1.0;
 				g2d.translate(translateX, translateY);
 				Drawable shape = shapeRenderer.getShape(data, s, i);
 				shape.draw(g2d);
