@@ -18,15 +18,15 @@ public class LogarithmicRenderer2DTest {
 	}
 
 	@Test
-	public void testGetPos() {
+	public void testWorldToView() {
 		double delta = 1e-5;
 		double logMaxValue = Math.log(10);
-		assertEquals(Double.NEGATIVE_INFINITY, renderer.getPos(axis, 0), delta);
-		assertEquals(1.0, renderer.getPos(axis, 10), delta);
-		assertEquals(Math.log(5) / logMaxValue, renderer.getPos(axis, 5), delta);
-		assertEquals(Math.log(1) / logMaxValue, renderer.getPos(axis, 1), delta);
-		assertEquals(Math.log(9) / logMaxValue, renderer.getPos(axis, 9), delta);
-		assertEquals(Math.log(0.1) / logMaxValue, renderer.getPos(axis, 0.1), delta);
+		assertEquals(Double.NEGATIVE_INFINITY, renderer.worldToView(axis, 0), delta);
+		assertEquals(1.0, renderer.worldToView(axis, 10), delta);
+		assertEquals(Math.log(5) / logMaxValue, renderer.worldToView(axis, 5), delta);
+		assertEquals(Math.log(1) / logMaxValue, renderer.worldToView(axis, 1), delta);
+		assertEquals(Math.log(9) / logMaxValue, renderer.worldToView(axis, 9), delta);
+		assertEquals(Math.log(0.1) / logMaxValue, renderer.worldToView(axis, 0.1), delta);
 	}
 
 }

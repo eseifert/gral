@@ -16,7 +16,6 @@ import openjchart.Drawable;
 import openjchart.charts.axes.AbstractAxisRenderer2D;
 import openjchart.charts.axes.Axis;
 import openjchart.charts.axes.LinearRenderer2D;
-import openjchart.charts.axes.AxisRenderer2D.Orientation;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
@@ -42,9 +41,6 @@ public class ScatterPlot extends Chart {
 
 	public ScatterPlot(DataTable data, DataSeries... series) {
 		this.data = data;
-		axisXRenderer = new LinearRenderer2D();
-		axisYRenderer = new LinearRenderer2D();
-		shapeRenderer = new DefaultShapeRenderer();
 
 		minX = Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
@@ -64,13 +60,15 @@ public class ScatterPlot extends Chart {
 			maxY = Math.max(maxY.doubleValue(), data.getMax(colY).doubleValue());
 		}
 
-		gridEnabled = true;
-
 		// Create axes
 		axisX = new Axis(minX, maxX);
 		axisY = new Axis(minY, maxY);
-		axisXComp = axisXRenderer.getRendererComponent(axisX, Orientation.HORIZONTAL);
-		axisYComp = axisYRenderer.getRendererComponent(axisY, Orientation.VERTICAL);
+		
+		setAxisXRenderer(new LinearRenderer2D());
+		setAxisYRenderer(new LinearRenderer2D());
+		shapeRenderer = new DefaultShapeRenderer();
+
+		gridEnabled = true;
 
 		addAxis(axisX, axisXComp);
 		addAxis(axisY, axisYComp);
@@ -87,8 +85,8 @@ public class ScatterPlot extends Chart {
 		// Take the Component's insets into consideration
 		Insets insets = getInsets();
 
-		double axisXOffset = axisXComp.getHeight()/2.0;
-		double axisYOffset = axisYComp.getWidth()/2.0;
+		double axisXOffset = axisXComp.getHeight();
+		double axisYOffset = axisYComp.getWidth();
 		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
 		double h = getHeight() - 1 - axisXOffset - insets.top - insets.bottom;
 		double plotXMin = axisYOffset + insets.left;
@@ -96,14 +94,13 @@ public class ScatterPlot extends Chart {
 		double plotYMin = insets.top;
 		double plotYMax = plotYMin + h;
 		if (gridEnabled) {
-			int tickOffset = axisXRenderer.getTickLength()/2;
 			// Draw gridX
 			g2d.setColor(Color.LIGHT_GRAY);
-			double minTick = axisXRenderer.getMinTick(minX.doubleValue());
-			double maxTick = axisXRenderer.getMaxTick(maxX.doubleValue());
-			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-tickOffset);
+			double minTick = axisXRenderer.getMinTick(axisX);
+			double maxTick = axisXRenderer.getMaxTick(axisX);
+			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
 			for (double i = minTick; i < maxTick; i += axisXRenderer.getTickSpacing()) {
-				double translateX = w * axisXRenderer.getPos(axisX, i) + plotXMin;
+				double translateX = axisXRenderer.worldToView(axisX, i) + plotXMin;
 				// Do not draw a grid line on the axis
 				if (translateX == plotXMin) {
 					continue;
@@ -114,11 +111,11 @@ public class ScatterPlot extends Chart {
 			}
 
 			// Draw gridY
-			minTick = axisYRenderer.getMinTick(minY.doubleValue());
-			maxTick = axisYRenderer.getMaxTick(maxY.doubleValue());
-			Line2D gridLineHoriz = new Line2D.Double(plotXMin+tickOffset, 0, plotXMax, 0);
+			minTick = axisYRenderer.getMinTick(axisY);
+			maxTick = axisYRenderer.getMaxTick(axisY);
+			Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
 			for (double i = minTick; i <= maxTick; i += axisYRenderer.getTickSpacing()) {
-				double translateY = plotYMax - h*axisYRenderer.getPos(axisY, i);
+				double translateY = plotYMax - axisYRenderer.worldToView(axisY, i);
 				// Do not draw a grid line on the axis
 				if (translateY == plotYMin) {
 					continue;
@@ -138,8 +135,8 @@ public class ScatterPlot extends Chart {
 			for (int i = 0; i < data.getRowCount(); i++) {
 				double valueX = data.get(colX, i).doubleValue();
 				double valueY = data.get(colY, i).doubleValue();
-				double translateX = w * axisXRenderer.getPos(axisX, valueX) + plotXMin;
-				double translateY = plotYMax - h*axisYRenderer.getPos(axisY, valueY);
+				double translateX = axisXRenderer.worldToView(axisX, valueX) + plotXMin;
+				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY);
 				g2d.translate(translateX, translateY);
 				Drawable shape = shapeRenderer.getShape(data, s, i);
 				shape.draw(g2d);
@@ -156,17 +153,19 @@ public class ScatterPlot extends Chart {
 		Insets insets = getInsets();
 
 		double xHeight = 50;
-		double yWidth = 100;
-		double xWidth = getWidth() - yWidth/2 - insets.left - insets.right;
-		double yHeight = getHeight() - xHeight/2  - insets.top - insets.bottom;
+		double yWidth = 50;
+		double xWidth = getWidth() - yWidth - insets.left - insets.right;
+		double yHeight = getHeight() - xHeight  - insets.top - insets.bottom;
 
-		double posX = yWidth/2 + insets.left;
+		double posX = yWidth + insets.left;
 		double posY = getHeight() - xHeight  - insets.bottom;
 		axisXComp.setBounds(new Rectangle2D.Double(posX, posY, xWidth, xHeight));
-
+		axisXRenderer.setShape(new Line2D.Double(0.0, 0.0, xWidth, 0.0));
+		
 		posX = insets.left;
 		posY = insets.top;
 		axisYComp.setBounds(new Rectangle2D.Double(posX, posY, yWidth, yHeight));
+		axisYRenderer.setShape(new Line2D.Double(yWidth, yHeight, yWidth, 0.0));
 	}
 
 	@Override
@@ -193,6 +192,8 @@ public class ScatterPlot extends Chart {
 
 	public void setAxisXRenderer(AbstractAxisRenderer2D axisXRenderer) {
 		this.axisXRenderer = axisXRenderer;
+		axisXComp = axisXRenderer.getRendererComponent(axisX);
+		addAxis(axisX, axisXComp);
 	}
 
 	public AbstractAxisRenderer2D getAxisYRenderer() {
@@ -201,6 +202,9 @@ public class ScatterPlot extends Chart {
 
 	public void setAxisYRenderer(AbstractAxisRenderer2D axisYRenderer) {
 		this.axisYRenderer = axisYRenderer;
+		axisYRenderer.setNormalOrientationClockwise(false);
+		axisYComp = axisYRenderer.getRendererComponent(axisY);
+		addAxis(axisY, axisYComp);
 	}
 
 	public ShapeRenderer getShapeRenderer() {

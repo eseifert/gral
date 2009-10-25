@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.ScatterPlot;
+import openjchart.charts.axes.LogarithmicRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
@@ -54,7 +55,7 @@ public class SimpleXYChart extends JFrame {
 		// Grid disabled
 		//chart.setGridEnabled(false);
 		// Custom axis renderers
-		//chart.setAxisXRenderer(new LogarithmicRenderer2D());
+		chart.setAxisXRenderer(new LogarithmicRenderer2D());
 		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);

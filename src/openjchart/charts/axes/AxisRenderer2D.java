@@ -9,16 +9,14 @@ import openjchart.Drawable;
  *
  */
 public interface AxisRenderer2D {
-	public static enum Orientation {
-		HORIZONTAL, VERTICAL
-	};
-
 	/**
 	 * Returns a component that displays the specified axis.
 	 * @param axis axis to be displayed
-	 * @param orientation orientation of the axis
 	 * @return component displaying the axis
 	 * @see Axis
 	 */
-	Drawable getRendererComponent(Axis axis, Orientation orientation);
+	Drawable getRendererComponent(Axis axis);
+	
+	double worldToView(Axis axis, Number value);
+	Number viewToWorld(Axis axis, double value);
 }

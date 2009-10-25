@@ -53,21 +53,6 @@ public class Axis {
 		}
 	}
 
-	/**
-	 * Returns the relative position of the specified value on the <code>Axis</code>.
-	 * The values range from 0.0 to 1.0, whereas 0.0 represents the minimum
-	 * value and 1.0 represents the maximum value.
-	 * @param value value to calculate the relative position of
-	 * @return relative position to the minimum value of the axis
-	 */
-	public double getPos(Number value) {
-		double val = value.doubleValue();
-		double displayRange = max.doubleValue() - min.doubleValue();
-		double displayPercentage = (val - min.doubleValue()) / displayRange;
-
-		return displayPercentage;
-	}
-
 	public Number getMin() {
 		return min;
 	}
@@ -84,7 +69,7 @@ public class Axis {
 		setRange(this.min, max);
 	}
 
-	public Number getRange() {
+	public double getRange() {
 		return max.doubleValue() - min.doubleValue();
 	}
 
