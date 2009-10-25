@@ -1,7 +1,5 @@
 package openjchart.charts.axes;
 
-import java.awt.geom.Rectangle2D;
-
 import openjchart.Drawable;
 
 
