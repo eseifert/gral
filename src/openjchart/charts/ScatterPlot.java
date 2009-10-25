@@ -104,7 +104,8 @@ public class ScatterPlot extends Chart {
 			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-tickOffset);
 			for (double i = minTick; i < maxTick; i += axisXRenderer.getTickSpacing()) {
 				double translateX = w * axisXRenderer.getPos(axisX, i) + plotXMin;
-				if (translateX == plotYMin) {
+				// Do not draw a grid line on the axis
+				if (translateX == plotXMin) {
 					continue;
 				}
 				g2d.translate(translateX, 0);
@@ -118,7 +119,8 @@ public class ScatterPlot extends Chart {
 			Line2D gridLineHoriz = new Line2D.Double(plotXMin+tickOffset, 0, plotXMax, 0);
 			for (double i = minTick; i <= maxTick; i += axisYRenderer.getTickSpacing()) {
 				double translateY = plotYMax - h*axisYRenderer.getPos(axisY, i);
-				if (translateY == plotXMin) {
+				// Do not draw a grid line on the axis
+				if (translateY == plotYMin) {
 					continue;
 				}
 				g2d.translate(0, translateY);
