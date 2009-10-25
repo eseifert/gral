@@ -1,6 +1,7 @@
 package openjchart;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 public interface Drawable {
@@ -12,6 +13,8 @@ public interface Drawable {
 
 	double getWidth();
 	double getHeight();
+
+	Dimension2D getPreferredSize();
 
 	void draw(Graphics2D graphics);
 }

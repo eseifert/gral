@@ -1,5 +1,7 @@
 package openjchart.charts.axes;
 
+import java.awt.geom.Rectangle2D;
+
 import openjchart.Drawable;
 
 
@@ -16,7 +18,7 @@ public interface AxisRenderer2D {
 	 * @see Axis
 	 */
 	Drawable getRendererComponent(Axis axis);
-	
+
 	double worldToView(Axis axis, Number value);
 	Number viewToWorld(Axis axis, double value);
 }

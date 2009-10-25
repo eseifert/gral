@@ -1,6 +1,7 @@
 package openjchart.charts.axes;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
+import openjchart.util.Dimension2D;
 import openjchart.util.GeometryUtils;
 
 public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
@@ -165,7 +167,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 						double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
 						double intersY = labelBoundsIntersections.get(0).getY() - labelBoundsPadded.getCenterY();
 						double labelPosX = -intersX - 0.50*labelBounds.getWidth()  + (isLabelOutside()?tickShape.getX2():tickShape.getX1());
-						double labelPosY = -intersY + 0.35*labelBounds.getHeight() + (isLabelOutside()?tickShape.getY2():tickShape.getY1());  // FIXME
+						double labelPosY = -intersY + 0.35*labelBounds.getHeight() + (isLabelOutside()?tickShape.getY2():tickShape.getY1());  // FIXME: 0.35?
 						g2d.drawString(label, (float)labelPosX, (float)labelPosY);
 
 						g2d.setTransform(txOld);
@@ -173,6 +175,15 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 						currentTick++;
 					}
 				}
+			}
+
+			@Override
+			public Dimension2D getPreferredSize() {
+				double fontHeight = 10.0;
+				double tickLengthOuter = getTickLength()*(1.0 - getTickAlignment());
+				double labelDist = labelDistance*getTickLength() + tickLengthOuter;
+				double minSize = fontHeight + labelDist + tickLengthOuter;
+				return new Dimension2D.Double(minSize, minSize);
 			}
 		};
 

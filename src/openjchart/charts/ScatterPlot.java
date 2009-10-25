@@ -152,8 +152,8 @@ public class ScatterPlot extends Chart {
 
 		Insets insets = getInsets();
 
-		double xHeight = 50;
-		double yWidth = 50;
+		double xHeight = axisXComp.getPreferredSize().getHeight();
+		double yWidth = axisYComp.getPreferredSize().getWidth();
 		double xWidth = getWidth() - yWidth - insets.left - insets.right;
 		double yHeight = getHeight() - xHeight  - insets.top - insets.bottom;
 
