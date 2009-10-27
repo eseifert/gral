@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
@@ -21,6 +22,7 @@ public class BarChart extends Chart {
 	private double minY;
 	private double maxY;
 
+	private AbstractAxisRenderer2D axisYRenderer;
 	private Drawable axisYComp;
 
 	public BarChart(DataTable data, DataSeries series) {
@@ -35,7 +37,7 @@ public class BarChart extends Chart {
 		}
 
 		Axis axisY = new Axis(minY, maxY);
-		AbstractAxisRenderer2D axisYRenderer = new LinearRenderer2D();
+		axisYRenderer = new LinearRenderer2D();
 		axisYRenderer.setNormalOrientationClockwise(false);
 		axisYComp = axisYRenderer.getRendererComponent(axisY);
 		addAxis(axisY, axisYComp);
@@ -79,10 +81,11 @@ public class BarChart extends Chart {
 		super.setBounds(x, y, width, height);
 
 		Insets insets = getInsets();
-		double w = 100.0;
+		double w = axisYComp.getPreferredSize().getWidth();
 		double h = height - insets.top - insets.bottom;
 		double axisYCompX = insets.left;
 		double axisYCompY = insets.top;
-		axisYComp.setBounds(new Rectangle2D.Double(axisYCompX, axisYCompY, w, h));
+		axisYComp.setBounds(axisYCompX, axisYCompY, w, h);
+		axisYRenderer.setShape(new Line2D.Double(w, h, w, 0.0));
 	}
 }

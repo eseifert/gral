@@ -6,11 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.AbstractAxisRenderer2D;
@@ -159,23 +156,13 @@ public class ScatterPlot extends Chart {
 
 		double posX = yWidth + insets.left;
 		double posY = getHeight() - xHeight  - insets.bottom;
-		axisXComp.setBounds(new Rectangle2D.Double(posX, posY, xWidth, xHeight));
+		axisXComp.setBounds(posX, posY, xWidth, xHeight);
 		axisXRenderer.setShape(new Line2D.Double(0.0, 0.0, xWidth, 0.0));
 		
 		posX = insets.left;
 		posY = insets.top;
-		axisYComp.setBounds(new Rectangle2D.Double(posX, posY, yWidth, yHeight));
+		axisYComp.setBounds(posX, posY, yWidth, yHeight);
 		axisYRenderer.setShape(new Line2D.Double(yWidth, yHeight, yWidth, 0.0));
-	}
-
-	@Override
-	public Insets getInsets() {
-		Border border = getBorder();
-		if (border != null) {
-			return border.getBorderInsets(this);
-		}
-
-		return new Insets(0, 0, 0, 0);
 	}
 
 	public boolean isGridEnabled() {

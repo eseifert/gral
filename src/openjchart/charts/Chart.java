@@ -3,12 +3,14 @@ package openjchart.charts;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
@@ -45,6 +47,16 @@ public class Chart extends JPanel {
 			axis.draw(g2d);
 			g2d.setTransform(txOld);
 		}
+	}
+
+	@Override
+	public Insets getInsets() {
+		Border border = getBorder();
+		if (border != null) {
+			return border.getBorderInsets(this);
+		}
+
+		return new Insets(0, 0, 0, 0);
 	}
 
 	public void addAxis(Axis axis) {

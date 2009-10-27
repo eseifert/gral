@@ -1,13 +1,17 @@
 package openjchart.data;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 public class DataTable implements Iterable<Number[]> {
 	private final ArrayList<Number[]> data;
-
 	private Class<?>[] types;
 
+	private final Map<Integer, Double> cacheMin;
+	private final Map<Integer, Double> cacheMax;
+	
 	private static class DataTableIterator implements Iterator<Number[]> {
 		private final DataTable data;
 		private int row;
@@ -31,11 +35,12 @@ public class DataTable implements Iterable<Number[]> {
 		}
 	}
 
-	public DataTable(Class<?>... types) {
+	public DataTable(Class<? extends Number>... types) {
 		this.types = new Class[types.length];
 		System.arraycopy(types, 0, this.types, 0, types.length);
-
 		data = new ArrayList<Number[]>();
+		cacheMin = new HashMap<Integer, Double>();
+		cacheMax = new HashMap<Integer, Double>();
 	}
 
 	/**
@@ -49,19 +54,23 @@ public class DataTable implements Iterable<Number[]> {
 	 * do not match {@inheritDoc}
 	 */
 	public void add(Number... values) {
+		Number[] row = new Number[values.length];
 		for (int i = 0; i < values.length; i++) {
 			Object obj = values[i];
 			if (!(types[i].isAssignableFrom(obj.getClass()))) {
 				throw new IllegalArgumentException("Expected: "+types[i]+", Got: "+obj.getClass());
 			}
+			row[i] = values[i];
 		}
-		Number[] row = new Number[values.length];
-		System.arraycopy(values, 0, row, 0, values.length);
 		data.add(row);
+		cacheMin.clear();
+		cacheMax.clear();
 	}
 
 	public void clear() {
 		data.clear();
+		cacheMin.clear();
+		cacheMax.clear();
 	}
 
 	/**
@@ -93,15 +102,19 @@ public class DataTable implements Iterable<Number[]> {
 		if (data.isEmpty()) {
 			return null;
 		}
+		if (cacheMin.containsKey(col)) {
+			return cacheMin.get(col);
+		}
 
 		double valueMin = Double.MAX_VALUE;
+		valueMin = Double.MAX_VALUE;
 		for (int row = 0; row < data.size(); row++) {
 			double value = get(col, row).doubleValue();
 			if (value < valueMin) {
 				valueMin = value;
 			}
 		}
-
+		cacheMin.put(col, valueMin);
 		return valueMin;
 	}
 
@@ -115,6 +128,9 @@ public class DataTable implements Iterable<Number[]> {
 		if (data.isEmpty()) {
 			return null;
 		}
+		if (cacheMax.containsKey(col)) {
+			return cacheMax.get(col);
+		}
 
 		double valueMax = -Double.MAX_VALUE;
 		for (int row = 0; row < data.size(); row++) {
@@ -123,7 +139,7 @@ public class DataTable implements Iterable<Number[]> {
 				valueMax = value;
 			}
 		}
-
+		cacheMax.put(col, valueMax);
 		return valueMax;
 	}
 

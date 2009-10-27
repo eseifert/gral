@@ -48,6 +48,11 @@ public abstract class AbstractDrawable implements Drawable {
 	}
 
 	@Override
+	public void setBounds(double x, double y, double width, double height) {
+		this.bounds.setFrame(x, y, width, height);
+	}
+
+	@Override
 	public Dimension2D getPreferredSize() {
 		return new Dimension2D.Double();
 	}

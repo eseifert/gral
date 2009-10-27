@@ -56,7 +56,7 @@ public class SimpleXYChart extends JFrame {
 		//chart.setGridEnabled(false);
 		// Custom axis renderers
 		chart.setAxisXRenderer(new LogarithmicRenderer2D());
-		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
+		chart.setAxisYRenderer(new LogarithmicRenderer2D());
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 
