@@ -67,8 +67,8 @@ public class ScatterPlot extends Chart {
 
 		gridEnabled = true;
 
-		addAxis(axisX, axisXComp);
-		addAxis(axisY, axisYComp);
+		setAxis(Axis.X, axisX, axisXComp);
+		setAxis(Axis.Y, axisY, axisYComp);
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class ScatterPlot extends Chart {
 	public void setAxisXRenderer(AbstractAxisRenderer2D axisXRenderer) {
 		this.axisXRenderer = axisXRenderer;
 		axisXComp = axisXRenderer.getRendererComponent(axisX);
-		addAxis(axisX, axisXComp);
+		setAxis(Axis.X, axisX, axisXComp);
 	}
 
 	public AbstractAxisRenderer2D getAxisYRenderer() {
@@ -191,7 +191,7 @@ public class ScatterPlot extends Chart {
 		this.axisYRenderer = axisYRenderer;
 		axisYRenderer.setNormalOrientationClockwise(false);
 		axisYComp = axisYRenderer.getRendererComponent(axisY);
-		addAxis(axisY, axisYComp);
+		setAxis(Axis.Y, axisY, axisYComp);
 	}
 
 	public ShapeRenderer getShapeRenderer() {

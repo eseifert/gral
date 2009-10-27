@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Axis {
+	public static final String X = "x";
+	public static final String Y = "y";
+	public static final String Z = "z";
+
 	private final List<AxisListener> axisListeners;
 
 	private Number min;

@@ -16,13 +16,15 @@ import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
 
 public class Chart extends JPanel {
-	private final Map<Axis, Drawable> axes;
+	private final Map<String, Axis> axes;
+	private final Map<String, Drawable> axisDrawables;
 
 	private Color backgroundColor;
 	private boolean antialiasingEnabled;
 
 	public Chart() {
-		axes = new HashMap<Axis, Drawable>();
+		axes = new HashMap<String, Axis>();
+		axisDrawables = new HashMap<String, Drawable>();
 		backgroundColor = Color.WHITE;
 		setBackground(backgroundColor);
 		antialiasingEnabled = true;
@@ -42,7 +44,7 @@ public class Chart extends JPanel {
 		AffineTransform txOld = g2d.getTransform();
 
 		// Draw axes
-		for (Drawable axis : axes.values()) {
+		for (Drawable axis : axisDrawables.values()) {
 			g2d.translate(axis.getX(), axis.getY());
 			axis.draw(g2d);
 			g2d.setTransform(txOld);
@@ -59,16 +61,28 @@ public class Chart extends JPanel {
 		return new Insets(0, 0, 0, 0);
 	}
 
-	public void addAxis(Axis axis) {
-		axes.put(axis, null);
+	public Axis getAxis(String name) {
+		return axes.get(name);
 	}
 
-	public void addAxis(Axis axis, Drawable drawable) {
-		axes.put(axis, drawable);
+	public void setAxis(String name, Axis axis) {
+		if (axis == null) {
+			removeAxis(name);
+		}
+		axes.put(name, axis);
+		axisDrawables.put(name, null);
 	}
 
-	public void removeAxis(Axis axis) {
-		axes.remove(axis);
+	public void setAxis(String name, Axis axis, Drawable drawable) {
+		if (axis == null) {
+			removeAxis(name);
+		}
+		axes.put(name, axis);
+		axisDrawables.put(name, drawable);
+	}
+
+	public void removeAxis(String name) {
+		axes.remove(name);
 	}
 
 	public Color getBackgroundColor() {

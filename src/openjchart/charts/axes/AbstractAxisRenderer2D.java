@@ -130,7 +130,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 					double tickNormalY = (isNormalOrientationClockwise()?-1:1)*(line.getX2() - line.getX1()) / segmentLength;
 
 					// If the next tick(s) lie(s) on our current axis shape segment
-					while (tickPositionsView[currentTick] <= shapeLengthCur + segmentLength) {
+					while (currentTick<tickPositionsView.length && tickPositionsView[currentTick] <= shapeLengthCur + segmentLength) {
 						// Interpolate segment ends to get tick position
 						double tickPosRel = (tickPositionsView[currentTick] - shapeLengthCur) / segmentLength;
 						double tickPosX = line.getX1() + (line.getX2() - line.getX1())*tickPosRel;

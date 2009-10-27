@@ -40,7 +40,7 @@ public class BarChart extends Chart {
 		axisYRenderer = new LinearRenderer2D();
 		axisYRenderer.setNormalOrientationClockwise(false);
 		axisYComp = axisYRenderer.getRendererComponent(axisY);
-		addAxis(axisY, axisYComp);
+		setAxis(Axis.Y, axisY, axisYComp);
 	}
 
 	@Override
