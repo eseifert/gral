@@ -1,6 +1,7 @@
 package openjchart.examples;
 
 import java.awt.BorderLayout;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
@@ -13,6 +14,7 @@ public class SimplePieChart extends JFrame {
 	public SimplePieChart() {
 		super("OpenJChartTest");
 		final DataTable data = new DataTable(Integer.class, Integer.class);
+		/*
 		data.add(1, 1);
 		data.add(2, 3);
 		data.add(3, 2);
@@ -20,12 +22,19 @@ public class SimplePieChart extends JFrame {
 		data.add(5, 4);
 		data.add(6, 8);
 		data.add(7, 9);
-		data.add(8, 11);
+		data.add(8, 11);//*/
+		//*
+		Random r = new Random(0);
+		for (int i=0; i<20; i++) {
+			data.add(i, r.nextInt()%100);
+		}
 		PieChart chart = new PieChart(data);
 		// Change rotation
 		//chart.setSetting(PieChart.KEY_CLOCKWISE, false);
 		// Custom start angle
 		//chart.setSetting(PieChart.KEY_START, 70.0);
+		// Custom colors
+		//chart.setSetting(PieChart.KEY_COLORS, new RainbowColors());
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 
