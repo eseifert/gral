@@ -11,6 +11,7 @@ import java.util.Iterator;
 import openjchart.Drawable;
 import openjchart.charts.axes.AbstractAxisRenderer2D;
 import openjchart.charts.axes.Axis;
+import openjchart.charts.axes.AxisRenderer2D;
 import openjchart.charts.axes.LinearRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
@@ -27,20 +28,13 @@ public class BarChart extends Chart {
 
 	public BarChart(DataTable data, DataSeries series) {
 		this.data = data;
+		this.series = series;
 		dataChanged(this.data);
 		this.data.addDataListener(this);
-		this.series = series;
-
-		minY = Double.MAX_VALUE;
-		maxY = -Double.MAX_VALUE;
-		for (Integer col : series.values()) {
-			maxY = Math.max(maxY, data.getMax(col).doubleValue());
-			minY = Math.min(minY, data.getMin(col).doubleValue());
-		}
 
 		Axis axisY = new Axis(minY, maxY);
 		axisYRenderer = new LinearRenderer2D();
-		axisYRenderer.setNormalOrientationClockwise(false);
+		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 		axisYComp = axisYRenderer.getRendererComponent(axisY);
 		setAxis(Axis.Y, axisY, axisYComp);
 	}
@@ -88,6 +82,18 @@ public class BarChart extends Chart {
 		double axisYCompX = insets.left;
 		double axisYCompY = insets.top;
 		axisYComp.setBounds(axisYCompX, axisYCompY, w, h);
-		axisYRenderer.setShape(new Line2D.Double(w, h, w, 0.0));
+		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(w, h, w, 0.0));
+	}
+
+	@Override
+	public void dataChanged(DataTable data) {
+		super.dataChanged(data);
+
+		minY = Double.MAX_VALUE;
+		maxY = -Double.MAX_VALUE;
+		for (Integer col : series.values()) {
+			maxY = Math.max(maxY, data.getMax(col).doubleValue());
+			minY = Math.min(minY, data.getMin(col).doubleValue());
+		}
 	}
 }

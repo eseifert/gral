@@ -32,7 +32,9 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
-		setBackground(settings.get(SETTING_BACKGROUND_COLOR, Color.WHITE));
+		setSettingDefault(SETTING_BACKGROUND_COLOR, Color.WHITE);
+		setSettingDefault(SETTING_ANTIALISING, true);
+		setBackground(this.<Color>getSetting(SETTING_BACKGROUND_COLOR));
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				getSetting(SETTING_ANTIALISING, true) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				this.<Boolean>getSetting(SETTING_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 		AffineTransform txOld = g2d.getTransform();
 
 		// Draw axes
@@ -87,12 +89,17 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	}
 
 	@Override
-	public <T> T getSetting(String key, T defaultValue) {
-		return settings.get(key, defaultValue);
+	public <T> T getSetting(String key) {
+		return settings.<T>get(key);
 	}
 
 	@Override
 	public <T> void setSetting(String key, T value) {
+		settings.<T>put(key, value);
+	}
+
+	@Override
+	public <T> void setSettingDefault(String key, T value) {
 		settings.put(key, value);
 	}
 

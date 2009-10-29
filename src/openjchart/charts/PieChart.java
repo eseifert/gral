@@ -21,6 +21,11 @@ public class PieChart extends Chart {
 	private double degreesPerValue;
 
 	public PieChart(DataTable data) {
+		setSettingDefault(KEY_RADIUS, 1.0);
+		setSettingDefault(KEY_COLOR_LIST, generateColors(data.getRowCount()));
+		setSettingDefault(KEY_CLOCKWISE, true);
+		setSettingDefault(KEY_START, 0.0);
+
 		this.data = data;
 		dataChanged(this.data);
 		this.data.addDataListener(this);
@@ -37,13 +42,13 @@ public class PieChart extends Chart {
 		Insets insets = getInsets();
 		double w = getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
-		double size = Math.min(w, h) * getSetting(KEY_RADIUS, 1.0);
+		double size = Math.min(w, h) * this.<Double>getSetting(KEY_RADIUS);
 		g2d.translate(getWidth()/2, getHeight()/2);
-		double angleStart = getSetting(KEY_START, 0.0);
+		double angleStart = getSetting(KEY_START);
 		double angleStop = angleStart;
 		for (int i = 0; i < data.getRowCount();  i++) {
 			angleStop = data.get(0, i).doubleValue() * degreesPerValue;
-			List<Color> colorList = getSetting(KEY_COLOR_LIST, generateColors(data.getRowCount()));
+			List<Color> colorList = getSetting(KEY_COLOR_LIST);
 			g2d.setColor(colorList.get(i));
 			g2d.fill(new Arc2D.Double(-size/2, -size/2, size, size, angleStart, angleStop, Arc2D.PIE));
 			angleStart += angleStop;
@@ -80,7 +85,7 @@ public class PieChart extends Chart {
 			colYSum += row[0].doubleValue();
 		}
 
-		if (getSetting(KEY_CLOCKWISE, true)) {
+		if (getSetting(KEY_CLOCKWISE)) {
 			degreesPerValue = -360.0/colYSum;
 		}
 		else {

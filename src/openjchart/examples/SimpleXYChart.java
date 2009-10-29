@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 import openjchart.charts.ScatterPlot;
+import openjchart.charts.axes.AxisRenderer2D;
 import openjchart.charts.axes.LogarithmicRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
@@ -52,12 +53,14 @@ public class SimpleXYChart extends JFrame {
 		//chart.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom shape coloring
 		//chart.getShapeRenderer().setColor(Color.RED);
+		// Custom grid color
+		//chart.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		//chart.setGridEnabled(false);
+		//chart.setSetting(ScatterPlot.KEY_GRID, false);
 		// Custom axis renderers
 		chart.setAxisXRenderer(new LogarithmicRenderer2D());
 		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
-		chart.getAxisXRenderer().setTickSpacing(0.67);
+		chart.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 

@@ -23,9 +23,9 @@ public class SimplePieChart extends JFrame {
 		data.add(8, 11);
 		PieChart chart = new PieChart(data);
 		// Change rotation
-		//chart.setClockwise(false);
+		//chart.setSetting(PieChart.KEY_CLOCKWISE, false);
 		// Custom start angle
-		//chart.setStart(70);
+		//chart.setSetting(PieChart.KEY_START, 70.0);
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 
