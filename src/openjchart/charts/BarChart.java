@@ -27,6 +27,8 @@ public class BarChart extends Chart {
 
 	public BarChart(DataTable data, DataSeries series) {
 		this.data = data;
+		dataChanged(this.data);
+		this.data.addDataListener(this);
 		this.series = series;
 
 		minY = Double.MAX_VALUE;

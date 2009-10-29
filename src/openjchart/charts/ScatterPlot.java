@@ -17,6 +17,8 @@ import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
 public class ScatterPlot extends Chart {
+	private static final String KEY_GRID = "scatterplot.grid";
+
 	private DataTable data;
 
 	private AbstractAxisRenderer2D axisXRenderer;
@@ -24,13 +26,11 @@ public class ScatterPlot extends Chart {
 
 	private ShapeRenderer shapeRenderer;
 
-	private boolean gridEnabled;
-
 	private List<DataSeries> series;
-	private Number minX;
-	private Number maxX;
-	private Number minY;
-	private Number maxY;
+	private double minX;
+	private double maxX;
+	private double minY;
+	private double maxY;
 	private Axis axisX;
 	private Axis axisY;
 	private Drawable axisXComp;
@@ -38,6 +38,8 @@ public class ScatterPlot extends Chart {
 
 	public ScatterPlot(DataTable data, DataSeries... series) {
 		this.data = data;
+		dataChanged(this.data);
+		this.data.addDataListener(this);
 
 		minX = Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
@@ -50,11 +52,11 @@ public class ScatterPlot extends Chart {
 
 			// Set the minimal and maximal value of the axes
 			int colX = s.get(DataSeries.X);
-			minX = Math.min(minX.doubleValue(), data.getMin(colX).doubleValue());
-			maxX = Math.max(maxX.doubleValue(), data.getMax(colX).doubleValue());
+			minX = Math.min(minX, data.getMin(colX).doubleValue());
+			maxX = Math.max(maxX, data.getMax(colX).doubleValue());
 			int colY = s.get(DataSeries.Y);
-			minY = Math.min(minY.doubleValue(), data.getMin(colY).doubleValue());
-			maxY = Math.max(maxY.doubleValue(), data.getMax(colY).doubleValue());
+			minY = Math.min(minY, data.getMin(colY).doubleValue());
+			maxY = Math.max(maxY, data.getMax(colY).doubleValue());
 		}
 
 		// Create axes
@@ -64,8 +66,6 @@ public class ScatterPlot extends Chart {
 		setAxisXRenderer(new LinearRenderer2D());
 		setAxisYRenderer(new LinearRenderer2D());
 		shapeRenderer = new DefaultShapeRenderer();
-
-		gridEnabled = true;
 
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
@@ -90,7 +90,7 @@ public class ScatterPlot extends Chart {
 		double plotXMax = plotXMin + w;
 		double plotYMin = insets.top;
 		double plotYMax = plotYMin + h;
-		if (gridEnabled) {
+		if (getSetting(KEY_GRID, true)) {
 			// Draw gridX
 			g2d.setColor(Color.LIGHT_GRAY);
 			double minTick = axisXRenderer.getMinTick(axisX);
@@ -163,14 +163,6 @@ public class ScatterPlot extends Chart {
 		posY = insets.top;
 		axisYComp.setBounds(posX, posY, yWidth, yHeight);
 		axisYRenderer.setShape(new Line2D.Double(yWidth, yHeight, yWidth, 0.0));
-	}
-
-	public boolean isGridEnabled() {
-		return gridEnabled;
-	}
-
-	public void setGridEnabled(boolean gridEnabled) {
-		this.gridEnabled = gridEnabled;
 	}
 
 	public AbstractAxisRenderer2D getAxisXRenderer() {

@@ -14,20 +14,25 @@ import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
+import openjchart.data.DataListener;
+import openjchart.data.DataTable;
+import openjchart.util.Settings;
+import openjchart.util.SettingsStorage;
 
-public class Chart extends JPanel {
+public abstract class Chart extends JPanel implements SettingsStorage, DataListener {
+	private static final String SETTING_BACKGROUND_COLOR = "chart.background.color";
+	private static final String SETTING_ANTIALISING = "chart.antialiasing";
+
+	private final Settings settings;
+
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
-	private Color backgroundColor;
-	private boolean antialiasingEnabled;
-
 	public Chart() {
-		axes = new HashMap<String, Axis>();
-		axisDrawables = new HashMap<String, Drawable>();
-		backgroundColor = Color.WHITE;
-		setBackground(backgroundColor);
-		antialiasingEnabled = true;
+		this.axes = new HashMap<String, Axis>();
+		this.axisDrawables = new HashMap<String, Drawable>();
+		this.settings = new Settings();
+		setBackground(settings.get(SETTING_BACKGROUND_COLOR, Color.WHITE));
 	}
 
 	@Override
@@ -35,12 +40,8 @@ public class Chart extends JPanel {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
-		if (antialiasingEnabled) {
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		}
-		else {
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		}
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				getSetting(SETTING_ANTIALISING, true) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 		AffineTransform txOld = g2d.getTransform();
 
 		// Draw axes
@@ -85,19 +86,17 @@ public class Chart extends JPanel {
 		axes.remove(name);
 	}
 
-	public Color getBackgroundColor() {
-		return backgroundColor;
+	@Override
+	public <T> T getSetting(String key, T defaultValue) {
+		return settings.get(key, defaultValue);
 	}
 
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
+	@Override
+	public <T> void setSetting(String key, T value) {
+		settings.put(key, value);
 	}
 
-	public boolean isAntialiasingEnabled() {
-		return antialiasingEnabled;
-	}
-
-	public void setAntialiasingEnabled(boolean antialiasingEnabled) {
-		this.antialiasingEnabled = antialiasingEnabled;
+	@Override
+	public void dataChanged(DataTable data) {
 	}
 }

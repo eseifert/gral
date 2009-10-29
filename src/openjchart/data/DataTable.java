@@ -1,8 +1,10 @@
 package openjchart.data;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 
 public class DataTable implements Iterable<Number[]> {
@@ -12,6 +14,8 @@ public class DataTable implements Iterable<Number[]> {
 	private final Map<Integer, Double> cacheMin;
 	private final Map<Integer, Double> cacheMax;
 	
+	private final Set<DataListener> dataListeners;
+
 	private static class DataTableIterator implements Iterator<Number[]> {
 		private final DataTable data;
 		private int row;
@@ -39,6 +43,7 @@ public class DataTable implements Iterable<Number[]> {
 		this.types = new Class[types.length];
 		System.arraycopy(types, 0, this.types, 0, types.length);
 		data = new ArrayList<Number[]>();
+		dataListeners = new HashSet<DataListener>();
 		cacheMin = new HashMap<Integer, Double>();
 		cacheMax = new HashMap<Integer, Double>();
 	}
@@ -154,5 +159,19 @@ public class DataTable implements Iterable<Number[]> {
 	@Override
 	public Iterator<Number[]> iterator() {
 		return new DataTableIterator(this);
+	}
+
+	public void addDataListener(DataListener dataListener) {
+		dataListeners.add(dataListener);
+	}
+
+	public void removeDataListener(DataListener dataListener) {
+		dataListeners.remove(dataListener);
+	}
+
+	protected void notifyDataChanged() {
+		for (DataListener dataListener : dataListeners) {
+			dataListener.dataChanged(this);
+		}
 	}
 }

@@ -12,51 +12,38 @@ import java.util.List;
 import openjchart.data.DataTable;
 
 public class PieChart extends Chart {
+	public static final String KEY_RADIUS = "piechart.radius";
+	public static final String KEY_COLOR_LIST = "piechart.colorlist";
+	public static final String KEY_CLOCKWISE = "piechart.clockwise";
+	public static final String KEY_START = "piechart.start";
+
 	private DataTable data;
-	private double radius;
 	private double degreesPerValue;
-	private List<Color> colorList;
-	private boolean clockwise;
-	private int start;
 
 	public PieChart(DataTable data) {
 		this.data = data;
-		radius = 1.0;
-		start = 0;
-		clockwise = true;
-		colorList = generateColors(data.getRowCount());
-
-		// Calculate sum of all values
-		double colYSum = 0.0;
-		for (Number[] row : data) {
-			colYSum += row[0].doubleValue();
-		}
-
-		if (clockwise) {
-			degreesPerValue = -360.0/colYSum;
-		}
-		else {
-			degreesPerValue = 360.0/colYSum;
-		}
+		dataChanged(this.data);
+		this.data.addDataListener(this);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform txOld = g2d.getTransform();
+
 		// Paint pie
 		Color colorOld = g2d.getColor();
 		Insets insets = getInsets();
 		double w = getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
-		double size = Math.min(w, h) * radius;
+		double size = Math.min(w, h) * getSetting(KEY_RADIUS, 1.0);
 		g2d.translate(getWidth()/2, getHeight()/2);
-		double angleStart = start;
+		double angleStart = getSetting(KEY_START, 0.0);
 		double angleStop = angleStart;
 		for (int i = 0; i < data.getRowCount();  i++) {
 			angleStop = data.get(0, i).doubleValue() * degreesPerValue;
+			List<Color> colorList = getSetting(KEY_COLOR_LIST, generateColors(data.getRowCount()));
 			g2d.setColor(colorList.get(i));
 			g2d.fill(new Arc2D.Double(-size/2, -size/2, size, size, angleStart, angleStop, Arc2D.PIE));
 			angleStart += angleStop;
@@ -65,53 +52,39 @@ public class PieChart extends Chart {
 		g2d.setColor(colorOld);
 	}
 
-	public double getRadius() {
-		return radius;
-	}
-
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
-
-	public List<Color> getColorList() {
-		return colorList;
-	}
-
-	public void setColorList(List<Color> colorList) {
-		this.colorList = colorList;
-	}
-
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public boolean isClockwise() {
-		return clockwise;
-	}
-
-	public void setClockwise(boolean clockwise) {
-		this.clockwise = clockwise;
-	}
-
-	private List<Color> generateColors(int count) {
+	protected List<Color> generateColors(int count) {
 		List<Color> colors = new ArrayList<Color>(count);
 		float hueStep = 1f / count;
 		for (int i = 0; i < count; i++) {
 			float h;
 			if ((i & 1) == 0) {
-				h = i/2 * hueStep;
+				h = i/2f * hueStep;
 			}
 			else {
-				h = 0.5f + i/2 * hueStep;
+				h = 0.5f + i/2f * hueStep;
 			}
 			Color color = Color.getHSBColor(h, 1f, 1f);
 			colors.add(color);
 		}
 
 		return colors;
+	}
+
+	@Override
+	public void dataChanged(DataTable data) {
+		super.dataChanged(data);
+
+		// Calculate sum of all values
+		double colYSum = 0.0;
+		for (Number[] row : data) {
+			colYSum += row[0].doubleValue();
+		}
+
+		if (getSetting(KEY_CLOCKWISE, true)) {
+			degreesPerValue = -360.0/colYSum;
+		}
+		else {
+			degreesPerValue = 360.0/colYSum;
+		}
 	}
 }
