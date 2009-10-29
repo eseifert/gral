@@ -68,14 +68,12 @@ public class DataTable implements Iterable<Number[]> {
 			row[i] = values[i];
 		}
 		data.add(row);
-		cacheMin.clear();
-		cacheMax.clear();
+		notifyDataChanged();
 	}
 
 	public void clear() {
 		data.clear();
-		cacheMin.clear();
-		cacheMax.clear();
+		notifyDataChanged();
 	}
 
 	/**
@@ -170,6 +168,8 @@ public class DataTable implements Iterable<Number[]> {
 	}
 
 	protected void notifyDataChanged() {
+		cacheMin.clear();
+		cacheMax.clear();
 		for (DataListener dataListener : dataListeners) {
 			dataListener.dataChanged(this);
 		}

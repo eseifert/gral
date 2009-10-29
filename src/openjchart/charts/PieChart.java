@@ -43,14 +43,19 @@ public class PieChart extends Chart {
 		double w = getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
 		double size = Math.min(w, h) * this.<Double>getSetting(KEY_RADIUS);
-		g2d.translate(getWidth()/2, getHeight()/2);
+		g2d.translate(getWidth()/2d, getHeight()/2d);
 		double angleStart = getSetting(KEY_START);
 		double angleStop = angleStart;
 		ColorMapper colorList = getSetting(KEY_COLORS);
 		for (int i = 0; i < data.getRowCount();  i++) {
+			double val = data.get(0, i).doubleValue();
+			// Ignore negative values
+			if (val <= 0.0) {
+				continue;
+			}
 			angleStop = data.get(0, i).doubleValue() * degreesPerValue;
 			g2d.setColor(colorList.get(i/(double)data.getRowCount()));
-			g2d.fill(new Arc2D.Double(-size/2, -size/2, size, size, angleStart, angleStop, Arc2D.PIE));
+			g2d.fill(new Arc2D.Double(-size/2d, -size/2d, size, size, angleStart, angleStop, Arc2D.PIE));
 			angleStart += angleStop;
 		}
 		g2d.setTransform(txOld);
@@ -60,11 +65,16 @@ public class PieChart extends Chart {
 	@Override
 	public void dataChanged(DataTable data) {
 		super.dataChanged(data);
-
+		
 		// Calculate sum of all values
 		double colYSum = 0.0;
-		for (Number[] row : data) {
-			colYSum += row[0].doubleValue();
+		for (int i = 0; i < data.getRowCount();  i++) {
+			double val = data.get(0, i).doubleValue();
+			// Ignore negative values
+			if (val <= 0.0) {
+				continue;
+			}
+			colYSum += val;
 		}
 
 		if (getSetting(KEY_CLOCKWISE)) {

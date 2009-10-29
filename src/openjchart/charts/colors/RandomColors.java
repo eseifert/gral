@@ -7,16 +7,16 @@ import java.util.Random;
 
 public class RandomColors implements ColorMapper {
 	private static final int NUM_COMPARISONS = 3;
-	private static final float MIN_DIST = 0.2f;
-	private Random random = new Random();
+	private static final float MIN_DIST = 0.3f;
+	private Random random;
 	private Deque<Color> previousColors;
 
 	public RandomColors() {
-		this(1l);
+		this(0l);
 	}
 
 	public RandomColors(long seed) {
-		random.setSeed(seed);
+		random = new Random(seed);
 		previousColors = new ArrayDeque<Color>(NUM_COMPARISONS);
 	}
 

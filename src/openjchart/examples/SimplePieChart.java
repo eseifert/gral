@@ -13,7 +13,7 @@ public class SimplePieChart extends JFrame {
 
 	public SimplePieChart() {
 		super("OpenJChartTest");
-		final DataTable data = new DataTable(Integer.class, Integer.class);
+		final DataTable data = new DataTable(Integer.class);
 		/*
 		data.add(1, 1);
 		data.add(2, 3);
@@ -24,9 +24,9 @@ public class SimplePieChart extends JFrame {
 		data.add(7, 9);
 		data.add(8, 11);//*/
 		//*
-		Random r = new Random(0);
-		for (int i=0; i<20; i++) {
-			data.add(i, r.nextInt()%100);
+		Random r = new Random();
+		for (int i = 0; i < 10; i++) {
+			data.add(Math.abs(r.nextInt()) % 10 + 1);
 		}
 		PieChart chart = new PieChart(data);
 		// Change rotation
