@@ -95,12 +95,12 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 
 	@Override
 	public <T> void setSetting(String key, T value) {
-		settings.<T>put(key, value);
+		settings.<T>set(key, value);
 	}
 
 	@Override
 	public <T> void setSettingDefault(String key, T value) {
-		settings.put(key, value);
+		settings.set(key, value);
 	}
 
 	@Override

@@ -190,7 +190,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	}
 
 	public <T> void setSetting(String key, T value) {
-		settings.<T>put(key, value);
+		settings.<T>set(key, value);
 		if (KEY_SHAPE.equals(key)) {
 			evaluateShape((Shape)value);
 		}

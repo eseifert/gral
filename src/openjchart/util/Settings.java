@@ -14,7 +14,7 @@ public class Settings {
 		return (T)settings.get(key);
 	}
 
-	public <T> void put(String key, T value) {
+	public <T> void set(String key, T value) {
 		settings.put(key, value);
 	}
 
