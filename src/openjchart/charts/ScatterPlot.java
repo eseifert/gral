@@ -50,11 +50,11 @@ public class ScatterPlot extends Chart {
 
 		dataChanged(this.data);
 		this.data.addDataListener(this);
-		
+
 		// Create axes
 		axisX = new Axis(minX, maxX);
 		axisY = new Axis(minY, maxY);
-		
+
 		setAxisXRenderer(new LinearRenderer2D());
 		setAxisYRenderer(new LinearRenderer2D());
 		shapeRenderer = new DefaultShapeRenderer();
@@ -87,14 +87,18 @@ public class ScatterPlot extends Chart {
 			g2d.setColor(this.<Color>getSetting(KEY_GRID_COLOR));
 			double minTickX = axisXRenderer.getMinTick(axisX);
 			double maxTickX = axisXRenderer.getMaxTick(axisX);
-			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
+			double gridOffsetY =
+				axisXRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
+				axisXRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
+			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-gridOffsetY);
 			double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 			for (double i = minTickX; i < maxTickX; i += tickSpacingX) {
-				double translateX = axisXRenderer.worldToView(axisX, i) + plotXMin;
+				double viewX = axisXRenderer.worldToView(axisX, i);
 				// Do not draw a grid line on the axis
-				if (translateX == plotXMin) {
+				if (viewX == 0.0) {
 					continue;
 				}
+				double translateX = plotXMin + viewX;
 				g2d.translate(translateX, 0);
 				g2d.draw(gridLineVert);
 				g2d.setTransform(txOld);
@@ -103,14 +107,18 @@ public class ScatterPlot extends Chart {
 			// Draw gridY
 			double minTickY = axisYRenderer.getMinTick(axisY);
 			double maxTickY = axisYRenderer.getMaxTick(axisY);
-			Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
+			double gridOffsetX =
+				axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
+				axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
+			Line2D gridLineHoriz = new Line2D.Double(plotXMin+gridOffsetX, 0, plotXMax, 0);
 			double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 			for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
-				double translateY = plotYMax - axisYRenderer.worldToView(axisY, i) + 1.0;
+				double viewY = axisYRenderer.worldToView(axisY, i);
 				// Do not draw a grid line on the axis
-				if (translateY == plotYMin) {
+				if (viewY == 0.0) {
 					continue;
 				}
+				double translateY = plotYMax - viewY + 1.0;
 				g2d.translate(0, translateY);
 				g2d.draw(gridLineHoriz);
 				g2d.setTransform(txOld);
@@ -152,7 +160,7 @@ public class ScatterPlot extends Chart {
 		double posY = getHeight() - xHeight  - insets.bottom;
 		axisXComp.setBounds(posX, posY, xWidth, xHeight);
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, xWidth, 0.0));
-		
+
 		posX = insets.left;
 		posY = insets.top;
 		axisYComp.setBounds(posX, posY, yWidth, yHeight);
