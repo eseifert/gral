@@ -92,7 +92,7 @@ public class ScatterPlot extends Chart {
 				axisXRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
 			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-gridOffsetY);
 			double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-			for (double i = minTickX; i < maxTickX; i += tickSpacingX) {
+			for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
 				double viewX = axisXRenderer.worldToView(axisX, i);
 				// Do not draw a grid line on the axis
 				if (viewX == 0.0) {
