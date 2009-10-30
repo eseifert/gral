@@ -1,5 +1,6 @@
 package openjchart.charts;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -23,6 +24,7 @@ public class BarChart extends Chart {
 	private double minY;
 	private double maxY;
 
+	private Axis axisY;
 	private AbstractAxisRenderer2D axisYRenderer;
 	private Drawable axisYComp;
 
@@ -32,7 +34,7 @@ public class BarChart extends Chart {
 		dataChanged(this.data);
 		this.data.addDataListener(this);
 
-		Axis axisY = new Axis(minY, maxY);
+		axisY = new Axis(minY, maxY);
 		axisYRenderer = new LinearRenderer2D();
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 		axisYComp = axisYRenderer.getRendererComponent(axisY);
@@ -44,16 +46,35 @@ public class BarChart extends Chart {
 		super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D) g;
+		Color colorOld = g2d.getColor();
 		AffineTransform txOld = g2d.getTransform();
 
 		Insets insets = getInsets();
-		double w = getWidth() - axisYComp.getWidth()/2.0 - insets.left - insets.right;
+		double w = getWidth() - axisYComp.getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
 		double barGap = w / series.size();
-		double plotXMin = axisYComp.getWidth()/2 + insets.left;
+		double plotXMin = axisYComp.getWidth() + insets.left;
 		double plotXMax = plotXMin + w;
 		double plotYMin = insets.top;
 		double plotYMax = plotYMin + h;
+		// Draw gridY
+		double minTick = axisYRenderer.getMinTick(axisY);
+		double maxTick = axisYRenderer.getMaxTick(axisY);
+		double tickSpacing = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
+		double tickOffset =
+			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
+			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
+		Line2D gridLineHoriz = new Line2D.Double(plotXMin + tickOffset, 0.0, plotXMax, 0.0);
+		g2d.setColor(Color.LIGHT_GRAY);
+		for (double i = minTick; i <= maxTick; i += tickSpacing) {
+			double translateY = plotYMax - axisYRenderer.worldToView(axisY, i);
+			g2d.translate(0.0, translateY);
+			g2d.draw(gridLineHoriz);
+			g2d.setTransform(txOld);
+		}
+
+		// Draw bars
+		g2d.setColor(Color.BLACK);
 		Rectangle2D bar = new Rectangle2D.Double();
 		Iterator<Integer> cols = series.values().iterator();
 		for (int i = 0; cols.hasNext(); i++) {
@@ -69,7 +90,7 @@ public class BarChart extends Chart {
 			g2d.setTransform(txOld);
 		}
 
-		g2d.setTransform(txOld);
+		g2d.setColor(colorOld);
 	}
 
 	@Override
