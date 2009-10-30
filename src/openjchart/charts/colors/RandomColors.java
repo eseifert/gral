@@ -1,43 +1,57 @@
 package openjchart.charts.colors;
 
 import java.awt.Color;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomColors implements ColorMapper {
-	private static final int NUM_COMPARISONS = 3;
-	private static final float MIN_DIST = 0.3f;
+	private static final int NUM_COMPARISONS = 4;
+	private static final double MIN_DIST = 0.3;
+
+	private final Map<Double, Color> colorCache;
 	private Random random;
-	private Deque<Color> previousColors;
 
 	public RandomColors() {
-		this(0l);
+		random = new Random();
+		colorCache = new LinkedHashMap<Double, Color>();
 	}
 
 	public RandomColors(long seed) {
+		this();
 		random = new Random(seed);
-		previousColors = new ArrayDeque<Color>(NUM_COMPARISONS);
 	}
 
 	@Override
 	public Color get(double value) {
+		if (colorCache.containsKey(value)) {
+			return colorCache.get(value);
+		}
+		
+		// Use the same random numbers for the same input value
+		//long seed = Double.doubleToRawLongBits(value);
+		//random.setSeed(seed);
+
+		// Generate a new color that is distant enough from previous colors
 		boolean match = false;
 		Color r;
 		do {
 			r = getRandomColor();
 			match = true;
-			for (Color prev : previousColors) {
+			Iterator<Color> colors = colorCache.values().iterator();
+			for (int i=0; i<NUM_COMPARISONS && colors.hasNext(); i++) {
+				Color prev = colors.next();
 				if (distanceSq(r, prev) < MIN_DIST*MIN_DIST) {
 					match = false;
 					break;
 				}
 			}
 		} while (!match);
-		previousColors.addFirst(r);
-		if (previousColors.size() > NUM_COMPARISONS) {
-			previousColors.removeLast();
-		}
+
+		// Remember previous colors to avoid similarities
+		colorCache.put(value, r);
+
 		return r;
 	}
 
@@ -48,15 +62,13 @@ public class RandomColors implements ColorMapper {
 		return Color.getHSBColor(hue, saturation, brightness);
 	}
 
-	private static float distanceSq(Color a, Color b) {
-		float[] hsbA = new float[3];
-		float[] hsbB = new float[3];
-		Color.RGBtoHSB(a.getRed(), a.getGreen(), a.getBlue(), hsbA);
-		Color.RGBtoHSB(b.getRed(), b.getGreen(), b.getBlue(), hsbB);
-		float dh = hsbA[0]-hsbB[0];
-		float ds = hsbA[1]-hsbB[1];
-		float db = hsbA[2]-hsbB[2];
-		return dh*dh + ds*ds + db*db;
+	private static double distanceSq(Color a, Color b) {
+		double rMean = (a.getRed() + b.getRed()) / 256.0 / 2.0;
+		double dr = (a.getRed()   - b.getRed())   / 256.0;
+		double dg = (a.getGreen() - b.getGreen()) / 256.0;
+		double db = (a.getBlue()  - b.getBlue())  / 256.0;
+		double d = (2.0 + rMean)*dr*dr + (4.0)*dg*dg + (2.0 + 1.0-rMean)*db*db;
+		return d / 9.0;
 	}
 
 }
