@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Settings {
-	private Map settings = new HashMap<String, Object>();
-	private Map defaults = new HashMap<String, Object>();
+	private Map<String, Object> settings = new HashMap<String, Object>();
+	private Map<String, Object> defaults = new HashMap<String, Object>();
 
 	public <T> T get(String key) {
 		if (!settings.containsKey(key)) {

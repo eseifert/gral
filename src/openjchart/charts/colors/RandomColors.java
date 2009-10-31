@@ -56,9 +56,9 @@ public class RandomColors implements ColorMapper {
 	}
 
 	private Color getRandomColor() {
-		float hue        = 0.0f + 1.0f*random.nextFloat();
-		float saturation = 0.7f + 0.3f*random.nextFloat();
-		float brightness = 0.3f + 0.7f*random.nextFloat();
+		float hue        = 0.00f + 1.00f*random.nextFloat();
+		float saturation = 0.75f + 0.25f*random.nextFloat();
+		float brightness = 0.25f + 0.75f*random.nextFloat();
 		return Color.getHSBColor(hue, saturation, brightness);
 	}
 
