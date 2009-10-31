@@ -12,6 +12,7 @@ public class RandomColors implements ColorMapper {
 
 	private final Map<Double, Color> colorCache;
 	private Random random;
+	private float[] colorVariance;
 
 	public RandomColors() {
 		random = new Random();
@@ -21,6 +22,11 @@ public class RandomColors implements ColorMapper {
 	public RandomColors(long seed) {
 		this();
 		random = new Random(seed);
+		colorVariance = new float[] {
+			0.00f, 1.00f,  // Hue
+			0.75f, 0.25f,  // Saturation
+			0.25f, 0.75f   // Brightness
+		};
 	}
 
 	@Override
@@ -56,9 +62,9 @@ public class RandomColors implements ColorMapper {
 	}
 
 	private Color getRandomColor() {
-		float hue        = 0.00f + 1.00f*random.nextFloat();
-		float saturation = 0.75f + 0.25f*random.nextFloat();
-		float brightness = 0.25f + 0.75f*random.nextFloat();
+		float hue        = colorVariance[0] + colorVariance[1]*random.nextFloat();
+		float saturation = colorVariance[2] + colorVariance[3]*random.nextFloat();
+		float brightness = colorVariance[4] + colorVariance[5]*random.nextFloat();
 		return Color.getHSBColor(hue, saturation, brightness);
 	}
 
