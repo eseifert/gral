@@ -25,8 +25,8 @@ public class SimplePieChart extends JFrame {
 		data.add(8, 11);//*/
 		//*
 		Random r = new Random();
-		for (int i = 0; i < 25; i++) {
-			data.add(Math.abs(r.nextInt()) % 50 + 1);
+		for (int i = 0; i < 15; i++) {
+			data.add(Math.abs(r.nextInt()) % 10 + 1);
 		}
 		PieChart chart = new PieChart(data);
 		// Change rotation

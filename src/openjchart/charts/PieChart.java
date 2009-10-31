@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
 import openjchart.charts.colors.ColorMapper;
-import openjchart.charts.colors.RandomColors;
+import openjchart.charts.colors.QuasiRandomColors;
 import openjchart.data.DataTable;
 
 public class PieChart extends Chart {
@@ -22,7 +22,7 @@ public class PieChart extends Chart {
 
 	public PieChart(DataTable data) {
 		setSettingDefault(KEY_RADIUS, 1.0);
-		setSettingDefault(KEY_COLORS, new RandomColors());
+		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
 		setSettingDefault(KEY_START, 0.0);
 

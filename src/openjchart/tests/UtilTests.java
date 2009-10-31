@@ -5,11 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	UtilTests.class,
-	AxisTest.class,
-	LinearRenderer2DTest.class,
-	LogarithmicRenderer2DTest.class,
-	DataTableTest.class
+	MathUtilsTest.class,
+	HaltonSequenceTest.class
 })
-public class AllTests {
+public class UtilTests {
 }
