@@ -3,38 +3,30 @@ package openjchart.charts;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
-import openjchart.Drawable;
-import openjchart.data.DataSeries;
-import openjchart.data.DataTable;
+import openjchart.util.Settings;
 
 public abstract class AbstractShapeRenderer implements ShapeRenderer {
-	protected Rectangle2D bounds;
-	protected Color color;
+	private final Settings settings;
 
 	public AbstractShapeRenderer() {
+		settings = new Settings();
+
+		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 
 	@Override
-	public abstract Drawable getShape(DataTable data, DataSeries series, int row);
-
-	@Override
-	public Rectangle2D getBounds() {
-		return bounds.getBounds2D();
+	public <T> T getSetting(String key) {
+		return settings.<T>get(key);
 	}
 
 	@Override
-	public Color getColor() {
-		return color;
+	public <T> void setSetting(String key, T value) {
+		settings.<T>set(key, value);
 	}
 
 	@Override
-	public void setBounds(Rectangle2D bounds) {
-		this.bounds.setFrame(bounds.getBounds2D());
+	public <T> void setSettingDefault(String key, T value) {
+		settings.<T>setDefault(key, value);
 	}
-
-	@Override
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 }

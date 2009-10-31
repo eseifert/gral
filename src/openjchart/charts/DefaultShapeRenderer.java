@@ -13,8 +13,6 @@ import openjchart.data.DataTable;
 public class DefaultShapeRenderer extends AbstractShapeRenderer implements ShapeRenderer {
 
 	public DefaultShapeRenderer() {
-		bounds = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
-		color = Color.BLACK;
 	}
 
 	@Override
@@ -24,7 +22,7 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer implements Shape
 			public void draw(Graphics2D graphics) {
 				Color colorOld = graphics.getColor();
 
-				graphics.setColor(color);
+				graphics.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
 				Integer sizeCol = series.get(DataSeries.SIZE);
 				Shape shape;
 				if (sizeCol != null) {
@@ -32,7 +30,7 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer implements Shape
 					shape = new Rectangle2D.Double(-size/2.0, -size/2.0, size, size);
 				}
 				else {
-					shape = bounds;
+					shape = getSetting(KEY_SHAPE);
 				}
 				graphics.fill(shape);
 				graphics.setColor(colorOld);
