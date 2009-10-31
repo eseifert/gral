@@ -35,6 +35,10 @@ public class SimplePieChart extends JFrame {
 		//chart.setSetting(PieChart.KEY_START, 70.0);
 		// Custom colors
 		//chart.setSetting(PieChart.KEY_COLORS, new RainbowColors());
+		// Random blue colors
+		//QuasiRandomColors colors = new QuasiRandomColors();
+		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
+		//chart.setSetting(PieChart.KEY_COLORS, colors);
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(chart, BorderLayout.CENTER);
 

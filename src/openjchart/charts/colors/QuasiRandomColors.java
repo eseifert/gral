@@ -13,14 +13,6 @@ public class QuasiRandomColors implements ColorMapper {
 	private final Map<Double, Color> colorCache;
 	private float[] colorVariance;
 
-	public float[] getColorVariance() {
-		return colorVariance;
-	}
-
-	public void setColorVariance(float[] colorVariance) {
-		this.colorVariance = colorVariance;
-	}
-
 	public QuasiRandomColors() {
 		colorCache = new HashMap<Double, Color>();
 		colorVariance = new float[] {
@@ -42,4 +34,13 @@ public class QuasiRandomColors implements ColorMapper {
 		colorCache.put(value, color);
 		return color;
 	}
+
+	public float[] getColorVariance() {
+		return colorVariance;
+	}
+
+	public void setColorVariance(float[] colorVariance) {
+		this.colorVariance = colorVariance;
+	}
+
 }

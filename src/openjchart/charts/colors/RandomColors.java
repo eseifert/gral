@@ -77,4 +77,12 @@ public class RandomColors implements ColorMapper {
 		return d / 9.0;
 	}
 
+	public float[] getColorVariance() {
+		return colorVariance;
+	}
+
+	public void setColorVariance(float[] colorVariance) {
+		this.colorVariance = colorVariance;
+	}
+
 }
