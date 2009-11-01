@@ -10,7 +10,6 @@ import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
-import openjchart.charts.labels.Label;
 import openjchart.data.DataListener;
 import openjchart.data.DataTable;
 import openjchart.util.Settings;
@@ -120,7 +119,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	public void dataChanged(DataTable data) {
 	}
 
-	public Drawable getTitle() {
+	public Label getTitle() {
 		return title;
 	}
 }

@@ -1,4 +1,4 @@
-package openjchart.charts.labels;
+package openjchart.charts;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -40,7 +40,7 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 		g2d.setFont(Label.this.<Font>getSetting(KEY_FONT));
 		FontMetrics metrics = g2d.getFontMetrics();
 		int titleWidth = metrics.stringWidth(text);
-		float x = (float) (getX() - titleWidth + getWidth()*Label.this.<Double>getSetting(KEY_ALIGNMENT));
+		float x = (float) (getX() + (getWidth() - titleWidth)*Label.this.<Double>getSetting(KEY_ALIGNMENT));
 		float y = (float) (getY() + getHeight()/2.0);
 
 		g2d.drawString(text, x, y);

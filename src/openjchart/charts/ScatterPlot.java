@@ -76,7 +76,7 @@ public class ScatterPlot extends Chart {
 		// Take the Component's insets into consideration
 		Insets insets = getInsets();
 
-		Drawable title = getTitle();
+		Label title = getTitle();
 		double titleOffset = title != null ? title.getY() + title.getHeight() : insets.top;
 		double axisXOffset = axisXComp.getHeight();
 		double axisYOffset = axisYComp.getWidth();
@@ -156,7 +156,7 @@ public class ScatterPlot extends Chart {
 		Insets insets = getInsets();
 
 		// Calculate title and axis bounds
-		Drawable title = getTitle();
+		Label title = getTitle();
 		double titleY = insets.top;
 		double titleHeight = title != null ? title.getPreferredSize().getHeight() : 0.0;
 
@@ -171,7 +171,7 @@ public class ScatterPlot extends Chart {
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
 
 		double titleX = posX;
-		double titleWidth = width - insets.left - insets.right;
+		double titleWidth = compXWidth;
 		if (title != null) {
 			title.setBounds(titleX, titleY, titleWidth, titleHeight);
 		}
@@ -180,6 +180,7 @@ public class ScatterPlot extends Chart {
 		posY = titleY + titleHeight;
 		axisYComp.setBounds(posX, posY, compYWidth, compYHeight);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
+
 	}
 
 	public AbstractAxisRenderer2D getAxisXRenderer() {

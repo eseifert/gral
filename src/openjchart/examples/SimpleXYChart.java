@@ -52,6 +52,8 @@ public class SimpleXYChart extends JFrame {
 		ScatterPlot chart = new ScatterPlot(data, seriesLog, seriesLin);
 		// Setting the title
 		chart.setSetting(ScatterPlot.KEY_TITLE, "A scatter plot");
+		// Custom title alignment
+		//chart.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
 		// Custom shape bounds
 		//chart.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom shape coloring
