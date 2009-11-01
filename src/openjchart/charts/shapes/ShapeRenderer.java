@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.charts.shapes;
 
 import openjchart.Drawable;
 import openjchart.data.DataSeries;

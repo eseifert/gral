@@ -14,6 +14,8 @@ import openjchart.charts.axes.AbstractAxisRenderer2D;
 import openjchart.charts.axes.Axis;
 import openjchart.charts.axes.AxisRenderer2D;
 import openjchart.charts.axes.LinearRenderer2D;
+import openjchart.charts.shapes.DefaultShapeRenderer;
+import openjchart.charts.shapes.ShapeRenderer;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 

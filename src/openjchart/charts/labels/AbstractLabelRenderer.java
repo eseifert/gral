@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.charts.labels;
 
 import openjchart.util.Settings;
 

@@ -10,6 +10,8 @@ import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
+import openjchart.charts.labels.DefaultLabelRenderer;
+import openjchart.charts.labels.LabelRenderer;
 import openjchart.data.DataListener;
 import openjchart.data.DataTable;
 import openjchart.util.Settings;
