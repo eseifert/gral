@@ -67,7 +67,9 @@ public class SimpleXYChart extends JFrame {
 		chart.setAxisXRenderer(logRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(3f);
-		logRendererX.setSetting(AxisRenderer2D.KEY_STROKE, stroke);
+		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
+		// Custom stroke for the ticks
+		logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
 		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
 		chart.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));

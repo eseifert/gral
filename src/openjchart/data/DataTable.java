@@ -1,10 +1,7 @@
 package openjchart.data;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import openjchart.data.comparators.DataComparator;
 
 
 public class DataTable implements Iterable<Number[]> {
@@ -13,7 +10,7 @@ public class DataTable implements Iterable<Number[]> {
 
 	private final Map<Integer, Double> cacheMin;
 	private final Map<Integer, Double> cacheMax;
-	
+
 	private final Set<DataListener> dataListeners;
 
 	private static class DataTableIterator implements Iterator<Number[]> {
@@ -152,6 +149,21 @@ public class DataTable implements Iterable<Number[]> {
 	 */
 	public int getRowCount() {
 		return data.size();
+	}
+
+	public void sort(final DataComparator... comparators) {
+		Collections.sort(data, new Comparator<Number[]>() {
+			@Override
+			public int compare(Number[] o1, Number[] o2) {
+				for (DataComparator comp : comparators) {
+					int result = comp.compare(o1, o2);
+					if (result != 0) {
+						return result;
+					}
+				}
+				return 0;
+			}
+		});
 	}
 
 	@Override

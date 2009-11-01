@@ -3,6 +3,8 @@ package openjchart.tests;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import openjchart.data.DataTable;
+import openjchart.data.comparators.Ascending;
+import openjchart.data.comparators.Descending;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,6 +51,43 @@ public class DataTableTest {
 		for (Number[] row : table) {
 			assertArrayEquals(table.get(rowNo), row);
 			rowNo++;
+		}
+	}
+
+	@Test
+	public void testSort() {
+		table = new DataTable(Integer.class, Integer.class, Integer.class);
+		int[] original = {
+				9,	1,	3,
+				4,	4,	2,
+				4,	2,	1,
+				8,	1,	9,
+				8,	1,	7,
+				6,	2,	4,
+				4,	6,	5,
+				3,	3,	5
+		};
+		int i = 0;
+		while (i < original.length) {
+			table.add(original[i++], original[i++], original[i++]);
+		}
+
+		table.sort(new Ascending(1), new Descending(0), new Ascending(2));
+
+		int[] expected = {
+				9,	1,	3,
+				8,	1,	7,
+				8,	1,	9,
+				6,	2,	4,
+				4,	2,	1,
+				3,	3,	5,
+				4,	4,	2,
+				4,	6,	5
+		};
+		i = 0;
+		while (i < expected.length) {
+			assertEquals(expected[i], table.get(i%3, i/3));
+			i++;
 		}
 	}
 }

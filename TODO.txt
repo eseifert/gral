@@ -1,0 +1,26 @@
+- Add line support to ScatterPlot
+
+- Include DataTable in DataSeries
+
+- Add new chart for drawing a pair of rows as line segments;
+  Extension of scatter plot possible (Connect every nth pair)
+
+- Add support for error bars ShapeRenderer
+
+- Add Legend to charts
+
+- Add JTable that acts as a renderer for DataTable
+
+- Add more support for statistics to DataTable (for example histograms)
+
+- Allow axes to be rescaled on Chart/window resizing
+  Example: Axis is scaled from -3 to +3 -> chart is resized -> 
+  new scale for Axis: -4 to +4
+
+- Setting to keep aspect ratio when resizing a chart
+  (take alignment into account)
+
+- Set font sizes relative to the size of a standard font size 
+  (like "em" in HTML)
+
+- Property window to change the charts while the program is running

@@ -33,10 +33,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 		setSettingDefault(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
-		setSettingDefault(KEY_STROKE, new BasicStroke());
+		setSettingDefault(KEY_SHAPE_STROKE, new BasicStroke());
 
 		setSettingDefault(KEY_TICK_SPACING, 1.0);
 		setSettingDefault(KEY_TICK_LENGTH, 10.0);
+		setSettingDefault(KEY_TICK_STROKE, new BasicStroke());
 		setSettingDefault(KEY_TICK_ALIGNMENT, 0.5);
 
 		setSettingDefault(KEY_LABEL_FORMAT, NumberFormat.getInstance());
@@ -69,7 +70,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				}
 
 				// Draw axis shape
-				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_STROKE));
+				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_SHAPE_STROKE));
 				g2d.draw(AbstractAxisRenderer2D.this.<Shape>getSetting(KEY_SHAPE));
 				g2d.setStroke(strokeOld);
 
@@ -95,7 +96,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 					double tickNormalX = (isNormalOrientationClockwise?1:-1)*(line.getY2() - line.getY1()) / segmentLength;
 					double tickNormalY = (isNormalOrientationClockwise?-1:1)*(line.getX2() - line.getX1()) / segmentLength;
 
-					// If the next tick(s) lie(s) on our current axis shape segment
+					// If the next ticks lie on our current axis shape segment
+					g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
 					while (currentTick<tickPositionsView.length && tickPositionsView[currentTick] <= shapeLengthCur + segmentLength) {
 						// Interpolate segment ends to get tick position
 						double tickPosRel = (tickPositionsView[currentTick] - shapeLengthCur) / segmentLength;
@@ -142,6 +144,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 						currentTick++;
 					}
+					g2d.setStroke(strokeOld);
 				}
 			}
 
