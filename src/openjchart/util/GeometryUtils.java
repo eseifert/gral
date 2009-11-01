@@ -1,10 +1,6 @@
 package openjchart.util;
 import java.awt.Shape;
-import java.awt.geom.FlatteningPathIterator;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

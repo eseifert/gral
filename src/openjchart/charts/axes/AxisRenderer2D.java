@@ -32,7 +32,7 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_LABEL_FORMAT = "axis.label.format";
 	/** Distance of labels to their ticks. */
 	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
-	/** Draw labels outside of the chart. */
+	/** Draw labels outside of the plot. */
 	static final String KEY_LABEL_OUTSIDE = "axis.label.outside";
 
 	/**

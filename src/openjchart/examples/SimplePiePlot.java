@@ -6,12 +6,12 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
-import openjchart.charts.PieChart;
 import openjchart.data.DataTable;
+import openjchart.plots.PiePlot;
 
-public class SimplePieChart extends JFrame {
+public class SimplePiePlot extends JFrame {
 
-	public SimplePieChart() {
+	public SimplePiePlot() {
 		super("OpenJChartTest");
 		final DataTable data = new DataTable(Integer.class);
 		/*
@@ -28,26 +28,26 @@ public class SimplePieChart extends JFrame {
 		for (int i = 0; i < 15; i++) {
 			data.add(Math.abs(r.nextInt()) % 10 + 1);
 		}
-		PieChart chart = new PieChart(data);
+		PiePlot plot = new PiePlot(data);
 		// Change rotation
-		//chart.setSetting(PieChart.KEY_CLOCKWISE, false);
+		//plot.setSetting(PiePlot.KEY_CLOCKWISE, false);
 		// Custom start angle
-		//chart.setSetting(PieChart.KEY_START, 70.0);
+		//plot.setSetting(PiePlot.KEY_START, 70.0);
 		// Custom colors
-		//chart.setSetting(PieChart.KEY_COLORS, new RainbowColors());
+		//plot.setSetting(PiePlot.KEY_COLORS, new RainbowColors());
 		// Random blue colors
 		//QuasiRandomColors colors = new QuasiRandomColors();
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
-		//chart.setSetting(PieChart.KEY_COLORS, colors);
-		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
-		getContentPane().add(chart, BorderLayout.CENTER);
+		//plot.setSetting(PiePlot.KEY_COLORS, colors);
+		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
+		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 	}
 
 	public static void main(String[] args) {
-		SimplePieChart test = new SimplePieChart();
+		SimplePiePlot test = new SimplePiePlot();
 		test.setVisible(true);
 	}
 }

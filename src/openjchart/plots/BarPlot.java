@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.plots;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,7 +17,7 @@ import openjchart.charts.axes.LinearRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
-public class BarChart extends Chart {
+public class BarPlot extends Plot {
 	private DataTable data;
 	private DataSeries series;
 
@@ -28,7 +28,7 @@ public class BarChart extends Chart {
 	private AbstractAxisRenderer2D axisYRenderer;
 	private Drawable axisYComp;
 
-	public BarChart(DataTable data, DataSeries series) {
+	public BarPlot(DataTable data, DataSeries series) {
 		this.data = data;
 		this.series = series;
 		dataChanged(this.data);

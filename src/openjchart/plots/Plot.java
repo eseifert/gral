@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.plots;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -15,10 +15,10 @@ import openjchart.data.DataTable;
 import openjchart.util.Settings;
 import openjchart.util.SettingsStorage;
 
-public abstract class Chart extends JPanel implements SettingsStorage, DataListener {
-	public static final String KEY_TITLE = "chart.title";
-	public static final String KEY_BACKGROUND_COLOR = "chart.background.color";
-	public static final String KEY_ANTIALISING = "chart.antialiasing";
+public abstract class Plot extends JPanel implements SettingsStorage, DataListener {
+	public static final String KEY_TITLE = "plot.title";
+	public static final String KEY_BACKGROUND_COLOR = "plot.background.color";
+	public static final String KEY_ANTIALISING = "plot.antialiasing";
 
 	private final Settings settings;
 
@@ -27,7 +27,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 
 	private Label title;
 
-	public Chart() {
+	public Plot() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();

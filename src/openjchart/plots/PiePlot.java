@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.plots;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,17 +11,17 @@ import openjchart.charts.colors.ColorMapper;
 import openjchart.charts.colors.QuasiRandomColors;
 import openjchart.data.DataTable;
 
-public class PieChart extends Chart {
-	public static final String KEY_RADIUS = "piechart.radius";
-	public static final String KEY_COLORS = "piechart.colorlist";
-	public static final String KEY_CLOCKWISE = "piechart.clockwise";
-	public static final String KEY_START = "piechart.start";
+public class PiePlot extends Plot {
+	public static final String KEY_RADIUS = "pieplot.radius";
+	public static final String KEY_COLORS = "pieplot.colorlist";
+	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
+	public static final String KEY_START = "pieplot.start";
 
 	private DataTable data;
 	private double degreesPerValue;
 	private double[] startValues;
 
-	public PieChart(DataTable data) {
+	public PiePlot(DataTable data) {
 		setSettingDefault(KEY_RADIUS, 1.0);
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);

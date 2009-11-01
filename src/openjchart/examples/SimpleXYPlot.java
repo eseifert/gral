@@ -6,15 +6,15 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
-import openjchart.charts.ScatterPlot;
 import openjchart.charts.axes.AxisRenderer2D;
 import openjchart.charts.axes.LogarithmicRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
+import openjchart.plots.XYPlot;
 
-public class SimpleXYChart extends JFrame {
+public class SimpleXYPlot extends JFrame {
 
-	public SimpleXYChart() {
+	public SimpleXYPlot() {
 		super("OpenJChartTest");
 		/*final DataTable data = new DataTable(Integer.class, Integer.class);
 		data.add(1, 1);
@@ -49,38 +49,38 @@ public class SimpleXYChart extends JFrame {
 		seriesLin.put(DataSeries.X, 0);
 		seriesLin.put(DataSeries.Y, 0);
 		seriesLin.put(DataSeries.SIZE, 2);
-		ScatterPlot chart = new ScatterPlot(data, seriesLog, seriesLin);
+		XYPlot plot = new XYPlot(data, seriesLog, seriesLin);
 		// Setting the title
-		chart.setSetting(ScatterPlot.KEY_TITLE, "A scatter plot");
+		plot.setSetting(XYPlot.KEY_TITLE, "An XY plot");
 		// Custom title alignment
-		//chart.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
+		//plot.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
 		// Custom shape bounds
-		//chart.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
+		//plot.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom shape coloring
-		//chart.getShapeRenderer().setColor(Color.RED);
+		//plot.getShapeRenderer().setColor(Color.RED);
 		// Custom grid color
-		//chart.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
+		//plot.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		//chart.setSetting(ScatterPlot.KEY_GRID, false);
+		//plot.setSetting(ScatterPlot.KEY_GRID, false);
 		// Custom axis renderers
 		LogarithmicRenderer2D logRendererX = new LogarithmicRenderer2D();
-		chart.setAxisXRenderer(logRendererX);
+		plot.setAxisXRenderer(logRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(3f);
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
 		// Custom stroke for the ticks
 		logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
-		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
-		chart.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
-		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
-		getContentPane().add(chart, BorderLayout.CENTER);
+		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
+		plot.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
+		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
+		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 	}
 
 	public static void main(String[] args) {
-		SimpleXYChart test = new SimpleXYChart();
+		SimpleXYPlot test = new SimpleXYPlot();
 		test.setVisible(true);
 	}
 }

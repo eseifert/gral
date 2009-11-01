@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.plots;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +19,7 @@ import openjchart.charts.shapes.ShapeRenderer;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
-public class ScatterPlot extends Chart {
+public class XYPlot extends Plot {
 	public static final String KEY_GRID = "scatterplot.grid";
 	public static final String KEY_GRID_COLOR = "scatterplot.grid.color";
 
@@ -40,7 +40,7 @@ public class ScatterPlot extends Chart {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	public ScatterPlot(DataTable data, DataSeries... series) {
+	public XYPlot(DataTable data, DataSeries... series) {
 		setSettingDefault(KEY_GRID, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 

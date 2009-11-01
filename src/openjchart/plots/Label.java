@@ -1,4 +1,4 @@
-package openjchart.charts;
+package openjchart.plots;
 
 import java.awt.Font;
 import java.awt.FontMetrics;

@@ -1,5 +1,7 @@
 - Add line support to ScatterPlot
 
+- Use Label class also in AbstractAxisRenderer2D
+
 - Include DataTable in DataSeries
 
 - Add new chart for drawing a pair of rows as line segments;
