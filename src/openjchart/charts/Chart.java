@@ -103,16 +103,16 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	@Override
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
-		if (KEY_TITLE.equals(key)) {
-			title = labelRenderer.getLabel(this.<String>getSetting(KEY_TITLE));
+		if (KEY_TITLE.equals(key) && value != null) {
+			title = labelRenderer.getLabel((String) value);
 		}
 	}
 
 	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.set(key, value);
-		if (KEY_TITLE.equals(key)) {
-			title = labelRenderer.getLabel(this.<String>getSetting(KEY_TITLE));
+		if (KEY_TITLE.equals(key) && value != null) {
+			title = labelRenderer.getLabel((String) value);
 		}
 	}
 
