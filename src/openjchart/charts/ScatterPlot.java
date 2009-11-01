@@ -74,13 +74,14 @@ public class ScatterPlot extends Chart {
 		// Take the Component's insets into consideration
 		Insets insets = getInsets();
 
+		double titleOffset = getTitle().getY() + getTitle().getHeight();
 		double axisXOffset = axisXComp.getHeight();
 		double axisYOffset = axisYComp.getWidth();
 		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
-		double h = getHeight() - 1 - axisXOffset - insets.top - insets.bottom;
+		double h = getHeight() - 1 - axisXOffset - titleOffset - insets.bottom;
 		double plotXMin = axisYOffset + insets.left;
 		double plotXMax = plotXMin + w;
-		double plotYMin = insets.top;
+		double plotYMin = titleOffset;
 		double plotYMax = plotYMin + h;
 		if (getSetting(KEY_GRID)) {
 			// Draw gridX
@@ -151,20 +152,28 @@ public class ScatterPlot extends Chart {
 
 		Insets insets = getInsets();
 
-		double xHeight = axisXComp.getPreferredSize().getHeight();
-		double yWidth = axisYComp.getPreferredSize().getWidth();
-		double xWidth = getWidth() - yWidth - insets.left - insets.right;
-		double yHeight = getHeight() - xHeight  - insets.top - insets.bottom;
+		// Calculate title and axis bounds
+		double titleY = insets.top;
+		double titleHeight = 50.0;
 
-		double posX = yWidth + insets.left;
-		double posY = getHeight() - xHeight  - insets.bottom;
-		axisXComp.setBounds(posX, posY, xWidth, xHeight);
-		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, xWidth, 0.0));
+		double compXHeight = axisXComp.getPreferredSize().getHeight();
+		double compYWidth = axisYComp.getPreferredSize().getWidth();
+		double compXWidth = getWidth() - compYWidth - insets.left - insets.right;
+		double compYHeight = getHeight() - compXHeight  - titleY - titleHeight - insets.bottom;
+
+		double posX = compYWidth + insets.left;
+		double posY = getHeight() - compXHeight  - insets.bottom;
+		axisXComp.setBounds(posX, posY, compXWidth, compXHeight);
+		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
+
+		double titleX = posX;
+		double titleWidth = width - insets.left - insets.right;
+		getTitle().setBounds(titleX, titleY, titleWidth, titleHeight);
 
 		posX = insets.left;
-		posY = insets.top;
-		axisYComp.setBounds(posX, posY, yWidth, yHeight);
-		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(yWidth, yHeight, yWidth, 0.0));
+		posY = titleY + titleHeight;
+		axisYComp.setBounds(posX, posY, compYWidth, compYHeight);
+		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
 	}
 
 	public AbstractAxisRenderer2D getAxisXRenderer() {

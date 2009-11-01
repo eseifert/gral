@@ -1,10 +1,6 @@
 package openjchart.charts;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,21 +16,24 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsStorage;
 
 public abstract class Chart extends JPanel implements SettingsStorage, DataListener {
-	private static final String SETTING_BACKGROUND_COLOR = "chart.background.color";
-	private static final String SETTING_ANTIALISING = "chart.antialiasing";
+	public static final String KEY_BACKGROUND_COLOR = "chart.background.color";
+	public static final String KEY_ANTIALISING = "chart.antialiasing";
 
 	private final Settings settings;
 
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
+	private final Title title;
+
 	public Chart() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
-		setSettingDefault(SETTING_BACKGROUND_COLOR, Color.WHITE);
-		setSettingDefault(SETTING_ANTIALISING, true);
-		setBackground(this.<Color>getSetting(SETTING_BACKGROUND_COLOR));
+		this.title = new Title(null);
+		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
+		setSettingDefault(KEY_ANTIALISING, true);
+		setBackground(this.<Color>getSetting(KEY_BACKGROUND_COLOR));
 	}
 
 	@Override
@@ -43,8 +42,13 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				this.<Boolean>getSetting(SETTING_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 		AffineTransform txOld = g2d.getTransform();
+
+		String titleString = title.getTitle();
+		if (titleString != null) {
+			title.draw(g2d);
+		}
 
 		// Draw axes
 		for (Drawable axis : axisDrawables.values()) {
@@ -105,5 +109,9 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 
 	@Override
 	public void dataChanged(DataTable data) {
+	}
+
+	public Title getTitle() {
+		return title;
 	}
 }
