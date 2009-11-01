@@ -10,8 +10,7 @@ import javax.swing.border.Border;
 
 import openjchart.Drawable;
 import openjchart.charts.axes.Axis;
-import openjchart.charts.labels.DefaultLabelRenderer;
-import openjchart.charts.labels.LabelRenderer;
+import openjchart.charts.labels.Label;
 import openjchart.data.DataListener;
 import openjchart.data.DataTable;
 import openjchart.util.Settings;
@@ -27,15 +26,14 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
-	private final DefaultLabelRenderer labelRenderer;
-	private Drawable title;
+	private Label title;
 
 	public Chart() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
-		this.labelRenderer = new DefaultLabelRenderer();
-		this.labelRenderer.setSetting(LabelRenderer.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+		this.title = new Label("");
+		this.title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
 		setSettingDefault(KEY_ANTIALISING, true);
@@ -106,7 +104,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
 		if (KEY_TITLE.equals(key) && value != null) {
-			title = labelRenderer.getLabel((String) value);
+			title.setText((String) value);
 		}
 	}
 
@@ -114,7 +112,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	public <T> void setSettingDefault(String key, T value) {
 		settings.set(key, value);
 		if (KEY_TITLE.equals(key) && value != null) {
-			title = labelRenderer.getLabel((String) value);
+			title.setText((String) value);
 		}
 	}
 

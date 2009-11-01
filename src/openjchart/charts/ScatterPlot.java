@@ -158,7 +158,7 @@ public class ScatterPlot extends Chart {
 		// Calculate title and axis bounds
 		Drawable title = getTitle();
 		double titleY = insets.top;
-		double titleHeight = title != null ? 50.0 : 0.0;
+		double titleHeight = title != null ? title.getPreferredSize().getHeight() : 0.0;
 
 		double compXHeight = axisXComp.getPreferredSize().getHeight();
 		double compYWidth = axisYComp.getPreferredSize().getWidth();
