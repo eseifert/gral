@@ -16,6 +16,7 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsStorage;
 
 public abstract class Chart extends JPanel implements SettingsStorage, DataListener {
+	public static final String KEY_TITLE = "chart.title";
 	public static final String KEY_BACKGROUND_COLOR = "chart.background.color";
 	public static final String KEY_ANTIALISING = "chart.antialiasing";
 
@@ -24,13 +25,15 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
-	private final Title title;
+	private final DefaultLabelRenderer labelRenderer;
+	private Drawable title;
 
 	public Chart() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
-		this.title = new Title(null);
+		this.labelRenderer = new DefaultLabelRenderer();
+		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
 		setSettingDefault(KEY_ANTIALISING, true);
 		setBackground(this.<Color>getSetting(KEY_BACKGROUND_COLOR));
@@ -45,8 +48,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 		AffineTransform txOld = g2d.getTransform();
 
-		String titleString = title.getTitle();
-		if (titleString != null) {
+		if (title != null) {
 			title.draw(g2d);
 		}
 
@@ -100,18 +102,24 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 	@Override
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
+		if (KEY_TITLE.equals(key)) {
+			title = labelRenderer.getLabel(this.<String>getSetting(KEY_TITLE));
+		}
 	}
 
 	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.set(key, value);
+		if (KEY_TITLE.equals(key)) {
+			title = labelRenderer.getLabel(this.<String>getSetting(KEY_TITLE));
+		}
 	}
 
 	@Override
 	public void dataChanged(DataTable data) {
 	}
 
-	public Title getTitle() {
+	public Drawable getTitle() {
 		return title;
 	}
 }
