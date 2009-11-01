@@ -33,6 +33,7 @@ public abstract class Chart extends JPanel implements SettingsStorage, DataListe
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
 		this.labelRenderer = new DefaultLabelRenderer();
+		this.labelRenderer.setSetting(LabelRenderer.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
 		setSettingDefault(KEY_ANTIALISING, true);
