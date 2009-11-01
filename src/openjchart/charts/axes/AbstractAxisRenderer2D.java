@@ -1,8 +1,6 @@
 package openjchart.charts.axes;
 
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -35,6 +33,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 		setSettingDefault(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
+		setSettingDefault(KEY_STROKE, new BasicStroke());
 
 		setSettingDefault(KEY_TICK_SPACING, 1.0);
 		setSettingDefault(KEY_TICK_LENGTH, 10.0);
@@ -55,6 +54,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				}
 				AffineTransform txOld = g2d.getTransform();
 				FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
+				Stroke strokeOld = g2d.getStroke();
 
 				// Calculate tick positions (in pixel coordinates)
 				double minTick = getMinTick(axis);
@@ -68,9 +68,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 					tickPositionsView[i] = worldToView(axis, tickPositionsWorld[i]);
 				}
 
-				// Draw axis shape and ticks
+				// Draw axis shape
+				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_STROKE));
 				g2d.draw(AbstractAxisRenderer2D.this.<Shape>getSetting(KEY_SHAPE));
+				g2d.setStroke(strokeOld);
 
+				// Draw ticks
 				// FIXME: Rausziehen
 				tickLengthInner = tickLength*(tickAlignment);
 				tickLengthOuter = tickLength*(1.0 - tickAlignment);
@@ -102,8 +105,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 						// Draw tick and label
 						g2d.translate(tickPosX, tickPosY);
 						tickShape.setLine(
-							-tickNormalX*tickLengthInner, -tickNormalY*tickLengthInner,
-							 tickNormalX*tickLengthOuter,  tickNormalY*tickLengthOuter
+								-tickNormalX*tickLengthInner, -tickNormalY*tickLengthInner,
+								tickNormalX*tickLengthOuter,  tickNormalY*tickLengthOuter
 						);
 						g2d.draw(tickShape);
 
@@ -114,20 +117,20 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 						Rectangle2D labelBounds = metrics.getStringBounds(label, g2d);
 						// Add padding to bounding box
 						labelBoundsPadded.setFrame(
-							0.0,
-							0.0,
-							labelBounds.getWidth()  + 2.0*labelDist,
-							labelBounds.getHeight() + 2.0*labelDist
+								0.0,
+								0.0,
+								labelBounds.getWidth()  + 2.0*labelDist,
+								labelBounds.getHeight() + 2.0*labelDist
 						);
 						boolean isLabelOutside = getSetting(KEY_LABEL_OUTSIDE);
 						List<Point2D> labelBoundsIntersections = GeometryUtils.intersection(
-							labelBoundsPadded,
-							new Line2D.Double(
-								labelBoundsPadded.getCenterX(),
-								labelBoundsPadded.getCenterY(),
-								labelBoundsPadded.getCenterX() + (isLabelOutside?-tickNormalX:tickNormalX)*labelBoundsPadded.getWidth(),
-								labelBoundsPadded.getCenterY() + (isLabelOutside?-tickNormalY:tickNormalY)*labelBoundsPadded.getWidth()
-							)
+								labelBoundsPadded,
+								new Line2D.Double(
+										labelBoundsPadded.getCenterX(),
+										labelBoundsPadded.getCenterY(),
+										labelBoundsPadded.getCenterX() + (isLabelOutside?-tickNormalX:tickNormalX)*labelBoundsPadded.getWidth(),
+										labelBoundsPadded.getCenterY() + (isLabelOutside?-tickNormalY:tickNormalY)*labelBoundsPadded.getWidth()
+								)
 						);
 						double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
 						double intersY = labelBoundsIntersections.get(0).getY() - labelBoundsPadded.getCenterY();

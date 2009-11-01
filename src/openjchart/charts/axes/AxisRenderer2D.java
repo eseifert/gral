@@ -16,6 +16,8 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE = "axis.shape.normalOrientationClockwise";
 	/** Color of axis, ticks and labels. */
 	static final String KEY_SHAPE_COLOR = "axis.shape.color";
+	/** Stroke of the axis */
+	static final String KEY_STROKE = "axis.stroke";
 
 	/** Interval for ticks. */
 	static final String KEY_TICK_SPACING = "axis.tick.spacing";

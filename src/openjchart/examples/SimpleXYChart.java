@@ -1,5 +1,6 @@
 package openjchart.examples;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
@@ -58,7 +59,11 @@ public class SimpleXYChart extends JFrame {
 		// Grid disabled
 		//chart.setSetting(ScatterPlot.KEY_GRID, false);
 		// Custom axis renderers
-		chart.setAxisXRenderer(new LogarithmicRenderer2D());
+		LogarithmicRenderer2D logRendererX = new LogarithmicRenderer2D();
+		chart.setAxisXRenderer(logRendererX);
+		// Custom stroke for the x-axis
+		BasicStroke stroke = new BasicStroke(3f);
+		logRendererX.setSetting(AxisRenderer2D.KEY_STROKE, stroke);
 		//chart.setAxisYRenderer(new LogarithmicRenderer2D());
 		chart.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		chart.setBorder(new EmptyBorder(20, 20, 20, 20));
