@@ -1,9 +1,6 @@
 package openjchart.plots;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -20,8 +17,11 @@ import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 
 public class XYPlot extends Plot {
-	public static final String KEY_GRID = "scatterplot.grid";
-	public static final String KEY_GRID_COLOR = "scatterplot.grid.color";
+	public static final String KEY_GRID = "xyplot.grid";
+	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
+
+	public static final String KEY_LINE_STROKE = "xyplot.line.stroke";
+	public static final String KEY_LINE_COLOR = "xyplot.line.color";
 
 	private DataTable data;
 
@@ -43,6 +43,8 @@ public class XYPlot extends Plot {
 	public XYPlot(DataTable data, DataSeries... series) {
 		setSettingDefault(KEY_GRID, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
+		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
+		setSettingDefault(KEY_LINE_COLOR, Color.BLACK);
 
 		this.data = data;
 		this.series = new ArrayList<DataSeries>(series.length);
@@ -72,6 +74,7 @@ public class XYPlot extends Plot {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform txOld = g2d.getTransform();
 		Color colorDefault = g2d.getColor();
+		Stroke strokeOld = g2d.getStroke();
 
 		// Take the Component's insets into consideration
 		Insets insets = getInsets();
@@ -129,8 +132,12 @@ public class XYPlot extends Plot {
 			}
 		}
 
-		// Paint shapes
+		// Paint shapes and lines
+		g2d.setColor(this.<Color>getSetting(KEY_LINE_COLOR));
+		g2d.setStroke(this.<Stroke>getSetting(KEY_LINE_STROKE));
+		Line2D line = new Line2D.Double();
 		for (DataSeries s : series) {
+			double[] lineStart = new double[2];
 			// Retrieve the columns mapped to X and Y axes
 			int colX = s.get(DataSeries.X);
 			int colY = s.get(DataSeries.Y);
@@ -140,6 +147,14 @@ public class XYPlot extends Plot {
 				double valueY = data.get(colY, i).doubleValue();
 				double translateX = axisXRenderer.worldToView(axisX, valueX) + plotXMin;
 				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY) + 1.0;
+
+				if (i != 0) {
+					line.setLine(lineStart[0], lineStart[1], translateX, translateY);
+					g2d.draw(line);
+				}
+				lineStart[0] = translateX;
+				lineStart[1] = translateY;
+
 				g2d.translate(translateX, translateY);
 				Drawable shape = shapeRenderer.getShape(data, s, i);
 				shape.draw(g2d);
