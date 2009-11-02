@@ -13,7 +13,7 @@ public class SimpleBarPlot extends JFrame {
 
 	public SimpleBarPlot() {
 		super("OpenJChartTest");
-		final DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
+		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
 		data.add(1, 1, 6);
 		data.add(2, 3, 8);
 		data.add(3, 2, 2);

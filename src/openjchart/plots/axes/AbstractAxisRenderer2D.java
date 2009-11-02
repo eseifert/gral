@@ -1,4 +1,4 @@
-package openjchart.charts.axes;
+package openjchart.plots.axes;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

@@ -1,8 +1,8 @@
-package openjchart.charts.shapes;
+package openjchart.plots.shapes;
 
 import openjchart.Drawable;
 import openjchart.data.DataSeries;
-import openjchart.data.DataTable;
+import openjchart.data.DataSource;
 import openjchart.util.SettingsStorage;
 
 /**
@@ -27,5 +27,5 @@ public interface ShapeRenderer extends SettingsStorage {
 	 * @param row row of the value in the DataTable
 	 * @return Drawable that represents the shape
 	 */
-	Drawable getShape(DataTable data, DataSeries series, int row);
+	Drawable getShape(DataSource data, DataSeries series, int row);
 }

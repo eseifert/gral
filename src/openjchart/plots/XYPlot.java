@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import openjchart.Drawable;
-import openjchart.charts.axes.AbstractAxisRenderer2D;
-import openjchart.charts.axes.Axis;
-import openjchart.charts.axes.AxisRenderer2D;
-import openjchart.charts.axes.LinearRenderer2D;
-import openjchart.charts.shapes.DefaultShapeRenderer;
-import openjchart.charts.shapes.ShapeRenderer;
 import openjchart.data.DataSeries;
+import openjchart.data.DataSource;
 import openjchart.data.DataTable;
+import openjchart.plots.axes.AbstractAxisRenderer2D;
+import openjchart.plots.axes.Axis;
+import openjchart.plots.axes.AxisRenderer2D;
+import openjchart.plots.axes.LinearRenderer2D;
+import openjchart.plots.shapes.DefaultShapeRenderer;
+import openjchart.plots.shapes.ShapeRenderer;
 
 public class XYPlot extends Plot {
 	public static final String KEY_GRID = "xyplot.grid";
@@ -23,7 +24,7 @@ public class XYPlot extends Plot {
 	public static final String KEY_LINE_STROKE = "xyplot.line.stroke";
 	public static final String KEY_LINE_COLOR = "xyplot.line.color";
 
-	private DataTable data;
+	private DataSource data;
 
 	private AbstractAxisRenderer2D axisXRenderer;
 	private AbstractAxisRenderer2D axisYRenderer;
@@ -40,7 +41,7 @@ public class XYPlot extends Plot {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	public XYPlot(DataTable data, DataSeries... series) {
+	public XYPlot(DataSource data, DataSeries... series) {
 		setSettingDefault(KEY_GRID, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
@@ -228,7 +229,7 @@ public class XYPlot extends Plot {
 	}
 
 	@Override
-	public void dataChanged(DataTable data) {
+	public void dataChanged(DataSource data) {
 		super.dataChanged(data);
 
 		minX = Double.MAX_VALUE;

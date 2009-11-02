@@ -10,15 +10,16 @@ import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import openjchart.Drawable;
-import openjchart.charts.axes.AbstractAxisRenderer2D;
-import openjchart.charts.axes.Axis;
-import openjchart.charts.axes.AxisRenderer2D;
-import openjchart.charts.axes.LinearRenderer2D;
 import openjchart.data.DataSeries;
+import openjchart.data.DataSource;
 import openjchart.data.DataTable;
+import openjchart.plots.axes.AbstractAxisRenderer2D;
+import openjchart.plots.axes.Axis;
+import openjchart.plots.axes.AxisRenderer2D;
+import openjchart.plots.axes.LinearRenderer2D;
 
 public class BarPlot extends Plot {
-	private DataTable data;
+	private DataSource data;
 	private DataSeries series;
 
 	private double minY;
@@ -28,7 +29,7 @@ public class BarPlot extends Plot {
 	private AbstractAxisRenderer2D axisYRenderer;
 	private Drawable axisYComp;
 
-	public BarPlot(DataTable data, DataSeries series) {
+	public BarPlot(DataSource data, DataSeries series) {
 		this.data = data;
 		this.series = series;
 		dataChanged(this.data);
@@ -107,7 +108,7 @@ public class BarPlot extends Plot {
 	}
 
 	@Override
-	public void dataChanged(DataTable data) {
+	public void dataChanged(DataSource data) {
 		super.dataChanged(data);
 
 		minY = Double.MAX_VALUE;

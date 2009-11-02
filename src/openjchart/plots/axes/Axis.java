@@ -1,4 +1,4 @@
-package openjchart.charts.axes;
+package openjchart.plots.axes;
 
 import java.util.ArrayList;
 import java.util.List;

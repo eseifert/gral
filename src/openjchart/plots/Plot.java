@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import openjchart.Drawable;
-import openjchart.charts.axes.Axis;
 import openjchart.data.DataListener;
-import openjchart.data.DataTable;
+import openjchart.data.DataSource;
+import openjchart.plots.axes.Axis;
 import openjchart.util.Settings;
 import openjchart.util.SettingsStorage;
 
@@ -116,7 +116,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	}
 
 	@Override
-	public void dataChanged(DataTable data) {
+	public void dataChanged(DataSource data) {
 	}
 
 	public Label getTitle() {

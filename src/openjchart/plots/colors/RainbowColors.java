@@ -1,4 +1,4 @@
-package openjchart.charts.colors;
+package openjchart.plots.colors;
 
 import java.awt.Color;
 

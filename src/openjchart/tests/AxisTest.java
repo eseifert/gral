@@ -1,7 +1,7 @@
 package openjchart.tests;
 
 import static org.junit.Assert.assertEquals;
-import openjchart.charts.axes.Axis;
+import openjchart.plots.axes.Axis;
 
 import org.junit.Before;
 import org.junit.Test;

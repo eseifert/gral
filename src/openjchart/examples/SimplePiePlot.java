@@ -13,7 +13,7 @@ public class SimplePiePlot extends JFrame {
 
 	public SimplePiePlot() {
 		super("OpenJChartTest");
-		final DataTable data = new DataTable(Integer.class);
+		DataTable data = new DataTable(Integer.class);
 		/*
 		data.add(1, 1);
 		data.add(2, 3);

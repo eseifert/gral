@@ -1,4 +1,4 @@
-package openjchart.charts.axes;
+package openjchart.plots.axes;
 
 
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {

@@ -1,4 +1,4 @@
-package openjchart.charts.shapes;
+package openjchart.plots.shapes;
 
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;

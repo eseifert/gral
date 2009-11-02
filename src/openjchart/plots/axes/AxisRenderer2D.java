@@ -1,4 +1,4 @@
-package openjchart.charts.axes;
+package openjchart.plots.axes;
 
 import openjchart.Drawable;
 import openjchart.util.SettingsStorage;

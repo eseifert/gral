@@ -6,11 +6,11 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
-import openjchart.charts.axes.AxisRenderer2D;
-import openjchart.charts.axes.LogarithmicRenderer2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
+import openjchart.plots.axes.AxisRenderer2D;
+import openjchart.plots.axes.LogarithmicRenderer2D;
 
 public class SimpleXYPlot extends JFrame {
 
@@ -25,7 +25,7 @@ public class SimpleXYPlot extends JFrame {
 		data.add(6, 8);
 		data.add(7, 9);
 		data.add(8, 11);*/
-		final DataTable data = new DataTable(Double.class, Double.class, Double.class);
+		DataTable data = new DataTable(Double.class, Double.class, Double.class);
 		/*data.add(-8.0, 2.07944154168);
 		data.add(-7.0, 1.94591014906);
 		data.add(-6.0, 1.79175946923);

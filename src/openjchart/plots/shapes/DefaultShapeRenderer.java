@@ -1,4 +1,4 @@
-package openjchart.charts.shapes;
+package openjchart.plots.shapes;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSeries;
-import openjchart.data.DataTable;
+import openjchart.data.DataSource;
 
 public class DefaultShapeRenderer extends AbstractShapeRenderer implements ShapeRenderer {
 
@@ -16,7 +16,7 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer implements Shape
 	}
 
 	@Override
-	public Drawable getShape(final DataTable data, final DataSeries series, final int row) {
+	public Drawable getShape(final DataSource data, final DataSeries series, final int row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D graphics) {

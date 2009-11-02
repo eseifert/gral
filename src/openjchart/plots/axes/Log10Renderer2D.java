@@ -1,4 +1,4 @@
-package openjchart.charts.axes;
+package openjchart.plots.axes;
 
 
 public class Log10Renderer2D extends AbstractAxisRenderer2D {

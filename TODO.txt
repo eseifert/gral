@@ -13,7 +13,8 @@
 
 - Add JTable that acts as a renderer for DataTable
 
-- Add more support for statistics to DataTable (for example histograms)
+- Add more support for statistics to DataTable (for example mean, median, quartiles)
+  Is a separate class necessary?
 
 - Allow axes to be rescaled on Chart/window resizing
   Example: Axis is scaled from -3 to +3 -> chart is resized -> 

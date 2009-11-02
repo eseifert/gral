@@ -7,9 +7,10 @@ import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
-import openjchart.charts.colors.ColorMapper;
-import openjchart.charts.colors.QuasiRandomColors;
+import openjchart.data.DataSource;
 import openjchart.data.DataTable;
+import openjchart.plots.colors.ColorMapper;
+import openjchart.plots.colors.QuasiRandomColors;
 
 public class PiePlot extends Plot {
 	public static final String KEY_RADIUS = "pieplot.radius";
@@ -17,11 +18,11 @@ public class PiePlot extends Plot {
 	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
 	public static final String KEY_START = "pieplot.start";
 
-	private DataTable data;
+	private DataSource data;
 	private double degreesPerValue;
 	private double[] startValues;
 
-	public PiePlot(DataTable data) {
+	public PiePlot(DataSource data) {
 		setSettingDefault(KEY_RADIUS, 1.0);
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
@@ -57,7 +58,7 @@ public class PiePlot extends Plot {
 	}
 
 	@Override
-	public void dataChanged(DataTable data) {
+	public void dataChanged(DataSource data) {
 		super.dataChanged(data);
 
 		// Calculate sum of all values

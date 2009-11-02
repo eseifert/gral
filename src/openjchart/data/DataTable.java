@@ -4,7 +4,7 @@ import java.util.*;
 import openjchart.data.comparators.DataComparator;
 
 
-public class DataTable implements Iterable<Number[]> {
+public class DataTable implements DataSource {
 	private final ArrayList<Number[]> data;
 	private Class<?>[] types;
 
@@ -14,10 +14,10 @@ public class DataTable implements Iterable<Number[]> {
 	private final Set<DataListener> dataListeners;
 
 	private static class DataTableIterator implements Iterator<Number[]> {
-		private final DataTable data;
+		private final DataSource data;
 		private int row;
 
-		public DataTableIterator(DataTable data) {
+		public DataTableIterator(DataSource data) {
 			this.data = data;
 		}
 
@@ -73,30 +73,22 @@ public class DataTable implements Iterable<Number[]> {
 		notifyDataChanged();
 	}
 
-	/**
-	 * Returns the row with the specified index.
-	 * @param row index of the row to return
-	 * @return the specified row of the table
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#get(int)
 	 */
 	public Number[] get(int row) {
 		return data.get(row);
 	}
 
-	/**
-	 * Returns the row with the specified index.
-	 * @param col index of the column to return
-	 * @param row index of the row to return
-	 * @return the specified value of the table cell
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#get(int, int)
 	 */
 	public Number get(int col, int row) {
 		return data.get(row)[col];
 	}
 
-	/**
-	 * Retrieves the smallest value of the table's column.
-	 * Returns null if there are no rows in the table.
-	 * @param col index of the column the minimum value should be searched in
-	 * @return the minimum value of the column
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#getMin(int)
 	 */
 	public Number getMin(int col) {
 		if (data.isEmpty()) {
@@ -118,11 +110,8 @@ public class DataTable implements Iterable<Number[]> {
 		return valueMin;
 	}
 
-	/**
-	 * Retrieves the largest value of the table's column.
-	 * Returns null if there are no rows in the table.
-	 * @param col index of the column the maximum value should be searched in
-	 * @return the maximum value of the column
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#getMax(int)
 	 */
 	public Number getMax(int col) {
 		if (data.isEmpty()) {
@@ -143,12 +132,18 @@ public class DataTable implements Iterable<Number[]> {
 		return valueMax;
 	}
 
-	/**
-	 * Returns the number of rows of the table.
-	 * @return number of rows in the table
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#getRowCount()
 	 */
 	public int getRowCount() {
 		return data.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#getColumnCount()
+	 */
+	public int getColumnCount() {
+		return types.length;
 	}
 
 	public void sort(final DataComparator... comparators) {
@@ -166,15 +161,26 @@ public class DataTable implements Iterable<Number[]> {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#iterator()
+	 */
 	@Override
 	public Iterator<Number[]> iterator() {
 		return new DataTableIterator(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#addDataListener(DataListener)
+	 */
+	@Override
 	public void addDataListener(DataListener dataListener) {
 		dataListeners.add(dataListener);
 	}
 
+	/* (non-Javadoc)
+	 * @see openjchart.data.DataSource#removeDataListener(DataListener)
+	 */
+	@Override
 	public void removeDataListener(DataListener dataListener) {
 		dataListeners.remove(dataListener);
 	}
