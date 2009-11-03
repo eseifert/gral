@@ -1,6 +1,9 @@
 - Add more sophisticated line support to ScatterPlot
 
-- Use Label class also in AbstractAxisRenderer2D
+- Use Label class for displaying scales in AbstractAxisRenderer2D
+
+- Add support for axis labels to AbstractAxisRenderer2D;
+  Example: you could add text like "x axis" or "temperature [K]"
 
 - Include DataTable in DataSeries
 
@@ -13,8 +16,8 @@
 
 - Add JTable that acts as a renderer for DataTable
 
-- Add more support for statistics to DataTable (for example mean, median, quartiles)
-  Is a separate class necessary?
+- Add more support for statistics to DataTable (for example mean, median,
+  quartiles); Evaluate whether a separate class is necessary.
 
 - Allow axes to be rescaled on Chart/window resizing
   Example: Axis is scaled from -3 to +3 -> chart is resized -> 
@@ -27,3 +30,8 @@
   (like "em" in HTML)
 
 - Property window to change the charts while the program is running
+
+- Add support for custom tick labels to AbstractAxisRenderer2D;
+  Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
+
+- Add support for simple linear regression
