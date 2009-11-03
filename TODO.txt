@@ -1,4 +1,4 @@
-- Add line support to ScatterPlot
+- Add more sophisticated line support to ScatterPlot
 
 - Use Label class also in AbstractAxisRenderer2D
 

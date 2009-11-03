@@ -59,22 +59,24 @@ public class Histogram implements DataSource {
 	}
 
 	protected void rebuildCells() {
-		// FIXME: Improve this very naïve, inefficient implementation
+		// FIXME: Very naive implementation
 		colCells.clear();
 		cacheMin.clear();
 		cacheMax.clear();
 
 		int rowCount = data.getRowCount();
 		int col = 0;
+		// Iterate over histogram columns
 		for (Number[] brk : colBreaks) {
 			long[] cells = new long[brk.length - 1];
 			long colMin = Long.MAX_VALUE;
 			long colMax = Long.MIN_VALUE;
+			// Iterate over data rows
 			for (int row = 0; row < rowCount; row++) {
-				// Extract value
 				double val = data.get(col, row).doubleValue();
-				// Put value into corresponding class
+				// Iterate over histogram rows
 				for (int i = 0; i < brk.length - 1; i++) {
+					// Put the value into corresponding class
 					if (val >= brk[i].doubleValue() && val < brk[i + 1].doubleValue()) {
 						cells[i]++;
 						if (cells[i] > colMax) {
@@ -83,6 +85,7 @@ public class Histogram implements DataSource {
 						if (cells[i] < colMin) {
 							colMin = cells[i];
 						}
+						break;
 					}
 				}
 			}
