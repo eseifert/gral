@@ -39,7 +39,7 @@ public class Histogram implements DataSource {
 		for (int col = 0; col < this.data.getColumnCount(); col++) {
 			double min = this.data.getMin(col).doubleValue();
 			double max = this.data.getMax(col).doubleValue();
-			double delta = (max - min) / cellCount;
+			double delta = (max - min + Double.MIN_VALUE) / cellCount;
 
 			Number[] breaks = new Double[cellCount + 1];
 			for (int i = 0; i < breaks.length; i++) {
