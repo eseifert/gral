@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import openjchart.Drawable;
 import openjchart.data.DataSeries;
@@ -31,9 +31,8 @@ public class XYPlot extends Plot {
 	private AbstractAxisRenderer2D axisYRenderer;
 
 	private ShapeRenderer shapeRenderer;
-	private LineRenderer2D lineRenderer;
 
-	private List<DataSeries> series;
+	private final Map<DataSeries, LineRenderer2D> series;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -48,9 +47,10 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 
 		this.data = data;
-		this.series = new ArrayList<DataSeries>(series.length);
+		this.series = new HashMap<DataSeries, LineRenderer2D>(series.length);
+		LineRenderer2D lineRendererDefault = new DefaultLineRenderer2D();
 		for (DataSeries s : series) {
-			this.series.add(s);
+			this.series.put(s, lineRendererDefault);
 		}
 
 		dataChanged(this.data);
@@ -63,7 +63,6 @@ public class XYPlot extends Plot {
 		setAxisXRenderer(new LinearRenderer2D());
 		setAxisYRenderer(new LinearRenderer2D());
 		shapeRenderer = new DefaultShapeRenderer();
-		lineRenderer = new DefaultLineRenderer2D();
 
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
@@ -135,7 +134,9 @@ public class XYPlot extends Plot {
 
 		// Paint shapes and lines
 		Drawable line;
-		for (DataSeries s : series) {
+		for (Map.Entry<DataSeries, LineRenderer2D> entry : series.entrySet()) {
+			DataSeries s = entry.getKey();
+			LineRenderer2D lineRenderer = entry.getValue();
 			double[] lineStart = new double[2];
 			// Retrieve the columns mapped to X and Y axes
 			int colX = s.get(DataSeries.X);
@@ -147,7 +148,7 @@ public class XYPlot extends Plot {
 				double translateX = axisXRenderer.worldToView(axisX, valueX) + plotXMin;
 				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY) + 1.0;
 
-				if (i != 0) {
+				if (i != 0 && lineRenderer != null) {
 					line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
 					line.draw(g2d);
 				}
@@ -234,7 +235,7 @@ public class XYPlot extends Plot {
 		maxX = -Double.MAX_VALUE;
 		minY = Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		for (DataSeries s : series) {
+		for (DataSeries s : series.keySet()) {
 			// Set the minimal and maximal value of the axes
 			int colX = s.get(DataSeries.X);
 			minX = Math.min(minX, data.getMin(colX).doubleValue());
@@ -245,11 +246,11 @@ public class XYPlot extends Plot {
 		}
 	}
 
-	public LineRenderer2D getLineRenderer() {
-		return lineRenderer;
+	public LineRenderer2D getLineRenderer(DataSeries s) {
+		return series.get(s);
 	}
 
-	public void setLineRenderer(LineRenderer2D lineRenderer) {
-		this.lineRenderer = lineRenderer;
+	public void setLineRenderer(DataSeries s, LineRenderer2D lineRenderer) {
+		series.put(s, lineRenderer);
 	}
 }

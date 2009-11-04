@@ -1,7 +1,5 @@
 - Add functions to GeometryUtils: grow(Shape), intersection(Shape, Shape)
 
-- Add more sophisticated line support to ScatterPlot
-
 - Use Label class for displaying scales in AbstractAxisRenderer2D
 
 - Merge XYPlot and BarPlot
