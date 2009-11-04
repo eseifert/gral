@@ -1,6 +1,9 @@
 package openjchart.plots;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -9,11 +12,12 @@ import java.util.List;
 import openjchart.Drawable;
 import openjchart.data.DataSeries;
 import openjchart.data.DataSource;
-import openjchart.data.DataTable;
 import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LinearRenderer2D;
+import openjchart.plots.lines.DefaultLineRenderer2D;
+import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
 
@@ -21,15 +25,13 @@ public class XYPlot extends Plot {
 	public static final String KEY_GRID = "xyplot.grid";
 	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
 
-	public static final String KEY_LINE_STROKE = "xyplot.line.stroke";
-	public static final String KEY_LINE_COLOR = "xyplot.line.color";
-
 	private DataSource data;
 
 	private AbstractAxisRenderer2D axisXRenderer;
 	private AbstractAxisRenderer2D axisYRenderer;
 
 	private ShapeRenderer shapeRenderer;
+	private LineRenderer2D lineRenderer;
 
 	private List<DataSeries> series;
 	private double minX;
@@ -44,8 +46,6 @@ public class XYPlot extends Plot {
 	public XYPlot(DataSource data, DataSeries... series) {
 		setSettingDefault(KEY_GRID, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
-		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
-		setSettingDefault(KEY_LINE_COLOR, Color.BLACK);
 
 		this.data = data;
 		this.series = new ArrayList<DataSeries>(series.length);
@@ -63,6 +63,7 @@ public class XYPlot extends Plot {
 		setAxisXRenderer(new LinearRenderer2D());
 		setAxisYRenderer(new LinearRenderer2D());
 		shapeRenderer = new DefaultShapeRenderer();
+		lineRenderer = new DefaultLineRenderer2D();
 
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
@@ -75,7 +76,6 @@ public class XYPlot extends Plot {
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform txOld = g2d.getTransform();
 		Color colorDefault = g2d.getColor();
-		Stroke strokeOld = g2d.getStroke();
 
 		// Take the Component's insets into consideration
 		Insets insets = getInsets();
@@ -134,9 +134,7 @@ public class XYPlot extends Plot {
 		}
 
 		// Paint shapes and lines
-		g2d.setColor(this.<Color>getSetting(KEY_LINE_COLOR));
-		g2d.setStroke(this.<Stroke>getSetting(KEY_LINE_STROKE));
-		Line2D line = new Line2D.Double();
+		Drawable line;
 		for (DataSeries s : series) {
 			double[] lineStart = new double[2];
 			// Retrieve the columns mapped to X and Y axes
@@ -150,8 +148,8 @@ public class XYPlot extends Plot {
 				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY) + 1.0;
 
 				if (i != 0) {
-					line.setLine(lineStart[0], lineStart[1], translateX, translateY);
-					g2d.draw(line);
+					line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
+					line.draw(g2d);
 				}
 				lineStart[0] = translateX;
 				lineStart[1] = translateY;
@@ -245,5 +243,13 @@ public class XYPlot extends Plot {
 			minY = Math.min(minY, data.getMin(colY).doubleValue());
 			maxY = Math.max(maxY, data.getMax(colY).doubleValue());
 		}
+	}
+
+	public LineRenderer2D getLineRenderer() {
+		return lineRenderer;
+	}
+
+	public void setLineRenderer(LineRenderer2D lineRenderer) {
+		this.lineRenderer = lineRenderer;
 	}
 }
