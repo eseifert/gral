@@ -48,8 +48,16 @@ public interface DataSource extends Iterable<Number[]> {
 	 * @return number of columns in the table
 	 */
 	int getColumnCount();
-	
+
+	/**
+	 * Adds the specified DataListener to this DataSource.
+	 * @param dataListener listener to be added
+	 */
 	public void addDataListener(DataListener dataListener);
 
+	/**
+	 * Adds the specified DataListener from this DataSource.
+	 * @param dataListener listener to be removed
+	 */
 	public void removeDataListener(DataListener dataListener);
 }
