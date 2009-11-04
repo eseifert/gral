@@ -2,6 +2,7 @@ package openjchart.examples;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
@@ -11,6 +12,7 @@ import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LogarithmicRenderer2D;
+import openjchart.plots.lines.LineRenderer2D;
 
 public class SimpleXYPlot extends JFrame {
 
@@ -62,6 +64,8 @@ public class SimpleXYPlot extends JFrame {
 		//plot.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
 		//plot.setSetting(ScatterPlot.KEY_GRID, false);
+		// Custom insets of start and end points of shapes
+		plot.getLineRenderer().setSetting(LineRenderer2D.KEY_POINT_INSETS, new Insets(10, 10, 10, 10));
 		// Custom axis renderers
 		LogarithmicRenderer2D logRendererX = new LogarithmicRenderer2D();
 		plot.setAxisXRenderer(logRendererX);
