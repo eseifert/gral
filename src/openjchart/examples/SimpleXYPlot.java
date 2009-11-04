@@ -12,6 +12,7 @@ import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LogarithmicRenderer2D;
+import openjchart.plots.lines.DiscreteLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 
 public class SimpleXYPlot extends JFrame {
@@ -64,8 +65,13 @@ public class SimpleXYPlot extends JFrame {
 		//plot.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
 		//plot.setSetting(ScatterPlot.KEY_GRID, false);
+		// Custom line renderer
+		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
+		plot.setLineRenderer(discreteRenderer);
 		// Custom insets of start and end points of shapes
-		plot.getLineRenderer().setSetting(LineRenderer2D.KEY_POINT_INSETS, new Insets(10, 10, 10, 10));
+		discreteRenderer.setSetting(LineRenderer2D.KEY_POINT_INSETS, new Insets(10, 10, 10, 10));
+		// Custom ascending point
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		LogarithmicRenderer2D logRendererX = new LogarithmicRenderer2D();
 		plot.setAxisXRenderer(logRendererX);

@@ -1,6 +1,10 @@
+- Add functions to GeometryUtils: grow(Shape), intersection(Shape, Shape)
+
 - Add more sophisticated line support to ScatterPlot
 
 - Use Label class for displaying scales in AbstractAxisRenderer2D
+
+- Merge XYPlot and BarPlot
 
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
@@ -28,6 +32,10 @@
 
 - Set font sizes relative to the size of a standard font size 
   (like "em" in HTML)
+
+- Flip axis direction of plots
+
+- Add support for DiscreteLineRenderer2D to start steps in y-direction
 
 - Property window to change the charts while the program is running
 
