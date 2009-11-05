@@ -202,10 +202,20 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		}
 	}
 
+	@Override
+	public <T> void removeSetting(String key) {
+		settings.remove(key);
+	}
+
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
 		if (KEY_SHAPE.equals(key)) {
 			evaluateShape((Shape)value);
 		}
+	}
+
+	@Override
+	public <T> void removeSettingDefault(String key) {
+		settings.removeDefault(key);
 	}
 }

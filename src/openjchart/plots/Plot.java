@@ -108,6 +108,11 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	}
 
 	@Override
+	public <T> void removeSetting(String key) {
+		settings.remove(key);
+	}
+
+	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.set(key, value);
 		if (KEY_TITLE.equals(key) && value != null) {
@@ -115,6 +120,11 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		}
 	}
 
+	@Override
+	public <T> void removeSettingDefault(String key) {
+		settings.removeDefault(key);
+	}
+	
 	@Override
 	public void dataChanged(DataSource data) {
 	}

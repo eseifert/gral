@@ -74,6 +74,11 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 	}
 
 	@Override
+	public <T> void removeSetting(String key) {
+		settings.remove(key);
+	}
+
+	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
 		if (KEY_FONT.equals(key) || KEY_FONT_RENDER_CONTEXT.equals(key)) {
@@ -81,6 +86,11 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 				this.layout = new TextLayout(text, this.<Font>getSetting(KEY_FONT), this.<FontRenderContext>getSetting(KEY_FONT_RENDER_CONTEXT));
 			}
 		}
+	}
+
+	@Override
+	public <T> void removeSettingDefault(String key) {
+		settings.removeDefault(key);
 	}
 
 	public String getText() {

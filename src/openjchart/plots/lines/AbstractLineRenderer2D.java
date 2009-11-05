@@ -28,8 +28,18 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D {
 	}
 
 	@Override
+	public <T> void removeSetting(String key) {
+		settings.remove(key);
+	}
+
+	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
+	}
+
+	@Override
+	public <T> void removeSettingDefault(String key) {
+		settings.removeDefault(key);
 	}
 
 }

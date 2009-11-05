@@ -8,17 +8,29 @@ public class Settings {
 	private Map<String, Object> defaults = new HashMap<String, Object>();
 
 	public <T> T get(String key) {
-		if (!settings.containsKey(key)) {
-			return (T)defaults.get(key);
+		T t;
+		if (settings.containsKey(key)) {
+			t = (T)settings.get(key);
+		} else {
+			t = (T)defaults.get(key);
 		}
-		return (T)settings.get(key);
+		return t;
 	}
 
 	public <T> void set(String key, T value) {
 		settings.put(key, value);
 	}
 
+	public <T> void remove(String key) {
+		settings.remove(key);
+	}
+
 	public <T> void setDefault(String key, T value) {
 		defaults.put(key, value);
 	}
+
+	public <T> void removeDefault(String key) {
+		defaults.remove(key);
+	}
+
 }

@@ -12,7 +12,6 @@ import java.util.Iterator;
 import openjchart.Drawable;
 import openjchart.data.DataSeries;
 import openjchart.data.DataSource;
-import openjchart.data.DataTable;
 import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;

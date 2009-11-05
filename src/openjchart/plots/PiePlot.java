@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
 import openjchart.data.DataSource;
-import openjchart.data.DataTable;
 import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
 
