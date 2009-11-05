@@ -6,7 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	MathUtilsTest.class,
-	HaltonSequenceTest.class
+	HaltonSequenceTest.class,
+	GeometryUtilsTest.class
 })
 public class UtilTests {
 }

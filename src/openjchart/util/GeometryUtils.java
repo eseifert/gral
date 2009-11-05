@@ -114,7 +114,7 @@ public abstract class GeometryUtils {
 
     /**
      * Expand or shrinks a shape in all directions by a defined offset.
-     * @param s Sape
+     * @param s Shape
      * @param offset Offset
      * @return New shape that was expanded or shrunk by the specified amount
      */
