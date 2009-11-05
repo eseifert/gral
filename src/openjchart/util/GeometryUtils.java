@@ -1,6 +1,11 @@
 package openjchart.util;
+import java.awt.BasicStroke;
 import java.awt.Shape;
-import java.awt.geom.*;
+import java.awt.geom.Area;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,56 +44,25 @@ public abstract class GeometryUtils {
 	}
 
 	/**
-     * Returns the intersection point(s) of a rectangle and a line.
-     * @param r Rectangle
-     * @param l Line
+     * Returns all intersection points of two shapes.
+     * @param s1 First shape
+     * @param s2 Second shape
      * @return Intersection points, or empty array if
      * no intersections were found
      */
-    public static List<Point2D> intersection(final Rectangle2D r, final Line2D l) {
+    public static List<Point2D> intersection(final Shape s1, final Shape s2) {
     	List<Point2D> intersections = new ArrayList<Point2D>(2);
-    	Point2D intersection = null;
-    	Line2D edge = null;
+    	List<Line2D> lines1 = shapeToLines(s1);
+    	List<Line2D> lines2 = shapeToLines(s2);
 
-    	// Top
-    	edge = new Line2D.Double(
-    		r.getMinX(), r.getMinY(),
-    		r.getMaxX(), r.getMinY());
-    	intersection = intersection(edge, l);
-    	if (intersection != null) {
-    		intersections.add(intersection);
-    	}
-
-    	// Bottom
-    	edge = new Line2D.Double(
-    		r.getMinX(), r.getMaxY(),
-    		r.getMaxX(), r.getMaxY());
-    	intersection = intersection(edge, l);
-    	if (intersection != null) {
-    		intersections.add(intersection);
-    	}
-
-    	if (intersections.size() < 2) {
-			// Left
-			edge = new Line2D.Double(
-				r.getMinX(), r.getMinY(),
-				r.getMinX(), r.getMaxY());
-			intersection = intersection(edge, l);
-			if (intersection != null) {
-				intersections.add(intersection);
+    	for (Line2D l1 : lines1) {
+			for (Line2D l2 : lines2) {
+				Point2D intersection = intersection(l1, l2);
+				if (intersection != null) {
+					intersections.add(intersection);
+				}
 			}
-    	}
-
-    	if (intersections.size() < 2) {
-			// Right
-			edge = new Line2D.Double(
-				r.getMaxX(), r.getMinY(),
-				r.getMaxX(), r.getMaxY());
-			intersection = intersection(edge, l);
-			if (intersection != null) {
-				intersections.add(intersection);
-			}
-    	}
+		}
 
     	return intersections;
 	}
@@ -101,9 +75,9 @@ public abstract class GeometryUtils {
      * no intersection was found
      */
     public static Point2D intersection(final Line2D l1, final Line2D l2) {
-    	Point2D p0 = new Point2D.Double(l1.getX1(), l1.getY1());
+    	Point2D p0 = l1.getP1();
 		Point2D d0 = new Point2D.Double(l1.getX2()-p0.getX(), l1.getY2()-p0.getY());
-		Point2D p1 = new Point2D.Double(l2.getX1(), l2.getY1());
+		Point2D p1 = l2.getP1();
 		Point2D d1 = new Point2D.Double(l2.getX2()-p1.getX(), l2.getY2()-p1.getY());
 
 		Point2D e = new Point2D.Double(p1.getX()-p0.getX(), p1.getY()-p0.getY());
@@ -137,4 +111,29 @@ public abstract class GeometryUtils {
 
 		return null;
 	}
+
+    /**
+     * Expand or shrinks a shape in all directions by a defined offset.
+     * @param s Sape
+     * @param offset Offset
+     * @return New shape that was expanded or shrunk by the specified amount
+     */
+    public static Shape grow(final Shape s, final double offset) {
+    	if (Math.abs(offset) < EPSILON) {
+    		return s;
+    	}
+
+    	BasicStroke stroke = new BasicStroke((float)Math.abs(2.0*offset));
+    	Area strokeShape = new Area(stroke.createStrokedShape(s));
+
+    	Area shape = new Area(s);
+    	if (offset > 0.0) {
+    		shape.add(strokeShape);
+    	} else {
+    		shape.subtract(strokeShape);
+    	}
+
+    	return shape;
+    }
+
 }

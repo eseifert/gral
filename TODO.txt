@@ -1,5 +1,3 @@
-- Add functions to GeometryUtils: grow(Shape), intersection(Shape, Shape)
-
 - Use Label class for displaying scales in AbstractAxisRenderer2D
 
 - Merge XYPlot and BarPlot
