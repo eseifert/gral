@@ -100,7 +100,7 @@ public class XYPlot extends Plot {
 			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-gridOffsetY);
 			double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 			for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
-				double viewX = axisXRenderer.worldToView(axisX, i);
+				double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
 				// Do not draw a grid line on the axis
 				if (viewX == 0.0) {
 					continue;
@@ -120,7 +120,7 @@ public class XYPlot extends Plot {
 			Line2D gridLineHoriz = new Line2D.Double(plotXMin+gridOffsetX, 0, plotXMax, 0);
 			double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 			for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
-				double viewY = axisYRenderer.worldToView(axisY, i);
+				double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
 				// Do not draw a grid line on the axis
 				if (viewY == 0.0) {
 					continue;
@@ -143,10 +143,10 @@ public class XYPlot extends Plot {
 			int colY = s.get(DataSeries.Y);
 
 			for (int i = 0; i < data.getRowCount(); i++) {
-				double valueX = data.get(colX, i).doubleValue();
-				double valueY = data.get(colY, i).doubleValue();
-				double translateX = axisXRenderer.worldToView(axisX, valueX) + plotXMin;
-				double translateY = plotYMax - axisYRenderer.worldToView(axisY, valueY) + 1.0;
+				Number valueX = data.get(colX, i);
+				Number valueY = data.get(colY, i);
+				double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + plotXMin;
+				double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + plotYMin;
 
 				if (i != 0 && lineRenderer != null) {
 					line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);

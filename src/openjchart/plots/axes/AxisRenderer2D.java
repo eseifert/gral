@@ -1,5 +1,7 @@
 package openjchart.plots.axes;
 
+import java.awt.geom.Point2D;
+
 import openjchart.Drawable;
 import openjchart.util.SettingsStorage;
 
@@ -45,6 +47,26 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 */
 	Drawable getRendererComponent(Axis axis);
 
+	/**
+	 * Returns the position of the specified value on the axis.
+	 * The value is returned in view coordinates.
+	 * @return Two-dimensional point of the value
+	 */
+	Point2D worldToViewPos(Axis axis, Number value);
+
+	/**
+	 * Converts a world (axis) coordinate value to a view (screen) coordinate value.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @return Screen coordinate value
+	 */
 	double worldToView(Axis axis, Number value);
+
+	/**
+	 * Converts a view (screen) coordinate value to a world (axis) coordinate value.
+	 * @param axis Axis
+	 * @param value View coordinate value to convert
+	 * @return World coordinate value
+	 */
 	Number viewToWorld(Axis axis, double value);
 }

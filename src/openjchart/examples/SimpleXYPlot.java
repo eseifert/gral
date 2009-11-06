@@ -82,6 +82,8 @@ public class SimpleXYPlot extends JFrame {
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
 		// Custom stroke for the ticks
 		logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
+		// Swap axis direction
+		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		plot.getAxisXRenderer().setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		plot.setBorder(new EmptyBorder(20, 20, 20, 20));

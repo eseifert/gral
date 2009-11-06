@@ -67,7 +67,7 @@ public class BarPlot extends Plot {
 		Line2D gridLineHoriz = new Line2D.Double(plotXMin + tickOffset, 0.0, plotXMax, 0.0);
 		g2d.setColor(Color.LIGHT_GRAY);
 		for (double i = minTick; i <= maxTick; i += tickSpacing) {
-			double translateY = plotYMax - axisYRenderer.worldToView(axisY, i);
+			double translateY = axisYRenderer.worldToViewPos(axisY, i).getY() + plotYMin;
 			g2d.translate(0.0, translateY);
 			g2d.draw(gridLineHoriz);
 			g2d.setTransform(txOld);
@@ -78,13 +78,13 @@ public class BarPlot extends Plot {
 		Rectangle2D bar = new Rectangle2D.Double();
 		Iterator<Integer> cols = series.values().iterator();
 		for (int i = 0; cols.hasNext(); i++) {
-			double barWidth = barGap / 2.0;
+			double barWidth = barGap/2.0;
 			double barHeight = h * data.getMax(cols.next()).doubleValue() / maxY;
 			double barX = plotXMin - barWidth/2.0;
 			double barY = plotYMax - barHeight;
 			bar.setFrame(barX, barY, barWidth, barHeight);
 
-			double transformX = barGap*i + barGap/2;
+			double transformX = barGap*i + barGap/2.0;
 			g2d.translate(transformX, 0.0);
 			g2d.fill(bar);
 			g2d.setTransform(txOld);

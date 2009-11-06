@@ -1,6 +1,7 @@
 package openjchart.plots.axes;
 
 
+
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 	public LinearRenderer2D() {

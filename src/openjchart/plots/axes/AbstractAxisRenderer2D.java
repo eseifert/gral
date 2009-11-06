@@ -1,6 +1,10 @@
 package openjchart.plots.axes;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -93,13 +97,15 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 					// Calculate normalized vector perpendicular to current axis shape segment
 					// for ticks and labels
-					boolean isNormalOrientationClockwise = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
-					double tickNormalX = (isNormalOrientationClockwise?1:-1)*(line.getY2() - line.getY1()) / segmentLength;
-					double tickNormalY = (isNormalOrientationClockwise?-1:1)*(line.getX2() - line.getX1()) / segmentLength;
+					double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
+					Point2D tickNormal = new Point2D.Double(
+						 normalOrientation*(line.getY2() - line.getY1()) / segmentLength,
+						-normalOrientation*(line.getX2() - line.getX1()) / segmentLength
+					);
 
 					// If the next ticks lie on our current axis shape segment
 					g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
-					while (currentTick<tickPositionsView.length && tickPositionsView[currentTick] <= shapeLengthCur + segmentLength) {
+					while (currentTick < tickPositionsView.length && tickPositionsView[currentTick] <= shapeLengthCur + segmentLength) {
 						// Interpolate segment ends to get tick position
 						double tickPosRel = (tickPositionsView[currentTick] - shapeLengthCur) / segmentLength;
 						double tickPosX = line.getX1() + (line.getX2() - line.getX1())*tickPosRel;
@@ -108,8 +114,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 						// Draw tick and label
 						g2d.translate(tickPosX, tickPosY);
 						tickShape.setLine(
-								-tickNormalX*tickLengthInner, -tickNormalY*tickLengthInner,
-								tickNormalX*tickLengthOuter,  tickNormalY*tickLengthOuter
+							-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
+							 tickNormal.getX()*tickLengthOuter,  tickNormal.getY()*tickLengthOuter
 						);
 						g2d.draw(tickShape);
 
@@ -131,8 +137,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 								new Line2D.Double(
 										labelBoundsPadded.getCenterX(),
 										labelBoundsPadded.getCenterY(),
-										labelBoundsPadded.getCenterX() + (isLabelOutside?-tickNormalX:tickNormalX)*labelBoundsPadded.getWidth(),
-										labelBoundsPadded.getCenterY() + (isLabelOutside?-tickNormalY:tickNormalY)*labelBoundsPadded.getWidth()
+										labelBoundsPadded.getCenterX() + (isLabelOutside?-1.0:1.0)*tickNormal.getX()*labelBoundsPadded.getWidth(),
+										labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*labelBoundsPadded.getWidth()
 								)
 						);
 						double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
@@ -175,15 +181,51 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		return Math.floor(axis.getMax().doubleValue()/tickSpacing) * tickSpacing;
 	}
 
+	@Override
+	public Point2D worldToViewPos(Axis axis, Number value) {
+		double length = worldToView(axis, value);
+		
+		if (length <= 0.0) {
+			return shapeLines.get(0).getP1();
+		}
+		if (length >= shapeLength) {
+			return shapeLines.get(shapeLines.size() - 1).getP2();
+		}
+
+		Iterator<Line2D> linesIterator = shapeLines.iterator();
+		for (int i=0; i<shapeLines.size(); i++) {
+			Line2D line = linesIterator.next();
+			double segmentLength = shapeSegmentLengths[i];
+			double shapeLengthCur = shapeLengths[i];
+			double shapeLengthNext = shapeLengthCur + segmentLength;
+			
+			if (length < shapeLengthNext && length >= shapeLengthCur) {
+				double posRel = (length - shapeLengthCur) / segmentLength;
+				Point2D pos = new Point2D.Double(
+					line.getX1() + (line.getX2() - line.getX1())*posRel,
+					line.getY1() + (line.getY2() - line.getY1())*posRel
+				);
+				return pos;
+			}
+		}		
+		return null;
+	}
+
 	protected void evaluateShape(Shape shape) {
 		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
+		shapeSegmentLengths = new double[0];
+		shapeLengths = new double[0];
+		shapeLength = 0.0;
+
+		if (shapeLines.isEmpty()) {
+			return;
+		}
 
 		// Calculate length of axis shape at each shape segment
 		shapeSegmentLengths = new double[shapeLines.size()];
 		shapeLengths = new double[shapeLines.size()];
 		Iterator<Line2D> linesIterator = shapeLines.iterator();
-		shapeLength = 0.0;
 		for (int i=0; i<shapeLines.size(); i++) {
 			Line2D line = linesIterator.next();
 			double segmentLength = line.getP1().distance(line.getP2());

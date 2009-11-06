@@ -1,6 +1,7 @@
 package openjchart.plots.axes;
 
 
+
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override
