@@ -12,7 +12,10 @@ import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
@@ -24,8 +27,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	private final Settings settings;
 
 	protected List<Line2D> shapeLines;
-	protected double[] shapeSegmentLengths;
-	protected double[] shapeLengths;
+	protected List<Double> shapeSegmentLengths;
+	protected SortedSet<Double> shapeLengths;
 	protected double shapeLength;
 
 	private double tickLengthInner;
@@ -34,6 +37,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 	public AbstractAxisRenderer2D() {
 		settings = new Settings();
+		shapeSegmentLengths = new LinkedList<Double>();
+		shapeLengths = new TreeSet<Double>();
 
 		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
@@ -90,10 +95,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 				int currentTick = 0;
 				Iterator<Line2D> linesIterator = shapeLines.iterator();
-				for (int i=0; i<shapeLines.size(); i++) {
+				Iterator<Double> segmentLengthsIterator = shapeSegmentLengths.iterator();
+				Iterator<Double> shapeLengthsIterator = shapeLengths.iterator();
+				for (int i = 0; i < shapeLines.size(); i++) {
 					Line2D line = linesIterator.next();
-					double segmentLength = shapeSegmentLengths[i];
-					double shapeLengthCur = shapeLengths[i];
+					double segmentLength = segmentLengthsIterator.next();
+					double shapeLengthCur = shapeLengthsIterator.next();
 
 					// Calculate normalized vector perpendicular to current axis shape segment
 					// for ticks and labels
@@ -193,10 +200,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		}
 
 		Iterator<Line2D> linesIterator = shapeLines.iterator();
+		Iterator<Double> segmentLengthsIterator = shapeSegmentLengths.iterator();
+		Iterator<Double> shapeLengthsIterator = shapeLengths.iterator();
 		for (int i=0; i<shapeLines.size(); i++) {
 			Line2D line = linesIterator.next();
-			double segmentLength = shapeSegmentLengths[i];
-			double shapeLengthCur = shapeLengths[i];
+			double segmentLength = segmentLengthsIterator.next();
+			double shapeLengthCur = shapeLengthsIterator.next();
 			double shapeLengthNext = shapeLengthCur + segmentLength;
 			
 			if (length < shapeLengthNext && length >= shapeLengthCur) {
@@ -214,8 +223,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	protected void evaluateShape(Shape shape) {
 		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
-		shapeSegmentLengths = new double[0];
-		shapeLengths = new double[0];
+		shapeSegmentLengths.clear();
+		shapeLengths.clear();
 		shapeLength = 0.0;
 
 		if (shapeLines.isEmpty()) {
@@ -223,14 +232,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		}
 
 		// Calculate length of axis shape at each shape segment
-		shapeSegmentLengths = new double[shapeLines.size()];
-		shapeLengths = new double[shapeLines.size()];
 		Iterator<Line2D> linesIterator = shapeLines.iterator();
 		for (int i=0; i<shapeLines.size(); i++) {
 			Line2D line = linesIterator.next();
 			double segmentLength = line.getP1().distance(line.getP2());
-			shapeSegmentLengths[i] = segmentLength;
-			shapeLengths[i] = shapeLength;
+			shapeSegmentLengths.add(segmentLength);
+			shapeLengths.add(shapeLength);
 			shapeLength += segmentLength;
 		}
 	}
