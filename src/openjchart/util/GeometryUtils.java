@@ -15,7 +15,7 @@ public abstract class GeometryUtils {
 	public static final double EPSILON = 1e-3;
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
 
-	public static List<Line2D> shapeToLines(Shape path) {
+	public static List<Line2D> shapeToLines(Shape path, boolean swapped) {
 		LinkedList<Line2D> lines = new LinkedList<Line2D>();
 		PathIterator i = new FlatteningPathIterator(path.getPathIterator(null), 0.5);
 
@@ -25,15 +25,27 @@ public abstract class GeometryUtils {
 			int segment = i.currentSegment(coords);
 
 			if (segment==PathIterator.SEG_LINETO || segment==PathIterator.SEG_CLOSE) {
-				Line2D line = new Line2D.Double(coordsPrev[0], coordsPrev[1], coords[0], coords[1]);
-				lines.add(line);
+				Line2D line;
+				if (!swapped) {
+					line = new Line2D.Double(coordsPrev[0], coordsPrev[1], coords[0], coords[1]);
+					lines.addLast(line);
+				} else {
+					line = new Line2D.Double(coords[0], coords[1], coordsPrev[0], coordsPrev[1]);
+					lines.addFirst(line);
+				}
 			}
 			if (segment==PathIterator.SEG_CLOSE && !lines.isEmpty()) {
 				Point2D firstPoint = lines.getFirst().getP1();
 				Point2D lastPoint = lines.getLast().getP2();
 				if (!firstPoint.equals(lastPoint)) {
-					Line2D line = new Line2D.Double(coords[0], coords[1], firstPoint.getX(), firstPoint.getY());
-					lines.add(line);
+					Line2D line;
+					if (!swapped) {
+						line = new Line2D.Double(coords[0], coords[1], firstPoint.getX(), firstPoint.getY());
+						lines.addLast(line);
+					} else {
+						line = new Line2D.Double(firstPoint.getX(), firstPoint.getY(), coords[0], coords[1]);
+						lines.addFirst(line);
+					}
 				}
 			}
 
@@ -52,8 +64,8 @@ public abstract class GeometryUtils {
      */
     public static List<Point2D> intersection(final Shape s1, final Shape s2) {
     	List<Point2D> intersections = new ArrayList<Point2D>(2);
-    	List<Line2D> lines1 = shapeToLines(s1);
-    	List<Line2D> lines2 = shapeToLines(s2);
+    	List<Line2D> lines1 = shapeToLines(s1, false);
+    	List<Line2D> lines2 = shapeToLines(s2, false);
 
     	for (Line2D l1 : lines1) {
 			for (Line2D l2 : lines2) {
@@ -113,7 +125,7 @@ public abstract class GeometryUtils {
 	}
 
     /**
-     * Expand or shrinks a shape in all directions by a defined offset.
+     * Expand or shrink a shape in all directions by a defined offset.
      * @param s Shape
      * @param offset Offset
      * @return New shape that was expanded or shrunk by the specified amount

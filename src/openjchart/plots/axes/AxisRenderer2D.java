@@ -18,6 +18,8 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_SHAPE_COLOR = "axis.shape.color";
 	/** Stroke style of the axis */
 	static final String KEY_SHAPE_STROKE = "axis.shape.stroke";
+	/** Determines whether the axis direction will be swapped. */
+	static final String KEY_SHAPE_DIRECTION_SWAPPED = "axis.shape.directionSwapped";
 
 	/** Interval for ticks. */
 	static final String KEY_TICK_SPACING = "axis.tick.spacing";

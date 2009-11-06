@@ -13,6 +13,8 @@ import openjchart.util.GeometryUtils;
 import org.junit.Test;
 
 public class GeometryUtilsTest {
+	private static final double DELTA = 1e-5;
+
 	@Test
 	public void testIntersectionShapeShape() {
 		Line2D l1, l2;
@@ -38,11 +40,18 @@ public class GeometryUtilsTest {
 	public void testGrow() {
 		Shape normal = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
 		Shape grown = GeometryUtils.grow(normal, 0.5);
-		assertTrue(grown.contains( 0.500,  0.500));
-		assertTrue(grown.contains(-0.250, -0.250));
-		assertTrue(grown.contains( 1.250,  1.250));
-		assertTrue(grown.contains(-0.499, -0.499));  // FIXME: -0.5, -0.5
-		assertTrue(grown.contains( 1.499,  1.499));  // FIXME:  1.5,  1.5
+
+		// Test inner region
+		for (double coord=-0.25; coord<=1.25; coord+=0.25) {
+			assertTrue(grown.contains(coord, coord));
+		}
+
+		// Test boundary
+		Rectangle2D grownBounds = grown.getBounds2D();
+		assertEquals(-0.5, grownBounds.getMinX(), DELTA);
+		assertEquals(-0.5, grownBounds.getMinY(), DELTA);
+		assertEquals( 1.5, grownBounds.getMaxX(), DELTA);
+		assertEquals( 1.5, grownBounds.getMaxY(), DELTA);
 	}
 
 }

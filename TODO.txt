@@ -29,8 +29,6 @@
 - Set font sizes relative to the size of a standard font size 
   (like "em" in HTML)
 
-- Flip axis direction of plots
-
 - Add support for DiscreteLineRenderer2D to start steps in y-direction
 
 - Property window to change the charts while the program is running

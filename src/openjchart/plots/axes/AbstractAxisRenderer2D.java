@@ -31,6 +31,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	public AbstractAxisRenderer2D() {
 		settings = new Settings();
 
+		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 		setSettingDefault(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
 		setSettingDefault(KEY_SHAPE_STROKE, new BasicStroke());
@@ -175,7 +176,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	}
 
 	protected void evaluateShape(Shape shape) {
-		shapeLines = GeometryUtils.shapeToLines(shape);
+		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
+		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 
 		// Calculate length of axis shape at each shape segment
 		shapeSegmentLengths = new double[shapeLines.size()];

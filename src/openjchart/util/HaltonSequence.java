@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class HaltonSequence implements Iterator<Double> {
 	private int base;
-	private int c;
+	private long c;
 
 	public HaltonSequence() {
 		this(2);
@@ -21,12 +21,19 @@ public class HaltonSequence implements Iterator<Double> {
 
 	@Override
 	public Double next() {
-		int i = ++c;
-		double h = 0.0;
-		double step = 1.0 / base;
+		long i, digit;
+		double h, step;
+
+		if (++c == Long.MAX_VALUE) {
+			c = 0;
+		}
+
+		i = c;
+		h = 0.0;
+		step = 1.0 / base;
 
 		while (i > 0) {
-			int digit = i % base;
+			digit = i % base;
 		    h += digit * step;
 		    i = (i - digit) / base;
 		    step /= base;
