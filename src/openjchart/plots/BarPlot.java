@@ -44,27 +44,31 @@ public class BarPlot extends Plot {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		Graphics2D g2d = (Graphics2D) g;
-		Color colorOld = g2d.getColor();
+
+		drawGrid(g2d);
+		drawAxes(g2d);
+		drawPlot(g2d);
+		drawTitle(g2d);
+	}
+
+	protected void drawGrid(Graphics2D g2d) {
 		AffineTransform txOld = g2d.getTransform();
+		Color colorOld = g2d.getColor();
 
 		Insets insets = getInsets();
 		double w = getWidth() - axisYComp.getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
-		double barGap = w / series.size();
 		double plotXMin = axisYComp.getWidth() + insets.left;
 		double plotXMax = plotXMin + w;
 		double plotYMin = insets.top;
 		double plotYMax = plotYMin + h;
+
 		// Draw gridY
 		double minTick = axisYRenderer.getMinTick(axisY);
 		double maxTick = axisYRenderer.getMaxTick(axisY);
 		double tickSpacing = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-		double tickOffset =
-			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
-			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
-		Line2D gridLineHoriz = new Line2D.Double(plotXMin + tickOffset, 0.0, plotXMax, 0.0);
+		Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0.0, plotXMax, 0.0);
 		g2d.setColor(Color.LIGHT_GRAY);
 		for (double i = minTick; i <= maxTick; i += tickSpacing) {
 			double translateY = axisYRenderer.worldToViewPos(axisY, i).getY() + plotYMin;
@@ -73,7 +77,23 @@ public class BarPlot extends Plot {
 			g2d.setTransform(txOld);
 		}
 
+		g2d.setColor(colorOld);
+	}
+
+	protected void drawPlot(Graphics2D g2d) {
+		AffineTransform txOld = g2d.getTransform();
+		Color colorOld = g2d.getColor();
+
+		Insets insets = getInsets();
+		double w = getWidth() - axisYComp.getWidth() - insets.left - insets.right;
+		double h = getHeight() - insets.top - insets.bottom;
+		double plotXMin = axisYComp.getWidth() + insets.left;
+		double plotXMax = plotXMin + w;
+		double plotYMin = insets.top;
+		double plotYMax = plotYMin + h;
+
 		// Draw bars
+		double barGap = w / series.size();
 		g2d.setColor(Color.BLACK);
 		Rectangle2D bar = new Rectangle2D.Double();
 		Iterator<Integer> cols = series.values().iterator();

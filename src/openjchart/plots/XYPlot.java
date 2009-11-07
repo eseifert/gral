@@ -104,10 +104,7 @@ public class XYPlot extends Plot {
 		g2d.setColor(this.<Color>getSetting(KEY_GRID_COLOR));
 		double minTickX = axisXRenderer.getMinTick(axisX);
 		double maxTickX = axisXRenderer.getMaxTick(axisX);
-		double gridOffsetY =
-			axisXRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
-			axisXRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
-		Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax-gridOffsetY);
+		Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
 		double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 		for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
 			double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
@@ -120,10 +117,7 @@ public class XYPlot extends Plot {
 		// Draw gridY
 		double minTickY = axisYRenderer.getMinTick(axisY);
 		double maxTickY = axisYRenderer.getMaxTick(axisY);
-		double gridOffsetX =
-			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_ALIGNMENT) *
-			axisYRenderer.<Double>getSetting(AxisRenderer2D.KEY_TICK_LENGTH);
-		Line2D gridLineHoriz = new Line2D.Double(plotXMin+gridOffsetX, 0, plotXMax, 0);
+		Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
 		double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 		for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
 			double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
