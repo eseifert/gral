@@ -11,25 +11,21 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.util.Dimension2D;
 import openjchart.util.GeometryUtils;
+import openjchart.util.MathUtils;
 import openjchart.util.Settings;
 
 public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 	private final Settings settings;
 
-	protected List<Line2D> shapeLines;
-	protected List<Double> shapeSegmentLengths;
-	protected SortedSet<Double> shapeLengths;
-	protected double shapeLength;
+	private Line2D[] shapeLines;
+	private double[] shapeSegmentLengths;
+	private double[] shapeLengths;
 
 	private double tickLengthInner;
 	private double tickLengthOuter;
@@ -37,8 +33,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 	public AbstractAxisRenderer2D() {
 		settings = new Settings();
-		shapeSegmentLengths = new LinkedList<Double>();
-		shapeLengths = new TreeSet<Double>();
 
 		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
@@ -60,7 +54,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		final Drawable component = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				if (shapeLines==null || shapeLines.isEmpty()) {
+				if (shapeLines==null || shapeLines.length==0) {
 					return;
 				}
 				AffineTransform txOld = g2d.getTransform();
@@ -94,13 +88,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				Line2D tickShape = new Line2D.Double();
 
 				int currentTick = 0;
-				Iterator<Line2D> linesIterator = shapeLines.iterator();
-				Iterator<Double> segmentLengthsIterator = shapeSegmentLengths.iterator();
-				Iterator<Double> shapeLengthsIterator = shapeLengths.iterator();
-				for (int i = 0; i < shapeLines.size(); i++) {
-					Line2D line = linesIterator.next();
-					double segmentLength = segmentLengthsIterator.next();
-					double shapeLengthCur = shapeLengthsIterator.next();
+				for (int i = 0; i < shapeLines.length; i++) {
+					Line2D line = shapeLines[i];
+					double segmentLength = shapeSegmentLengths[i];
+					double shapeLengthCur = shapeLengths[i];
 
 					// Calculate normalized vector perpendicular to current axis shape segment
 					// for ticks and labels
@@ -188,57 +179,60 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		return Math.floor(axis.getMax().doubleValue()/tickSpacing) * tickSpacing;
 	}
 
+	protected double getShapeLength() {
+		if (shapeLengths == null || shapeLengths.length == 0) {
+			return 0.0;
+		}
+		return shapeLengths[shapeLengths.length - 1];
+	}
+	
 	@Override
 	public Point2D worldToViewPos(Axis axis, Number value) {
 		double length = worldToView(axis, value);
 		
-		if (length <= 0.0) {
-			return shapeLines.get(0).getP1();
+		if (shapeLines == null || shapeLines.length == 0) {
+			return null;
 		}
-		if (length >= shapeLength) {
-			return shapeLines.get(shapeLines.size() - 1).getP2();
+		if (length <= 0.0) {
+			return shapeLines[0].getP1();
+		}
+		if (length >= getShapeLength()) {
+			return shapeLines[shapeLines.length - 1].getP2();
 		}
 
-		Iterator<Line2D> linesIterator = shapeLines.iterator();
-		Iterator<Double> segmentLengthsIterator = shapeSegmentLengths.iterator();
-		Iterator<Double> shapeLengthsIterator = shapeLengths.iterator();
-		for (int i=0; i<shapeLines.size(); i++) {
-			Line2D line = linesIterator.next();
-			double segmentLength = segmentLengthsIterator.next();
-			double shapeLengthCur = shapeLengthsIterator.next();
-			double shapeLengthNext = shapeLengthCur + segmentLength;
-			
-			if (length < shapeLengthNext && length >= shapeLengthCur) {
-				double posRel = (length - shapeLengthCur) / segmentLength;
-				Point2D pos = new Point2D.Double(
-					line.getX1() + (line.getX2() - line.getX1())*posRel,
-					line.getY1() + (line.getY2() - line.getY1())*posRel
-				);
-				return pos;
-			}
-		}		
-		return null;
+		// Determine to which segment the value belongs using a binary search
+		int i = MathUtils.binarySearchFloor(shapeLengths, value.doubleValue());
+
+		if (i < 0) {
+			return null;
+		}
+		Line2D line = shapeLines[i];
+
+		double posRel = (length - shapeLengths[i]) / shapeSegmentLengths[i];
+		Point2D pos = new Point2D.Double(
+			line.getX1() + (line.getX2() - line.getX1())*posRel,
+			line.getY1() + (line.getY2() - line.getY1())*posRel
+		);
+		return pos;
 	}
 
 	protected void evaluateShape(Shape shape) {
 		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
-		shapeSegmentLengths.clear();
-		shapeLengths.clear();
-		shapeLength = 0.0;
+		shapeSegmentLengths = new double[shapeLines.length];
+		shapeLengths = new double[shapeLines.length + 1];  // First length is always 0.0
 
-		if (shapeLines.isEmpty()) {
+		if (shapeLines.length == 0) {
 			return;
 		}
 
 		// Calculate length of axis shape at each shape segment
-		Iterator<Line2D> linesIterator = shapeLines.iterator();
-		for (int i=0; i<shapeLines.size(); i++) {
-			Line2D line = linesIterator.next();
+		for (int i = 0; i < shapeLines.length; i++) {
+			Line2D line = shapeLines[i];
+
 			double segmentLength = line.getP1().distance(line.getP2());
-			shapeSegmentLengths.add(segmentLength);
-			shapeLengths.add(shapeLength);
-			shapeLength += segmentLength;
+			shapeSegmentLengths[i] = segmentLength;
+			shapeLengths[i + 1] = shapeLengths[i] + segmentLength;
 		}
 	}
 

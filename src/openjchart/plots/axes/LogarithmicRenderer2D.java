@@ -10,7 +10,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double axisMinLog = (axisMin > 0.0) ? Math.log(axisMin) : 0.0;
 		double axisMax = axis.getMax().doubleValue();
 		double axisMaxLog = Math.log(axisMax);
-		double pos = (Math.log(value.doubleValue()) - axisMinLog)*shapeLength / axisMaxLog;
+		double pos = (Math.log(value.doubleValue()) - axisMinLog)*getShapeLength() / axisMaxLog;
 
 		return pos;
 	}

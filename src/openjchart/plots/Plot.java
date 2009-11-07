@@ -51,12 +51,16 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
-		AffineTransform txOld = g2d.getTransform();
+	}
 
+	protected void drawTitle(Graphics2D g2d) {
 		if (title != null) {
 			title.draw(g2d);
 		}
+	}
 
+	protected void drawAxes(Graphics2D g2d) {
+		AffineTransform txOld = g2d.getTransform();
 		// Draw axes
 		for (Drawable axis : axisDrawables.values()) {
 			g2d.translate(axis.getX(), axis.getY());

@@ -6,8 +6,9 @@ import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Deque;
 import java.util.List;
 
 
@@ -15,8 +16,8 @@ public abstract class GeometryUtils {
 	public static final double EPSILON = 1e-3;
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
 
-	public static List<Line2D> shapeToLines(Shape path, boolean swapped) {
-		LinkedList<Line2D> lines = new LinkedList<Line2D>();
+	public static Line2D[] shapeToLines(Shape path, boolean swapped) {
+		Deque<Line2D> lines = new ArrayDeque<Line2D>();
 		PathIterator i = new FlatteningPathIterator(path.getPathIterator(null), 0.5);
 
 		double[] coords = new double[6];
@@ -52,7 +53,9 @@ public abstract class GeometryUtils {
 			System.arraycopy(coords, 0, coordsPrev, 0, 6);
 			i.next();
 		}
-		return lines;
+		Line2D[] linesArray = new Line2D[lines.size()];
+		lines.toArray(linesArray);
+		return linesArray;
 	}
 
 	/**
@@ -64,8 +67,8 @@ public abstract class GeometryUtils {
      */
     public static List<Point2D> intersection(final Shape s1, final Shape s2) {
     	List<Point2D> intersections = new ArrayList<Point2D>(2);
-    	List<Line2D> lines1 = shapeToLines(s1, false);
-    	List<Line2D> lines2 = shapeToLines(s2, false);
+    	Line2D[] lines1 = shapeToLines(s1, false);
+    	Line2D[] lines2 = shapeToLines(s2, false);
 
     	for (Line2D l1 : lines1) {
 			for (Line2D l2 : lines2) {
