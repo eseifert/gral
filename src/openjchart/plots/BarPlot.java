@@ -56,6 +56,7 @@ public class BarPlot extends Plot {
 		AffineTransform txOld = g2d.getTransform();
 		Color colorOld = g2d.getColor();
 
+		// TODO: Use Drawable for plot area instead of calculating each values separately
 		Insets insets = getInsets();
 		double w = getWidth() - axisYComp.getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
@@ -84,6 +85,7 @@ public class BarPlot extends Plot {
 		AffineTransform txOld = g2d.getTransform();
 		Color colorOld = g2d.getColor();
 
+		// TODO: Use Drawable for plot area instead of calculating each values separately
 		Insets insets = getInsets();
 		double w = getWidth() - axisYComp.getWidth() - insets.left - insets.right;
 		double h = getHeight() - insets.top - insets.bottom;
@@ -124,6 +126,7 @@ public class BarPlot extends Plot {
 		double axisYCompY = insets.top;
 		axisYComp.setBounds(axisYCompX, axisYCompY, w, h);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(w, h, w, 0.0));
+		// TODO: Calculate dimensions for plot area
 	}
 
 	@Override

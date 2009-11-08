@@ -93,6 +93,7 @@ public class XYPlot extends Plot {
 		double titleOffset = title != null ? title.getY() + title.getHeight() : insets.top;
 		double axisXOffset = axisXComp.getHeight();
 		double axisYOffset = axisYComp.getWidth();
+		// TODO: Use Drawable for plot area instead of calculating each values separately
 		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
 		double h = getHeight() - 1 - axisXOffset - titleOffset - insets.bottom;
 		double plotXMin = axisYOffset + insets.left;
@@ -139,6 +140,7 @@ public class XYPlot extends Plot {
 		double titleOffset = title != null ? title.getY() + title.getHeight() : insets.top;
 		double axisXOffset = axisXComp.getHeight();
 		double axisYOffset = axisYComp.getWidth();
+		// TODO: Use Drawable for plot area instead of calculating each values separately
 		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
 		double h = getHeight() - 1 - axisXOffset - titleOffset - insets.bottom;
 		double plotXMin = axisYOffset + insets.left;
@@ -210,6 +212,7 @@ public class XYPlot extends Plot {
 		axisYComp.setBounds(posX, posY, compYWidth, compYHeight);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
 
+		// TODO: Calculate dimensions of plot area
 	}
 
 	public AbstractAxisRenderer2D getAxisXRenderer() {
