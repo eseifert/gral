@@ -179,11 +179,16 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
 		}
-		if (length <= 0.0) {
-			return shapeLines[0].getP1();
-		}
-		if (length >= getShapeLength()) {
-			return shapeLines[shapeLines.length - 1].getP2();
+		// do linear extrapolation if point lies outside of shape
+		if (length <= 0.0 || length >= getShapeLength()) {
+			int segmentIndex = (length <= 0.0) ? 0 : shapeLines.length - 1;
+			Line2D segment = shapeLines[segmentIndex];
+			double segmentLen = shapeSegmentLengths[segmentIndex];
+			double shapeLen = shapeLengths[segmentIndex];
+			return new Point2D.Double(
+				segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
+				segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
+			);
 		}
 
 		// Determine to which segment the value belongs using a binary search

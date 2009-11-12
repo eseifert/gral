@@ -248,11 +248,11 @@ public class XYPlot extends Plot {
 		for (DataSource s : this.data.keySet()) {
 			// Set the minimal and maximal value of the axes
 			int colX = 0;
-			minX = Math.min(minX, data.getMin(colX).doubleValue());
-			maxX = Math.max(maxX, data.getMax(colX).doubleValue());
+			minX = Math.min(minX, s.getMin(colX).doubleValue());
+			maxX = Math.max(maxX, s.getMax(colX).doubleValue());
 			int colY = 1;
-			minY = Math.min(minY, data.getMin(colY).doubleValue());
-			maxY = Math.max(maxY, data.getMax(colY).doubleValue());
+			minY = Math.min(minY, s.getMin(colY).doubleValue());
+			maxY = Math.max(maxY, s.getMax(colY).doubleValue());
 		}
 	}
 
