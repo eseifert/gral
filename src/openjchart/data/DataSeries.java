@@ -10,8 +10,9 @@ import java.util.List;
  * @see DataSource
  */
 public class DataSeries implements DataSource {
-	private final DataSource data;
+	private DataSource data;
 	private final List<Integer> cols;
+	private String name;
 
 	private class DataSeriesIterator implements Iterator<Number[]> {
 		private int row;
@@ -32,14 +33,35 @@ public class DataSeries implements DataSource {
 	}
 
 	/**
-	 * Basic constructor.
+	 * Constructor without name.
+	 * @param data Data source
+	 * @param cols Column numbers
 	 */
 	public DataSeries(DataSource data, int... cols) {
+		this(null, data, cols);
+	}
+	
+	/**
+	 * Constructor.
+	 * @param name Descriptive name
+	 * @param data Data source
+	 * @param cols Column numbers
+	 */
+	public DataSeries(String name, DataSource data, int... cols) {
+		this.name = name;
 		this.data = data;
 		this.cols = new ArrayList<Integer>(cols.length);
 		for (int col : cols) {
 			this.cols.add(col);
 		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

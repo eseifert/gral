@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import openjchart.Drawable;
-import openjchart.data.DataSeries;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
@@ -22,7 +21,8 @@ import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
 
 public class XYPlot extends Plot {
-	public static final String KEY_GRID = "xyplot.grid";
+	public static final String KEY_GRID_X = "xyplot.grid.x";
+	public static final String KEY_GRID_Y = "xyplot.grid.y";
 	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
 
 	private AbstractAxisRenderer2D axisXRenderer;
@@ -41,7 +41,8 @@ public class XYPlot extends Plot {
 	private Drawable axisYComp;
 
 	public XYPlot(DataSource... data) {
-		setSettingDefault(KEY_GRID, true);
+		setSettingDefault(KEY_GRID_X, true);
+		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 
 		this.data = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
@@ -76,8 +77,9 @@ public class XYPlot extends Plot {
 	}
 
 	protected void drawGrid(Graphics2D g2d) {
-		boolean isGrid = getSetting(KEY_GRID);
-		if (!isGrid) {
+		boolean isGridX = getSetting(KEY_GRID_X);
+		boolean isGridY = getSetting(KEY_GRID_Y);
+		if (!isGridX && !isGridY) {
 			return;
 		}
 
@@ -97,31 +99,36 @@ public class XYPlot extends Plot {
 		double plotYMin = titleOffset;
 		double plotYMax = plotYMin + h;
 
-		// Draw gridX
 		g2d.setColor(this.<Color>getSetting(KEY_GRID_COLOR));
-		double minTickX = axisXRenderer.getMinTick(axisX);
-		double maxTickX = axisXRenderer.getMaxTick(axisX);
-		Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
-		double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-		for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
-			double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
-			double translateX = plotXMin + viewX;
-			g2d.translate(translateX, 0);
-			g2d.draw(gridLineVert);
-			g2d.setTransform(txOld);
+		
+		// Draw gridX
+		if (isGridX) {
+			double minTickX = axisXRenderer.getMinTick(axisX);
+			double maxTickX = axisXRenderer.getMaxTick(axisX);
+			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
+			double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
+			for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
+				double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
+				double translateX = plotXMin + viewX;
+				g2d.translate(translateX, 0);
+				g2d.draw(gridLineVert);
+				g2d.setTransform(txOld);
+			}
 		}
 
 		// Draw gridY
-		double minTickY = axisYRenderer.getMinTick(axisY);
-		double maxTickY = axisYRenderer.getMaxTick(axisY);
-		Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
-		double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-		for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
-			double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
-			double translateY = plotYMax - viewY + 1.0;
-			g2d.translate(0, translateY);
-			g2d.draw(gridLineHoriz);
-			g2d.setTransform(txOld);
+		if (isGridY) {
+			double minTickY = axisYRenderer.getMinTick(axisY);
+			double maxTickY = axisYRenderer.getMaxTick(axisY);
+			Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
+			double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
+			for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
+				double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
+				double translateY = plotYMax - viewY + 1.0;
+				g2d.translate(0, translateY);
+				g2d.draw(gridLineHoriz);
+				g2d.setTransform(txOld);
+			}
 		}
 
 		g2d.setColor(colorDefault);
@@ -256,11 +263,11 @@ public class XYPlot extends Plot {
 		}
 	}
 
-	public LineRenderer2D getLineRenderer(DataSeries s) {
+	public LineRenderer2D getLineRenderer(DataSource s) {
 		return data.get(s);
 	}
 
-	public void setLineRenderer(DataSeries s, LineRenderer2D lineRenderer) {
+	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
 		data.put(s, lineRenderer);
 	}
 }

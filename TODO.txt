@@ -1,6 +1,4 @@
-- Merge XYPlot and BarPlot
-
-- Use Drawable for plot area in XYPlot and BarPlot
+- Use Drawable for plot area in XYPlot (and BarPlot)
 
 - Use Label class for displaying scales in AbstractAxisRenderer2D
 

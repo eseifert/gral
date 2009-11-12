@@ -15,10 +15,10 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 	public Drawable getShape(final DataSource data, final int row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
-			public void draw(Graphics2D graphics) {
-				Color colorOld = graphics.getColor();
+			public void draw(Graphics2D g2d) {
+				Color colorOld = g2d.getColor();
 
-				graphics.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
+				g2d.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
 				Shape shape;
 				// TODO
 				if (data.getColumnCount() > 2) {
@@ -28,8 +28,8 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 				else {
 					shape = getSetting(KEY_SHAPE);
 				}
-				graphics.fill(shape);
-				graphics.setColor(colorOld);
+				g2d.fill(shape);
+				g2d.setColor(colorOld);
 			}
 		};
 
