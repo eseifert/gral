@@ -13,32 +13,35 @@ import openjchart.plots.axes.Axis;
 import openjchart.plots.shapes.AbstractShapeRenderer;
 
 public class BarPlot extends XYPlot {
+	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
 	
 	protected class BarRenderer extends AbstractShapeRenderer {
-
 		@Override
 		public Drawable getShape(final DataSource data, final int row) {
 			return new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
-					Color colorOld = g2d.getColor();
-
-					g2d.setColor(BarRenderer.this.<Color>getSetting(KEY_COLOR));
-					
-					//double valueX = data.get(0, row).doubleValue();
-					double valueY = data.get(1, row).doubleValue();
-
-					//Axis axisX = getAxis(Axis.X);
+					Number valueX = data.get(0, row);
+					Number valueY = data.get(1, row);
+					Axis axisX = getAxis(Axis.X);
 					Axis axisY = getAxis(Axis.Y);
 					
-					double barXMax = getAxisYRenderer().worldToViewPos(axisY, axisY.getMin()).getY();
-					double barXMin = getAxisYRenderer().worldToViewPos(axisY, valueY).getY();
-					double barWidth = 50.0;  // TODO: Use separate column for bar width
-					double barHeight = Math.abs(barXMax - barXMin);
+					double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
+					double barAlign = 0.5;
+					double barX = getAxisXRenderer().worldToViewPos(axisX, valueX).getX();
+					double barXMin = getAxisXRenderer().worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
+					double barXMax = getAxisXRenderer().worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
+					double barYMin = getAxisYRenderer().worldToViewPos(axisY, valueY).getY();
+					double barYMax = getAxisYRenderer().worldToViewPos(axisY, axisY.getMin()).getY();
 
-					Shape shape = new Rectangle2D.Double(-barWidth/2.0, 0.0, barWidth, barHeight);
+					double barWidth = Math.abs(barXMax - barXMin);
+					double barHeight = Math.abs(barYMax - barYMin);
+
+					Shape shape = new Rectangle2D.Double(barXMin - barX, 0.0, barWidth, barHeight);
+
+					Color colorOld = g2d.getColor();
+					g2d.setColor(BarRenderer.this.<Color>getSetting(KEY_COLOR));
 					g2d.fill(shape);
-					
 					g2d.setColor(colorOld);
 				}
 			};
@@ -50,6 +53,7 @@ public class BarPlot extends XYPlot {
 		super(data);
 
 		setSettingDefault(KEY_GRID_X, false);
+		setSettingDefault(KEY_BAR_WIDTH, 1.0);
 
 		for (DataSource s : data) {
 			setLineRenderer(s, null);

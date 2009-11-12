@@ -26,6 +26,7 @@ public class SimpleBarPlot extends JFrame {
 		plot.getAxis(Axis.X).setRange(0.5, 8.5);
 		plot.getAxis(Axis.Y).setRange(0.0, 11.0);
 		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
+		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
 		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
