@@ -7,26 +7,22 @@ import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
-import openjchart.data.DataSeries;
 import openjchart.data.DataSource;
 
-public class DefaultShapeRenderer extends AbstractShapeRenderer implements ShapeRenderer {
-
-	public DefaultShapeRenderer() {
-	}
+public class DefaultShapeRenderer extends AbstractShapeRenderer {
 
 	@Override
-	public Drawable getShape(final DataSource data, final DataSeries series, final int row) {
+	public Drawable getShape(final DataSource data, final int row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D graphics) {
 				Color colorOld = graphics.getColor();
 
 				graphics.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
-				Integer sizeCol = series.get(DataSeries.SIZE);
 				Shape shape;
-				if (sizeCol != null) {
-					double size = data.get(sizeCol, row).doubleValue();
+				// TODO
+				if (data.getColumnCount() > 2) {
+					double size = data.get(2, row).doubleValue();
 					shape = new Rectangle2D.Double(-size/2.0, -size/2.0, size, size);
 				}
 				else {

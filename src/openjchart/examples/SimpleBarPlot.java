@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
-import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.BarPlot;
 
@@ -22,11 +21,7 @@ public class SimpleBarPlot extends JFrame {
 		data.add(6, 8, 18);
 		data.add(7, 9, 9);
 		data.add(8, 11, 1);
-		DataSeries series = new DataSeries();
-		series.put("0", 0);
-		series.put("1", 1);
-		series.put("2", 2);
-		BarPlot plot = new BarPlot(data, series);
+		BarPlot plot = new BarPlot(data);
 		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(plot, BorderLayout.CENTER);
 

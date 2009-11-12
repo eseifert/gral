@@ -7,10 +7,8 @@ import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
 
 import openjchart.Drawable;
-import openjchart.data.DataSeries;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
@@ -19,7 +17,6 @@ import openjchart.plots.axes.LinearRenderer2D;
 
 public class BarPlot extends Plot {
 	private DataSource data;
-	private DataSeries series;
 
 	private double minY;
 	private double maxY;
@@ -28,9 +25,8 @@ public class BarPlot extends Plot {
 	private AbstractAxisRenderer2D axisYRenderer;
 	private Drawable axisYComp;
 
-	public BarPlot(DataSource data, DataSeries series) {
+	public BarPlot(DataSource data) {
 		this.data = data;
-		this.series = series;
 		dataChanged(this.data);
 		this.data.addDataListener(this);
 
@@ -95,13 +91,12 @@ public class BarPlot extends Plot {
 		double plotYMax = plotYMin + h;
 
 		// Draw bars
-		double barGap = w / series.size();
+		double barGap = w / data.getColumnCount();
 		g2d.setColor(Color.BLACK);
 		Rectangle2D bar = new Rectangle2D.Double();
-		Iterator<Integer> cols = series.values().iterator();
-		for (int i = 0; cols.hasNext(); i++) {
+		for (int i = 0; i < data.getColumnCount(); i++) {
 			double barWidth = barGap/2.0;
-			double barHeight = h * data.getMax(cols.next()).doubleValue() / maxY;
+			double barHeight = h * data.getMax(i).doubleValue() / maxY;
 			double barX = plotXMin - barWidth/2.0;
 			double barY = plotYMax - barHeight;
 			bar.setFrame(barX, barY, barWidth, barHeight);
@@ -135,9 +130,9 @@ public class BarPlot extends Plot {
 
 		minY = Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		for (Integer col : series.values()) {
-			maxY = Math.max(maxY, data.getMax(col).doubleValue());
-			minY = Math.min(minY, data.getMin(col).doubleValue());
+		for (int i = 0; i < data.getColumnCount(); i++) {
+			maxY = Math.max(maxY, data.getMax(i).doubleValue());
+			minY = Math.min(minY, data.getMin(i).doubleValue());
 		}
 	}
 }

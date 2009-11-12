@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	UtilTests.class,
 	DataTableTest.class,
+	DataSeriesTest.class,
 	HistogramTest.class,
 	AxisTest.class,
 	LinearRenderer2DTest.class,

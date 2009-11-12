@@ -1,10 +1,6 @@
 package openjchart.data.statistics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
@@ -22,9 +18,27 @@ public class Histogram implements DataSource {
 	private DataSource data;
 	private final List<Number[]> colBreaks;
 	private final List<long[]> colCells;
-	
+
 	private final Map<Integer, Long> cacheMin;
 	private final Map<Integer, Long> cacheMax;
+
+	private class HistogramIterator implements Iterator<Number[]> {
+		private int row;
+
+		@Override
+		public boolean hasNext() {
+			return row < getRowCount();
+		}
+
+		@Override
+		public Number[] next() {
+			return get(row++);
+		}
+
+		@Override
+		public void remove() {
+		}
+	}
 
 	private Histogram(DataSource data) {
 		this.data = data;

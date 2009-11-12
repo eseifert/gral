@@ -30,16 +30,11 @@ public class SimpleXYPlot extends JFrame {
 		data.add(7.0, 1.94591014906,  3.8);
 		data.add(8.0, 2.07944154168, 15.5);
 
-		DataSeries seriesLog = new DataSeries();
-		seriesLog.put(DataSeries.X, 0);
-		seriesLog.put(DataSeries.Y, 1);
-		
-		DataSeries seriesLin = new DataSeries();
-		seriesLin.put(DataSeries.X, 0);
-		seriesLin.put(DataSeries.Y, 0);
-		seriesLin.put(DataSeries.SIZE, 2);
+		DataSeries seriesLog = new DataSeries(data, 0, 1);
 
-		XYPlot plot = new XYPlot(data, seriesLog, seriesLin);
+		DataSeries seriesLin = new DataSeries(data, 0, 0, 2);
+
+		XYPlot plot = new XYPlot(seriesLog, seriesLin);
 		// Setting the title
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
 		// Custom title alignment

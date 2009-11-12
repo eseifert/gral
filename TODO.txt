@@ -7,8 +7,6 @@
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Include DataTable in DataSeries
-
 - Add new chart for drawing a pair of rows as line segments;
   Extension of scatter plot possible (Connect every nth pair)
 
