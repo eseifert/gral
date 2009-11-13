@@ -1,4 +1,4 @@
-package openjchart.tests;
+package openjchart.tests.util;
 
 import static org.junit.Assert.assertEquals;
 import openjchart.util.HaltonSequence;

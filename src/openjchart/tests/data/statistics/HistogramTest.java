@@ -1,4 +1,4 @@
-package openjchart.tests;
+package openjchart.tests.data.statistics;
 
 import static org.junit.Assert.assertEquals;
 import openjchart.data.DataTable;

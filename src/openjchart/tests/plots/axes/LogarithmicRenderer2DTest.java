@@ -1,4 +1,4 @@
-package openjchart.tests;
+package openjchart.tests.plots.axes;
 
 import static org.junit.Assert.assertEquals;
 import openjchart.plots.axes.Axis;
