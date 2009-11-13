@@ -1,7 +1,5 @@
 - Use Drawable for plot area in XYPlot (and BarPlot)
 
-- Use Label class for displaying scales in AbstractAxisRenderer2D
-
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
