@@ -1,48 +1,36 @@
 package openjchart.data;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import openjchart.data.comparators.DataComparator;
 
-
-public class DataTable implements DataSource {
+/**
+ * Creates a DataTable object.
+ * DataTable is the basic implementation of DataSource.
+ * Implemented functionality includes:
+ * <ul>
+ * <li>Adding and getting data rows</li>
+ * <li>Getting data cells</li>
+ * <li>Deleting the table</li>
+ * <li>Calculating minimum and maximum values of columns</li>
+ * <li>Getting row and column count</li>
+ * <li>Sorting the table with a specific DataComparator</li>
+ * </ul>
+ */
+public class DataTable extends AbstractDataSource {
 	private final ArrayList<Number[]> data;
 	private Class<?>[] types;
 
 	private final Map<Integer, Double> cacheMin;
 	private final Map<Integer, Double> cacheMax;
 
-	private final Set<DataListener> dataListeners;
-
-	private class DataTableIterator implements Iterator<Number[]> {
-		private int row;
-
-		@Override
-		public boolean hasNext() {
-			return row < getRowCount();
-		}
-
-		@Override
-		public Number[] next() {
-			return get(row++);
-		}
-
-		@Override
-		public void remove() {
-		}
-	}
-
+	/**
+	 * Constructor.
+	 * @param types type for each column
+	 */
 	public DataTable(Class<? extends Number>... types) {
 		this.types = new Class[types.length];
 		System.arraycopy(types, 0, this.types, 0, types.length);
 		data = new ArrayList<Number[]>();
-		dataListeners = new HashSet<DataListener>();
 		cacheMin = new HashMap<Integer, Double>();
 		cacheMax = new HashMap<Integer, Double>();
 	}
@@ -55,7 +43,7 @@ public class DataTable implements DataSource {
 	 * @param values values to be added as a row
 	 * @throws IllegalArgumentException if the type of the
 	 * table column and the type of the value that should be added
-	 * do not match {@inheritDoc}
+	 * do not match
 	 */
 	public void add(Number... values) {
 		Number[] row = new Number[values.length];
@@ -70,6 +58,9 @@ public class DataTable implements DataSource {
 		notifyDataChanged();
 	}
 
+	/**
+	 * Deletes all data this table contains.
+	 */
 	public void clear() {
 		data.clear();
 		notifyDataChanged();
@@ -148,6 +139,11 @@ public class DataTable implements DataSource {
 		return types.length;
 	}
 
+	/**
+	 * Sorts the table with the specified DataComparators.
+	 * The values are compared in the way the comparators are specified.
+	 * @param comparators comparators used for sorting
+	 */
 	public void sort(final DataComparator... comparators) {
 		Collections.sort(data, new Comparator<Number[]>() {
 			@Override
@@ -163,35 +159,10 @@ public class DataTable implements DataSource {
 		});
 	}
 
-	/* (non-Javadoc)
-	 * @see openjchart.data.DataSource#iterator()
-	 */
 	@Override
-	public Iterator<Number[]> iterator() {
-		return new DataTableIterator();
-	}
-
-	/* (non-Javadoc)
-	 * @see openjchart.data.DataSource#addDataListener(DataListener)
-	 */
-	@Override
-	public void addDataListener(DataListener dataListener) {
-		dataListeners.add(dataListener);
-	}
-
-	/* (non-Javadoc)
-	 * @see openjchart.data.DataSource#removeDataListener(DataListener)
-	 */
-	@Override
-	public void removeDataListener(DataListener dataListener) {
-		dataListeners.remove(dataListener);
-	}
-
 	protected void notifyDataChanged() {
 		cacheMin.clear();
 		cacheMax.clear();
-		for (DataListener dataListener : dataListeners) {
-			dataListener.dataChanged(this);
-		}
+		super.notifyDataChanged();
 	}
 }

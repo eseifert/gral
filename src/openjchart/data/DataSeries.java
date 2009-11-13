@@ -1,48 +1,34 @@
 package openjchart.data;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Class that represents a view on a DataSource.
- * This is achieved by simply mapping strings to column indexes.
  * @see DataSource
  */
-public class DataSeries implements DataSource {
+public class DataSeries extends AbstractDataSource {
 	private DataSource data;
 	private final List<Integer> cols;
 	private String name;
 
-	private class DataSeriesIterator implements Iterator<Number[]> {
-		private int row;
-
-		@Override
-		public boolean hasNext() {
-			return row < getRowCount();
-		}
-
-		@Override
-		public Number[] next() {
-			return get(row++);
-		}
-
-		@Override
-		public void remove() {
-		}
-	}
-
 	/**
 	 * Constructor without name.
+	 * The first column will be column 0, the second column 1 and so on,
+	 * whereas the value of the specified columns is the column number
+	 * in the DataSource.
 	 * @param data Data source
 	 * @param cols Column numbers
 	 */
 	public DataSeries(DataSource data, int... cols) {
 		this(null, data, cols);
 	}
-	
+
 	/**
 	 * Constructor.
+	 * The first column will be column 0, the second column 1 and so on,
+	 * whereas the value of the specified columns is the column number
+	 * in the DataSource.
 	 * @param name Descriptive name
 	 * @param data Data source
 	 * @param cols Column numbers
@@ -56,18 +42,20 @@ public class DataSeries implements DataSource {
 		}
 	}
 
+	/**
+	 * Returns the name of this series.
+	 * @return a name string
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets the name of this series.
+	 * @param name name to be set
+	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@Override
-	public void addDataListener(DataListener dataListener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -83,13 +71,14 @@ public class DataSeries implements DataSource {
 
 	@Override
 	public Number get(int col, int row) {
-		int dataCol = -1;
+		Number number = null;
 		try {
-			dataCol = cols.get(col);
+			int dataCol = cols.get(col);
+			number = data.get(dataCol, row);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// TODO: handle exception
 		}
-		return data.get(dataCol, row);
+		return number;
 	}
 
 	@Override
@@ -99,39 +88,30 @@ public class DataSeries implements DataSource {
 
 	@Override
 	public Number getMax(int col) {
-		int dataCol = -1;
+		Number number = null;
 		try {
-			dataCol = cols.get(col);
+			int dataCol = cols.get(col);
+			number = data.getMax(dataCol);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// TODO: handle exception
 		}
-		return data.getMax(dataCol);
+		return number;
 	}
 
 	@Override
 	public Number getMin(int col) {
-		int dataCol = -1;
+		Number number = null;
 		try {
-			dataCol = cols.get(col);
+			int dataCol = cols.get(col);
+			number = data.getMin(dataCol);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// TODO: handle exception
 		}
-		return data.getMin(dataCol);
+		return number;
 	}
 
 	@Override
 	public int getRowCount() {
 		return data.getRowCount();
-	}
-
-	@Override
-	public void removeDataListener(DataListener dataListener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Iterator<Number[]> iterator() {
-		return new DataSeriesIterator();
 	}
 }
