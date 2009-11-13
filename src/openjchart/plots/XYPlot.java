@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,8 +29,7 @@ public class XYPlot extends Plot {
 	private AbstractAxisRenderer2D axisXRenderer;
 	private AbstractAxisRenderer2D axisYRenderer;
 
-	private ShapeRenderer shapeRenderer;
-
+	private final Map<DataSource, ShapeRenderer> shapeRenderers;
 	private final Map<DataSource, LineRenderer2D> data;
 	private double minX;
 	private double maxX;
@@ -45,10 +45,13 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 
+		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
+		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		this.data = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 		LineRenderer2D lineRendererDefault = new DefaultLineRenderer2D();
 		for (DataSource source : data) {
 			this.data.put(source, lineRendererDefault);
+			this.shapeRenderers.put(source, shapeRendererDefault);
 			dataChanged(source);
 			source.addDataListener(this);
 		}
@@ -59,7 +62,6 @@ public class XYPlot extends Plot {
 
 		setAxisXRenderer(new LinearRenderer2D());
 		setAxisYRenderer(new LinearRenderer2D());
-		shapeRenderer = new DefaultShapeRenderer();
 
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
@@ -100,7 +102,7 @@ public class XYPlot extends Plot {
 		double plotYMax = plotYMin + h;
 
 		g2d.setColor(this.<Color>getSetting(KEY_GRID_COLOR));
-		
+
 		// Draw gridX
 		if (isGridX) {
 			double minTickX = axisXRenderer.getMinTick(axisX);
@@ -172,7 +174,7 @@ public class XYPlot extends Plot {
 				lineStart[1] = translateY;
 
 				g2d.translate(translateX, translateY);
-				Drawable shape = shapeRenderer.getShape(data, i);
+				Drawable shape = shapeRenderers.get(data).getShape(data, i);
 				shape.draw(g2d);
 				g2d.setTransform(txOld);
 			}
@@ -236,12 +238,12 @@ public class XYPlot extends Plot {
 		setAxis(Axis.Y, axisY, axisYComp);
 	}
 
-	public ShapeRenderer getShapeRenderer() {
-		return shapeRenderer;
+	public ShapeRenderer getShapeRenderer(DataSource source) {
+		return shapeRenderers.get(source);
 	}
 
-	public void setShapeRenderer(ShapeRenderer shapeRenderer) {
-		this.shapeRenderer = shapeRenderer;
+	public void setShapeRenderer(DataSource source, ShapeRenderer shapeRenderer) {
+		this.shapeRenderers.put(source, shapeRenderer);
 	}
 
 	@Override

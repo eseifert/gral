@@ -15,20 +15,22 @@ import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LogarithmicRenderer2D;
 import openjchart.plots.lines.DiscreteLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
+import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.plots.shapes.SizeableShapeRenderer;
 
 public class SimpleXYPlot extends JFrame {
 
 	public SimpleXYPlot() {
 		super("OpenJChartTest");
 		DataTable data = new DataTable(Double.class, Double.class, Double.class);
-		data.add(1.0, 0.00000000000,  3.0);
-		data.add(2.0, 0.69314718056,  8.1);
-		data.add(3.0, 1.09861228867,  2.5);
-		data.add(4.0, 1.38629436112,  5.0);
-		data.add(5.0, 1.60943791243, 13.7);
-		data.add(6.0, 1.79175946923, 10.2);
-		data.add(7.0, 1.94591014906,  3.8);
-		data.add(8.0, 2.07944154168, 15.5);
+		data.add(1.0, 0.00000000000,  0.3);
+		data.add(2.0, 0.69314718056,  0.81);
+		data.add(3.0, 1.09861228867,  3.5);
+		data.add(4.0, 1.38629436112,  0.5);
+		data.add(5.0, 1.60943791243, 1.8);
+		data.add(6.0, 1.79175946923, 1.02);
+		data.add(7.0, 1.94591014906,  0.38);
+		data.add(8.0, 2.07944154168, 2.55);
 
 		DataSeries seriesLog = new DataSeries(data, 0, 1);
 
@@ -39,6 +41,9 @@ public class SimpleXYPlot extends JFrame {
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
 		// Custom title alignment
 		//plot.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
+		// Custom shape renderer
+		ShapeRenderer sizeableShapeRenderer = new SizeableShapeRenderer();
+		plot.setShapeRenderer(seriesLin, sizeableShapeRenderer);
 		// Custom shape bounds
 		//plot.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom shape coloring

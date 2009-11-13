@@ -11,10 +11,11 @@ import openjchart.Drawable;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.shapes.AbstractShapeRenderer;
+import openjchart.plots.shapes.ShapeRenderer;
 
 public class BarPlot extends XYPlot {
 	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
-	
+
 	protected class BarRenderer extends AbstractShapeRenderer {
 		@Override
 		public Drawable getShape(final DataSource data, final int row) {
@@ -25,7 +26,7 @@ public class BarPlot extends XYPlot {
 					Number valueY = data.get(1, row);
 					Axis axisX = getAxis(Axis.X);
 					Axis axisY = getAxis(Axis.Y);
-					
+
 					double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
 					double barAlign = 0.5;
 					double barX = getAxisXRenderer().worldToViewPos(axisX, valueX).getX();
@@ -46,7 +47,7 @@ public class BarPlot extends XYPlot {
 				}
 			};
 		}
-		
+
 	}
 
 	public BarPlot(DataSource... data) {
@@ -55,10 +56,11 @@ public class BarPlot extends XYPlot {
 		setSettingDefault(KEY_GRID_X, false);
 		setSettingDefault(KEY_BAR_WIDTH, 1.0);
 
+		ShapeRenderer shapeRendererDefault = new BarRenderer();
 		for (DataSource s : data) {
 			setLineRenderer(s, null);
+			setShapeRenderer(s, shapeRendererDefault);
 		}
-		setShapeRenderer(new BarRenderer());
 	}
 
 	@Override
