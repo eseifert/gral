@@ -8,8 +8,6 @@ Version 0.7
 
 - Add legend to charts
 
-- Extended statistics (e.g. median, arbitrary quantiles, etc.)
-
 - Refactor renderers in XYPlot: add setting for default LineRenderer and
   ShapeRenderer to XYPlot
 
@@ -24,6 +22,8 @@ Version 0.7
 
 Version 0.8
 ===========
+
+- Extend statistics (e.g. arbitrary quantiles, etc.)
 
 - Add support for custom tick labels to AbstractAxisRenderer2D;
   Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]

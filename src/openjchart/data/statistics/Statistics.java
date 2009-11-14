@@ -1,11 +1,16 @@
 package openjchart.data.statistics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
+import openjchart.util.NumberComparator;
 
 /**
  * A class that computes and stores various statistical information
@@ -58,21 +63,24 @@ public class Statistics implements DataListener {
 	@Override
 	public void dataChanged(DataSource data) {
 		statistics.clear();
-		
+
 		// Add a Map for each column
 		int colCount = data.getColumnCount();
 		statistics.ensureCapacity(colCount);
-		for (int i = 0; i<colCount; i++) {
-			Map<String, Double> colStats = new HashMap<String, Double>();
-			statistics.add(colStats);
-		}
 
+		NumberComparator comparator = new NumberComparator();
+		
 		// Calculate statistics
-		for (Number[] row : data) {
-			for (int colIndex = 0; colIndex < row.length; colIndex++) {
-				double value = row[colIndex].doubleValue();
+		for (int colIndex = 0; colIndex < colCount; colIndex++) {
+			Map<String, Double> colStats = new HashMap<String, Double>();
+			List<Number> col = new LinkedList<Number>();
+
+			for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
+				Number cell = data.get(colIndex, rowIndex);
+				col.add(cell);
+
+				double value = cell.doubleValue();
 				double value2 = value*value;
-				Map<String, Double> colStats = statistics.get(colIndex);
 
 				// Sum
 				if (!colStats.containsKey(SUM)) colStats.put(SUM, 0.0);
@@ -99,13 +107,7 @@ public class Statistics implements DataListener {
 				// N (element count, zeroth moment)
 				if (!colStats.containsKey(N)) colStats.put(N, 0.0);
 				colStats.put(N, colStats.get(N) + 1.0);
-
-				// TODO: (Running) Median
 			}
-		}
-
-		for (int colIndex = 0; colIndex<colCount; colIndex++) {
-			Map<String, Double> colStats = statistics.get(colIndex);
 
 			// Mean
 			double mean = colStats.get(SUM) / colStats.get(N);
@@ -120,6 +122,17 @@ public class Statistics implements DataListener {
 			colStats.put(SKEWNESS, colStats.get(SUM3) - 3.0*mean*colStats.get(SUM2) + 2.0*mean2*colStats.get(SUM));
 			// Kurtosis (fourth moment)
 			colStats.put(KURTOSIS, colStats.get(SUM4) - 4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) - 3.0*mean2*mean*colStats.get(SUM));
+
+			// Median
+			Collections.sort(col, comparator);
+			int rowCount = colStats.get(N).intValue() - 1;
+			double median = col.get(rowCount/2).doubleValue();
+			if ((rowCount & 1) == 0) {
+				median = (median + col.get(rowCount/2 + 1).doubleValue())/2.0;
+			}
+			colStats.put(MEDIAN, median);
+
+			statistics.add(colStats);
 		}
 	}
 
