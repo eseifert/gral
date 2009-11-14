@@ -2,10 +2,10 @@ package openjchart.data.statistics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import openjchart.data.AbstractDataSource;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 
@@ -18,31 +18,13 @@ import openjchart.data.DataSource;
  * 
  * @author Erich Seifert
  */
-public class Histogram implements DataSource {
+public class Histogram extends AbstractDataSource implements DataListener {
 	private DataSource data;
 	private final List<Number[]> colBreaks;
 	private final List<long[]> colCells;
 
 	private final Map<Integer, Long> cacheMin;
 	private final Map<Integer, Long> cacheMax;
-
-	private class HistogramIterator implements Iterator<Number[]> {
-		private int row;
-
-		@Override
-		public boolean hasNext() {
-			return row < getRowCount();
-		}
-
-		@Override
-		public Number[] next() {
-			return get(row++);
-		}
-
-		@Override
-		public void remove() {
-		}
-	}
 
 	private Histogram(DataSource data) {
 		this.data = data;
@@ -54,9 +36,10 @@ public class Histogram implements DataSource {
 
 	public Histogram(DataSource data, int cellCount) {
 		this(data);
+		Statistics stats = this.data.getStatistics();
 		for (int col = 0; col < this.data.getColumnCount(); col++) {
-			double min = this.data.getMin(col).doubleValue();
-			double max = this.data.getMax(col).doubleValue();
+			double min = stats.get(Statistics.MIN, col);
+			double max = stats.get(Statistics.MAX, col);
 			double delta = (max - min + Double.MIN_VALUE) / cellCount;
 
 			Number[] breaks = new Double[cellCount + 1];
@@ -65,7 +48,7 @@ public class Histogram implements DataSource {
 			}
 			colBreaks.add(breaks);
 		}
-		rebuildCells();
+		dataChanged(this.data);
 	}
 
 	public Histogram(DataSource data, Number[]... breaks) {
@@ -73,7 +56,7 @@ public class Histogram implements DataSource {
 		for (Number[] brk : breaks) {
 			colBreaks.add(brk);
 		}
-		rebuildCells();
+		dataChanged(this.data);
 	}
 
 	protected void rebuildCells() {
@@ -114,6 +97,13 @@ public class Histogram implements DataSource {
 		}
 	}
 
+	public Number[] getCellLimits(int col, int cell) {
+		Number[] breaks = colBreaks.get(col);
+		Number lower = breaks[cell];
+		Number upper = breaks[cell+1];
+		return new Number[] {lower, upper};
+	}
+
 	@Override
 	public Number[] get(int row) {
 		Number[] rowData = new Number[getColumnCount()];
@@ -126,18 +116,6 @@ public class Histogram implements DataSource {
 	@Override
 	public Number get(int col, int row) {
 		return colCells.get(col)[row];
-	}
-
-	@Override
-	public Number getMax(int col) {
-		// TODO
-		return Double.MAX_VALUE;
-	}
-
-	@Override
-	public Number getMin(int col) {
-		// TODO
-		return 0;
 	}
 
 	@Override
@@ -155,25 +133,8 @@ public class Histogram implements DataSource {
 	}
 
 	@Override
-	public Iterator<Number[]> iterator() {
-		// TODO
-		return null;
+	public void dataChanged(DataSource data) {
+		rebuildCells();
 	}
 
-	@Override
-	public void addDataListener(DataListener dataListener) {
-		data.addDataListener(dataListener);
-	}
-
-	@Override
-	public void removeDataListener(DataListener dataListener) {
-		data.removeDataListener(dataListener);
-	}
-
-	public Number[] getCellLimits(int col, int cell) {
-		Number[] breaks = colBreaks.get(col);
-		Number lower = breaks[cell];
-		Number upper = breaks[cell+1];
-		return new Number[] {lower, upper};
-	}
 }

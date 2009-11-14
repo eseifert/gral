@@ -1,5 +1,7 @@
 package openjchart.data;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import openjchart.data.comparators.DataComparator;
 
@@ -20,9 +22,6 @@ public class DataTable extends AbstractDataSource {
 	private final ArrayList<Number[]> data;
 	private Class<?>[] types;
 
-	private final Map<Integer, Double> cacheMin;
-	private final Map<Integer, Double> cacheMax;
-
 	/**
 	 * Constructor.
 	 * @param types type for each column
@@ -31,8 +30,6 @@ public class DataTable extends AbstractDataSource {
 		this.types = new Class[types.length];
 		System.arraycopy(types, 0, this.types, 0, types.length);
 		data = new ArrayList<Number[]>();
-		cacheMin = new HashMap<Integer, Double>();
-		cacheMax = new HashMap<Integer, Double>();
 	}
 
 	/**
@@ -81,51 +78,6 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/* (non-Javadoc)
-	 * @see openjchart.data.DataSource#getMin(int)
-	 */
-	public Number getMin(int col) {
-		if (data.isEmpty()) {
-			return null;
-		}
-		if (cacheMin.containsKey(col)) {
-			return cacheMin.get(col);
-		}
-
-		double valueMin = Double.MAX_VALUE;
-		valueMin = Double.MAX_VALUE;
-		for (int row = 0; row < data.size(); row++) {
-			double value = get(col, row).doubleValue();
-			if (value < valueMin) {
-				valueMin = value;
-			}
-		}
-		cacheMin.put(col, valueMin);
-		return valueMin;
-	}
-
-	/* (non-Javadoc)
-	 * @see openjchart.data.DataSource#getMax(int)
-	 */
-	public Number getMax(int col) {
-		if (data.isEmpty()) {
-			return null;
-		}
-		if (cacheMax.containsKey(col)) {
-			return cacheMax.get(col);
-		}
-
-		double valueMax = -Double.MAX_VALUE;
-		for (int row = 0; row < data.size(); row++) {
-			double value = get(col, row).doubleValue();
-			if (value > valueMax) {
-				valueMax = value;
-			}
-		}
-		cacheMax.put(col, valueMax);
-		return valueMax;
-	}
-
-	/* (non-Javadoc)
 	 * @see openjchart.data.DataSource#getRowCount()
 	 */
 	public int getRowCount() {
@@ -161,8 +113,6 @@ public class DataTable extends AbstractDataSource {
 
 	@Override
 	protected void notifyDataChanged() {
-		cacheMin.clear();
-		cacheMax.clear();
 		super.notifyDataChanged();
 	}
 }

@@ -1,19 +1,37 @@
+Version 0.7
+===========
+
 - Use Drawable for plot area in XYPlot (and BarPlot)
 
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Add new chart for drawing a pair of rows as line segments;
-  Extension of scatter plot possible (Connect every nth pair)
+- Add legend to charts
+
+- Improve statistics (e.g. median, arbitrary quantiles, etc.)
+
+- Refactor renderers in XYPlot: add setting for default LineRenderer and
+  ShapeRenderer to XYPlot
+
+- Add support for variable intersection of axes
+
+- Fix bug that prevents last grid line and axis tick from being drawn.
+
+- Improve line gaps around shapes (currently constant width):
+  Use GeometryUtils.grow()
+
+- Add more JavaDocs and unit tests
+
+Version 0.8
+===========
+
+- Add support for custom tick labels to AbstractAxisRenderer2D;
+  Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
 
 - Add support for error bars ShapeRenderer
 
-- Add Legend to charts
-
-- Add JTable that acts as a renderer for DataTable
-
-- Add more support for statistics to DataTable (for example mean, median,
-  quartiles); Evaluate whether a separate class is necessary.
+- Add new chart for drawing a pair of rows as line segments;
+  Extension of scatter plot possible (Connect every nth pair)
 
 - Allow axes to be rescaled on Chart/window resizing
   Example: Axis is scaled from -3 to +3 -> chart is resized -> 
@@ -27,9 +45,25 @@
 
 - Add support for DiscreteLineRenderer2D to start steps in y-direction
 
+- Add export support to bitmap (PNG, GIF, JFIF/JPEG) as well as vector
+  (SVG, EPS) file formats
+
+Version 0.9
+===========
+
+- Add more plot types: multiple axis plots, circular plots,
+  contour plots, etc.
+
+- JDBC interface to DataSource
+
+- Add JTable that acts as a renderer for DataTable
+
 - Property window to change the charts while the program is running
 
-- Add support for custom tick labels to AbstractAxisRenderer2D;
-  Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
+- Add support for regressions with basic equations
+  (linear, exponential, polynomial, etc.)
 
-- Add support for simple linear regression
+Version 1.0
+===========
+
+- Add 3D support using OpenGL/JOGL (also 2D with JOGL?)

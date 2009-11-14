@@ -1,6 +1,10 @@
 package openjchart.plots.axes;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -192,7 +196,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		// Determine to which segment the value belongs using a binary search
 		int i = MathUtils.binarySearchFloor(shapeLengths, value.doubleValue());
 
-		if (i < 0) {
+		if (i < 0 || i >= shapeLines.length) {
 			return null;
 		}
 		Line2D line = shapeLines[i];

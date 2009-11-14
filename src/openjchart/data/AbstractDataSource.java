@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import openjchart.data.statistics.Statistics;
+
 /**
  * Abstract implementation of DataSource.
  * This class provides:
@@ -15,6 +17,7 @@ import java.util.Set;
  */
 public abstract class AbstractDataSource implements DataSource {
 	private final Set<DataListener> dataListeners;
+	private Statistics statistics;
 
 	/**
 	 * Iterator that returns each row of the DataSource.
@@ -41,7 +44,15 @@ public abstract class AbstractDataSource implements DataSource {
 	 * Constructor.
 	 */
 	public AbstractDataSource() {
-		this.dataListeners = new HashSet<DataListener>();
+		dataListeners = new HashSet<DataListener>();
+	}
+
+	@Override
+	public Statistics getStatistics() {
+		if (statistics == null) {
+			statistics = new Statistics(this);
+		}
+		return statistics;
 	}
 
 	@Override

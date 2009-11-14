@@ -35,7 +35,8 @@ public class HistogramTest {
 		};
 		int i = 0;
 		while (i < expected.length) {
-			assertEquals(expected[i], histogram.get(i%2, i/2));
+			int col = i%2, row = i/2;
+			assertEquals("column " + (col+1)+", row " + (row+1)+":", expected[i], histogram.get(col, row));
 			i++;
 		}
 	}

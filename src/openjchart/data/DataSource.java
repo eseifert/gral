@@ -1,5 +1,7 @@
 package openjchart.data;
 
+import openjchart.data.statistics.Statistics;
+
 /**
  * Immutable view on a source for tabular data.
  * @author Erich Seifert
@@ -22,20 +24,11 @@ public interface DataSource extends Iterable<Number[]> {
 	Number get(int col, int row);
 
 	/**
-	 * Retrieves the smallest value of the table's column.
-	 * Returns null if there are no rows in the table.
-	 * @param col index of the column the minimum value should be searched in
-	 * @return the minimum value of the column
+	 * Retrieves a object instance that contains various statistical information
+	 * on the current data source.
+	 * @return statistical information
 	 */
-	Number getMin(int col);
-
-	/**
-	 * Retrieves the largest value of the table's column.
-	 * Returns null if there are no rows in the table.
-	 * @param col index of the column the maximum value should be searched in
-	 * @return the maximum value of the column
-	 */
-	Number getMax(int col);
+	Statistics getStatistics();
 
 	/**
 	 * Returns the number of rows of the table.

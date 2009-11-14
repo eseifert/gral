@@ -34,18 +34,6 @@ public class DataTableTest {
 	}
 
 	@Test
-	public void testGetMin() {
-		assertEquals(1.0, table.getMin(0));
-		assertEquals(1.0, table.getMin(1));
-	}
-
-	@Test
-	public void testGetMax() {
-		assertEquals(8.0, table.getMax(0));
-		assertEquals(11.0, table.getMax(1));
-	}
-
-	@Test
 	public void testIterator() {
 		int rowNo = 0;
 		for (Number[] row : table) {

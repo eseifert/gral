@@ -12,6 +12,7 @@ import java.util.Map;
 
 import openjchart.Drawable;
 import openjchart.data.DataSource;
+import openjchart.data.statistics.Statistics;
 import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
@@ -255,13 +256,14 @@ public class XYPlot extends Plot {
 		minY = Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
 		for (DataSource s : this.data.keySet()) {
+			Statistics stats = s.getStatistics();
 			// Set the minimal and maximal value of the axes
 			int colX = 0;
-			minX = Math.min(minX, s.getMin(colX).doubleValue());
-			maxX = Math.max(maxX, s.getMax(colX).doubleValue());
+			minX = Math.min(minX, stats.get(Statistics.MIN, colX));
+			maxX = Math.max(maxX, stats.get(Statistics.MAX, colX));
 			int colY = 1;
-			minY = Math.min(minY, s.getMin(colY).doubleValue());
-			maxY = Math.max(maxY, s.getMax(colY).doubleValue());
+			minY = Math.min(minY, stats.get(Statistics.MIN, colY));
+			maxY = Math.max(maxY, stats.get(Statistics.MAX, colY));
 		}
 	}
 

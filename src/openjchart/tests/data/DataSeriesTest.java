@@ -42,15 +42,4 @@ public class DataSeriesTest {
 		assertEquals(2, series.getColumnCount());
 	}
 
-	@Test
-	public void testGetMax() {
-		assertEquals(table.getMax(2), series.getMax(0));
-		assertEquals(table.getMax(1), series.getMax(1));
-	}
-
-	@Test
-	public void testGetMin() {
-		assertEquals(table.getMin(2), series.getMin(0));
-		assertEquals(table.getMin(1), series.getMin(1));
-	}
 }

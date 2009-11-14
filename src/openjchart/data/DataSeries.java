@@ -87,30 +87,6 @@ public class DataSeries extends AbstractDataSource {
 	}
 
 	@Override
-	public Number getMax(int col) {
-		Number number = null;
-		try {
-			int dataCol = cols.get(col);
-			number = data.getMax(dataCol);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			// TODO: handle exception
-		}
-		return number;
-	}
-
-	@Override
-	public Number getMin(int col) {
-		Number number = null;
-		try {
-			int dataCol = cols.get(col);
-			number = data.getMin(dataCol);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			// TODO: handle exception
-		}
-		return number;
-	}
-
-	@Override
 	public int getRowCount() {
 		return data.getRowCount();
 	}
