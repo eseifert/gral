@@ -11,6 +11,7 @@ import openjchart.data.statistics.Statistics;
  * This class provides:
  * <ul>
  * <li>the administration of DataListeners</li>
+ * <li>the administration of the Statistics capabilities</li>
  * <li>capability of notification of DataListeners</li>
  * <li>a basic iterator</li>
  * </ul>

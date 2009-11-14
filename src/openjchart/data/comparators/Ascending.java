@@ -1,7 +1,14 @@
 package openjchart.data.comparators;
 
+/**
+ * DataComparator sorting in ascending order.
+ */
 public class Ascending extends DataComparator {
 
+	/**
+	 * Constructor.
+	 * @param col column index to be compared
+	 */
 	public Ascending(int col) {
 		super(col);
 	}

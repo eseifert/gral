@@ -13,7 +13,6 @@ import openjchart.data.comparators.DataComparator;
  * <li>Adding and getting data rows</li>
  * <li>Getting data cells</li>
  * <li>Deleting the table</li>
- * <li>Calculating minimum and maximum values of columns</li>
  * <li>Getting row and column count</li>
  * <li>Sorting the table with a specific DataComparator</li>
  * </ul>
@@ -109,10 +108,5 @@ public class DataTable extends AbstractDataSource {
 				return 0;
 			}
 		});
-	}
-
-	@Override
-	protected void notifyDataChanged() {
-		super.notifyDataChanged();
 	}
 }
