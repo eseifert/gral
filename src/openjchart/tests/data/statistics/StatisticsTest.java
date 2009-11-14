@@ -52,9 +52,38 @@ public class StatisticsTest {
 	}
 
 	@Test
+	public void testN() {
+		assertEquals(8.0, stats.get(Statistics.N, 0), DELTA);
+		assertEquals(8.0, stats.get(Statistics.N, 1), DELTA);
+	}
+
+	@Test
+	public void testMeanDeviation() {
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, 0), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, 1), DELTA);
+	}
+
+	@Test
+	public void testVariance() {
+		assertEquals(18.875, stats.get(Statistics.VARIANCE, 0), DELTA);
+		assertEquals(48.000, stats.get(Statistics.VARIANCE, 1), DELTA);
+	}
+
+	@Test
+	public void testSkewness() {
+		assertEquals( 17.90625, stats.get(Statistics.SKEWNESS, 0), DELTA);
+		assertEquals(198.00000, stats.get(Statistics.SKEWNESS, 1), DELTA);
+	}
+
+	@Test
+	public void testKurtosis() {
+		assertEquals( 104.275390625, stats.get(Statistics.KURTOSIS, 0), DELTA);
+		assertEquals(1332.000000000, stats.get(Statistics.KURTOSIS, 1), DELTA);
+	}
+
+	@Test
 	public void testMedian() {
-		// TODO
-		//assertEquals(2.0, stats.get(Statistics.MEDIAN, 0), DELTA);
-		//assertEquals(2.0, stats.get(Statistics.MEDIAN, 1), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MEDIAN, 0), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MEDIAN, 1), DELTA);
 	}
 }

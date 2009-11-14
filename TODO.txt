@@ -8,7 +8,7 @@ Version 0.7
 
 - Add legend to charts
 
-- Improve statistics (e.g. median, arbitrary quantiles, etc.)
+- Extended statistics (e.g. median, arbitrary quantiles, etc.)
 
 - Refactor renderers in XYPlot: add setting for default LineRenderer and
   ShapeRenderer to XYPlot

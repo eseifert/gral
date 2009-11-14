@@ -1,7 +1,6 @@
 package openjchart.plots.axes;
 
 import java.awt.BasicStroke;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -60,7 +59,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 					return;
 				}
 				AffineTransform txOld = g2d.getTransform();
-				FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
 				Stroke strokeOld = g2d.getStroke();
 
 				// Calculate tick positions (in pixel coordinates)
