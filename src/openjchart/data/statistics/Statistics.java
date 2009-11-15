@@ -2,6 +2,7 @@ package openjchart.data.statistics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import openjchart.data.DataListener;
@@ -67,15 +68,15 @@ public class Statistics implements DataListener {
 		// Calculate statistics
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
 			Map<String, Double> colStats = new HashMap<String, Double>();
-			Double[] col = new Double[rowCount];
+			List<Double> col = new ArrayList<Double>(rowCount);
 
 			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 				Number cell = data.get(colIndex, rowIndex);
 				double value = cell.doubleValue();
 				double value2 = value*value;
-				
+
 				// Store value of column row
-				col[rowIndex] = value;
+				col.add(value);
 
 				// Sum
 				if (!colStats.containsKey(SUM)) colStats.put(SUM, 0.0);
@@ -119,10 +120,10 @@ public class Statistics implements DataListener {
 			colStats.put(KURTOSIS, colStats.get(SUM4) - 4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) - 3.0*mean2*mean*colStats.get(SUM));
 
 			// Median
-			int medianIndex = MathUtils.randomizedSelect(col, 0, col.length - 1, col.length/2);
-			double median = col[medianIndex];
+			int medianIndex = MathUtils.randomizedSelect(col, 0, col.size() - 1, col.size()/2);
+			double median = col.get(medianIndex);
 			if ((rowCount & 1) == 0) {
-				double medianUpper = col[medianIndex + 1];
+				double medianUpper = col.get(medianIndex + 1);
 				median = (median + medianUpper)/2.0;
 			}
 			colStats.put(MEDIAN, median);
@@ -132,9 +133,9 @@ public class Statistics implements DataListener {
 		}
 	}
 
-	protected static <T extends Comparable<T>> T getPercentile(T[] col, double percentile) {
-		int i = (int)(percentile*col.length);
-		int pos = MathUtils.randomizedSelect(col, 0, col.length - 1, i);
-		return col[pos];
+	protected static <T extends Comparable<T>> T getPercentile(List<T> col, double percentile) {
+		int i = (int)(percentile*col.size());
+		int index = MathUtils.randomizedSelect(col, 0, col.size() - 1, i);
+		return col.get(index);
 	}
 }

@@ -1,5 +1,6 @@
 package openjchart.util;
 
+import java.util.List;
 import java.util.Random;
 
 
@@ -83,10 +84,10 @@ public abstract class MathUtils {
 	 * @param upper End index
 	 * @param i Smallness rank of value to search
 	 * @return Index of the element that is the <i>i</i>th smallest in array <i>a</i>
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 186
 	 */
-	public static <T extends Comparable<T>> int randomizedSelect(T[] a, int lower, int upper, int i) {
-		if (a.length == 0) {
+	public static <T extends Comparable<T>> int randomizedSelect(List<T> a, int lower, int upper, int i) {
+		if (a.isEmpty()) {
 			return -1;
 		}
 		if (lower == upper) {
@@ -112,9 +113,9 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 154
 	 */
-	private static <T extends Comparable<T>> int randomizedPartition(T[] a, int lower, int upper) {
+	private static <T extends Comparable<T>> int randomizedPartition(List<T> a, int lower, int upper) {
 		int i = lower + random.nextInt(upper - lower + 1);
 		exchange(a, upper, i);
 		return partition(a, lower, upper);
@@ -129,13 +130,13 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 146
 	 */
-	private static <T extends Comparable<T>> int partition(T[] a, int lower, int upper) {
-		T x = a[upper];
+	private static <T extends Comparable<T>> int partition(List<T> a, int lower, int upper) {
+		T x = a.get(upper);
 		int i = lower - 1;
 		for (int j = lower; j < upper; j++) {
-			if (a[j].compareTo(x) <= 0) {
+			if (a.get(j).compareTo(x) <= 0) {
 				i++;
 				exchange(a, i, j);
 			}
@@ -151,10 +152,10 @@ public abstract class MathUtils {
 	 * @param i1 First element index
 	 * @param i2 Second element index
 	 */
-	private static <T> void exchange(T[] a, int i1, int i2) {
-		T tmp = a[i2];
-		a[i2] = a[i1];
-		a[i1] = tmp;
+	private static <T> void exchange(List<T> a, int i1, int i2) {
+		T tmp = a.get(i2);
+		a.set(i2, a.get(i1));
+		a.set(i1, tmp);
 	}
 
 }
