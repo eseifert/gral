@@ -66,7 +66,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				double tickSpacing = getSetting(KEY_TICK_SPACING);
 				double tickLength = getSetting(KEY_TICK_LENGTH);
 				double tickAlignment = getSetting(KEY_TICK_ALIGNMENT);
-				double[] tickPositionsWorld = new double[(int) (axis.getRange()/tickSpacing)];
+				double[] tickPositionsWorld = new double[(int) (axis.getRange()/tickSpacing) + 1];
 				for (int i=0; i<tickPositionsWorld.length; i++) {
 					tickPositionsWorld[i] = minTick + i*tickSpacing;
 				}
@@ -89,6 +89,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
 				for (double tickPositionWorld : tickPositionsWorld) {
 					int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionWorld);
+					
+					if (segmentIndex < 0) {
+						continue;
+					}
 
 					double tickNormalX = normalOrientation * shapeLineNormals[segmentIndex].getX();
 					double tickNormalY = normalOrientation * shapeLineNormals[segmentIndex].getY();
