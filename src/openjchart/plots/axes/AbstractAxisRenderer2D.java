@@ -66,7 +66,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 				double tickSpacing = getSetting(KEY_TICK_SPACING);
 				double tickLength = getSetting(KEY_TICK_LENGTH);
 				double tickAlignment = getSetting(KEY_TICK_ALIGNMENT);
-				double[] tickPositionsWorld = new double[(int) (axis.getRange()/tickSpacing) + 1];
+				int tickCount = (int) (axis.getRange()/tickSpacing);
+				if (MathUtils.almostEqual(minTick, 0.0, 1e-10)) tickCount++;
+				double[] tickPositionsWorld = new double[tickCount];
 				for (int i=0; i<tickPositionsWorld.length; i++) {
 					tickPositionsWorld[i] = minTick + i*tickSpacing;
 				}
