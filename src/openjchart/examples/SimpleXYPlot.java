@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
-import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LogarithmicRenderer2D;
 import openjchart.plots.lines.DiscreteLineRenderer2D;
@@ -72,7 +71,7 @@ public class SimpleXYPlot extends JFrame {
 		// Swap axis direction
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
-		plot.<AbstractAxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
 		getContentPane().add(plot, BorderLayout.CENTER);
 

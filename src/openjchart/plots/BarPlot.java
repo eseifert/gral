@@ -8,8 +8,8 @@ import java.awt.geom.Rectangle2D;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
-import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
+import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.shapes.AbstractShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
 
@@ -27,8 +27,8 @@ public class BarPlot extends XYPlot {
 					Axis axisX = getAxis(Axis.X);
 					Axis axisY = getAxis(Axis.Y);
 
-					AbstractAxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
-					AbstractAxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+					AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
+					AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
 					double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
 					double barAlign = 0.5;
 					double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();

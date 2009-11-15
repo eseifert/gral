@@ -4,21 +4,24 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
 import openjchart.data.statistics.Statistics;
-import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LinearRenderer2D;
+import openjchart.plots.axes.Tick2D;
 import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
@@ -66,15 +69,17 @@ public class XYPlot extends Plot {
 
 			// Draw gridX
 			if (isGridX) {
-				AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-				double minTickX = axisXRenderer.getMinTick(axisX);
-				double maxTickX = axisXRenderer.getMaxTick(axisX);
-				Line2D gridLineVert = new Line2D.Double(0, bounds.getMinY(), 0, bounds.getMaxY());
-				double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-				for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
-					double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
-					double translateX = bounds.getMinX() + viewX;
-					g2d.translate(translateX, 0);
+				AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
+				Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
+				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
+				List<Tick2D> ticksX = axisXRenderer.getTicks(axisX);
+				Line2D gridLineVert = new Line2D.Double(
+					bounds.getMinX() - shapeBoundsX.getMinX(), bounds.getMinY() - shapeBoundsX.getMinY(),
+					bounds.getMinX() - shapeBoundsX.getMinX(), bounds.getMaxY() - shapeBoundsX.getMinY()
+				);
+				for (Tick2D tick : ticksX) {
+					Point2D tickPoint = tick.getPosition();
+					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					g2d.draw(gridLineVert);
 					g2d.setTransform(txOld);
 				}
@@ -82,15 +87,17 @@ public class XYPlot extends Plot {
 
 			// Draw gridY
 			if (isGridY) {
-				AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-				double minTickY = axisYRenderer.getMinTick(axisY);
-				double maxTickY = axisYRenderer.getMaxTick(axisY);
-				Line2D gridLineHoriz = new Line2D.Double(bounds.getMinX(), 0, bounds.getMaxX(), 0);
-				double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-				for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
-					double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
-					double translateY = bounds.getMaxY() - viewY + 1.0;
-					g2d.translate(0, translateY);
+				AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+				Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
+				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
+				List<Tick2D> ticksY = axisYRenderer.getTicks(axisY);
+				Line2D gridLineHoriz = new Line2D.Double(
+					bounds.getMinX() - shapeBoundsY.getMinX(), bounds.getMinY() - shapeBoundsY.getMinY(),
+					bounds.getMaxX() - shapeBoundsY.getMinX(), bounds.getMinY() - shapeBoundsY.getMinY()
+				);
+				for (Tick2D tick : ticksY) {
+					Point2D tickPoint = tick.getPosition();
+					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					g2d.draw(gridLineHoriz);
 					g2d.setTransform(txOld);
 				}
@@ -115,8 +122,8 @@ public class XYPlot extends Plot {
 				for (int i = 0; i < data.getRowCount(); i++) {
 					Number valueX = data.get(0, i);
 					Number valueY = data.get(1, i);
-					AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-					AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
+					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + bounds.getMinX();
 					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + bounds.getMinY();
 
@@ -195,7 +202,7 @@ public class XYPlot extends Plot {
 		double compXposX = compYWidth + insets.left;
 		double compXposY = getHeight() - compXHeight  - insets.bottom;
 		axisXComp.setBounds(compXposX, compXposY, compXWidth, compXHeight);
-		AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
+		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
 
 		double titleX = compXposX;
@@ -207,7 +214,7 @@ public class XYPlot extends Plot {
 		double compYposX = insets.left;
 		double compYposY = titleY + titleHeight;
 		axisYComp.setBounds(compYposX, compYposY, compYWidth, compYHeight);
-		AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+		AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
 
 		// Calculate dimensions of plot area
@@ -223,12 +230,12 @@ public class XYPlot extends Plot {
 		super.setSetting(key, value);
 
 		if (KEY_RENDERER_AXIS_X.equals(key)) {
-			AbstractAxisRenderer2D axisXRenderer = (AbstractAxisRenderer2D) value;
+			AxisRenderer2D axisXRenderer = (AxisRenderer2D) value;
 			axisXComp = axisXRenderer.getRendererComponent(axisX);
 			setAxis(Axis.X, axisX, axisXComp);
 		}
 		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
-			AbstractAxisRenderer2D axisYRenderer = (AbstractAxisRenderer2D) value;
+			AxisRenderer2D axisYRenderer = (AxisRenderer2D) value;
 			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			axisYComp = axisYRenderer.getRendererComponent(axisY);
 			setAxis(Axis.Y, axisY, axisYComp);
@@ -240,12 +247,12 @@ public class XYPlot extends Plot {
 		super.setSettingDefault(key, value);
 
 		if (KEY_RENDERER_AXIS_X.equals(key)) {
-			AbstractAxisRenderer2D axisXRenderer = (AbstractAxisRenderer2D) value;
+			AxisRenderer2D axisXRenderer = (AxisRenderer2D) value;
 			axisXComp = axisXRenderer.getRendererComponent(axisX);
 			setAxis(Axis.X, axisX, axisXComp);
 		}
 		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
-			AbstractAxisRenderer2D axisYRenderer = (AbstractAxisRenderer2D) value;
+			AxisRenderer2D axisYRenderer = (AxisRenderer2D) value;
 			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			axisYComp = axisYRenderer.getRendererComponent(axisY);
 			setAxis(Axis.Y, axisY, axisYComp);

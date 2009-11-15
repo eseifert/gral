@@ -1,6 +1,7 @@
 package openjchart.plots.axes;
 
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import openjchart.Drawable;
 import openjchart.util.SettingsStorage;
@@ -69,4 +70,11 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @return World coordinate value
 	 */
 	Number viewToWorld(Axis axis, double value);
+
+	/**
+	 * 
+	 * @param axis
+	 * @return
+	 */
+	List<Tick2D> getTicks(Axis axis);
 }
