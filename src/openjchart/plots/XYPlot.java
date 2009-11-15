@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
 import openjchart.data.statistics.Statistics;
@@ -40,6 +41,112 @@ public class XYPlot extends Plot {
 	private Axis axisY;
 	private Drawable axisXComp;
 	private Drawable axisYComp;
+	private final PlotArea2D plotArea;
+
+	private class PlotArea2D extends AbstractDrawable {
+		private double w;
+		private double h;
+		private double xMin;
+		private double xMax;
+		private double yMin;
+		private double yMax;
+
+		@Override
+		public void draw(Graphics2D g2d) {
+			drawGrid(g2d);
+			drawPlot(g2d);
+		}
+
+		@Override
+		public void setBounds(double x, double y, double width, double height) {
+			super.setBounds(x, y, width, height);
+
+			w = width - 1;
+			h = height - 1;
+			xMin = x;
+			xMax = xMin + w;
+			yMin = y;
+			yMax = yMin + h;
+		}
+
+		protected void drawGrid(Graphics2D g2d) {
+			boolean isGridX = getSetting(KEY_GRID_X);
+			boolean isGridY = getSetting(KEY_GRID_Y);
+			if (!isGridX && !isGridY) {
+				return;
+			}
+
+			AffineTransform txOld = g2d.getTransform();
+			Color colorDefault = g2d.getColor();
+
+			g2d.setColor(XYPlot.this.<Color>getSetting(KEY_GRID_COLOR));
+
+			// Draw gridX
+			if (isGridX) {
+				double minTickX = axisXRenderer.getMinTick(axisX);
+				double maxTickX = axisXRenderer.getMaxTick(axisX);
+				Line2D gridLineVert = new Line2D.Double(0, yMin, 0, yMax);
+				double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
+				for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
+					double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
+					double translateX = xMin + viewX;
+					g2d.translate(translateX, 0);
+					g2d.draw(gridLineVert);
+					g2d.setTransform(txOld);
+				}
+			}
+
+			// Draw gridY
+			if (isGridY) {
+				double minTickY = axisYRenderer.getMinTick(axisY);
+				double maxTickY = axisYRenderer.getMaxTick(axisY);
+				Line2D gridLineHoriz = new Line2D.Double(xMin, 0, xMax, 0);
+				double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
+				for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
+					double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
+					double translateY = yMax - viewY + 1.0;
+					g2d.translate(0, translateY);
+					g2d.draw(gridLineHoriz);
+					g2d.setTransform(txOld);
+				}
+			}
+
+			g2d.setColor(colorDefault);
+		}
+
+		protected void drawPlot(Graphics2D g2d) {
+			AffineTransform txOld = g2d.getTransform();
+			Color colorDefault = g2d.getColor();
+
+			// Paint shapes and lines
+			Drawable line;
+			for (Map.Entry<DataSource, LineRenderer2D> entry : data.entrySet()) {
+				DataSource data = entry.getKey();
+				LineRenderer2D lineRenderer = entry.getValue();
+				double[] lineStart = new double[2];
+
+				for (int i = 0; i < data.getRowCount(); i++) {
+					Number valueX = data.get(0, i);
+					Number valueY = data.get(1, i);
+					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + xMin;
+					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + yMin;
+
+					if (i != 0 && lineRenderer != null) {
+						line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
+						line.draw(g2d);
+					}
+					lineStart[0] = translateX;
+					lineStart[1] = translateY;
+
+					g2d.translate(translateX, translateY);
+					Drawable shape = shapeRenderers.get(data).getShape(data, i);
+					shape.draw(g2d);
+					g2d.setTransform(txOld);
+				}
+			}
+			g2d.setColor(colorDefault);
+		}
+	}
 
 	public XYPlot(DataSource... data) {
 		setSettingDefault(KEY_GRID_X, true);
@@ -66,6 +173,7 @@ public class XYPlot extends Plot {
 
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
+		this.plotArea = new PlotArea2D();
 	}
 
 	@Override
@@ -73,114 +181,10 @@ public class XYPlot extends Plot {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 
-		drawGrid(g2d);
+		plotArea.drawGrid(g2d);
 		drawAxes(g2d);
-		drawPlot(g2d);
+		plotArea.drawPlot(g2d);
 		drawTitle(g2d);
-	}
-
-	protected void drawGrid(Graphics2D g2d) {
-		boolean isGridX = getSetting(KEY_GRID_X);
-		boolean isGridY = getSetting(KEY_GRID_Y);
-		if (!isGridX && !isGridY) {
-			return;
-		}
-
-		AffineTransform txOld = g2d.getTransform();
-		Color colorDefault = g2d.getColor();
-
-		Insets insets = getInsets();
-		Label title = getTitle();
-		double titleOffset = title != null ? title.getY() + title.getHeight() : insets.top;
-		double axisXOffset = axisXComp.getHeight();
-		double axisYOffset = axisYComp.getWidth();
-		// TODO: Use Drawable for plot area instead of calculating each values separately
-		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
-		double h = getHeight() - 1 - axisXOffset - titleOffset - insets.bottom;
-		double plotXMin = axisYOffset + insets.left;
-		double plotXMax = plotXMin + w;
-		double plotYMin = titleOffset;
-		double plotYMax = plotYMin + h;
-
-		g2d.setColor(this.<Color>getSetting(KEY_GRID_COLOR));
-
-		// Draw gridX
-		if (isGridX) {
-			double minTickX = axisXRenderer.getMinTick(axisX);
-			double maxTickX = axisXRenderer.getMaxTick(axisX);
-			Line2D gridLineVert = new Line2D.Double(0, plotYMin, 0, plotYMax);
-			double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-			for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
-				double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
-				double translateX = plotXMin + viewX;
-				g2d.translate(translateX, 0);
-				g2d.draw(gridLineVert);
-				g2d.setTransform(txOld);
-			}
-		}
-
-		// Draw gridY
-		if (isGridY) {
-			double minTickY = axisYRenderer.getMinTick(axisY);
-			double maxTickY = axisYRenderer.getMaxTick(axisY);
-			Line2D gridLineHoriz = new Line2D.Double(plotXMin, 0, plotXMax, 0);
-			double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
-			for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
-				double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
-				double translateY = plotYMax - viewY + 1.0;
-				g2d.translate(0, translateY);
-				g2d.draw(gridLineHoriz);
-				g2d.setTransform(txOld);
-			}
-		}
-
-		g2d.setColor(colorDefault);
-	}
-
-	protected void drawPlot(Graphics2D g2d) {
-		AffineTransform txOld = g2d.getTransform();
-		Color colorDefault = g2d.getColor();
-
-		Insets insets = getInsets();
-		Label title = getTitle();
-		double titleOffset = title != null ? title.getY() + title.getHeight() : insets.top;
-		double axisXOffset = axisXComp.getHeight();
-		double axisYOffset = axisYComp.getWidth();
-		// TODO: Use Drawable for plot area instead of calculating each values separately
-		double w = getWidth() - 1 - axisYOffset - insets.left - insets.right;
-		double h = getHeight() - 1 - axisXOffset - titleOffset - insets.bottom;
-		double plotXMin = axisYOffset + insets.left;
-		double plotXMax = plotXMin + w;
-		double plotYMin = titleOffset;
-		double plotYMax = plotYMin + h;
-
-		// Paint shapes and lines
-		Drawable line;
-		for (Map.Entry<DataSource, LineRenderer2D> entry : data.entrySet()) {
-			DataSource data = entry.getKey();
-			LineRenderer2D lineRenderer = entry.getValue();
-			double[] lineStart = new double[2];
-
-			for (int i = 0; i < data.getRowCount(); i++) {
-				Number valueX = data.get(0, i);
-				Number valueY = data.get(1, i);
-				double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + plotXMin;
-				double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + plotYMin;
-
-				if (i != 0 && lineRenderer != null) {
-					line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
-					line.draw(g2d);
-				}
-				lineStart[0] = translateX;
-				lineStart[1] = translateY;
-
-				g2d.translate(translateX, translateY);
-				Drawable shape = shapeRenderers.get(data).getShape(data, i);
-				shape.draw(g2d);
-				g2d.setTransform(txOld);
-			}
-		}
-		g2d.setColor(colorDefault);
 	}
 
 	@Override
@@ -199,23 +203,28 @@ public class XYPlot extends Plot {
 		double compXWidth = getWidth() - compYWidth - insets.left - insets.right;
 		double compYHeight = getHeight() - compXHeight  - titleY - titleHeight - insets.bottom;
 
-		double posX = compYWidth + insets.left;
-		double posY = getHeight() - compXHeight  - insets.bottom;
-		axisXComp.setBounds(posX, posY, compXWidth, compXHeight);
+		double compXposX = compYWidth + insets.left;
+		double compXposY = getHeight() - compXHeight  - insets.bottom;
+		axisXComp.setBounds(compXposX, compXposY, compXWidth, compXHeight);
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
 
-		double titleX = posX;
+		double titleX = compXposX;
 		double titleWidth = compXWidth;
 		if (title != null) {
 			title.setBounds(titleX, titleY, titleWidth, titleHeight);
 		}
 
-		posX = insets.left;
-		posY = titleY + titleHeight;
-		axisYComp.setBounds(posX, posY, compYWidth, compYHeight);
+		double compYposX = insets.left;
+		double compYposY = titleY + titleHeight;
+		axisYComp.setBounds(compYposX, compYposY, compYWidth, compYHeight);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
 
-		// TODO: Calculate dimensions of plot area
+		// Calculate dimensions of plot area
+		double plotAreaX = compYposX + compYWidth;
+		double plotAreaY = titleY + titleHeight;
+		double plotAreaWidth = width - plotAreaX - insets.right;
+		double plotAreaHeight = height - plotAreaY - (height - compXposY);
+		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
 	}
 
 	public AbstractAxisRenderer2D getAxisXRenderer() {

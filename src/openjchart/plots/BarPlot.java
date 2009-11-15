@@ -1,7 +1,6 @@
 package openjchart.plots;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -61,16 +60,5 @@ public class BarPlot extends XYPlot {
 			setLineRenderer(s, null);
 			setShapeRenderer(s, shapeRendererDefault);
 		}
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-
-		drawGrid(g2d);
-		drawAxes(g2d);
-		drawPlot(g2d);
-		drawTitle(g2d);
 	}
 }
