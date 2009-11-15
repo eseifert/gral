@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,29 +45,10 @@ public class XYPlot extends Plot {
 	private final PlotArea2D plotArea;
 
 	private class PlotArea2D extends AbstractDrawable {
-		private double w;
-		private double h;
-		private double xMin;
-		private double xMax;
-		private double yMin;
-		private double yMax;
-
 		@Override
 		public void draw(Graphics2D g2d) {
 			drawGrid(g2d);
 			drawPlot(g2d);
-		}
-
-		@Override
-		public void setBounds(double x, double y, double width, double height) {
-			super.setBounds(x, y, width, height);
-
-			w = width - 1;
-			h = height - 1;
-			xMin = x;
-			xMax = xMin + w;
-			yMin = y;
-			yMax = yMin + h;
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
@@ -80,17 +62,18 @@ public class XYPlot extends Plot {
 			Color colorDefault = g2d.getColor();
 
 			g2d.setColor(XYPlot.this.<Color>getSetting(KEY_GRID_COLOR));
+			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
 			if (isGridX) {
 				AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 				double minTickX = axisXRenderer.getMinTick(axisX);
 				double maxTickX = axisXRenderer.getMaxTick(axisX);
-				Line2D gridLineVert = new Line2D.Double(0, yMin, 0, yMax);
+				Line2D gridLineVert = new Line2D.Double(0, bounds.getMinY(), 0, bounds.getMaxY());
 				double tickSpacingX = axisXRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 				for (double i = minTickX; i <= maxTickX; i += tickSpacingX) {
 					double viewX = axisXRenderer.worldToViewPos(axisX, i).getX();
-					double translateX = xMin + viewX;
+					double translateX = bounds.getMinX() + viewX;
 					g2d.translate(translateX, 0);
 					g2d.draw(gridLineVert);
 					g2d.setTransform(txOld);
@@ -102,11 +85,11 @@ public class XYPlot extends Plot {
 				AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 				double minTickY = axisYRenderer.getMinTick(axisY);
 				double maxTickY = axisYRenderer.getMaxTick(axisY);
-				Line2D gridLineHoriz = new Line2D.Double(xMin, 0, xMax, 0);
+				Line2D gridLineHoriz = new Line2D.Double(bounds.getMinX(), 0, bounds.getMaxX(), 0);
 				double tickSpacingY = axisYRenderer.getSetting(AxisRenderer2D.KEY_TICK_SPACING);
 				for (double i = minTickY; i <= maxTickY; i += tickSpacingY) {
 					double viewY = axisYRenderer.worldToViewPos(axisY, i).getY();
-					double translateY = yMax - viewY + 1.0;
+					double translateY = bounds.getMaxY() - viewY + 1.0;
 					g2d.translate(0, translateY);
 					g2d.draw(gridLineHoriz);
 					g2d.setTransform(txOld);
@@ -119,6 +102,7 @@ public class XYPlot extends Plot {
 		protected void drawPlot(Graphics2D g2d) {
 			AffineTransform txOld = g2d.getTransform();
 			Color colorDefault = g2d.getColor();
+			Rectangle2D bounds = getBounds();
 
 			// Paint shapes and lines
 			Drawable line;
@@ -133,8 +117,8 @@ public class XYPlot extends Plot {
 					Number valueY = data.get(1, i);
 					AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + xMin;
-					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + yMin;
+					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + bounds.getMinX();
+					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + bounds.getMinY();
 
 					if (i != 0 && lineRenderer != null) {
 						line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
@@ -229,8 +213,8 @@ public class XYPlot extends Plot {
 		// Calculate dimensions of plot area
 		double plotAreaX = compYposX + compYWidth;
 		double plotAreaY = titleY + titleHeight;
-		double plotAreaWidth = width - plotAreaX - insets.right;
-		double plotAreaHeight = height - plotAreaY - (height - compXposY);
+		double plotAreaWidth = width-1 - plotAreaX - insets.right;
+		double plotAreaHeight = height-1 - plotAreaY - (height - compXposY);
 		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
 	}
 
