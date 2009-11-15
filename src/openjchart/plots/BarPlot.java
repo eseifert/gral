@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
+import openjchart.plots.axes.AbstractAxisRenderer2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.shapes.AbstractShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
@@ -26,13 +27,15 @@ public class BarPlot extends XYPlot {
 					Axis axisX = getAxis(Axis.X);
 					Axis axisY = getAxis(Axis.Y);
 
+					AbstractAxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
+					AbstractAxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
 					double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
 					double barAlign = 0.5;
-					double barX = getAxisXRenderer().worldToViewPos(axisX, valueX).getX();
-					double barXMin = getAxisXRenderer().worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
-					double barXMax = getAxisXRenderer().worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
-					double barYMin = getAxisYRenderer().worldToViewPos(axisY, valueY).getY();
-					double barYMax = getAxisYRenderer().worldToViewPos(axisY, axisY.getMin()).getY();
+					double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
+					double barXMin = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
+					double barXMax = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
+					double barYMin = axisYRenderer.worldToViewPos(axisY, valueY).getY();
+					double barYMax = axisYRenderer.worldToViewPos(axisY, axisY.getMin()).getY();
 
 					double barWidth = Math.abs(barXMax - barXMin);
 					double barHeight = Math.abs(barYMax - barYMin);

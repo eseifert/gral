@@ -28,8 +28,8 @@ public class XYPlot extends Plot {
 	public static final String KEY_GRID_Y = "xyplot.grid.y";
 	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
 
-	private AbstractAxisRenderer2D axisXRenderer;
-	private AbstractAxisRenderer2D axisYRenderer;
+	public static final String KEY_RENDERER_AXIS_X = "xyplot.renderer.axisx";
+	public static final String KEY_RENDERER_AXIS_Y = "xyplot.renderer.axisy";
 
 	private final Map<DataSource, ShapeRenderer> shapeRenderers;
 	private final Map<DataSource, LineRenderer2D> data;
@@ -83,6 +83,7 @@ public class XYPlot extends Plot {
 
 			// Draw gridX
 			if (isGridX) {
+				AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 				double minTickX = axisXRenderer.getMinTick(axisX);
 				double maxTickX = axisXRenderer.getMaxTick(axisX);
 				Line2D gridLineVert = new Line2D.Double(0, yMin, 0, yMax);
@@ -98,6 +99,7 @@ public class XYPlot extends Plot {
 
 			// Draw gridY
 			if (isGridY) {
+				AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 				double minTickY = axisYRenderer.getMinTick(axisY);
 				double maxTickY = axisYRenderer.getMaxTick(axisY);
 				Line2D gridLineHoriz = new Line2D.Double(xMin, 0, xMax, 0);
@@ -125,9 +127,12 @@ public class XYPlot extends Plot {
 				LineRenderer2D lineRenderer = entry.getValue();
 				double[] lineStart = new double[2];
 
+				ShapeRenderer shapeRenderer = shapeRenderers.get(data);
 				for (int i = 0; i < data.getRowCount(); i++) {
 					Number valueX = data.get(0, i);
 					Number valueY = data.get(1, i);
+					AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
+					AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + xMin;
 					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + yMin;
 
@@ -139,7 +144,7 @@ public class XYPlot extends Plot {
 					lineStart[1] = translateY;
 
 					g2d.translate(translateX, translateY);
-					Drawable shape = shapeRenderers.get(data).getShape(data, i);
+					Drawable shape = shapeRenderer.getShape(data, i);
 					shape.draw(g2d);
 					g2d.setTransform(txOld);
 				}
@@ -152,11 +157,12 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
+		this.plotArea = new PlotArea2D();
 
-		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
 		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
-		this.data = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 		LineRenderer2D lineRendererDefault = new DefaultLineRenderer2D();
+		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
+		this.data = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 		for (DataSource source : data) {
 			this.data.put(source, lineRendererDefault);
 			this.shapeRenderers.put(source, shapeRendererDefault);
@@ -168,12 +174,11 @@ public class XYPlot extends Plot {
 		axisX = new Axis(minX, maxX);
 		axisY = new Axis(minY, maxY);
 
-		setAxisXRenderer(new LinearRenderer2D());
-		setAxisYRenderer(new LinearRenderer2D());
-
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
-		this.plotArea = new PlotArea2D();
+
+		setSettingDefault(KEY_RENDERER_AXIS_X, new LinearRenderer2D());
+		setSettingDefault(KEY_RENDERER_AXIS_Y, new LinearRenderer2D());
 	}
 
 	@Override
@@ -206,6 +211,7 @@ public class XYPlot extends Plot {
 		double compXposX = compYWidth + insets.left;
 		double compXposY = getHeight() - compXHeight  - insets.bottom;
 		axisXComp.setBounds(compXposX, compXposY, compXWidth, compXHeight);
+		AbstractAxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
 
 		double titleX = compXposX;
@@ -217,6 +223,7 @@ public class XYPlot extends Plot {
 		double compYposX = insets.left;
 		double compYposY = titleY + titleHeight;
 		axisYComp.setBounds(compYposX, compYposY, compYWidth, compYHeight);
+		AbstractAxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
 
 		// Calculate dimensions of plot area
@@ -227,26 +234,39 @@ public class XYPlot extends Plot {
 		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
 	}
 
-	public AbstractAxisRenderer2D getAxisXRenderer() {
-		return axisXRenderer;
-	}
+	@Override
+	public <T> void setSetting(String key, T value) {
+		super.setSetting(key, value);
 
-	public void setAxisXRenderer(AbstractAxisRenderer2D axisXRenderer) {
-		this.axisXRenderer = axisXRenderer;
-		axisXComp = axisXRenderer.getRendererComponent(axisX);
-		setAxis(Axis.X, axisX, axisXComp);
-	}
+		if (KEY_RENDERER_AXIS_X.equals(key)) {
+			AbstractAxisRenderer2D axisXRenderer = (AbstractAxisRenderer2D) value;
+			axisXComp = axisXRenderer.getRendererComponent(axisX);
+			setAxis(Axis.X, axisX, axisXComp);
+		}
+		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
+			AbstractAxisRenderer2D axisYRenderer = (AbstractAxisRenderer2D) value;
+			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			axisYComp = axisYRenderer.getRendererComponent(axisY);
+			setAxis(Axis.Y, axisY, axisYComp);
+		}
+	};
 
-	public AbstractAxisRenderer2D getAxisYRenderer() {
-		return axisYRenderer;
-	}
+	@Override
+	public <T> void setSettingDefault(String key, T value) {
+		super.setSettingDefault(key, value);
 
-	public void setAxisYRenderer(AbstractAxisRenderer2D axisYRenderer) {
-		this.axisYRenderer = axisYRenderer;
-		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
-		axisYComp = axisYRenderer.getRendererComponent(axisY);
-		setAxis(Axis.Y, axisY, axisYComp);
-	}
+		if (KEY_RENDERER_AXIS_X.equals(key)) {
+			AbstractAxisRenderer2D axisXRenderer = (AbstractAxisRenderer2D) value;
+			axisXComp = axisXRenderer.getRendererComponent(axisX);
+			setAxis(Axis.X, axisX, axisXComp);
+		}
+		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
+			AbstractAxisRenderer2D axisYRenderer = (AbstractAxisRenderer2D) value;
+			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			axisYComp = axisYRenderer.getRendererComponent(axisY);
+			setAxis(Axis.Y, axisY, axisYComp);
+		}
+	};
 
 	public ShapeRenderer getShapeRenderer(DataSource source) {
 		return shapeRenderers.get(source);
