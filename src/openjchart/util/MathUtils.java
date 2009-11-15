@@ -1,8 +1,11 @@
 package openjchart.util;
 
+import java.util.Random;
 
 
 public abstract class MathUtils {
+	private static final Random random = new Random();
+
 	/**
 	 * Check whether two floating point values match with a given precision.
 	 * @param a First value
@@ -68,6 +71,90 @@ public abstract class MathUtils {
 			i++;
 		}
 		return i;
+	}
+
+	/**
+	 * Perform a randomized search on an unsorted array <code>a</code> to find
+	 * the <i>i</i>th smallest element. The array contents are be modified during
+	 * the operation!
+	 * @param <T> Data type of the array
+	 * @param a Unsorted array
+	 * @param lower Starting index
+	 * @param upper End index
+	 * @param i Smallness rank of value to search
+	 * @return Index of the element that is the <i>i</i>th smallest in array <i>a</i>
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 */
+	public static <T extends Comparable<T>> int randomizedSelect(T[] a, int lower, int upper, int i) {
+		if (a.length == 0) {
+			return -1;
+		}
+		if (lower == upper) {
+			return lower;
+		}
+		int q = randomizedPartition(a, lower, upper);
+		int k = q - lower + 1;
+		if (i == k) {
+			return q;
+		} else if (i < k) {
+			return randomizedSelect(a, lower, q - 1, i);
+		} else {
+			return randomizedSelect(a, q + 1, upper, i - k);
+		}
+	}
+ 
+	/**
+	 * Rearranges an array in two partitions using random sampling.
+	 * The array is permuted so that the elements of the lower partition
+	 * are always smaller than those of the upper partition.
+	 * @param <T> Data type of the array
+	 * @param a Unsorted array
+	 * @param lower Starting index
+	 * @param upper End index
+	 * @return Pivot point of the partitioned array
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 */
+	private static <T extends Comparable<T>> int randomizedPartition(T[] a, int lower, int upper) {
+		int i = lower + random.nextInt(upper - lower + 1);
+		exchange(a, upper, i);
+		return partition(a, lower, upper);
+	}
+
+	/**
+	 * Performs QuickSort partitioning: Rearranges an array in two partitions.
+	 * The array is permuted so that the elements of the lower partition are
+	 * always smaller than those of the upper partition.
+	 * @param <T> Data type of the array
+	 * @param a Unsorted array
+	 * @param lower Starting index
+	 * @param upper End index
+	 * @return Pivot point of the partitioned array
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 */
+	private static <T extends Comparable<T>> int partition(T[] a, int lower, int upper) {
+		T x = a[upper];
+		int i = lower - 1;
+		for (int j = lower; j < upper; j++) {
+			if (a[j].compareTo(x) <= 0) {
+				i++;
+				exchange(a, i, j);
+			}
+		}
+		exchange(a, i + 1, upper);
+		return i + 1;
+	}
+
+	/**
+	 * Swaps two elements at indexes <code>i1</code> and <code>i2</code> of an array in-place.
+	 * @param <T> Data type of the array
+	 * @param a Array
+	 * @param i1 First element index
+	 * @param i2 Second element index
+	 */
+	private static <T> void exchange(T[] a, int i1, int i2) {
+		T tmp = a[i2];
+		a[i2] = a[i1];
+		a[i1] = tmp;
 	}
 
 }

@@ -23,8 +23,6 @@ Version 0.7
 Version 0.8
 ===========
 
-- Extend statistics (e.g. arbitrary quantiles, etc.)
-
 - Add support for custom tick labels to AbstractAxisRenderer2D;
   Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
 

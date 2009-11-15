@@ -1,16 +1,12 @@
 package openjchart.data.statistics;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
-import openjchart.util.NumberComparator;
+import openjchart.util.MathUtils;
 
 /**
  * A class that computes and stores various statistical information
@@ -41,7 +37,7 @@ public class Statistics implements DataListener {
 	public static final String SKEWNESS = "skewness";
 	/** Kurtosis. This is the fourth central moment: E((x - E(x))^4) */
 	public static final String KURTOSIS = "kurtosis";
-	/** Median or 50% quantile. */
+	/** Median / 50% quantile. */
 	public static final String MEDIAN = "median";
 
 	private DataSource data;
@@ -62,25 +58,24 @@ public class Statistics implements DataListener {
 
 	@Override
 	public void dataChanged(DataSource data) {
-		statistics.clear();
-
-		// Add a Map for each column
 		int colCount = data.getColumnCount();
+		int rowCount = data.getRowCount();
+
+		statistics.clear();
 		statistics.ensureCapacity(colCount);
 
-		NumberComparator comparator = new NumberComparator();
-		
 		// Calculate statistics
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
 			Map<String, Double> colStats = new HashMap<String, Double>();
-			List<Number> col = new LinkedList<Number>();
+			Double[] col = new Double[rowCount];
 
-			for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
+			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 				Number cell = data.get(colIndex, rowIndex);
-				col.add(cell);
-
 				double value = cell.doubleValue();
 				double value2 = value*value;
+				
+				// Store value of column row
+				col[rowIndex] = value;
 
 				// Sum
 				if (!colStats.containsKey(SUM)) colStats.put(SUM, 0.0);
@@ -124,16 +119,22 @@ public class Statistics implements DataListener {
 			colStats.put(KURTOSIS, colStats.get(SUM4) - 4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) - 3.0*mean2*mean*colStats.get(SUM));
 
 			// Median
-			Collections.sort(col, comparator);
-			int rowCount = colStats.get(N).intValue() - 1;
-			double median = col.get(rowCount/2).doubleValue();
+			int medianIndex = MathUtils.randomizedSelect(col, 0, col.length - 1, col.length/2);
+			double median = col[medianIndex];
 			if ((rowCount & 1) == 0) {
-				median = (median + col.get(rowCount/2 + 1).doubleValue())/2.0;
+				double medianUpper = col[medianIndex + 1];
+				median = (median + medianUpper)/2.0;
 			}
 			colStats.put(MEDIAN, median);
 
+			// Add a Map for each column
 			statistics.add(colStats);
 		}
 	}
 
+	protected static <T extends Comparable<T>> T getPercentile(T[] col, double percentile) {
+		int i = (int)(percentile*col.length);
+		int pos = MathUtils.randomizedSelect(col, 0, col.length - 1, i);
+		return col[pos];
+	}
 }
