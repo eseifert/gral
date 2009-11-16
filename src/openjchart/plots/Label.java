@@ -8,11 +8,9 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
-import openjchart.util.Dimension2D;
-import openjchart.util.Settings;
-import openjchart.util.SettingsStorage;
+import openjchart.util.*;
 
-public class Label extends AbstractDrawable implements SettingsStorage {
+public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
 	public static final String KEY_ALIGNMENT_Y = "label.alignment.x";
 	public static final String KEY_FONT = "label.font";
@@ -67,9 +65,6 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 	@Override
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
-		if (KEY_FONT.equals(key) || KEY_FONT_RENDER_CONTEXT.equals(key)) {
-			renewLayout();
-		}
 	}
 
 	@Override
@@ -80,9 +75,6 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
-		if (KEY_FONT.equals(key) || KEY_FONT_RENDER_CONTEXT.equals(key)) {
-			renewLayout();
-		}
 	}
 
 	@Override
@@ -106,6 +98,14 @@ public class Label extends AbstractDrawable implements SettingsStorage {
 			// Set width and height
 			Rectangle2D layoutBounds = this.layout.getBounds();
 			setBounds(getX(), getY(), layoutBounds.getWidth(), layoutBounds.getHeight());
+		}
+	}
+
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
+		String key = event.getKey();
+		if (KEY_FONT.equals(key) || KEY_FONT_RENDER_CONTEXT.equals(key)) {
+			renewLayout();
 		}
 	}
 }

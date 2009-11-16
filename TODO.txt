@@ -4,14 +4,11 @@ Version 0.7
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
+- Add layout manager for plot, axes and plot areas
+
 - Add legend to charts
 
-- Refactor renderers in XYPlot: add setting for default LineRenderer and
-  ShapeRenderer to XYPlot
-
 - Add support for variable intersection of axes
-
-- Fix bug that prevents last grid line and axis tick from being drawn.
 
 - Improve line gaps around shapes (currently constant width):
   Use GeometryUtils.grow()

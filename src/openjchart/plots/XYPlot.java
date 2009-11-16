@@ -1,10 +1,6 @@
 package openjchart.plots;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -26,6 +22,7 @@ import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.util.SettingChangeEvent;
 
 public class XYPlot extends Plot {
 	public static final String KEY_GRID_X = "xyplot.grid.x";
@@ -225,40 +222,6 @@ public class XYPlot extends Plot {
 		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
 	}
 
-	@Override
-	public <T> void setSetting(String key, T value) {
-		super.setSetting(key, value);
-
-		if (KEY_RENDERER_AXIS_X.equals(key)) {
-			AxisRenderer2D axisXRenderer = (AxisRenderer2D) value;
-			axisXComp = axisXRenderer.getRendererComponent(axisX);
-			setAxis(Axis.X, axisX, axisXComp);
-		}
-		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
-			AxisRenderer2D axisYRenderer = (AxisRenderer2D) value;
-			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
-			axisYComp = axisYRenderer.getRendererComponent(axisY);
-			setAxis(Axis.Y, axisY, axisYComp);
-		}
-	};
-
-	@Override
-	public <T> void setSettingDefault(String key, T value) {
-		super.setSettingDefault(key, value);
-
-		if (KEY_RENDERER_AXIS_X.equals(key)) {
-			AxisRenderer2D axisXRenderer = (AxisRenderer2D) value;
-			axisXComp = axisXRenderer.getRendererComponent(axisX);
-			setAxis(Axis.X, axisX, axisXComp);
-		}
-		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
-			AxisRenderer2D axisYRenderer = (AxisRenderer2D) value;
-			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
-			axisYComp = axisYRenderer.getRendererComponent(axisY);
-			setAxis(Axis.Y, axisY, axisYComp);
-		}
-	};
-
 	public ShapeRenderer getShapeRenderer(DataSource source) {
 		return shapeRenderers.get(source);
 	}
@@ -293,5 +256,23 @@ public class XYPlot extends Plot {
 
 	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
 		data.put(s, lineRenderer);
+	}
+
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
+		super.settingChanged(event);
+
+		String key = event.getKey();
+		if (KEY_RENDERER_AXIS_X.equals(key)) {
+			AxisRenderer2D axisXRenderer = (AxisRenderer2D) event.getValNew();
+			axisXComp = axisXRenderer.getRendererComponent(axisX);
+			setAxis(Axis.X, axisX, axisXComp);
+		}
+		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
+			AxisRenderer2D axisYRenderer = (AxisRenderer2D) event.getValNew();
+			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			axisYComp = axisYRenderer.getRendererComponent(axisY);
+			setAxis(Axis.Y, axisY, axisYComp);
+		}
 	}
 }

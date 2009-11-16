@@ -1,11 +1,6 @@
 package openjchart.plots;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +12,12 @@ import openjchart.Drawable;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
+import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
+import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
-public abstract class Plot extends JPanel implements SettingsStorage, DataListener {
+public abstract class Plot extends JPanel implements SettingsStorage, DataListener, SettingsListener {
 	public static final String KEY_TITLE = "plot.title";
 	public static final String KEY_BACKGROUND_COLOR = "plot.background.color";
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
@@ -36,6 +33,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
 		this.settings = new Settings();
+		this.settings.addSettingsListener(this);
 		this.title = new Label("");
 		this.title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		setSettingDefault(KEY_TITLE, null);
@@ -133,9 +131,13 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	public <T> void removeSettingDefault(String key) {
 		settings.removeDefault(key);
 	}
-	
+
 	@Override
 	public void dataChanged(DataSource data) {
+	}
+
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	public Label getTitle() {

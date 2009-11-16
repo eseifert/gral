@@ -16,12 +16,9 @@ import java.util.List;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.plots.Label;
-import openjchart.util.Dimension2D;
-import openjchart.util.GeometryUtils;
-import openjchart.util.MathUtils;
-import openjchart.util.Settings;
+import openjchart.util.*;
 
-public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
+public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, SettingsListener {
 	private final Settings settings;
 
 	private Line2D[] shapeLines;
@@ -163,7 +160,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		List<Tick2D> tickPositions = new LinkedList<Tick2D>();
 		for (double tickPositionWorld : tickPositionsWorld) {
 			int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionWorld);
-			
+
 			if (segmentIndex < 0) {
 				continue;
 			}
@@ -174,7 +171,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 			Point2D tickNormal = shapeLineNormals[segmentIndex];
 
 			Format labelFormat = getSetting(KEY_LABEL_FORMAT);
-			String tickLabel = labelFormat.format(tickPositionWorld); 
+			String tickLabel = labelFormat.format(tickPositionWorld);
 
 			tickPositions.add(new Tick2D(tickPoint, tickNormal, tickLabel));
 		}
@@ -257,9 +254,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
-		if (KEY_SHAPE.equals(key)) {
-			evaluateShape((Shape)value);
-		}
 	}
 
 	@Override
@@ -269,9 +263,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
-		if (KEY_SHAPE.equals(key)) {
-			evaluateShape((Shape)value);
-		}
 	}
 
 	@Override
@@ -279,4 +270,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D {
 		settings.removeDefault(key);
 	}
 
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
+		String key = event.getKey();
+		if (KEY_SHAPE.equals(key)) {
+			evaluateShape((Shape) event.getValNew());
+		}
+	}
 }

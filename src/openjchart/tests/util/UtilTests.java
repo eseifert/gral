@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	MathUtilsTest.class,
 	HaltonSequenceTest.class,
-	GeometryUtilsTest.class
+	GeometryUtilsTest.class,
+	SettingsTest.class
 })
 public class UtilTests {
 }
