@@ -15,6 +15,16 @@ public class AxisTest {
 	}
 
 	@Test
+	public void testGetMin() {
+		assertEquals(-5, axis.getMin());
+	}
+
+	@Test
+	public void testGetMax() {
+		assertEquals(5, axis.getMax());
+	}
+
+	@Test
 	public void testGetRange() {
 		double delta = 1e-5;
 		assertEquals(10, axis.getRange(), delta);

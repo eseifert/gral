@@ -133,15 +133,15 @@ public abstract class GeometryUtils {
      * @param offset Offset
      * @return New shape that was expanded or shrunk by the specified amount
      */
-    public static Shape grow(final Shape s, final double offset) {
+    public static Area grow(final Shape s, final double offset) {
+    	Area shape = new Area(s);
     	if (Math.abs(offset) < EPSILON) {
-    		return s;
+    		return shape;
     	}
 
     	BasicStroke stroke = new BasicStroke((float)Math.abs(2.0*offset));
     	Area strokeShape = new Area(stroke.createStrokedShape(s));
 
-    	Area shape = new Area(s);
     	if (offset > 0.0) {
     		shape.add(strokeShape);
     	} else {

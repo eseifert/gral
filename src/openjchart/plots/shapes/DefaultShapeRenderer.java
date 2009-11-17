@@ -17,13 +17,20 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 			public void draw(Graphics2D g2d) {
 				Color colorOld = g2d.getColor();
 
+				Shape shape = getShapePath(data, row);
 				g2d.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
-				Shape shape = getSetting(KEY_SHAPE);
 				g2d.fill(shape);
+
 				g2d.setColor(colorOld);
 			}
 		};
 
 		return drawable;
+	}
+
+	@Override
+	public Shape getShapePath(DataSource data, int row) {
+		Shape shape = getSetting(KEY_SHAPE);
+		return shape;
 	}
 }

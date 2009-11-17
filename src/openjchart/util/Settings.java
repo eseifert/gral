@@ -1,6 +1,11 @@
 package openjchart.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Class that stores a specific and a default setting for a certain key.

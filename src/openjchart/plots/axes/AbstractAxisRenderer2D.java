@@ -16,7 +16,12 @@ import java.util.List;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.plots.Label;
-import openjchart.util.*;
+import openjchart.util.Dimension2D;
+import openjchart.util.GeometryUtils;
+import openjchart.util.MathUtils;
+import openjchart.util.SettingChangeEvent;
+import openjchart.util.Settings;
+import openjchart.util.SettingsListener;
 
 public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, SettingsListener {
 	private final Settings settings;
@@ -32,6 +37,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 	public AbstractAxisRenderer2D() {
 		settings = new Settings();
+		settings.addSettingsListener(this);
 
 		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
@@ -77,7 +83,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				Rectangle2D labelBoundsPadded = new Rectangle2D.Double();
 				Line2D tickShape = new Line2D.Double();
 
-
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
 				for (Tick2D tick : ticks) {
 					Point2D tickPoint = tick.getPosition();
@@ -87,8 +92,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					// Draw tick
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					tickShape.setLine(
-							-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
-							 tickNormal.getX()*tickLengthOuter,  tickNormal.getY()*tickLengthOuter
+						-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
+						 tickNormal.getX()*tickLengthOuter,  tickNormal.getY()*tickLengthOuter
 					);
 					g2d.draw(tickShape);
 
@@ -99,19 +104,19 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					Rectangle2D labelBounds = label.getBounds();
 					// Add padding to bounding box
 					labelBoundsPadded.setFrame(
-							0.0,
-							0.0,
-							labelBounds.getWidth()  + 2.0*labelDist,
-							labelBounds.getHeight() + 2.0*labelDist
+						0.0,
+						0.0,
+						labelBounds.getWidth()  + 2.0*labelDist,
+						labelBounds.getHeight() + 2.0*labelDist
 					);
 					boolean isLabelOutside = getSetting(KEY_LABEL_OUTSIDE);
 					List<Point2D> labelBoundsIntersections = GeometryUtils.intersection(
 							labelBoundsPadded,
 							new Line2D.Double(
-									labelBoundsPadded.getCenterX(),
-									labelBoundsPadded.getCenterY(),
-									labelBoundsPadded.getCenterX() + (isLabelOutside?-1.0:1.0)*tickNormal.getX()*labelBoundsPadded.getWidth(),
-									labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*labelBoundsPadded.getWidth()
+								labelBoundsPadded.getCenterX(),
+								labelBoundsPadded.getCenterY(),
+								labelBoundsPadded.getCenterX() + (isLabelOutside?-1.0:1.0)*tickNormal.getX()*labelBoundsPadded.getWidth(),
+								labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*labelBoundsPadded.getWidth()
 							)
 					);
 					double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
@@ -200,8 +205,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			double segmentLen = shapeSegmentLengths[segmentIndex];
 			double shapeLen = shapeLengths[segmentIndex];
 			return new Point2D.Double(
-						segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
-						segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
+				segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
+				segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
 			);
 		}
 
@@ -215,8 +220,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 		double posRel = (length - shapeLengths[i]) / shapeSegmentLengths[i];
 		Point2D pos = new Point2D.Double(
-					line.getX1() + (line.getX2() - line.getX1())*posRel,
-					line.getY1() + (line.getY2() - line.getY1())*posRel
+			line.getX1() + (line.getX2() - line.getX1())*posRel,
+			line.getY1() + (line.getY2() - line.getY1())*posRel
 		);
 		return pos;
 	}
@@ -242,8 +247,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 			// Calculate normalized vector perpendicular to current axis shape segment
 			shapeLineNormals[i] = new Point2D.Double(
-					 (line.getY2() - line.getY1()) / segmentLength,
-					-(line.getX2() - line.getX1()) / segmentLength
+				 (line.getY2() - line.getY1()) / segmentLength,
+				-(line.getX2() - line.getX1()) / segmentLength
 			);
 		}
 	}

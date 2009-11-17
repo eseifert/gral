@@ -8,7 +8,11 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
-import openjchart.util.*;
+import openjchart.util.Dimension2D;
+import openjchart.util.SettingChangeEvent;
+import openjchart.util.Settings;
+import openjchart.util.SettingsListener;
+import openjchart.util.SettingsStorage;
 
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";

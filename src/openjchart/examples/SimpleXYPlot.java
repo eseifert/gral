@@ -3,7 +3,6 @@ package openjchart.examples;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
@@ -56,8 +55,8 @@ public class SimpleXYPlot extends JFrame {
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, Color.RED);
 		plot.setLineRenderer(seriesLin, discreteRenderer);
-		// Custom insets of start and end points of shapes
-		discreteRenderer.setSetting(LineRenderer2D.KEY_POINT_INSETS, new Insets(10, 10, 10, 10));
+		// Custom gaps for shapes
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 5.0);
 		// Custom ascending point
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers

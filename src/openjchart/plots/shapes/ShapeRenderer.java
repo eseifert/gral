@@ -1,5 +1,7 @@
 package openjchart.plots.shapes;
 
+import java.awt.Shape;
+
 import openjchart.Drawable;
 import openjchart.data.DataSource;
 import openjchart.util.SettingsStorage;
@@ -26,4 +28,13 @@ public interface ShapeRenderer extends SettingsStorage {
 	 * @return Drawable that represents the shape
 	 */
 	Drawable getShape(DataSource data, int row);
+
+	/**
+	 * Returns a <code>Shape</code> instance that can be used
+	 * for further calculations.
+	 * @param data data provided
+	 * @param row row of the value in the DataTable
+	 * @return Outline that describes the shape
+	 */
+	Shape getShapePath(DataSource data, int row);
 }

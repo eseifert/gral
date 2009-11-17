@@ -10,9 +10,6 @@ Version 0.7
 
 - Add support for variable intersection of axes
 
-- Improve line gaps around shapes (currently constant width):
-  Use GeometryUtils.grow()
-
 - Add more JavaDocs and unit tests
 
 Version 0.8

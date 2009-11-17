@@ -1,6 +1,10 @@
 package openjchart.plots;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -113,25 +117,32 @@ public class XYPlot extends Plot {
 			for (Map.Entry<DataSource, LineRenderer2D> entry : data.entrySet()) {
 				DataSource data = entry.getKey();
 				LineRenderer2D lineRenderer = entry.getValue();
-				double[] lineStart = new double[2];
 
 				ShapeRenderer shapeRenderer = shapeRenderers.get(data);
+				Point2D posPrev = null;
+				Shape shapePathOld = null;
 				for (int i = 0; i < data.getRowCount(); i++) {
 					Number valueX = data.get(0, i);
 					Number valueY = data.get(1, i);
 					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-					double translateX = axisXRenderer.worldToViewPos(axisX, valueX).getX() + bounds.getMinX();
-					double translateY = axisYRenderer.worldToViewPos(axisY, valueY).getY() + bounds.getMinY();
+					Point2D pos = new Point2D.Double(
+						axisXRenderer.worldToViewPos(axisX, valueX).getX() + bounds.getMinX(),
+						axisYRenderer.worldToViewPos(axisY, valueY).getY() + bounds.getMinY()
+					);
+					if (bounds.contains(pos));
 
-					if (i != 0 && lineRenderer != null) {
-						line = lineRenderer.getLine(lineStart[0], lineStart[1], translateX, translateY);
+					Shape shapePath = shapeRenderer.getShapePath(data, i);
+					if (i > 0 && lineRenderer != null) {
+						DataPoint2D p1 = new DataPoint2D(posPrev, shapePathOld);
+						DataPoint2D p2 = new DataPoint2D(pos, shapePath);
+						line = lineRenderer.getLine(p1, p2);
 						line.draw(g2d);
 					}
-					lineStart[0] = translateX;
-					lineStart[1] = translateY;
+					posPrev = pos;
+					shapePathOld = shapePath;
 
-					g2d.translate(translateX, translateY);
+					g2d.translate(pos.getX(), pos.getY());
 					Drawable shape = shapeRenderer.getShape(data, i);
 					shape.draw(g2d);
 					g2d.setTransform(txOld);

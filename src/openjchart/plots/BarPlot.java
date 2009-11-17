@@ -22,26 +22,7 @@ public class BarPlot extends XYPlot {
 			return new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
-					Number valueX = data.get(0, row);
-					Number valueY = data.get(1, row);
-					Axis axisX = getAxis(Axis.X);
-					Axis axisY = getAxis(Axis.Y);
-
-					AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
-					AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
-					double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
-					double barAlign = 0.5;
-					double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
-					double barXMin = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
-					double barXMax = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
-					double barYMin = axisYRenderer.worldToViewPos(axisY, valueY).getY();
-					double barYMax = axisYRenderer.worldToViewPos(axisY, axisY.getMin()).getY();
-
-					double barWidth = Math.abs(barXMax - barXMin);
-					double barHeight = Math.abs(barYMax - barYMin);
-
-					Shape shape = new Rectangle2D.Double(barXMin - barX, 0.0, barWidth, barHeight);
-
+					Shape shape = getShapePath(data, row);
 					Color colorOld = g2d.getColor();
 					g2d.setColor(BarRenderer.this.<Color>getSetting(KEY_COLOR));
 					g2d.fill(shape);
@@ -50,6 +31,29 @@ public class BarPlot extends XYPlot {
 			};
 		}
 
+		@Override
+		public Shape getShapePath(DataSource data, int row) {
+			Number valueX = data.get(0, row);
+			Number valueY = data.get(1, row);
+			Axis axisX = getAxis(Axis.X);
+			Axis axisY = getAxis(Axis.Y);
+
+			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
+			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+			double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
+			double barAlign = 0.5;
+			double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
+			double barXMin = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
+			double barXMax = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
+			double barYMin = axisYRenderer.worldToViewPos(axisY, valueY).getY();
+			double barYMax = axisYRenderer.worldToViewPos(axisY, axisY.getMin()).getY();
+
+			double barWidth = Math.abs(barXMax - barXMin);
+			double barHeight = Math.abs(barYMax - barYMin);
+
+			Shape shape = new Rectangle2D.Double(barXMin - barX, 0.0, barWidth, barHeight);
+			return shape;
+		}
 	}
 
 	public BarPlot(DataSource... data) {

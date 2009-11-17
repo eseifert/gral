@@ -2,8 +2,13 @@ package openjchart.plots.lines;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Insets;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 
+import openjchart.plots.DataPoint2D;
+import openjchart.util.GeometryUtils;
 import openjchart.util.Settings;
 
 public abstract class AbstractLineRenderer2D implements LineRenderer2D {
@@ -13,8 +18,26 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D {
 		this.settings = new Settings();
 
 		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
-		setSettingDefault(KEY_POINT_INSETS, new Insets(0, 0, 0, 0));
+		setSettingDefault(KEY_LINE_GAP, 0.0);
 		setSettingDefault(KEY_LINE_COLOR, Color.BLACK);
+	}
+
+	@Override
+	public Shape punchShapes(Shape line, DataPoint2D p1, DataPoint2D p2) {
+		Stroke stroke = getSetting(LineRenderer2D.KEY_LINE_STROKE);
+		Area lineShape = new Area(stroke.createStrokedShape(line));
+
+		// Subtract shape of data points from line to yield gaps.
+		double gap = getSetting(KEY_LINE_GAP);
+		if (gap > 1e-10) {
+			for (DataPoint2D p : new DataPoint2D[] { p1, p2 }) {
+				AffineTransform tx = AffineTransform.getTranslateInstance(p.getX(), p.getY());
+				Shape shape = tx.createTransformedShape(p.getShape());
+				Area gapShape = GeometryUtils.grow(shape, gap);
+				lineShape.subtract(gapShape);
+			}
+		}
+		return lineShape;
 	}
 
 	@Override
