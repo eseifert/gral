@@ -163,6 +163,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		List<Tick2D> tickPositions = new LinkedList<Tick2D>();
+		double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
 		for (double tickPositionWorld : tickPositionsWorld) {
 			int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionWorld);
 
@@ -173,7 +174,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			// Calculate position of tick on axis shape
 			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld);
 
-			Point2D tickNormal = shapeLineNormals[segmentIndex];
+			Point2D tickNormal = new Point2D.Double(
+				normalOrientation * shapeLineNormals[segmentIndex].getX(),
+				normalOrientation * shapeLineNormals[segmentIndex].getY()
+			);
 
 			Format labelFormat = getSetting(KEY_LABEL_FORMAT);
 			String tickLabel = labelFormat.format(tickPositionWorld);

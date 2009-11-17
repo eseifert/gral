@@ -13,5 +13,5 @@ public interface LineRenderer2D extends SettingsStorage {
 
 	Drawable getLine(DataPoint2D p1, DataPoint2D p2);
 
-	Shape punchShapes(Shape lineShape, DataPoint2D p1, DataPoint2D p2);
+	Shape punchShapes(Shape lineShape, DataPoint2D... points);
 }

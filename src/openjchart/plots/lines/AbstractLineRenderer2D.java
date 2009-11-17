@@ -23,14 +23,14 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D {
 	}
 
 	@Override
-	public Shape punchShapes(Shape line, DataPoint2D p1, DataPoint2D p2) {
+	public Shape punchShapes(Shape line, DataPoint2D... points) {
 		Stroke stroke = getSetting(LineRenderer2D.KEY_LINE_STROKE);
 		Area lineShape = new Area(stroke.createStrokedShape(line));
 
 		// Subtract shape of data points from line to yield gaps.
 		double gap = getSetting(KEY_LINE_GAP);
 		if (gap > 1e-10) {
-			for (DataPoint2D p : new DataPoint2D[] { p1, p2 }) {
+			for (DataPoint2D p : points) {
 				AffineTransform tx = AffineTransform.getTranslateInstance(p.getX(), p.getY());
 				Shape shape = tx.createTransformedShape(p.getShape());
 				Area gapShape = GeometryUtils.grow(shape, gap);
