@@ -21,19 +21,19 @@ public class SimpleXYPlot extends JFrame {
 
 	public SimpleXYPlot() {
 		super("OpenJChartTest");
-		DataTable data = new DataTable(Double.class, Double.class, Double.class);
-		data.add(1.0, 0.00000000000,  0.3);
-		data.add(2.0, 0.69314718056,  0.81);
-		data.add(3.0, 1.09861228867,  3.5);
-		data.add(4.0, 1.38629436112,  0.5);
-		data.add(5.0, 1.60943791243, 1.8);
-		data.add(6.0, 1.79175946923, 1.02);
-		data.add(7.0, 1.94591014906,  0.38);
-		data.add(8.0, 2.07944154168, 2.55);
+		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		data.add(-1.5,  1.0,  0.00000000000,  0.30);
+		data.add( 0.0,  2.0,  0.69314718056,  0.81);
+		data.add( 1.5,  3.0,  1.09861228867,  3.50);
+		data.add( 4.0,  4.0,  1.38629436112,  0.50);
+		data.add( 5.0,  5.0,  1.60943791243,  1.80);
+		data.add( 6.0,  6.0,  1.79175946923,  1.02);
+		data.add( 7.0,  7.0,  1.94591014906,  0.38);
+		data.add( 8.0,  8.0,  2.07944154168,  2.55);
 
-		DataSeries seriesLog = new DataSeries(data, 0, 1);
+		DataSeries seriesLog = new DataSeries(data, 1, 2);
 
-		DataSeries seriesLin = new DataSeries(data, 0, 0, 2);
+		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
 		// Setting the title
@@ -60,7 +60,7 @@ public class SimpleXYPlot extends JFrame {
 		// Custom ascending point
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
-		LogarithmicRenderer2D logRendererX = new LogarithmicRenderer2D();
+		AxisRenderer2D logRendererX = new LogarithmicRenderer2D();
 		plot.setSetting(XYPlot.KEY_RENDERER_AXIS_X, logRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(3f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {15f, 5f, 5f, 5f}, 0.0f);

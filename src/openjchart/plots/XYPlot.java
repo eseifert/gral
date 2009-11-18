@@ -80,6 +80,7 @@ public class XYPlot extends Plot {
 				);
 				for (Tick2D tick : ticksX) {
 					Point2D tickPoint = tick.getPosition();
+					if (tickPoint == null) continue;
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					g2d.draw(gridLineVert);
 					g2d.setTransform(txOld);
@@ -126,14 +127,16 @@ public class XYPlot extends Plot {
 					Number valueY = data.get(1, i);
 					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX);
+					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY);
+					if (axisPosX==null || axisPosY==null) continue;
 					Point2D pos = new Point2D.Double(
-						axisXRenderer.worldToViewPos(axisX, valueX).getX() + bounds.getMinX(),
-						axisYRenderer.worldToViewPos(axisY, valueY).getY() + bounds.getMinY()
+						axisPosX.getX() + bounds.getMinX(),
+						axisPosY.getY() + bounds.getMinY()
 					);
-					if (bounds.contains(pos));
 
 					Shape shapePath = shapeRenderer.getShapePath(data, i);
-					if (i > 0 && lineRenderer != null) {
+					if (i > 0 && lineRenderer != null && pos != null && posPrev != null) {
 						DataPoint2D p1 = new DataPoint2D(posPrev, shapePathOld);
 						DataPoint2D p2 = new DataPoint2D(pos, shapePath);
 						line = lineRenderer.getLine(p1, p2);

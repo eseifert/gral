@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	public AbstractAxisRenderer2D() {
 		settings = new Settings();
 		settings.addSettingsListener(this);
+
+		setSettingDefault(KEY_INTERSECTION, 0.0);
 
 		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
@@ -90,6 +93,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					String tickLabel = tick.getLabel();
 
 					// Draw tick
+					if (tickPoint == null) continue;
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					tickShape.setLine(
 						-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
@@ -150,22 +154,21 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	@Override
 	public List<Tick2D> getTicks(Axis axis) {
 		double tickSpacing = getSetting(KEY_TICK_SPACING);
-		double minTick = Math.ceil(axis.getMin().doubleValue()/tickSpacing) * tickSpacing;
+		double min = axis.getMin().doubleValue();
+		double max = axis.getMax().doubleValue();
+		double minTick = Math.ceil(min/tickSpacing) * tickSpacing;
+		double maxTick = Math.floor(max/tickSpacing) * tickSpacing;
 
-		int tickCount = (int) (axis.getRange()/tickSpacing);
-		if (MathUtils.almostEqual(minTick, 0.0, 1e-10)) {
-			tickCount++;
-		}
-
-		double[] tickPositionsWorld = new double[tickCount];
-		for (int i=0; i<tickPositionsWorld.length; i++) {
-			tickPositionsWorld[i] = minTick + i*tickSpacing;
+		List<Double> tickPositionsWorld = new ArrayList<Double>();
+		for (double tickPositionWorld=minTick; tickPositionWorld<=maxTick; tickPositionWorld++) {
+			tickPositionsWorld.add(tickPositionWorld);
 		}
 
 		List<Tick2D> tickPositions = new LinkedList<Tick2D>();
 		double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
 		for (double tickPositionWorld : tickPositionsWorld) {
-			int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionWorld);
+			double tickPositionView = worldToView(axis, tickPositionWorld);
+			int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionView);
 
 			if (segmentIndex < 0) {
 				continue;
@@ -173,7 +176,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 			// Calculate position of tick on axis shape
 			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld);
+			
+			if (tickPoint == null) continue;
 
+			segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
 			Point2D tickNormal = new Point2D.Double(
 				normalOrientation * shapeLineNormals[segmentIndex].getX(),
 				normalOrientation * shapeLineNormals[segmentIndex].getY()
@@ -197,11 +203,16 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 	@Override
 	public Point2D worldToViewPos(Axis axis, Number value) {
-		double length = worldToView(axis, value);
-
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
 		}
+
+		double length = worldToView(axis, value);
+
+		if (Double.isNaN(length) || Double.isInfinite(length)) {
+			return null;
+		}
+
 		// do linear extrapolation if point lies outside of shape
 		if (length <= 0.0 || length >= getShapeLength()) {
 			int segmentIndex = (length <= 0.0) ? 0 : shapeLines.length - 1;
@@ -215,7 +226,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		// Determine to which segment the value belongs using a binary search
-		int i = MathUtils.binarySearchFloor(shapeLengths, value.doubleValue());
+		int i = MathUtils.binarySearchFloor(shapeLengths, length);
 
 		if (i < 0 || i >= shapeLines.length) {
 			return null;

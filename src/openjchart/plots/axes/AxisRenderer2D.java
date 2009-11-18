@@ -13,6 +13,9 @@ import openjchart.util.SettingsStorage;
  *
  */
 public interface AxisRenderer2D extends SettingsStorage {
+	/** Intersection point of axis. */
+	static final String KEY_INTERSECTION = "axis.intersection";
+
 	/** Shape of the axis. */
 	static final String KEY_SHAPE = "axis.shape";
 	/** Determines whether normal vector is calculated using clockwise rotation. */

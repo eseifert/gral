@@ -75,6 +75,25 @@ public abstract class MathUtils {
 	}
 
 	/**
+	 * Clamps a value to specified limits: if <code>value</code> is greater than <code>max</code>
+	 * then <code>max</code> will be returned. If <code>value</code> is greater than <code>min</code>
+	 * then <code>min</code> will be returned. 
+	 * @param value Value to be clamped
+	 * @param min Minimum
+	 * @param max Maximum
+	 * @return Clamped value
+	 */
+	public static <T extends Comparable<T>> T limit(T value, T min, T max) {
+		if (value.compareTo(max) > 0) {
+			return max;
+		}
+		if (value.compareTo(min) < 0) {
+			return min;
+		}
+		return value;
+	}
+	
+	/**
 	 * Perform a randomized search on an unsorted array <code>a</code> to find
 	 * the <i>i</i>th smallest element. The array contents are be modified during
 	 * the operation!
