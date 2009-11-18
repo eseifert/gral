@@ -3,6 +3,7 @@ package openjchart.plots;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
@@ -12,6 +13,7 @@ import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.shapes.AbstractShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.util.MathUtils;
 
 public class BarPlot extends XYPlot {
 	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
@@ -33,25 +35,38 @@ public class BarPlot extends XYPlot {
 
 		@Override
 		public Shape getShapePath(DataSource data, int row) {
-			Number valueX = data.get(0, row);
-			Number valueY = data.get(1, row);
-			Axis axisX = getAxis(Axis.X);
-			Axis axisY = getAxis(Axis.Y);
-
+			double valueX = data.get(0, row).doubleValue();
+			double valueY = data.get(1, row).doubleValue();
 			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
 			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+			Axis axisX = getAxis(Axis.X);
+			Axis axisY = getAxis(Axis.Y);
+			double axisYMin = axisY.getMin().doubleValue();
+			double axisYMax = axisY.getMax().doubleValue();
+			double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
+
+			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) || (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
+				return new GeneralPath();
+			}
+
 			double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
 			double barAlign = 0.5;
-			double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
-			double barXMin = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() - barWidthRel*barAlign).getX();
-			double barXMax = axisXRenderer.worldToViewPos(axisX, valueX.doubleValue() + barWidthRel*barAlign).getX();
-			double barYMin = axisYRenderer.worldToViewPos(axisY, valueY).getY();
-			double barYMax = axisYRenderer.worldToViewPos(axisY, axisY.getMin()).getY();
+
+			double barXMin = axisXRenderer.worldToViewPos(axisX, valueX - barWidthRel*barAlign).getX();
+			double barXMax = axisXRenderer.worldToViewPos(axisX, valueX + barWidthRel*barAlign).getX();
+
+			double barYVal = axisYRenderer.worldToViewPos(axisY, valueY).getY();
+			double barYOrigin = axisYRenderer.worldToViewPos(axisY, axisYOrigin).getY();
+			double barYMin = Math.min(barYVal, barYOrigin);
+			double barYMax = Math.max(barYVal, barYOrigin);
 
 			double barWidth = Math.abs(barXMax - barXMin);
 			double barHeight = Math.abs(barYMax - barYMin);
 
-			Shape shape = new Rectangle2D.Double(barXMin - barX, 0.0, barWidth, barHeight);
+			double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
+			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
+
+			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);
 			return shape;
 		}
 	}
