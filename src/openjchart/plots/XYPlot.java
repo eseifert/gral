@@ -11,6 +11,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LinearRenderer2D;
 import openjchart.plots.axes.Tick2D;
-import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
@@ -37,7 +37,8 @@ public class XYPlot extends Plot {
 	public static final String KEY_RENDERER_AXIS_Y = "xyplot.renderer.axisy";
 
 	private final Map<DataSource, ShapeRenderer> shapeRenderers;
-	private final Map<DataSource, LineRenderer2D> data;
+	private final Map<DataSource, LineRenderer2D> lineRenderers;
+	private final List<DataSource> data;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -115,16 +116,15 @@ public class XYPlot extends Plot {
 
 			// Paint shapes and lines
 			Drawable line;
-			for (Map.Entry<DataSource, LineRenderer2D> entry : data.entrySet()) {
-				DataSource data = entry.getKey();
-				LineRenderer2D lineRenderer = entry.getValue();
+			for (DataSource s : data) {
+				ShapeRenderer shapeRenderer = getShapeRenderer(s);
+				LineRenderer2D lineRenderer = getLineRenderer(s);
 
-				ShapeRenderer shapeRenderer = shapeRenderers.get(data);
 				Point2D posPrev = null;
 				Shape shapePathOld = null;
-				for (int i = 0; i < data.getRowCount(); i++) {
-					Number valueX = data.get(0, i);
-					Number valueY = data.get(1, i);
+				for (int i = 0; i < s.getRowCount(); i++) {
+					Number valueX = s.get(0, i);
+					Number valueY = s.get(1, i);
 					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX);
@@ -135,7 +135,7 @@ public class XYPlot extends Plot {
 						axisPosY.getY() + bounds.getMinY()
 					);
 
-					Shape shapePath = shapeRenderer.getShapePath(data, i);
+					Shape shapePath = shapeRenderer.getShapePath(s, i);
 					if (i > 0 && lineRenderer != null && pos != null && posPrev != null) {
 						DataPoint2D p1 = new DataPoint2D(posPrev, shapePathOld);
 						DataPoint2D p2 = new DataPoint2D(pos, shapePath);
@@ -146,7 +146,7 @@ public class XYPlot extends Plot {
 					shapePathOld = shapePath;
 
 					g2d.translate(pos.getX(), pos.getY());
-					Drawable shape = shapeRenderer.getShape(data, i);
+					Drawable shape = shapeRenderer.getShape(s, i);
 					shape.draw(g2d);
 					g2d.setTransform(txOld);
 				}
@@ -161,13 +161,14 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 		this.plotArea = new PlotArea2D();
 
-		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
-		LineRenderer2D lineRendererDefault = new DefaultLineRenderer2D();
 		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
-		this.data = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
+		this.lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
+		this.data = new LinkedList<DataSource>();
+
+		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		for (DataSource source : data) {
-			this.data.put(source, lineRendererDefault);
-			this.shapeRenderers.put(source, shapeRendererDefault);
+			this.data.add(source);
+			setShapeRenderer(source, shapeRendererDefault);
 			dataChanged(source);
 			source.addDataListener(this);
 		}
@@ -203,7 +204,7 @@ public class XYPlot extends Plot {
 		// Calculate title and axis bounds
 		Label title = getTitle();
 		double titleY = insets.top;
-		double titleHeight = title != null ? title.getPreferredSize().getHeight() : 0.0;
+		double titleHeight = (title != null) ? title.getPreferredSize().getHeight() : 0.0;
 
 		double compXHeight = axisXComp.getPreferredSize().getHeight();
 		double compYWidth = axisYComp.getPreferredSize().getWidth();
@@ -236,23 +237,31 @@ public class XYPlot extends Plot {
 		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
 	}
 
-	public ShapeRenderer getShapeRenderer(DataSource source) {
-		return shapeRenderers.get(source);
+	public ShapeRenderer getShapeRenderer(DataSource s) {
+		return shapeRenderers.get(s);
 	}
 
-	public void setShapeRenderer(DataSource source, ShapeRenderer shapeRenderer) {
-		this.shapeRenderers.put(source, shapeRenderer);
+	public void setShapeRenderer(DataSource s, ShapeRenderer shapeRenderer) {
+		this.shapeRenderers.put(s, shapeRenderer);
+	}
+
+	public LineRenderer2D getLineRenderer(DataSource s) {
+		return lineRenderers.get(s);
+	}
+
+	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
+		lineRenderers.put(s, lineRenderer);
 	}
 
 	@Override
 	public void dataChanged(DataSource data) {
 		super.dataChanged(data);
-
-		minX = Double.MAX_VALUE;
+	
+		minX =  Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
-		minY = Double.MAX_VALUE;
+		minY =  Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		for (DataSource s : this.data.keySet()) {
+		for (DataSource s : this.data) {
 			Statistics stats = s.getStatistics();
 			// Set the minimal and maximal value of the axes
 			int colX = 0;
@@ -262,14 +271,6 @@ public class XYPlot extends Plot {
 			minY = Math.min(minY, stats.get(Statistics.MIN, colY));
 			maxY = Math.max(maxY, stats.get(Statistics.MAX, colY));
 		}
-	}
-
-	public LineRenderer2D getLineRenderer(DataSource s) {
-		return data.get(s);
-	}
-
-	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
-		data.put(s, lineRenderer);
 	}
 
 	@Override

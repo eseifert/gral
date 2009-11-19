@@ -29,6 +29,7 @@ public class SimplePiePlot extends JFrame {
 			data.add(Math.abs(r.nextInt()) % 10 + 1);
 		}
 		PiePlot plot = new PiePlot(data);
+		plot.setSetting(PiePlot.KEY_TITLE, "A Sample Pie Plot");
 		// Change rotation
 		//plot.setSetting(PiePlot.KEY_CLOCKWISE, false);
 		// Custom start angle

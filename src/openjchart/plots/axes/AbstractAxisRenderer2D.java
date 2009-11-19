@@ -126,7 +126,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
 					double intersY = labelBoundsIntersections.get(0).getY() - labelBoundsPadded.getCenterY();
 					double labelPosX = -intersX - 0.50*labelBounds.getWidth()  + (isLabelOutside?tickShape.getX2():tickShape.getX1());
-					double labelPosY = -intersY + 0.35*labelBounds.getHeight() + (isLabelOutside?tickShape.getY2():tickShape.getY1());  // FIXME: 0.35?
+					double labelPosY = -intersY + 0.50*labelBounds.getHeight() + (isLabelOutside?tickShape.getY2():tickShape.getY1());
 					g2d.translate(labelPosX, labelPosY);
 					label.draw(g2d);
 
