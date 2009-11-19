@@ -37,8 +37,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	private double labelDist;
 
 	public AbstractAxisRenderer2D() {
-		settings = new Settings();
-		settings.addSettingsListener(this);
+		settings = new Settings(this);
 
 		setSettingDefault(KEY_INTERSECTION, 0.0);
 

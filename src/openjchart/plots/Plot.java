@@ -37,8 +37,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	public Plot() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
-		this.settings = new Settings();
-		this.settings.addSettingsListener(this);
+		this.settings = new Settings(this);
 		this.title = new Label("");
 		this.title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		setSettingDefault(KEY_TITLE, null);

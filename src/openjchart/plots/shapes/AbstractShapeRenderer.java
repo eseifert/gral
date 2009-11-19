@@ -3,13 +3,15 @@ package openjchart.plots.shapes;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
+import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
+import openjchart.util.SettingsListener;
 
-public abstract class AbstractShapeRenderer implements ShapeRenderer {
+public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsListener {
 	private final Settings settings;
 
 	public AbstractShapeRenderer() {
-		settings = new Settings();
+		settings = new Settings(this);
 
 		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
 		setSettingDefault(KEY_COLOR, Color.BLACK);
@@ -40,4 +42,7 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer {
 		settings.removeDefault(key);
 	}
 
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
+	}
 }

@@ -9,13 +9,15 @@ import java.awt.geom.Area;
 
 import openjchart.plots.DataPoint2D;
 import openjchart.util.GeometryUtils;
+import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
+import openjchart.util.SettingsListener;
 
-public abstract class AbstractLineRenderer2D implements LineRenderer2D {
+public abstract class AbstractLineRenderer2D implements LineRenderer2D, SettingsListener {
 	private final Settings settings;
 
 	public AbstractLineRenderer2D() {
-		this.settings = new Settings();
+		this.settings = new Settings(this);
 
 		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
 		setSettingDefault(KEY_LINE_GAP, 0.0);
@@ -65,4 +67,7 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D {
 		settings.removeDefault(key);
 	}
 
+	@Override
+	public void settingChanged(SettingChangeEvent event) {
+	}
 }

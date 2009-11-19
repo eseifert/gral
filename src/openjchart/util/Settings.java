@@ -22,10 +22,14 @@ public class Settings {
 	/**
 	 * Creates an empty Settings object.
 	 */
-	public Settings() {
+	public Settings(SettingsListener listener) {
 		settingsListeners = new HashSet<SettingsListener>();
 		settings = new HashMap<String, Object>();
 		defaults = new HashMap<String, Object>();
+		
+		if (listener != null) {
+			addSettingsListener(listener);
+		}
 	}
 
 	/**

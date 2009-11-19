@@ -23,8 +23,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	private TextLayout layout;
 
 	public Label(String text) {
-		settings = new Settings();
-		settings.addSettingsListener(this);
+		settings = new Settings(this);
 		this.text = text;
 
 		setSettingDefault(KEY_ALIGNMENT_X, 0.5);
