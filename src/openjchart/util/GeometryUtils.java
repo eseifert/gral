@@ -1,6 +1,7 @@
 package openjchart.util;
 import java.awt.BasicStroke;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
@@ -134,12 +135,25 @@ public abstract class GeometryUtils {
      * @return New shape that was expanded or shrunk by the specified amount
      */
     public static Area grow(final Shape s, final double offset) {
+    	return grow(s, offset, BasicStroke.JOIN_MITER, 10f);
+    }
+
+    /**
+     * Expand or shrink a shape in all directions by a defined offset.
+     * @param s Shape
+     * @param offset Offset to expand/shrink
+     * @param join Method for handling edges (see BasicStroke)
+     * @param miterlimit Limit for miter joining method
+     * @return New shape that is expanded or shrunk by the specified amount
+     */
+    public static Area grow(final Shape s, final double offset, int join, float miterlimit) {
     	Area shape = new Area(s);
-    	if (Math.abs(offset) < EPSILON) {
+
+    	if (MathUtils.almostEqual(offset, 0.0, EPSILON)) {
     		return shape;
     	}
 
-    	BasicStroke stroke = new BasicStroke((float)Math.abs(2.0*offset));
+    	Stroke stroke = new BasicStroke((float)Math.abs(2.0*offset), BasicStroke.CAP_SQUARE, join, miterlimit);
     	Area strokeShape = new Area(stroke.createStrokedShape(s));
 
     	if (offset > 0.0) {

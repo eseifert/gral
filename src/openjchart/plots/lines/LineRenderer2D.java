@@ -8,7 +8,8 @@ import openjchart.util.SettingsStorage;
 
 public interface LineRenderer2D extends SettingsStorage {
 	public static final String KEY_LINE_STROKE = "line.stroke";
-	public static final String KEY_LINE_GAP = "line.gap";
+	public static final String KEY_LINE_GAP = "line.gap.size";
+	public static final String KEY_LINE_GAP_ROUNDED = "line.gap.rounded";
 	public static final String KEY_LINE_COLOR = "line.color";
 
 	Drawable getLine(DataPoint2D p1, DataPoint2D p2);

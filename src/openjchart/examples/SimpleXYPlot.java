@@ -54,16 +54,18 @@ public class SimpleXYPlot extends JFrame {
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, Color.RED);
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_STROKE, new BasicStroke(7.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {5f, 10f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for shapes
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 5.0);
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 2.0);
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP_ROUNDED, true);
 		// Custom ascending point
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer2D logRendererX = new LogarithmicRenderer2D();
 		plot.setSetting(XYPlot.KEY_RENDERER_AXIS_X, logRendererX);
 		// Custom stroke for the x-axis
-		BasicStroke stroke = new BasicStroke(3f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {15f, 5f, 5f, 5f}, 0.0f);
+		BasicStroke stroke = new BasicStroke(3f);
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
 		// Custom stroke for the ticks
 		//logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
