@@ -3,10 +3,11 @@ package openjchart.plots;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
+import openjchart.AbstractDrawable;
 import openjchart.data.DataSource;
 import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
@@ -21,12 +22,62 @@ public class PiePlot extends Plot {
 	private double degreesPerValue;
 	private double[] startValues;
 
+	private final PlotArea2D plotArea;
+	
+	private class PlotArea2D extends AbstractDrawable {
+		@Override
+		public void draw(Graphics2D g2d) {
+			Color bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			if (bg != null) {
+				Color colorOld = g2d.getColor();
+				g2d.setColor(bg);
+				g2d.fill(getBounds());
+				g2d.setColor(colorOld);
+			}
+
+			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
+			if (borderStroke != null) {
+				Stroke strokeOld = g2d.getStroke();
+				g2d.setStroke(borderStroke);
+				g2d.draw(getBounds());
+				g2d.setStroke(strokeOld);
+			}
+
+			drawPlot(g2d);
+		}
+
+		protected void drawPlot(Graphics2D g2d) {
+			AffineTransform txOrig = g2d.getTransform();
+			g2d.translate(getX(), getY());
+			AffineTransform txOffset = g2d.getTransform();
+
+			// Paint pie
+			Color colorOld = g2d.getColor();
+			double w = getWidth();
+			double h = getHeight();
+			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
+			g2d.translate(w/2d, h/2d);
+			startValues[0] = getSetting(KEY_START);
+			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
+			ColorMapper colorList = getSetting(KEY_COLORS);
+			for (int i = 1; i < startValues.length;  i++) {
+				g2d.setColor(colorList.get(i-1/(double)startValues.length));
+				g2d.fill(new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE));
+			}
+			g2d.setTransform(txOffset);
+			g2d.setColor(colorOld);
+			g2d.setTransform(txOrig);
+		}
+	}
+	
 	public PiePlot(DataSource data) {
 		setSettingDefault(KEY_RADIUS, 0.9);
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
 		setSettingDefault(KEY_START, 0.0);
-
+		plotArea = new PlotArea2D();
+		add(plotArea, PlotLayout.CENTER);
+		
 		this.data = data;
 		dataChanged(this.data);
 		this.data.addDataListener(this);
@@ -36,26 +87,10 @@ public class PiePlot extends Plot {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform txOld = g2d.getTransform();
 
-		// Paint pie
-		Color colorOld = g2d.getColor();
-		Insets insets = getInsets();
-		double w = getWidth() - insets.left - insets.right;
-		double h = getHeight() - insets.top - insets.bottom;
-		double size = Math.min(w, h) * this.<Double>getSetting(KEY_RADIUS);
-		g2d.translate(getWidth()/2d, getHeight()/2d);
-		startValues[0] = getSetting(KEY_START);
-		startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
-		ColorMapper colorList = getSetting(KEY_COLORS);
-		for (int i = 1; i < startValues.length;  i++) {
-			g2d.setColor(colorList.get(i-1/(double)startValues.length));
-			g2d.fill(new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE));
-		}
-		g2d.setTransform(txOld);
-		g2d.setColor(colorOld);
+		drawComponents(g2d);
 	}
-
+	
 	@Override
 	public void dataChanged(DataSource data) {
 		super.dataChanged(data);

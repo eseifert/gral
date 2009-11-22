@@ -40,7 +40,7 @@ public class SimplePiePlot extends JFrame {
 		//QuasiRandomColors colors = new QuasiRandomColors();
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.KEY_COLORS, colors);
-		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
+		plot.setBorder(new EmptyBorder(40, 40, 40, 40));
 		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

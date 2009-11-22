@@ -1,5 +1,6 @@
 package openjchart.plots;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -25,8 +26,11 @@ import openjchart.util.SettingsStorage;
 
 public abstract class Plot extends JPanel implements SettingsStorage, DataListener, SettingsListener {
 	public static final String KEY_TITLE = "plot.title";
-	public static final String KEY_BACKGROUND_COLOR = "plot.background.color";
+	public static final String KEY_BACKGROUND = "plot.background";
+	public static final String KEY_BORDER = "plot.border";
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
+	public static final String KEY_PLOTAREA_BACKGROUND = "plot.plotarea.background";
+	public static final String KEY_PLOTAREA_BORDER = "plot.plotarea.border";
 
 	private final Settings settings;
 
@@ -38,18 +42,20 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	private Label title;
 
 	public Plot() {
-		this.axes = new HashMap<String, Axis>();
-		this.axisDrawables = new HashMap<String, Drawable>();
-		this.components = new ArrayList<Drawable>();
-		this.settings = new Settings(this);
-		this.layout = new PlotLayout();
-		this.title = new Label("");
-		this.title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+		axes = new HashMap<String, Axis>();
+		axisDrawables = new HashMap<String, Drawable>();
+		components = new ArrayList<Drawable>();
+		settings = new Settings(this);
+		layout = new PlotLayout();
+		title = new Label("");
+		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		add(title, PlotLayout.NORTH);
 		setSettingDefault(KEY_TITLE, null);
-		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
+		setSettingDefault(KEY_BACKGROUND, null);
+		setSettingDefault(KEY_BORDER, null);
 		setSettingDefault(KEY_ANTIALISING, true);
-		setBackground(this.<Color>getSetting(KEY_BACKGROUND_COLOR));
+		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
+		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
 	}
 
 	@Override
@@ -60,7 +66,6 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 
-		drawAxes(g2d);
 		drawComponents(g2d);
 	}
 
@@ -150,6 +155,16 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
+		String key = event.getKey();
+		if (KEY_BACKGROUND.equals(key)) {
+			Color bg = getSetting(key);
+			if (bg != null) {
+				setOpaque(true);
+				setBackground(bg);
+			} else {
+				setOpaque(false);
+			}
+		}
 	}
 
 	public Label getTitle() {

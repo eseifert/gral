@@ -1,6 +1,8 @@
 Version 0.7
 ===========
 
+- Create common base class for plot areas that is derived from AbstractDrawable
+
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
@@ -10,15 +12,13 @@ Version 0.7
 
 - Add more JavaDocs and unit tests
 
-- Add border and background settings to plot (area)
-
 Version 0.8
 ===========
 
 - Add support for custom tick labels to AbstractAxisRenderer2D;
   Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
 
-- Add support for error bars ShapeRenderer
+- Add support for error bars to ShapeRenderer
 
 - Add new chart for drawing a pair of rows as line segments;
   Extension of scatter plot possible (Connect every nth pair)

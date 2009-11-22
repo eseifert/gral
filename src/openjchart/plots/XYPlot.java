@@ -3,6 +3,7 @@ package openjchart.plots;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
@@ -51,11 +52,26 @@ public class XYPlot extends Plot {
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
-			AffineTransform txOrig = g2d.getTransform();
-			g2d.translate(getX(), getY());
+			Color bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			if (bg != null) {
+				Color colorOld = g2d.getColor();
+				g2d.setColor(bg);
+				g2d.fill(getBounds());
+				g2d.setColor(colorOld);
+			}
+
 			drawGrid(g2d);
+
+			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
+			if (borderStroke != null) {
+				Stroke strokeOld = g2d.getStroke();
+				g2d.setStroke(borderStroke);
+				g2d.draw(getBounds());
+				g2d.setStroke(strokeOld);
+			}
+
+			drawAxes(g2d);
 			drawPlot(g2d);
-			g2d.setTransform(txOrig);
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
@@ -65,6 +81,8 @@ public class XYPlot extends Plot {
 				return;
 			}
 
+			AffineTransform txOrig = g2d.getTransform();
+			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 			Color colorDefault = g2d.getColor();
 
@@ -111,9 +129,12 @@ public class XYPlot extends Plot {
 			}
 
 			g2d.setColor(colorDefault);
+			g2d.setTransform(txOrig);
 		}
 
 		protected void drawPlot(Graphics2D g2d) {
+			AffineTransform txOrig = g2d.getTransform();
+			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 			Color colorDefault = g2d.getColor();
 
@@ -154,6 +175,7 @@ public class XYPlot extends Plot {
 				}
 			}
 			g2d.setColor(colorDefault);
+			g2d.setTransform(txOrig);
 		}
 	}
 
@@ -161,7 +183,7 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
-		this.plotArea = new PlotArea2D();
+		plotArea = new PlotArea2D();
 		add(plotArea, PlotLayout.CENTER);
 
 		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
