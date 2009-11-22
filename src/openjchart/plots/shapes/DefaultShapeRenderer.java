@@ -1,7 +1,7 @@
 package openjchart.plots.shapes;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 
 import openjchart.AbstractDrawable;
@@ -15,13 +15,13 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Color colorOld = g2d.getColor();
+				Paint paintOld = g2d.getPaint();
 
 				Shape shape = getShapePath(data, row);
-				g2d.setColor(DefaultShapeRenderer.this.<Color>getSetting(KEY_COLOR));
+				g2d.setPaint(DefaultShapeRenderer.this.<Paint>getSetting(KEY_COLOR));
 				g2d.fill(shape);
 
-				g2d.setColor(colorOld);
+				g2d.setPaint(paintOld);
 			}
 		};
 

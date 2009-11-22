@@ -1,11 +1,12 @@
 package openjchart.plots;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
 import openjchart.data.DataSource;
@@ -27,12 +28,18 @@ public class PiePlot extends Plot {
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
-			Color bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
 			if (bg != null) {
-				Color colorOld = g2d.getColor();
-				g2d.setColor(bg);
-				g2d.fill(getBounds());
-				g2d.setColor(colorOld);
+				AffineTransform txOrig = g2d.getTransform();
+				g2d.translate(getX(), getY());
+				g2d.scale(getWidth(), getHeight());
+
+				Paint paintOld = g2d.getPaint();
+				g2d.setPaint(bg);
+				g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
+				g2d.setPaint(paintOld);
+
+				g2d.setTransform(txOrig);
 			}
 
 			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
@@ -52,7 +59,7 @@ public class PiePlot extends Plot {
 			AffineTransform txOffset = g2d.getTransform();
 
 			// Paint pie
-			Color colorOld = g2d.getColor();
+			Paint paintOld = g2d.getPaint();
 			double w = getWidth();
 			double h = getHeight();
 			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
@@ -61,11 +68,11 @@ public class PiePlot extends Plot {
 			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
 			ColorMapper colorList = getSetting(KEY_COLORS);
 			for (int i = 1; i < startValues.length;  i++) {
-				g2d.setColor(colorList.get(i-1/(double)startValues.length));
+				g2d.setPaint(colorList.get(i-1/(double)startValues.length));
 				g2d.fill(new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE));
 			}
 			g2d.setTransform(txOffset);
-			g2d.setColor(colorOld);
+			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 	}

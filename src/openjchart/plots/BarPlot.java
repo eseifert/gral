@@ -1,7 +1,7 @@
 package openjchart.plots;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -25,10 +25,10 @@ public class BarPlot extends XYPlot {
 				@Override
 				public void draw(Graphics2D g2d) {
 					Shape shape = getShapePath(data, row);
-					Color colorOld = g2d.getColor();
-					g2d.setColor(BarRenderer.this.<Color>getSetting(KEY_COLOR));
+					Paint paintOld = g2d.getPaint();
+					g2d.setPaint(BarRenderer.this.<Paint>getSetting(KEY_COLOR));
 					g2d.fill(shape);
-					g2d.setColor(colorOld);
+					g2d.setPaint(paintOld);
 				}
 			};
 		}

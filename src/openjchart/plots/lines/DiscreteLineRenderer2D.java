@@ -1,7 +1,7 @@
 package openjchart.plots.lines;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 
@@ -34,10 +34,10 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				Shape lineShape = punchShapes(line, p1, p2);
 
 				// Draw path
-				Color colorOld = g2d.getColor();
-				g2d.setColor(DiscreteLineRenderer2D.this.<Color>getSetting(LineRenderer2D.KEY_LINE_COLOR));
+				Paint paintOld = g2d.getPaint();
+				g2d.setPaint(DiscreteLineRenderer2D.this.<Paint>getSetting(LineRenderer2D.KEY_LINE_COLOR));
 				g2d.fill(lineShape);
-				g2d.setColor(colorOld);
+				g2d.setPaint(paintOld);
 			}
 		};
 		return d;

@@ -6,7 +6,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +60,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
+		setOpaque(false);
 	}
 
 	@Override
@@ -66,11 +71,32 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 
+		Paint bg = getSetting(KEY_BACKGROUND);
+		if (bg != null) {
+			AffineTransform txOrig = g2d.getTransform();
+			g2d.translate(getX(), getY());
+			g2d.scale(getWidth(), getHeight());
+
+			Paint paintOld = g2d.getPaint();
+			g2d.setPaint(bg);
+			g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
+			g2d.setPaint(paintOld);
+
+			g2d.setTransform(txOrig);
+		}
+
+		Stroke borderStroke = getSetting(KEY_BORDER);
+		if (borderStroke != null) {
+			Stroke strokeOld = g2d.getStroke();
+			g2d.setStroke(borderStroke);
+			g2d.draw(getBounds());
+			g2d.setStroke(strokeOld);
+		}
+		
 		drawComponents(g2d);
 	}
 
 	protected void drawComponents(Graphics2D g2d) {
-		// Draw components
 		for (Drawable component : components) {
 			component.draw(g2d);
 		}
@@ -155,16 +181,6 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		String key = event.getKey();
-		if (KEY_BACKGROUND.equals(key)) {
-			Color bg = getSetting(key);
-			if (bg != null) {
-				setOpaque(true);
-				setBackground(bg);
-			} else {
-				setOpaque(false);
-			}
-		}
 	}
 
 	public Label getTitle() {

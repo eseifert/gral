@@ -2,6 +2,7 @@ package openjchart.plots;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
@@ -52,12 +53,18 @@ public class XYPlot extends Plot {
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
-			Color bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
 			if (bg != null) {
-				Color colorOld = g2d.getColor();
-				g2d.setColor(bg);
-				g2d.fill(getBounds());
-				g2d.setColor(colorOld);
+				AffineTransform txOrig = g2d.getTransform();
+				g2d.translate(getX(), getY());
+				g2d.scale(getWidth(), getHeight());
+
+				Paint paintOld = g2d.getPaint();
+				g2d.setPaint(bg);
+				g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
+				g2d.setPaint(paintOld);
+
+				g2d.setTransform(txOrig);
 			}
 
 			drawGrid(g2d);
@@ -84,9 +91,9 @@ public class XYPlot extends Plot {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Color colorDefault = g2d.getColor();
+			Paint paintOld = g2d.getPaint();
 
-			g2d.setColor(XYPlot.this.<Color>getSetting(KEY_GRID_COLOR));
+			g2d.setPaint(XYPlot.this.<Paint>getSetting(KEY_GRID_COLOR));
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
@@ -128,7 +135,7 @@ public class XYPlot extends Plot {
 				}
 			}
 
-			g2d.setColor(colorDefault);
+			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 
@@ -136,7 +143,7 @@ public class XYPlot extends Plot {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Color colorDefault = g2d.getColor();
+			Paint paintOld = g2d.getPaint();
 
 			// Paint shapes and lines
 			Drawable line;
@@ -174,7 +181,7 @@ public class XYPlot extends Plot {
 					g2d.setTransform(txOffset);
 				}
 			}
-			g2d.setColor(colorDefault);
+			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 	}
@@ -182,7 +189,7 @@ public class XYPlot extends Plot {
 	public XYPlot(DataSource... data) {
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
-		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
+		setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
 		plotArea = new PlotArea2D();
 		add(plotArea, PlotLayout.CENTER);
 

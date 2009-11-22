@@ -3,6 +3,7 @@ package openjchart.examples;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
@@ -36,6 +37,9 @@ public class SimpleXYPlot extends JFrame {
 		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
+		// Custom background
+		plot.setSetting(XYPlot.KEY_PLOTAREA_BACKGROUND,
+				new LinearGradientPaint(0f,0f, 0f,1f, new float[] {0f, 1f}, new Color[] {Color.WHITE, new Color(1f, 0.9f, 0.9f)}));
 		// Setting the title
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
 		// Custom title alignment
