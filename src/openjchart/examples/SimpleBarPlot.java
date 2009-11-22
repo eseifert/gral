@@ -1,6 +1,8 @@
 package openjchart.examples;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
@@ -8,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import openjchart.data.DataTable;
 import openjchart.plots.BarPlot;
 import openjchart.plots.axes.Axis;
+import openjchart.plots.shapes.ShapeRenderer;
 
 public class SimpleBarPlot extends JFrame {
 
@@ -27,6 +30,10 @@ public class SimpleBarPlot extends JFrame {
 		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
 		plot.setBorder(new EmptyBorder(40, 40, 40, 40));
 		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
+		plot.getShapeRenderer(data).setSetting(ShapeRenderer.KEY_COLOR,
+				new LinearGradientPaint(0f,0f, 0f,1f,
+						new float[] {0.0f, 0.5f, 1.0f},
+						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
 		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

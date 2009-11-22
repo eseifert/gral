@@ -9,8 +9,6 @@ import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +21,7 @@ import openjchart.Drawable;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
+import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
@@ -73,16 +72,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 		Paint bg = getSetting(KEY_BACKGROUND);
 		if (bg != null) {
-			AffineTransform txOrig = g2d.getTransform();
-			g2d.translate(getX(), getY());
-			g2d.scale(getWidth(), getHeight());
-
-			Paint paintOld = g2d.getPaint();
-			g2d.setPaint(bg);
-			g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
-			g2d.setPaint(paintOld);
-
-			g2d.setTransform(txOrig);
+			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 		}
 
 		Stroke borderStroke = getSetting(KEY_BORDER);

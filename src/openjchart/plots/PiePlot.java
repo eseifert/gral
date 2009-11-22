@@ -3,15 +3,16 @@ package openjchart.plots;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
-import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
 import openjchart.data.DataSource;
 import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
+import openjchart.util.GraphicsUtils;
 
 public class PiePlot extends Plot {
 	public static final String KEY_RADIUS = "pieplot.radius";
@@ -23,23 +24,14 @@ public class PiePlot extends Plot {
 	private double degreesPerValue;
 	private double[] startValues;
 
-	private final PlotArea2D plotArea;
+	protected final PlotArea2D plotArea;
 	
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
 			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
 			if (bg != null) {
-				AffineTransform txOrig = g2d.getTransform();
-				g2d.translate(getX(), getY());
-				g2d.scale(getWidth(), getHeight());
-
-				Paint paintOld = g2d.getPaint();
-				g2d.setPaint(bg);
-				g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
-				g2d.setPaint(paintOld);
-
-				g2d.setTransform(txOrig);
+				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 			}
 
 			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
@@ -59,7 +51,6 @@ public class PiePlot extends Plot {
 			AffineTransform txOffset = g2d.getTransform();
 
 			// Paint pie
-			Paint paintOld = g2d.getPaint();
 			double w = getWidth();
 			double h = getHeight();
 			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
@@ -68,11 +59,11 @@ public class PiePlot extends Plot {
 			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
 			ColorMapper colorList = getSetting(KEY_COLORS);
 			for (int i = 1; i < startValues.length;  i++) {
-				g2d.setPaint(colorList.get(i-1/(double)startValues.length));
-				g2d.fill(new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE));
+				Paint paint = colorList.get(i-1/(double)startValues.length);
+				Shape shape = new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE);
+				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
 			}
 			g2d.setTransform(txOffset);
-			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 	}

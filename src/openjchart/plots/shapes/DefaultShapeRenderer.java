@@ -7,6 +7,7 @@ import java.awt.Shape;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
+import openjchart.util.GraphicsUtils;
 
 public class DefaultShapeRenderer extends AbstractShapeRenderer {
 
@@ -15,13 +16,9 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Paint paintOld = g2d.getPaint();
-
+				Paint paint = getSetting(KEY_COLOR);
 				Shape shape = getShapePath(data, row);
-				g2d.setPaint(DefaultShapeRenderer.this.<Paint>getSetting(KEY_COLOR));
-				g2d.fill(shape);
-
-				g2d.setPaint(paintOld);
+				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
 			}
 		};
 

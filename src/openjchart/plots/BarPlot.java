@@ -13,6 +13,7 @@ import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.shapes.AbstractShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.util.GraphicsUtils;
 import openjchart.util.MathUtils;
 
 public class BarPlot extends XYPlot {
@@ -21,14 +22,25 @@ public class BarPlot extends XYPlot {
 	protected class BarRenderer extends AbstractShapeRenderer {
 		@Override
 		public Drawable getShape(final DataSource data, final int row) {
+			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
+					// TODO: Translate?
 					Shape shape = getShapePath(data, row);
-					Paint paintOld = g2d.getPaint();
-					g2d.setPaint(BarRenderer.this.<Paint>getSetting(KEY_COLOR));
-					g2d.fill(shape);
-					g2d.setPaint(paintOld);
+					Paint paint = getSetting(KEY_COLOR);
+					Rectangle2D paintBoundaries = null;
+					/*
+					// TODO: Optionally fill all bars with a single paint:
+					AffineTransform txOld = g2d.getTransform();
+					Rectangle2D shapeBounds = shape.getBounds2D();
+					Rectangle2D paintBoundaries = plotArea.getBounds();
+					paintBoundaries = new Rectangle2D.Double(
+						shapeBounds.getX(), paintBoundaries.getY() - txOld.getTranslateY(),
+						shapeBounds.getWidth(), paintBoundaries.getHeight()
+					);
+					*/
+					GraphicsUtils.fillPaintedShape(g2d, shape, paint, paintBoundaries);
 				}
 			};
 		}

@@ -8,6 +8,7 @@ import java.awt.geom.GeneralPath;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
+import openjchart.util.GraphicsUtils;
 
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	public static final String KEY_ASCENDING_POINT = "line.discrete.ascending";
@@ -34,10 +35,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				Shape lineShape = punchShapes(line, p1, p2);
 
 				// Draw path
-				Paint paintOld = g2d.getPaint();
-				g2d.setPaint(DiscreteLineRenderer2D.this.<Paint>getSetting(LineRenderer2D.KEY_LINE_COLOR));
-				g2d.fill(lineShape);
-				g2d.setPaint(paintOld);
+				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};
 		return d;

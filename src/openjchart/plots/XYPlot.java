@@ -27,6 +27,7 @@ import openjchart.plots.axes.Tick2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 
 public class XYPlot extends Plot {
@@ -48,23 +49,15 @@ public class XYPlot extends Plot {
 	private Axis axisY;
 	private Drawable axisXComp;
 	private Drawable axisYComp;
-	private final PlotArea2D plotArea;
+
+	protected final PlotArea2D plotArea;
 
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
 			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
 			if (bg != null) {
-				AffineTransform txOrig = g2d.getTransform();
-				g2d.translate(getX(), getY());
-				g2d.scale(getWidth(), getHeight());
-
-				Paint paintOld = g2d.getPaint();
-				g2d.setPaint(bg);
-				g2d.fill(new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0));
-				g2d.setPaint(paintOld);
-
-				g2d.setTransform(txOrig);
+				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 			}
 
 			drawGrid(g2d);
@@ -91,9 +84,7 @@ public class XYPlot extends Plot {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Paint paintOld = g2d.getPaint();
-
-			g2d.setPaint(XYPlot.this.<Paint>getSetting(KEY_GRID_COLOR));
+			Paint paint = XYPlot.this.getSetting(KEY_GRID_COLOR);
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
@@ -112,7 +103,7 @@ public class XYPlot extends Plot {
 						continue;
 					}
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
-					g2d.draw(gridLineVert);
+					GraphicsUtils.drawPaintedShape(g2d, gridLineVert, paint, null, null);
 					g2d.setTransform(txOffset);
 				}
 			}
@@ -130,12 +121,11 @@ public class XYPlot extends Plot {
 				for (Tick2D tick : ticksY) {
 					Point2D tickPoint = tick.getPosition();
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
-					g2d.draw(gridLineHoriz);
+					GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
 					g2d.setTransform(txOffset);
 				}
 			}
 
-			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 
@@ -143,7 +133,6 @@ public class XYPlot extends Plot {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Paint paintOld = g2d.getPaint();
 
 			// Paint shapes and lines
 			Drawable line;
@@ -181,7 +170,6 @@ public class XYPlot extends Plot {
 					g2d.setTransform(txOffset);
 				}
 			}
-			g2d.setPaint(paintOld);
 			g2d.setTransform(txOrig);
 		}
 	}

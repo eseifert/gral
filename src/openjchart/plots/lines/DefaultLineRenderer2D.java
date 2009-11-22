@@ -9,6 +9,7 @@ import java.awt.geom.Point2D;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
+import openjchart.util.GraphicsUtils;
 
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
@@ -26,12 +27,8 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				Shape lineShape = punchShapes(line, p1, p2);
 
 				// Draw line
-				Paint paintOld = g2d.getPaint();
-
-				g2d.setPaint(DefaultLineRenderer2D.this.<Paint>getSetting(LineRenderer2D.KEY_LINE_COLOR));
-				g2d.fill(lineShape);
-
-				g2d.setPaint(paintOld);
+				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};
 		return d;
