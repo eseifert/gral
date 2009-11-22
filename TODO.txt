@@ -4,13 +4,13 @@ Version 0.7
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Add layout manager for plot, axes and plot areas
-
 - Add legend to charts
 
 - Add support for variable intersection of axes
 
 - Add more JavaDocs and unit tests
+
+- Add border and background settings to plot (area)
 
 Version 0.8
 ===========
