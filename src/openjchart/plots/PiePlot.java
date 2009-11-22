@@ -22,7 +22,7 @@ public class PiePlot extends Plot {
 	private double[] startValues;
 
 	public PiePlot(DataSource data) {
-		setSettingDefault(KEY_RADIUS, 1.0);
+		setSettingDefault(KEY_RADIUS, 0.9);
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
 		setSettingDefault(KEY_START, 0.0);

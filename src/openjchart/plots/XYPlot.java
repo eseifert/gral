@@ -1,11 +1,10 @@
 package openjchart.plots;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -52,8 +51,11 @@ public class XYPlot extends Plot {
 	private class PlotArea2D extends AbstractDrawable {
 		@Override
 		public void draw(Graphics2D g2d) {
+			AffineTransform txOrig = g2d.getTransform();
+			g2d.translate(getX(), getY());
 			drawGrid(g2d);
 			drawPlot(g2d);
+			g2d.setTransform(txOrig);
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
@@ -63,7 +65,7 @@ public class XYPlot extends Plot {
 				return;
 			}
 
-			AffineTransform txOld = g2d.getTransform();
+			AffineTransform txOffset = g2d.getTransform();
 			Color colorDefault = g2d.getColor();
 
 			g2d.setColor(XYPlot.this.<Color>getSetting(KEY_GRID_COLOR));
@@ -76,15 +78,17 @@ public class XYPlot extends Plot {
 				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 				List<Tick2D> ticksX = axisXRenderer.getTicks(axisX);
 				Line2D gridLineVert = new Line2D.Double(
-					bounds.getMinX() - shapeBoundsX.getMinX(), bounds.getMinY() - shapeBoundsX.getMinY(),
-					bounds.getMinX() - shapeBoundsX.getMinX(), bounds.getMaxY() - shapeBoundsX.getMinY()
+					-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
+					-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
 				);
 				for (Tick2D tick : ticksX) {
 					Point2D tickPoint = tick.getPosition();
-					if (tickPoint == null) continue;
+					if (tickPoint == null) {
+						continue;
+					}
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					g2d.draw(gridLineVert);
-					g2d.setTransform(txOld);
+					g2d.setTransform(txOffset);
 				}
 			}
 
@@ -95,14 +99,14 @@ public class XYPlot extends Plot {
 				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 				List<Tick2D> ticksY = axisYRenderer.getTicks(axisY);
 				Line2D gridLineHoriz = new Line2D.Double(
-					bounds.getMinX() - shapeBoundsY.getMinX(), bounds.getMinY() - shapeBoundsY.getMinY(),
-					bounds.getMaxX() - shapeBoundsY.getMinX(), bounds.getMinY() - shapeBoundsY.getMinY()
+					-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
+					bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 				);
 				for (Tick2D tick : ticksY) {
 					Point2D tickPoint = tick.getPosition();
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					g2d.draw(gridLineHoriz);
-					g2d.setTransform(txOld);
+					g2d.setTransform(txOffset);
 				}
 			}
 
@@ -110,9 +114,8 @@ public class XYPlot extends Plot {
 		}
 
 		protected void drawPlot(Graphics2D g2d) {
-			AffineTransform txOld = g2d.getTransform();
+			AffineTransform txOffset = g2d.getTransform();
 			Color colorDefault = g2d.getColor();
-			Rectangle2D bounds = getBounds();
 
 			// Paint shapes and lines
 			Drawable line;
@@ -129,11 +132,10 @@ public class XYPlot extends Plot {
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX);
 					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY);
-					if (axisPosX==null || axisPosY==null) continue;
-					Point2D pos = new Point2D.Double(
-						axisPosX.getX() + bounds.getMinX(),
-						axisPosY.getY() + bounds.getMinY()
-					);
+					if (axisPosX==null || axisPosY==null) {
+						continue;
+					}
+					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
 					Shape shapePath = shapeRenderer.getShapePath(s, i);
 					if (i > 0 && lineRenderer != null && pos != null && posPrev != null) {
@@ -148,7 +150,7 @@ public class XYPlot extends Plot {
 					g2d.translate(pos.getX(), pos.getY());
 					Drawable shape = shapeRenderer.getShape(s, i);
 					shape.draw(g2d);
-					g2d.setTransform(txOld);
+					g2d.setTransform(txOffset);
 				}
 			}
 			g2d.setColor(colorDefault);
@@ -160,6 +162,7 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, Color.LIGHT_GRAY);
 		this.plotArea = new PlotArea2D();
+		add(plotArea, PlotLayout.CENTER);
 
 		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
 		this.lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
@@ -185,56 +188,34 @@ public class XYPlot extends Plot {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-
-		plotArea.drawGrid(g2d);
-		drawAxes(g2d);
-		plotArea.drawPlot(g2d);
-		drawTitle(g2d);
-	}
-
-	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 
-		Insets insets = getInsets();
+		// Calculate axis bounds
+		Rectangle2D plotBounds = plotArea.getBounds();
 
-		// Calculate title and axis bounds
-		Label title = getTitle();
-		double titleY = insets.top;
-		double titleHeight = (title != null) ? title.getPreferredSize().getHeight() : 0.0;
-
-		double compXHeight = axisXComp.getPreferredSize().getHeight();
-		double compYWidth = axisYComp.getPreferredSize().getWidth();
-		double compXWidth = getWidth() - compYWidth - insets.left - insets.right;
-		double compYHeight = getHeight() - compXHeight  - titleY - titleHeight - insets.bottom;
-
-		double compXposX = compYWidth + insets.left;
-		double compXposY = getHeight() - compXHeight  - insets.bottom;
-		axisXComp.setBounds(compXposX, compXposY, compXWidth, compXHeight);
+		Dimension2D axisXSize = axisXComp.getPreferredSize();
 		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(0.0, 0.0, compXWidth, 0.0));
+		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
+			0.0, 0.0,
+			plotBounds.getWidth(), 0.0
+		));
+		axisXComp.setBounds(
+			plotBounds.getMinX(), plotBounds.getMaxY(),
+			plotBounds.getWidth(), axisXSize.getHeight()
+		);
 
-		double titleX = compXposX;
-		double titleWidth = compXWidth;
-		if (title != null) {
-			title.setBounds(titleX, titleY, titleWidth, titleHeight);
-		}
-
-		double compYposX = insets.left;
-		double compYposY = titleY + titleHeight;
-		axisYComp.setBounds(compYposX, compYposY, compYWidth, compYHeight);
+		Dimension2D axisYSize = axisYComp.getPreferredSize();
 		AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(compYWidth, compYHeight, compYWidth, 0.0));
-
-		// Calculate dimensions of plot area
-		double plotAreaX = compYposX + compYWidth;
-		double plotAreaY = titleY + titleHeight;
-		double plotAreaWidth = width-1 - plotAreaX - insets.right;
-		double plotAreaHeight = height-1 - plotAreaY - (height - compXposY);
-		plotArea.setBounds(plotAreaX, plotAreaY, plotAreaWidth, plotAreaHeight);
+		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
+			axisYSize.getWidth(), plotBounds.getHeight(),
+			axisYSize.getWidth(), 0.0
+		));
+		axisYComp.setBounds(
+			plotBounds.getMinX() - axisYSize.getWidth(),
+			plotBounds.getMinY(),
+			axisYSize.getWidth(), plotBounds.getHeight()
+		);
 	}
 
 	public ShapeRenderer getShapeRenderer(DataSource s) {
@@ -256,7 +237,7 @@ public class XYPlot extends Plot {
 	@Override
 	public void dataChanged(DataSource data) {
 		super.dataChanged(data);
-	
+
 		minX =  Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;

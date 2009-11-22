@@ -73,7 +73,7 @@ public class SimpleXYPlot extends JFrame {
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
-		plot.setBorder(new EmptyBorder(20, 20, 20, 20));
+		plot.setBorder(new EmptyBorder(40, 40, 40, 40));
 		getContentPane().add(plot, BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

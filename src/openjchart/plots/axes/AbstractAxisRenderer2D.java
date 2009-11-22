@@ -64,11 +64,15 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				if (shapeLines==null || shapeLines.length==0) {
 					return;
 				}
-				AffineTransform txOld = g2d.getTransform();
+				//
+				AffineTransform txOrig = g2d.getTransform();
+				g2d.translate(getX(), getY());
+				AffineTransform txOffset = g2d.getTransform();
 				Stroke strokeOld = g2d.getStroke();
 
 				// Calculate tick positions (in pixel coordinates)
 				List<Tick2D> ticks = getTicks(axis);
+
 
 				// Draw axis shape
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_SHAPE_STROKE));
@@ -92,7 +96,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					String tickLabel = tick.getLabel();
 
 					// Draw tick
-					if (tickPoint == null) continue;
+					if (tickPoint == null) {
+						continue;
+					}
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					tickShape.setLine(
 						-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
@@ -129,9 +135,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					g2d.translate(labelPosX, labelPosY);
 					label.draw(g2d);
 
-					g2d.setTransform(txOld);
+					g2d.setTransform(txOffset);
 				}
 				g2d.setStroke(strokeOld);
+				g2d.setTransform(txOrig);
 			}
 
 			@Override
@@ -175,8 +182,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 			// Calculate position of tick on axis shape
 			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld);
-			
-			if (tickPoint == null) continue;
+
+			if (tickPoint == null) {
+				continue;
+			}
 
 			segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
 			Point2D tickNormal = new Point2D.Double(

@@ -6,8 +6,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -31,15 +32,20 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
+	private final List<Drawable> components;
+	private PlotLayout layout;
 
 	private Label title;
 
 	public Plot() {
 		this.axes = new HashMap<String, Axis>();
 		this.axisDrawables = new HashMap<String, Drawable>();
+		this.components = new ArrayList<Drawable>();
 		this.settings = new Settings(this);
+		this.layout = new PlotLayout();
 		this.title = new Label("");
 		this.title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+		add(title, PlotLayout.NORTH);
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND_COLOR, Color.WHITE);
 		setSettingDefault(KEY_ANTIALISING, true);
@@ -53,21 +59,21 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+
+		drawAxes(g2d);
+		drawComponents(g2d);
 	}
 
-	protected void drawTitle(Graphics2D g2d) {
-		if (title != null) {
-			title.draw(g2d);
+	protected void drawComponents(Graphics2D g2d) {
+		// Draw components
+		for (Drawable component : components) {
+			component.draw(g2d);
 		}
 	}
 
 	protected void drawAxes(Graphics2D g2d) {
-		AffineTransform txOld = g2d.getTransform();
-		// Draw axes
-		for (Drawable axis : axisDrawables.values()) {
-			g2d.translate(axis.getX(), axis.getY());
-			axis.draw(g2d);
-			g2d.setTransform(txOld);
+		for (Drawable d : axisDrawables.values()) {
+			d.draw(g2d);
 		}
 	}
 
@@ -85,20 +91,22 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		return axes.get(name);
 	}
 
-	public void setAxis(String name, Axis axis) {
-		if (axis == null) {
-			removeAxis(name);
-		}
-		axes.put(name, axis);
-		axisDrawables.put(name, null);
-	}
-
 	public void setAxis(String name, Axis axis, Drawable drawable) {
 		if (axis == null) {
 			removeAxis(name);
 		}
 		axes.put(name, axis);
 		axisDrawables.put(name, drawable);
+	}
+
+	public void add(Drawable drawable, String anchor) {
+		components.add(drawable);
+		layout.add(drawable, anchor);
+	}
+
+	public void remove(Drawable drawable) {
+		components.remove(drawable);
+		layout.remove(drawable);
 	}
 
 	public void removeAxis(String name) {
@@ -146,5 +154,11 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	public Label getTitle() {
 		return title;
+	}
+
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+		layout.layout(getBounds(), getInsets());
 	}
 }
