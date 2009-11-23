@@ -1,8 +1,6 @@
 Version 0.7
 ===========
 
-- Create common base class for plot areas that is derived from AbstractDrawable
-
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 

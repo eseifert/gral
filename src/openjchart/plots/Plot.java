@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
@@ -44,22 +45,48 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	private Label title;
 
+	private PlotArea2D plotArea;
+
+	protected abstract class PlotArea2D extends AbstractDrawable {
+		protected void drawBackground(Graphics2D g2d) {
+			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			if (bg != null) {
+				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
+			}
+		}
+
+		protected void drawBorder(Graphics2D g2d) {
+			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
+			if (borderStroke != null) {
+				Stroke strokeOld = g2d.getStroke();
+				g2d.setStroke(borderStroke);
+				g2d.draw(getBounds());
+				g2d.setStroke(strokeOld);
+			}
+		}
+		
+		protected abstract void drawPlot(Graphics2D g2d);
+	}
+
 	public Plot() {
 		axes = new HashMap<String, Axis>();
 		axisDrawables = new HashMap<String, Drawable>();
 		components = new ArrayList<Drawable>();
 		settings = new Settings(this);
 		layout = new PlotLayout();
-		title = new Label("");
-		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
-		add(title, PlotLayout.NORTH);
+
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
 		setSettingDefault(KEY_BORDER, null);
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
+
 		setOpaque(false);
+
+		title = new Label("");
+		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+		add(title, PlotLayout.NORTH);
 	}
 
 	@Override
@@ -120,6 +147,10 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		axisDrawables.put(name, drawable);
 	}
 
+	public void removeAxis(String name) {
+		axes.remove(name);
+	}
+
 	public void add(Drawable drawable, String anchor) {
 		components.add(drawable);
 		layout.add(drawable, anchor);
@@ -130,8 +161,18 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		layout.remove(drawable);
 	}
 
-	public void removeAxis(String name) {
-		axes.remove(name);
+	protected PlotArea2D getPlotArea() {
+		return plotArea;
+	}
+
+	protected void setPlotArea(PlotArea2D plotArea) {
+		if (this.plotArea != null) {
+			remove(this.plotArea);
+		}
+		this.plotArea = plotArea;
+		if (this.plotArea != null) {
+			add(this.plotArea, PlotLayout.CENTER);
+		}
 	}
 
 	@Override

@@ -4,11 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
-import openjchart.AbstractDrawable;
 import openjchart.data.DataSource;
 import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
@@ -24,24 +22,11 @@ public class PiePlot extends Plot {
 	private double degreesPerValue;
 	private double[] startValues;
 
-	protected final PlotArea2D plotArea;
-	
-	private class PlotArea2D extends AbstractDrawable {
+	private class PiePlotArea2D extends PlotArea2D {
 		@Override
 		public void draw(Graphics2D g2d) {
-			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
-			if (bg != null) {
-				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
-			}
-
-			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
-			if (borderStroke != null) {
-				Stroke strokeOld = g2d.getStroke();
-				g2d.setStroke(borderStroke);
-				g2d.draw(getBounds());
-				g2d.setStroke(strokeOld);
-			}
-
+			drawBackground(g2d);
+			drawBorder(g2d);
 			drawPlot(g2d);
 		}
 
@@ -73,8 +58,7 @@ public class PiePlot extends Plot {
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
 		setSettingDefault(KEY_START, 0.0);
-		plotArea = new PlotArea2D();
-		add(plotArea, PlotLayout.CENTER);
+		setPlotArea(new PiePlotArea2D());
 		
 		this.data = data;
 		dataChanged(this.data);

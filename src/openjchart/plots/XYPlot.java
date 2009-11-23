@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
@@ -16,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
 import openjchart.data.statistics.Statistics;
@@ -50,26 +48,12 @@ public class XYPlot extends Plot {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	protected final PlotArea2D plotArea;
-
-	private class PlotArea2D extends AbstractDrawable {
+	protected class XYPlotArea2D extends PlotArea2D {
 		@Override
 		public void draw(Graphics2D g2d) {
-			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
-			if (bg != null) {
-				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
-			}
-
+			drawBackground(g2d);
 			drawGrid(g2d);
-
-			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
-			if (borderStroke != null) {
-				Stroke strokeOld = g2d.getStroke();
-				g2d.setStroke(borderStroke);
-				g2d.draw(getBounds());
-				g2d.setStroke(strokeOld);
-			}
-
+			drawBorder(g2d);
 			drawAxes(g2d);
 			drawPlot(g2d);
 		}
@@ -178,8 +162,8 @@ public class XYPlot extends Plot {
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
-		plotArea = new PlotArea2D();
-		add(plotArea, PlotLayout.CENTER);
+
+		setPlotArea(new XYPlotArea2D());
 
 		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
 		this.lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
@@ -209,7 +193,7 @@ public class XYPlot extends Plot {
 		super.setBounds(x, y, width, height);
 
 		// Calculate axis bounds
-		Rectangle2D plotBounds = plotArea.getBounds();
+		Rectangle2D plotBounds = getPlotArea().getBounds();
 
 		Dimension2D axisXSize = axisXComp.getPreferredSize();
 		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
