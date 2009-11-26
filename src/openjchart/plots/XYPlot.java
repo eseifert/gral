@@ -54,8 +54,8 @@ public class XYPlot extends Plot {
 			drawBackground(g2d);
 			drawGrid(g2d);
 			drawBorder(g2d);
-			drawAxes(g2d);
 			drawPlot(g2d);
+			drawAxes(g2d);
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
@@ -192,29 +192,40 @@ public class XYPlot extends Plot {
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 
-		// Calculate axis bounds
+		layoutAxes();
+	}
+
+	/**
+	 * Calculates bounds of axes.
+	 */
+	protected void layoutAxes() {
 		Rectangle2D plotBounds = getPlotArea().getBounds();
 
+		// Shapes
 		Dimension2D axisXSize = axisXComp.getPreferredSize();
 		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
 			0.0, 0.0,
 			plotBounds.getWidth(), 0.0
 		));
-		axisXComp.setBounds(
-			plotBounds.getMinX(), plotBounds.getMaxY(),
-			plotBounds.getWidth(), axisXSize.getHeight()
-		);
-
 		Dimension2D axisYSize = axisYComp.getPreferredSize();
 		AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
 			axisYSize.getWidth(), plotBounds.getHeight(),
 			axisYSize.getWidth(), 0.0
 		));
+
+		// Bounds
+		double axisXIntersection = axisXRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+		Point2D axisXPos = axisYRenderer.worldToViewPos(axisY, axisXIntersection, false);
+		axisXComp.setBounds(
+			plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
+			plotBounds.getWidth(), axisXSize.getHeight()
+		);
+		double axisYIntersection = axisYRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+		Point2D axisYPos = axisXRenderer.worldToViewPos(axisX, axisYIntersection, false);
 		axisYComp.setBounds(
-			plotBounds.getMinX() - axisYSize.getWidth(),
-			plotBounds.getMinY(),
+			plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
 			axisYSize.getWidth(), plotBounds.getHeight()
 		);
 	}

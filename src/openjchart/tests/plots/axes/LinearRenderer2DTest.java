@@ -19,7 +19,7 @@ public class LinearRenderer2DTest {
 
 	@Test
 	public void testWorldToView() {
-		double delta = 1e-5;
+		double delta = 1e-10;
 
 		assertEquals( 0.0, renderer.worldToView(axis,  -5, false), delta);
 		assertEquals( 1.0, renderer.worldToView(axis,   5, false), delta);

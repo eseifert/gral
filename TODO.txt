@@ -6,8 +6,6 @@ Version 0.7
 
 - Add legend to charts
 
-- Add support for variable intersection of axes
-
 - Add more JavaDocs and unit tests
 
 Version 0.8
