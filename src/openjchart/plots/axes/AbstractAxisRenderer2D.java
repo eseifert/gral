@@ -173,7 +173,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		List<Tick2D> tickPositions = new LinkedList<Tick2D>();
 		double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
 		for (double tickPositionWorld : tickPositionsWorld) {
-			double tickPositionView = worldToView(axis, tickPositionWorld);
+			double tickPositionView = worldToView(axis, tickPositionWorld, false);
 			int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionView);
 
 			if (segmentIndex < 0) {
@@ -181,7 +181,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			}
 
 			// Calculate position of tick on axis shape
-			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld);
+			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld, false);
 
 			if (tickPoint == null) {
 				continue;
@@ -210,27 +210,35 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public Point2D worldToViewPos(Axis axis, Number value) {
+	public Point2D worldToViewPos(Axis axis, Number value, boolean extrapolate) {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
 		}
 
-		double length = worldToView(axis, value);
+		double length = worldToView(axis, value, extrapolate);
 
 		if (Double.isNaN(length) || Double.isInfinite(length)) {
 			return null;
 		}
-
-		// do linear extrapolation if point lies outside of shape
+		
 		if (length <= 0.0 || length >= getShapeLength()) {
-			int segmentIndex = (length <= 0.0) ? 0 : shapeLines.length - 1;
-			Line2D segment = shapeLines[segmentIndex];
-			double segmentLen = shapeSegmentLengths[segmentIndex];
-			double shapeLen = shapeLengths[segmentIndex];
-			return new Point2D.Double(
-				segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
-				segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
-			);
+			if (extrapolate) {
+				// do linear extrapolation if point lies outside of shape
+				int segmentIndex = (length <= 0.0) ? 0 : shapeLines.length - 1;
+				Line2D segment = shapeLines[segmentIndex];
+				double segmentLen = shapeSegmentLengths[segmentIndex];
+				double shapeLen = shapeLengths[segmentIndex];
+				return new Point2D.Double(
+					segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
+					segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
+				);
+			} else {
+				if (length <= 0.0) {
+					return shapeLines[0].getP1();
+				} else {
+					return shapeLines[shapeLines.length - 1].getP2();
+				}
+			}
 		}
 
 		// Determine to which segment the value belongs using a binary search

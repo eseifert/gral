@@ -131,8 +131,8 @@ public class XYPlot extends Plot {
 					Number valueY = s.get(1, i);
 					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX);
-					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY);
+					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX, true);
+					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY, true);
 					if (axisPosX==null || axisPosY==null) {
 						continue;
 					}

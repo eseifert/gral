@@ -20,12 +20,20 @@ public class LinearRenderer2DTest {
 	@Test
 	public void testWorldToView() {
 		double delta = 1e-5;
-		assertEquals(0.0, renderer.worldToView(axis, -5), delta);
-		assertEquals(1.0, renderer.worldToView(axis, 5), delta);
-		assertEquals(0.5, renderer.worldToView(axis, 0), delta);
-		assertEquals(-0.5, renderer.worldToView(axis, -10), delta);
-		assertEquals(1.5, renderer.worldToView(axis, 10), delta);
-		assertEquals(0.8, renderer.worldToView(axis, 3), delta);
+
+		assertEquals( 0.0, renderer.worldToView(axis,  -5, false), delta);
+		assertEquals( 1.0, renderer.worldToView(axis,   5, false), delta);
+		assertEquals( 0.5, renderer.worldToView(axis,   0, false), delta);
+		assertEquals( 0.0, renderer.worldToView(axis, -10, false), delta);
+		assertEquals( 1.0, renderer.worldToView(axis,  10, false), delta);
+		assertEquals( 0.8, renderer.worldToView(axis,   3, false), delta);
+
+		assertEquals( 0.0, renderer.worldToView(axis,  -5, true), delta);
+		assertEquals( 1.0, renderer.worldToView(axis,   5, true), delta);
+		assertEquals( 0.5, renderer.worldToView(axis,   0, true), delta);
+		assertEquals(-0.5, renderer.worldToView(axis, -10, true), delta);
+		assertEquals( 1.5, renderer.worldToView(axis,  10, true), delta);
+		assertEquals( 0.8, renderer.worldToView(axis,   3, true), delta);
 	}
 
 }

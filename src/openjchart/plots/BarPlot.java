@@ -64,18 +64,18 @@ public class BarPlot extends XYPlot {
 			double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
 			double barAlign = 0.5;
 
-			double barXMin = axisXRenderer.worldToViewPos(axisX, valueX - barWidthRel*barAlign).getX();
-			double barXMax = axisXRenderer.worldToViewPos(axisX, valueX + barWidthRel*barAlign).getX();
+			double barXMin = axisXRenderer.worldToViewPos(axisX, valueX - barWidthRel*barAlign, true).getX();
+			double barXMax = axisXRenderer.worldToViewPos(axisX, valueX + barWidthRel*barAlign, true).getX();
 
-			double barYVal = axisYRenderer.worldToViewPos(axisY, valueY).getY();
-			double barYOrigin = axisYRenderer.worldToViewPos(axisY, axisYOrigin).getY();
+			double barYVal = axisYRenderer.worldToViewPos(axisY, valueY, true).getY();
+			double barYOrigin = axisYRenderer.worldToViewPos(axisY, axisYOrigin, true).getY();
 			double barYMin = Math.min(barYVal, barYOrigin);
 			double barYMax = Math.max(barYVal, barYOrigin);
 
 			double barWidth = Math.abs(barXMax - barXMin);
 			double barHeight = Math.abs(barYMax - barYMin);
 
-			double barX = axisXRenderer.worldToViewPos(axisX, valueX).getX();
+			double barX = axisXRenderer.worldToViewPos(axisX, valueX, true).getX();
 			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
 
 			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);

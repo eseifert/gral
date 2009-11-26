@@ -54,30 +54,35 @@ public interface AxisRenderer2D extends SettingsStorage {
 	/**
 	 * Returns the position of the specified value on the axis.
 	 * The value is returned in view coordinates.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
 	 * @return Two-dimensional point of the value
 	 */
-	Point2D worldToViewPos(Axis axis, Number value);
+	Point2D worldToViewPos(Axis axis, Number value, boolean extrapolate);
 
 	/**
 	 * Converts a world (axis) coordinate value to a view (screen) coordinate value.
 	 * @param axis Axis
 	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
 	 * @return Screen coordinate value
 	 */
-	double worldToView(Axis axis, Number value);
+	double worldToView(Axis axis, Number value, boolean extrapolate);
 
 	/**
 	 * Converts a view (screen) coordinate value to a world (axis) coordinate value.
 	 * @param axis Axis
 	 * @param value View coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
 	 * @return World coordinate value
 	 */
-	Number viewToWorld(Axis axis, double value);
+	Number viewToWorld(Axis axis, double value, boolean extrapolate);
 
 	/**
-	 * 
-	 * @param axis
-	 * @return
+	 * Returns a list of all tick element on the axis.
+	 * @param axis Axis
+	 * @return A list of <code>Tick</code> instances
 	 */
 	List<Tick2D> getTicks(Axis axis);
 }
