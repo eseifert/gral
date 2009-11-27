@@ -67,12 +67,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				//
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(getX(), getY());
-				AffineTransform txOffset = g2d.getTransform();
 				Stroke strokeOld = g2d.getStroke();
 
 				// Calculate tick positions (in pixel coordinates)
 				List<Tick2D> ticks = getTicks(axis);
-
 
 				// Draw axis shape
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_SHAPE_STROKE));
@@ -99,10 +97,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					if (tickPoint == null) {
 						continue;
 					}
-					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					tickShape.setLine(
-						-tickNormal.getX()*tickLengthInner, -tickNormal.getY()*tickLengthInner,
-						 tickNormal.getX()*tickLengthOuter,  tickNormal.getY()*tickLengthOuter
+						tickPoint.getX() - tickNormal.getX()*tickLengthInner, tickPoint.getY() - tickNormal.getY()*tickLengthInner,
+						tickPoint.getX() + tickNormal.getX()*tickLengthOuter, tickPoint.getY() + tickNormal.getY()*tickLengthOuter
 					);
 					g2d.draw(tickShape);
 
@@ -110,32 +107,33 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					Label label = new Label(tickLabel);
 
 					// Bounding box for label
-					Rectangle2D labelBounds = label.getBounds();
+					Dimension2D labelDims = label.getPreferredSize();
+					Rectangle2D labelBounds = new Rectangle2D.Double(
+						0.0, 0.0,
+						labelDims.getWidth(), labelDims.getHeight()
+					);
 					// Add padding to bounding box
 					labelBoundsPadded.setFrame(
-						0.0,
-						0.0,
-						labelBounds.getWidth()  + 2.0*labelDist,
-						labelBounds.getHeight() + 2.0*labelDist
+						0.0, 0.0,
+						labelBounds.getWidth() + 2.0*labelDist, labelBounds.getHeight() + 2.0*labelDist
 					);
 					boolean isLabelOutside = getSetting(KEY_LABEL_OUTSIDE);
+					double intersectionRayLength = labelBoundsPadded.getWidth()*labelBoundsPadded.getWidth();
 					List<Point2D> labelBoundsIntersections = GeometryUtils.intersection(
 							labelBoundsPadded,
 							new Line2D.Double(
 								labelBoundsPadded.getCenterX(),
 								labelBoundsPadded.getCenterY(),
-								labelBoundsPadded.getCenterX() + (isLabelOutside?-1.0:1.0)*tickNormal.getX()*labelBoundsPadded.getWidth(),
-								labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*labelBoundsPadded.getWidth()
+								labelBoundsPadded.getCenterX() + (isLabelOutside?-1.0:1.0)*tickNormal.getX()*intersectionRayLength,
+								labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*intersectionRayLength
 							)
 					);
 					double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
 					double intersY = labelBoundsIntersections.get(0).getY() - labelBoundsPadded.getCenterY();
-					double labelPosX = -intersX - 0.50*labelBounds.getWidth()  + (isLabelOutside?tickShape.getX2():tickShape.getX1());
-					double labelPosY = -intersY + 0.50*labelBounds.getHeight() + (isLabelOutside?tickShape.getY2():tickShape.getY1());
-					g2d.translate(labelPosX, labelPosY);
+					double labelPosX = (isLabelOutside ? tickShape.getX2() : tickShape.getX1()) - intersX - labelBounds.getWidth()/2.0;
+					double labelPosY = (isLabelOutside ? tickShape.getY2() : tickShape.getY1()) - intersY - labelBounds.getHeight()/2.0;
+					label.setBounds(labelPosX, labelPosY, labelBounds.getWidth(), labelBounds.getHeight());
 					label.draw(g2d);
-
-					g2d.setTransform(txOffset);
 				}
 				g2d.setStroke(strokeOld);
 				g2d.setTransform(txOrig);

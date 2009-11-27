@@ -7,7 +7,7 @@ import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 
-import openjchart.PlotPanel;
+import openjchart.DrawablePanel;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
@@ -78,8 +78,8 @@ public class SimpleXYPlot extends JFrame {
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
-		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new PlotPanel(plot), BorderLayout.CENTER);
+		plot.setInsets(new Insets2D.Double(40.0));
+		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);

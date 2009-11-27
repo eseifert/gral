@@ -48,4 +48,9 @@ public interface Container extends Iterable<Drawable> {
 	 */
 	void remove(Drawable drawable);
 
+	/**
+	 * Returns the number of components that are stored in this container.
+	 * @return total number of components
+	 */
+	int size();
 }

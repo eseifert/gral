@@ -1,9 +1,9 @@
 package openjchart;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	public DrawableContainer(Layout layout) {
-		components = new ArrayList<Drawable>();
+		components = new LinkedList<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
 		this.layout = layout;
 	}
@@ -96,6 +96,11 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		return components.iterator();
 	}
 
+	@Override
+	public int size() {
+		return components.size();
+	}
+	
 	@Override
 	public void setBounds(double x, double y, double width, double height) {
 		super.setBounds(x, y, width, height);

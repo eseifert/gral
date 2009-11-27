@@ -29,8 +29,8 @@ public class EdgeLayout implements Layout {
 
 		// Fetch components
 		Drawable north = null, northEast = null, east = null, southEast = null,
-		         s = null, sw = null, w = null, nw = null,
-		         c = null;
+		         south = null, southWest = null, west = null, northWest = null,
+		         center = null;
 		for (Drawable d: container) {
 			Object constraints = container.getConstraints(d);
 			if (NORTH.equals(constraints)) {
@@ -42,30 +42,30 @@ public class EdgeLayout implements Layout {
 			} else if (SOUTH_EAST.equals(constraints)) {
 				southEast = d;
 			} else if (SOUTH.equals(constraints)) {
-				s = d;
+				south = d;
 			} else if (SOUTH_WEST.equals(constraints)) {
-				sw = d;
+				southWest = d;
 			} else if (WEST.equals(constraints)) {
-				w = d;
+				west = d;
 			} else if (NORTH_WEST.equals(constraints)) {
-				nw = d;
+				northWest = d;
 			} else if (CENTER.equals(constraints)) {
-				c = d;
+				center = d;
 			}
 		}
 
 		// Calculate maximum widths and heights
-		double widthEast = getMaxWidth(northEast, east, southEast);
-		double widthWest = getMaxWidth(sw, w, nw);
-		double heightNorth = getMaxHeight(nw, north, northEast);
-		double heightSouth = getMaxHeight(southEast, s, sw);
+		double widthWest    = getMaxWidth(northWest,  west,   southWest);
+		double widthEast    = getMaxWidth(northEast,  east,   southEast);
+		double heightNorth  = getMaxHeight(northWest, north,  northEast);
+		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
 		double xWest = bounds.getMinX() + insets.getLeft();
 		double xEast = bounds.getMaxX() - insets.getRight() - widthEast;
 		double yNorth = bounds.getMinY() + insets.getTop();
 		double ySouth = bounds.getMaxY() - insets.getBottom() - heightSouth;
 
-		layoutComponent(nw,
+		layoutComponent(northWest,
 			xWest, yNorth,
 			widthWest, heightNorth
 		);
@@ -93,25 +93,25 @@ public class EdgeLayout implements Layout {
 			heightSouth
 		);
 
-		layoutComponent(s,
+		layoutComponent(south,
 			xWest + widthWest, ySouth,
 			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight(),
 			heightSouth
 		);
 
-		layoutComponent(sw,
+		layoutComponent(southWest,
 			xWest, ySouth,
 			widthWest,
 			heightSouth
 		);
 
-		layoutComponent(w,
+		layoutComponent(west,
 			xWest, yNorth + heightNorth,
 			widthWest,
 			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom()
 		);
 
-		layoutComponent(c,
+		layoutComponent(center,
 			xWest + widthWest, yNorth + heightNorth,
 			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight(),
 			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom()
@@ -120,17 +120,47 @@ public class EdgeLayout implements Layout {
 
 	@Override
 	public Dimension2D getPreferredSize(Container container) {
-		// Calculate maximum widths and heights
-		Insets2D insets = container.getInsets();
-		double width = insets.getLeft();
-		double height = insets.getTop();
-		for (Drawable d : container) {
-			Rectangle2D compBounds = d.getBounds();
-			width = Math.max(width, compBounds.getMaxX());
-			height = Math.max(height, compBounds.getMaxY());
+		// Fetch components
+		Drawable north = null, northEast = null, east = null, southEast = null,
+		         south = null, southWest = null, west = null, northWest = null,
+		         center = null;
+		for (Drawable d: container) {
+			Object constraints = container.getConstraints(d);
+			if (NORTH.equals(constraints)) {
+				north = d;
+			} else if (NORTH_EAST.equals(constraints)) {
+				northEast = d;
+			} else if (EAST.equals(constraints)) {
+				east = d;
+			} else if (SOUTH_EAST.equals(constraints)) {
+				southEast = d;
+			} else if (SOUTH.equals(constraints)) {
+				south = d;
+			} else if (SOUTH_WEST.equals(constraints)) {
+				southWest = d;
+			} else if (WEST.equals(constraints)) {
+				west = d;
+			} else if (NORTH_WEST.equals(constraints)) {
+				northWest = d;
+			} else if (CENTER.equals(constraints)) {
+				center = d;
+			}
 		}
 
-		return new openjchart.util.Dimension2D.Double(width, height);
+		// Calculate maximum widths and heights
+		double widthWest    = getMaxWidth(northWest,  west,   southWest);
+		double widthCenter  = getMaxWidth(north,      center, south);
+		double widthEast    = getMaxWidth(northEast,  east,   southEast);
+		double heightNorth  = getMaxHeight(northWest, north,  northEast);
+		double heightCenter = getMaxHeight(west,      center, east);
+		double heightSouth  = getMaxHeight(southWest, south,  southEast);
+
+		// Calculate preferred dimensions
+		Insets2D insets = container.getInsets();
+		return new openjchart.util.Dimension2D.Double(
+			insets.getLeft() + widthEast + widthCenter + widthWest + insets.getRight(),
+			insets.getTop() + heightNorth + heightCenter + heightSouth + insets.getBottom()
+		);
 	}
 
 	private static double getMaxWidth(Drawable... drawables) {

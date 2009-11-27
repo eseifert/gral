@@ -1,22 +1,23 @@
 package openjchart;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Rectangle2D;
 
 import openjchart.util.Insets2D;
 
 
 public class StackedLayout implements Layout {
 	public static enum Orientation { HORIZONTAL, VERTICAL };
-	
+
 	private Orientation orientation;
-	private double gap;
+	private double minGap;
 
 	public StackedLayout(Orientation orientation) {
 		this(orientation, 0.0);
 	}
 
-	public StackedLayout(Orientation orientation, double gap) {
+	public StackedLayout(Orientation orientation, double minGap) {
 		this.orientation = orientation;
-		this.gap = gap;
+		this.minGap = minGap;
 	}
 
 	@Override
@@ -27,18 +28,12 @@ public class StackedLayout implements Layout {
 		double height = insets.getTop();
 		if (Orientation.HORIZONTAL.equals(orientation)) {
 			for (Drawable component : container) {
-				if (width > insets.getLeft()) {
-					width += gap;
-				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
 				height = Math.max(height, itemBounds.getHeight());
 			}
 		} else if (Orientation.VERTICAL.equals(orientation)) {
 			for (Drawable component : container) {
-				if (height > insets.getTop()) {
-					height += gap;
-				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width = Math.max(width, itemBounds.getWidth());
 				height += itemBounds.getHeight();
@@ -53,50 +48,36 @@ public class StackedLayout implements Layout {
 
 	@Override
 	public void layout(Container container) {
+		Dimension2D size = getPreferredSize(container);
+		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
 
+		double x = insets.getLeft();
+		double y = insets.getTop();
+		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
+		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
+		int count = 0;
 		if (Orientation.HORIZONTAL.equals(orientation)) {
-			double heightMax = getMaxHeight(container);
-			double x = insets.getLeft();
-			double y = insets.getTop();
+			double gap = Math.max(bounds.getWidth() - size.getWidth(), minGap)/(double)(container.size() - 1);
 			for (Drawable component : container) {
-				Dimension2D itemBounds = component.getPreferredSize();
-				component.setBounds(x, y, itemBounds.getWidth(), heightMax);
-				if (x > insets.getLeft()) {
+				if (count++ > 0) {
 					x += gap;
 				}
-				x += itemBounds.getWidth();
+				Dimension2D compBounds = component.getPreferredSize();
+				component.setBounds(x, y, compBounds.getWidth(), height);
+				x += compBounds.getWidth();
 			}
 		} else if (Orientation.VERTICAL.equals(orientation)) {
-			double x = insets.getLeft();
-			double y = insets.getTop();
-			double widthMax = getMaxWidth(container);
+			double gap = Math.max(bounds.getHeight() - size.getHeight(), minGap)/(double)(container.size() - 1);
 			for (Drawable component : container) {
-				Dimension2D itemBounds = component.getPreferredSize();
-				component.setBounds(x, y, widthMax, itemBounds.getHeight());
-				if (y > insets.getTop()) {
+				if (count++ > 0) {
 					y += gap;
 				}
-				y += itemBounds.getHeight();
+				Dimension2D compBounds = component.getPreferredSize();
+				component.setBounds(x, y, width, compBounds.getHeight());
+				y += compBounds.getHeight();
 			}
 		}
 	}
 
-	private static double getMaxWidth(Container container) {
-		double widthMax = 0.0;
-		for (Drawable component : container) {
-			Dimension2D itemBounds = component.getPreferredSize();
-			widthMax = Math.max(widthMax, itemBounds.getWidth());
-		}
-		return widthMax;
-	}
-
-	private static double getMaxHeight(Container container) {
-		double heightMax = 0.0;
-		for (Drawable component : container) {
-			Dimension2D itemBounds = component.getPreferredSize();
-			heightMax = Math.max(heightMax, itemBounds.getHeight());
-		}
-		return heightMax;
-	}
 }

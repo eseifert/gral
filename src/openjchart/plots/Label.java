@@ -1,8 +1,11 @@
 package openjchart.plots;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
@@ -36,21 +39,27 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		if (layout == null) {
 			return;
 		}
+		AffineTransform txOrig = g2d.getTransform();
+		Paint paintOld = g2d.getPaint();
+
 		Rectangle2D textBounds = layout.getBounds();
 		double alignmentX = getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
-		double x = getX() + (getWidth() - textBounds.getWidth())*alignmentX;
-		double y = getY() + (getHeight() - textBounds.getHeight())*alignmentY;
-
-		layout.draw(g2d, (float)x, (float)y);
+		double x = (getWidth() - textBounds.getWidth())*alignmentX;
+		double y = textBounds.getHeight() + (getHeight() - textBounds.getHeight())*alignmentY;
 
 		/*
 		// DEBUG:
-		AffineTransform txOld = g2d.getTransform();
-		g2d.translate(0, -getHeight());
-		g2d.draw(getBounds());
-		g2d.setTransform(txOld);
+		g2d.setPaint(new Color(1f, 0f, 0f, 0.2f));
+		g2d.fill(getBounds());
 		//*/
+
+		g2d.translate(getX(), getY());
+		g2d.setPaint(Color.BLACK);
+		layout.draw(g2d, (float)x, (float)y);
+
+		g2d.setPaint(paintOld);
+		g2d.setTransform(txOrig);
 	}
 
 	@Override

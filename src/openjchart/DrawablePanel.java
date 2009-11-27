@@ -7,33 +7,36 @@ import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
 
-import openjchart.plots.Plot;
+public class DrawablePanel extends JPanel {
+	private Drawable drawable;
 
-public class PlotPanel extends JPanel {
-	private Plot plot;
-
-	public PlotPanel(Plot plot) {
-		this.plot = plot;
+	public DrawablePanel(Drawable plot) {
+		this.drawable = plot;
 		setOpaque(false);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		plot.draw((Graphics2D)g);
+		drawable.draw((Graphics2D)g);
 	}
 
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		plot.setBounds(x, y, width, height);
+		drawable.setBounds(x, y, width, height);
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
 		Dimension dims = super.getPreferredSize();
-		Dimension2D dimsPlot = plot.getPreferredSize();
+		Dimension2D dimsPlot = drawable.getPreferredSize();
 		dims.setSize(dimsPlot);
 		return dims;
+	}
+
+	@Override
+	public Dimension getMinimumSize() {
+		return super.getPreferredSize();
 	}
 }
