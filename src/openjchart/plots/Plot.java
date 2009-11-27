@@ -18,17 +18,21 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import openjchart.AbstractDrawable;
+import openjchart.Container;
 import openjchart.Drawable;
+import openjchart.LayoutManager2D;
+import openjchart.PlotLayout;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.util.GraphicsUtils;
+import openjchart.util.Insets2D;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
-public abstract class Plot extends JPanel implements SettingsStorage, DataListener, SettingsListener {
+public abstract class Plot extends JPanel implements SettingsStorage, DataListener, SettingsListener, Container {
 	public static final String KEY_TITLE = "plot.title";
 	public static final String KEY_BACKGROUND = "plot.background";
 	public static final String KEY_BORDER = "plot.border";
@@ -40,8 +44,10 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
+
 	private final List<Drawable> components;
-	private PlotLayout layout;
+	private final Map<Drawable, Object> constraints;
+	private LayoutManager2D layout;
 
 	private Label title;
 
@@ -72,8 +78,9 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		axes = new HashMap<String, Axis>();
 		axisDrawables = new HashMap<String, Drawable>();
 		components = new ArrayList<Drawable>();
+		constraints = new HashMap<Drawable, Object>();
 		settings = new Settings(this);
-		layout = new PlotLayout();
+		setLayoutManager(new PlotLayout());
 
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
@@ -125,16 +132,6 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		}
 	}
 
-	@Override
-	public Insets getInsets() {
-		Border border = getBorder();
-		if (border != null) {
-			return border.getBorderInsets(this);
-		}
-
-		return new Insets(0, 0, 0, 0);
-	}
-
 	public Axis getAxis(String name) {
 		return axes.get(name);
 	}
@@ -151,16 +148,41 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		axes.remove(name);
 	}
 
-	public void add(Drawable drawable, String anchor) {
-		components.add(drawable);
-		layout.add(drawable, anchor);
+	@Override
+	public LayoutManager2D getLayoutManager() {
+		return layout;
 	}
 
+	public void setLayoutManager(LayoutManager2D layout) {
+		this.layout = layout;
+	}
+	
+	@Override
+	public void add(Drawable drawable) {
+		add(drawable, null);
+	}
+	@Override
+	public void add(Drawable drawable, Object constraints) {
+		components.add(drawable);
+		this.constraints.put(drawable, constraints);
+	}
+
+	@Override
+	public Object getConstraints(Drawable drawable) {
+		return constraints.get(drawable);
+	}
+	
+	@Override
 	public void remove(Drawable drawable) {
 		components.remove(drawable);
-		layout.remove(drawable);
+		constraints.remove(drawable);
 	}
 
+	@Override
+	public java.util.Iterator<Drawable> iterator() {
+		return components.iterator();
+	};
+	
 	protected PlotArea2D getPlotArea() {
 		return plotArea;
 	}
@@ -221,6 +243,19 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		layout.layout(getBounds(), getInsets());
+		if (getLayoutManager() != null) {
+			getLayoutManager().layout(this);
+		}
+	}
+
+	@Override
+	public Insets2D getInsets2D() {
+		Insets2D insets = new Insets2D.Double();
+		Border border = getBorder();
+		if (border != null) {
+			Insets borderInsets = border.getBorderInsets(this);
+			insets.setInsets(borderInsets.top, borderInsets.left, borderInsets.bottom, borderInsets.right);
+		}
+		return insets;
 	}
 }

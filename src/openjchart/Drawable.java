@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+
 /**
  * Interface providing functions for a lightweight component that can be drawn on the screen.
  * Functions include:
@@ -63,7 +64,7 @@ public interface Drawable {
 
 	/**
 	 * Draws the Drawable with the specified Graphics2D object.
-	 * @param graphics graphics object to be provided
+	 * @param g2d graphics object to be provided
 	 */
-	void draw(Graphics2D graphics);
+	void draw(Graphics2D g2d);
 }

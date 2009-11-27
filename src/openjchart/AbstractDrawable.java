@@ -1,8 +1,8 @@
 package openjchart;
 
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import openjchart.util.Dimension2D;
 
 /**
  * Abstract implementation of the Drawable interface.
@@ -49,7 +49,7 @@ public abstract class AbstractDrawable implements Drawable {
 
 	@Override
 	public void setBounds(Rectangle2D bounds) {
-		this.bounds.setFrame(bounds);
+		setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
 
 	@Override
@@ -59,6 +59,7 @@ public abstract class AbstractDrawable implements Drawable {
 
 	@Override
 	public Dimension2D getPreferredSize() {
-		return new Dimension2D.Double();
+		return new openjchart.util.Dimension2D.Double();
 	}
+
 }

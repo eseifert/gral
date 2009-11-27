@@ -3,10 +3,10 @@ package openjchart.plots;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.TextLayout;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
-import openjchart.util.Dimension2D;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
