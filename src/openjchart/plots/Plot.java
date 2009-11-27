@@ -3,9 +3,7 @@ package openjchart.plots;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
@@ -14,25 +12,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-
 import openjchart.AbstractDrawable;
-import openjchart.Container;
 import openjchart.Drawable;
-import openjchart.LayoutManager2D;
-import openjchart.PlotLayout;
+import openjchart.DrawableContainer;
+import openjchart.EdgeLayout;
+import openjchart.Layout;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.util.GraphicsUtils;
-import openjchart.util.Insets2D;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
-public abstract class Plot extends JPanel implements SettingsStorage, DataListener, SettingsListener, Container {
+public abstract class Plot extends DrawableContainer implements SettingsStorage, DataListener, SettingsListener {
 	public static final String KEY_TITLE = "plot.title";
 	public static final String KEY_BACKGROUND = "plot.background";
 	public static final String KEY_BORDER = "plot.border";
@@ -47,7 +41,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 
 	private final List<Drawable> components;
 	private final Map<Drawable, Object> constraints;
-	private LayoutManager2D layout;
+	private Layout layout;
 
 	private Label title;
 
@@ -75,12 +69,13 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	}
 
 	public Plot() {
+		super(new EdgeLayout());
+
 		axes = new HashMap<String, Axis>();
 		axisDrawables = new HashMap<String, Drawable>();
 		components = new ArrayList<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
 		settings = new Settings(this);
-		setLayoutManager(new PlotLayout());
 
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
@@ -89,18 +84,13 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
 
-		setOpaque(false);
-
 		title = new Label("");
 		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
-		add(title, PlotLayout.NORTH);
+		add(title, EdgeLayout.NORTH);
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		Graphics2D g2d = (Graphics2D) g;
+	public void draw(Graphics2D g2d) {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 
@@ -118,12 +108,6 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		}
 		
 		drawComponents(g2d);
-	}
-
-	protected void drawComponents(Graphics2D g2d) {
-		for (Drawable component : components) {
-			component.draw(g2d);
-		}
 	}
 
 	protected void drawAxes(Graphics2D g2d) {
@@ -149,11 +133,11 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 	}
 
 	@Override
-	public LayoutManager2D getLayoutManager() {
+	public Layout getLayout() {
 		return layout;
 	}
 
-	public void setLayoutManager(LayoutManager2D layout) {
+	public void setLayout(Layout layout) {
 		this.layout = layout;
 	}
 	
@@ -193,7 +177,7 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		}
 		this.plotArea = plotArea;
 		if (this.plotArea != null) {
-			add(this.plotArea, PlotLayout.CENTER);
+			add(this.plotArea, EdgeLayout.CENTER);
 		}
 	}
 
@@ -240,22 +224,4 @@ public abstract class Plot extends JPanel implements SettingsStorage, DataListen
 		return title;
 	}
 
-	@Override
-	public void setBounds(int x, int y, int width, int height) {
-		super.setBounds(x, y, width, height);
-		if (getLayoutManager() != null) {
-			getLayoutManager().layout(this);
-		}
-	}
-
-	@Override
-	public Insets2D getInsets2D() {
-		Insets2D insets = new Insets2D.Double();
-		Border border = getBorder();
-		if (border != null) {
-			Insets borderInsets = border.getBorderInsets(this);
-			insets.setInsets(borderInsets.top, borderInsets.left, borderInsets.bottom, borderInsets.right);
-		}
-		return insets;
-	}
 }

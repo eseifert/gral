@@ -4,10 +4,11 @@ import java.awt.BorderLayout;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.border.EmptyBorder;
 
+import openjchart.PlotPanel;
 import openjchart.data.DataTable;
 import openjchart.plots.PiePlot;
+import openjchart.util.Insets2D;
 
 public class SimplePiePlot extends JFrame {
 
@@ -40,8 +41,8 @@ public class SimplePiePlot extends JFrame {
 		//QuasiRandomColors colors = new QuasiRandomColors();
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.KEY_COLORS, colors);
-		plot.setBorder(new EmptyBorder(40, 40, 40, 40));
-		getContentPane().add(plot, BorderLayout.CENTER);
+		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
+		getContentPane().add(new PlotPanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);

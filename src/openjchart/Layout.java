@@ -1,8 +1,8 @@
 package openjchart;
 
-import openjchart.util.Dimension2D;
+import java.awt.geom.Dimension2D;
 
-public interface LayoutManager2D {
+public interface Layout {
 
 	void layout(Container container);
 

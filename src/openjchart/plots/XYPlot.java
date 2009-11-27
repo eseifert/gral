@@ -189,9 +189,8 @@ public class XYPlot extends Plot {
 	}
 
 	@Override
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(double x, double y, double width, double height) {
 		super.setBounds(x, y, width, height);
-
 		layoutAxes();
 	}
 

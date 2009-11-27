@@ -1,11 +1,11 @@
 package openjchart;
 
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import openjchart.util.Dimension2D;
 import openjchart.util.Insets2D;
 
-public class PlotLayout implements LayoutManager2D {
+public class EdgeLayout implements Layout {
 	public static final String NORTH = "north";
 	public static final String NORTH_EAST = "northeast";
 	public static final String EAST = "east";
@@ -20,7 +20,7 @@ public class PlotLayout implements LayoutManager2D {
 	 * @see openjchart.plots.LayoutManager2D#layout(java.awt.geom.Rectangle2D, java.awt.Insets)
 	 */
 	public void layout(Container container) {
-		Insets2D insets = container.getInsets2D();
+		Insets2D insets = container.getInsets();
 		if (insets == null) {
 			insets = new Insets2D.Double();
 		}
@@ -60,10 +60,10 @@ public class PlotLayout implements LayoutManager2D {
 		double heightNorth = getMaxHeight(nw, north, northEast);
 		double heightSouth = getMaxHeight(southEast, s, sw);
 
-		double yNorth = bounds.getMinY() + insets.getTop();
-		double xEast = bounds.getMaxX() - widthEast - insets.getRight();
-		double ySouth = bounds.getMaxY() - heightSouth - insets.getBottom();
 		double xWest = bounds.getMinX() + insets.getLeft();
+		double xEast = bounds.getMaxX() - insets.getRight() - widthEast;
+		double yNorth = bounds.getMinY() + insets.getTop();
+		double ySouth = bounds.getMaxY() - insets.getBottom() - heightSouth;
 
 		layoutComponent(nw,
 			xWest, yNorth,
@@ -121,7 +121,7 @@ public class PlotLayout implements LayoutManager2D {
 	@Override
 	public Dimension2D getPreferredSize(Container container) {
 		// Calculate maximum widths and heights
-		Insets2D insets = container.getInsets2D();
+		Insets2D insets = container.getInsets();
 		double width = insets.getLeft();
 		double height = insets.getTop();
 		for (Drawable d : container) {
@@ -130,9 +130,9 @@ public class PlotLayout implements LayoutManager2D {
 			height = Math.max(height, compBounds.getMaxY());
 		}
 
-		return new Dimension2D.Double(width, height);
+		return new openjchart.util.Dimension2D.Double(width, height);
 	}
-	
+
 	private static double getMaxWidth(Drawable... drawables) {
 		double width = 0.0;
 		for (Drawable d : drawables) {

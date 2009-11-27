@@ -12,13 +12,18 @@ import openjchart.util.Insets2D;
 
 public class DrawableContainer extends AbstractDrawable implements Container {
 	private Insets2D insets = new Insets2D.Double();
-	private LayoutManager2D layout;
+	private Layout layout;
 	private final List<Drawable> components;
 	private final Map<Drawable, Object> constraints;
 
 	public DrawableContainer() {
+		this(null);
+	}
+
+	public DrawableContainer(Layout layout) {
 		components = new ArrayList<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
+		this.layout = layout;
 	}
 
 	@Override
@@ -56,23 +61,26 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	@Override
-	public Insets2D getInsets2D() {
+	public Insets2D getInsets() {
 		Insets2D insets = new Insets2D.Double();
 		insets.setInsets(this.insets);
 		return insets;
 	}
 	
-	public void setInsets2D(Insets2D insets) {
-		insets.setInsets(insets);
+	public void setInsets(Insets2D insets) {
+		if (insets == this.insets) {
+			return;
+		}
+		this.insets.setInsets(insets);
 		doLayout();
 	}
 
 	@Override
-	public LayoutManager2D getLayoutManager() {
+	public Layout getLayout() {
 		return layout;
 	}
 
-	public void setLayoutManager(LayoutManager2D layout) {
+	public void setLayout(Layout layout) {
 		this.layout = layout;
 		doLayout();
 	}
@@ -96,8 +104,8 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 
 	@Override
 	public Dimension2D getPreferredSize() {
-		if (getLayoutManager() != null) {
-			return getLayoutManager().getPreferredSize(this);
+		if (getLayout() != null) {
+			return getLayout().getPreferredSize(this);
 		}
 		return super.getPreferredSize();
 	}

@@ -9,7 +9,7 @@ public interface Container extends Iterable<Drawable> {
 	 * Return the space that this DrawableContainer must leave at each of its edges.
 	 * @return The insets of this DrawableContainer
 	 */
-	Insets2D getInsets2D();
+	Insets2D getInsets();
 
 	/**
 	 * Returns the dimensions of this container.
@@ -21,7 +21,7 @@ public interface Container extends Iterable<Drawable> {
 	 * Returns the layout associated with with this container.
 	 * @return Layout manager
 	 */
-	LayoutManager2D getLayoutManager();
+	Layout getLayout();
 
 	/**
 	 * Adds a new component to this container.

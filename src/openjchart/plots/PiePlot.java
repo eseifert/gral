@@ -1,6 +1,5 @@
 package openjchart.plots;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -65,14 +64,6 @@ public class PiePlot extends Plot {
 		this.data.addDataListener(this);
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-
-		drawComponents(g2d);
-	}
-	
 	@Override
 	public void dataChanged(DataSource data) {
 		super.dataChanged(data);

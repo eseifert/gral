@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -17,7 +18,6 @@ import java.util.List;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.plots.Label;
-import openjchart.util.Dimension2D;
 import openjchart.util.GeometryUtils;
 import openjchart.util.MathUtils;
 import openjchart.util.SettingChangeEvent;
@@ -150,7 +150,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				double labelDistance = getSetting(KEY_LABEL_DISTANCE);
 				double labelDist = labelDistance*tickLength + tickLengthOuter;
 				double minSize = fontHeight + labelDist + tickLengthOuter;
-				return new Dimension2D.Double(minSize, minSize);
+				return new openjchart.util.Dimension2D.Double(minSize, minSize);
 			}
 		};
 

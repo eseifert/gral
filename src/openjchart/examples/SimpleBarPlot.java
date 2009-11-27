@@ -5,12 +5,13 @@ import java.awt.Color;
 import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
-import javax.swing.border.EmptyBorder;
 
+import openjchart.PlotPanel;
 import openjchart.data.DataTable;
 import openjchart.plots.BarPlot;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.shapes.ShapeRenderer;
+import openjchart.util.Insets2D;
 
 public class SimpleBarPlot extends JFrame {
 
@@ -28,13 +29,13 @@ public class SimpleBarPlot extends JFrame {
 		BarPlot plot = new BarPlot(data);
 		plot.getAxis(Axis.X).setRange(0.5, 8.5);
 		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
-		plot.setBorder(new EmptyBorder(40, 40, 40, 40));
+		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
 		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
 		plot.getShapeRenderer(data).setSetting(ShapeRenderer.KEY_COLOR,
 				new LinearGradientPaint(0f,0f, 0f,1f,
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
-		getContentPane().add(plot, BorderLayout.CENTER);
+		getContentPane().add(new PlotPanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
