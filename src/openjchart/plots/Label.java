@@ -45,8 +45,10 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		Rectangle2D textBounds = layout.getBounds();
 		double alignmentX = getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
-		double x = (getWidth() - textBounds.getWidth())*alignmentX;
-		double y = textBounds.getHeight() + (getHeight() - textBounds.getHeight())*alignmentY;
+		AffineTransform txLabel = AffineTransform.getTranslateInstance(
+			(getWidth() - textBounds.getWidth())*alignmentX,
+			textBounds.getHeight() + (getHeight() - textBounds.getHeight())*alignmentY
+		);
 
 		/*
 		// DEBUG:
@@ -56,7 +58,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 		g2d.translate(getX(), getY());
 		g2d.setPaint(Color.BLACK);
-		layout.draw(g2d, (float)x, (float)y);
+		g2d.fill(layout.getOutline(txLabel));
 
 		g2d.setPaint(paintOld);
 		g2d.setTransform(txOrig);
