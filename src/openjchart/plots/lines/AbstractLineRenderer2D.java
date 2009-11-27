@@ -37,9 +37,12 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 			boolean isGapRounded = getSetting(KEY_LINE_GAP_ROUNDED);
 			int gapJoin = (isGapRounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
 			for (DataPoint2D p : points) {
+				Shape shape = p.getShape();
+				if (shape == null) {
+					continue;
+				}
 				AffineTransform tx = AffineTransform.getTranslateInstance(p.getX(), p.getY());
-				Shape shape = tx.createTransformedShape(p.getShape());
-				Area gapShape = GeometryUtils.grow(shape, gapSize, gapJoin, 10f);
+				Area gapShape = GeometryUtils.grow(tx.createTransformedShape(shape), gapSize, gapJoin, 10f);
 				lineShape.subtract(gapShape);
 			}
 		}

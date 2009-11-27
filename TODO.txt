@@ -4,7 +4,7 @@ Version 0.7
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Add legend to charts
+- Methods for adding Legend instances to charts
 
 - Add more JavaDocs and unit tests
 

@@ -9,15 +9,17 @@ public class StackedLayout implements Layout {
 	public static enum Orientation { HORIZONTAL, VERTICAL };
 
 	private Orientation orientation;
-	private double minGap;
+	private double gap;
+	private double alignment;
 
 	public StackedLayout(Orientation orientation) {
 		this(orientation, 0.0);
 	}
 
-	public StackedLayout(Orientation orientation, double minGap) {
+	public StackedLayout(Orientation orientation, double gap) {
 		this.orientation = orientation;
-		this.minGap = minGap;
+		this.gap = gap;
+		this.alignment = 0.5;
 	}
 
 	@Override
@@ -26,14 +28,21 @@ public class StackedLayout implements Layout {
 
 		double width = insets.getLeft();
 		double height = insets.getTop();
+		int count = 0;
 		if (Orientation.HORIZONTAL.equals(orientation)) {
 			for (Drawable component : container) {
+				if (count++ > 0) {
+					width += gap;
+				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
 				height = Math.max(height, itemBounds.getHeight());
 			}
 		} else if (Orientation.VERTICAL.equals(orientation)) {
 			for (Drawable component : container) {
+				if (count++ > 0) {
+					height += gap;
+				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width = Math.max(width, itemBounds.getWidth());
 				height += itemBounds.getHeight();
@@ -58,7 +67,7 @@ public class StackedLayout implements Layout {
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
 		if (Orientation.HORIZONTAL.equals(orientation)) {
-			double gap = Math.max(bounds.getWidth() - size.getWidth(), minGap)/(double)(container.size() - 1);
+			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					x += gap;
@@ -68,7 +77,7 @@ public class StackedLayout implements Layout {
 				x += compBounds.getWidth();
 			}
 		} else if (Orientation.VERTICAL.equals(orientation)) {
-			double gap = Math.max(bounds.getHeight() - size.getHeight(), minGap)/(double)(container.size() - 1);
+			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					y += gap;

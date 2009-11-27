@@ -13,7 +13,7 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsLi
 	public AbstractShapeRenderer() {
 		settings = new Settings(this);
 
-		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
+		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
 		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 

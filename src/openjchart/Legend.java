@@ -1,14 +1,19 @@
 package openjchart;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import openjchart.data.DataSeries;
+import openjchart.data.DummyData;
+import openjchart.plots.DataPoint2D;
 import openjchart.plots.Label;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.ShapeRenderer;
@@ -22,7 +27,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	public static final String KEY_BACKGROUND = "legend.background";
 	public static final String KEY_BORDER = "legend.border";
 	public static final String KEY_ORIENTATION = "legend.orientation";
-	public static final String KEY_MINIMAL_GAP = "legend.minGap";
+	public static final String KEY_GAP = "legend.gap";
 
 	public static final String VALUE_HORIZONTAL = "horizontal";
 	public static final String VALUE_VERTICAL = "vertical";
@@ -32,6 +37,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	private final Map<DataSeries, Drawable> dataToComponent;
 
 	private static class Item extends DrawableContainer {
+		private static final DummyData DUMMY_DATA = new DummyData(1, 1, 1.0);
 		private final Drawable symbol;
 		private final Label label;
 
@@ -41,13 +47,29 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 			symbol = new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
-					Color colorOld = g2d.getColor();
-					g2d.setColor(new Color(0f, 0f, 0f, 0.25f));
-					g2d.fill(getBounds());
-					g2d.setColor(colorOld);
-					// TODO: Draw shape and line of data series
+					Rectangle2D bounds = getBounds();
+					
+					Shape s2 = null;
+					if (shapeRenderer != null) {
+						s2 = shapeRenderer.getShapePath(DUMMY_DATA, 0);
+					}
+
+					DataPoint2D p1 = new DataPoint2D(new Point2D.Double(bounds.getMinX(),    bounds.getCenterY()), null);
+					DataPoint2D p2 = new DataPoint2D(new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), s2);
+					DataPoint2D p3 = new DataPoint2D(new Point2D.Double(bounds.getMaxX(),    bounds.getCenterY()), null);
+
+					if (lineRenderer != null) {
+						lineRenderer.getLine(p1, p2).draw(g2d);
+						lineRenderer.getLine(p2, p3).draw(g2d);
+					}
+					if (shapeRenderer != null) {
+						AffineTransform txOrig = g2d.getTransform();
+						g2d.translate(p2.getX(), p2.getY());
+						shapeRenderer.getShape(DUMMY_DATA, 0).draw(g2d);
+						g2d.setTransform(txOrig);
+					}
 				}
-				
+
 				@Override
 				public Dimension2D getPreferredSize() {
 					Dimension2D size = super.getPreferredSize();
@@ -73,7 +95,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		settings = new Settings(this);
 
 		setSettingDefault(KEY_ORIENTATION, VALUE_VERTICAL);
-		setSettingDefault(KEY_MINIMAL_GAP, 10.0);
+		setSettingDefault(KEY_GAP, 10.0);
 	}
 
 	@Override
@@ -146,9 +168,9 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		String key = event.getKey();
-		if (KEY_ORIENTATION.equals(key) || KEY_MINIMAL_GAP.equals(key)) {
+		if (KEY_ORIENTATION.equals(key) || KEY_GAP.equals(key)) {
 			String orientation = getSetting(KEY_ORIENTATION);
-			Double gap = getSetting(KEY_MINIMAL_GAP);
+			Double gap = getSetting(KEY_GAP);
 
 			StackedLayout.Orientation layoutOrientation = StackedLayout.Orientation.VERTICAL;
 			if (VALUE_HORIZONTAL.equals(orientation)) {
