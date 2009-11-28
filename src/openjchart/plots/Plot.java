@@ -69,7 +69,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	public Plot() {
-		super(new EdgeLayout());
+		super(new EdgeLayout(20.0, 20.0));
 
 		axes = new HashMap<String, Axis>();
 		axisDrawables = new HashMap<String, Drawable>();

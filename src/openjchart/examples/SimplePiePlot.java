@@ -41,7 +41,7 @@ public class SimplePiePlot extends JFrame {
 		//QuasiRandomColors colors = new QuasiRandomColors();
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.KEY_COLORS, colors);
-		plot.setInsets(new Insets2D.Double(40.0));
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -16,6 +16,14 @@ public class EdgeLayout implements Layout {
 	public static final String NORTH_WEST = "northwest";
 	public static final String CENTER = "center";
 
+	private double hgap;
+	private double vgap;
+
+	public EdgeLayout(double hgap, double vgap) {
+		this.hgap = hgap;
+		this.vgap = vgap;
+	}
+
 	/* (non-Javadoc)
 	 * @see openjchart.plots.LayoutManager2D#layout(java.awt.geom.Rectangle2D, java.awt.Insets)
 	 */
@@ -60,10 +68,17 @@ public class EdgeLayout implements Layout {
 		double heightNorth  = getMaxHeight(northWest, north,  northEast);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double xWest = bounds.getMinX() + insets.getLeft();
-		double xEast = bounds.getMaxX() - insets.getRight() - widthEast;
-		double yNorth = bounds.getMinY() + insets.getTop();
-		double ySouth = bounds.getMaxY() - insets.getBottom() - heightSouth;
+		double hgapEast  = (widthWest>0.0 && center!=null) ? hgap : 0.0;
+		double hgapWest  = (widthEast>0.0 && center!=null) ? hgap : 0.0;
+		double vgapNorth = (heightNorth>0.0 && center!=null) ? vgap : 0.0;
+		double vgapSouth = (heightSouth>0.0 && center!=null) ? vgap : 0.0;
+
+		double xWest   = bounds.getMinX() + insets.getLeft();
+		double xCenter = xWest + widthWest + hgapEast;
+		double xEast   = bounds.getMaxX() - insets.getRight() - widthEast;
+		double yNorth  = bounds.getMinY() + insets.getTop();
+		double yCenter = yNorth + heightNorth + vgapNorth;
+		double ySouth  = bounds.getMaxY() - insets.getBottom() - heightSouth;
 
 		layoutComponent(northWest,
 			xWest, yNorth,
@@ -112,9 +127,9 @@ public class EdgeLayout implements Layout {
 		);
 
 		layoutComponent(center,
-			xWest + widthWest, yNorth + heightNorth,
-			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight(),
-			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom()
+			xCenter, yCenter,
+			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight() - hgapEast - hgapWest,
+			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom() - vgapNorth - vgapSouth
 		);
 	}
 
@@ -155,11 +170,16 @@ public class EdgeLayout implements Layout {
 		double heightCenter = getMaxHeight(west,      center, east);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
+		double hgapEast  = (widthWest>0.0 && center!=null) ? hgap : 0.0;
+		double hgapWest  = (widthEast>0.0 && center!=null) ? hgap : 0.0;
+		double vgapNorth = (heightNorth>0.0 && center!=null) ? vgap : 0.0;
+		double vgapSouth = (heightSouth>0.0 && center!=null) ? vgap : 0.0;
+
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
 		return new openjchart.util.Dimension2D.Double(
-			insets.getLeft() + widthEast + widthCenter + widthWest + insets.getRight(),
-			insets.getTop() + heightNorth + heightCenter + heightSouth + insets.getBottom()
+			insets.getLeft() + widthEast + hgapEast + widthCenter + hgapWest + widthWest + insets.getRight(),
+			insets.getTop() + heightNorth + vgapNorth + heightCenter + vgapSouth + heightSouth + insets.getBottom()
 		);
 	}
 

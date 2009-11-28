@@ -2,7 +2,6 @@ package openjchart;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
@@ -43,26 +42,26 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		private final Label label;
 
 		public Item(final String labelText, final ShapeRenderer shapeRenderer, final LineRenderer2D lineRenderer) {
-			super(new EdgeLayout());
+			super(new EdgeLayout(10.0, 0.0));
 
 			symbol = new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
+					Row row = new Row(DUMMY_DATA, 0);
 					Rectangle2D bounds = getBounds();
 
-					Row row = new Row(DUMMY_DATA, 0);
-
-					Point2D pos1 = new Point2D.Double(bounds.getMinX(),    bounds.getCenterY());
-					Point2D pos2 = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
-					Point2D pos3 = new Point2D.Double(bounds.getMaxX(),    bounds.getCenterY());
-
-					Shape s1 = null;
-					Shape s2 = (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null;
-					Shape s3 = null;
-
-					DataPoint2D p1 = new DataPoint2D(pos1, null, s1, null);
-					DataPoint2D p2 = new DataPoint2D(pos2, null, s2, null);
-					DataPoint2D p3 = new DataPoint2D(pos3, null, s3, null);
+					DataPoint2D p1 = new DataPoint2D(
+						new Point2D.Double(bounds.getMinX(), bounds.getCenterY()), null,
+						null, null
+					);
+					DataPoint2D p2 = new DataPoint2D(
+						new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), null,
+						(shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null, null
+					);
+					DataPoint2D p3 = new DataPoint2D(
+						new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null,
+						null, null
+					);
 
 					if (lineRenderer != null) {
 						lineRenderer.getLine(p1, p2).draw(g2d);

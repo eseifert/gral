@@ -29,7 +29,7 @@ public class SimpleBarPlot extends JFrame {
 		BarPlot plot = new BarPlot(data);
 		plot.getAxis(Axis.X).setRange(0.5, 8.5);
 		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
-		plot.setInsets(new Insets2D.Double(40.0));
+		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
 		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
 		plot.getShapeRenderer(data).setSetting(ShapeRenderer.KEY_COLOR,
 				new LinearGradientPaint(0f,0f, 0f,1f,
