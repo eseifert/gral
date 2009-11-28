@@ -6,6 +6,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 
 import openjchart.plots.DataPoint2D;
 import openjchart.util.GeometryUtils;
@@ -41,7 +42,8 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 				if (shape == null) {
 					continue;
 				}
-				AffineTransform tx = AffineTransform.getTranslateInstance(p.getX(), p.getY());
+				Point2D pos = p.getPosition();
+				AffineTransform tx = AffineTransform.getTranslateInstance(pos.getX(), pos.getY());
 				Area gapShape = GeometryUtils.grow(tx.createTransformedShape(shape), gapSize, gapJoin, 10f);
 				lineShape.subtract(gapShape);
 			}

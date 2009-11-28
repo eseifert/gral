@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
@@ -22,15 +23,17 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
+				Point2D pos1 = p1.getPosition();
+				Point2D pos2 = p2.getPosition();
 				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
-				double ascendingX = p1.getX() + (p2.getX() - p1.getX()) * ascendingPoint;
+				double ascendingX = pos1.getX() + (pos2.getX() - pos1.getX()) * ascendingPoint;
 
 				// Create path
 				GeneralPath line = new GeneralPath();
-				line.moveTo(p1.getX(), p1.getY());
-				line.lineTo(ascendingX, p1.getY());
-				line.lineTo(ascendingX, p2.getY());
-				line.lineTo(p2.getX(), p2.getY());
+				line.moveTo(pos1.getX(), pos1.getY());
+				line.lineTo(ascendingX,  pos1.getY());
+				line.lineTo(ascendingX,  pos2.getY());
+				line.lineTo(pos2.getX(), pos2.getY());
 
 				Shape lineShape = punchShapes(line, p1, p2);
 

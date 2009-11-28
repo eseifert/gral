@@ -13,6 +13,7 @@ import java.util.Map;
 
 import openjchart.data.DataSeries;
 import openjchart.data.DummyData;
+import openjchart.data.Row;
 import openjchart.plots.DataPoint2D;
 import openjchart.plots.Label;
 import openjchart.plots.lines.LineRenderer2D;
@@ -48,24 +49,30 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 				@Override
 				public void draw(Graphics2D g2d) {
 					Rectangle2D bounds = getBounds();
-					
-					Shape s2 = null;
-					if (shapeRenderer != null) {
-						s2 = shapeRenderer.getShapePath(DUMMY_DATA, 0);
-					}
 
-					DataPoint2D p1 = new DataPoint2D(new Point2D.Double(bounds.getMinX(),    bounds.getCenterY()), null);
-					DataPoint2D p2 = new DataPoint2D(new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), s2);
-					DataPoint2D p3 = new DataPoint2D(new Point2D.Double(bounds.getMaxX(),    bounds.getCenterY()), null);
+					Row row = new Row(DUMMY_DATA, 0);
+
+					Point2D pos1 = new Point2D.Double(bounds.getMinX(),    bounds.getCenterY());
+					Point2D pos2 = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+					Point2D pos3 = new Point2D.Double(bounds.getMaxX(),    bounds.getCenterY());
+
+					Shape s1 = null;
+					Shape s2 = (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null;
+					Shape s3 = null;
+
+					DataPoint2D p1 = new DataPoint2D(pos1, null, s1, null);
+					DataPoint2D p2 = new DataPoint2D(pos2, null, s2, null);
+					DataPoint2D p3 = new DataPoint2D(pos3, null, s3, null);
 
 					if (lineRenderer != null) {
 						lineRenderer.getLine(p1, p2).draw(g2d);
 						lineRenderer.getLine(p2, p3).draw(g2d);
 					}
 					if (shapeRenderer != null) {
+						Point2D pos = p2.getPosition();
 						AffineTransform txOrig = g2d.getTransform();
-						g2d.translate(p2.getX(), p2.getY());
-						shapeRenderer.getShape(DUMMY_DATA, 0).draw(g2d);
+						g2d.translate(pos.getX(), pos.getY());
+						shapeRenderer.getShape(row).draw(g2d);
 						g2d.setTransform(txOrig);
 					}
 				}

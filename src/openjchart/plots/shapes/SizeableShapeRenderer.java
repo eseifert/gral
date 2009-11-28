@@ -3,14 +3,14 @@ package openjchart.plots.shapes;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-import openjchart.data.DataSource;
+import openjchart.data.Row;
 
 public class SizeableShapeRenderer extends DefaultShapeRenderer {
 	@Override
-	public Shape getShapePath(DataSource data, int row) {
+	public Shape getShapePath(Row row) {
 		Shape shape = getSetting(KEY_SHAPE);
-		if (data.getColumnCount() >= 2) {
-			double size = data.get(2, row).doubleValue();
+		if (row.getSource().getColumnCount() >= 2) {
+			double size = row.get(2).doubleValue();
 			AffineTransform tx = AffineTransform.getScaleInstance(size, size);
 			shape = tx.createTransformedShape(shape);
 		}

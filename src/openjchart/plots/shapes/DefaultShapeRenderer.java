@@ -6,18 +6,18 @@ import java.awt.Shape;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
-import openjchart.data.DataSource;
+import openjchart.data.Row;
 import openjchart.util.GraphicsUtils;
 
 public class DefaultShapeRenderer extends AbstractShapeRenderer {
 
 	@Override
-	public Drawable getShape(final DataSource data, final int row) {
+	public Drawable getShape(final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
 				Paint paint = getSetting(KEY_COLOR);
-				Shape shape = getShapePath(data, row);
+				Shape shape = getShapePath(row);
 				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
 			}
 		};
@@ -26,7 +26,7 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 	}
 
 	@Override
-	public Shape getShapePath(DataSource data, int row) {
+	public Shape getShapePath(Row row) {
 		Shape shape = getSetting(KEY_SHAPE);
 		return shape;
 	}

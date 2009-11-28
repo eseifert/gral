@@ -17,6 +17,7 @@ import java.util.List;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
+import openjchart.plots.DataPoint2D;
 import openjchart.plots.Label;
 import openjchart.util.GeometryUtils;
 import openjchart.util.MathUtils;
@@ -70,7 +71,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				Stroke strokeOld = g2d.getStroke();
 
 				// Calculate tick positions (in pixel coordinates)
-				List<Tick2D> ticks = getTicks(axis);
+				List<DataPoint2D> ticks = getTicks(axis);
 
 				// Draw axis shape
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_SHAPE_STROKE));
@@ -88,7 +89,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				Line2D tickShape = new Line2D.Double();
 
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
-				for (Tick2D tick : ticks) {
+				for (DataPoint2D tick : ticks) {
 					Point2D tickPoint = tick.getPosition();
 					Point2D tickNormal = tick.getNormal();
 					String tickLabel = tick.getLabel();
@@ -156,7 +157,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public List<Tick2D> getTicks(Axis axis) {
+	public List<DataPoint2D> getTicks(Axis axis) {
 		double tickSpacing = getSetting(KEY_TICK_SPACING);
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -168,7 +169,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			tickPositionsWorld.add(tickPositionWorld);
 		}
 
-		List<Tick2D> tickPositions = new LinkedList<Tick2D>();
+		List<DataPoint2D> tickPositions = new LinkedList<DataPoint2D>();
 		double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
 		for (double tickPositionWorld : tickPositionsWorld) {
 			double tickPositionView = worldToView(axis, tickPositionWorld, false);
@@ -194,7 +195,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			Format labelFormat = getSetting(KEY_LABEL_FORMAT);
 			String tickLabel = labelFormat.format(tickPositionWorld);
 
-			tickPositions.add(new Tick2D(tickPoint, tickNormal, tickLabel));
+			tickPositions.add(new DataPoint2D(tickPoint, tickNormal, null, tickLabel));
 		}
 
 		return tickPositions;

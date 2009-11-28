@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import openjchart.Drawable;
+import openjchart.plots.DataPoint2D;
 import openjchart.util.SettingsStorage;
 
 
@@ -84,5 +85,5 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @param axis Axis
 	 * @return A list of <code>Tick</code> instances
 	 */
-	List<Tick2D> getTicks(Axis axis);
+	List<DataPoint2D> getTicks(Axis axis);
 }

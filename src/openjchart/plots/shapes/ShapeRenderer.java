@@ -3,8 +3,9 @@ package openjchart.plots.shapes;
 import java.awt.Shape;
 
 import openjchart.Drawable;
-import openjchart.data.DataSource;
+import openjchart.data.Row;
 import openjchart.util.SettingsStorage;
+
 
 /**
  * An interface providing functions for rendering shapes in a diagram.
@@ -23,18 +24,16 @@ public interface ShapeRenderer extends SettingsStorage {
 
 	/**
 	 * Returns the shape to be drawn for the specified data value.
-	 * @param data data provided
-	 * @param row row of the value in the DataTable
+	 * @param p Row data at point
 	 * @return Drawable that represents the shape
 	 */
-	Drawable getShape(DataSource data, int row);
+	Drawable getShape(Row row);
 
 	/**
 	 * Returns a <code>Shape</code> instance that can be used
 	 * for further calculations.
-	 * @param data data provided
-	 * @param row row of the value in the DataTable
+	 * @param p Row data at point
 	 * @return Outline that describes the shape
 	 */
-	Shape getShapePath(DataSource data, int row);
+	Shape getShapePath(Row row);
 }

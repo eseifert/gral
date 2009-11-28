@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
 import openjchart.data.DataSource;
+import openjchart.data.Row;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.shapes.AbstractShapeRenderer;
@@ -21,13 +22,13 @@ public class BarPlot extends XYPlot {
 
 	protected class BarRenderer extends AbstractShapeRenderer {
 		@Override
-		public Drawable getShape(final DataSource data, final int row) {
+		public Drawable getShape(final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
 					// TODO: Translate?
-					Shape shape = getShapePath(data, row);
+					Shape shape = getShapePath(row);
 					Paint paint = getSetting(KEY_COLOR);
 					Rectangle2D paintBoundaries = null;
 					/*
@@ -46,9 +47,9 @@ public class BarPlot extends XYPlot {
 		}
 
 		@Override
-		public Shape getShapePath(DataSource data, int row) {
-			double valueX = data.get(0, row).doubleValue();
-			double valueY = data.get(1, row).doubleValue();
+		public Shape getShapePath(Row row) {
+			double valueX = row.get(0).doubleValue();
+			double valueY = row.get(1).doubleValue();
 			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
 			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
 			Axis axisX = getAxis(Axis.X);

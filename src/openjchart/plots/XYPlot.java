@@ -17,16 +17,17 @@ import java.util.Map;
 
 import openjchart.Drawable;
 import openjchart.data.DataSource;
+import openjchart.data.Row;
 import openjchart.data.statistics.Statistics;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LinearRenderer2D;
-import openjchart.plots.axes.Tick2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.DefaultShapeRenderer;
 import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
+
 
 public class XYPlot extends Plot {
 	public static final String KEY_GRID_X = "xyplot.grid.x";
@@ -76,12 +77,12 @@ public class XYPlot extends Plot {
 				AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 				Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
-				List<Tick2D> ticksX = axisXRenderer.getTicks(axisX);
+				List<DataPoint2D> ticksX = axisXRenderer.getTicks(axisX);
 				Line2D gridLineVert = new Line2D.Double(
 					-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
 					-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
 				);
-				for (Tick2D tick : ticksX) {
+				for (DataPoint2D tick : ticksX) {
 					Point2D tickPoint = tick.getPosition();
 					if (tickPoint == null) {
 						continue;
@@ -97,12 +98,12 @@ public class XYPlot extends Plot {
 				AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 				Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
-				List<Tick2D> ticksY = axisYRenderer.getTicks(axisY);
+				List<DataPoint2D> ticksY = axisYRenderer.getTicks(axisY);
 				Line2D gridLineHoriz = new Line2D.Double(
 					-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
 					bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 				);
-				for (Tick2D tick : ticksY) {
+				for (DataPoint2D tick : ticksY) {
 					Point2D tickPoint = tick.getPosition();
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
@@ -124,11 +125,11 @@ public class XYPlot extends Plot {
 				ShapeRenderer shapeRenderer = getShapeRenderer(s);
 				LineRenderer2D lineRenderer = getLineRenderer(s);
 
-				Point2D posPrev = null;
-				Shape shapePathOld = null;
+				DataPoint2D pPrev = null;
 				for (int i = 0; i < s.getRowCount(); i++) {
-					Number valueX = s.get(0, i);
-					Number valueY = s.get(1, i);
+					Row row = new Row(s, i);
+					Number valueX = row.get(0);
+					Number valueY = row.get(1);
 					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
 					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
 					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX, true);
@@ -138,18 +139,17 @@ public class XYPlot extends Plot {
 					}
 					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
-					Shape shapePath = shapeRenderer.getShapePath(s, i);
-					if (i > 0 && lineRenderer != null && pos != null && posPrev != null) {
-						DataPoint2D p1 = new DataPoint2D(posPrev, shapePathOld);
-						DataPoint2D p2 = new DataPoint2D(pos, shapePath);
-						line = lineRenderer.getLine(p1, p2);
+
+					Shape shapePath = shapeRenderer.getShapePath(row);
+					DataPoint2D p = new DataPoint2D(pos, null, shapePath, null);
+					if (i > 0 && lineRenderer != null && pos != null) {
+						line = lineRenderer.getLine(pPrev, p);
 						line.draw(g2d);
 					}
-					posPrev = pos;
-					shapePathOld = shapePath;
+					pPrev = p;
 
 					g2d.translate(pos.getX(), pos.getY());
-					Drawable shape = shapeRenderer.getShape(s, i);
+					Drawable shape = shapeRenderer.getShape(row);
 					shape.draw(g2d);
 					g2d.setTransform(txOffset);
 				}
