@@ -28,6 +28,7 @@ public class Histogram extends AbstractDataSource implements DataListener {
 
 	private Histogram(DataSource data) {
 		this.data = data;
+		this.data.addDataListener(this);
 		colBreaks = new ArrayList<Number[]>(data.getColumnCount());
 		colCells = new ArrayList<long[]>(data.getColumnCount());
 		cacheMin = new HashMap<Integer, Long>();
@@ -135,6 +136,7 @@ public class Histogram extends AbstractDataSource implements DataListener {
 	@Override
 	public void dataChanged(DataSource data) {
 		rebuildCells();
+		notifyDataChanged();
 	}
 
 }

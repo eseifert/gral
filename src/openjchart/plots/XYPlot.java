@@ -11,11 +11,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import openjchart.Drawable;
+import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.data.Row;
 import openjchart.data.statistics.Statistics;
@@ -29,7 +29,7 @@ import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 
 
-public class XYPlot extends Plot {
+public class XYPlot extends Plot implements DataListener  {
 	public static final String KEY_GRID_X = "xyplot.grid.x";
 	public static final String KEY_GRID_Y = "xyplot.grid.y";
 	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
@@ -39,7 +39,6 @@ public class XYPlot extends Plot {
 
 	private final Map<DataSource, ShapeRenderer> shapeRenderers;
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
-	private final List<DataSource> data;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -159,6 +158,8 @@ public class XYPlot extends Plot {
 	}
 
 	public XYPlot(DataSource... data) {
+		super(data);
+
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
@@ -167,11 +168,9 @@ public class XYPlot extends Plot {
 
 		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
 		this.lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
-		this.data = new LinkedList<DataSource>();
 
 		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		for (DataSource source : data) {
-			this.data.add(source);
 			setShapeRenderer(source, shapeRendererDefault);
 			dataChanged(source);
 			source.addDataListener(this);
@@ -247,8 +246,6 @@ public class XYPlot extends Plot {
 
 	@Override
 	public void dataChanged(DataSource data) {
-		super.dataChanged(data);
-
 		minX =  Double.MAX_VALUE;
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;

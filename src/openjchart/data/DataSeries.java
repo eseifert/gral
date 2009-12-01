@@ -7,7 +7,7 @@ import java.util.List;
  * Class that represents a view on a DataSource.
  * @see DataSource
  */
-public class DataSeries extends AbstractDataSource {
+public class DataSeries extends AbstractDataSource implements DataListener {
 	private DataSource data;
 	private final List<Integer> cols;
 	private String name;
@@ -36,6 +36,7 @@ public class DataSeries extends AbstractDataSource {
 	public DataSeries(String name, DataSource data, int... cols) {
 		this.name = name;
 		this.data = data;
+		this.data.addDataListener(this);
 		this.cols = new ArrayList<Integer>(cols.length);
 		for (int col : cols) {
 			this.cols.add(col);
@@ -89,5 +90,10 @@ public class DataSeries extends AbstractDataSource {
 	@Override
 	public int getRowCount() {
 		return data.getRowCount();
+	}
+
+	@Override
+	public void dataChanged(DataSource data) {
+		notifyDataChanged();
 	}
 }

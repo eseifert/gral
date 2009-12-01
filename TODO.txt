@@ -4,7 +4,7 @@ Version 0.7
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Methods for adding Legend instances to charts
+- Methods for adding Legend instances to plots
 
 - Add more JavaDocs and unit tests
 
@@ -58,3 +58,9 @@ Version 1.0
 - API improvements based on review in version 0.9
 
 - Add 3D support using OpenGL/JOGL (also 2D with JOGL?)
+
+Future
+======
+
+- Implement a more complex application as testing environment
+  (like Origin, SPSS, etc.)

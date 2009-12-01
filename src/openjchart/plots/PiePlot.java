@@ -6,18 +6,18 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
+import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
 import openjchart.util.GraphicsUtils;
 
-public class PiePlot extends Plot {
+public class PiePlot extends Plot implements DataListener {
 	public static final String KEY_RADIUS = "pieplot.radius";
 	public static final String KEY_COLORS = "pieplot.colorlist";
 	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
 	public static final String KEY_START = "pieplot.start";
 
-	private DataSource data;
 	private double degreesPerValue;
 	private double[] startValues;
 
@@ -51,23 +51,23 @@ public class PiePlot extends Plot {
 			g2d.setTransform(txOrig);
 		}
 	}
-	
+
 	public PiePlot(DataSource data) {
+		super(data);
+
 		setSettingDefault(KEY_RADIUS, 0.9);
 		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
 		setSettingDefault(KEY_CLOCKWISE, true);
 		setSettingDefault(KEY_START, 0.0);
-		setPlotArea(new PiePlotArea2D());
+
+		dataChanged(data);
+		data.addDataListener(this);
 		
-		this.data = data;
-		dataChanged(this.data);
-		this.data.addDataListener(this);
+		setPlotArea(new PiePlotArea2D());
 	}
 
 	@Override
 	public void dataChanged(DataSource data) {
-		super.dataChanged(data);
-
 		// Calculate sum of all values
 		double colYSum = 0.0;
 		for (int i = 0; i < data.getRowCount();  i++) {

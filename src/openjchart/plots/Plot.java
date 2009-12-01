@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,6 @@ import openjchart.Drawable;
 import openjchart.DrawableContainer;
 import openjchart.EdgeLayout;
 import openjchart.Layout;
-import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.util.GraphicsUtils;
@@ -26,7 +26,7 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
-public abstract class Plot extends DrawableContainer implements SettingsStorage, DataListener, SettingsListener {
+public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
 	public static final String KEY_TITLE = "plot.title";
 	public static final String KEY_BACKGROUND = "plot.background";
 	public static final String KEY_BORDER = "plot.border";
@@ -35,6 +35,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final String KEY_PLOTAREA_BORDER = "plot.plotarea.border";
 
 	private final Settings settings;
+
+	protected final List<DataSource> data;
 
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
@@ -68,21 +70,26 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		protected abstract void drawPlot(Graphics2D g2d);
 	}
 
-	public Plot() {
+	public Plot(DataSource... data) {
 		super(new EdgeLayout(20.0, 20.0));
 
-		axes = new HashMap<String, Axis>();
-		axisDrawables = new HashMap<String, Drawable>();
-		components = new ArrayList<Drawable>();
-		constraints = new HashMap<Drawable, Object>();
 		settings = new Settings(this);
-
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
 		setSettingDefault(KEY_BORDER, null);
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
+
+		this.data = new LinkedList<DataSource>();
+		axes = new HashMap<String, Axis>();
+		axisDrawables = new HashMap<String, Drawable>();
+		for (DataSource source : data) {
+			this.data.add(source);
+		}
+
+		components = new ArrayList<Drawable>();
+		constraints = new HashMap<Drawable, Object>();
 
 		title = new Label("");
 		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
@@ -210,10 +217,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	@Override
 	public <T> void removeSettingDefault(String key) {
 		settings.removeDefault(key);
-	}
-
-	@Override
-	public void dataChanged(DataSource data) {
 	}
 
 	@Override
