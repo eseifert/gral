@@ -4,6 +4,9 @@ import java.awt.geom.Rectangle2D;
 
 import openjchart.util.Insets2D;
 
+/**
+ * A class that provides functions to store and layout Drawables.
+ */
 public interface Container extends Iterable<Drawable> {
 	/**
 	 * Return the space that this DrawableContainer must leave at each of its edges.
@@ -12,22 +15,35 @@ public interface Container extends Iterable<Drawable> {
 	Insets2D getInsets();
 
 	/**
-	 * Returns the dimensions of this container.
-	 * @return Dimensions
+	 * Sets the space that this DrawableContainer must leave at each of its edges.
+	 * @param insets Insets to be set.
+	 */
+	void setInsets(Insets2D insets);
+
+	/**
+	 * Returns the bounds of this container.
+	 * @return bounds
 	 */
 	Rectangle2D getBounds();
 
 	/**
-	 * Returns the layout associated with with this container.
+	 * Returns the layout associated with this container.
 	 * @return Layout manager
 	 */
 	Layout getLayout();
+
+	/**
+	 * Sets the layout associated with this container.
+	 * @param layout Layout to be set.
+	 */
+	void setLayout(Layout layout);
 
 	/**
 	 * Adds a new component to this container.
 	 * @param drawable Component
 	 */
 	void add(Drawable drawable);
+
 	/**
 	 * Adds a new component to this container.
 	 * @param drawable Component

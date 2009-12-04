@@ -7,11 +7,19 @@ import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
 
+/**
+ * A class that represents an adapter between the components of this library and swing.
+ * It displays a single Drawable in a JPanel.
+ */
 public class DrawablePanel extends JPanel {
-	private Drawable drawable;
+	private final Drawable drawable;
 
-	public DrawablePanel(Drawable plot) {
-		this.drawable = plot;
+	/**
+	 * Creates a new DrawablePanel with the specified Drawable.
+	 * @param drawable Drawable to be displayer
+	 */
+	public DrawablePanel(Drawable drawable) {
+		this.drawable = drawable;
 		setOpaque(false);
 	}
 

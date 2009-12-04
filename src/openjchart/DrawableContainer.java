@@ -9,17 +9,27 @@ import java.util.Map;
 
 import openjchart.util.Insets2D;
 
-
+/**
+ * Implementation of Container that is a Drawable itself.
+ * It takes care of the layout and the insets and stores Drawables.
+ */
 public class DrawableContainer extends AbstractDrawable implements Container {
 	private Insets2D insets = new Insets2D.Double();
 	private Layout layout;
 	private final List<Drawable> components;
 	private final Map<Drawable, Object> constraints;
 
+	/**
+	 * Creates a new container for Drawables without layout manager.
+	 */
 	public DrawableContainer() {
 		this(null);
 	}
 
+	/**
+	 * Creates a new container for Drawables with the specified layout manager.
+	 * @param layout Layout manager to be set.
+	 */
 	public DrawableContainer(Layout layout) {
 		components = new LinkedList<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
@@ -30,7 +40,11 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	public void draw(Graphics2D g2d) {
 		drawComponents(g2d);
 	}
-	
+
+	/**
+	 * Invokes the draw method of each Drawable.
+	 * @param g2d Graphics object used for drawing.
+	 */
 	protected void drawComponents(Graphics2D g2d) {
 		for (Drawable d : this) {
 			d.draw(g2d);
@@ -41,6 +55,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	public void add(Drawable drawable) {
 		add(drawable, null);
 	}
+
 	@Override
 	public void add(Drawable drawable, Object constraints) {
 		components.add(drawable);
@@ -66,7 +81,8 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		insets.setInsets(this.insets);
 		return insets;
 	}
-	
+
+	@Override
 	public void setInsets(Insets2D insets) {
 		if (insets == this.insets) {
 			return;
@@ -80,11 +96,15 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		return layout;
 	}
 
+	@Override
 	public void setLayout(Layout layout) {
 		this.layout = layout;
 		doLayout();
 	}
-	
+
+	/**
+	 * Recalculates this container's layout
+	 */
 	protected void doLayout() {
 		if (layout != null) {
 			layout.layout(this);
@@ -100,7 +120,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	public int size() {
 		return components.size();
 	}
-	
+
 	@Override
 	public void setBounds(double x, double y, double width, double height) {
 		super.setBounds(x, y, width, height);
