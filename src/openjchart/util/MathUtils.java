@@ -209,7 +209,7 @@ public abstract class MathUtils {
 		return values;
 	}
 
-	public static double[] invert(double[] values) {
+	public static double[] negate(double[] values) {
 		for (int i = 0; i < values.length; i++) {
 			values[i] = -values[i];
 		}

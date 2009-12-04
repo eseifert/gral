@@ -34,7 +34,7 @@ public class ConvolutionExample extends JFrame {
 		Convolution dataSmoothed = new Convolution(data, kernel, Convolution.MODE_REPEAT, 1);
 		DataSeries dsSmoothed = new DataSeries(dataSmoothed, 0, 1);
 
-		double[] kernel2 = MathUtils.invert(MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE)));
+		double[] kernel2 = MathUtils.negate(MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE)));
 		kernel2[kernel2.length/2] += 1.0;
 		Convolution dataHighpass = new Convolution(data, kernel2, Convolution.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries(dataHighpass, 0, 1);

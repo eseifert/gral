@@ -1,5 +1,6 @@
 package openjchart.tests.data;
 
+import openjchart.tests.data.io.IoTests;
 import openjchart.tests.data.statistics.StatisticsTests;
 
 import org.junit.runner.RunWith;
@@ -9,7 +10,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	DataTableTest.class,
 	DataSeriesTest.class,
-	StatisticsTests.class
+	StatisticsTests.class,
+	IoTests.class
 })
 public class DataTests {
 }
