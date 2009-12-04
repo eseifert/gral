@@ -69,7 +69,7 @@ public class Statistics implements DataListener {
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
 			Map<String, Double> colStats = new HashMap<String, Double>();
 			List<Double> col = new ArrayList<Double>(rowCount);
-
+			
 			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 				Number cell = data.get(colIndex, rowIndex);
 				double value = cell.doubleValue();
@@ -103,6 +103,11 @@ public class Statistics implements DataListener {
 				// N (element count, zeroth moment)
 				if (!colStats.containsKey(N)) colStats.put(N, 0.0);
 				colStats.put(N, colStats.get(N) + 1.0);
+			}
+
+			// Check for empty data source
+			if (rowCount == 0) {
+				continue;
 			}
 
 			// Mean

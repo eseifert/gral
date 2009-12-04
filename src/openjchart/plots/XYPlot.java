@@ -138,8 +138,7 @@ public class XYPlot extends Plot implements DataListener  {
 					}
 					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
-
-					Shape shapePath = shapeRenderer.getShapePath(row);
+					Shape shapePath = (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null;
 					DataPoint2D p = new DataPoint2D(pos, null, shapePath, null);
 					if (i > 0 && lineRenderer != null && pos != null) {
 						line = lineRenderer.getLine(pPrev, p);
@@ -147,10 +146,12 @@ public class XYPlot extends Plot implements DataListener  {
 					}
 					pPrev = p;
 
-					g2d.translate(pos.getX(), pos.getY());
-					Drawable shape = shapeRenderer.getShape(row);
-					shape.draw(g2d);
-					g2d.setTransform(txOffset);
+					if (shapeRenderer != null) {
+						g2d.translate(pos.getX(), pos.getY());
+						Drawable shape = shapeRenderer.getShape(row);
+						shape.draw(g2d);
+						g2d.setTransform(txOffset);
+					}
 				}
 			}
 			g2d.setTransform(txOrig);
@@ -172,8 +173,8 @@ public class XYPlot extends Plot implements DataListener  {
 		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		for (DataSource source : data) {
 			setShapeRenderer(source, shapeRendererDefault);
-			dataChanged(source);
 			source.addDataListener(this);
+			dataChanged(source);
 		}
 
 		// Create axes

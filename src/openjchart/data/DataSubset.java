@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class FilteredData extends AbstractDataSource implements DataListener {
+public abstract class DataSubset extends AbstractDataSource implements DataListener {
 	private final DataSource original;
 	private final List<Integer> accepted;
 
-	public FilteredData(DataSource original) {
+	public DataSubset(DataSource original) {
 		accepted = new ArrayList<Integer>();
 		this.original = original;
 		this.original.addDataListener(this);
