@@ -177,4 +177,42 @@ public abstract class MathUtils {
 		a.set(i1, tmp);
 	}
 
+	public static double[] getBinomial(double variance) {
+		int size = (int) (variance * 4.0) + 1;
+		return getBinomial(size);
+	}
+
+	public static double[] getBinomial(int size) {
+		double[] binomials = new double[size];
+		binomials[0] = 1.0;
+		for (int i = 0; i < size - 1; i++) {
+			binomials[0] /= 2.0;
+		}
+
+		for (int i = 0; i < size; i++) {
+			for (int j = i; j > 0; j--) {
+				binomials[j] += binomials[j - 1];
+			}
+		}
+
+		return binomials;
+	}
+
+	public static double[] normalize(double[] values) {
+		double sum = 0.0;
+		for (double value : values) {
+			sum += value;
+		}
+		for (int i = 0; i < values.length; i++) {
+			values[i] /= sum;
+		}
+		return values;
+	}
+
+	public static double[] invert(double[] values) {
+		for (int i = 0; i < values.length; i++) {
+			values[i] = -values[i];
+		}
+		return values;
+	}
 }
