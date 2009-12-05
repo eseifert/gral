@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	TSVSourceTest.class
+	TSVReaderTest.class,
+	TSVWriterTest.class
 })
 public class IoTests {
 }

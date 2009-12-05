@@ -6,35 +6,46 @@ import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import openjchart.data.AbstractDataSource;
+import openjchart.data.DataSource;
+import openjchart.data.DataTable;
 
-public class TSVSource extends AbstractDataSource {
-	private final ArrayList<Number[]> data;
-	private Class<?>[] types;
-	private Method[] parseMethods;
+public class TSVReader implements DataReader {
+	private final Class<? extends Number>[] types;
+	private final Map<Class<? extends Number>, Method> parseMethods;
+	private final Reader input;
 
-	public TSVSource(Reader input, Class<? extends Number>... types) throws IOException, ParseException {
-		this.types = new Class[types.length];
-		this.parseMethods = new Method[types.length];
-		for (int i = 0; i < types.length; i++) {
-			this.types[i] = types[i];
-			this.parseMethods[i] = getParseMethod(types[i]);
+	public TSVReader(Reader input, Class<? extends Number>... types) {
+		parseMethods = new HashMap<Class<? extends Number>, Method>();
+		this.input = input;
+		this.types = types;
+		for (Class<? extends Number> type : types) {
+			if (parseMethods.containsKey(type)) {
+				continue;
+			}
+			Method parseMethod = getParseMethod(type);
+			if (parseMethod != null) {
+				parseMethods.put(type, parseMethod);
+			}
 		}
-		data = new ArrayList<Number[]>();
+	}
 
+	public DataSource read() throws IOException, ParseException {
+		DataTable data = new DataTable(types);
 		BufferedReader reader = new BufferedReader(input);
 		String line = null;
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
 			String[] cols = line.split("\t");
-			if (cols.length < getColumnCount()) {
-				throw new IllegalArgumentException("Column count in file doesn't match; got "+cols.length+", but expected "+getColumnCount()+".");
+			if (cols.length < types.length) {
+				throw new IllegalArgumentException("Column count in file doesn't match; got "+cols.length+", but expected "+types.length+".");
 			}
-			Number[] row = new Number[getColumnCount()];
-			for (int i = 0; i < getColumnCount(); i++) {
+			Number[] row = new Number[types.length];
+			for (int i = 0; i < types.length; i++) {
+				Method parseMethod = parseMethods.get(types[i]);
 				try {
-					row[i] = (Number)parseMethods[i].invoke(null, cols[i]);
+					row[i] = (Number)parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
 				} catch (IllegalAccessException e) {
 				} catch (InvocationTargetException e) {
@@ -43,26 +54,7 @@ public class TSVSource extends AbstractDataSource {
 			}
 			data.add(row);
 		}
-	}
-
-	@Override
-	public Number[] get(int row) {
-		return data.get(row);
-	}
-
-	@Override
-	public Number get(int col, int row) {
-		return data.get(row)[col];
-	}
-
-	@Override
-	public int getColumnCount() {
-		return types.length;
-	}
-
-	@Override
-	public int getRowCount() {
-		return data.size();
+		return data;
 	}
 
 	private static Method getParseMethod(Class<?> c) {
