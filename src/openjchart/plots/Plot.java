@@ -18,6 +18,8 @@ import openjchart.Drawable;
 import openjchart.DrawableContainer;
 import openjchart.EdgeLayout;
 import openjchart.Layout;
+import openjchart.Legend;
+import openjchart.DrawableConstants.Location;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.util.GraphicsUtils;
@@ -33,6 +35,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
 	public static final String KEY_PLOTAREA_BACKGROUND = "plot.plotarea.background";
 	public static final String KEY_PLOTAREA_BORDER = "plot.plotarea.border";
+	public static final String KEY_LEGEND = "plot.legend";
+	public static final String KEY_LEGEND_POSITION = "plot.legend.position";
 
 	private final Settings settings;
 
@@ -46,8 +50,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private Layout layout;
 
 	private Label title;
-
 	private PlotArea2D plotArea;
+	private Legend legend;
 
 	protected abstract class PlotArea2D extends AbstractDrawable {
 		protected void drawBackground(Graphics2D g2d) {
@@ -80,6 +84,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
+		setSettingDefault(KEY_LEGEND, false);
+		setSettingDefault(KEY_LEGEND_POSITION, Location.NORTH_WEST);
 
 		this.data = new LinkedList<DataSource>();
 		axes = new HashMap<String, Axis>();
@@ -93,7 +99,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 		title = new Label("");
 		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
-		add(title, EdgeLayout.NORTH);
+		add(title, Location.NORTH);
+
+		legend = new Legend();
 	}
 
 	@Override
@@ -121,6 +129,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		for (Drawable d : axisDrawables.values()) {
 			d.draw(g2d);
 		}
+	}
+
+	protected void drawLegend(Graphics2D g2d) {
+		legend.draw(g2d);
 	}
 
 	public Axis getAxis(String name) {
@@ -184,7 +196,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		}
 		this.plotArea = plotArea;
 		if (this.plotArea != null) {
-			add(this.plotArea, EdgeLayout.CENTER);
+			add(this.plotArea, Location.CENTER);
 		}
 	}
 
@@ -225,6 +237,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	public Label getTitle() {
 		return title;
+	}
+
+	public Legend getLegend() {
+		return legend;
 	}
 
 }

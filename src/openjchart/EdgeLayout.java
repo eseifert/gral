@@ -3,19 +3,10 @@ package openjchart;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+import openjchart.DrawableConstants.Location;
 import openjchart.util.Insets2D;
 
 public class EdgeLayout implements Layout {
-	public static final String NORTH = "north";
-	public static final String NORTH_EAST = "northeast";
-	public static final String EAST = "east";
-	public static final String SOUTH_EAST = "southeast";
-	public static final String SOUTH = "south";
-	public static final String SOUTH_WEST = "southwest";
-	public static final String WEST = "west";
-	public static final String NORTH_WEST = "northwest";
-	public static final String CENTER = "center";
-
 	private double hgap;
 	private double vgap;
 
@@ -40,24 +31,24 @@ public class EdgeLayout implements Layout {
 		         south = null, southWest = null, west = null, northWest = null,
 		         center = null;
 		for (Drawable d: container) {
-			Object constraints = container.getConstraints(d);
-			if (NORTH.equals(constraints)) {
+			Location constraints = (Location)container.getConstraints(d);
+			if (Location.NORTH.equals(constraints)) {
 				north = d;
-			} else if (NORTH_EAST.equals(constraints)) {
+			} else if (Location.NORTH_EAST.equals(constraints)) {
 				northEast = d;
-			} else if (EAST.equals(constraints)) {
+			} else if (Location.EAST.equals(constraints)) {
 				east = d;
-			} else if (SOUTH_EAST.equals(constraints)) {
+			} else if (Location.SOUTH_EAST.equals(constraints)) {
 				southEast = d;
-			} else if (SOUTH.equals(constraints)) {
+			} else if (Location.SOUTH.equals(constraints)) {
 				south = d;
-			} else if (SOUTH_WEST.equals(constraints)) {
+			} else if (Location.SOUTH_WEST.equals(constraints)) {
 				southWest = d;
-			} else if (WEST.equals(constraints)) {
+			} else if (Location.WEST.equals(constraints)) {
 				west = d;
-			} else if (NORTH_WEST.equals(constraints)) {
+			} else if (Location.NORTH_WEST.equals(constraints)) {
 				northWest = d;
-			} else if (CENTER.equals(constraints)) {
+			} else if (Location.CENTER.equals(constraints)) {
 				center = d;
 			}
 		}
@@ -141,23 +132,23 @@ public class EdgeLayout implements Layout {
 		         center = null;
 		for (Drawable d: container) {
 			Object constraints = container.getConstraints(d);
-			if (NORTH.equals(constraints)) {
+			if (Location.NORTH.equals(constraints)) {
 				north = d;
-			} else if (NORTH_EAST.equals(constraints)) {
+			} else if (Location.NORTH_EAST.equals(constraints)) {
 				northEast = d;
-			} else if (EAST.equals(constraints)) {
+			} else if (Location.EAST.equals(constraints)) {
 				east = d;
-			} else if (SOUTH_EAST.equals(constraints)) {
+			} else if (Location.SOUTH_EAST.equals(constraints)) {
 				southEast = d;
-			} else if (SOUTH.equals(constraints)) {
+			} else if (Location.SOUTH.equals(constraints)) {
 				south = d;
-			} else if (SOUTH_WEST.equals(constraints)) {
+			} else if (Location.SOUTH_WEST.equals(constraints)) {
 				southWest = d;
-			} else if (WEST.equals(constraints)) {
+			} else if (Location.WEST.equals(constraints)) {
 				west = d;
-			} else if (NORTH_WEST.equals(constraints)) {
+			} else if (Location.NORTH_WEST.equals(constraints)) {
 				northWest = d;
-			} else if (CENTER.equals(constraints)) {
+			} else if (Location.CENTER.equals(constraints)) {
 				center = d;
 			}
 		}

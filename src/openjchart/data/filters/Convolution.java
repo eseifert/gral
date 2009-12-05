@@ -10,19 +10,16 @@ import openjchart.data.DataSource;
 import openjchart.util.MathUtils;
 
 public class Convolution extends AbstractDataSource implements DataListener {
-	public static final int MODE_ZERO = 0;
-	public static final int MODE_REPEAT = 1;
-	public static final int MODE_MIRROR = 2;
-	public static final int MODE_CIRCULAR = 3;
+	public static enum Mode { MODE_ZERO, MODE_REPEAT, MODE_MIRROR, MODE_CIRCULAR };
 
 	private ArrayList<double[]> data;
 	private DataSource original;
 	private double[] kernel;
 	private int kernelOffset;
-	private int mode;
+	private Mode mode;
 	private final Set<Integer> cols;
 
-	public Convolution(DataSource original, double[] kernel, int mode, int... cols) {
+	public Convolution(DataSource original, double[] kernel, Mode mode, int... cols) {
 		setKernel(kernel);
 		setMode(mode);
 		this.cols = new HashSet<Integer>();
@@ -42,13 +39,11 @@ public class Convolution extends AbstractDataSource implements DataListener {
 	protected Number getOriginal(int col, int row) {
 		int rowLast = original.getRowCount() - 1;
 		if (row<0 || row>rowLast) {
-			switch (mode) {
-			case MODE_ZERO:
+			if (Mode.MODE_ZERO.equals(mode)) {
 				return 0.0;
-			case MODE_REPEAT:
+			} else if (Mode.MODE_REPEAT.equals(mode)) {
 				row = MathUtils.limit(row, 0, rowLast);
-				break;
-			case MODE_MIRROR:
+			} else if (Mode.MODE_MIRROR.equals(mode)) {
 				int rem = Math.abs(row) / rowLast;
 				int mod = Math.abs(row) % rowLast;
 				if ((rem & 1) == 0) {
@@ -56,10 +51,8 @@ public class Convolution extends AbstractDataSource implements DataListener {
 				} else {
 					row = rowLast - mod;
 				}
-				break;
-			case MODE_CIRCULAR:
+			} else if (Mode.MODE_CIRCULAR.equals(mode)) {
 				row %= (rowLast + 1);
-				break;
 			}
 		}
 		return original.get(col, row);
@@ -91,12 +84,12 @@ public class Convolution extends AbstractDataSource implements DataListener {
 		return kernel;
 	}
 
-	public void setMode(int mode) {
+	public void setMode(Mode mode) {
 		this.mode = mode;
 		filter();
 	}
 
-	public int getMode() {
+	public Mode getMode() {
 		return mode;
 	}
 

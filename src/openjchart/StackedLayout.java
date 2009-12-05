@@ -2,12 +2,11 @@ package openjchart;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+import openjchart.DrawableConstants.Orientation;
 import openjchart.util.Insets2D;
 
 
 public class StackedLayout implements Layout {
-	public static enum Orientation { HORIZONTAL, VERTICAL };
-
 	private Orientation orientation;
 	private double gap;
 	private double alignment;

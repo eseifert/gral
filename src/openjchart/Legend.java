@@ -10,6 +10,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
+import openjchart.DrawableConstants.Location;
+import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSeries;
 import openjchart.data.DummyData;
 import openjchart.data.Row;
@@ -29,9 +31,6 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	public static final String KEY_ORIENTATION = "legend.orientation";
 	public static final String KEY_GAP = "legend.gap";
 
-	public static final String VALUE_HORIZONTAL = "horizontal";
-	public static final String VALUE_VERTICAL = "vertical";
-	
 	private final Settings settings;
 
 	private final Map<DataSeries, Drawable> dataToComponent;
@@ -85,8 +84,8 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 			};
 			label = new Label(labelText);
 
-			add(symbol, EdgeLayout.CENTER);
-			add(label, EdgeLayout.EAST);
+			add(symbol, Location.CENTER);
+			add(label, Location.EAST);
 		}
 
 		@Override
@@ -100,7 +99,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		dataToComponent = new HashMap<DataSeries, Drawable>();
 		settings = new Settings(this);
 
-		setSettingDefault(KEY_ORIENTATION, VALUE_VERTICAL);
+		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(KEY_GAP, 10.0);
 	}
 
@@ -175,15 +174,9 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	public void settingChanged(SettingChangeEvent event) {
 		String key = event.getKey();
 		if (KEY_ORIENTATION.equals(key) || KEY_GAP.equals(key)) {
-			String orientation = getSetting(KEY_ORIENTATION);
+			Orientation orientation = getSetting(KEY_ORIENTATION);
 			Double gap = getSetting(KEY_GAP);
-
-			StackedLayout.Orientation layoutOrientation = StackedLayout.Orientation.VERTICAL;
-			if (VALUE_HORIZONTAL.equals(orientation)) {
-				layoutOrientation = StackedLayout.Orientation.HORIZONTAL;
-			}
-			Layout layout = new StackedLayout(layoutOrientation, (gap != null) ? gap : 0.0);
-
+			Layout layout = new StackedLayout(orientation, (gap != null) ? gap : 0.0);
 			setLayout(layout);
 		}
 	}

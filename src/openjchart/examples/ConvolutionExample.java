@@ -31,12 +31,12 @@ public class ConvolutionExample extends JFrame {
 		final double KERNEL_VARIANCE = 10.0;
 
 		double[] kernel = MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE));
-		Convolution dataSmoothed = new Convolution(data, kernel, Convolution.MODE_REPEAT, 1);
+		Convolution dataSmoothed = new Convolution(data, kernel, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsSmoothed = new DataSeries(dataSmoothed, 0, 1);
 
 		double[] kernel2 = MathUtils.negate(MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE)));
 		kernel2[kernel2.length/2] += 1.0;
-		Convolution dataHighpass = new Convolution(data, kernel2, Convolution.MODE_REPEAT, 1);
+		Convolution dataHighpass = new Convolution(data, kernel2, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries(dataHighpass, 0, 1);
 
 		XYPlot plot = new XYPlot(dsHighpass, ds, dsSmoothed);
