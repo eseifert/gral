@@ -27,12 +27,14 @@ public class EdgeLayout implements Layout {
 		Rectangle2D bounds = container.getBounds();
 
 		// Fetch components
-		Drawable north = null, northEast = null, east = null, southEast = null,
-		         south = null, southWest = null, west = null, northWest = null,
-		         center = null;
+		Drawable center = null,
+		         north = null, northEast = null, east = null, southEast = null,
+		         south = null, southWest = null, west = null, northWest = null;
 		for (Drawable d: container) {
 			Location constraints = (Location)container.getConstraints(d);
-			if (Location.NORTH.equals(constraints)) {
+			if (Location.CENTER.equals(constraints)) {
+				center = d;
+			} else if (Location.NORTH.equals(constraints)) {
 				north = d;
 			} else if (Location.NORTH_EAST.equals(constraints)) {
 				northEast = d;
@@ -48,9 +50,7 @@ public class EdgeLayout implements Layout {
 				west = d;
 			} else if (Location.NORTH_WEST.equals(constraints)) {
 				northWest = d;
-			} else if (Location.CENTER.equals(constraints)) {
-				center = d;
-			}
+			} 
 		}
 
 		// Calculate maximum widths and heights

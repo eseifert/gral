@@ -63,6 +63,10 @@ public abstract class Insets2D {
 			this.right = right;
 		}
 
+		@Override
+		public String toString() {
+			return getClass().toString() + "[top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right + "]";
+		}
 	}
 
 }

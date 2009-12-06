@@ -7,22 +7,22 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import openjchart.AbstractDrawable;
+import openjchart.Container;
 import openjchart.Drawable;
 import openjchart.DrawableContainer;
 import openjchart.EdgeLayout;
-import openjchart.Layout;
 import openjchart.Legend;
 import openjchart.DrawableConstants.Location;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
 import openjchart.util.GraphicsUtils;
+import openjchart.util.Insets2D;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
@@ -37,6 +37,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final String KEY_PLOTAREA_BORDER = "plot.plotarea.border";
 	public static final String KEY_LEGEND = "plot.legend";
 	public static final String KEY_LEGEND_POSITION = "plot.legend.position";
+	public static final String KEY_LEGEND_MARGIN = "plot.legend.margin";
 
 	private final Settings settings;
 
@@ -45,13 +46,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
-	private final List<Drawable> components;
-	private final Map<Drawable, Object> constraints;
-	private Layout layout;
-
 	private Label title;
 	private PlotArea2D plotArea;
-	private Legend legend;
+	private final Container legendContainer;
+	private final Legend legend;
 
 	protected abstract class PlotArea2D extends AbstractDrawable {
 		protected void drawBackground(Graphics2D g2d) {
@@ -77,6 +75,19 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public Plot(DataSource... data) {
 		super(new EdgeLayout(20.0, 20.0));
 
+		title = new Label("");
+		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+
+		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
+		legend = new Legend();
+
+		this.data = new LinkedList<DataSource>();
+		axes = new HashMap<String, Axis>();
+		axisDrawables = new HashMap<String, Drawable>();
+		for (DataSource source : data) {
+			this.data.add(source);
+		}
+
 		settings = new Settings(this);
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
@@ -86,22 +97,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
 		setSettingDefault(KEY_LEGEND, false);
 		setSettingDefault(KEY_LEGEND_POSITION, Location.NORTH_WEST);
+		setSettingDefault(KEY_LEGEND_MARGIN, new Insets2D.Double(20.0));
 
-		this.data = new LinkedList<DataSource>();
-		axes = new HashMap<String, Axis>();
-		axisDrawables = new HashMap<String, Drawable>();
-		for (DataSource source : data) {
-			this.data.add(source);
-		}
-
-		components = new ArrayList<Drawable>();
-		constraints = new HashMap<Drawable, Object>();
-
-		title = new Label("");
-		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 		add(title, Location.NORTH);
-
-		legend = new Legend();
 	}
 
 	@Override
@@ -151,41 +149,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		axes.remove(name);
 	}
 
-	@Override
-	public Layout getLayout() {
-		return layout;
-	}
-
-	public void setLayout(Layout layout) {
-		this.layout = layout;
-	}
-	
-	@Override
-	public void add(Drawable drawable) {
-		add(drawable, null);
-	}
-	@Override
-	public void add(Drawable drawable, Object constraints) {
-		components.add(drawable);
-		this.constraints.put(drawable, constraints);
-	}
-
-	@Override
-	public Object getConstraints(Drawable drawable) {
-		return constraints.get(drawable);
-	}
-	
-	@Override
-	public void remove(Drawable drawable) {
-		components.remove(drawable);
-		constraints.remove(drawable);
-	}
-
-	@Override
-	public java.util.Iterator<Drawable> iterator() {
-		return components.iterator();
-	};
-	
 	protected PlotArea2D getPlotArea() {
 		return plotArea;
 	}
@@ -208,9 +171,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	@Override
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
-		if (KEY_TITLE.equals(key) && value != null) {
-			title.setText((String) value);
-		}
 	}
 
 	@Override
@@ -221,9 +181,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.set(key, value);
-		if (KEY_TITLE.equals(key) && value != null) {
-			title.setText((String) value);
-		}
 	}
 
 	@Override
@@ -233,10 +190,26 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
+		String key = event.getKey();
+		if (KEY_TITLE.equals(key)) {
+			String text = getSetting(KEY_TITLE);
+			title.setText((text != null) ? text : "");
+		} else if (KEY_LEGEND_POSITION.equals(key)) {
+			Location constraints = getSetting(KEY_LEGEND_POSITION);
+			legendContainer.remove(legend);
+			legendContainer.add(legend, constraints);
+		} else if (KEY_LEGEND_MARGIN.equals(key)) {
+			Insets2D margin = getSetting(KEY_LEGEND_MARGIN);
+			legendContainer.setInsets(margin);
+		}
 	}
 
 	public Label getTitle() {
 		return title;
+	}
+
+	protected Container getLegendContainer() {
+		return legendContainer;
 	}
 
 	public Legend getLegend() {

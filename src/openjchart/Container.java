@@ -27,6 +27,12 @@ public interface Container extends Iterable<Drawable> {
 	Rectangle2D getBounds();
 
 	/**
+	 * Sets the bounds of this container.
+	 * @param bounds Bounds
+	 */
+	void setBounds(Rectangle2D bounds);
+
+	/**
 	 * Returns the layout associated with this container.
 	 * @return Layout manager
 	 */

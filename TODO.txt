@@ -4,7 +4,9 @@ Version 0.7
 - Add support for axis labels to AbstractAxisRenderer2D;
   Example: you could add text like "x axis" or "temperature [K]"
 
-- Methods for adding Legend instances to plots
+- API improvements:
+  Automatically add DataSources to legend (what's about changes to shape and line renderer?)
+  Add methods to Plot for adding/removing DataSource instances to legend
 
 - Add more JavaDocs and unit tests
 

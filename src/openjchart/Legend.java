@@ -12,7 +12,7 @@ import java.util.Map;
 
 import openjchart.DrawableConstants.Location;
 import openjchart.DrawableConstants.Orientation;
-import openjchart.data.DataSeries;
+import openjchart.data.DataSource;
 import openjchart.data.DummyData;
 import openjchart.data.Row;
 import openjchart.plots.DataPoint2D;
@@ -20,6 +20,7 @@ import openjchart.plots.Label;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.GraphicsUtils;
+import openjchart.util.Insets2D;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
@@ -33,7 +34,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 
 	private final Settings settings;
 
-	private final Map<DataSeries, Drawable> dataToComponent;
+	private final Map<DataSource, Drawable> dataToComponent;
 
 	private static class Item extends DrawableContainer {
 		private static final DummyData DUMMY_DATA = new DummyData(1, 1, 1.0);
@@ -96,18 +97,23 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	}
 	
 	public Legend() {
-		dataToComponent = new HashMap<DataSeries, Drawable>();
+		dataToComponent = new HashMap<DataSource, Drawable>();
 		settings = new Settings(this);
+		setInsets(new Insets2D.Double(10.0));
 
 		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
-		setSettingDefault(KEY_GAP, 10.0);
+		setSettingDefault(KEY_GAP, new openjchart.util.Dimension2D.Double(20.0, 5.0));
 	}
 
 	@Override
 	public void draw(Graphics2D g2d) {
 		drawBackground(g2d);
 		drawBorder(g2d);
+
+		AffineTransform txOrig = g2d.getTransform();
+		g2d.translate(getX(), getY());
 		drawComponents(g2d);
+		g2d.setTransform(txOrig);
 	}
 
 	protected void drawBackground(Graphics2D g2d) {
@@ -127,13 +133,13 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		}
 	}
 
-	public void add(DataSeries series, String label, ShapeRenderer shapeRenderer, LineRenderer2D lineRenderer) {
+	public void add(DataSource series, String label, ShapeRenderer shapeRenderer, LineRenderer2D lineRenderer) {
 		Item item = new Item(label, shapeRenderer, lineRenderer);
 		add(item);
 		dataToComponent.put(series, item);
 	}
 
-	public void remove(DataSeries series) {
+	public void remove(DataSource series) {
 		Drawable removeItem = dataToComponent.get(series);
 		if (removeItem != null) {
 			remove(removeItem);
@@ -142,7 +148,7 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 	}
 
 	protected void notifyDataChanged() {
-		doLayout();
+		layout();
 	}
 
 	@Override
@@ -175,8 +181,8 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		String key = event.getKey();
 		if (KEY_ORIENTATION.equals(key) || KEY_GAP.equals(key)) {
 			Orientation orientation = getSetting(KEY_ORIENTATION);
-			Double gap = getSetting(KEY_GAP);
-			Layout layout = new StackedLayout(orientation, (gap != null) ? gap : 0.0);
+			Dimension2D gap = getSetting(KEY_GAP);
+			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
 		}
 	}

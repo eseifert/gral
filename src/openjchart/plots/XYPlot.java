@@ -56,6 +56,7 @@ public class XYPlot extends Plot implements DataListener  {
 			drawBorder(g2d);
 			drawPlot(g2d);
 			drawAxes(g2d);
+			drawLegend(g2d);
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
@@ -68,7 +69,7 @@ public class XYPlot extends Plot implements DataListener  {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Paint paint = XYPlot.this.getSetting(KEY_GRID_COLOR);
+			Paint paint = getSetting(KEY_GRID_COLOR);
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
@@ -189,44 +190,72 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	@Override
-	public void setBounds(double x, double y, double width, double height) {
-		super.setBounds(x, y, width, height);
+	protected void layout() {
+		super.layout();
 		layoutAxes();
+		layoutLegend();
 	}
 
 	/**
-	 * Calculates bounds of axes.
+	 * Calculates the bounds of the axes.
 	 */
 	protected void layoutAxes() {
+		if (getPlotArea() == null) {
+			return;
+		}
+
 		Rectangle2D plotBounds = getPlotArea().getBounds();
-
-		// Shapes
-		Dimension2D axisXSize = axisXComp.getPreferredSize();
 		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-		axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
-			0.0, 0.0,
-			plotBounds.getWidth(), 0.0
-		));
-		Dimension2D axisYSize = axisYComp.getPreferredSize();
 		AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
-		axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
-			axisYSize.getWidth(), plotBounds.getHeight(),
-			axisYSize.getWidth(), 0.0
-		));
+		Dimension2D axisXSize = null;
+		Dimension2D axisYSize = null;
 
-		// Bounds
-		double axisXIntersection = axisXRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
-		Point2D axisXPos = axisYRenderer.worldToViewPos(axisY, axisXIntersection, false);
-		axisXComp.setBounds(
-			plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
-			plotBounds.getWidth(), axisXSize.getHeight()
-		);
-		double axisYIntersection = axisYRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
-		Point2D axisYPos = axisXRenderer.worldToViewPos(axisX, axisYIntersection, false);
-		axisYComp.setBounds(
-			plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
-			axisYSize.getWidth(), plotBounds.getHeight()
-		);
+		// Set the new shapes first to allow for correct positioning
+		if (axisXComp != null && axisXRenderer != null) {
+			axisXSize = axisXComp.getPreferredSize();
+			axisXRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
+				0.0, 0.0,
+				plotBounds.getWidth(), 0.0
+			));
+		}
+		if (axisYComp != null && axisYRenderer != null) {
+			axisYSize = axisYComp.getPreferredSize();
+			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE, new Line2D.Double(
+				axisYSize.getWidth(), plotBounds.getHeight(),
+				axisYSize.getWidth(), 0.0
+			));
+		}			
+
+		// Set bounds with new axis shapes
+		if (axisXComp != null && axisXRenderer != null) {
+			double axisXIntersection = axisXRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+			Point2D axisXPos = axisYRenderer.worldToViewPos(axisY, axisXIntersection, false);
+			axisXComp.setBounds(
+				plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
+				plotBounds.getWidth(), axisXSize.getHeight()
+			);
+		}
+
+		if (axisYComp != null && axisYRenderer != null) {
+			double axisYIntersection = axisYRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+			Point2D axisYPos = axisXRenderer.worldToViewPos(axisX, axisYIntersection, false);
+			axisYComp.setBounds(
+				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
+				axisYSize.getWidth(), plotBounds.getHeight()
+			);
+		}
+	}
+
+	/**
+	 * Calculates the bounds of the legend component.
+	 */
+	protected void layoutLegend() {
+		boolean isVisible = getSetting(KEY_LEGEND);
+		if (!isVisible || getPlotArea() == null) {
+			return;
+		}
+		Rectangle2D plotBounds = getPlotArea().getBounds();
+		getLegendContainer().setBounds(plotBounds);
 	}
 
 	public ShapeRenderer getShapeRenderer(DataSource s) {
@@ -251,13 +280,13 @@ public class XYPlot extends Plot implements DataListener  {
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
+		final int colX = 0;
+		final int colY = 1;
 		for (DataSource s : this.data) {
 			Statistics stats = s.getStatistics();
 			// Set the minimal and maximal value of the axes
-			int colX = 0;
 			minX = Math.min(minX, stats.get(Statistics.MIN, colX));
 			maxX = Math.max(maxX, stats.get(Statistics.MAX, colX));
-			int colY = 1;
 			minY = Math.min(minY, stats.get(Statistics.MIN, colY));
 			maxY = Math.max(maxY, stats.get(Statistics.MAX, colY));
 		}

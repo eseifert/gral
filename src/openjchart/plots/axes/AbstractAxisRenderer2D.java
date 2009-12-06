@@ -129,6 +129,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 								labelBoundsPadded.getCenterY() + (isLabelOutside?-1.0:1.0)*tickNormal.getY()*intersectionRayLength
 							)
 					);
+					if (labelBoundsIntersections.isEmpty()) {
+						continue;
+					}
 					double intersX = labelBoundsIntersections.get(0).getX() - labelBoundsPadded.getCenterX();
 					double intersY = labelBoundsIntersections.get(0).getY() - labelBoundsPadded.getCenterY();
 					double labelPosX = (isLabelOutside ? tickShape.getX2() : tickShape.getX1()) - intersX - labelBounds.getWidth()/2.0;

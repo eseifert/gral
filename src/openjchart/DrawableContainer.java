@@ -1,6 +1,7 @@
 package openjchart;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -60,14 +61,14 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	public void add(Drawable drawable, Object constraints) {
 		components.add(drawable);
 		this.constraints.put(drawable, constraints);
-		doLayout();
+		layout();
 	}
 
 	@Override
 	public void remove(Drawable drawable) {
 		components.remove(drawable);
 		constraints.remove(drawable);
-		doLayout();
+		layout();
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 			return;
 		}
 		this.insets.setInsets(insets);
-		doLayout();
+		layout();
 	}
 
 	@Override
@@ -99,13 +100,13 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	@Override
 	public void setLayout(Layout layout) {
 		this.layout = layout;
-		doLayout();
+		layout();
 	}
 
 	/**
 	 * Recalculates this container's layout
 	 */
-	protected void doLayout() {
+	protected void layout() {
 		if (layout != null) {
 			layout.layout(this);
 		}
@@ -122,9 +123,15 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	@Override
+	public void setBounds(Rectangle2D bounds) {
+		super.setBounds(bounds);
+		layout();
+	}
+
+	@Override
 	public void setBounds(double x, double y, double width, double height) {
 		super.setBounds(x, y, width, height);
-		doLayout();
+		layout();
 	}
 
 	@Override
@@ -134,4 +141,5 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		}
 		return super.getPreferredSize();
 	}
+
 }

@@ -3,6 +3,7 @@ package openjchart;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
@@ -30,6 +31,12 @@ public class DrawablePanel extends JPanel {
 	}
 
 	@Override
+	public void setBounds(Rectangle bounds) {
+		super.setBounds(bounds);
+		drawable.setBounds(bounds);
+	}
+
+	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 		drawable.setBounds(x, y, width, height);
@@ -43,6 +50,10 @@ public class DrawablePanel extends JPanel {
 		return dims;
 	}
 
+	public Dimension getMinimalSize() {
+		return getPreferredSize();
+	}
+	
 	@Override
 	public Dimension getMinimumSize() {
 		return super.getPreferredSize();

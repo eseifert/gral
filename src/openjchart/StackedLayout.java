@@ -8,16 +8,19 @@ import openjchart.util.Insets2D;
 
 public class StackedLayout implements Layout {
 	private Orientation orientation;
-	private double gap;
+	private Dimension2D gap;
 	private double alignment;
 
 	public StackedLayout(Orientation orientation) {
-		this(orientation, 0.0);
+		this(orientation, null);
 	}
 
-	public StackedLayout(Orientation orientation, double gap) {
+	public StackedLayout(Orientation orientation, Dimension2D gap) {
 		this.orientation = orientation;
-		this.gap = gap;
+		this.gap = new openjchart.util.Dimension2D.Double();
+		if (gap != null) {
+			this.gap.setSize(gap);
+		}
 		this.alignment = 0.5;
 	}
 
@@ -31,7 +34,7 @@ public class StackedLayout implements Layout {
 		if (Orientation.HORIZONTAL.equals(orientation)) {
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					width += gap;
+					width += gap.getWidth();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
@@ -40,7 +43,7 @@ public class StackedLayout implements Layout {
 		} else if (Orientation.VERTICAL.equals(orientation)) {
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					height += gap;
+					height += gap.getHeight();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width = Math.max(width, itemBounds.getWidth());
@@ -69,7 +72,7 @@ public class StackedLayout implements Layout {
 			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					x += gap;
+					x += gap.getWidth();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
 				component.setBounds(x, y, compBounds.getWidth(), height);
@@ -79,7 +82,7 @@ public class StackedLayout implements Layout {
 			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					y += gap;
+					y += gap.getHeight();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
 				component.setBounds(x, y, width, compBounds.getHeight());
