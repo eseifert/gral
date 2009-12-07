@@ -15,8 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 import openjchart.Drawable;
+import openjchart.Legend;
+import openjchart.PlotArea2D;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
+import openjchart.data.DummyData;
 import openjchart.data.Row;
 import openjchart.data.statistics.Statistics;
 import openjchart.plots.axes.Axis;
@@ -37,8 +40,6 @@ public class XYPlot extends Plot implements DataListener  {
 	public static final String KEY_RENDERER_AXIS_X = "xyplot.renderer.axisx";
 	public static final String KEY_RENDERER_AXIS_Y = "xyplot.renderer.axisy";
 
-	private final Map<DataSource, ShapeRenderer> shapeRenderers;
-	private final Map<DataSource, LineRenderer2D> lineRenderers;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -47,6 +48,9 @@ public class XYPlot extends Plot implements DataListener  {
 	private Axis axisY;
 	private Drawable axisXComp;
 	private Drawable axisYComp;
+
+	private final Map<DataSource, ShapeRenderer> shapeRenderers;
+	private final Map<DataSource, LineRenderer2D> lineRenderers;
 
 	protected class XYPlotArea2D extends PlotArea2D {
 		@Override
@@ -60,8 +64,8 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
-			boolean isGridX = getSetting(KEY_GRID_X);
-			boolean isGridY = getSetting(KEY_GRID_Y);
+			boolean isGridX = XYPlot.this.getSetting(KEY_GRID_X);
+			boolean isGridY = XYPlot.this.getSetting(KEY_GRID_Y);
 			if (!isGridX && !isGridY) {
 				return;
 			}
@@ -69,12 +73,12 @@ public class XYPlot extends Plot implements DataListener  {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Paint paint = getSetting(KEY_GRID_COLOR);
+			Paint paint = XYPlot.this.getSetting(KEY_GRID_COLOR);
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
 			if (isGridX) {
-				AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
+				AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_X);
 				Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 				List<DataPoint2D> ticksX = axisXRenderer.getTicks(axisX);
@@ -95,7 +99,7 @@ public class XYPlot extends Plot implements DataListener  {
 
 			// Draw gridY
 			if (isGridY) {
-				AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+				AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
 				Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 				List<DataPoint2D> ticksY = axisYRenderer.getTicks(axisY);
@@ -130,8 +134,8 @@ public class XYPlot extends Plot implements DataListener  {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-					AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+					AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_X);
+					AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
 					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX, true);
 					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY, true);
 					if (axisPosX==null || axisPosY==null) {
@@ -159,17 +163,57 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 	}
 
+	public class XYLegend extends Legend {
+		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 1.0);
+
+		@Override
+		protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
+			ShapeRenderer shapeRenderer = shapeRenderers.get(data);
+			LineRenderer2D lineRenderer = lineRenderers.get(data);
+
+			Row row = new Row(DUMMY_DATA, 0);
+			Rectangle2D bounds = symbol.getBounds();
+
+			DataPoint2D p1 = new DataPoint2D(
+				new Point2D.Double(bounds.getMinX(), bounds.getCenterY()), null,
+				null, null
+			);
+			DataPoint2D p2 = new DataPoint2D(
+				new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), null,
+				(shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null, null
+			);
+			DataPoint2D p3 = new DataPoint2D(
+				new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null,
+				null, null
+			);
+
+			if (lineRenderer != null) {
+				lineRenderer.getLine(p1, p2).draw(g2d);
+				lineRenderer.getLine(p2, p3).draw(g2d);
+			}
+			if (shapeRenderer != null) {
+				Point2D pos = p2.getPosition();
+				AffineTransform txOrig = g2d.getTransform();
+				g2d.translate(pos.getX(), pos.getY());
+				shapeRenderer.getShape(row).draw(g2d);
+				g2d.setTransform(txOrig);
+			}
+		}
+		
+	}
+
 	public XYPlot(DataSource... data) {
 		super(data);
+
+		shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
+		lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 
 		setSettingDefault(KEY_GRID_X, true);
 		setSettingDefault(KEY_GRID_Y, true);
 		setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
 
 		setPlotArea(new XYPlotArea2D());
-
-		this.shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
-		this.lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
+		setLegend(new XYLegend());
 
 		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		for (DataSource source : data) {
@@ -258,22 +302,6 @@ public class XYPlot extends Plot implements DataListener  {
 		getLegendContainer().setBounds(plotBounds);
 	}
 
-	public ShapeRenderer getShapeRenderer(DataSource s) {
-		return shapeRenderers.get(s);
-	}
-
-	public void setShapeRenderer(DataSource s, ShapeRenderer shapeRenderer) {
-		this.shapeRenderers.put(s, shapeRenderer);
-	}
-
-	public LineRenderer2D getLineRenderer(DataSource s) {
-		return lineRenderers.get(s);
-	}
-
-	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
-		lineRenderers.put(s, lineRenderer);
-	}
-
 	@Override
 	public void dataChanged(DataSource data) {
 		minX =  Double.MAX_VALUE;
@@ -309,4 +337,21 @@ public class XYPlot extends Plot implements DataListener  {
 			setAxis(Axis.Y, axisY, axisYComp);
 		}
 	}
+
+	public ShapeRenderer getShapeRenderer(DataSource s) {
+		return shapeRenderers.get(s);
+	}
+
+	public void setShapeRenderer(DataSource s, ShapeRenderer shapeRenderer) {
+		this.shapeRenderers.put(s, shapeRenderer);
+	}
+
+	public LineRenderer2D getLineRenderer(DataSource s) {
+		return lineRenderers.get(s);
+	}
+
+	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
+		lineRenderers.put(s, lineRenderer);
+	}
+
 }

@@ -12,12 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import openjchart.AbstractDrawable;
 import openjchart.Container;
 import openjchart.Drawable;
 import openjchart.DrawableContainer;
 import openjchart.EdgeLayout;
 import openjchart.Legend;
+import openjchart.PlotArea2D;
 import openjchart.DrawableConstants.Location;
 import openjchart.data.DataSource;
 import openjchart.plots.axes.Axis;
@@ -49,28 +49,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private Label title;
 	private PlotArea2D plotArea;
 	private final Container legendContainer;
-	private final Legend legend;
-
-	protected abstract class PlotArea2D extends AbstractDrawable {
-		protected void drawBackground(Graphics2D g2d) {
-			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
-			if (bg != null) {
-				GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
-			}
-		}
-
-		protected void drawBorder(Graphics2D g2d) {
-			Stroke borderStroke = getSetting(KEY_PLOTAREA_BORDER);
-			if (borderStroke != null) {
-				Stroke strokeOld = g2d.getStroke();
-				g2d.setStroke(borderStroke);
-				g2d.draw(getBounds());
-				g2d.setStroke(strokeOld);
-			}
-		}
-		
-		protected abstract void drawPlot(Graphics2D g2d);
-	}
+	private Legend legend;
 
 	public Plot(DataSource... data) {
 		super(new EdgeLayout(20.0, 20.0));
@@ -79,7 +58,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
-		legend = new Legend();
 
 		this.data = new LinkedList<DataSource>();
 		axes = new HashMap<String, Axis>();
@@ -194,10 +172,22 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		if (KEY_TITLE.equals(key)) {
 			String text = getSetting(KEY_TITLE);
 			title.setText((text != null) ? text : "");
+		} else if (KEY_PLOTAREA_BACKGROUND.equals(key)) {
+			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
+			if (plotArea != null) {
+				plotArea.setSetting(PlotArea2D.KEY_BACKGROUND, bg);
+			}
+		} else if (KEY_PLOTAREA_BORDER.equals(key)) {
+			Stroke border = getSetting(KEY_PLOTAREA_BORDER);
+			if (plotArea != null) {
+				plotArea.setSetting(PlotArea2D.KEY_BORDER, border);
+			}
 		} else if (KEY_LEGEND_POSITION.equals(key)) {
 			Location constraints = getSetting(KEY_LEGEND_POSITION);
-			legendContainer.remove(legend);
-			legendContainer.add(legend, constraints);
+			if (legend != null) {
+				legendContainer.remove(legend);
+				legendContainer.add(legend, constraints);
+			}
 		} else if (KEY_LEGEND_MARGIN.equals(key)) {
 			Insets2D margin = getSetting(KEY_LEGEND_MARGIN);
 			legendContainer.setInsets(margin);
@@ -216,4 +206,14 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		return legend;
 	}
 
+	protected void setLegend(Legend legend) {
+		if (this.legend != null) {
+			legendContainer.remove(this.legend);
+		}
+		this.legend = legend;
+		if (this.legend != null) {
+			Location constraints = getSetting(KEY_LEGEND_POSITION);
+			legendContainer.add(legend, constraints);
+		}
+	}
 }

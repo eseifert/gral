@@ -1,24 +1,19 @@
 package openjchart;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import openjchart.DrawableConstants.Location;
 import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSource;
-import openjchart.data.DummyData;
-import openjchart.data.Row;
-import openjchart.plots.DataPoint2D;
 import openjchart.plots.Label;
-import openjchart.plots.lines.LineRenderer2D;
-import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.Insets2D;
 import openjchart.util.SettingChangeEvent;
@@ -26,7 +21,7 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
-public class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
+public abstract class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
 	public static final String KEY_BACKGROUND = "legend.background";
 	public static final String KEY_BORDER = "legend.border";
 	public static final String KEY_ORIENTATION = "legend.orientation";
@@ -34,46 +29,21 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 
 	private final Settings settings;
 
-	private final Map<DataSource, Drawable> dataToComponent;
+	private final Map<DataSource, Drawable> components;
 
-	private static class Item extends DrawableContainer {
-		private static final DummyData DUMMY_DATA = new DummyData(1, 1, 1.0);
+	protected class Item extends DrawableContainer {
+		private final DataSource data;
 		private final Drawable symbol;
 		private final Label label;
 
-		public Item(final String labelText, final ShapeRenderer shapeRenderer, final LineRenderer2D lineRenderer) {
+		public Item(final DataSource data, final String labelText) {
 			super(new EdgeLayout(10.0, 0.0));
+			this.data = data;
 
 			symbol = new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
-					Row row = new Row(DUMMY_DATA, 0);
-					Rectangle2D bounds = getBounds();
-
-					DataPoint2D p1 = new DataPoint2D(
-						new Point2D.Double(bounds.getMinX(), bounds.getCenterY()), null,
-						null, null
-					);
-					DataPoint2D p2 = new DataPoint2D(
-						new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), null,
-						(shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null, null
-					);
-					DataPoint2D p3 = new DataPoint2D(
-						new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null,
-						null, null
-					);
-
-					if (lineRenderer != null) {
-						lineRenderer.getLine(p1, p2).draw(g2d);
-						lineRenderer.getLine(p2, p3).draw(g2d);
-					}
-					if (shapeRenderer != null) {
-						Point2D pos = p2.getPosition();
-						AffineTransform txOrig = g2d.getTransform();
-						g2d.translate(pos.getX(), pos.getY());
-						shapeRenderer.getShape(row).draw(g2d);
-						g2d.setTransform(txOrig);
-					}
+					drawSymbol(g2d, this, Item.this.data);
 				}
 
 				@Override
@@ -84,9 +54,11 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 				}
 			};
 			label = new Label(labelText);
+			label.setSetting(Label.KEY_ALIGNMENT_X, 0.0);
+			label.setSetting(Label.KEY_ALIGNMENT_Y, 0.5);
 
-			add(symbol, Location.CENTER);
-			add(label, Location.EAST);
+			add(symbol, Location.WEST);
+			add(label, Location.CENTER);
 		}
 
 		@Override
@@ -94,13 +66,18 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 			return getLayout().getPreferredSize(this);
 		}
 
+		public DataSource getData() {
+			return data;
+		}
 	}
-	
+
 	public Legend() {
-		dataToComponent = new HashMap<DataSource, Drawable>();
-		settings = new Settings(this);
+		components = new HashMap<DataSource, Drawable>();
 		setInsets(new Insets2D.Double(10.0));
 
+		settings = new Settings(this);
+		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
+		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
 		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(KEY_GAP, new openjchart.util.Dimension2D.Double(20.0, 5.0));
 	}
@@ -133,18 +110,20 @@ public class Legend extends DrawableContainer implements SettingsStorage, Settin
 		}
 	}
 
-	public void add(DataSource series, String label, ShapeRenderer shapeRenderer, LineRenderer2D lineRenderer) {
-		Item item = new Item(label, shapeRenderer, lineRenderer);
+	protected abstract void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data);
+
+	public void add(DataSource data) {
+		Item item = new Item(data, data.toString());
 		add(item);
-		dataToComponent.put(series, item);
+		components.put(data, item);
 	}
 
 	public void remove(DataSource series) {
-		Drawable removeItem = dataToComponent.get(series);
+		Drawable removeItem = components.get(series);
 		if (removeItem != null) {
 			remove(removeItem);
 		}
-		dataToComponent.remove(series);
+		components.remove(series);
 	}
 
 	protected void notifyDataChanged() {

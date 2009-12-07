@@ -18,7 +18,7 @@ import openjchart.util.SettingsStorage;
 
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
-	public static final String KEY_ALIGNMENT_Y = "label.alignment.x";
+	public static final String KEY_ALIGNMENT_Y = "label.alignment.y";
 	public static final String KEY_FONT = "label.font";
 
 	private final Settings settings;
@@ -46,8 +46,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		double alignmentX = getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
 		AffineTransform txLabel = AffineTransform.getTranslateInstance(
-			(getWidth() - textBounds.getWidth())*alignmentX,
-			textBounds.getHeight() + (getHeight() - textBounds.getHeight())*alignmentY
+			(getWidth() - textBounds.getWidth())*alignmentX - textBounds.getX(),
+			(getHeight() - textBounds.getHeight())*alignmentY - textBounds.getY()
 		);
 
 		/*
@@ -111,8 +111,6 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	private void renewLayout() {
 		if (text != null && !text.isEmpty()) {
 			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(KEY_FONT));
-			Rectangle2D layoutBounds = layout.getBounds();
-			setBounds(getX(), getY(), layoutBounds.getWidth(), layoutBounds.getHeight());
 		}
 	}
 

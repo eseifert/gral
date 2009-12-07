@@ -6,6 +6,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 
+import openjchart.PlotArea2D;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.plots.colors.ColorMapper;

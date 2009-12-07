@@ -96,4 +96,9 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	public void dataChanged(DataSource data) {
 		notifyDataChanged();
 	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
