@@ -108,6 +108,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	protected void drawLegend(Graphics2D g2d) {
+		boolean isVisible = getSetting(KEY_LEGEND);
+		if (!isVisible || legend == null) {
+			return;
+		}
 		legend.draw(g2d);
 	}
 

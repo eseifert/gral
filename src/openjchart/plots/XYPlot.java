@@ -294,8 +294,7 @@ public class XYPlot extends Plot implements DataListener  {
 	 * Calculates the bounds of the legend component.
 	 */
 	protected void layoutLegend() {
-		boolean isVisible = getSetting(KEY_LEGEND);
-		if (!isVisible || getPlotArea() == null) {
+		if (getPlotArea() == null) {
 			return;
 		}
 		Rectangle2D plotBounds = getPlotArea().getBounds();
