@@ -217,6 +217,7 @@ public class XYPlot extends Plot implements DataListener  {
 
 		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
 		for (DataSource source : data) {
+			getLegend().add(source);
 			setShapeRenderer(source, shapeRendererDefault);
 			source.addDataListener(this);
 			dataChanged(source);

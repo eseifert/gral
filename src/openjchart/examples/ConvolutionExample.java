@@ -43,7 +43,7 @@ public class ConvolutionExample extends JFrame {
 		Convolution dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
-		XYPlot plot = new XYPlot(dsHighpass, ds, dsLowpass);
+		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass);
 
 		plot.setShapeRenderer(ds, null);
 		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
@@ -63,11 +63,7 @@ public class ConvolutionExample extends JFrame {
 		// TODO: Put better default styles to standard constructor of Legend
 		plot.setSetting(Plot.KEY_LEGEND, true);
 		plot.setSetting(Plot.KEY_LEGEND_POSITION, Location.SOUTH_WEST);
-		Legend legend = plot.getLegend();
-		legend.setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
-		legend.add(ds);
-		legend.add(dsLowpass);
-		legend.add(dsHighpass);
+		plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
