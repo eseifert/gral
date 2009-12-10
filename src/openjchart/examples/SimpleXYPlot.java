@@ -8,6 +8,7 @@ import java.awt.LinearGradientPaint;
 import javax.swing.JFrame;
 
 import openjchart.DrawablePanel;
+import openjchart.PlotArea2D;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
@@ -39,7 +40,7 @@ public class SimpleXYPlot extends JFrame {
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
 		// Custom background
-		plot.setSetting(XYPlot.KEY_PLOTAREA_BACKGROUND,
+		plot.getPlotArea().setSetting(PlotArea2D.KEY_BACKGROUND,
 				new LinearGradientPaint(0f,0f, 0f,1f, new float[] {0f, 1f}, new Color[] {Color.WHITE, new Color(1f, 0.9f, 0.9f)}));
 		// Setting the title
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");

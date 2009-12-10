@@ -1,7 +1,5 @@
 package openjchart.plots;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -33,8 +31,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final String KEY_BACKGROUND = "plot.background";
 	public static final String KEY_BORDER = "plot.border";
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
-	public static final String KEY_PLOTAREA_BACKGROUND = "plot.plotarea.background";
-	public static final String KEY_PLOTAREA_BORDER = "plot.plotarea.border";
 	public static final String KEY_LEGEND = "plot.legend";
 	public static final String KEY_LEGEND_POSITION = "plot.legend.position";
 	public static final String KEY_LEGEND_MARGIN = "plot.legend.margin";
@@ -71,8 +67,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		setSettingDefault(KEY_BACKGROUND, null);
 		setSettingDefault(KEY_BORDER, null);
 		setSettingDefault(KEY_ANTIALISING, true);
-		setSettingDefault(KEY_PLOTAREA_BACKGROUND, Color.WHITE);
-		setSettingDefault(KEY_PLOTAREA_BORDER, new BasicStroke(1f));
 		setSettingDefault(KEY_LEGEND, false);
 		setSettingDefault(KEY_LEGEND_POSITION, Location.NORTH_WEST);
 		setSettingDefault(KEY_LEGEND_MARGIN, new Insets2D.Double(20.0));
@@ -131,7 +125,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		axes.remove(name);
 	}
 
-	protected PlotArea2D getPlotArea() {
+	public PlotArea2D getPlotArea() {
 		return plotArea;
 	}
 
@@ -176,16 +170,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		if (KEY_TITLE.equals(key)) {
 			String text = getSetting(KEY_TITLE);
 			title.setText((text != null) ? text : "");
-		} else if (KEY_PLOTAREA_BACKGROUND.equals(key)) {
-			Paint bg = getSetting(KEY_PLOTAREA_BACKGROUND);
-			if (plotArea != null) {
-				plotArea.setSetting(PlotArea2D.KEY_BACKGROUND, bg);
-			}
-		} else if (KEY_PLOTAREA_BORDER.equals(key)) {
-			Stroke border = getSetting(KEY_PLOTAREA_BORDER);
-			if (plotArea != null) {
-				plotArea.setSetting(PlotArea2D.KEY_BORDER, border);
-			}
 		} else if (KEY_LEGEND_POSITION.equals(key)) {
 			Location constraints = getSetting(KEY_LEGEND_POSITION);
 			if (legend != null) {
