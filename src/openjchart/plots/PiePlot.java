@@ -40,9 +40,9 @@ public class PiePlot extends Plot implements DataListener {
 			double h = getHeight();
 			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
 			g2d.translate(w/2d, h/2d);
-			startValues[0] = getSetting(KEY_START);
+			startValues[0] = PiePlot.this.getSetting(KEY_START);
 			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
-			ColorMapper colorList = getSetting(KEY_COLORS);
+			ColorMapper colorList = PiePlot.this.getSetting(KEY_COLORS);
 			for (int i = 1; i < startValues.length;  i++) {
 				Paint paint = colorList.get(i-1/(double)startValues.length);
 				Shape shape = new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE);
