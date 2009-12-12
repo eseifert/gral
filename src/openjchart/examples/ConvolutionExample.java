@@ -13,7 +13,9 @@ import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.data.filters.Convolution;
+import openjchart.data.filters.Filter;
 import openjchart.data.filters.Kernel;
+import openjchart.data.filters.Median;
 import openjchart.plots.Plot;
 import openjchart.plots.XYPlot;
 import openjchart.plots.lines.DefaultLineRenderer2D;
@@ -37,19 +39,23 @@ public class ConvolutionExample extends JFrame {
 		final double KERNEL_VARIANCE = 10.0;
 
 		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
-		Convolution dataLowpass = new Convolution(data, kernelLowpass, Convolution.Mode.MODE_REPEAT, 1);
+		Filter dataLowpass = new Convolution(data, kernelLowpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
 		Kernel kernelHighpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
-		Convolution dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
+		Filter dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
 		int kernelMovingAverageSize = (int)Math.round(2.0*KERNEL_VARIANCE);
 		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
-		Convolution dataMovingAverage = new Convolution(data, kernelMovingAverage, Convolution.Mode.MODE_OMIT, 1);
+		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Convolution.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
-		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage);
+		int kernelMovingMedianSize = (int)Math.round(2.0*KERNEL_VARIANCE);
+		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, 1);
+		DataSeries dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
+
+		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
 
 		plot.setShapeRenderer(ds, null);
 		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
@@ -70,6 +76,11 @@ public class ConvolutionExample extends JFrame {
 		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
 		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0.67f, 0f));
 		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
+
+		plot.setShapeRenderer(dsMovingMedian, null);
+		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
+		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(1.0f, 0f, 0.5f));
+		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);
 
 		plot.setSetting(Plot.KEY_LEGEND, true);
 		plot.setSetting(Plot.KEY_LEGEND_POSITION, Location.SOUTH_WEST);

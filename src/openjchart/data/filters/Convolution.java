@@ -1,42 +1,23 @@
 package openjchart.data.filters;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import openjchart.data.AbstractDataSource;
-import openjchart.data.DataListener;
 import openjchart.data.DataSource;
 import openjchart.util.MathUtils;
 
-public class Convolution extends AbstractDataSource implements DataListener {
+public class Convolution extends Filter {
 	public static enum Mode { MODE_OMIT, MODE_ZERO, MODE_REPEAT, MODE_MIRROR, MODE_CIRCULAR };
 
-	private ArrayList<double[]> data;
-	private DataSource original;
 	private Kernel kernel;
 	private Mode mode;
-	private final Set<Integer> cols;
-
+	
 	public Convolution(DataSource original, Kernel kernel, Mode mode, int... cols) {
-		setKernel(kernel);
-		setMode(mode);
-		this.cols = new HashSet<Integer>();
-		for (int col: cols) {
-			this.cols.add(col);
-		}
-		this.original = original;
-		this.original.addDataListener(this);
-		dataChanged(this.original);
-	}
-
-	@Override
-	public Number[] get(int row) {
-		return original.get(row);
+		super(original, cols);
+		this.kernel = kernel;
+		this.mode = mode;
+		filter();
 	}
 
 	protected Number getOriginal(int col, int row) {
-		int rowLast = original.getRowCount() - 1;
+		int rowLast = getRowCount() - 1;
 		if (row<0 || row>rowLast) {
 			if (Mode.MODE_OMIT.equals(mode)) {
 				return Double.NaN;
@@ -56,27 +37,12 @@ public class Convolution extends AbstractDataSource implements DataListener {
 				row %= (rowLast + 1);
 			}
 		}
-		return original.get(col, row);
-	}
-
-	@Override
-	public Number get(int col, int row) {
-		return data.get(row)[col];
-	}
-
-	@Override
-	public int getColumnCount() {
-		return original.getColumnCount();
-	}
-
-	@Override
-	public int getRowCount() {
-		return original.getRowCount();
+		return super.getOriginal(col, row);
 	}
 
 	protected final void setKernel(Kernel kernel) {
 		this.kernel = kernel;
-		filter();
+		dataChanged(this);
 	}
 
 	public Kernel getKernel() {
@@ -85,32 +51,32 @@ public class Convolution extends AbstractDataSource implements DataListener {
 
 	protected final void setMode(Mode mode) {
 		this.mode = mode;
-		filter();
+		dataChanged(this);
 	}
 
 	public Mode getMode() {
 		return mode;
 	}
 
-	private void filter() {
-		if (original == null) {
-			return;
-		}
-		data = new ArrayList<double[]>(original.getRowCount());
-		for (int rowIndex = 0; rowIndex < original.getRowCount(); rowIndex++) {
-			double[] filteredRow = new double[original.getColumnCount()];
+	protected void filter() {
+		clear();
+		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
+			double[] filteredRow = new double[getColumnCount()];
 			for (int colIndex = 0; colIndex < filteredRow.length; colIndex++) {
-				if (cols.contains(colIndex)) {
+				if (isFiltered(colIndex)) {
 					filteredRow[colIndex] = convolve(colIndex, rowIndex);
 				} else {
-					filteredRow[colIndex] = original.get(colIndex, rowIndex).doubleValue();
+					filteredRow[colIndex] = getOriginal(colIndex, rowIndex).doubleValue();
 				}
 			}
-			data.add(filteredRow);
+			add(filteredRow);
 		}
 	}
 
 	private double convolve(int col, int row) {
+		if (kernel == null) {
+			return getOriginal(col, row).doubleValue();
+		}
 		double sum = 0.0;
 		for (int k = kernel.getMinIndex(); k <= kernel.getMaxIndex(); k++) {
 			int r = row + k;
@@ -121,12 +87,6 @@ public class Convolution extends AbstractDataSource implements DataListener {
 			sum += kernel.get(k) * v;
 		}
 		return sum;
-	}
-
-	@Override
-	public void dataChanged(DataSource data) {
-		filter();
-		notifyDataChanged();
 	}
 
 }
