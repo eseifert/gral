@@ -12,7 +12,7 @@ public class DataSeriesTest {
 	private static DataSeries series;
 
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0
 		table.add(2, 8, 2); // 1

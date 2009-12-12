@@ -21,6 +21,9 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
+				if (p1 == null || p2 == null) {
+					return;
+				}
 				Point2D pos1 = p1.getPosition();
 				Point2D pos2 = p2.getPosition();
 				Line2D line = new Line2D.Double(pos1, pos2);

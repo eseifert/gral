@@ -27,12 +27,13 @@ public class ConvolutionExample extends JFrame {
 		Random r = new Random();
 		for (int i=0; i<200; i++) {
 			double x = i/2.0/3.141;
-			double y = 10.0*Math.sin(x/5.0) + r.nextGaussian()*Math.cos(x/2.0);
+			double yError = 0.5*r.nextGaussian();
+			double y = 10.0*Math.sin(x/5.0) + yError*yError*yError;
 			data.add(x, y);
 		}
 		DataSeries ds = new DataSeries("Data", data, 0, 1);
 
-		final double KERNEL_VARIANCE = 5.0;
+		final double KERNEL_VARIANCE = 10.0;
 
 		double[] kernelLowpass = MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE));
 		Convolution dataLowpass = new Convolution(data, kernelLowpass, Convolution.Mode.MODE_REPEAT, 1);
@@ -43,24 +44,33 @@ public class ConvolutionExample extends JFrame {
 		Convolution dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
-		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass);
+		double[] kernelMovingAverage = MathUtils.normalize(MathUtils.getUniform((int)Math.round(2.0*KERNEL_VARIANCE), 1.0));
+		int kernelOffsetMovingAverage = kernelMovingAverage.length - 1;
+		Convolution dataMovingAverage = new Convolution(data, kernelMovingAverage, kernelOffsetMovingAverage, Convolution.Mode.MODE_NONE, 1);
+		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
+
+		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage);
 
 		plot.setShapeRenderer(ds, null);
 		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
-		lineData.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, Color.DARK_GRAY);
+		lineData.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0f, 0f));
 		plot.setLineRenderer(ds, lineData);
 
 		plot.setShapeRenderer(dsLowpass, null);
 		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
-		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, Color.RED);
+		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(1.0f, 0.2f, 0.0f));
 		plot.setLineRenderer(dsLowpass, lineLowpass);
 
 		plot.setShapeRenderer(dsHighpass, null);
 		DefaultLineRenderer2D lineHighpass = new DefaultLineRenderer2D();
-		lineHighpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0.7f, 0f));
+		lineHighpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0.2f, 0.4f, 0.8f));
 		plot.setLineRenderer(dsHighpass, lineHighpass);
 
-		// TODO: Put better default styles to standard constructor of Legend
+		plot.setShapeRenderer(dsMovingAverage, null);
+		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
+		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0.67f, 0f));
+		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
+
 		plot.setSetting(Plot.KEY_LEGEND, true);
 		plot.setSetting(Plot.KEY_LEGEND_POSITION, Location.SOUTH_WEST);
 		plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);

@@ -78,6 +78,14 @@ public class Statistics implements DataListener {
 				// Store value of column row
 				col.add(value);
 
+				// N (element count, zeroth moment)
+				if (!colStats.containsKey(N)) colStats.put(N, 0.0);
+				colStats.put(N, colStats.get(N) + 1.0);
+
+				if (Double.isNaN(value)) {
+					continue;
+				}
+
 				// Sum
 				if (!colStats.containsKey(SUM)) colStats.put(SUM, 0.0);
 				colStats.put(SUM, colStats.get(SUM) + value);
@@ -99,10 +107,6 @@ public class Statistics implements DataListener {
 				if (!colStats.containsKey(MAX) || value > colStats.get(MAX)) {
 					colStats.put(MAX, value);
 				}
-
-				// N (element count, zeroth moment)
-				if (!colStats.containsKey(N)) colStats.put(N, 0.0);
-				colStats.put(N, colStats.get(N) + 1.0);
 			}
 
 			// Check for empty data source

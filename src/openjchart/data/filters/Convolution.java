@@ -10,7 +10,7 @@ import openjchart.data.DataSource;
 import openjchart.util.MathUtils;
 
 public class Convolution extends AbstractDataSource implements DataListener {
-	public static enum Mode { MODE_ZERO, MODE_REPEAT, MODE_MIRROR, MODE_CIRCULAR };
+	public static enum Mode { MODE_NONE, MODE_ZERO, MODE_REPEAT, MODE_MIRROR, MODE_CIRCULAR };
 
 	private ArrayList<double[]> data;
 	private DataSource original;
@@ -20,7 +20,11 @@ public class Convolution extends AbstractDataSource implements DataListener {
 	private final Set<Integer> cols;
 
 	public Convolution(DataSource original, double[] kernel, Mode mode, int... cols) {
-		setKernel(kernel);
+		this(original, kernel, kernel.length/2, mode, cols);
+	}
+
+	public Convolution(DataSource original, double[] kernel, int kernelOffset, Mode mode, int... cols) {
+		setKernel(kernel, kernelOffset);
 		setMode(mode);
 		this.cols = new HashSet<Integer>();
 		for (int col: cols) {
@@ -39,7 +43,9 @@ public class Convolution extends AbstractDataSource implements DataListener {
 	protected Number getOriginal(int col, int row) {
 		int rowLast = original.getRowCount() - 1;
 		if (row<0 || row>rowLast) {
-			if (Mode.MODE_ZERO.equals(mode)) {
+			if (Mode.MODE_NONE.equals(mode)) {
+				return Double.NaN;
+			} else if (Mode.MODE_ZERO.equals(mode)) {
 				return 0.0;
 			} else if (Mode.MODE_REPEAT.equals(mode)) {
 				row = MathUtils.limit(row, 0, rowLast);
@@ -73,10 +79,10 @@ public class Convolution extends AbstractDataSource implements DataListener {
 		return original.getRowCount();
 	}
 
-	public void setKernel(double[] kernel) {
+	public void setKernel(double[] kernel, int kernelOffset) {
 		this.kernel = new double[kernel.length];
 		System.arraycopy(kernel, 0, this.kernel, 0, kernel.length);
-		kernelOffset = kernel.length/2;
+		this.kernelOffset = kernelOffset;
 		filter();
 	}
 

@@ -7,10 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AxisTest {
-	private static Axis axis;
+	private Axis axis;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		axis = new Axis(-5, 5);
 	}
 

@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LinearRenderer2DTest {
-	private static Axis axis;
-	private static LinearRenderer2D renderer;
+	private Axis axis;
+	private LinearRenderer2D renderer;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		axis = new Axis(-5, 5);
 		renderer = new LinearRenderer2D();
 	}

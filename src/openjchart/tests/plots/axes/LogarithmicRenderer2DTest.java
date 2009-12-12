@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LogarithmicRenderer2DTest {
-	private static Axis axis;
-	private static LogarithmicRenderer2D renderer;
+	private Axis axis;
+	private LogarithmicRenderer2D renderer;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		axis = new Axis(0, 10);
 		renderer = new LogarithmicRenderer2D();
 	}

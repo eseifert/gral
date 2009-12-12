@@ -16,7 +16,7 @@ public class SettingsTest {
 	private Settings settings;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		settings = new Settings(null);
 		settings.set("1", "v1");
 		settings.setDefault("1", "v1Default");
