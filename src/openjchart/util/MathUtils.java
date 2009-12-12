@@ -199,24 +199,6 @@ public abstract class MathUtils {
 		return binomials;
 	}
 
-	public static double[] normalize(double[] values) {
-		double sum = 0.0;
-		for (double value : values) {
-			sum += value;
-		}
-		for (int i = 0; i < values.length; i++) {
-			values[i] /= sum;
-		}
-		return values;
-	}
-
-	public static double[] negate(double[] values) {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = -values[i];
-		}
-		return values;
-	}
-
 	public static double[] getUniform(int n, double value) {
 		double[] values = new double[n];
 		Arrays.fill(values, value);

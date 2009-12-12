@@ -70,6 +70,12 @@ public class Statistics implements DataListener {
 			Map<String, Double> colStats = new HashMap<String, Double>();
 			List<Double> col = new ArrayList<Double>(rowCount);
 			
+			colStats.put(N, 0.0);
+			colStats.put(SUM, 0.0);
+			colStats.put(SUM2, 0.0);
+			colStats.put(SUM3, 0.0);
+			colStats.put(SUM4, 0.0);
+
 			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 				Number cell = data.get(colIndex, rowIndex);
 				double value = cell.doubleValue();
@@ -79,7 +85,6 @@ public class Statistics implements DataListener {
 				col.add(value);
 
 				// N (element count, zeroth moment)
-				if (!colStats.containsKey(N)) colStats.put(N, 0.0);
 				colStats.put(N, colStats.get(N) + 1.0);
 
 				if (Double.isNaN(value)) {
@@ -87,16 +92,12 @@ public class Statistics implements DataListener {
 				}
 
 				// Sum
-				if (!colStats.containsKey(SUM)) colStats.put(SUM, 0.0);
 				colStats.put(SUM, colStats.get(SUM) + value);
 				// Sum of value squares
-				if (!colStats.containsKey(SUM2)) colStats.put(SUM2, 0.0);
 				colStats.put(SUM2, colStats.get(SUM2) + value2);
 				// Sum of value cubics
-				if (!colStats.containsKey(SUM3)) colStats.put(SUM3, 0.0);
 				colStats.put(SUM3, colStats.get(SUM3) + value2*value);
 				// Sum of value quads
-				if (!colStats.containsKey(SUM4)) colStats.put(SUM4, 0.0);
 				colStats.put(SUM4, colStats.get(SUM4) + value2*value2);
 
 				// Minimum

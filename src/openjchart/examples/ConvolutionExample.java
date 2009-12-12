@@ -13,11 +13,12 @@ import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.data.filters.Convolution;
+import openjchart.data.filters.Kernel;
 import openjchart.plots.Plot;
 import openjchart.plots.XYPlot;
 import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.util.Insets2D;
-import openjchart.util.MathUtils;
+import openjchart.util.KernelUtils;
 
 public class ConvolutionExample extends JFrame {
 
@@ -27,7 +28,7 @@ public class ConvolutionExample extends JFrame {
 		Random r = new Random();
 		for (int i=0; i<200; i++) {
 			double x = i/2.0/3.141;
-			double yError = 0.5*r.nextGaussian();
+			double yError = Math.sqrt(3.0*0.1)*r.nextGaussian();
 			double y = 10.0*Math.sin(x/5.0) + yError*yError*yError;
 			data.add(x, y);
 		}
@@ -35,18 +36,17 @@ public class ConvolutionExample extends JFrame {
 
 		final double KERNEL_VARIANCE = 10.0;
 
-		double[] kernelLowpass = MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE));
+		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
 		Convolution dataLowpass = new Convolution(data, kernelLowpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
-		double[] kernelHighpass = MathUtils.negate(MathUtils.normalize(MathUtils.getBinomial(KERNEL_VARIANCE)));
-		kernelHighpass[kernelHighpass.length/2] += 1.0;
+		Kernel kernelHighpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
 		Convolution dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
-		double[] kernelMovingAverage = MathUtils.normalize(MathUtils.getUniform((int)Math.round(2.0*KERNEL_VARIANCE), 1.0));
-		int kernelOffsetMovingAverage = kernelMovingAverage.length - 1;
-		Convolution dataMovingAverage = new Convolution(data, kernelMovingAverage, kernelOffsetMovingAverage, Convolution.Mode.MODE_NONE, 1);
+		int kernelMovingAverageSize = (int)Math.round(2.0*KERNEL_VARIANCE);
+		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
+		Convolution dataMovingAverage = new Convolution(data, kernelMovingAverage, Convolution.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
 		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage);
