@@ -44,7 +44,7 @@ public class DataTableTest {
 
 	@Test
 	public void testSort() {
-		table = new DataTable(Integer.class, Integer.class, Integer.class);
+		DataTable table = new DataTable(Integer.class, Integer.class, Integer.class);
 		int[] original = {
 				9,	1,	3,
 				4,	4,	2,

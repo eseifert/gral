@@ -27,7 +27,7 @@ public class SimplePiePlot extends JFrame {
 		//*
 		Random r = new Random();
 		for (int i = 0; i < 15; i++) {
-			data.add(Math.abs(r.nextInt()) % 10 + 1);
+			data.add(r.nextInt(10) + 1);
 		}
 		PiePlot plot = new PiePlot(data);
 		plot.setSetting(PiePlot.KEY_TITLE, "A Sample Pie Plot");

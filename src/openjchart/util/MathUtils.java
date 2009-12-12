@@ -31,7 +31,7 @@ public abstract class MathUtils {
 		int h = a.length - 1;
 		int i;
 		do {
-			i = (l + h) / 2;
+			i = (int)(((long)l + (long)h) / 2L);
 			if (key > a[i]) {
 				l = i + 1;
 			} else if (key < a[i]) {

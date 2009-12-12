@@ -48,6 +48,7 @@ public class TSVReader implements DataReader {
 					row[i] = (Number)parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
 				} catch (IllegalAccessException e) {
+					throw new RuntimeException("Couldn't access method for parsing data type "+types[i].getSimpleName()+" in column "+i);
 				} catch (InvocationTargetException e) {
 					throw new ParseException("Type mismatch in column "+i+": got \""+cols[i]+"\", but expected "+types[i].getSimpleName()+" value.", -1);
 				}
