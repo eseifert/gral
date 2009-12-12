@@ -11,8 +11,15 @@ Version 0.7
 Version 0.8
 ===========
 
+- Rename "shape" to "point" (e.g. ShapeRenderer becomes PointRenderer)?
+
+- Add option for automatic selection of tick spacing
+
 - Add support for custom tick labels to AbstractAxisRenderer2D;
   Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
+
+- Add support for displaying point value to ShapeRenderer
+  Example: BarPlot displaying value for each bar
 
 - Add support for error bars to ShapeRenderer
 

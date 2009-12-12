@@ -121,7 +121,11 @@ public class Convolution extends AbstractDataSource implements DataListener {
 		double sum = 0.0;
 		for (int k = 0; k < kernel.length; k++) {
 			int r = row - kernelOffset + k;
-			sum += kernel[k] * getOriginal(col, r).doubleValue();
+			double v = getOriginal(col, r).doubleValue();
+			if (Double.isNaN(v) || Double.isInfinite(v)) {
+				return v;
+			}
+			sum += kernel[k] * v;
 		}
 		return sum;
 	}
