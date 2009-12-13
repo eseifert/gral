@@ -4,8 +4,7 @@ import openjchart.data.DataSource;
 
 public class Convolution extends Filter {
 	private Kernel kernel;
-	private Mode mode;
-	
+
 	public Convolution(DataSource original, Kernel kernel, Mode mode, int... cols) {
 		super(original, mode, cols);
 		this.kernel = kernel;
