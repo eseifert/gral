@@ -7,19 +7,26 @@ import java.util.Set;
 import openjchart.data.AbstractDataSource;
 import openjchart.data.DataListener;
 import openjchart.data.DataSource;
+import openjchart.util.MathUtils;
 
 public abstract class Filter extends AbstractDataSource implements DataListener {
+	public static enum Mode { MODE_OMIT, MODE_ZERO, MODE_REPEAT, MODE_MIRROR, MODE_CIRCULAR };
+
 	private final DataSource original;
 	private final Set<Integer> cols;
 	private final ArrayList<double[]> data;
+	private Mode mode;
 
-	public Filter(DataSource original, int... cols) {
-		data = new ArrayList<double[]>();
+	public Filter(DataSource original, Mode mode, int... cols) {
+		this.data = new ArrayList<double[]>();
+		this.original = original;
+		this.mode = mode;
 		this.cols = new HashSet<Integer>();
+
 		for (int col: cols) {
 			this.cols.add(col);
 		}
-		this.original = original;
+
 		this.original.addDataListener(this);
 		dataChanged(this.original);
 	}
@@ -35,6 +42,26 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	protected Number getOriginal(int col, int row) {
+		int rowLast = getRowCount() - 1;
+		if (row < 0 || row > rowLast) {
+			if (Mode.MODE_OMIT.equals(mode)) {
+				return Double.NaN;
+			} else if (Mode.MODE_ZERO.equals(mode)) {
+				return 0.0;
+			} else if (Mode.MODE_REPEAT.equals(mode)) {
+				row = MathUtils.limit(row, 0, rowLast);
+			} else if (Mode.MODE_MIRROR.equals(mode)) {
+				int rem = Math.abs(row) / rowLast;
+				int mod = Math.abs(row) % rowLast;
+				if ((rem & 1) == 0) {
+					row = mod;
+				} else {
+					row = rowLast - mod;
+				}
+			} else if (Mode.MODE_CIRCULAR.equals(mode)) {
+				row %= (rowLast + 1);
+			}
+		}
 		return original.get(col, row);
 	}
 
@@ -72,4 +99,13 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	protected abstract void filter();
+
+	public Mode getMode() {
+		return mode;
+	}
+
+	public void setMode(Mode mode) {
+		this.mode = mode;
+		dataChanged(this);
+	}
 }

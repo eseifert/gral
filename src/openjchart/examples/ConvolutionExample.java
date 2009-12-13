@@ -39,20 +39,20 @@ public class ConvolutionExample extends JFrame {
 		final double KERNEL_VARIANCE = 10.0;
 
 		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
-		Filter dataLowpass = new Convolution(data, kernelLowpass, Convolution.Mode.MODE_REPEAT, 1);
+		Filter dataLowpass = new Convolution(data, kernelLowpass, Filter.Mode.MODE_REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
 		Kernel kernelHighpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
-		Filter dataHighpass = new Convolution(data, kernelHighpass, Convolution.Mode.MODE_REPEAT, 1);
+		Filter dataHighpass = new Convolution(data, kernelHighpass, Filter.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
 		int kernelMovingAverageSize = (int)Math.round(2.0*KERNEL_VARIANCE);
 		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
-		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Convolution.Mode.MODE_OMIT, 1);
+		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
 		int kernelMovingMedianSize = (int)Math.round(2.0*KERNEL_VARIANCE);
-		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, 1);
+		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, kernelMovingMedianSize - 1, Filter.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
 
 		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
@@ -79,7 +79,7 @@ public class ConvolutionExample extends JFrame {
 
 		plot.setShapeRenderer(dsMovingMedian, null);
 		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
-		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(1.0f, 0f, 0.5f));
+		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0.5f, 0f, 0.5f));
 		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);
 
 		plot.setSetting(Plot.KEY_LEGEND, true);
@@ -91,7 +91,7 @@ public class ConvolutionExample extends JFrame {
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(getContentPane().getMinimumSize());
-		setSize(800, 600);
+		setSize(900, 600);
 	}
 
 	public static void main(String[] args) {

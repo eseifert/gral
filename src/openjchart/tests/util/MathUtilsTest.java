@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import openjchart.util.MathUtils;
@@ -47,6 +48,14 @@ public class MathUtilsTest {
 		for (int i = 0; i < a.size(); i++) {
 			assertEquals(i, MathUtils.randomizedSelect(a, 0, a.size() - 1, i + 1));
 		}
+
+		// Check for integrity after sorting
+		assertEquals(2, Collections.frequency(a,  1.0));
+		assertEquals(1, Collections.frequency(a,  2.0));
+		assertEquals(1, Collections.frequency(a,  3.0));
+		assertEquals(1, Collections.frequency(a,  5.0));
+		assertEquals(1, Collections.frequency(a,  8.0));
+		assertEquals(1, Collections.frequency(a, 13.0));
 	}
 
 }
