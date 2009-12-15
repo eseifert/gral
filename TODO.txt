@@ -1,8 +1,7 @@
 Version 0.7
 ===========
 
-- Add support for axis labels to AbstractAxisRenderer2D;
-  Example: you could add text like "x axis" or "temperature [K]"
+- Add support for rotation of axis and tick labels to AbstractAxisRenderer2D
 
 - Add more JavaDoc comments and unit tests
 

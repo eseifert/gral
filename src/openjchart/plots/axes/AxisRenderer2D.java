@@ -38,11 +38,16 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_TICK_ALIGNMENT = "axis.tick.alignment";
 
 	/** Format of labels. */
-	static final String KEY_LABEL_FORMAT = "axis.label.format";
+	static final String KEY_TICK_LABEL_FORMAT = "axis.tick.label.format";
 	/** Distance of labels to their ticks. */
-	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
+	static final String KEY_TICK_LABEL_DISTANCE = "axis.tick.label.distance";
 	/** Draw labels outside of the plot. */
-	static final String KEY_LABEL_OUTSIDE = "axis.label.outside";
+	static final String KEY_TICK_LABEL_OUTSIDE = "axis.tick.label.outside";
+
+	/** Label text of the axis. */
+	static final String KEY_LABEL = "axis.label";
+	/** Distance from the axis to the label. */
+	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
 
 	/**
 	 * Returns a component that displays the specified axis.

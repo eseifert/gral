@@ -69,17 +69,19 @@ public class SimpleXYPlot extends JFrame {
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer2D logRendererX = new LogarithmicRenderer2D();
+		logRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
 		plot.setSetting(XYPlot.KEY_RENDERER_AXIS_X, logRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(3f);
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
+		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_RENDERER_AXIS_Y)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
 		// Custom stroke for the ticks
 		//logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
 		// Swap axis direction
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		plot.setInsets(new Insets2D.Double(20.0, 100.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
