@@ -65,10 +65,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		final Drawable component = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				if (shapeLines==null || shapeLines.length==0) {
+				if (shapeLines == null || shapeLines.length == 0) {
 					return;
 				}
-				//
+				// Remember old state of Graphics2D instance
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(getX(), getY());
 				Stroke strokeOld = g2d.getStroke();

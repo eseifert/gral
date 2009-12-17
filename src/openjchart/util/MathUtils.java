@@ -94,16 +94,16 @@ public abstract class MathUtils {
 	}
 	
 	/**
-	 * Perform a randomized search on an unsorted array <code>a</code> to find
+	 * <p>Perform a randomized search on an unsorted array <code>a</code> to find
 	 * the <i>i</i>th smallest element. The array contents are be modified during
-	 * the operation!
+	 * the operation!</p>
+	 * <p>See Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 186</p>
 	 * @param <T> Data type of the array
 	 * @param a Unsorted array
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @param i Smallness rank of value to search
 	 * @return Index of the element that is the <i>i</i>th smallest in array <i>a</i>
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 186
 	 */
 	public static <T extends Comparable<T>> int randomizedSelect(List<T> a, int lower, int upper, int i) {
 		if (a.isEmpty()) {

@@ -24,7 +24,7 @@ public interface ShapeRenderer extends SettingsStorage {
 
 	/**
 	 * Returns the shape to be drawn for the specified data value.
-	 * @param p Row data at point
+	 * @param row Row data at point
 	 * @return Drawable that represents the shape
 	 */
 	Drawable getShape(Row row);
@@ -32,7 +32,7 @@ public interface ShapeRenderer extends SettingsStorage {
 	/**
 	 * Returns a <code>Shape</code> instance that can be used
 	 * for further calculations.
-	 * @param p Row data at point
+	 * @param row Row data at point
 	 * @return Outline that describes the shape
 	 */
 	Shape getShapePath(Row row);

@@ -16,7 +16,6 @@ public class Kernel {
 
 	public double get(int i) {
 		if (i < getMinIndex() || i > getMaxIndex()) {
-			System.err.println(getMaxIndex()+" > "+i+" < "+getMinIndex());
 			return 0.0;
 		}
 		return values[i - getMinIndex()];

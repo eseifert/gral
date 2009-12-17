@@ -1,5 +1,6 @@
 package openjchart.data.comparators;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Comparator;
  * This class makes it possible to specify the position of the Number
  * arrays that should be compared.
  */
-public abstract class DataComparator implements Comparator<Number[]> {
+public abstract class DataComparator implements Comparator<Number[]>, Serializable {
 	private int col;
 
 	/**

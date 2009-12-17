@@ -14,7 +14,9 @@ Version 0.8
 
 - Add option for automatic selection of tick spacing
 
-- Add support for custom tick labels to AbstractAxisRenderer2D;
+- Add category support to axis (instead of ticks)
+
+- Add support for custom tick/category labels to AbstractAxisRenderer2D;
   Example: ["-1.0", "-0.5", "Break Even", "0.5", "1.0"]
 
 - Add support for displaying point value to ShapeRenderer
@@ -39,6 +41,9 @@ Version 0.8
 
 - Add export support to bitmap (PNG, GIF, JFIF/JPEG) as well as vector
   (SVG, EPS) file formats
+
+- Add more possibilities to style plot area (multiple gradients,
+  background images, etc.)
 
 Version 0.9
 ===========
