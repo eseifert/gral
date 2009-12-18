@@ -23,8 +23,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Point2D pos1 = p1.getPosition();
-				Point2D pos2 = p2.getPosition();
+				Point2D pos1 = p1.getPoint();
+				Point2D pos2 = p2.getPoint();
 				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
 				double ascendingX = pos1.getX() + (pos2.getX() - pos1.getX()) * ascendingPoint;
 

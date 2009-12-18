@@ -43,11 +43,15 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_TICK_LABEL_DISTANCE = "axis.tick.label.distance";
 	/** Draw labels outside of the plot. */
 	static final String KEY_TICK_LABEL_OUTSIDE = "axis.tick.label.outside";
+	/** Rotation of the tick labels in degrees. */
+	static final String KEY_TICK_LABEL_ROTATION = "axis.tick.label.rotation";
 
 	/** Label text of the axis. */
 	static final String KEY_LABEL = "axis.label";
 	/** Distance from the axis to the label. */
 	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
+	/** Rotation of the axis label in degrees. */
+	static final String KEY_LABEL_ROTATION = "axis.label.rotation";
 
 	/**
 	 * Returns a component that displays the specified axis.
@@ -66,6 +70,16 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @return Two-dimensional point of the value
 	 */
 	Point2D worldToViewPos(Axis axis, Number value, boolean extrapolate);
+
+	/**
+	 * Returns the normal vector at the position of the specified value.
+	 * The vector is normalized.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
+	 * @return Two-dimensional normal vector at the position
+	 */
+	Point2D getNormal(Axis axis, Number value, boolean extrapolate);
 
 	/**
 	 * Converts a world (axis) coordinate value to a view (screen) coordinate value.
@@ -91,4 +105,5 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @return A list of <code>Tick</code> instances
 	 */
 	List<DataPoint2D> getTicks(Axis axis);
+
 }

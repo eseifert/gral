@@ -87,7 +87,7 @@ public class XYPlot extends Plot implements DataListener  {
 					-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
 				);
 				for (DataPoint2D tick : ticksX) {
-					Point2D tickPoint = tick.getPosition();
+					Point2D tickPoint = tick.getPoint();
 					if (tickPoint == null) {
 						continue;
 					}
@@ -108,7 +108,7 @@ public class XYPlot extends Plot implements DataListener  {
 					bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 				);
 				for (DataPoint2D tick : ticksY) {
-					Point2D tickPoint = tick.getPosition();
+					Point2D tickPoint = tick.getPoint();
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
 					g2d.setTransform(txOffset);
@@ -192,7 +192,7 @@ public class XYPlot extends Plot implements DataListener  {
 				lineRenderer.getLine(p2, p3).draw(g2d);
 			}
 			if (shapeRenderer != null) {
-				Point2D pos = p2.getPosition();
+				Point2D pos = p2.getPoint();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
 				shapeRenderer.getShape(row).draw(g2d);

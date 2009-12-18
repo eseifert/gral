@@ -24,8 +24,8 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				if (p1 == null || p2 == null) {
 					return;
 				}
-				Point2D pos1 = p1.getPosition();
-				Point2D pos2 = p2.getPosition();
+				Point2D pos1 = p1.getPoint();
+				Point2D pos2 = p2.getPoint();
 				Line2D line = new Line2D.Double(pos1, pos2);
 				Shape lineShape = punchShapes(line, p1, p2);
 

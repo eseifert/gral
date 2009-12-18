@@ -8,20 +8,20 @@ import java.awt.geom.Point2D;
  * @author Erich Seifert
  */
 public class DataPoint2D {
-	private final Point2D position;
+	private final Point2D point;
 	private final Point2D normal;
 	private final Shape shape;
 	private final String label;
 
-	public DataPoint2D(Point2D position, Point2D normal, Shape shape, String label) {
-		this.position = position;
+	public DataPoint2D(Point2D point, Point2D normal, Shape shape, String label) {
+		this.point = point;
 		this.normal = normal;
 		this.shape = shape;
 		this.label = label;
 	}
 
-	public Point2D getPosition() {
-		return position;
+	public Point2D getPoint() {
+		return point;
 	}
 
 	public Point2D getNormal() {
