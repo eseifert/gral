@@ -36,8 +36,9 @@ public class ConvolutionExample extends JFrame {
 		}
 		DataSeries ds = new DataSeries("Data", data, 0, 1);
 
-		final double KERNEL_VARIANCE = 10.0;
+		final double KERNEL_VARIANCE = 5.0;
 
+		//*
 		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
 		Filter dataLowpass = new Convolution(data, kernelLowpass, Filter.Mode.MODE_REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
@@ -46,12 +47,13 @@ public class ConvolutionExample extends JFrame {
 		Filter dataHighpass = new Convolution(data, kernelHighpass, Filter.Mode.MODE_REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
-		int kernelMovingAverageSize = (int)Math.round(2.0*KERNEL_VARIANCE);
+		int kernelMovingAverageSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
 		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
+		//*/
 
-		int kernelMovingMedianSize = (int)Math.round(2.0*KERNEL_VARIANCE);
+		int kernelMovingMedianSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, kernelMovingMedianSize - 1, Filter.Mode.MODE_OMIT, 1);
 		DataSeries dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
 
@@ -62,6 +64,7 @@ public class ConvolutionExample extends JFrame {
 		lineData.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0f, 0f));
 		plot.setLineRenderer(ds, lineData);
 
+		//*
 		plot.setShapeRenderer(dsLowpass, null);
 		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
 		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(1.0f, 0.2f, 0.0f));
@@ -76,6 +79,7 @@ public class ConvolutionExample extends JFrame {
 		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
 		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0.67f, 0f));
 		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
+		//*/
 
 		plot.setShapeRenderer(dsMovingMedian, null);
 		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
