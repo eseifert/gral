@@ -33,10 +33,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	private double[] shapeSegmentLengths;
 	private double[] shapeLengths;
 
-	private double tickLengthInner;
-	private double tickLengthOuter;
-	private double tickLabelDist;
-
 	public AbstractAxisRenderer2D() {
 		settings = new Settings(this);
 
@@ -65,6 +61,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	@Override
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
+			private double tickLengthInner;
+			private double tickLengthOuter;
+			private double tickLabelDist;
+
 			@Override
 			public void draw(Graphics2D g2d) {
 				if (shapeLines == null || shapeLines.length == 0) {
@@ -128,7 +128,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					double fontHeight = 10.0;
 					double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_DISTANCE);
 					double labelDist = tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
-					double labelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_ROTATION)/180.0*Math.PI;
+					double labelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_ROTATION);
 					double axisCenter = (axis.getMin().doubleValue() + axis.getMax().doubleValue()) / 2.0;
 					Point2D labelPos = worldToViewPos(axis, axisCenter, false);
 					Point2D labelNormal = getNormal(axis, axisCenter, false);
@@ -141,27 +141,39 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			}
 
 			private void layoutLabel(Label label, Point2D labelPos, Point2D labelNormal, double labelDist, boolean isLabelOutside, double rotation) {
-				Dimension2D labelSize = label.getPreferredSize();
-				Rectangle2D labelBounds = new Rectangle2D.Double(
+				Rectangle2D labelSize = label.getTextRectangle();
+				Shape marginShape = new Rectangle2D.Double(
 					0, 0,
 					labelSize.getWidth() + 2.0*labelDist, labelSize.getHeight() + 2.0*labelDist
 				);
-				double intersRayLength = labelBounds.getHeight()*labelBounds.getHeight() + labelBounds.getWidth()*labelBounds.getWidth();
+				Rectangle2D marginBounds = marginShape.getBounds2D();
+				label.setSetting(Label.KEY_ROTATION, rotation);
+				if ((rotation%360.0) != 0.0) {
+					marginShape = AffineTransform.getRotateInstance(
+						-rotation/180.0*Math.PI,
+						marginBounds.getCenterX(),
+						marginBounds.getCenterY()
+					).createTransformedShape(marginShape);
+				}
+				marginBounds = marginShape.getBounds2D();
+
+				double intersRayLength = marginBounds.getHeight()*marginBounds.getHeight() + marginBounds.getWidth()*marginBounds.getWidth();
 				List<Point2D> descriptionBoundsIntersections = GeometryUtils.intersection(
-					labelBounds,
+					marginBounds,
 					new Line2D.Double(
-						labelBounds.getCenterX(),
-						labelBounds.getCenterY(),
-						labelBounds.getCenterX() + (isLabelOutside?-1.0:1.0)*labelNormal.getX()*intersRayLength,
-						labelBounds.getCenterY() + (isLabelOutside?-1.0:1.0)*labelNormal.getY()*intersRayLength
+						marginBounds.getCenterX(),
+						marginBounds.getCenterY(),
+						marginBounds.getCenterX() + (isLabelOutside?-1.0:1.0)*labelNormal.getX()*intersRayLength,
+						marginBounds.getCenterY() + (isLabelOutside?-1.0:1.0)*labelNormal.getY()*intersRayLength
 					)
 				);
 				if (!descriptionBoundsIntersections.isEmpty()) {
 					Point2D inters = descriptionBoundsIntersections.get(0);
-					double intersX = inters.getX() - labelBounds.getCenterX();
-					double intersY = inters.getY() - labelBounds.getCenterY();
+					double intersX = inters.getX() - marginBounds.getCenterX();
+					double intersY = inters.getY() - marginBounds.getCenterY();
 					double posX = labelPos.getX() - intersX - labelSize.getWidth()/2.0;
 					double posY = labelPos.getY() - intersY - labelSize.getHeight()/2.0;
+
 					label.setBounds(posX, posY, labelSize.getWidth(), labelSize.getHeight());
 				}
 			}
@@ -347,4 +359,5 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			evaluateShape((Shape) event.getValNew());
 		}
 	}
+
 }
