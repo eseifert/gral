@@ -50,8 +50,8 @@ public class BarPlot extends XYPlot {
 		public Shape getShapePath(Row row) {
 			double valueX = row.get(0).doubleValue();
 			double valueY = row.get(1).doubleValue();
-			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_X);
-			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_AXIS_X_RENDERER);
+			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
 			Axis axisX = getAxis(Axis.X);
 			Axis axisY = getAxis(Axis.Y);
 			double axisYMin = axisY.getMin().doubleValue();
@@ -87,7 +87,7 @@ public class BarPlot extends XYPlot {
 	public BarPlot(DataSource... data) {
 		super(data);
 
-		setSettingDefault(KEY_GRID_X, false);
+		getPlotArea().setSettingDefault(XYPlotArea2D.KEY_GRID_X, false);
 		setSettingDefault(KEY_BAR_WIDTH, 1.0);
 
 		ShapeRenderer shapeRendererDefault = new BarRenderer();

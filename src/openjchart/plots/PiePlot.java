@@ -22,7 +22,7 @@ public class PiePlot extends Plot implements DataListener {
 	private double degreesPerValue;
 	private double[] startValues;
 
-	private class PiePlotArea2D extends PlotArea2D {
+	public class PiePlotArea2D extends PlotArea2D {
 		@Override
 		public void draw(Graphics2D g2d) {
 			drawBackground(g2d);

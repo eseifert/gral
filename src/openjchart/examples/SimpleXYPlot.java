@@ -54,9 +54,10 @@ public class SimpleXYPlot extends JFrame {
 		// Custom shape coloring
 		//plot.getShapeRenderer().setColor(Color.RED);
 		// Custom grid color
-		//plot.setSetting(ScatterPlot.KEY_GRID_COLOR, Color.BLUE);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		//plot.setSetting(ScatterPlot.KEY_GRID, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, Color.RED);
@@ -70,17 +71,17 @@ public class SimpleXYPlot extends JFrame {
 		// Custom axis renderers
 		AxisRenderer2D logRendererX = new LogarithmicRenderer2D();
 		logRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
-		plot.setSetting(XYPlot.KEY_RENDERER_AXIS_X, logRendererX);
+		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, logRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(3f);
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
-		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_RENDERER_AXIS_Y)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
+		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
 		// Custom stroke for the ticks
 		//logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
 		// Swap axis direction
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_RENDERER_AXIS_X).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
 		plot.setInsets(new Insets2D.Double(20.0, 100.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 

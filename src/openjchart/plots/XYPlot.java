@@ -33,12 +33,8 @@ import openjchart.util.SettingChangeEvent;
 
 
 public class XYPlot extends Plot implements DataListener  {
-	public static final String KEY_GRID_X = "xyplot.grid.x";
-	public static final String KEY_GRID_Y = "xyplot.grid.y";
-	public static final String KEY_GRID_COLOR = "xyplot.grid.color";
-
-	public static final String KEY_RENDERER_AXIS_X = "xyplot.renderer.axisx";
-	public static final String KEY_RENDERER_AXIS_Y = "xyplot.renderer.axisy";
+	public static final String KEY_AXIS_X_RENDERER = "xyplot.axis.x.renderer";
+	public static final String KEY_AXIS_Y_RENDERER = "xyplot.axis.y.renderer";
 
 	private double minX;
 	private double maxX;
@@ -52,7 +48,17 @@ public class XYPlot extends Plot implements DataListener  {
 	private final Map<DataSource, ShapeRenderer> shapeRenderers;
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
 
-	protected class XYPlotArea2D extends PlotArea2D {
+	public class XYPlotArea2D extends PlotArea2D {
+		public static final String KEY_GRID_X = "xyplot.grid.x";
+		public static final String KEY_GRID_Y = "xyplot.grid.y";
+		public static final String KEY_GRID_COLOR = "xyplot.grid.color";
+
+		public XYPlotArea2D() {
+			setSettingDefault(KEY_GRID_X, true);
+			setSettingDefault(KEY_GRID_Y, true);
+			setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
+		}
+
 		@Override
 		public void draw(Graphics2D g2d) {
 			drawBackground(g2d);
@@ -64,8 +70,8 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		protected void drawGrid(Graphics2D g2d) {
-			boolean isGridX = XYPlot.this.getSetting(KEY_GRID_X);
-			boolean isGridY = XYPlot.this.getSetting(KEY_GRID_Y);
+			boolean isGridX = getSetting(KEY_GRID_X);
+			boolean isGridY = getSetting(KEY_GRID_Y);
 			if (!isGridX && !isGridY) {
 				return;
 			}
@@ -73,12 +79,12 @@ public class XYPlot extends Plot implements DataListener  {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
-			Paint paint = XYPlot.this.getSetting(KEY_GRID_COLOR);
+			Paint paint = getSetting(KEY_GRID_COLOR);
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
 			if (isGridX) {
-				AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_X);
+				AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
 				Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 				List<DataPoint2D> ticksX = axisXRenderer.getTicks(axisX);
@@ -99,7 +105,7 @@ public class XYPlot extends Plot implements DataListener  {
 
 			// Draw gridY
 			if (isGridY) {
-				AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+				AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
 				Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
 				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 				List<DataPoint2D> ticksY = axisYRenderer.getTicks(axisY);
@@ -134,8 +140,8 @@ public class XYPlot extends Plot implements DataListener  {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_X);
-					AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_RENDERER_AXIS_Y);
+					AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
+					AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
 					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX, true);
 					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY, true);
 					if (axisPosX==null || axisPosY==null) {
@@ -208,10 +214,6 @@ public class XYPlot extends Plot implements DataListener  {
 		shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
 		lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 
-		setSettingDefault(KEY_GRID_X, true);
-		setSettingDefault(KEY_GRID_Y, true);
-		setSettingDefault(KEY_GRID_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.2f));
-
 		setPlotArea(new XYPlotArea2D());
 		setLegend(new XYLegend());
 
@@ -230,8 +232,8 @@ public class XYPlot extends Plot implements DataListener  {
 		setAxis(Axis.X, axisX, axisXComp);
 		setAxis(Axis.Y, axisY, axisYComp);
 
-		setSettingDefault(KEY_RENDERER_AXIS_X, new LinearRenderer2D());
-		setSettingDefault(KEY_RENDERER_AXIS_Y, new LinearRenderer2D());
+		setSettingDefault(KEY_AXIS_X_RENDERER, new LinearRenderer2D());
+		setSettingDefault(KEY_AXIS_Y_RENDERER, new LinearRenderer2D());
 	}
 
 	@Override
@@ -250,8 +252,8 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		Rectangle2D plotBounds = getPlotArea().getBounds();
-		AxisRenderer2D axisXRenderer = getSetting(KEY_RENDERER_AXIS_X);
-		AxisRenderer2D axisYRenderer = getSetting(KEY_RENDERER_AXIS_Y);
+		AxisRenderer2D axisXRenderer = getSetting(KEY_AXIS_X_RENDERER);
+		AxisRenderer2D axisYRenderer = getSetting(KEY_AXIS_Y_RENDERER);
 		Dimension2D axisXSize = null;
 		Dimension2D axisYSize = null;
 
@@ -325,14 +327,15 @@ public class XYPlot extends Plot implements DataListener  {
 		super.settingChanged(event);
 
 		String key = event.getKey();
-		if (KEY_RENDERER_AXIS_X.equals(key)) {
+		if (KEY_AXIS_X_RENDERER.equals(key)) {
 			AxisRenderer2D axisXRenderer = (AxisRenderer2D) event.getValNew();
 			axisXComp = axisXRenderer.getRendererComponent(axisX);
 			setAxis(Axis.X, axisX, axisXComp);
 		}
-		else if (KEY_RENDERER_AXIS_Y.equals(key)) {
+		else if (KEY_AXIS_Y_RENDERER.equals(key)) {
 			AxisRenderer2D axisYRenderer = (AxisRenderer2D) event.getValNew();
 			axisYRenderer.setSetting(AxisRenderer2D.KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			axisYRenderer.setSetting(AxisRenderer2D.KEY_LABEL_ROTATION, 90.0);
 			axisYComp = axisYRenderer.getRendererComponent(axisY);
 			setAxis(Axis.Y, axisY, axisYComp);
 		}
