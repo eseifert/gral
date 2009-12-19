@@ -58,8 +58,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		double alignmentX = getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
 		txLabel.translate(
-			-textBounds.getX() - alignmentX*textBounds.getWidth() - (alignmentX - 0.5)*getWidth(),
-			-textBounds.getY() - alignmentY*textBounds.getHeight() - (alignmentY - 0.5)*getHeight()
+			-textBounds.getX() - alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
+			-textBounds.getY() - alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
 		);
 
 		Shape labelShape = layout.getOutline(txLabel);
