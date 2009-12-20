@@ -14,7 +14,7 @@ public abstract class AbstractDrawable implements Drawable {
 	private final Rectangle2D bounds;
 
 	/**
-	 * Basic constructor.
+	 * Creates an AbstractDrawable.
 	 */
 	public AbstractDrawable() {
 		bounds = new Rectangle2D.Double();

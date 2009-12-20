@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 import openjchart.util.Insets2D;
 
 /**
- * A class that provides functions to store and layout Drawables.
+ * An interface that provides functions to store and layout Drawables.
  */
 public interface Container extends Iterable<Drawable> {
 	/**

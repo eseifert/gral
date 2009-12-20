@@ -1,5 +1,9 @@
 package openjchart;
 
+/**
+ * Interface that solely stores constants concerning Drawables.
+ * Stored constants include location and orientation.
+ */
 public interface DrawableConstants {
 	static enum Location {
 		CENTER,

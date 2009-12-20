@@ -6,10 +6,20 @@ import java.awt.geom.Rectangle2D;
 import openjchart.DrawableConstants.Location;
 import openjchart.util.Insets2D;
 
+/**
+ * Implementation of Layout that arranges a Container's components according to a certain grid.
+ * This is similar to java's BorderLayout, but also allows components to
+ * be placed in each of the corners.
+ */
 public class EdgeLayout implements Layout {
 	private double hgap;
 	private double vgap;
 
+	/**
+	 * Creates an EdgeLayout with the specified distances between the components.
+	 * @param hgap Horizontal gap.
+	 * @param vgap Vertical gap.
+	 */
 	public EdgeLayout(double hgap, double vgap) {
 		this.hgap = hgap;
 		this.vgap = vgap;
@@ -50,7 +60,7 @@ public class EdgeLayout implements Layout {
 				west = d;
 			} else if (Location.NORTH_WEST.equals(constraints)) {
 				northWest = d;
-			} 
+			}
 		}
 
 		// Calculate maximum widths and heights
@@ -174,6 +184,11 @@ public class EdgeLayout implements Layout {
 		);
 	}
 
+	/**
+	 * Returns the maximum width of an array of Drawables.
+	 * @param drawables Drawables to be measured.
+	 * @return Maximum horizontal extent.
+	 */
 	private static double getMaxWidth(Drawable... drawables) {
 		double width = 0.0;
 		for (Drawable d : drawables) {
@@ -186,6 +201,11 @@ public class EdgeLayout implements Layout {
 		return width;
 	}
 
+	/**
+	 * Returns the maximum height of an array of Drawables.
+	 * @param drawables Drawables to be measured.
+	 * @return Maximum vertical extent.
+	 */
 	private static double getMaxHeight(Drawable... drawables) {
 		double height = 0.0;
 		for (Drawable d : drawables) {
@@ -198,6 +218,14 @@ public class EdgeLayout implements Layout {
 		return height;
 	}
 
+	/**
+	 * Sets the bounds of the specified Drawable to the specified values.
+	 * @param d Drawable to be aligned.
+	 * @param x X-coordinate.
+	 * @param y Y-coordinate.
+	 * @param w Width.
+	 * @param h Height.
+	 */
 	private static void layoutComponent(Drawable d, double x, double y, double w, double h) {
 		if (d == null) {
 			return;

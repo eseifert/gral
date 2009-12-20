@@ -50,10 +50,6 @@ public class DrawablePanel extends JPanel {
 		return dims;
 	}
 
-	public Dimension getMinimalSize() {
-		return getPreferredSize();
-	}
-	
 	@Override
 	public Dimension getMinimumSize() {
 		return super.getPreferredSize();
