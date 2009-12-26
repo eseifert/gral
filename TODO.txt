@@ -3,8 +3,6 @@ Version 0.7
 
 - Add more JavaDoc comments and unit tests
 
-- Add copyright texts and LICENSE.txt
-
 Version 0.8
 ===========
 
@@ -65,6 +63,21 @@ Version 1.0
 ===========
 
 - API improvements based on review in version 0.9
+
+- Bug fixing
+
+- Cleanup/Optmization
+
+- Examples
+
+- Code Formatting
+
+- UML
+
+- Plot Gallery
+
+Version 2.0
+===========
 
 - Add 3D support using OpenGL/JOGL (also 2D with JOGL?)
 
