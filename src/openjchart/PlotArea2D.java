@@ -32,26 +32,45 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
+/**
+ * Abstract class that represents a canvas for the plot which will be drawn.
+ */
 public abstract class PlotArea2D extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	public static final String KEY_BACKGROUND = "plotarea.background";
 	public static final String KEY_BORDER = "plotarea.border";
 
 	private final Settings settings;
 
+	/**
+	 * Creates a new PlotArea2D object with default background color and
+	 * border.
+	 */
 	public PlotArea2D() {
 		settings = new Settings(this);
 		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
 	}
-	
+
+	/**
+	 * Draws the background of this Legend with the specified Graphics2D
+	 * object.
+	 * @param g2d Graphics object to draw with.
+	 */
 	protected void drawBackground(Graphics2D g2d) {
+		// FIXME: duplicate code! See openjchart.Legend
 		Paint bg = getSetting(KEY_BACKGROUND);
 		if (bg != null) {
 			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 		}
 	}
 
+	/**
+	 * Draws the border of this Legend with the specified Graphics2D
+	 * object.
+	 * @param g2d Graphics object to draw with.
+	 */
 	protected void drawBorder(Graphics2D g2d) {
+		// FIXME: duplicate code! See openjchart.Legend
 		Stroke borderStroke = getSetting(KEY_BORDER);
 		if (borderStroke != null) {
 			Stroke strokeOld = g2d.getStroke();
@@ -91,5 +110,4 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
-
 }

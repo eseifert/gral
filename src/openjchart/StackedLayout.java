@@ -25,16 +25,33 @@ import java.awt.geom.Rectangle2D;
 import openjchart.DrawableConstants.Orientation;
 import openjchart.util.Insets2D;
 
-
+/**
+ * Class that represents a layout manager which arranges its components
+ * lying upon another.
+ */
 public class StackedLayout implements Layout {
+	// TODO: Add setters and getters.
+	// FIXME: Use SettingsStorage?
+	// FIXME: Extract abstract superclass as an additional layer between Layout and StackedLayout?
 	private Orientation orientation;
 	private Dimension2D gap;
 	private double alignment;
 
+	/**
+	 * Creates a new StackedLayout object with the specified orientation
+	 * and default gap between the components.
+	 * @param orientation Orientation in which components are stacked.
+	 */
 	public StackedLayout(Orientation orientation) {
 		this(orientation, null);
 	}
 
+	/**
+	 * Creates a new StackedLayout object with the specified orientation
+	 * gap between the components.
+	 * @param orientation Orientation in which components are stacked.
+	 * @param gap Gap between the components.
+	 */
 	public StackedLayout(Orientation orientation, Dimension2D gap) {
 		this.orientation = orientation;
 		this.gap = new openjchart.util.Dimension2D.Double();

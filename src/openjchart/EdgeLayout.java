@@ -32,6 +32,9 @@ import openjchart.util.Insets2D;
  * be placed in each of the corners.
  */
 public class EdgeLayout implements Layout {
+	// TODO: Add setters and getters.
+	// FIXME: Use SettingsStorage?
+	// FIXME: Extract abstract superclass as an additional layer between Layout and EdgeLayout?
 	private double hgap;
 	private double vgap;
 

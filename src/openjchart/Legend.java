@@ -41,6 +41,16 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
+/**
+ * Abstract class that serves as a basic for any legend in a plot.
+ * It provides an inner Item class which is responsible for
+ * displaying a specific DataSource.
+ * The functionality includes:
+ * <ul>
+ * <li>Storing and retrieving settings</li>
+ * <li>Adding and removing DataSources</li>
+ * </ul>
+ */
 public abstract class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
 	public static final String KEY_BACKGROUND = "legend.background";
 	public static final String KEY_BORDER = "legend.border";
@@ -51,11 +61,19 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 
 	private final Map<DataSource, Drawable> components;
 
+	/**
+	 * Class that displays a specific DataSource as an item of a Legend.
+	 */
 	protected class Item extends DrawableContainer {
 		private final DataSource data;
 		private final Drawable symbol;
 		private final Label label;
 
+		/**
+		 * Creates a new Item object with the specified DataSource and text.
+		 * @param data DataSource to be displayed.
+		 * @param labelText Description text.
+		 */
 		public Item(final DataSource data, final String labelText) {
 			super(new EdgeLayout(10.0, 0.0));
 			this.data = data;
@@ -86,11 +104,19 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 			return getLayout().getPreferredSize(this);
 		}
 
+		/**
+		 * Returns the displayed DataSource.
+		 * @return Displayed DataSource
+		 */
 		public DataSource getData() {
 			return data;
 		}
 	}
 
+	/**
+	 * Creates a new Legend object with default background color, border,
+	 * orientation and gap between the Items.
+	 */
 	public Legend() {
 		components = new HashMap<DataSource, Drawable>();
 		setInsets(new Insets2D.Double(10.0));
@@ -113,6 +139,11 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		g2d.setTransform(txOrig);
 	}
 
+	/**
+	 * Draws the background of this Legend with the specified Graphics2D
+	 * object.
+	 * @param g2d Graphics object to draw with.
+	 */
 	protected void drawBackground(Graphics2D g2d) {
 		Paint bg = getSetting(KEY_BACKGROUND);
 		if (bg != null) {
@@ -120,6 +151,11 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		}
 	}
 
+	/**
+	 * Draws the border of this Legend with the specified Graphics2D
+	 * object.
+	 * @param g2d Graphics object to draw with.
+	 */
 	protected void drawBorder(Graphics2D g2d) {
 		Stroke borderStroke = getSetting(KEY_BORDER);
 		if (borderStroke != null) {
@@ -132,21 +168,33 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 
 	protected abstract void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data);
 
-	public void add(DataSource data) {
-		Item item = new Item(data, data.toString());
+	/**
+	 * Adds the specified DataSource in order to display it.
+	 * @param data DataSource to be added.
+	 */
+	public void add(DataSource source) {
+		Item item = new Item(source, source.toString());
 		add(item);
-		components.put(data, item);
+		components.put(source, item);
 	}
 
-	public void remove(DataSource series) {
-		Drawable removeItem = components.get(series);
+	/**
+	 * Removes the specified DataSource.
+	 * @param source DataSource to be removed.
+	 */
+	public void remove(DataSource source) {
+		Drawable removeItem = components.get(source);
 		if (removeItem != null) {
 			remove(removeItem);
 		}
-		components.remove(series);
+		components.remove(source);
 	}
 
+	/**
+	 * Invoked if data has changed.
+	 */
 	protected void notifyDataChanged() {
+		// FIXME: is this function needed?
 		layout();
 	}
 
