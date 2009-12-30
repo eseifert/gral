@@ -26,7 +26,8 @@ package openjchart.data;
  */
 public interface DataListener {
 	/**
-	 * Method that is invoked by objects that provide support for DataListeners.
+	 * Method that is invoked by objects that provide support for
+	 * DataListeners.
 	 * @param data data that has changed
 	 */
 	void dataChanged(DataSource data);

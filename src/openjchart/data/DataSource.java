@@ -24,7 +24,6 @@ import openjchart.data.statistics.Statistics;
 
 /**
  * Immutable view on a source for tabular data.
- * @author Erich Seifert
  */
 public interface DataSource extends Iterable<Number[]> {
 

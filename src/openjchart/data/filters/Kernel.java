@@ -20,20 +20,47 @@
 
 package openjchart.data.filters;
 
+/**
+ * Class that represents an array of coefficients for a weighted filtering.
+ * Functionality includes:
+ * <ul>
+ * <li>Adding of other kernels or scalars</li>
+ * <li>Multiplication with other kernels or scalars</li>
+ * <li>Normalization</li>
+ * <li>Negation</li>
+ * </ul>
+ */
 public class Kernel {
 	private final double[] values;
 	private final int offset;
-	
+
+	/**
+	 * Creates a new Kernel object with the specified offset and values.
+	 * @param offset Offset to the first item in the kernel.
+	 * @param values Array of values in the kernel.
+	 */
 	public Kernel(int offset, double[] values) {
 		this.values = new double[values.length];
 		System.arraycopy(values, 0, this.values, 0, values.length);
 		this.offset = offset;
 	}
 
+	/**
+	 * Creates a new kernel object with the specified values and an offset
+	 * being half the size of this kernel (rounded down).
+	 * @param values
+	 */
 	public Kernel(double... values) {
 		this(values.length/2, values);
 	}
 
+	/**
+	 * Returns the value at the specified position of this kernel.
+	 * If the position exceeds the minimum or maximum index, 0.0 is
+	 * returned.
+	 * @param i Index to be returned.
+	 * @return Value at the specified index.
+	 */
 	public double get(int i) {
 		if (i < getMinIndex() || i > getMaxIndex()) {
 			return 0.0;
@@ -41,29 +68,56 @@ public class Kernel {
 		return values[i - getMinIndex()];
 	}
 
+	/**
+	 * Sets the specified index of this kernel to the specified value.
+	 * @param i Index to be changed.
+	 * @param v Value to be set.
+	 */
 	protected void set(int i, double v) {
 		if (i < getMinIndex() || i > getMaxIndex()) {
 			return;
 		}
 		values[i - getMinIndex()] = v;
 	}
-	
+
+	/**
+	 * Returns the offset of this kernel.
+	 * @return Offset.
+	 */
 	public int getOffset() {
 		return offset;
 	}
 
+	/**
+	 * Returns the number of values in this kernel.
+	 * @return Number of values.
+	 */
 	public int size() {
 		return values.length;
 	}
 
+	/**
+	 * Returns the index of the "leftmost" value.
+	 * @return Minimal index.
+	 */
 	public int getMinIndex() {
 		return -getOffset();
 	}
-	
+
+	/**
+	 * Returns the index of the "rightmost" value.
+	 * @return Maximal index.
+	 */
 	public int getMaxIndex() {
 		return size() - getOffset() - 1;
 	}
 
+	/**
+	 * Returns a new Kernel, where the specified value was added to each of
+	 * the items.
+	 * @param v Value to be added.
+	 * @return Kernel with new values.
+	 */
 	public Kernel add(double v) {
 		for (int i = 0; i < values.length; i++) {
 			values[i] += v;
@@ -71,6 +125,11 @@ public class Kernel {
 		return this;
 	}
 
+	/**
+	 * Returns a new Kernel, where the specified kernel was added.
+	 * @param k Kernel to be added.
+	 * @return Kernel with new values.
+	 */
 	public Kernel add(Kernel k) {
 		int min = getMinIndex();
 		int max = getMaxIndex();
@@ -84,6 +143,12 @@ public class Kernel {
 		return this;
 	}
 
+	/**
+	 * Returns a new Kernel, where the specified value was multiplied with
+	 * each of the items.
+	 * @param v Value to be multiplied.
+	 * @return Kernel with new values.
+	 */
 	public Kernel mul(double v) {
 		for (int i = 0; i < values.length; i++) {
 			values[i] *= v;
@@ -91,6 +156,11 @@ public class Kernel {
 		return this;
 	}
 
+	/**
+	 * Returns a new Kernel, where the specified kernel was multiplied.
+	 * @param k Kernel to be multiplied.
+	 * @return Kernel with new values.
+	 */
 	public Kernel mul(Kernel k) {
 		int min = getMinIndex();
 		int max = getMaxIndex();
@@ -104,6 +174,10 @@ public class Kernel {
 		return this;
 	}
 
+	/**
+	 * Returns a normalized Kernel so that the sum of all values equals 1.
+	 * @return Normalized Kernel.
+	 */
 	public Kernel normalize() {
 		double sum = 0.0;
 		for (double value : values) {
@@ -112,6 +186,10 @@ public class Kernel {
 		return mul(1.0/sum);
 	}
 
+	/**
+	 * Returns a Kernel with all values being negated.
+	 * @return Negated Kernel.
+	 */
 	public Kernel negate() {
 		for (int i = 0; i < values.length; i++) {
 			values[i] = -values[i];

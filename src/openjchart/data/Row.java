@@ -23,25 +23,42 @@ package openjchart.data;
 
 /**
  * Class for storing a row of a data source.
- * @author Erich Seifert
  */
 public class Row {
 	private final DataSource source;
 	private final int row;
 
+	/**
+	 * Creates a new Row object with the specified DataSource and row index.
+	 * @param source DataSource.
+	 * @param row Row index.
+	 */
 	public Row(DataSource source, int row) {
 		this.source = source;
 		this.row = row;
 	}
 
+	/**
+	 * Returns the DataSource containing this row.
+	 * @return DataSource containing this row.
+	 */
 	public DataSource getSource() {
 		return source;
 	}
 
+	/**
+	 * Returns the index of this row in the DataSource.
+	 * @return Row index.
+	 */
 	public int getRow() {
 		return row;
 	}
 
+	/**
+	 * Returns the value of this row for the specified column.
+	 * @param col Column index.
+	 * @return Value of the cell.
+	 */
 	public Number get(int col) {
 		if (getSource() == null) {
 			return null;

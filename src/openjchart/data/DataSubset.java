@@ -23,11 +23,17 @@ package openjchart.data;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Abstract class that represents a view on several rows of a DataSource.
+ */
 public abstract class DataSubset extends AbstractDataSource implements DataListener {
 	private final DataSource original;
 	private final List<Integer> accepted;
 
+	/**
+	 * Creates a new DataSubset object with the specified DataSource
+	 * @param original DataSource to be filtered.
+	 */
 	public DataSubset(DataSource original) {
 		accepted = new ArrayList<Integer>();
 		this.original = original;
@@ -70,5 +76,10 @@ public abstract class DataSubset extends AbstractDataSource implements DataListe
 		notifyDataChanged();
 	}
 
+	/**
+	 * Tests whether the specified row is accepted by this DataSubset or not.
+	 * @param row Row to be tested.
+	 * @return True if the row is accepted.
+	 */
 	public abstract boolean accept(Number[] row);
 }

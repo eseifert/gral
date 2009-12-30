@@ -42,7 +42,7 @@ public class DataTable extends AbstractDataSource {
 	private Class<?>[] types;
 
 	/**
-	 * Constructor.
+	 * Creates a new DataTable object.
 	 * @param types type for each column
 	 */
 	public DataTable(Class<? extends Number>... types) {

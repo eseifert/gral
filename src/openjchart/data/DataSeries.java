@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that represents a view on a DataSource.
+ * Class that represents a view on several columns of a DataSource.
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {

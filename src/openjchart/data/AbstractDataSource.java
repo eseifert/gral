@@ -62,7 +62,7 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Constructor.
+	 * Creates a new AbstractDataSource object.
 	 */
 	public AbstractDataSource() {
 		dataListeners = new HashSet<DataListener>();
@@ -92,7 +92,8 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Notifies all DataListeners that the data of this DataSource has changed.
+	 * Notifies all registered DataListeners that the data of this DataSource has
+	 * changed.
 	 */
 	protected void notifyDataChanged() {
 		for (DataListener dataListener : dataListeners) {
