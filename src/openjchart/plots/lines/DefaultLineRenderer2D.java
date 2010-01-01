@@ -23,7 +23,7 @@ package openjchart.plots.lines;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.geom.Line2D;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
 import openjchart.AbstractDrawable;
@@ -41,20 +41,21 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				DataPoint2D pointPrv = null;
-				for (DataPoint2D pointCur : points) {
-					if (pointPrv != null) {
-						Point2D pos1 = pointPrv.getPosition();
-						Point2D pos2 = pointCur.getPosition();
-						Line2D line = new Line2D.Double(pos1, pos2);
-						Shape lineShape = punchShapes(line, pointPrv, pointCur);
-		
-						// Draw line
-						Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
-						GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
+				// Construct shape
+				GeneralPath line = new GeneralPath();
+				for (DataPoint2D point : points) {
+					Point2D pos = point.getPosition();
+					if (line.getCurrentPoint() == null) {
+						line.moveTo(pos.getX(), pos.getY());
+					} else {
+						line.lineTo(pos.getX(), pos.getY());
 					}
-					pointPrv = pointCur;
 				}
+				
+				// Draw line
+				Shape lineShape = punchShapes(line, points);
+				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};
 		return d;

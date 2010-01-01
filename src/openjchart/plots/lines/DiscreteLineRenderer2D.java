@@ -43,29 +43,28 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				DataPoint2D pointPrv = null;
-				for (DataPoint2D pointCur : points) {
-					if (pointPrv != null) {
-						Point2D pos1 = pointPrv.getPosition();
-						Point2D pos2 = pointCur.getPosition();
-						double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
-						double ascendingX = pos1.getX() + (pos2.getX() - pos1.getX()) * ascendingPoint;
+				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
+
+				// Construct shape
+				GeneralPath line = new GeneralPath();
+				for (DataPoint2D point : points) {
+					Point2D pos = point.getPosition();
+					if (line.getCurrentPoint() == null) {
+						line.moveTo(pos.getX(), pos.getY());
+					} else {
+						Point2D posPrev = line.getCurrentPoint();
+						double ascendingX = posPrev.getX() + (pos.getX() - posPrev.getX()) * ascendingPoint;
+						line.lineTo(ascendingX,  posPrev.getY());
+						line.lineTo(ascendingX,  pos.getY());
+						line.lineTo(pos.getX(), pos.getY());
 		
-						// Create path
-						GeneralPath line = new GeneralPath();
-						line.moveTo(pos1.getX(), pos1.getY());
-						line.lineTo(ascendingX,  pos1.getY());
-						line.lineTo(ascendingX,  pos2.getY());
-						line.lineTo(pos2.getX(), pos2.getY());
-		
-						Shape lineShape = punchShapes(line, pointPrv, pointCur);
-		
-						// Draw path
-						Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
-						GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 					}
-					pointPrv = pointCur;
 				}
+
+				// Draw path
+				Shape lineShape = punchShapes(line, points);
+				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};
 		return d;
