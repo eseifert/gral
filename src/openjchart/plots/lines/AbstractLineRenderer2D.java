@@ -62,7 +62,7 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 				if (shape == null) {
 					continue;
 				}
-				Point2D pos = p.getPoint();
+				Point2D pos = p.getPosition();
 				AffineTransform tx = AffineTransform.getTranslateInstance(pos.getX(), pos.getY());
 				Area gapShape = GeometryUtils.grow(tx.createTransformedShape(shape), gapSize, gapJoin, 10f);
 				lineShape.subtract(gapShape);

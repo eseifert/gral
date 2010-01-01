@@ -31,7 +31,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -117,7 +116,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 				g2d.setStroke(AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_TICK_STROKE));
 				for (DataPoint2D tick : ticks) {
-					Point2D tickPoint = tick.getPoint();
+					Point2D tickPoint = tick.getPosition();
 					Point2D tickNormal = tick.getNormal();
 
 					// Draw tick
@@ -223,13 +222,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double minTick = Math.ceil(min/tickSpacing) * tickSpacing;
 		double maxTick = Math.floor(max/tickSpacing) * tickSpacing;
 
-		List<Double> tickPositionsWorld = new ArrayList<Double>();
-		for (double tickPositionWorld=minTick; tickPositionWorld<=maxTick; tickPositionWorld++) {
-			tickPositionsWorld.add(tickPositionWorld);
-		}
-
 		List<DataPoint2D> tickPositions = new LinkedList<DataPoint2D>();
-		for (double tickPositionWorld : tickPositionsWorld) {
+		for (double tickPositionWorld=minTick; tickPositionWorld<=maxTick; tickPositionWorld += tickSpacing) {
 			// Calculate position of tick on axis shape
 			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld, false);
 
@@ -243,7 +237,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
 			String tickLabel = labelFormat.format(tickPositionWorld);
 
-			tickPositions.add(new DataPoint2D(tickPoint, tickNormal, null, tickLabel));
+			tickPositions.add(new DataPoint2D(tickPoint, tickNormal, null, null, tickLabel));
 		}
 
 		return tickPositions;

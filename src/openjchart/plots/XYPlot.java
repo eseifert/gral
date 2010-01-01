@@ -31,6 +31,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -113,7 +114,7 @@ public class XYPlot extends Plot implements DataListener  {
 					-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
 				);
 				for (DataPoint2D tick : ticksX) {
-					Point2D tickPoint = tick.getPoint();
+					Point2D tickPoint = tick.getPosition();
 					if (tickPoint == null) {
 						continue;
 					}
@@ -134,7 +135,7 @@ public class XYPlot extends Plot implements DataListener  {
 					bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 				);
 				for (DataPoint2D tick : ticksY) {
-					Point2D tickPoint = tick.getPoint();
+					Point2D tickPoint = tick.getPosition();
 					g2d.translate(tickPoint.getX(), tickPoint.getY());
 					GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
 					g2d.setTransform(txOffset);
@@ -150,12 +151,11 @@ public class XYPlot extends Plot implements DataListener  {
 			AffineTransform txOffset = g2d.getTransform();
 
 			// Paint shapes and lines
-			Drawable line;
 			for (DataSource s : data) {
 				ShapeRenderer shapeRenderer = getShapeRenderer(s);
 				LineRenderer2D lineRenderer = getLineRenderer(s);
 
-				DataPoint2D pPrev = null;
+				List<DataPoint2D> points = new LinkedList<DataPoint2D>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
@@ -169,18 +169,30 @@ public class XYPlot extends Plot implements DataListener  {
 					}
 					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
-					Shape shapePath = (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null;
-					DataPoint2D p = new DataPoint2D(pos, null, shapePath, null);
-					if (i > 0 && lineRenderer != null && pos != null) {
-						line = lineRenderer.getLine(pPrev, p);
-						line.draw(g2d);
-					}
-					pPrev = p;
-
+					
+					Drawable drawable = null;
+					Shape shape = null;
 					if (shapeRenderer != null) {
-						g2d.translate(pos.getX(), pos.getY());
-						Drawable shape = shapeRenderer.getShape(row);
-						shape.draw(g2d);
+						drawable = shapeRenderer.getShape(row);
+						shape = shapeRenderer.getShapePath(row);
+					}
+
+					DataPoint2D point = new DataPoint2D(pos, null, drawable, shape, null);
+					points.add(point);
+				}
+
+				if (lineRenderer != null) {
+					DataPoint2D[] pointArray = new DataPoint2D[points.size()];
+					points.toArray(pointArray);
+					Drawable drawable = lineRenderer.getLine(pointArray);
+					drawable.draw(g2d);
+				}
+
+				if (shapeRenderer != null) {
+					for (DataPoint2D point : points) {
+						g2d.translate(point.getPosition().getX(), point.getPosition().getY());
+						Drawable drawable = point.getDrawable();
+						drawable.draw(g2d);
 						g2d.setTransform(txOffset);
 					}
 				}
@@ -202,23 +214,22 @@ public class XYPlot extends Plot implements DataListener  {
 
 			DataPoint2D p1 = new DataPoint2D(
 				new Point2D.Double(bounds.getMinX(), bounds.getCenterY()), null,
-				null, null
+				null, null, null
 			);
 			DataPoint2D p2 = new DataPoint2D(
 				new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()), null,
-				(shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null, null
+				null, (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null, null
 			);
 			DataPoint2D p3 = new DataPoint2D(
 				new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null,
-				null, null
+				null, null, null
 			);
 
 			if (lineRenderer != null) {
-				lineRenderer.getLine(p1, p2).draw(g2d);
-				lineRenderer.getLine(p2, p3).draw(g2d);
+				lineRenderer.getLine(p1, p2, p3).draw(g2d);
 			}
 			if (shapeRenderer != null) {
-				Point2D pos = p2.getPoint();
+				Point2D pos = p2.getPosition();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
 				shapeRenderer.getShape(row).draw(g2d);

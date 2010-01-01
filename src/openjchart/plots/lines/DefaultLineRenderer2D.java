@@ -37,21 +37,24 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	}
 
 	@Override
-	public Drawable getLine(final DataPoint2D p1, final DataPoint2D p2) {
+	public Drawable getLine(final DataPoint2D... points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				if (p1 == null || p2 == null) {
-					return;
+				DataPoint2D pointPrv = null;
+				for (DataPoint2D pointCur : points) {
+					if (pointPrv != null) {
+						Point2D pos1 = pointPrv.getPosition();
+						Point2D pos2 = pointCur.getPosition();
+						Line2D line = new Line2D.Double(pos1, pos2);
+						Shape lineShape = punchShapes(line, pointPrv, pointCur);
+		
+						// Draw line
+						Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+						GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
+					}
+					pointPrv = pointCur;
 				}
-				Point2D pos1 = p1.getPoint();
-				Point2D pos2 = p2.getPoint();
-				Line2D line = new Line2D.Double(pos1, pos2);
-				Shape lineShape = punchShapes(line, p1, p2);
-
-				// Draw line
-				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
-				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};
 		return d;

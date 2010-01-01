@@ -76,6 +76,11 @@ Version 1.0
 
 - Plot Gallery
 
+Version 1.1
+===========
+
+- Skins: (XML) files storing visual styles
+
 Version 2.0
 ===========
 

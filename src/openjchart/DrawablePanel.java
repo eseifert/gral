@@ -33,6 +33,7 @@ import javax.swing.JPanel;
  * It displays a single Drawable in a JPanel.
  */
 public class DrawablePanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private final Drawable drawable;
 
 	/**

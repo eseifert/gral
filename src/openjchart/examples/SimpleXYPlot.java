@@ -44,24 +44,28 @@ public class SimpleXYPlot extends JFrame {
 
 	public SimpleXYPlot() {
 		super("OpenJChartTest");
+		getContentPane().setBackground(new Color(1.0f, 0.99f, 0.95f));
+		
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
-		data.add(-1.5,  1.0,  0.00000000000,  0.30);
-		data.add( 0.0,  2.0,  0.69314718056,  0.81);
-		data.add( 1.5,  3.0,  1.09861228867,  3.50);
-		data.add( 4.0,  4.0,  1.38629436112,  0.50);
-		data.add( 5.0,  5.0,  1.60943791243,  1.80);
-		data.add( 6.0,  6.0,  1.79175946923,  1.02);
-		data.add( 7.0,  7.0,  1.94591014906,  0.38);
-		data.add( 8.0,  8.0,  2.07944154168,  2.55);
+		data.add(-1.5,  1.0,  Math.log( 1.0),  0.30);
+		data.add( 0.0,  2.0,  Math.log( 2.0),  0.81);
+		data.add( 1.5,  3.0,  Math.log( 3.0),  3.50);
+		data.add( 4.0,  4.0,  Math.log( 4.0),  0.50);
+		data.add( 5.0,  5.0,  Math.log( 5.0),  1.80);
+		data.add( 6.0,  6.0,  Math.log( 6.0),  1.02);
+		data.add( 7.0,  7.0,  Math.log( 7.0),  0.38);
+		data.add( 8.0,  8.0,  Math.log( 8.0),  2.55);
+		data.add( 9.0,  9.0,  Math.log( 9.0),  1.50);
+		data.add(10.0, 10.0,  Math.log(10.0),  2.00);
 
 		DataSeries seriesLog = new DataSeries(data, 1, 2);
-
 		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
-		// Custom background
+		// Custom plot area formatting
 		plot.getPlotArea().setSetting(PlotArea2D.KEY_BACKGROUND,
-				new LinearGradientPaint(0f,0f, 0f,1f, new float[] {0f, 1f}, new Color[] {Color.WHITE, new Color(1f, 0.9f, 0.9f)}));
+				new LinearGradientPaint(0f,0f, 1f,0f, new float[] {0.00f, 0.05f}, new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
+		plot.getPlotArea().setSetting(PlotArea2D.KEY_BORDER, null);
 		// Setting the title
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
 		// Custom title alignment
@@ -76,12 +80,12 @@ public class SimpleXYPlot extends JFrame {
 		// Custom grid color
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, Color.RED);
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_STROKE, new BasicStroke(7.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {5f, 10f}, 0.0f));
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
+		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for shapes
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 2.0);
@@ -93,7 +97,7 @@ public class SimpleXYPlot extends JFrame {
 		logRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
 		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, logRendererX);
 		// Custom stroke for the x-axis
-		BasicStroke stroke = new BasicStroke(3f);
+		BasicStroke stroke = new BasicStroke(2f);
 		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
 		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
 		// Custom stroke for the ticks
@@ -101,7 +105,7 @@ public class SimpleXYPlot extends JFrame {
 		// Swap axis direction
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.67);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.5);
 		plot.setInsets(new Insets2D.Double(20.0, 80.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 

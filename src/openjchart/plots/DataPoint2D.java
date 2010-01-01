@@ -23,29 +23,37 @@ package openjchart.plots;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 
+import openjchart.Drawable;
+
 /**
  * Class for storing points of a plot.
  * @author Erich Seifert
  */
 public class DataPoint2D {
-	private final Point2D point;
+	private final Point2D position;
 	private final Point2D normal;
+	private final Drawable drawable;
 	private final Shape shape;
 	private final String label;
 
-	public DataPoint2D(Point2D point, Point2D normal, Shape shape, String label) {
-		this.point = point;
+	public DataPoint2D(Point2D position, Point2D normal, Drawable drawable, Shape shape, String label) {
+		this.position = position;
 		this.normal = normal;
+		this.drawable = drawable;
 		this.shape = shape;
 		this.label = label;
 	}
 
-	public Point2D getPoint() {
-		return point;
+	public Point2D getPosition() {
+		return position;
 	}
 
 	public Point2D getNormal() {
 		return normal;
+	}
+
+	public Drawable getDrawable() {
+		return drawable;
 	}
 
 	public Shape getShape() {
