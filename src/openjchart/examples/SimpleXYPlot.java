@@ -36,7 +36,6 @@ import openjchart.plots.axes.AxisRenderer2D;
 import openjchart.plots.axes.LogarithmicRenderer2D;
 import openjchart.plots.lines.DiscreteLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
-import openjchart.plots.lines.SplineLineRenderer2D;
 import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.plots.shapes.SizeableShapeRenderer;
 import openjchart.util.Insets2D;
@@ -84,7 +83,7 @@ public class SimpleXYPlot extends JFrame {
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
 		// Custom line renderer
-		LineRenderer2D discreteRenderer = new SplineLineRenderer2D();
+		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
