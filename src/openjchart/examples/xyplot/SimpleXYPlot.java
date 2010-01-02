@@ -18,12 +18,13 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.examples;
+package openjchart.examples.xyplot;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.LinearGradientPaint;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -41,30 +42,26 @@ import openjchart.plots.shapes.SizeableShapeRenderer;
 import openjchart.util.Insets2D;
 
 public class SimpleXYPlot extends JFrame {
+	private static final Random random = new Random();
 
 	public SimpleXYPlot() {
 		super("OpenJChartTest");
 		getContentPane().setBackground(new Color(1.0f, 0.99f, 0.95f));
-		
+
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
-		data.add(-1.5,  1.0,  Math.log( 1.0),  0.30);
-		data.add( 0.0,  2.0,  Math.log( 2.0),  0.81);
-		data.add( 1.5,  3.0,  Math.log( 3.0),  3.50);
-		data.add( 4.0,  4.0,  Math.log( 4.0),  0.50);
-		data.add( 5.0,  5.0,  Math.log( 5.0),  1.80);
-		data.add( 6.0,  6.0,  Math.log( 6.0),  1.02);
-		data.add( 7.0,  7.0,  Math.log( 7.0),  0.38);
-		data.add( 8.0,  8.0,  Math.log( 8.0),  2.55);
-		data.add( 9.0,  9.0,  Math.log( 9.0),  1.50);
-		data.add(10.0, 10.0,  Math.log(10.0),  2.00);
+		for (double x = 1.0; x <= 200.0; x *= 2.0) {
+			double x2 = x/5.0;
+			data.add(x2 - 12.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
+		}
 
 		DataSeries seriesLog = new DataSeries(data, 1, 2);
 		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
 		// Custom plot area formatting
-		plot.getPlotArea().setSetting(PlotArea2D.KEY_BACKGROUND,
-				new LinearGradientPaint(0f,0f, 1f,0f, new float[] {0.00f, 0.05f}, new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
+		plot.getPlotArea().setSetting(PlotArea2D.KEY_BACKGROUND, new LinearGradientPaint(
+				0f,0f, 1f,0f, new float[] {0.00f, 0.05f},
+				new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
 		plot.getPlotArea().setSetting(PlotArea2D.KEY_BORDER, null);
 		// Setting the title
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
@@ -80,7 +77,7 @@ public class SimpleXYPlot extends JFrame {
 		// Custom grid color
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
@@ -105,7 +102,7 @@ public class SimpleXYPlot extends JFrame {
 		// Swap axis direction
 		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 0.5);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 1.0);
 		plot.setInsets(new Insets2D.Double(20.0, 80.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 

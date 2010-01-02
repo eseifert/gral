@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.examples;
+package openjchart.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

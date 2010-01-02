@@ -222,27 +222,31 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double minTick = Math.ceil(min/tickSpacing) * tickSpacing;
 		double maxTick = Math.floor(max/tickSpacing) * tickSpacing;
 
-		List<DataPoint2D> tickPositions = new LinkedList<DataPoint2D>();
-		for (double tickPositionWorld=minTick; tickPositionWorld<=maxTick; tickPositionWorld += tickSpacing) {
-			// Calculate position of tick on axis shape
-			Point2D tickPoint = worldToViewPos(axis, tickPositionWorld, false);
-
-			if (tickPoint == null) {
-				continue;
+		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacing) {
+			DataPoint2D tick = getTick(axis, tickPositionWorld);
+			if (tick.getPosition() != null) {
+				ticks.add(tick);
 			}
-
-			// Calculate tick normal
-			Point2D tickNormal = getNormal(axis, tickPositionWorld, false);
-
-			Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
-			String tickLabel = labelFormat.format(tickPositionWorld);
-
-			tickPositions.add(new DataPoint2D(tickPoint, tickNormal, null, null, tickLabel));
 		}
 
-		return tickPositions;
+		return ticks;
 	}
 
+	protected DataPoint2D getTick(Axis axis, double tickPositionWorld) {
+		// Calculate position of tick on axis shape
+		Point2D tickPoint = worldToViewPos(axis, tickPositionWorld, false);
+
+		// Calculate tick normal
+		Point2D tickNormal = getNormal(axis, tickPositionWorld, false);
+
+		Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
+		String tickLabel = labelFormat.format(tickPositionWorld);
+
+		DataPoint2D tick = new DataPoint2D(tickPoint, tickNormal, null, null, tickLabel);
+		return tick;
+	}
+	
 	@Override
 	public Point2D getNormal(Axis axis, Number value, boolean extrapolate) {
 		double tickPositionView = worldToView(axis, value, extrapolate);

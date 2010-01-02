@@ -18,50 +18,43 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.examples;
+package openjchart.examples.barplot;
 
 import java.awt.BorderLayout;
-import java.util.Random;
+import java.awt.Color;
+import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 
 import openjchart.DrawablePanel;
 import openjchart.data.DataTable;
-import openjchart.plots.PiePlot;
+import openjchart.plots.BarPlot;
+import openjchart.plots.axes.Axis;
+import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.Insets2D;
 
-public class SimplePiePlot extends JFrame {
+public class SimpleBarPlot extends JFrame {
 
-	public SimplePiePlot() {
+	public SimpleBarPlot() {
 		super("OpenJChartTest");
-		DataTable data = new DataTable(Integer.class);
-		/*
-		data.add(1, 1);
-		data.add(2, 3);
-		data.add(3, 2);
-		data.add(4, 6);
-		data.add(5, 4);
-		data.add(6, 8);
-		data.add(7, 9);
-		data.add(8, 11);//*/
-		//*
-		Random r = new Random();
-		for (int i = 0; i < 15; i++) {
-			data.add(r.nextInt(10) + 1);
-		}
-		PiePlot plot = new PiePlot(data);
-		plot.setSetting(PiePlot.KEY_TITLE, "A Sample Pie Plot");
-		// Change rotation
-		//plot.setSetting(PiePlot.KEY_CLOCKWISE, false);
-		// Custom start angle
-		//plot.setSetting(PiePlot.KEY_START, 70.0);
-		// Custom colors
-		//plot.setSetting(PiePlot.KEY_COLORS, new RainbowColors());
-		// Random blue colors
-		//QuasiRandomColors colors = new QuasiRandomColors();
-		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
-		//plot.setSetting(PiePlot.KEY_COLORS, colors);
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
+		data.add(1,  1,  6);
+		data.add(2,  3,  8);
+		data.add(3, -2,  2);
+		data.add(4,  6,  6);
+		data.add(5, -4,  8);
+		data.add(6,  8, 18);
+		data.add(7,  9,  9);
+		data.add(8, 11,  1);
+		BarPlot plot = new BarPlot(data);
+		plot.getAxis(Axis.X).setRange(0.5, 8.5);
+		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
+		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
+		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
+		plot.getShapeRenderer(data).setSetting(ShapeRenderer.KEY_COLOR,
+				new LinearGradientPaint(0f,0f, 0f,1f,
+						new float[] {0.0f, 0.5f, 1.0f},
+						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -69,7 +62,7 @@ public class SimplePiePlot extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		SimplePiePlot test = new SimplePiePlot();
+		SimpleBarPlot test = new SimpleBarPlot();
 		test.setVisible(true);
 	}
 }

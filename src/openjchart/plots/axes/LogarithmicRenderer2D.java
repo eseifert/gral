@@ -20,6 +20,11 @@
 
 package openjchart.plots.axes;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import openjchart.plots.DataPoint2D;
+
 
 
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
@@ -39,9 +44,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				return getShapeLength();
 			}
 		}
-		double axisMinLog = (axisMin > 0.0) ? Math.log(axisMin) : 0.0;
-		double axisMaxLog = (axisMax > 0.0) ? Math.log(axisMax) : 1.0;
-		return (Math.log(value.doubleValue()) - axisMinLog)*getShapeLength() / axisMaxLog;
+		double axisMinLog = (axisMin > 0.0) ? Math.log10(axisMin) : 0.0;
+		double axisMaxLog = (axisMax > 0.0) ? Math.log10(axisMax) : 1.0;
+		return (Math.log10(value.doubleValue()) - axisMinLog)*getShapeLength() / (axisMaxLog - axisMinLog);
 	}
 
 	@Override
@@ -60,4 +65,33 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		return value;
 	}
 
+	@Override
+	public List<DataPoint2D> getTicks(Axis axis) {
+		double tickSpacing = getSetting(KEY_TICK_SPACING);
+		double min = axis.getMin().doubleValue();
+		double max = axis.getMax().doubleValue();
+
+		final double BASE = 10.0;
+		double powerMin = Math.pow(BASE, Math.floor(Math.log10(min)));
+		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
+
+		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		for (double power = powerMin; power <= powerMax; power *= BASE) {
+			double powerNext = power*BASE;
+			for (double i = 1; i*power < powerNext; i++) {
+				double tickPositionWorld = i*power*tickSpacing;
+				if (tickPositionWorld < min) {
+					continue;
+				} else if (tickPositionWorld > max) {
+					break;
+				}
+				DataPoint2D tick = getTick(axis, tickPositionWorld);
+				if (tick.getPosition() != null) {
+					ticks.add(tick);
+				}
+			}
+		}
+
+		return ticks;
+	}
 }
