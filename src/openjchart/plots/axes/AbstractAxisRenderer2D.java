@@ -148,9 +148,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_DISTANCE);
 					double labelDist = tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
 					double labelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_ROTATION);
-					double axisCenter = (axis.getMin().doubleValue() + axis.getMax().doubleValue()) / 2.0;
-					Point2D labelPos = worldToViewPos(axis, axisCenter, false);
-					Point2D labelNormal = getNormal(axis, axisCenter, false);
+					double axisLabelPos = (axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
+					Point2D labelPos = getPosition(axis, axisLabelPos, false, true);
+					Point2D labelNormal = getNormal(axis, axisLabelPos, false, true);
 					layoutLabel(axisLabel, labelPos, labelNormal, labelDist, isTickLabelOutside, labelRotation);
 					axisLabel.draw(g2d);
 				}
@@ -235,10 +235,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 	protected DataPoint2D getTick(Axis axis, double tickPositionWorld) {
 		// Calculate position of tick on axis shape
-		Point2D tickPoint = worldToViewPos(axis, tickPositionWorld, false);
+		Point2D tickPoint = getPosition(axis, tickPositionWorld, false, false);
 
 		// Calculate tick normal
-		Point2D tickNormal = getNormal(axis, tickPositionWorld, false);
+		Point2D tickNormal = getNormal(axis, tickPositionWorld, false, false);
 
 		Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
 		String tickLabel = labelFormat.format(tickPositionWorld);
@@ -246,12 +246,17 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		DataPoint2D tick = new DataPoint2D(tickPoint, tickNormal, null, null, tickLabel);
 		return tick;
 	}
-	
-	@Override
-	public Point2D getNormal(Axis axis, Number value, boolean extrapolate) {
-		double tickPositionView = worldToView(axis, value, extrapolate);
-		int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, tickPositionView);
 
+	@Override
+	public Point2D getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
+		double valueView;
+		if (forceLinear) {
+			valueView = (value.doubleValue() - axis.getMin().doubleValue())/axis.getRange()*getShapeLength();
+		} else {
+			valueView = worldToView(axis, value, extrapolate);
+		}
+
+		int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, valueView);
 		if (segmentIndex < 0) {
 			throw new IndexOutOfBoundsException("Could not find shape segment for value "+value+".");
 		}
@@ -274,30 +279,35 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public Point2D worldToViewPos(Axis axis, Number value, boolean extrapolate) {
+	public Point2D getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
 		}
 
-		double length = worldToView(axis, value, extrapolate);
+		double valueView;
+		if (forceLinear) {
+			valueView = (value.doubleValue() - axis.getMin().doubleValue())/axis.getRange()*getShapeLength();
+		} else {
+			valueView = worldToView(axis, value, extrapolate);
+		}
 
-		if (Double.isNaN(length) || Double.isInfinite(length)) {
+		if (Double.isNaN(valueView) || Double.isInfinite(valueView)) {
 			return null;
 		}
 
-		if (length <= 0.0 || length >= getShapeLength()) {
+		if (valueView <= 0.0 || valueView >= getShapeLength()) {
 			if (extrapolate) {
 				// do linear extrapolation if point lies outside of shape
-				int segmentIndex = (length <= 0.0) ? 0 : shapeLines.length - 1;
+				int segmentIndex = (valueView <= 0.0) ? 0 : shapeLines.length - 1;
 				Line2D segment = shapeLines[segmentIndex];
 				double segmentLen = shapeSegmentLengths[segmentIndex];
 				double shapeLen = shapeLengths[segmentIndex];
 				return new Point2D.Double(
-					segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (length - shapeLen),
-					segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (length - shapeLen)
+					segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (valueView - shapeLen),
+					segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (valueView - shapeLen)
 				);
 			} else {
-				if (length <= 0.0) {
+				if (valueView <= 0.0) {
 					return shapeLines[0].getP1();
 				} else {
 					return shapeLines[shapeLines.length - 1].getP2();
@@ -306,14 +316,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		// Determine to which segment the value belongs using a binary search
-		int i = MathUtils.binarySearchFloor(shapeLengths, length);
+		int i = MathUtils.binarySearchFloor(shapeLengths, valueView);
 
 		if (i < 0 || i >= shapeLines.length) {
 			return null;
 		}
 		Line2D line = shapeLines[i];
 
-		double posRel = (length - shapeLengths[i]) / shapeSegmentLengths[i];
+		double posRel = (valueView - shapeLengths[i]) / shapeSegmentLengths[i];
 		Point2D pos = new Point2D.Double(
 			line.getX1() + (line.getX2() - line.getX1())*posRel,
 			line.getY1() + (line.getY2() - line.getY1())*posRel

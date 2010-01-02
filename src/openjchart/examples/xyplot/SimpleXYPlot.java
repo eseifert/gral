@@ -90,20 +90,24 @@ public class SimpleXYPlot extends JFrame {
 		// Custom ascending point
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
-		AxisRenderer2D logRendererX = new LogarithmicRenderer2D();
-		logRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
-		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, logRendererX);
+		AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
+		axisRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
+		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, axisRendererX);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
-		logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
+		axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
 		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
 		// Custom stroke for the ticks
-		//logRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
+		//axisRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
 		// Swap axis direction
-		//logRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
+		//axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
+		// Change intersection point of Y axis
+		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER);
+		axisRendererY.setSetting(AxisRenderer2D.KEY_INTERSECTION, 1.0);
+
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 1.0);
-		plot.setInsets(new Insets2D.Double(20.0, 80.0, 40.0, 40.0));
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

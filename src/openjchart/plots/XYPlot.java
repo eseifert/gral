@@ -162,8 +162,8 @@ public class XYPlot extends Plot implements DataListener  {
 					Number valueY = row.get(1);
 					AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
 					AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
-					Point2D axisPosX = axisXRenderer.worldToViewPos(axisX, valueX, true);
-					Point2D axisPosY = axisYRenderer.worldToViewPos(axisY, valueY, true);
+					Point2D axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+					Point2D axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
 					if (axisPosX==null || axisPosY==null) {
 						continue;
 					}
@@ -306,8 +306,8 @@ public class XYPlot extends Plot implements DataListener  {
 
 		// Set bounds with new axis shapes
 		if (axisXComp != null && axisXRenderer != null) {
-			double axisXIntersection = axisXRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
-			Point2D axisXPos = axisYRenderer.worldToViewPos(axisY, axisXIntersection, false);
+			Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+			Point2D axisXPos = axisYRenderer.getPosition(axisY, axisXIntersection, false, false);
 			axisXComp.setBounds(
 				plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
 				plotBounds.getWidth(), axisXSize.getHeight()
@@ -315,8 +315,8 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		if (axisYComp != null && axisYRenderer != null) {
-			double axisYIntersection = axisYRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
-			Point2D axisYPos = axisXRenderer.worldToViewPos(axisX, axisYIntersection, false);
+			Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer2D.KEY_INTERSECTION);
+			Point2D axisYPos = axisXRenderer.getPosition(axisX, axisYIntersection, false, false);
 			axisYComp.setBounds(
 				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
 				axisYSize.getWidth(), plotBounds.getHeight()

@@ -89,7 +89,7 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @param extrapolate Option to activate extrapolation value that are not on the axis
 	 * @return Two-dimensional point of the value
 	 */
-	Point2D worldToViewPos(Axis axis, Number value, boolean extrapolate);
+	Point2D getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
 
 	/**
 	 * Returns the normal vector at the position of the specified value.
@@ -99,7 +99,7 @@ public interface AxisRenderer2D extends SettingsStorage {
 	 * @param extrapolate Option to activate extrapolation value that are not on the axis
 	 * @return Two-dimensional normal vector at the position
 	 */
-	Point2D getNormal(Axis axis, Number value, boolean extrapolate);
+	Point2D getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
 
 	/**
 	 * Converts a world (axis) coordinate value to a view (screen) coordinate value.
