@@ -20,8 +20,10 @@
 
 package openjchart.plots.axes;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import openjchart.plots.DataPoint2D;
 import openjchart.util.MathUtils;
@@ -77,10 +79,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
 
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		Set<Double> tickPositions = new HashSet<Double>();
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
-			double powerNext = power*BASE;
 			double step = power*tickSpacing;
-			for (double tickPositionWorld = step; tickPositionWorld < powerNext;
+			double powerNext = power*BASE;
+			for (double tickPositionWorld = step; tickPositionWorld <= powerNext;
 					tickPositionWorld = MathUtils.round(tickPositionWorld + step, 1e-14)) {
 				if (tickPositionWorld < min) {
 					continue;
@@ -88,8 +91,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 					break;
 				}
 				DataPoint2D tick = getTick(axis, tickPositionWorld);
-				if (tick.getPosition() != null) {
+				if (tick.getPosition() != null && !tickPositions.contains(tickPositionWorld)) {
 					ticks.add(tick);
+					tickPositions.add(tickPositionWorld);
 				}
 			}
 		}

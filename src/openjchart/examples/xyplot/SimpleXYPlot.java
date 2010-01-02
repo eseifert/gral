@@ -49,9 +49,9 @@ public class SimpleXYPlot extends JFrame {
 		getContentPane().setBackground(new Color(1.0f, 0.99f, 0.95f));
 
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
-		for (double x = 1.0; x <= 200.0; x *= 2.0) {
+		for (double x = 1.0; x <= 400.0; x *= 1.5) {
 			double x2 = x/5.0;
-			data.add(x2 - 12.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
+			data.add(-Math.sqrt(x2) + 5.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
 		}
 
 		DataSeries seriesLog = new DataSeries(data, 1, 2);
@@ -106,8 +106,8 @@ public class SimpleXYPlot extends JFrame {
 		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER);
 		axisRendererY.setSetting(AxisRenderer2D.KEY_INTERSECTION, 1.0);
 		// Change tick spacing
-		//plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
-		//plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 1.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);

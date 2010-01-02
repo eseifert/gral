@@ -31,8 +31,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
@@ -223,10 +225,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double maxTick = MathUtils.floor(max, tickSpacing);
 
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		Set<Double> tickPositions = new HashSet<Double>();
 		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacing) {
 			DataPoint2D tick = getTick(axis, tickPositionWorld);
-			if (tick.getPosition() != null) {
+			if (tick.getPosition() != null && !tickPositions.contains(tickPositionWorld)) {
 				ticks.add(tick);
+				tickPositions.add(tickPositionWorld);
 			}
 		}
 
