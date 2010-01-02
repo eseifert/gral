@@ -219,8 +219,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double tickSpacing = getSetting(KEY_TICK_SPACING);
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
-		double minTick = Math.ceil(min/tickSpacing) * tickSpacing;
-		double maxTick = Math.floor(max/tickSpacing) * tickSpacing;
+		double minTick = MathUtils.ceil(min, tickSpacing);
+		double maxTick = MathUtils.floor(max, tickSpacing);
 
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
 		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacing) {

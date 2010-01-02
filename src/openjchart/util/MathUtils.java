@@ -39,6 +39,36 @@ public abstract class MathUtils {
 	}
 
 	/**
+	 * Mathematically rounds a number with a defined precision.
+	 * @param a Value
+	 * @param precision Precision
+	 * @return Rounded value
+	 */
+	public static double round(double a, double precision) {
+		return Math.round(a/precision) * precision;
+	}
+
+	/**
+	 * Returns a rounded number smaller than <code>a</code> with a defined precision.
+	 * @param a Value
+	 * @param precision Precision
+	 * @return Rounded value
+	 */
+	public static double floor(double a, double precision) {
+		return Math.floor(a/precision) * precision;
+	}
+
+	/**
+	 * Returns a rounded number larger than <code>a</code> with a defined precision.
+	 * @param a Value
+	 * @param precision Precision
+	 * @return Rounded value
+	 */
+	public static double ceil(double a, double precision) {
+		return Math.ceil(a/precision) * precision;
+	}
+
+	/**
 	 * Perform a binary search on a sorted array <code>a</code> to find the
 	 * element with the nearest element to <code>key</code>.
 	 * @param a Array with ascending values

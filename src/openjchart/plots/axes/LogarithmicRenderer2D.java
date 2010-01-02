@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import openjchart.plots.DataPoint2D;
+import openjchart.util.MathUtils;
 
 
 
@@ -78,8 +79,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
 			double powerNext = power*BASE;
-			for (double i = 1; i*power < powerNext; i++) {
-				double tickPositionWorld = i*power*tickSpacing;
+			double step = power*tickSpacing;
+			for (double tickPositionWorld = step; tickPositionWorld < powerNext;
+					tickPositionWorld = MathUtils.round(tickPositionWorld + step, 1e-14)) {
 				if (tickPositionWorld < min) {
 					continue;
 				} else if (tickPositionWorld > max) {
