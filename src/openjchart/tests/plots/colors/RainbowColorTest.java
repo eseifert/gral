@@ -20,13 +20,21 @@
 
 package openjchart.tests.plots.colors;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	RainbowColorTest.class,
-	SingleColorTest.class
-})
-public class ColorsTests {
+import java.awt.Color;
+
+import openjchart.plots.colors.RainbowColors;
+
+import org.junit.Test;
+
+public class RainbowColorTest {
+	@Test
+	public void testGet() {
+		RainbowColors c = new RainbowColors();
+		for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+			assertEquals(Color.getHSBColor(i, 1f, 1f), c.get(i));
+		}
+	}
+
 }

@@ -23,7 +23,7 @@ package openjchart.tests;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import openjchart.Drawable;
@@ -48,10 +48,12 @@ public class DrawablePanelTest {
 	public void setUp() {
 		panel = new DrawablePanel(drawable);
 	}
-	
+
 	@Test
 	public void testBounds() {
-		Rectangle2D bounds = panel.getBounds();
+		Rectangle bounds;
+		// Get
+		bounds = panel.getBounds();
 		assertEquals(0.0, bounds.getX(), DELTA);
 		assertEquals(0.0, bounds.getY(), DELTA);
 		assertEquals(0.0, bounds.getWidth(), DELTA);
@@ -60,6 +62,20 @@ public class DrawablePanelTest {
 		assertEquals(bounds.getY(), panel.getY(), DELTA);
 		assertEquals(bounds.getWidth(), panel.getWidth(), DELTA);
 		assertEquals(bounds.getHeight(), panel.getHeight(), DELTA);
+		// Set Rectangle object
+		panel.setBounds(new Rectangle(1, 2, 10, 20));
+		bounds = panel.getBounds();
+		assertEquals( 1.0, bounds.getX(), DELTA);
+		assertEquals( 2.0, bounds.getY(), DELTA);
+		assertEquals(10.0, bounds.getWidth(), DELTA);
+		assertEquals(20.0, bounds.getHeight(), DELTA);
+		// Set values
+		panel.setBounds(3, 4, 30, 40);
+		bounds = panel.getBounds();
+		assertEquals( 3.0, bounds.getX(), DELTA);
+		assertEquals( 4.0, bounds.getY(), DELTA);
+		assertEquals(30.0, bounds.getWidth(), DELTA);
+		assertEquals(40.0, bounds.getHeight(), DELTA);
 	}
 
 	@Test
