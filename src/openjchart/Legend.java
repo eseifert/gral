@@ -179,6 +179,15 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	}
 
 	/**
+	 * Returns whether the specified DataSource was added to the legend.
+	 * @param source Data source
+	 * @return <code>true</code> if legend contains the data source, otherwise <code>false</code>
+	 */
+	public boolean contains(DataSource source) {
+		return components.containsKey(source);
+	}
+
+	/**
 	 * Removes the specified DataSource.
 	 * @param source DataSource to be removed.
 	 */

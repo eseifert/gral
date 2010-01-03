@@ -34,7 +34,12 @@ import org.junit.runners.Suite;
 	ColorsTests.class,
 	LinesTests.class,
 	ShapesTests.class,
-	PlotTest.class
+	PlotArea2DTest.class,
+	LegendTest.class,
+	PlotTest.class,
+	XYPlotTest.class,
+	PiePlotTest.class,
+	BarPlotTest.class
 })
 public class PlotsTests {
 }
