@@ -21,6 +21,12 @@
 package openjchart.tests.plots.axes;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+import openjchart.Drawable;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.LinearRenderer2D;
 
@@ -34,8 +40,17 @@ public class LinearRenderer2DTest {
 
 	@Before
 	public void setUp() {
-		axis = new Axis(-5, 5);
+		axis = new Axis(-5.0, 5.0);
 		renderer = new LinearRenderer2D();
+	}
+
+	@Test
+	public void testDraw() {
+		Drawable d = renderer.getRendererComponent(axis);
+		assertNotNull(d);
+		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		d.draw(g2d);
 	}
 
 	@Test

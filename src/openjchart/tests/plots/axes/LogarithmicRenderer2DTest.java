@@ -21,9 +21,13 @@
 package openjchart.tests.plots.axes;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
+import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.LogarithmicRenderer2D;
@@ -38,8 +42,18 @@ public class LogarithmicRenderer2DTest {
 
 	@Before
 	public void setUp() {
-		axis = new Axis(0, 10);
+		axis = new Axis(0.0, 10.0);
 		renderer = new LogarithmicRenderer2D();
+	}
+
+	@Test
+	public void testDraw() {
+		Axis axis = new Axis(0.1, 10.0);
+		Drawable d = renderer.getRendererComponent(axis);
+		assertNotNull(d);
+		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		d.draw(g2d);
 	}
 
 	@Test
@@ -77,7 +91,7 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testTicks() {
-		Axis axis = new Axis(0.2, 10);
+		Axis axis = new Axis(0.2, 10.0);
 		List<DataPoint2D> ticks = renderer.getTicks(axis);
 		assertEquals(18, ticks.size());
 	}

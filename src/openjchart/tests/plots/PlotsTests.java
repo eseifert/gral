@@ -21,6 +21,9 @@
 package openjchart.tests.plots;
 
 import openjchart.tests.plots.axes.AxesTests;
+import openjchart.tests.plots.colors.ColorsTests;
+import openjchart.tests.plots.lines.LinesTests;
+import openjchart.tests.plots.shapes.ShapesTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -28,6 +31,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	AxesTests.class,
+	ColorsTests.class,
+	LinesTests.class,
+	ShapesTests.class,
 	PlotTest.class
 })
 public class PlotsTests {

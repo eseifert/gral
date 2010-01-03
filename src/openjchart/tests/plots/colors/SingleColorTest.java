@@ -18,21 +18,40 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests;
+package openjchart.tests.plots.colors;
 
-import openjchart.tests.data.DataTests;
-import openjchart.tests.plots.PlotsTests;
-import openjchart.tests.util.UtilTests;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.awt.Color;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class
-})
-public class AllTests {
+import openjchart.plots.colors.SingleColor;
+
+import org.junit.Test;
+
+public class SingleColorTest {
+
+	@Test
+	public void testCreation() {
+		SingleColor c = new SingleColor(Color.WHITE);
+		assertEquals(Color.WHITE, c.getColor());
+	}
+
+	@Test
+	public void testColor() {
+		SingleColor c = new SingleColor(Color.BLUE);
+		// Get
+		assertEquals(Color.BLUE, c.getColor());
+		// Set
+		c.setColor(Color.RED);
+		assertEquals(Color.RED, c.getColor());
+	}
+
+	@Test
+	public void testGet() {
+		SingleColor c = new SingleColor(Color.BLUE);
+		for (double i = 0.0; i <= 1.0; i += 0.1) {
+			assertEquals(Color.BLUE, c.get(i));
+		}
+	}
+
 }
