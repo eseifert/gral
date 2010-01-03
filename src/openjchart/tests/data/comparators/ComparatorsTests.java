@@ -18,24 +18,15 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data;
-
-import openjchart.tests.data.comparators.ComparatorsTests;
-import openjchart.tests.data.filters.FiltersTests;
-import openjchart.tests.data.io.IoTests;
-import openjchart.tests.data.statistics.StatisticsTests;
+package openjchart.tests.data.comparators;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	DataTableTest.class,
-	ComparatorsTests.class,
-	DataSeriesTest.class,
-	StatisticsTests.class,
-	FiltersTests.class,
-	IoTests.class
+	AscendingTest.class,
+	DescendingTest.class
 })
-public class DataTests {
+public class ComparatorsTests {
 }

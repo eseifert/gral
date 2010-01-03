@@ -33,6 +33,8 @@ import openjchart.util.MathUtils;
 import org.junit.Test;
 
 public class MathUtilsTest {
+	public static final double DELTA = 1e-15;
+
 	@Test
 	public void testAlmostEqual() {
 		double delta = 1e-5;
@@ -40,6 +42,57 @@ public class MathUtilsTest {
 		assertFalse(MathUtils.almostEqual(1.0, 2.0, delta));
 		assertTrue(MathUtils.almostEqual(1.0, 1.0 + 0.5*delta, delta));
 		assertFalse(MathUtils.almostEqual(1.0, 1.0 + 2.0*delta, delta));
+	}
+
+	@Test
+	public void testRound() {
+		assertEquals(1.0, MathUtils.round(1.0/1.0, 1e-1), DELTA);
+		assertEquals(0.7, MathUtils.round(2.0/3.0, 1e-1), DELTA);
+		assertEquals(0.5, MathUtils.round(1.0/2.0, 1e-1), DELTA);
+		assertEquals(0.3, MathUtils.round(1.0/3.0, 1e-1), DELTA);
+		assertEquals(0.1, MathUtils.round(1.0/9.0, 1e-1), DELTA);
+		assertEquals(1.00, MathUtils.round(1.0/1.0, 1e-2), DELTA);
+		assertEquals(0.67, MathUtils.round(2.0/3.0, 1e-2), DELTA);
+		assertEquals(0.50, MathUtils.round(1.0/2.0, 1e-2), DELTA);
+		assertEquals(0.33, MathUtils.round(1.0/3.0, 1e-2), DELTA);
+		assertEquals(0.11, MathUtils.round(1.0/9.0, 1e-2), DELTA);
+	}
+
+	@Test
+	public void testFloor() {
+		assertEquals(1.0, MathUtils.floor(1.0/1.0, 1e-1), DELTA);
+		assertEquals(0.6, MathUtils.floor(2.0/3.0, 1e-1), DELTA);
+		assertEquals(0.5, MathUtils.floor(1.0/2.0, 1e-1), DELTA);
+		assertEquals(0.3, MathUtils.floor(1.0/3.0, 1e-1), DELTA);
+		assertEquals(0.1, MathUtils.floor(1.0/9.0, 1e-1), DELTA);
+		assertEquals(1.00, MathUtils.floor(1.0/1.0, 1e-2), DELTA);
+		assertEquals(0.66, MathUtils.floor(2.0/3.0, 1e-2), DELTA);
+		assertEquals(0.50, MathUtils.floor(1.0/2.0, 1e-2), DELTA);
+		assertEquals(0.33, MathUtils.floor(1.0/3.0, 1e-2), DELTA);
+		assertEquals(0.11, MathUtils.floor(1.0/9.0, 1e-2), DELTA);
+	}
+
+	@Test
+	public void testCeil() {
+		assertEquals(1.0, MathUtils.ceil(1.0/1.0, 1e-1), DELTA);
+		assertEquals(0.7, MathUtils.ceil(2.0/3.0, 1e-1), DELTA);
+		assertEquals(0.5, MathUtils.ceil(1.0/2.0, 1e-1), DELTA);
+		assertEquals(0.4, MathUtils.ceil(1.0/3.0, 1e-1), DELTA);
+		assertEquals(0.2, MathUtils.ceil(1.0/9.0, 1e-1), DELTA);
+		assertEquals(1.00, MathUtils.ceil(1.0/1.0, 1e-2), DELTA);
+		assertEquals(0.67, MathUtils.ceil(2.0/3.0, 1e-2), DELTA);
+		assertEquals(0.50, MathUtils.ceil(1.0/2.0, 1e-2), DELTA);
+		assertEquals(0.34, MathUtils.ceil(1.0/3.0, 1e-2), DELTA);
+		assertEquals(0.12, MathUtils.ceil(1.0/9.0, 1e-2), DELTA);
+	}
+
+	@Test
+	public void testLimit() {
+		assertEquals(0.0, MathUtils.limit(-0.5, 0.0, 1.0), DELTA);
+		assertEquals(0.0, MathUtils.limit( 0.0, 0.0, 1.0), DELTA);
+		assertEquals(0.5, MathUtils.limit( 0.5, 0.0, 1.0), DELTA);
+		assertEquals(1.0, MathUtils.limit( 1.0, 0.0, 1.0), DELTA);
+		assertEquals(1.0, MathUtils.limit( 1.5, 0.0, 1.0), DELTA);
 	}
 
 	@Test
@@ -57,8 +110,6 @@ public class MathUtilsTest {
 		assertEquals(0, MathUtils.binarySearchCeil(a, 0.0));
 		assertEquals(1, MathUtils.binarySearchCeil(a, 0.5));
 		assertEquals(1, MathUtils.binarySearchCeil(a, 1.0));
-
-		// TODO: More tests
 	}
 
 	@Test

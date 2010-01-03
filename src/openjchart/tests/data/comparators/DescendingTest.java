@@ -18,24 +18,27 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data;
+package openjchart.tests.data.comparators;
 
-import openjchart.tests.data.comparators.ComparatorsTests;
-import openjchart.tests.data.filters.FiltersTests;
-import openjchart.tests.data.io.IoTests;
-import openjchart.tests.data.statistics.StatisticsTests;
+import static org.junit.Assert.assertEquals;
+import openjchart.data.comparators.DataComparator;
+import openjchart.data.comparators.Descending;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	DataTableTest.class,
-	ComparatorsTests.class,
-	DataSeriesTest.class,
-	StatisticsTests.class,
-	FiltersTests.class,
-	IoTests.class
-})
-public class DataTests {
+public class DescendingTest {
+	@Test
+	public void testCompare() {
+		Number[] row1 = { 1.0, 2.0, 3.0 };
+		Number[] row2 = { 2.0, 2.0, 2.0 };
+
+		DataComparator comparator1 = new Descending(0);
+		DataComparator comparator2 = new Descending(1);
+		DataComparator comparator3 = new Descending(2);
+
+		assertEquals( 1, comparator1.compare(row1, row2));
+		assertEquals( 0, comparator2.compare(row1, row2));
+		assertEquals(-1, comparator3.compare(row1, row2));
+	}
+
 }

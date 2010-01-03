@@ -106,7 +106,7 @@ public class SimpleXYPlot extends JFrame {
 		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER);
 		axisRendererY.setSetting(AxisRenderer2D.KEY_INTERSECTION, 1.0);
 		// Change tick spacing
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 1.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
