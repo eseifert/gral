@@ -20,6 +20,7 @@
 
 package openjchart.tests.data.statistics;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import openjchart.data.DataTable;
 import openjchart.data.statistics.Histogram;
@@ -44,7 +45,15 @@ public class HistogramTest {
 	}
 
 	@Test
-	public void testGeneration() {
+	public void testCreation() {
+		Histogram histogram = new Histogram(table, 4);
+
+		assertEquals(table.getColumnCount(), histogram.getColumnCount());
+		assertEquals(4, histogram.getRowCount());
+	}
+
+	@Test
+	public void testEqualBreaks() {
 		Histogram histogram = new Histogram(table, 4);
 
 		long[] expected = {
@@ -60,4 +69,48 @@ public class HistogramTest {
 			i++;
 		}
 	}
+
+	@Test
+	public void testCustomBreaks() {
+		Histogram histogram = new Histogram(table, new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}});
+
+		long[] expected = {
+			3, 5,  // 1.0-2.0, 1.0-3.0
+			3, 2,  // 2.0-3.0, 3.0-5.0
+			0, 0,  // 3.0-4.0, 5.0-7.0
+			1, 0   // 4.0-5.0, 7.0-9.0
+		};
+		int i = 0;
+		while (i < expected.length) {
+			int col = i%2, row = i/2;
+			assertEquals("column " + (col+1)+", row " + (row+1)+":", expected[i], histogram.get(col, row));
+			i++;
+		}
+	}
+
+	@Test
+	public void testGet() {
+		Histogram histogram = new Histogram(table, 4);
+
+		assertArrayEquals(new Number[] {3l, 5l}, histogram.get(0));
+		assertArrayEquals(new Number[] {3l, 2l}, histogram.get(1));
+		assertArrayEquals(new Number[] {0l, 0l}, histogram.get(2));
+		assertArrayEquals(new Number[] {1l, 0l}, histogram.get(3));
+	}
+
+	@Test
+	public void testCellLimits() {
+		Histogram histogram = new Histogram(table, 4);
+		Number[][] expected = new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}};
+
+		for (int colIndex = 0; colIndex < histogram.getColumnCount(); colIndex++) {
+			Number[] col = expected[colIndex];
+			for (int rowIndex = 0; rowIndex < col.length-1; rowIndex++) {
+				Number[] cellLimits = histogram.getCellLimits(colIndex, rowIndex);
+				assertEquals(col[rowIndex], cellLimits[0]);
+				assertEquals(col[rowIndex + 1], cellLimits[1]);
+			}
+		}
+	}
+
 }

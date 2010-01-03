@@ -20,6 +20,7 @@
 
 package openjchart.tests.data;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import openjchart.data.DataSubset;
 import openjchart.data.DataTable;
@@ -30,6 +31,7 @@ import org.junit.Test;
 public class DataSubsetTest {
 	private static final double DELTA = 1e-15;
 	private static DataTable table;
+	private static DataSubset data;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -52,8 +54,20 @@ public class DataSubsetTest {
 				return (row[0].doubleValue() % 2.0) == 0.0;
 			}
 		};
+
 		assertEquals(table.getColumnCount(), data.getColumnCount());
 		assertEquals(table.getRowCount()/2, data.getRowCount());
+	}
+
+	@Test
+	public void testGetIntInt() {
+		DataSubset data = new DataSubset(table) {
+			@Override
+			public boolean accept(Number[] row) {
+				return (row[0].doubleValue() % 2.0) == 0.0;
+			}
+		};
+
 		assertEquals( 2.0, data.get(0, 0).doubleValue(), DELTA);
 		assertEquals( 4.0, data.get(0, 1).doubleValue(), DELTA);
 		assertEquals( 6.0, data.get(0, 2).doubleValue(), DELTA);
@@ -62,6 +76,21 @@ public class DataSubsetTest {
 		assertEquals( 6.0, data.get(1, 1).doubleValue(), DELTA);
 		assertEquals( 8.0, data.get(1, 2).doubleValue(), DELTA);
 		assertEquals(11.0, data.get(1, 3).doubleValue(), DELTA);
+	}
+
+	@Test
+	public void testGetInt() {
+		DataSubset data = new DataSubset(table) {
+			@Override
+			public boolean accept(Number[] row) {
+				return (row[0].doubleValue() % 2.0) == 0.0;
+			}
+		};
+
+		assertArrayEquals(table.get(1), data.get(0));
+		assertArrayEquals(table.get(3), data.get(1));
+		assertArrayEquals(table.get(5), data.get(2));
+		assertArrayEquals(table.get(7), data.get(3));
 	}
 
 }

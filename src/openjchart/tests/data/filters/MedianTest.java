@@ -67,9 +67,18 @@ public class MedianTest {
 	public void testWindowSize() {
 		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
 		assertEquals(3, filter.getWindowSize());
-		
-		filter.setWindowSize(4);
-		assertEquals(4, filter.getWindowSize());
+
+		filter.setWindowSize(1);
+		assertEquals(1, filter.getWindowSize());
+	}
+
+	@Test
+	public void testOffset() {
+		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
+		assertEquals(1, filter.getOffset());
+
+		filter.setOffset(0);
+		assertEquals(0, filter.getOffset());
 	}
 
 }
