@@ -20,8 +20,8 @@
 
 package openjchart.plots.axes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class that represents an arbitrary axis.
@@ -36,7 +36,7 @@ public class Axis {
 	public static final String Y = "y";
 	public static final String Z = "z";
 
-	private final List<AxisListener> axisListeners;
+	private final Set<AxisListener> axisListeners;
 
 	private Number min;
 	private Number max;
@@ -47,7 +47,7 @@ public class Axis {
 	 * @param max maximum value
 	 */
 	public Axis(Number min, Number max) {
-		axisListeners = new ArrayList<AxisListener>();
+		axisListeners = new HashSet<AxisListener>();
 
 		this.min = min;
 		this.max = max;

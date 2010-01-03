@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LinearRenderer2DTest {
+	private static final double DELTA = 1e-15;
 	private Axis axis;
 	private LinearRenderer2D renderer;
 
@@ -39,21 +40,34 @@ public class LinearRenderer2DTest {
 
 	@Test
 	public void testWorldToView() {
-		double delta = 1e-10;
+		assertEquals( 0.0, renderer.worldToView(axis,  -5.0, false), DELTA);
+		assertEquals( 1.0, renderer.worldToView(axis,   5.0, false), DELTA);
+		assertEquals( 0.5, renderer.worldToView(axis,   0.0, false), DELTA);
+		assertEquals( 0.0, renderer.worldToView(axis, -10.0, false), DELTA);
+		assertEquals( 1.0, renderer.worldToView(axis,  10.0, false), DELTA);
+		assertEquals( 0.8, renderer.worldToView(axis,   3.0, false), DELTA);
 
-		assertEquals( 0.0, renderer.worldToView(axis,  -5, false), delta);
-		assertEquals( 1.0, renderer.worldToView(axis,   5, false), delta);
-		assertEquals( 0.5, renderer.worldToView(axis,   0, false), delta);
-		assertEquals( 0.0, renderer.worldToView(axis, -10, false), delta);
-		assertEquals( 1.0, renderer.worldToView(axis,  10, false), delta);
-		assertEquals( 0.8, renderer.worldToView(axis,   3, false), delta);
+		assertEquals( 0.0, renderer.worldToView(axis,  -5.0, true), DELTA);
+		assertEquals( 1.0, renderer.worldToView(axis,   5.0, true), DELTA);
+		assertEquals( 0.5, renderer.worldToView(axis,   0.0, true), DELTA);
+		assertEquals(-0.5, renderer.worldToView(axis, -10.0, true), DELTA);
+		assertEquals( 1.5, renderer.worldToView(axis,  10.0, true), DELTA);
+		assertEquals( 0.8, renderer.worldToView(axis,   3.0, true), DELTA);
+	}
 
-		assertEquals( 0.0, renderer.worldToView(axis,  -5, true), delta);
-		assertEquals( 1.0, renderer.worldToView(axis,   5, true), delta);
-		assertEquals( 0.5, renderer.worldToView(axis,   0, true), delta);
-		assertEquals(-0.5, renderer.worldToView(axis, -10, true), delta);
-		assertEquals( 1.5, renderer.worldToView(axis,  10, true), delta);
-		assertEquals( 0.8, renderer.worldToView(axis,   3, true), delta);
+	@Test
+	public void testViewToWorld() {
+		assertEquals( -5.0, renderer.viewToWorld(axis,  0.0, false));
+		assertEquals(  0.0, renderer.viewToWorld(axis,  0.5, false));
+		assertEquals(  3.0, renderer.viewToWorld(axis,  0.8, false));
+		assertEquals(  5.0, renderer.viewToWorld(axis,  1.0, false));
+
+		assertEquals(-10.0, renderer.viewToWorld(axis, -0.5, true));
+		assertEquals( -5.0, renderer.viewToWorld(axis,  0.0, true));
+		assertEquals(  0.0, renderer.viewToWorld(axis,  0.5, true));
+		assertEquals(  3.0, renderer.viewToWorld(axis,  0.8, true));
+		assertEquals(  5.0, renderer.viewToWorld(axis,  1.0, true));
+		assertEquals( 10.0, renderer.viewToWorld(axis,  1.5, true));
 	}
 
 }

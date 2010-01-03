@@ -21,6 +21,10 @@
 package openjchart.tests.plots.axes;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
+import openjchart.plots.DataPoint2D;
 import openjchart.plots.axes.Axis;
 import openjchart.plots.axes.LogarithmicRenderer2D;
 
@@ -28,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LogarithmicRenderer2DTest {
+	private static final double DELTA = 1e-13;
 	private Axis axis;
 	private LogarithmicRenderer2D renderer;
 
@@ -39,14 +44,31 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testWorldToView() {
-		double delta = 1e-5;
-		double logMaxValue = Math.log(10);
-		assertEquals(Double.NEGATIVE_INFINITY, renderer.worldToView(axis, 0, true), delta);
-		assertEquals(1.0, renderer.worldToView(axis, 10, true), delta);
-		assertEquals(Math.log(5) / logMaxValue, renderer.worldToView(axis, 5, true), delta);
-		assertEquals(Math.log(1) / logMaxValue, renderer.worldToView(axis, 1, true), delta);
-		assertEquals(Math.log(9) / logMaxValue, renderer.worldToView(axis, 9, true), delta);
-		assertEquals(Math.log(0.1) / logMaxValue, renderer.worldToView(axis, 0.1, true), delta);
+		assertEquals(Double.NEGATIVE_INFINITY, renderer.worldToView(axis, 0.0, true), DELTA);
+		assertEquals(Math.log10( 0.1), renderer.worldToView(axis,  0.1, true), DELTA);
+		assertEquals(Math.log10( 1.0), renderer.worldToView(axis,  1.0, true), DELTA);
+		assertEquals(Math.log10( 5.0), renderer.worldToView(axis,  5.0, true), DELTA);
+		assertEquals(Math.log10( 9.0), renderer.worldToView(axis,  9.0, true), DELTA);
+		assertEquals(Math.log10(10.0), renderer.worldToView(axis, 10.0, true), DELTA);
+	}
+
+	@Test
+	public void testViewToWorld() {
+		assertEquals( 0.00, renderer.viewToWorld(axis, Double.NEGATIVE_INFINITY, true).doubleValue(), DELTA);
+		assertEquals( 0.01, renderer.viewToWorld(axis, Math.log10( 0.01), true).doubleValue(), DELTA);
+		assertEquals( 0.10, renderer.viewToWorld(axis, Math.log10( 0.10), true).doubleValue(), DELTA);
+		assertEquals( 1.00, renderer.viewToWorld(axis, Math.log10( 1.00), true).doubleValue(), DELTA);
+		assertEquals( 5.00, renderer.viewToWorld(axis, Math.log10( 5.00), true).doubleValue(), DELTA);
+		assertEquals( 9.00, renderer.viewToWorld(axis, Math.log10( 9.00), true).doubleValue(), DELTA);
+		assertEquals(10.00, renderer.viewToWorld(axis, Math.log10(10.00), true).doubleValue(), DELTA);
+		assertEquals(15.00, renderer.viewToWorld(axis, Math.log10(15.00), true).doubleValue(), DELTA);
+	}
+
+	@Test
+	public void testTicks() {
+		Axis axis = new Axis(0.2, 10);
+		List<DataPoint2D> ticks = renderer.getTicks(axis);
+		assertEquals(18, ticks.size());
 	}
 
 }

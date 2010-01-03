@@ -35,8 +35,6 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
-		double axisMin = axis.getMin().doubleValue();
-		double axisMax = axis.getMax().doubleValue();
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 		double val = value.doubleValue();
@@ -48,6 +46,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				return getShapeLength();
 			}
 		}
+		double axisMin = axis.getMin().doubleValue();
+		double axisMax = axis.getMax().doubleValue();
 		double axisMinLog = (axisMin > 0.0) ? Math.log10(axisMin) : 0.0;
 		double axisMaxLog = (axisMax > 0.0) ? Math.log10(axisMax) : 1.0;
 		return (Math.log10(value.doubleValue()) - axisMinLog)*getShapeLength() / (axisMaxLog - axisMinLog);
@@ -65,8 +65,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				return max;
 			}
 		}
-		// TODO
-		return value;
+		double axisMin = axis.getMin().doubleValue();
+		double axisMax = axis.getMax().doubleValue();
+		double axisMinLog = (axisMin > 0.0) ? Math.log10(axisMin) : 0.0;
+		double axisMaxLog = (axisMax > 0.0) ? Math.log10(axisMax) : 1.0;
+		return Math.pow(10.0, value*(axisMaxLog - axisMinLog)/getShapeLength() + axisMinLog);
 	}
 
 	@Override
