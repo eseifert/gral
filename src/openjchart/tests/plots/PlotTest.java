@@ -23,6 +23,7 @@ package openjchart.tests.plots;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -48,6 +49,7 @@ public class PlotTest {
 	private static final double DELTA = 1e-15;
 	private static DataSeries series1, series2;
 	private Plot plot;
+	private boolean isDrawn;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -68,6 +70,11 @@ public class PlotTest {
 	@Before
 	public void setUp() {
 		plot = new Plot(series1, series2) {
+			@Override
+			public void draw(Graphics2D g2d) {
+				super.draw(g2d);
+				isDrawn = true;
+			}
 		};
 	}
 
@@ -155,6 +162,7 @@ public class PlotTest {
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		plot.draw(g2d);
+		assertTrue(isDrawn);
 	}
 
 }

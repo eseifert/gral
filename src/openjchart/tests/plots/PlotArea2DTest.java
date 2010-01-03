@@ -22,6 +22,7 @@ package openjchart.tests.plots;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -36,6 +37,7 @@ import org.junit.Test;
 
 public class PlotArea2DTest {
 	private PlotArea2D plotArea;
+	private boolean isDrawn;
 
 	@Before
 	public void setUp() {
@@ -48,6 +50,7 @@ public class PlotArea2DTest {
 			}
 			@Override
 			protected void drawPlot(Graphics2D g2d) {
+				isDrawn = true;
 			}
 		};
 	}
@@ -56,11 +59,9 @@ public class PlotArea2DTest {
 	public void testSettings() {
 		// Get
 		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea2D.KEY_BACKGROUND));
-
 		// Set
 		plotArea.setSetting(PlotArea2D.KEY_BACKGROUND, "foobar");
 		assertEquals("foobar", plotArea.<String>getSetting(PlotArea2D.KEY_BACKGROUND));
-
 		// Remove
 		plotArea.removeSetting(PlotArea2D.KEY_BACKGROUND);
 		assertNull(plotArea.getSetting(PlotArea2D.KEY_BACKGROUND));
@@ -75,6 +76,7 @@ public class PlotArea2DTest {
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		plotArea.draw(g2d);
+		assertTrue(isDrawn);
 	}
 
 }

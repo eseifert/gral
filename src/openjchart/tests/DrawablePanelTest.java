@@ -22,6 +22,7 @@ package openjchart.tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -76,6 +77,13 @@ public class DrawablePanelTest {
 		assertEquals( 4.0, bounds.getY(), DELTA);
 		assertEquals(30.0, bounds.getWidth(), DELTA);
 		assertEquals(40.0, bounds.getHeight(), DELTA);
+	}
+
+	@Test
+	public void testSize() {
+		Dimension size = panel.getPreferredSize();
+		assertEquals(0.0, size.getWidth(), DELTA);
+		assertEquals(0.0, size.getHeight(), DELTA);
 	}
 
 	@Test
