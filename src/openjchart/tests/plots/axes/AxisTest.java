@@ -22,31 +22,65 @@ package openjchart.tests.plots.axes;
 
 import static org.junit.Assert.assertEquals;
 import openjchart.plots.axes.Axis;
+import openjchart.plots.axes.AxisListener;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class AxisTest {
+	private static final double DELTA = 1e-15;
 	private Axis axis;
 
 	@Before
 	public void setUp() {
-		axis = new Axis(-5, 5);
+		axis = new Axis(-5.0, 5.0);
 	}
 
 	@Test
-	public void testGetMin() {
-		assertEquals(-5, axis.getMin());
+	public void testMin() {
+		assertEquals(-5.0, axis.getMin().doubleValue(), DELTA);
+		axis.setMin(10.0);
+		assertEquals(10.0, axis.getMin().doubleValue(), DELTA);
 	}
 
 	@Test
-	public void testGetMax() {
-		assertEquals(5, axis.getMax());
+	public void testMax() {
+		assertEquals(5.0, axis.getMax().doubleValue(), DELTA);
+		axis.setMax(10.0);
+		assertEquals(10.0, axis.getMax().doubleValue(), DELTA);
 	}
 
 	@Test
-	public void testGetRange() {
-		double delta = 1e-5;
-		assertEquals(10, axis.getRange(), delta);
+	public void testRange() {
+		assertEquals(10.0, axis.getRange(), DELTA);
+		axis.setRange(1.0, 3.0);
+		assertEquals(2.0, axis.getRange(), DELTA);
 	}
+
+	private static final class AxisListenerTest implements AxisListener {
+		public Number min = null;
+		public Number max = null;
+
+		@Override
+		public void rangeChanged(Number min, Number max) {
+			this.min = min;
+			this.max = max;
+		}
+	}
+
+	@Test
+	public void testAxisListeners() {
+		AxisListenerTest l = new AxisListenerTest();
+
+		axis.addAxisListener(l);
+		axis.setRange(0.0, 1.0);
+		assertEquals(0.0, l.min.doubleValue(), DELTA);
+		assertEquals(1.0, l.max.doubleValue(), DELTA);
+
+		axis.removeAxisListener(l);
+		axis.setRange(2.0, 3.0);
+		assertEquals(0.0, l.min.doubleValue(), DELTA);
+		assertEquals(1.0, l.max.doubleValue(), DELTA);
+	}
+
 }

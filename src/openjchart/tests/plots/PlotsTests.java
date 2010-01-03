@@ -27,7 +27,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AxesTests.class
+	AxesTests.class,
+	PlotTest.class
 })
 public class PlotsTests {
 }

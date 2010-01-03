@@ -32,7 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LogarithmicRenderer2DTest {
-	private static final double DELTA = 1e-13;
+	private static final double DELTA = 1e-14;
 	private Axis axis;
 	private LogarithmicRenderer2D renderer;
 
@@ -54,14 +54,25 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testViewToWorld() {
-		assertEquals( 0.00, renderer.viewToWorld(axis, Double.NEGATIVE_INFINITY, true).doubleValue(), DELTA);
-		assertEquals( 0.01, renderer.viewToWorld(axis, Math.log10( 0.01), true).doubleValue(), DELTA);
-		assertEquals( 0.10, renderer.viewToWorld(axis, Math.log10( 0.10), true).doubleValue(), DELTA);
-		assertEquals( 1.00, renderer.viewToWorld(axis, Math.log10( 1.00), true).doubleValue(), DELTA);
-		assertEquals( 5.00, renderer.viewToWorld(axis, Math.log10( 5.00), true).doubleValue(), DELTA);
-		assertEquals( 9.00, renderer.viewToWorld(axis, Math.log10( 9.00), true).doubleValue(), DELTA);
-		assertEquals(10.00, renderer.viewToWorld(axis, Math.log10(10.00), true).doubleValue(), DELTA);
-		assertEquals(15.00, renderer.viewToWorld(axis, Math.log10(15.00), true).doubleValue(), DELTA);
+		boolean extrapolate = true;
+		assertEquals( 0.00, renderer.viewToWorld(axis, Double.NEGATIVE_INFINITY, extrapolate).doubleValue(), DELTA);
+		assertEquals( 0.01, renderer.viewToWorld(axis, Math.log10( 0.01), extrapolate).doubleValue(), DELTA);
+		assertEquals( 0.10, renderer.viewToWorld(axis, Math.log10( 0.10), extrapolate).doubleValue(), DELTA);
+		assertEquals( 1.00, renderer.viewToWorld(axis, Math.log10( 1.00), extrapolate).doubleValue(), DELTA);
+		assertEquals( 5.00, renderer.viewToWorld(axis, Math.log10( 5.00), extrapolate).doubleValue(), DELTA);
+		assertEquals( 9.00, renderer.viewToWorld(axis, Math.log10( 9.00), extrapolate).doubleValue(), DELTA);
+		assertEquals(10.00, renderer.viewToWorld(axis, Math.log10(10.00), extrapolate).doubleValue(), DELTA);
+		assertEquals(15.00, renderer.viewToWorld(axis, Math.log10(15.00), extrapolate).doubleValue(), DELTA);
+
+		extrapolate = false;
+		assertEquals( 0.00, renderer.viewToWorld(axis, Double.NEGATIVE_INFINITY, extrapolate).doubleValue(), DELTA);
+		assertEquals( 0.00, renderer.viewToWorld(axis, Math.log10( 0.01), extrapolate).doubleValue(), DELTA);
+		assertEquals( 0.00, renderer.viewToWorld(axis, Math.log10( 0.10), extrapolate).doubleValue(), DELTA);
+		assertEquals( 0.00, renderer.viewToWorld(axis, Math.log10( 1.00), extrapolate).doubleValue(), DELTA);
+		assertEquals( 5.00, renderer.viewToWorld(axis, Math.log10( 5.00), extrapolate).doubleValue(), DELTA);
+		assertEquals( 9.00, renderer.viewToWorld(axis, Math.log10( 9.00), extrapolate).doubleValue(), DELTA);
+		assertEquals(10.00, renderer.viewToWorld(axis, Math.log10(10.00), extrapolate).doubleValue(), DELTA);
+		assertEquals(10.00, renderer.viewToWorld(axis, Math.log10(15.00), extrapolate).doubleValue(), DELTA);
 	}
 
 	@Test

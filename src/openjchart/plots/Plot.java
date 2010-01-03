@@ -134,8 +134,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	public void setAxis(String name, Axis axis, Drawable drawable) {
-		if (axis == null) {
+		if (axis == null || drawable == null) {
 			removeAxis(name);
+			return;
 		}
 		axes.put(name, axis);
 		axisDrawables.put(name, drawable);
@@ -143,6 +144,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	public void removeAxis(String name) {
 		axes.remove(name);
+		axisDrawables.remove(name);
 	}
 
 	public PlotArea2D getPlotArea() {
