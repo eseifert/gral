@@ -29,9 +29,7 @@ import openjchart.util.SettingsStorage;
 
 
 /**
- * Basic interface for classes that want to display an axis.
- * @author Michael Seifert
- *
+ * Basic interface for classes that want to display a 2-dimensional axis.
  */
 public interface AxisRenderer2D extends SettingsStorage {
 	/** Intersection point of axis. */

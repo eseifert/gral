@@ -26,13 +26,20 @@ import java.util.Map;
 
 import openjchart.util.HaltonSequence;
 
+/**
+ * Class that generates seemingly random colors.
+ */
 public class QuasiRandomColors implements ColorMapper {
 	private HaltonSequence seqHue = new HaltonSequence(3);
 	private HaltonSequence seqSat = new HaltonSequence(5);
 	private HaltonSequence seqBrightness = new HaltonSequence(2);
 	private final Map<Double, Color> colorCache;
+	//FIXME : duplicate code! See openjchart.plots.colors.RandomColors
 	private float[] colorVariance;
 
+	/**
+	 * Creates a new QuasiRandomColors object with default color variance.
+	 */
 	public QuasiRandomColors() {
 		colorCache = new HashMap<Double, Color>();
 		colorVariance = new float[] {
@@ -55,10 +62,18 @@ public class QuasiRandomColors implements ColorMapper {
 		return color;
 	}
 
+	/**
+	 * Returns the current color variance.
+	 * @return Range of hue, saturation and brightness a color can have.
+	 */
 	public float[] getColorVariance() {
 		return colorVariance;
 	}
 
+	/**
+	 * Sets the current color variance.
+	 * @param Range of hue, saturation and brightness a color can have.
+	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;
 	}

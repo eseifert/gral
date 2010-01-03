@@ -28,8 +28,9 @@ import java.util.Set;
 import openjchart.plots.DataPoint2D;
 import openjchart.util.MathUtils;
 
-
-
+/**
+ * Class that renders 2-dimensional axes with a logarithmic scale.
+ */
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override

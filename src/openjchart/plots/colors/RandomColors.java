@@ -26,22 +26,32 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Class that generates pseudo-random colors.
+ */
 public class RandomColors implements ColorMapper {
 	private static final int NUM_COMPARISONS = 4;
 	private static final double MIN_DIST = 0.3;
 
 	private final Map<Double, Color> colorCache;
 	private Random random;
+	//FIXME : duplicate code! See openjchart.plots.colors.QuasiRandomColors
 	private float[] colorVariance;
 
+	/**
+	 * Creates a new RandomColors object with default seed.
+	 */
 	public RandomColors() {
 		random = new Random();
 		colorCache = new LinkedHashMap<Double, Color>();
 	}
 
+	/**
+	 * Creates a new RandomColors object with the specified seed.
+	 */
 	public RandomColors(long seed) {
 		this();
-		random = new Random(seed);
+		random.setSeed(seed);
 		colorVariance = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation
@@ -54,7 +64,7 @@ public class RandomColors implements ColorMapper {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);
 		}
-		
+
 		// Use the same random numbers for the same input value
 		//long seed = Double.doubleToRawLongBits(value);
 		//random.setSeed(seed);
@@ -81,6 +91,10 @@ public class RandomColors implements ColorMapper {
 		return r;
 	}
 
+	/**
+	 * Generates a random color with the current color variance.
+	 * @return Color.
+	 */
 	private Color getRandomColor() {
 		float hue        = colorVariance[0] + colorVariance[1]*random.nextFloat();
 		float saturation = colorVariance[2] + colorVariance[3]*random.nextFloat();
@@ -88,6 +102,13 @@ public class RandomColors implements ColorMapper {
 		return Color.getHSBColor(hue, saturation, brightness);
 	}
 
+	/**
+	 * Calculates the square of the distance between the two specified
+	 * Colors.
+	 * @param a Color.
+	 * @param b Color.
+	 * @return Square of distance.
+	 */
 	private static double distanceSq(Color a, Color b) {
 		double rMean = (a.getRed() + b.getRed()) / 256.0 / 2.0;
 		double dr = (a.getRed()   - b.getRed())   / 256.0;
@@ -97,10 +118,18 @@ public class RandomColors implements ColorMapper {
 		return d / 9.0;
 	}
 
+	/**
+	 * Returns the current color variance.
+	 * @return Range of hue, saturation and brightness a color can have.
+	 */
 	public float[] getColorVariance() {
 		return colorVariance;
 	}
 
+	/**
+	 * Sets the current color variance.
+	 * @param Range of hue, saturation and brightness a color can have.
+	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;
 	}

@@ -20,6 +20,14 @@
 
 package openjchart.plots.axes;
 
+/**
+ * Interface that provides a function to listen for changes in axes.
+ */
 public interface AxisListener {
+	/**
+	 * Notified if the range of the axis has changed.
+	 * @param min New minimum value.
+	 * @param max New maximum value.
+	 */
 	void rangeChanged(Number min, Number max);
 }

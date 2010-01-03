@@ -21,7 +21,14 @@
 package openjchart.plots.colors;
 import java.awt.Color;
 
-
+/**
+ * Interface the provides a function to retrieve Colors.
+ */
 public interface ColorMapper {
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	Color get(double value);
 }

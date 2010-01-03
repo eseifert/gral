@@ -46,6 +46,15 @@ import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 
+/**
+ * Abstract class that provides function for rendering 2-dimensional axes.
+ * Functionality includes:
+ * <ul>
+ * <li>Calculating tick positions of an axis</li>
+ * <li>Calculating tick normals</li>
+ * <li>Administration of settings</li>
+ * </ul>
+ */
 public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, SettingsListener {
 	private final Settings settings;
 
@@ -54,6 +63,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	private double[] shapeSegmentLengths;
 	private double[] shapeLengths;
 
+	/**
+	 * Creates a new AbstractAxisRenderer2D object with default settings.
+	 */
 	public AbstractAxisRenderer2D() {
 		settings = new Settings(this);
 
@@ -237,6 +249,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		return ticks;
 	}
 
+	/**
+	 * Returns the point of the tick (in pixel coordinates) on the
+	 * specified axis with the specified value.
+	 * @param axis Axis containing the tick.
+	 * @param tickPositionWorld Displayed value on the axis.
+	 * @return DataPoint2D of the desired tick.
+	 */
 	protected DataPoint2D getTick(Axis axis, double tickPositionWorld) {
 		// Calculate position of tick on axis shape
 		Point2D tickPoint = getPosition(axis, tickPositionWorld, false, false);
@@ -275,6 +294,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		return tickNormal;
 	}
 
+	/**
+	 * Returns the length of the shape path which is used to render axes.
+	 * @return Shape length.
+	 */
 	protected double getShapeLength() {
 		if (shapeLengths == null || shapeLengths.length == 0) {
 			return 0.0;
@@ -335,6 +358,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		return pos;
 	}
 
+	/**
+	 * Calculates important aspects of the specified shape.
+	 * @param shape Shape to be evaluated.
+	 */
 	protected void evaluateShape(Shape shape) {
 		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
@@ -362,10 +389,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 	}
 
+	@Override
 	public <T> T getSetting(String key) {
 		return settings.<T>get(key);
 	}
 
+	@Override
 	public <T> void setSetting(String key, T value) {
 		settings.<T>set(key, value);
 	}
@@ -375,6 +404,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		settings.remove(key);
 	}
 
+	@Override
 	public <T> void setSettingDefault(String key, T value) {
 		settings.<T>setDefault(key, value);
 	}

@@ -35,8 +35,6 @@ import openjchart.data.DataSource;
  * a number of cells or breakpoints between histogram cells can be passed
  * as an array to create unequally sized cells.</p>
  * <p>For ease of use the histogram is a data source itself.</p>
- * 
- * @author Erich Seifert
  */
 public class Histogram extends AbstractDataSource implements DataListener {
 	private DataSource data;
@@ -55,6 +53,12 @@ public class Histogram extends AbstractDataSource implements DataListener {
 		cacheMax = new HashMap<Integer, Long>();
 	}
 
+	/**
+	 * Creates a new Histogram object with the specified DataSource and
+	 * cell count.
+	 * @param data DataSource so be analyzed.
+	 * @param cellCount Number of subdivisions for analysis.
+	 */
 	public Histogram(DataSource data, int cellCount) {
 		this(data);
 		Statistics stats = this.data.getStatistics();
@@ -72,6 +76,12 @@ public class Histogram extends AbstractDataSource implements DataListener {
 		dataChanged(this.data);
 	}
 
+	/**
+	 * Creates a new Histogram object with the specified DataSource and
+	 * subdivisions at the specified positions.
+	 * @param data DataSource to be analyzed.
+	 * @param breaks Values of where a subdivision should occur.
+	 */
 	public Histogram(DataSource data, Number[]... breaks) {
 		this(data);
 		for (Number[] brk : breaks) {
@@ -80,6 +90,9 @@ public class Histogram extends AbstractDataSource implements DataListener {
 		dataChanged(this.data);
 	}
 
+	/**
+	 * Repopulates the cells of this Histogram.
+	 */
 	protected void rebuildCells() {
 		// FIXME: Very naive implementation
 		colCells.clear();
@@ -118,6 +131,12 @@ public class Histogram extends AbstractDataSource implements DataListener {
 		}
 	}
 
+	/**
+	 * Returns the minimum and maximum value of the specified cell.
+	 * @param col Column index.
+	 * @param cell Cell index.
+	 * @return Extent of the cell.
+	 */
 	public Number[] getCellLimits(int col, int cell) {
 		Number[] breaks = colBreaks.get(col);
 		Number lower = breaks[cell];

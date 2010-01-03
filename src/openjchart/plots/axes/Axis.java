@@ -23,6 +23,14 @@ package openjchart.plots.axes;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that represents an arbitrary axis.
+ * Functionality includes:
+ * <ul>
+ * <li>Different ways of setting and getting the range of this axis</li>
+ * <li>Administration of {@link AxisListener AxisListeners}</li>
+ * </ul>
+ */
 public class Axis {
 	public static final String X = "x";
 	public static final String Y = "y";
@@ -77,26 +85,51 @@ public class Axis {
 		}
 	}
 
+	/**
+	 * Returns the minimum value to be displayed.
+	 * @return Minimum value.
+	 */
 	public Number getMin() {
 		return min;
 	}
 
+	/**
+	 * Sets the minimum value to be displayed.
+	 * @param min Minimum value.
+	 */
 	public void setMin(Number min) {
 		setRange(min, this.max);
 	}
 
+	/**
+	 * Returns the maximum value to be displayed.
+	 * @return Maximum value.
+	 */
 	public Number getMax() {
 		return max;
 	}
 
+	/**
+	 * Sets the maximum value to be displayed.
+	 * @return Maximum value.
+	 */
 	public void setMax(Number max) {
 		setRange(this.min, max);
 	}
 
+	/**
+	 * Returns the range of values to be displayed.
+	 * @return Distance between maximum and minimum value.
+	 */
 	public double getRange() {
 		return max.doubleValue() - min.doubleValue();
 	}
 
+	/**
+	 * Sets the range of values to be displayed.
+	 * @param min Minimum value.
+	 * @param max Maximum value.
+	 */
 	public void setRange(Number min, Number max) {
 		this.min = min;
 		this.max = max;

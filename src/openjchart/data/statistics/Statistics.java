@@ -64,6 +64,10 @@ public class Statistics implements DataListener {
 	private DataSource data;
 	private final ArrayList<Map<String, Double>> statistics;
 
+	/**
+	 * Creates a new Statistics object with the specified DataSource.
+	 * @param data DataSource to be analyzed.
+	 */
 	public Statistics(DataSource data) {
 		statistics = new ArrayList<Map<String, Double>>();
 
@@ -72,6 +76,12 @@ public class Statistics implements DataListener {
 		this.data.addDataListener(this);
 	}
 
+	/**
+	 * Returns the specified information for the specified column.
+	 * @param key Requested information.
+	 * @param col Column index.
+	 * @return Calculated value.
+	 */
 	public double get(String key, int col) {
 		Map<String, Double> colStats = statistics.get(col);
 		return colStats.get(key);
@@ -89,7 +99,7 @@ public class Statistics implements DataListener {
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
 			Map<String, Double> colStats = new HashMap<String, Double>();
 			List<Double> col = new ArrayList<Double>(rowCount);
-			
+
 			colStats.put(N, 0.0);
 			colStats.put(SUM, 0.0);
 			colStats.put(SUM2, 0.0);
@@ -163,6 +173,13 @@ public class Statistics implements DataListener {
 		}
 	}
 
+	/**
+	 * Returns the specified percentile of the specified list of values.
+	 * @param <T> Type of values.
+	 * @param col Column index.
+	 * @param percentile Value of percentile.
+	 * @return Item representing the percentile.
+	 */
 	protected static <T extends Comparable<T>> T getPercentile(List<T> col, double percentile) {
 		int i = (int)(percentile*col.size());
 		int index = MathUtils.randomizedSelect(col, 0, col.size() - 1, i);

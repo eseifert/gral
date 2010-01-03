@@ -22,9 +22,16 @@ package openjchart.plots.colors;
 
 import java.awt.Color;
 
+/**
+ * Class that represents a ColorMapper with a single color.
+ */
 public class SingleColor implements ColorMapper {
 	private Color color;
-	
+
+	/**
+	 * Creates a new SingleColor object with the specified color.
+	 * @param color
+	 */
 	public SingleColor(Color color) {
 		this.color = color;
 	}
@@ -34,10 +41,18 @@ public class SingleColor implements ColorMapper {
 		return color;
 	}
 
+	/**
+	 * Returns the color of this ColorMapper.
+	 * @return Color.
+	 */
 	public Color getColor() {
 		return color;
 	}
 
+	/**
+	 * Sets the color of this ColorMapper.
+	 * @param color Color to be set.
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}

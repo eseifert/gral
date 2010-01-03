@@ -20,8 +20,9 @@
 
 package openjchart.plots.axes;
 
-
-
+/**
+ * Class that renders 2-dimensional axes with a linear scale.
+ */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override

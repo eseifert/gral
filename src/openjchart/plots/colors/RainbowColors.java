@@ -22,6 +22,9 @@ package openjchart.plots.colors;
 
 import java.awt.Color;
 
+/**
+ * Class that generates the colors of a rainbow.
+ */
 public class RainbowColors implements ColorMapper {
 	@Override
 	public Color get(double value) {
