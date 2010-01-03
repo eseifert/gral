@@ -128,7 +128,7 @@ public class RandomColors implements ColorMapper {
 
 	/**
 	 * Sets the current color variance.
-	 * @param Range of hue, saturation and brightness a color can have.
+	 * @param colorVariance Range of hue, saturation and brightness a color can have.
 	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;

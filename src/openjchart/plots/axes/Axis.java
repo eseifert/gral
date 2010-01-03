@@ -111,7 +111,7 @@ public class Axis {
 
 	/**
 	 * Sets the maximum value to be displayed.
-	 * @return Maximum value.
+	 * @param max Maximum value.
 	 */
 	public void setMax(Number max) {
 		setRange(this.min, max);

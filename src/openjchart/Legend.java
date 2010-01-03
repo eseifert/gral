@@ -170,7 +170,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 
 	/**
 	 * Adds the specified DataSource in order to display it.
-	 * @param data DataSource to be added.
+	 * @param source DataSource to be added.
 	 */
 	public void add(DataSource source) {
 		Item item = new Item(source, source.toString());
