@@ -20,7 +20,7 @@
 
 package openjchart.tests.data;
 
-import openjchart.tests.data.comparators.ComparatorsTests;
+import openjchart.tests.data.comparators.ComparatorTest;
 import openjchart.tests.data.filters.FiltersTests;
 import openjchart.tests.data.io.IoTests;
 import openjchart.tests.data.statistics.StatisticsTests;
@@ -31,8 +31,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	DataTableTest.class,
-	ComparatorsTests.class,
 	DataSeriesTest.class,
+	DataSubsetTest.class,
+	DummyDataTest.class,
+	RowTest.class,
+	ComparatorTest.class,
 	StatisticsTests.class,
 	FiltersTests.class,
 	IoTests.class

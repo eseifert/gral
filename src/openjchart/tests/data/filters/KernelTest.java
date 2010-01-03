@@ -26,7 +26,7 @@ import openjchart.data.filters.Kernel;
 import org.junit.Test;
 
 public class KernelTest {
-	private static final double DELTA = 1e-10;
+	private static final double DELTA = 1e-15;
 
 	@Test
 	public void testSimpleKernel() {
@@ -70,9 +70,19 @@ public class KernelTest {
 		Kernel k1 = new Kernel(1.0);
 		Kernel k2 = new Kernel(1.0);
 		k1.add(k2);
-		
+
 		assertEquals(2.0, k1.get(0), DELTA);
 		assertEquals(1.0, k2.get(0), DELTA);
+	}
+
+	@Test
+	public void testMul() {
+		Kernel k1 = new Kernel(2.0);
+		Kernel k2 = new Kernel(3.0);
+		k1.mul(k2);
+
+		assertEquals(6.0, k1.get(0), DELTA);
+		assertEquals(3.0, k2.get(0), DELTA);
 	}
 
 	@Test
@@ -83,4 +93,14 @@ public class KernelTest {
 		assertEquals(0.5, k.get(-1), DELTA);
 		assertEquals(0.5, k.get( 0), DELTA);
 	}
+
+	@Test
+	public void testNegate() {
+		Kernel k = new Kernel(1.0, 1.0);
+		k.negate();
+		
+		assertEquals(-1.0, k.get(-1), DELTA);
+		assertEquals(-1.0, k.get( 0), DELTA);
+	}
+
 }

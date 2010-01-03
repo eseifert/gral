@@ -18,27 +18,22 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data.comparators;
+package openjchart.tests.data;
 
 import static org.junit.Assert.assertEquals;
-import openjchart.data.comparators.DataComparator;
-import openjchart.data.comparators.Descending;
+import openjchart.data.DummyData;
 
 import org.junit.Test;
 
-public class DescendingTest {
+public class DummyDataTest {
+	private static final double DELTA = 1e-15;
+
 	@Test
-	public void testCompare() {
-		Number[] row1 = { 1.0, 2.0, 3.0 };
-		Number[] row2 = { 2.0, 2.0, 2.0 };
-
-		DataComparator comparator1 = new Descending(0);
-		DataComparator comparator2 = new Descending(1);
-		DataComparator comparator3 = new Descending(2);
-
-		assertEquals( 1, comparator1.compare(row1, row2));
-		assertEquals( 0, comparator2.compare(row1, row2));
-		assertEquals(-1, comparator3.compare(row1, row2));
+	public void testCreation() {
+		DummyData data = new DummyData(1, 1, 1.0);
+		assertEquals(1, data.getColumnCount());
+		assertEquals(1, data.getRowCount());
+		assertEquals(1.0, data.get(0, 0).doubleValue(), DELTA);
 	}
 
 }

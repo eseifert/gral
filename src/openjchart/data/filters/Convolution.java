@@ -54,15 +54,6 @@ public class Convolution extends Filter {
 		return kernel;
 	}
 
-	/**
-	 * Sets the Kernel to the specified value.
-	 * @param kernel Kernel to be set.
-	 */
-	protected final void setKernel(Kernel kernel) {
-		this.kernel = kernel;
-		dataChanged(this);
-	}
-
 	@Override
 	protected void filter() {
 		clear();

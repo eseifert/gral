@@ -62,11 +62,14 @@ public class DataTable extends AbstractDataSource {
 	 * do not match
 	 */
 	public void add(Number... values) {
-		Number[] row = new Number[values.length];
+		if (types.length != values.length) {
+			throw new IllegalArgumentException("Wrong number of columns! Expected "+types.length+", got "+values.length);
+		}
+		Number[] row = new Number[types.length];
 		for (int i = 0; i < values.length; i++) {
 			Object obj = values[i];
 			if (!(types[i].isAssignableFrom(obj.getClass()))) {
-				throw new IllegalArgumentException("Expected: "+types[i]+", Got: "+obj.getClass());
+				throw new IllegalArgumentException("Wrong column type! Expected "+types[i]+", got "+obj.getClass());
 			}
 			row[i] = values[i];
 		}

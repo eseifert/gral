@@ -74,7 +74,7 @@ public abstract class Insets2D {
 			}
 			setInsets(insets.getTop(), insets.getLeft(), insets.getBottom(), insets.getRight());
 		}
-		
+
 		@Override
 		public void setInsets(double top, double left, double bottom, double right) {
 			this.top = top;
@@ -85,7 +85,7 @@ public abstract class Insets2D {
 
 		@Override
 		public String toString() {
-			return getClass().toString() + "[top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right + "]";
+			return getClass().getName() + "[top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right + "]";
 		}
 	}
 

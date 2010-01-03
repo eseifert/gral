@@ -1,0 +1,89 @@
+/* OpenJChart : a free plotting library for the Java(tm) platform
+ *
+ * (C) Copyright 2009, by Erich Seifert and Michael Seifert.
+ *
+ * This file is part of OpenJChart.
+ *
+ * OpenJChart is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenJChart is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package openjchart.tests.util;
+
+import static org.junit.Assert.assertEquals;
+import openjchart.util.Insets2D;
+
+import org.junit.Test;
+
+public class Insets2DTest {
+	public static final double DELTA = 1e-15;
+
+	@Test
+	public void testCreate() {
+		Insets2D insets;
+
+		// Standard constructor
+		insets = new Insets2D.Double();
+		assertEquals(0.0, insets.getTop(), DELTA);
+		assertEquals(0.0, insets.getLeft(), DELTA);
+		assertEquals(0.0, insets.getBottom(), DELTA);
+		assertEquals(0.0, insets.getRight(), DELTA);
+
+		// Constructor with a single value for all sides
+		insets = new Insets2D.Double(1.0);
+		assertEquals(1.0, insets.getTop(), DELTA);
+		assertEquals(1.0, insets.getLeft(), DELTA);
+		assertEquals(1.0, insets.getBottom(), DELTA);
+		assertEquals(1.0, insets.getRight(), DELTA);
+
+		// Constructor with four values
+		insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		assertEquals(1.0, insets.getTop(), DELTA);
+		assertEquals(2.0, insets.getLeft(), DELTA);
+		assertEquals(3.0, insets.getBottom(), DELTA);
+		assertEquals(4.0, insets.getRight(), DELTA);
+	}
+
+	@Test
+	public void testChange() {
+		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		Insets2D insets2 = new Insets2D.Double(10.0, 20.0, 30.0, 40.0);
+
+		// setInsets(Insets2D)
+		insets.setInsets(insets2);
+		assertEquals(insets2.getTop(), insets.getTop(), DELTA);
+		assertEquals(insets2.getLeft(), insets.getLeft(), DELTA);
+		assertEquals(insets2.getBottom(), insets.getBottom(), DELTA);
+		assertEquals(insets2.getRight(), insets.getRight(), DELTA);
+
+		insets.setInsets(null);
+		assertEquals(insets2.getTop(), insets.getTop(), DELTA);
+		assertEquals(insets2.getLeft(), insets.getLeft(), DELTA);
+		assertEquals(insets2.getBottom(), insets.getBottom(), DELTA);
+		assertEquals(insets2.getRight(), insets.getRight(), DELTA);
+		
+		// setSize(double, double, double, double)
+		insets.setInsets(5.0, 6.0, 7.0, 8.0);
+		assertEquals(5.0, insets.getTop(), DELTA);
+		assertEquals(6.0, insets.getLeft(), DELTA);
+		assertEquals(7.0, insets.getBottom(), DELTA);
+		assertEquals(8.0, insets.getRight(), DELTA);
+	}
+
+	@Test
+	public void testToString() {
+		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		assertEquals("openjchart.util.Insets2D$Double[top=1.0, left=2.0, bottom=3.0, right=4.0]", insets.toString());
+	}
+
+}

@@ -18,15 +18,23 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data.comparators;
+package openjchart.tests.util;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import openjchart.util.SettingChangeEvent;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	AscendingTest.class,
-	DescendingTest.class
-})
-public class ComparatorsTests {
+import org.junit.Test;
+
+public class SettingChangeEventTest {
+	@Test
+	public void testCreation() {
+		SettingChangeEvent e = new SettingChangeEvent(this, "test", 0.0, 1.0, true);
+		assertEquals(this, e.getSource());
+		assertEquals("test", e.getKey());
+		assertEquals(0.0, e.getValOld());
+		assertEquals(1.0, e.getValNew());
+		assertTrue(e.isDefaultSetting());
+	}
+
 }

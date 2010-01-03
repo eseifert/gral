@@ -27,16 +27,17 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 import openjchart.util.GeometryUtils;
 
 import org.junit.Test;
 
 public class GeometryUtilsTest {
-	private static final double DELTA = 1e-5;
+	private static final double DELTA = 1e-14;
 
 	@Test
-	public void testIntersectionShapeShape() {
+	public void testIntersectionLineLine() {
 		Line2D l1, l2;
 		Point2D expected;
 
@@ -57,21 +58,45 @@ public class GeometryUtilsTest {
 	}
 
 	@Test
+	public void testIntersectionShapeShape() {
+		Shape s1 = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+		Shape s2 = new Rectangle2D.Double(0.5, 0.5, 1.0, 1.0);
+		Point2D expected1 = new Point2D.Double(1.0, 0.5);
+		Point2D expected2 = new Point2D.Double(0.5, 1.0);
+
+		List<Point2D> intersections = GeometryUtils.intersection(s1, s2);
+		assertTrue(intersections.contains(expected1));
+		assertTrue(intersections.contains(expected2));
+	}
+
+	@Test
 	public void testGrow() {
 		Shape normal = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
 		Shape grown = GeometryUtils.grow(normal, 0.5);
+		Rectangle2D normalBounds = normal.getBounds2D();
+		Rectangle2D grownBounds = grown.getBounds2D();
 
-		// Test inner region
+		// Test growth
 		for (double coord=-0.25; coord<=1.25; coord+=0.25) {
 			assertTrue(grown.contains(coord, coord));
 		}
-
-		// Test boundary
-		Rectangle2D grownBounds = grown.getBounds2D();
 		assertEquals(-0.5, grownBounds.getMinX(), DELTA);
 		assertEquals(-0.5, grownBounds.getMinY(), DELTA);
 		assertEquals( 1.5, grownBounds.getMaxX(), DELTA);
 		assertEquals( 1.5, grownBounds.getMaxY(), DELTA);
+
+		// Test zero growth
+		grown = GeometryUtils.grow(normal, 0.0);
+		grownBounds = grown.getBounds2D();
+		assertEquals(normalBounds, grownBounds);
+
+		// Test shrinking
+		grown = GeometryUtils.grow(normal, -0.25);
+		grownBounds = grown.getBounds2D();
+		assertEquals(0.25, grownBounds.getMinX(), DELTA);
+		assertEquals(0.25, grownBounds.getMinY(), DELTA);
+		assertEquals(0.75, grownBounds.getMaxX(), DELTA);
+		assertEquals(0.75, grownBounds.getMaxY(), DELTA);
 	}
 
 }

@@ -25,10 +25,15 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	Dimension2DTest.class,
+	Insets2DTest.class,
 	MathUtilsTest.class,
 	HaltonSequenceTest.class,
+	KernelUtilsTest.class,
 	GeometryUtilsTest.class,
-	SettingsTest.class
+	GraphicsUtilsTest.class,
+	SettingsTest.class,
+	SettingChangeEventTest.class
 })
 public class UtilTests {
 }

@@ -22,18 +22,19 @@ package openjchart.tests.data;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import openjchart.data.DataTable;
 import openjchart.data.comparators.Ascending;
 import openjchart.data.comparators.Descending;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DataTableTest {
-	private static DataTable table;
+	private DataTable table;
 
-	@BeforeClass
-	public static void setUpBeforeClass() {
+	@Before
+	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
 		table.add(2, 3); // 1
@@ -43,6 +44,25 @@ public class DataTableTest {
 		table.add(6, 8); // 5
 		table.add(7, 9); // 6
 		table.add(8, 11); // 7
+	}
+
+	@Test
+	public void testAdd() {
+		DataTable table = new DataTable(Integer.class, Integer.class);
+		
+		// Wrong number of columns
+		try {
+			table.add(1);
+		fail("Expected IllegalArgumentException exception.");
+		} catch (IllegalArgumentException e) {
+		}
+
+		// Wrong type of columns
+		try {
+			table.add(1.0, 1.0);
+			fail("Expected IllegalArgumentException exception.");
+		} catch (IllegalArgumentException e) {
+		}
 	}
 
 	@Test
@@ -98,4 +118,11 @@ public class DataTableTest {
 			i++;
 		}
 	}
+
+	@Test
+	public void testClear() {
+		table.clear();
+		assertEquals(0, table.getRowCount());
+	}
+
 }

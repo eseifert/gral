@@ -23,12 +23,26 @@ package openjchart.tests.data.comparators;
 import static org.junit.Assert.assertEquals;
 import openjchart.data.comparators.Ascending;
 import openjchart.data.comparators.DataComparator;
+import openjchart.data.comparators.Descending;
 
 import org.junit.Test;
 
-public class AscendingTest {
+public class ComparatorTest {
+
 	@Test
-	public void testCompare() {
+	public void testColumn() {
+		DataComparator comparator = new Ascending(0);
+		assertEquals(0, comparator.getColumn());
+
+		comparator.setColumn(1);
+		assertEquals(1, comparator.getColumn());
+
+		comparator.setColumn(2);
+		assertEquals(2, comparator.getColumn());
+	}
+
+	@Test
+	public void testAscending() {
 		Number[] row1 = { 1.0, 2.0, 3.0 };
 		Number[] row2 = { 2.0, 2.0, 2.0 };
 
@@ -39,6 +53,28 @@ public class AscendingTest {
 		assertEquals(-1, comparator1.compare(row1, row2));
 		assertEquals( 0, comparator2.compare(row1, row2));
 		assertEquals( 1, comparator3.compare(row1, row2));
+
+		assertEquals(0, comparator1.compare(row1, row1));
+		assertEquals(0, comparator2.compare(row1, row1));
+		assertEquals(0, comparator3.compare(row1, row1));
+	}
+
+	@Test
+	public void testDescending() {
+		Number[] row1 = { 1.0, 2.0, 3.0 };
+		Number[] row2 = { 2.0, 2.0, 2.0 };
+
+		DataComparator comparator1 = new Descending(0);
+		DataComparator comparator2 = new Descending(1);
+		DataComparator comparator3 = new Descending(2);
+
+		assertEquals( 1, comparator1.compare(row1, row2));
+		assertEquals( 0, comparator2.compare(row1, row2));
+		assertEquals(-1, comparator3.compare(row1, row2));
+
+		assertEquals(0, comparator1.compare(row1, row1));
+		assertEquals(0, comparator2.compare(row1, row1));
+		assertEquals(0, comparator3.compare(row1, row1));
 	}
 
 }

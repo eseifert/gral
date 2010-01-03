@@ -34,7 +34,7 @@ import java.util.List;
 
 
 public abstract class GeometryUtils {
-	public static final double EPSILON = 1e-3;
+	public static final double EPSILON = 1e-5;
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
 
 	public static Line2D[] shapeToLines(Shape path, boolean swapped) {

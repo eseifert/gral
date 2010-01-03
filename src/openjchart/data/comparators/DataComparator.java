@@ -29,29 +29,29 @@ import java.util.Comparator;
  * arrays that should be compared.
  */
 public abstract class DataComparator implements Comparator<Number[]>, Serializable {
-	private int col;
+	private int column;
 
 	/**
 	 * Constructor.
 	 * @param col index of the column to be compared
 	 */
 	public DataComparator(int col) {
-		this.col = col;
+		this.column = col;
 	}
 
 	/**
 	 * Returns the column to be compared.
 	 * @return column index
 	 */
-	public int getCol() {
-		return col;
+	public int getColumn() {
+		return column;
 	}
 
 	/**
 	 * Sets the column to be compared to the specified index.
 	 * @param col column index
 	 */
-	public void setCol(int col) {
-		this.col = col;
+	public void setColumn(int col) {
+		this.column = col;
 	}
 }

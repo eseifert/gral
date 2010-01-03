@@ -127,6 +127,10 @@ public class MathUtilsTest {
 		assertEquals(1, Collections.frequency(a,  5.0));
 		assertEquals(1, Collections.frequency(a,  8.0));
 		assertEquals(1, Collections.frequency(a, 13.0));
+
+		// Check behavior for empty lists
+		List<Double> b = Arrays.<Double>asList();
+		assertEquals(-1, MathUtils.randomizedSelect(b, 0, a.size() - 1, 1));
 	}
 
 }

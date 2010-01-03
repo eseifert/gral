@@ -40,8 +40,8 @@ public class Descending extends DataComparator {
 		if (o1 == o2) {
 			return 0;
 		}
-		double o1Val = o1[getCol()].doubleValue();
-		double o2Val = o2[getCol()].doubleValue();
+		double o1Val = o1[getColumn()].doubleValue();
+		double o2Val = o2[getColumn()].doubleValue();
 		return Double.compare(o2Val, o1Val);
 	}
 

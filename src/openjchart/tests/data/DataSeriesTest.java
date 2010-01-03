@@ -29,7 +29,6 @@ import org.junit.Test;
 
 public class DataSeriesTest {
 	private static DataTable table;
-	private static DataSeries series;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -42,15 +41,28 @@ public class DataSeriesTest {
 		table.add(6, 9, 5); // 5
 		table.add(7, 8, 7); // 6
 		table.add(8, 1, 9); // 7
+	}
 
-		series = new DataSeries(table, 2, 1);
+	@Test
+	public void testCreation() {
+		DataSeries series1 = new DataSeries(table, 2, 1);
+		assertEquals(2, series1.getColumnCount());
+		assertEquals(table.getRowCount(), series1.getRowCount());
+		assertEquals(null, series1.getName());
+
+		DataSeries series2 = new DataSeries("name", table, 2, 1);
+		assertEquals(2, series2.getColumnCount());
+		assertEquals(table.getRowCount(), series2.getRowCount());
+		assertEquals("name", series2.getName());
 	}
 
 	@Test
 	public void testGetInt() {
-		for (int i = 0; i < series.getRowCount(); i++) {
-			Number[] rowTable = table.get(i);
-			Number[] rowSeries = series.get(i);
+		DataSeries series = new DataSeries(table, 2, 1);
+
+		for (int row = 0; row < series.getRowCount(); row++) {
+			Number[] rowTable = table.get(row);
+			Number[] rowSeries = series.get(row);
 			assertEquals(rowTable[2], rowSeries[0]);
 			assertEquals(rowTable[1], rowSeries[1]);
 			assertEquals(2, rowSeries.length);
@@ -58,8 +70,34 @@ public class DataSeriesTest {
 	}
 
 	@Test
+	public void testGetIntInt() {
+		DataSeries series = new DataSeries(table, 2, 1);
+
+		for (int row = 0; row < series.getRowCount(); row++) {
+			assertEquals(table.get(2, row), series.get(0, row));
+			assertEquals(table.get(1, row), series.get(1, row));
+		}
+	}
+
+	@Test
 	public void testGetColumnCount() {
+		DataSeries series = new DataSeries(table, 2, 1);
 		assertEquals(2, series.getColumnCount());
+	}
+
+	@Test
+	public void testName() {
+		DataSeries series = new DataSeries(table, 2, 1);
+		assertEquals(null, series.getName());
+		series.setName("name");
+		assertEquals("name", series.getName());
+	}
+
+	@Test
+	public void testToString() {
+		DataSeries series = new DataSeries("name", table, 2, 1);
+		assertEquals("name", series.toString());
+		assertEquals(series.getName(), series.toString());
 	}
 
 }

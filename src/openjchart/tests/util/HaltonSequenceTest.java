@@ -21,12 +21,21 @@
 package openjchart.tests.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import openjchart.util.HaltonSequence;
 
 import org.junit.Test;
 
 public class HaltonSequenceTest {
-	private static final double DELTA = 1e-14;
+	private static final double DELTA = 1e-15;
+
+	@Test
+	public void testHasNext() {
+		HaltonSequence seq = new HaltonSequence();
+		for (int i = 0; i < 20; i++) {
+			assertTrue(seq.hasNext());
+		}
+	}
 
 	@Test
 	public void testBase2() {

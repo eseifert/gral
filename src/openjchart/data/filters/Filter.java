@@ -117,7 +117,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 					row = rowLast - mod;
 				}
 			} else if (Mode.MODE_CIRCULAR.equals(mode)) {
-				row %= (rowLast + 1);
+				row = Math.abs(row) % (rowLast + 1);
 			}
 		}
 		return original.get(col, row);

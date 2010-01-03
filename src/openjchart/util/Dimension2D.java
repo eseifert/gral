@@ -52,7 +52,7 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 		
 		@Override
 		public String toString() {
-			return getClass().toString() + "[width=" + width + ", height=" + height + "]";
+			return getClass().getName() + "[width=" + width + ", height=" + height + "]";
 		}
 	}
 }
