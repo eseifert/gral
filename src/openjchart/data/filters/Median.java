@@ -26,10 +26,26 @@ import java.util.List;
 import openjchart.data.DataSource;
 import openjchart.util.MathUtils;
 
+/**
+ * Class that calculates the Median of a DataSource.
+ * <ul>
+ * <li>Setting and getting offset</li>
+ * <li>Setting and getting window size</li>
+ * </ul>
+ */
 public class Median extends Filter {
 	private int windowSize;
 	private int offset;
 
+	/**
+	 * Creates a new Median object with the specified DataSource, window
+	 * size, offset, Mode, and columns.
+	 * @param original DataSource to be filtered.
+	 * @param windowSize Number of rows to be used for the calculation of the median.
+	 * @param offset Offset from the current filtered value to the last value of the window.
+	 * @param mode Mode of filtering.
+	 * @param cols Column indexes.
+	 */
 	public Median(DataSource original, int windowSize, int offset, Mode mode, int... cols) {
 		super(original, mode, cols);
 		this.windowSize = windowSize;
@@ -75,6 +91,11 @@ public class Median extends Filter {
 		}
 	}
 
+	/**
+	 * Calculates the median for the specified values in the window.
+	 * @param w List of values the median will be calculated for.
+	 * @return Median.
+	 */
 	private double median(List<Double> w) {
 		if (w.size() == 1) {
 			return w.get(0);
@@ -96,19 +117,37 @@ public class Median extends Filter {
 		return median;
 	}
 
+	/**
+	 * Returns the size of the window which is used to calculate the median.
+	 * @return Number of rows used.
+	 */
 	public int getWindowSize() {
 		return windowSize;
 	}
 
+	/**
+	 * Set the size of the window which is used to calculate the median.
+	 * @param windowSize Number of rows used.
+	 */
 	public void setWindowSize(int windowSize) {
 		this.windowSize = windowSize;
 		dataChanged(this);
 	}
 
+	/**
+	 * Returns the offset from the current value used to calculate the
+	 * median to the last value of the window.
+	 * @return Offset.
+	 */
 	public int getOffset() {
 		return offset;
 	}
 
+	/**
+	 * Sets the offset from the current value used to calculate the
+	 * median to the last value of the window.
+	 * @param offset Offset.
+	 */
 	public void setOffset(int offset) {
 		this.offset = offset;
 		dataChanged(this);

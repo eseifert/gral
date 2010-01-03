@@ -22,24 +22,48 @@ package openjchart.data.filters;
 
 import openjchart.data.DataSource;
 
+/**
+ * Class that applies a convolution filter with the use of a Kernel.
+ * Functionality includes:
+ * <ul>
+ * <li>Getting and setting the Kernel used for convolution</li>
+ * </ul>
+ */
 public class Convolution extends Filter {
 	private Kernel kernel;
 
+	/**
+	 * Creates a new Convolution object with the specified DataSource,
+	 * Kernel, Mode and columns.
+	 * @param original DataSource to be filtered.
+	 * @param kernel Kernel to be used.
+	 * @param mode Mode of filtering.
+	 * @param cols Column indexes.
+	 */
 	public Convolution(DataSource original, Kernel kernel, Mode mode, int... cols) {
 		super(original, mode, cols);
 		this.kernel = kernel;
 		filter();
 	}
 
+	/**
+	 * Returns the Kernel.
+	 * @return Kernel used for convolution.
+	 */
 	public Kernel getKernel() {
 		return kernel;
 	}
-	
+
+	/**
+	 * Sets the Kernel to the specified value.
+	 * @param kernel Kernel to be set.
+	 */
 	protected final void setKernel(Kernel kernel) {
 		this.kernel = kernel;
 		dataChanged(this);
 	}
 
+	@Override
 	protected void filter() {
 		clear();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
@@ -55,6 +79,13 @@ public class Convolution extends Filter {
 		}
 	}
 
+	/**
+	 * Calculates the convolved value of the data with the specified column
+	 * and row.
+	 * @param col Column index.
+	 * @param row Row index.
+	 * @return Convolved value using the set kernel.
+	 */
 	private double convolve(int col, int row) {
 		if (kernel == null) {
 			return getOriginal(col, row).doubleValue();

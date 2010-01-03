@@ -26,13 +26,21 @@ import java.io.Writer;
 
 import openjchart.data.DataSource;
 
+/**
+ * Class that writes a DataSource in a TSV-file.
+ */
 public class TSVWriter implements DataWriter {
 	private final Writer output;
 
+	/**
+	 * Creates a new TSVWrites object with the specified Writer.
+	 * @param output Writer used to export the DataSource.
+	 */
 	public TSVWriter(Writer output) {
 		this.output = output;
 	}
 
+	@Override
 	public void write(DataSource data) throws IOException {
 		PrintWriter writer = new PrintWriter(output);
 		for (Number[] row : data) {

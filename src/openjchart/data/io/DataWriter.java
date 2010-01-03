@@ -24,6 +24,14 @@ import java.io.IOException;
 
 import openjchart.data.DataSource;
 
+/**
+ * Interface that provides a function to store a DataSource.
+ */
 public interface DataWriter {
+	/**
+	 * Stores the specified DataSource
+	 * @param data DataSource to be stored.
+	 * @throws IOException
+	 */
 	void write(DataSource data) throws IOException;
 }

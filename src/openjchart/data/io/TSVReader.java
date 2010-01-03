@@ -32,11 +32,19 @@ import java.util.Map;
 import openjchart.data.DataSource;
 import openjchart.data.DataTable;
 
+/**
+ * Class that reads a DataSource from a TSV-file.
+ */
 public class TSVReader implements DataReader {
 	private final Class<? extends Number>[] types;
 	private final Map<Class<? extends Number>, Method> parseMethods;
 	private final Reader input;
 
+	/**
+	 * Creates a new TSVReader with the specified Reader and data classes.
+	 * @param input Input to be read.
+	 * @param types Number types for the columns of the DataSource.
+	 */
 	public TSVReader(Reader input, Class<? extends Number>... types) {
 		parseMethods = new HashMap<Class<? extends Number>, Method>();
 		this.input = input;
@@ -52,6 +60,7 @@ public class TSVReader implements DataReader {
 		}
 	}
 
+	@Override
 	public DataSource read() throws IOException, ParseException {
 		DataTable data = new DataTable(types);
 		BufferedReader reader = new BufferedReader(input);
@@ -78,6 +87,11 @@ public class TSVReader implements DataReader {
 		return data;
 	}
 
+	/**
+	 * Returns a Method that returns a parsed value in the specified type.
+	 * @param c Desired type.
+	 * @return Method that parses a data type.
+	 */
 	private static Method getParseMethod(Class<?> c) {
 		Method parse = null;
 		for (Method m : c.getMethods()) {

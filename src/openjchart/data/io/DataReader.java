@@ -25,6 +25,15 @@ import java.text.ParseException;
 
 import openjchart.data.DataSource;
 
+/**
+ * Interface that provides a function to retrieve a DataSource.
+ */
 public interface DataReader {
+	/**
+	 * Returns a DataSource, that was imported.
+	 * @return DataSource
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	DataSource read() throws IOException, ParseException;
 }
