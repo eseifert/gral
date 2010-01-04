@@ -44,6 +44,11 @@ public class RandomColors implements ColorMapper {
 	public RandomColors() {
 		random = new Random();
 		colorCache = new LinkedHashMap<Double, Color>();
+		colorVariance = new float[] {
+			0.00f, 1.00f,  // Hue
+			0.75f, 0.25f,  // Saturation
+			0.25f, 0.75f   // Brightness
+		};
 	}
 
 	/**
@@ -52,11 +57,6 @@ public class RandomColors implements ColorMapper {
 	public RandomColors(long seed) {
 		this();
 		random.setSeed(seed);
-		colorVariance = new float[] {
-			0.00f, 1.00f,  // Hue
-			0.75f, 0.25f,  // Saturation
-			0.25f, 0.75f   // Brightness
-		};
 	}
 
 	@Override

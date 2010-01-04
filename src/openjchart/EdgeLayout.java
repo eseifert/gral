@@ -110,7 +110,7 @@ public class EdgeLayout implements Layout {
 		);
 
 		layoutComponent(north,
-			xWest + widthWest, yNorth,
+			xCenter, yNorth,
 			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight(),
 			heightNorth
 		);
@@ -121,7 +121,7 @@ public class EdgeLayout implements Layout {
 		);
 
 		layoutComponent(east,
-			xEast, yNorth + heightNorth,
+			xEast, yCenter,
 			widthEast,
 			bounds.getHeight() - insets.getTop() - heightSouth - insets.getBottom()
 		);
@@ -133,7 +133,7 @@ public class EdgeLayout implements Layout {
 		);
 
 		layoutComponent(south,
-			xWest + widthWest, ySouth,
+			xCenter, ySouth,
 			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight(),
 			heightSouth
 		);
@@ -145,7 +145,7 @@ public class EdgeLayout implements Layout {
 		);
 
 		layoutComponent(west,
-			xWest, yNorth + heightNorth,
+			xWest, yCenter,
 			widthWest,
 			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom()
 		);

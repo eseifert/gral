@@ -21,6 +21,8 @@
 package openjchart.tests.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import openjchart.util.Insets2D;
 
 import org.junit.Test;
@@ -84,6 +86,18 @@ public class Insets2DTest {
 	public void testToString() {
 		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
 		assertEquals("openjchart.util.Insets2D$Double[top=1.0, left=2.0, bottom=3.0, right=4.0]", insets.toString());
+	}
+
+	@Test
+	public void testEquality() {
+		Insets2D insets1 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		Insets2D insets2 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		// Equals
+		assertTrue(insets1.equals(insets2));
+		assertFalse(insets1.equals(null));
+		assertFalse(insets2.equals(null));
+		// Hash code
+		assertEquals(insets1.hashCode(), insets2.hashCode());
 	}
 
 }

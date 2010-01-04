@@ -30,9 +30,6 @@ import openjchart.util.Insets2D;
  * lying upon another.
  */
 public class StackedLayout implements Layout {
-	// TODO: Add setters and getters.
-	// FIXME: Use SettingsStorage?
-	// FIXME: Extract abstract superclass as an additional layer between Layout and StackedLayout?
 	private Orientation orientation;
 	private Dimension2D gap;
 	private double alignment;
@@ -100,8 +97,8 @@ public class StackedLayout implements Layout {
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
 
-		double x = insets.getLeft();
-		double y = insets.getTop();
+		double x = bounds.getMinX() + insets.getLeft();
+		double y = bounds.getMinY() + insets.getTop();
 		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
@@ -126,6 +123,25 @@ public class StackedLayout implements Layout {
 				y += compBounds.getHeight();
 			}
 		}
+	}
+
+	/**
+	 * Returns whether the components will be laid out horizontally or vertically.
+	 * @return Orientation constant
+	 */
+	public Orientation getOrientation() {
+		return orientation;
+	}
+
+	/**
+	 * Returns the minimal space between components. No space will be allocated
+	 * if there are no components.
+	 * @return Horizontal and vertical gaps
+	 */
+	public Dimension2D getGap() {
+		Dimension2D gap = new openjchart.util.Dimension2D.Double();
+		gap.setSize(this.gap);
+		return gap;
 	}
 
 }

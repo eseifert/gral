@@ -20,20 +20,25 @@
 
 package openjchart.tests.plots.colors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 
-import openjchart.plots.colors.RainbowColors;
+import openjchart.plots.colors.QuasiRandomColors;
 
 import org.junit.Test;
 
-public class RainbowColorTest {
+public class QuasiRandomColorsTest {
 	@Test
 	public void testGet() {
-		RainbowColors c = new RainbowColors();
-		for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
-			assertEquals(Color.getHSBColor(i, 1f, 1f), c.get(i));
+		QuasiRandomColors c = new QuasiRandomColors();
+		Color prv = null;
+		for (double i = 0.0; i <= 1.0; i += 0.1) {
+			Color cur = c.get(i);
+			assertNotNull(cur);
+			assertFalse(cur.equals(prv));
+			prv = cur;
 		}
 	}
 

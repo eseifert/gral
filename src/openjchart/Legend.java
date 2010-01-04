@@ -25,7 +25,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -132,11 +131,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	public void draw(Graphics2D g2d) {
 		drawBackground(g2d);
 		drawBorder(g2d);
-
-		AffineTransform txOrig = g2d.getTransform();
-		g2d.translate(getX(), getY());
 		drawComponents(g2d);
-		g2d.setTransform(txOrig);
 	}
 
 	/**

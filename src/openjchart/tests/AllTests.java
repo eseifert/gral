@@ -32,7 +32,9 @@ import org.junit.runners.Suite;
 	UtilTests.class,
 	DataTests.class,
 	PlotsTests.class,
-	DrawablePanelTest.class
+	DrawablePanelTest.class,
+	EdgeLayoutTest.class,
+	StackedLayoutTest.class
 })
 public class AllTests {
 }

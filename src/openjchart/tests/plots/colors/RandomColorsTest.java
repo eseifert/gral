@@ -20,15 +20,26 @@
 
 package openjchart.tests.plots.colors;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	RainbowColorsTest.class,
-	SingleColorTest.class,
-	RandomColorsTest.class,
-	QuasiRandomColorsTest.class
-})
-public class ColorsTests {
+import java.awt.Color;
+
+import openjchart.plots.colors.RandomColors;
+
+import org.junit.Test;
+
+public class RandomColorsTest {
+	@Test
+	public void testGet() {
+		RandomColors c = new RandomColors();
+		Color prv = null;
+		for (double i = 0.0; i <= 1.0; i += 0.1) {
+			Color cur = c.get(i);
+			assertNotNull(cur);
+			assertFalse(cur.equals(prv));
+			prv = cur;
+		}
+	}
+
 }

@@ -87,6 +87,25 @@ public abstract class Insets2D {
 		public String toString() {
 			return getClass().getName() + "[top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right + "]";
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Insets2D)) {
+				return false;
+			}
+			Insets2D insets = (Insets2D) obj;
+			return (getTop() == insets.getTop()) && (getLeft() == insets.getLeft()) &&
+				(getBottom() == insets.getBottom()) && (getRight() == insets.getRight());
+		}
+
+		@Override
+		public int hashCode() {
+			long bits = java.lang.Double.doubleToLongBits(getTop());
+			bits += java.lang.Double.doubleToLongBits(getLeft()) * 37;
+			bits += java.lang.Double.doubleToLongBits(getBottom()) * 43;
+			bits += java.lang.Double.doubleToLongBits(getRight()) * 47;
+			return (((int) bits) ^ ((int) (bits >> 32)));
+		}
 	}
 
 }

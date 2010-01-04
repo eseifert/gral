@@ -38,21 +38,37 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 		public double getHeight() {
 			return height;
 		}
-	
+
 		@Override
 		public double getWidth() {
 			return width;
 		}
-	
+
 		@Override
 		public void setSize(double width, double height) {
 			this.width = width;
 			this.height = height;
 		}
-		
+
 		@Override
 		public String toString() {
 			return getClass().getName() + "[width=" + width + ", height=" + height + "]";
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof java.awt.geom.Dimension2D)) {
+				return false;
+			}
+			java.awt.geom.Dimension2D dim = (java.awt.geom.Dimension2D) obj;
+			return (getWidth() == dim.getWidth()) && (getHeight() == dim.getHeight());
+		}
+
+		@Override
+		public int hashCode() {
+			long bits = java.lang.Double.doubleToLongBits(getWidth());
+			bits ^= java.lang.Double.doubleToLongBits(getHeight()) * 31;
+			return (((int) bits) ^ ((int) (bits >> 32)));
 		}
 	}
 }

@@ -21,6 +21,8 @@
 package openjchart.tests.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.geom.Dimension2D;
 
@@ -65,4 +67,17 @@ public class Dimension2DTest {
 		Dimension2D dim = new openjchart.util.Dimension2D.Double(1.0, 2.0);
 		assertEquals("openjchart.util.Dimension2D$Double[width=1.0, height=2.0]", dim.toString());
 	}
+
+	@Test
+	public void testEquality() {
+		Dimension2D dim1 = new openjchart.util.Dimension2D.Double(1.0, 2.0);
+		Dimension2D dim2 = new openjchart.util.Dimension2D.Double(1.0, 2.0);
+		// Equals
+		assertTrue(dim1.equals(dim2));
+		assertFalse(dim1.equals(null));
+		assertFalse(dim2.equals(null));
+		// Hash code
+		assertEquals(dim1.hashCode(), dim2.hashCode());
+	}
+
 }

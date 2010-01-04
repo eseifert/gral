@@ -32,6 +32,7 @@ import openjchart.data.DataSource;
 import openjchart.data.DummyData;
 import openjchart.plots.BarPlot;
 import openjchart.plots.Plot;
+import openjchart.plots.axes.Axis;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,8 @@ public class BarPlotTest {
 
 	@Test
 	public void testDraw() {
+		plot.getAxis(Axis.X).setRange(-1.0, 3.0);
+		plot.getAxis(Axis.Y).setRange(-1.0, 2.0);
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
