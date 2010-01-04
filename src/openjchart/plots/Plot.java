@@ -46,13 +46,30 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
+/**
+ * Abstract class that displays data in a plot.
+ * Functionality includes:
+ * <ul>
+ * <li>Adding axes to the plot</li>
+ * <li>Adding a title to the plot</li>
+ * <li>Adding a legend to the plot</li>
+ * <li>Administration of settings</li>
+ * </ul>
+ */
 public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
+	/** Title of the plot. */
 	public static final String KEY_TITLE = "plot.title";
+	/** Background paint. */
 	public static final String KEY_BACKGROUND = "plot.background";
+	/** Border of the plot. */
 	public static final String KEY_BORDER = "plot.border";
+	/** Antialiasing enabled. */
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
+	/** Legend enabled. */
 	public static final String KEY_LEGEND = "plot.legend";
-	public static final String KEY_LEGEND_POSITION = "plot.legend.position";
+	/** Location of the Legend. */
+	public static final String KEY_LEGEND_LOCATION = "plot.legend.location";
+	/** Margin of the Legend. */
 	public static final String KEY_LEGEND_MARGIN = "plot.legend.margin";
 
 	private final Settings settings;
@@ -67,6 +84,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private final Container legendContainer;
 	private Legend legend;
 
+	/**
+	 * Creates a new Plot object with the specified DataSources.
+	 * @param data Data to be displayed.
+	 */
 	public Plot(DataSource... data) {
 		super(new EdgeLayout(20.0, 20.0));
 
@@ -88,7 +109,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		setSettingDefault(KEY_BORDER, null);
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_LEGEND, false);
-		setSettingDefault(KEY_LEGEND_POSITION, Location.NORTH_WEST);
+		setSettingDefault(KEY_LEGEND_LOCATION, Location.NORTH_WEST);
 		setSettingDefault(KEY_LEGEND_MARGIN, new Insets2D.Double(20.0));
 
 		add(title, Location.NORTH);
@@ -111,16 +132,24 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 		}
-		
+
 		drawComponents(g2d);
 	}
 
+	/**
+	 * Draws the Plot's axes into the specified Graphics2D object.
+	 * @param g2d Graphics to be used for drawing.
+	 */
 	protected void drawAxes(Graphics2D g2d) {
 		for (Drawable d : axisDrawables.values()) {
 			d.draw(g2d);
 		}
 	}
 
+	/**
+	 * Draws the Plot's Legend into the specified Graphics2D object.
+	 * @param g2d Graphics to be used for drawing.
+	 */
 	protected void drawLegend(Graphics2D g2d) {
 		boolean isVisible = getSetting(KEY_LEGEND);
 		if (!isVisible || legend == null) {
@@ -129,10 +158,21 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		legend.draw(g2d);
 	}
 
+	/**
+	 * Returns the Axis with the specified name.
+	 * @param name Name of the Axis.
+	 * @return Axis.
+	 */
 	public Axis getAxis(String name) {
 		return axes.get(name);
 	}
 
+	/**
+	 * Sets the Axis with the specified name and the associated Drawable.
+	 * @param name Name of the Axis.
+	 * @param axis Axis.
+	 * @param drawable Representation of the Axis.
+	 */
 	public void setAxis(String name, Axis axis, Drawable drawable) {
 		if (axis == null || drawable == null) {
 			removeAxis(name);
@@ -142,15 +182,27 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		axisDrawables.put(name, drawable);
 	}
 
+	/**
+	 * Removes the Axis with the specified name.
+	 * @param name Name of the axis to be removed.
+	 */
 	public void removeAxis(String name) {
 		axes.remove(name);
 		axisDrawables.remove(name);
 	}
 
+	/**
+	 * Returns the drawing area of this plot.
+	 * @return PlotArea.
+	 */
 	public PlotArea2D getPlotArea() {
 		return plotArea;
 	}
 
+	/**
+	 * Sets the drawing area to the specified value.
+	 * @param plotArea PlotArea to be set.
+	 */
 	protected void setPlotArea(PlotArea2D plotArea) {
 		if (this.plotArea != null) {
 			remove(this.plotArea);
@@ -158,6 +210,45 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		this.plotArea = plotArea;
 		if (this.plotArea != null) {
 			add(this.plotArea, Location.CENTER);
+		}
+	}
+
+	/**
+	 * Returns the title of this plot.
+	 * @return Label representing the title.
+	 */
+	public Label getTitle() {
+		return title;
+	}
+
+	/**
+	 * Returns the object containing the Legend.
+	 * @return Container.
+	 */
+	protected Container getLegendContainer() {
+		return legendContainer;
+	}
+
+	/**
+	 * Returns the Legend.
+	 * @return Legend.
+	 */
+	public Legend getLegend() {
+		return legend;
+	}
+
+	/**
+	 * Sets the Legend to the specified value.
+	 * @param legend Legend to be set.
+	 */
+	protected void setLegend(Legend legend) {
+		if (this.legend != null) {
+			legendContainer.remove(this.legend);
+		}
+		this.legend = legend;
+		if (this.legend != null) {
+			Location constraints = getSetting(KEY_LEGEND_LOCATION);
+			legendContainer.add(legend, constraints);
 		}
 	}
 
@@ -192,8 +283,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		if (KEY_TITLE.equals(key)) {
 			String text = getSetting(KEY_TITLE);
 			title.setText((text != null) ? text : "");
-		} else if (KEY_LEGEND_POSITION.equals(key)) {
-			Location constraints = getSetting(KEY_LEGEND_POSITION);
+		} else if (KEY_LEGEND_LOCATION.equals(key)) {
+			Location constraints = getSetting(KEY_LEGEND_LOCATION);
 			if (legend != null) {
 				legendContainer.remove(legend);
 				legendContainer.add(legend, constraints);
@@ -201,29 +292,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		} else if (KEY_LEGEND_MARGIN.equals(key)) {
 			Insets2D margin = getSetting(KEY_LEGEND_MARGIN);
 			legendContainer.setInsets(margin);
-		}
-	}
-
-	public Label getTitle() {
-		return title;
-	}
-
-	protected Container getLegendContainer() {
-		return legendContainer;
-	}
-
-	public Legend getLegend() {
-		return legend;
-	}
-
-	protected void setLegend(Legend legend) {
-		if (this.legend != null) {
-			legendContainer.remove(this.legend);
-		}
-		this.legend = legend;
-		if (this.legend != null) {
-			Location constraints = getSetting(KEY_LEGEND_POSITION);
-			legendContainer.add(legend, constraints);
 		}
 	}
 }

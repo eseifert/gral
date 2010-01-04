@@ -33,15 +33,25 @@ import openjchart.plots.colors.ColorMapper;
 import openjchart.plots.colors.QuasiRandomColors;
 import openjchart.util.GraphicsUtils;
 
+/**
+ * Class that displays data in a pie plot.
+ */
 public class PiePlot extends Plot implements DataListener {
+	/** Relative radius of the pie. */
 	public static final String KEY_RADIUS = "pieplot.radius";
+	/** ColorMapper used for the segments. */
 	public static final String KEY_COLORS = "pieplot.colorlist";
+	/** Segments being ordered clockwise. */
 	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
+	/** Starting angle of the first segment. */
 	public static final String KEY_START = "pieplot.start";
 
 	private double degreesPerValue;
 	private double[] startValues;
 
+	/**
+	 * Class that represents the drawing area of a PiePlot.
+	 */
 	public class PiePlotArea2D extends PlotArea2D {
 		@Override
 		public void draw(Graphics2D g2d) {
@@ -50,6 +60,7 @@ public class PiePlot extends Plot implements DataListener {
 			drawPlot(g2d);
 		}
 
+		@Override
 		protected void drawPlot(Graphics2D g2d) {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
@@ -73,6 +84,10 @@ public class PiePlot extends Plot implements DataListener {
 		}
 	}
 
+	/**
+	 * Creates a new PiePlot object with the specified DataSource.
+	 * @param data Data to be displayed.
+	 */
 	public PiePlot(DataSource data) {
 		super(data);
 
@@ -83,7 +98,7 @@ public class PiePlot extends Plot implements DataListener {
 
 		dataChanged(data);
 		data.addDataListener(this);
-		
+
 		setPlotArea(new PiePlotArea2D());
 	}
 

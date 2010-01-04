@@ -24,13 +24,30 @@ import java.util.Arrays;
 
 import openjchart.data.filters.Kernel;
 
-
+/**
+ * Abstract class that provides utility functions which are useful for
+ * kernels.
+ */
 public abstract class KernelUtils {
+
+	private KernelUtils() {
+	}
+
+	/**
+	 * Returns a Kernel of specified variance with binomial coefficients.
+	 * @param variance Variance.
+	 * @return Kernel.
+	 */
 	public static Kernel getBinomial(double variance) {
 		int size = (int) (variance * 4.0) + 1;
 		return getBinomial(size);
 	}
 
+	/**
+	 * Returns a Kernel of specified size with binomial coefficients.
+	 * @param size Size of the Kernel.
+	 * @return Kernel.
+	 */
 	public static Kernel getBinomial(int size) {
 		double[] values = new double[size];
 		values[0] = 1.0;
@@ -47,6 +64,14 @@ public abstract class KernelUtils {
 		return new Kernel(values);
 	}
 
+	/**
+	 * Returns a Kernel with the specified size and offset, filled with a
+	 * single value.
+	 * @param size Size.
+	 * @param offset Offset.
+	 * @param value Value the Kernel is filled with.
+	 * @return Kernel.
+	 */
 	public static Kernel getUniform(int size, int offset, double value) {
 		double[] values = new double[size];
 		Arrays.fill(values, value);

@@ -37,16 +37,29 @@ import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 import openjchart.util.SettingsStorage;
 
+/**
+ * Class that draws a label to a specific location.
+ * A Label is able to administrate its settings and to set and get the
+ * displayed text, as well as calculating its bounds.
+ */
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
+	/** Horizontal alignment within the bounding rectangle. */
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
+	/** Vertical alignment within the bounding rectangle. */
 	public static final String KEY_ALIGNMENT_Y = "label.alignment.y";
+	/** Font of this Label. */
 	public static final String KEY_FONT = "label.font";
+	/** Rotation of this Label */
 	public static final String KEY_ROTATION = "label.rotation";
 
 	private final Settings settings;
 	private String text;
 	private TextLayout layout;
 
+	/**
+	 * Creates a new Label object with the specified text.
+	 * @param text Text to be displayed.
+	 */
 	public Label(String text) {
 		settings = new Settings(this);
 		this.text = text;
@@ -118,10 +131,40 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		return d;
 	}
 
+	/**
+	 * Returns the bounding rectangle of the text.
+	 * @return Bounds.
+	 */
 	public Rectangle2D getTextRectangle() {
 		return layout.getBounds();
 	}
-	
+
+	/**
+	 * Returns the text of this Label.
+	 * @return Text.
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * Sets the displayed text to the specified value.
+	 * @param text Text to be displayed.
+	 */
+	public void setText(String text) {
+		this.text = text;
+		renewLayout();
+	}
+
+	/**
+	 * Revalidates the text layout.
+	 */
+	private void renewLayout() {
+		if (text != null && !text.isEmpty()) {
+			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(KEY_FONT));
+		}
+	}
+
 	@Override
 	public <T> T getSetting(String key) {
 		return settings.<T>get(key);
@@ -145,21 +188,6 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	@Override
 	public <T> void removeSettingDefault(String key) {
 		settings.removeDefault(key);
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-		renewLayout();
-	}
-
-	private void renewLayout() {
-		if (text != null && !text.isEmpty()) {
-			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(KEY_FONT));
-		}
 	}
 
 	@Override

@@ -27,9 +27,16 @@ import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
 
+/**
+ * Abstract class implementing functions for the administration of settings.
+ */
 public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsListener {
 	private final Settings settings;
 
+	/**
+	 * Creates a new AbstractShapeRenderer object with default shape and
+	 * color.
+	 */
 	public AbstractShapeRenderer() {
 		settings = new Settings(this);
 

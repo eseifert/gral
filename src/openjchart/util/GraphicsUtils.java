@@ -31,18 +31,33 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Class that contains utility functions for working with graphics.
- * For example, This includes font handling.
- * @author Erich Seifert
+ * Abstract class that contains utility functions for working with graphics.
+ * For example, this includes font handling.
  */
 public abstract class GraphicsUtils {
 	private static final FontRenderContext frc = new FontRenderContext(null, true, true);
 
+	private GraphicsUtils() {
+	}
+
+	/**
+	 * Returns the layout for the specified text with the specified font.
+	 * @param text Text to be displayed.
+	 * @param font Font of the Text.
+	 * @return TextLayout.
+	 */
 	public static TextLayout getLayout(String text, Font font) {
 		TextLayout layout = new TextLayout(text, font, frc);
 		return layout;
 	}
 
+	/**
+	 * Fills a Shape with the specified Paint object.
+	 * @param g2d Graphics to be painted into.
+	 * @param shape Shape to be filled.
+	 * @param paint Paint to be used.
+	 * @param paintBounds Bounds of the paint.
+	 */
 	public static void fillPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds) {
 		if (paintBounds == null) {
 			paintBounds = shape.getBounds2D();
@@ -64,6 +79,14 @@ public abstract class GraphicsUtils {
 		g2d.setTransform(txOrig);
 	}
 
+	/**
+	 * Draws a filled Shape with the specified Paint object.
+	 * @param g2d Graphics to be painted into.
+	 * @param shape Shape to be filled.
+	 * @param paint Paint to be used.
+	 * @param paintBounds Bounds of the paint.
+	 * @param stroke Stroke to be used for outlines.
+	 */
 	public static void drawPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds, Stroke stroke) {
 		if (stroke == null) {
 			stroke = g2d.getStroke();

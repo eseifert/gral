@@ -107,7 +107,7 @@ public class ConvolutionExample extends JFrame {
 		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);
 
 		plot.setSetting(Plot.KEY_LEGEND, true);
-		plot.setSetting(Plot.KEY_LEGEND_POSITION, Location.SOUTH_WEST);
+		plot.setSetting(Plot.KEY_LEGEND_LOCATION, Location.SOUTH_WEST);
 		plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));

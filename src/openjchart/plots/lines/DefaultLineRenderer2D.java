@@ -31,8 +31,14 @@ import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
 import openjchart.util.GraphicsUtils;
 
+/**
+ * Class that connects DataPoints2D with a straight line.
+ */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
+	/**
+	 * Creates a new DefaultLineRenderer2D object.
+	 */
 	public DefaultLineRenderer2D() {
 	}
 
@@ -51,7 +57,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 						line.lineTo(pos.getX(), pos.getY());
 					}
 				}
-				
+
 				// Draw line
 				Shape lineShape = punchShapes(line, points);
 				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);

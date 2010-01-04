@@ -31,9 +31,16 @@ import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
 import openjchart.util.GraphicsUtils;
 
+/**
+ * Class that connects DataPoints2D with a stair-like line.
+ */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
+	/** Percentage of the distance between two points, which indicates the "step" of a stair. */
 	public static final String KEY_ASCENDING_POINT = "line.discrete.ascending";
 
+	/**
+	 * Creates a new DiscreteLineRenderer2D object with default settings.
+	 */
 	public DiscreteLineRenderer2D() {
 		setSettingDefault(KEY_ASCENDING_POINT, 1.0);
 	}
@@ -57,7 +64,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 						line.lineTo(ascendingX,  posPrev.getY());
 						line.lineTo(ascendingX,  pos.getY());
 						line.lineTo(pos.getX(), pos.getY());
-		
+
 					}
 				}
 

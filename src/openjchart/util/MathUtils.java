@@ -23,9 +23,15 @@ package openjchart.util;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * Abstract class that provides utility functions which are useful for
+ * mathematical calculations.
+ */
 public abstract class MathUtils {
 	private static final Random random = new Random();
+
+	private MathUtils() {
+	}
 
 	/**
 	 * Check whether two floating point values match with a given precision.
@@ -127,7 +133,7 @@ public abstract class MathUtils {
 	/**
 	 * Clamps a value to specified limits: if <code>value</code> is greater than <code>max</code>
 	 * then <code>max</code> will be returned. If <code>value</code> is greater than <code>min</code>
-	 * then <code>min</code> will be returned. 
+	 * then <code>min</code> will be returned.
 	 * @param value Value to be clamped
 	 * @param min Minimum
 	 * @param max Maximum
@@ -142,7 +148,7 @@ public abstract class MathUtils {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * <p>Perform a randomized search on an unsorted array <code>a</code> to find
 	 * the <i>i</i>th smallest element. The array contents are be modified during
@@ -172,7 +178,7 @@ public abstract class MathUtils {
 			return randomizedSelect(a, q + 1, upper, i - k);
 		}
 	}
- 
+
 	/**
 	 * Rearranges an array in two partitions using random sampling.
 	 * The array is permuted so that the elements of the lower partition

@@ -20,29 +20,89 @@
 
 package openjchart.util;
 
-
+/**
+ * Abstract class that stores insets for all four directions.
+ * <p>Please use this instead of java.awt.Insets, as the java class does not
+ * support double values.</p>
+ */
 public abstract class Insets2D {
+
+	/**
+	 * Creates a new Insets2D object.
+	 */
+	public Insets2D() {
+	}
+
+	/**
+	 * Returns the insets at the top.
+	 * @return Top insets.
+	 */
 	public abstract double getTop();
+
+	/**
+	 * Returns the insets at the left.
+	 * @return Left insets.
+	 */
 	public abstract double getLeft();
+
+	/**
+	 * Returns the insets at the bottom.
+	 * @return Bottom insets.
+	 */
 	public abstract double getBottom();
+
+	/**
+	 * Returns the insets at the right.
+	 * @return Right insets.
+	 */
 	public abstract double getRight();
+
+	/**
+	 * Sets the insets according to the specified insets.
+	 * @param insets Insets to be set.
+	 */
 	public abstract void setInsets(Insets2D insets);
+
+	/**
+	 * Sets the insets to the specified values.
+	 * @param top Top insets.
+	 * @param left Left insets.
+	 * @param bottom Bottom insets.
+	 * @param right Right insets.
+	 */
 	public abstract void setInsets(double top, double left, double bottom, double right);
 
+	/**
+	 * Class that stores insets as double values.
+	 */
 	public static class Double extends Insets2D {
 		private double top;
 		private double left;
 		private double bottom;
 		private double right;
 
+		/**
+		 * Creates a new Insets2D object with zero insets.
+		 */
 		public Double() {
 			this(0.0);
 		}
 
+		/**
+		 * Creates a new Insets2D object with the specified insets in all
+		 * directions.
+		 */
 		public Double(double inset) {
 			this(inset, inset, inset, inset);
 		}
 
+		/**
+		 * Creates a new Insets2D object with the specified insets.
+		 * @param top Top insets.
+		 * @param left Left insets.
+		 * @param bottom Bottom insets.
+		 * @param right Right insets.
+		 */
 		public Double(double top, double left, double bottom, double right) {
 			setInsets(top, left, bottom, right);
 		}

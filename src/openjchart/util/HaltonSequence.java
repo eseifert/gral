@@ -22,14 +22,23 @@ package openjchart.util;
 
 import java.util.Iterator;
 
+/**
+ * Class that calculates the values of the Halton sequence.
+ */
 public class HaltonSequence implements Iterator<Double> {
 	private int base;
 	private long c;
 
+	/**
+	 * Creates a new HaltonSequence object to the base of two.
+	 */
 	public HaltonSequence() {
 		this(2);
 	}
 
+	/**
+	 * Creates a new HaltonSequence object with the specified base.
+	 */
 	public HaltonSequence(int base) {
 		this.base = base;
 	}

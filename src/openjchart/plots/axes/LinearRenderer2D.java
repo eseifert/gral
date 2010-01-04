@@ -25,6 +25,12 @@ package openjchart.plots.axes;
  */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
+	/**
+	 * Creates a new LinearRenderer2D object.
+	 */
+	public LinearRenderer2D() {
+	}
+
 	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();

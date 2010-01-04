@@ -32,11 +32,25 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-
+/**
+ * Abstract class that represents a collection of utility functions
+ * concerning geometry.
+ */
 public abstract class GeometryUtils {
+	/** Precision */
 	public static final double EPSILON = 1e-5;
+	/** Precision squared */
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
 
+	private GeometryUtils() {
+	}
+
+	/**
+	 * Returns the line fragments of the specified Shape.
+	 * @param path Shape to be divided.
+	 * @param swapped Invert segment direction.
+	 * @return Array of lines.
+	 */
 	public static Line2D[] shapeToLines(Shape path, boolean swapped) {
 		Deque<Line2D> lines = new ArrayDeque<Line2D>();
 		PathIterator i = new FlatteningPathIterator(path.getPathIterator(null), 0.5);

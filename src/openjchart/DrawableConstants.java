@@ -25,20 +25,37 @@ package openjchart;
  * Stored constants include location and orientation.
  */
 public interface DrawableConstants {
+	/**
+	 * Indicates the location of a Drawable.
+	 */
 	static enum Location {
+		/** Central location. */
 		CENTER,
+		/** Northern location. */
 		NORTH,
+		/** North-eastern location. */
 		NORTH_EAST,
+		/** Eastern location. */
 		EAST,
+		/** South-eastern location. */
 		SOUTH_EAST,
+		/** Southern location. */
 		SOUTH,
+		/** South-western location. */
 		SOUTH_WEST,
+		/** Western location. */
 		WEST,
+		/** North-western location. */
 		NORTH_WEST
 	};
 
+	/**
+	 * Orientation of a Drawable.
+	 */
 	static enum Orientation {
+		/** Horizontal orientation. */
 		HORIZONTAL,
+		/** Vertical orientation. */
 		VERTICAL
 	};
 

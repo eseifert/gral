@@ -37,9 +37,16 @@ import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.MathUtils;
 
+/**
+ * Class that displays data in a bar plot.
+ */
 public class BarPlot extends XYPlot {
+	/** Relative width of the bars */
 	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
 
+	/**
+	 * Class that renders a bar in a bar plot.
+	 */
 	protected class BarRenderer extends AbstractShapeRenderer {
 		@Override
 		public Drawable getShape(final Row row) {
@@ -104,6 +111,10 @@ public class BarPlot extends XYPlot {
 		}
 	}
 
+	/**
+	 * Creates a new BarPlot object with the specified DataSources.
+	 * @param data Data to be displayed.
+	 */
 	public BarPlot(DataSource... data) {
 		super(data);
 

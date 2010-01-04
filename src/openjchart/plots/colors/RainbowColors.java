@@ -26,6 +26,13 @@ import java.awt.Color;
  * Class that generates the colors of a rainbow.
  */
 public class RainbowColors implements ColorMapper {
+
+	/**
+	 * Creates a new RainbowColors object.
+	 */
+	public RainbowColors() {
+	}
+
 	@Override
 	public Color get(double value) {
 		return Color.getHSBColor((float)value, 1f, 1f);

@@ -33,6 +33,12 @@ import openjchart.util.MathUtils;
  */
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
+	/**
+	 * Creates a new LogarithmicRenderer2D object.
+	 */
+	public LogarithmicRenderer2D() {
+	}
+
 	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();

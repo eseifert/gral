@@ -20,16 +20,39 @@
 
 package openjchart.util;
 
+/**
+ * Class that stores the horizontal and vertical extent of an object.
+ * <p>Please use this instead of java.awt.geom.Dimension2D, as the java class
+ * does not support double values.</p>
+ */
 public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 
+	/**
+	 * Creates a new Dimension2D object.
+	 */
+	public Dimension2D() {
+	}
+
+	/**
+	 * Class that stores double values.
+	 */
 	public static class Double extends Dimension2D {
 		private double width;
 		private double height;
 
+		/**
+		 * Creates a new Dimension2D object with zero width and height.
+		 */
 		public Double() {
 			setSize(0.0, 0.0);
 		}
 
+		/**
+		 * Creates a new Dimension2D object with the specified width and
+		 * height.
+		 * @param width Width.
+		 * @param height Height.
+		 */
 		public Double(double width, double height) {
 			setSize(width, height);
 		}

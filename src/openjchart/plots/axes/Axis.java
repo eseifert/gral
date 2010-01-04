@@ -32,8 +32,11 @@ import java.util.Set;
  * </ul>
  */
 public class Axis {
+	/** X-Axis */
 	public static final String X = "x";
+	/** Y-Axis */
 	public static final String Y = "y";
+	/** Z-Axis */
 	public static final String Z = "z";
 
 	private final Set<AxisListener> axisListeners;

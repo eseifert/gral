@@ -124,7 +124,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Recalculates this container's layout
+	 * Recalculates this container's layout.
 	 */
 	protected void layout() {
 		if (layout != null) {

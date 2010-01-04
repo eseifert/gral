@@ -27,7 +27,6 @@ import openjchart.Drawable;
 
 /**
  * Class for storing points of a plot.
- * @author Erich Seifert
  */
 public class DataPoint2D {
 	private final Point2D position;
@@ -36,6 +35,15 @@ public class DataPoint2D {
 	private final Shape shape;
 	private final String label;
 
+	/**
+	 * Creates a new DataPoint2D object with the specified position, normal,
+	 * drawable, shape and label.
+	 * @param position Coordinates.
+	 * @param normal Normal.
+	 * @param drawable Representation.
+	 * @param shape Shape.
+	 * @param label Description.
+	 */
 	public DataPoint2D(Point2D position, Point2D normal, Drawable drawable, Shape shape, String label) {
 		this.position = position;
 		this.normal = normal;
@@ -44,22 +52,42 @@ public class DataPoint2D {
 		this.label = label;
 	}
 
+	/**
+	 * Returns the coordinates of this DataPoint2D.
+	 * @return Position.
+	 */
 	public Point2D getPosition() {
 		return position;
 	}
 
+	/**
+	 * Returns the normal on this DataPoint2D.
+	 * @return Normal.
+	 */
 	public Point2D getNormal() {
 		return normal;
 	}
 
+	/**
+	 * Returns the Drawable which represents this DataPoint2D.
+	 * @return Drawable.
+	 */
 	public Drawable getDrawable() {
 		return drawable;
 	}
 
+	/**
+	 * Returns the Shape of this DataPoint2D.
+	 * @return Shape.
+	 */
 	public Shape getShape() {
 		return shape;
 	}
 
+	/**
+	 * Returns the label of this DataPoint2D.
+	 * @return Label.
+	 */
 	public String getLabel() {
 		return label;
 	}

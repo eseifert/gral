@@ -36,7 +36,9 @@ import openjchart.util.SettingsStorage;
  * Abstract class that represents a canvas for the plot which will be drawn.
  */
 public abstract class PlotArea2D extends AbstractDrawable implements SettingsStorage, SettingsListener {
+	/** Background color. */
 	public static final String KEY_BACKGROUND = "plotarea.background";
+	/** Border stroke of the PlotArea. */
 	public static final String KEY_BORDER = "plotarea.border";
 
 	private final Settings settings;
@@ -80,6 +82,10 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 		}
 	}
 
+	/**
+	 * Draws the data using the specified Graphics2D object.
+	 * @param g2d Graphics to be drawn into.
+	 */
 	protected abstract void drawPlot(Graphics2D g2d);
 
 	@Override

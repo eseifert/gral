@@ -26,13 +26,38 @@ import openjchart.Drawable;
 import openjchart.plots.DataPoint2D;
 import openjchart.util.SettingsStorage;
 
+/**
+ * Interface that provides functions for rendering a line in 2-dimensional
+ * space.
+ * Functionality includes:
+ * <ul>
+ * <li>Punching data points out of the line's shape</li>
+ * <li>Administration of settings</li>
+ * </ul>
+ */
 public interface LineRenderer2D extends SettingsStorage {
+	/** Stroke used to paint the line */
 	public static final String KEY_LINE_STROKE = "line.stroke";
+	/** Distance between the line and a shape */
 	public static final String KEY_LINE_GAP = "line.gap.size";
+	/** Rounded corners of a gap */
 	public static final String KEY_LINE_GAP_ROUNDED = "line.gap.rounded";
+	/** Color of the line */
 	public static final String KEY_LINE_COLOR = "line.color";
 
+	/**
+	 * Returns a Drawable for the line represented by the specified points.
+	 * @param points Points to be used for creating the line.
+	 * @return Representation of the line.
+	 */
 	Drawable getLine(DataPoint2D... points);
 
+	/**
+	 * Returns the shape of a line from which the shapes of the specified
+	 * points was subtracted.
+	 * @param lineShape Shape of the line.
+	 * @param points DataPoints on the line.
+	 * @return Punched shape.
+	 */
 	Shape punchShapes(Shape lineShape, DataPoint2D... points);
 }

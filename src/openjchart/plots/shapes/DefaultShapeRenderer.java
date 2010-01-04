@@ -29,6 +29,9 @@ import openjchart.Drawable;
 import openjchart.data.Row;
 import openjchart.util.GraphicsUtils;
 
+/**
+ * Class that creates Drawables for a row of data.
+ */
 public class DefaultShapeRenderer extends AbstractShapeRenderer {
 
 	@Override

@@ -51,9 +51,13 @@ import openjchart.util.SettingsStorage;
  * </ul>
  */
 public abstract class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
+	/** Background color. */
 	public static final String KEY_BACKGROUND = "legend.background";
+	/** Border of the Legend. */
 	public static final String KEY_BORDER = "legend.border";
+	/** Orientation of the Legend. */
 	public static final String KEY_ORIENTATION = "legend.orientation";
+	/** Gap between items. */
 	public static final String KEY_GAP = "legend.gap";
 
 	private final Settings settings;

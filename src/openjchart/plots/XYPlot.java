@@ -52,9 +52,13 @@ import openjchart.plots.shapes.ShapeRenderer;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 
-
+/**
+ * Class that displays data in an XY-Plot.
+ */
 public class XYPlot extends Plot implements DataListener  {
+	/** Renderer for the x-axis. */
 	public static final String KEY_AXIS_X_RENDERER = "xyplot.axis.x.renderer";
+	/** Renderer for the y-axis. */
 	public static final String KEY_AXIS_Y_RENDERER = "xyplot.axis.y.renderer";
 
 	private double minX;
@@ -69,11 +73,17 @@ public class XYPlot extends Plot implements DataListener  {
 	private final Map<DataSource, ShapeRenderer> shapeRenderers;
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
 
+	/**
+	 * Class that represents the drawing area of an XYPlot.
+	 */
 	public class XYPlotArea2D extends PlotArea2D {
 		public static final String KEY_GRID_X = "xyplot.grid.x";
 		public static final String KEY_GRID_Y = "xyplot.grid.y";
 		public static final String KEY_GRID_COLOR = "xyplot.grid.color";
 
+		/**
+		 * Creates a new XYPlotArea2D object with default settings.
+		 */
 		public XYPlotArea2D() {
 			setSettingDefault(KEY_GRID_X, true);
 			setSettingDefault(KEY_GRID_Y, true);
@@ -90,6 +100,10 @@ public class XYPlot extends Plot implements DataListener  {
 			drawLegend(g2d);
 		}
 
+		/**
+		 * Draws the grid into the specified Graphics2D object.
+		 * @param g2d Graphics to be used for drawing.
+		 */
 		protected void drawGrid(Graphics2D g2d) {
 			boolean isGridX = getSetting(KEY_GRID_X);
 			boolean isGridY = getSetting(KEY_GRID_Y);
@@ -145,6 +159,7 @@ public class XYPlot extends Plot implements DataListener  {
 			g2d.setTransform(txOrig);
 		}
 
+		@Override
 		protected void drawPlot(Graphics2D g2d) {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
@@ -169,7 +184,7 @@ public class XYPlot extends Plot implements DataListener  {
 					}
 					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
-					
+
 					Drawable drawable = null;
 					Shape shape = null;
 					if (shapeRenderer != null) {
@@ -201,6 +216,9 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 	}
 
+	/**
+	 * Class that displays a Legend in an XYPlot.
+	 */
 	public class XYLegend extends Legend {
 		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 1.0);
 
@@ -236,9 +254,14 @@ public class XYPlot extends Plot implements DataListener  {
 				g2d.setTransform(txOrig);
 			}
 		}
-		
+
 	}
 
+	/**
+	 * Creates a new XYPlot object with the specified DataSources and
+	 * default settings.
+	 * @param data Data to be displayed.
+	 */
 	public XYPlot(DataSource... data) {
 		super(data);
 
@@ -302,7 +325,7 @@ public class XYPlot extends Plot implements DataListener  {
 				axisYSize.getWidth(), plotBounds.getHeight(),
 				axisYSize.getWidth(), 0.0
 			));
-		}			
+		}
 
 		// Set bounds with new axis shapes
 		if (axisXComp != null && axisXRenderer != null) {
@@ -372,18 +395,40 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 	}
 
+	/**
+	 * Returns the ShapeRenderer for the specified DataSource.
+	 * @param s DataSource.
+	 * @return ShapeRenderer.
+	 */
 	public ShapeRenderer getShapeRenderer(DataSource s) {
 		return shapeRenderers.get(s);
 	}
 
+	/**
+	 * Sets the ShapeRenderer for the specified DataSource to the specified
+	 * value.
+	 * @param s DataSource.
+	 * @param shapeRenderer ShapeRenderer to be set.
+	 */
 	public void setShapeRenderer(DataSource s, ShapeRenderer shapeRenderer) {
 		this.shapeRenderers.put(s, shapeRenderer);
 	}
 
+	/**
+	 * Returns the LineRenderer for the specified DataSource.
+	 * @param s DataSource.
+	 * @return LineRenderer2D.
+	 */
 	public LineRenderer2D getLineRenderer(DataSource s) {
 		return lineRenderers.get(s);
 	}
 
+	/**
+	 * Sets the LineRenderer for the specified DataSource to the specified
+	 * value.
+	 * @param s DataSource.
+	 * @param lineRenderer LineRenderer to be set.
+	 */
 	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
 		lineRenderers.put(s, lineRenderer);
 	}

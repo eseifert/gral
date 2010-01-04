@@ -25,7 +25,17 @@ import java.awt.geom.AffineTransform;
 
 import openjchart.data.Row;
 
+/**
+ * Class that provides Drawables, which are sized accordingly to the data.
+ */
 public class SizeableShapeRenderer extends DefaultShapeRenderer {
+
+	/**
+	 * Creates a new SizeableShapeRenderer object.
+	 */
+	public SizeableShapeRenderer() {
+	}
+
 	@Override
 	public Shape getShapePath(Row row) {
 		Shape shape = getSetting(KEY_SHAPE);
