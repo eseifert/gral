@@ -56,9 +56,9 @@ import openjchart.util.SettingChangeEvent;
  * Class that displays data in an XY-Plot.
  */
 public class XYPlot extends Plot implements DataListener  {
-	/** Renderer for the x-axis. */
+	/** Key for specifying the {@link openjchart.plots.axes.AxisRenderer2D} instance for displaying the x-axis. */
 	public static final String KEY_AXIS_X_RENDERER = "xyplot.axis.x.renderer";
-	/** Renderer for the y-axis. */
+	/** Key for specifying the {@link openjchart.plots.axes.AxisRenderer2D} instance for displaying the y-axis. */
 	public static final String KEY_AXIS_Y_RENDERER = "xyplot.axis.y.renderer";
 
 	private double minX;
@@ -74,11 +74,14 @@ public class XYPlot extends Plot implements DataListener  {
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
 
 	/**
-	 * Class that represents the drawing area of an XYPlot.
+	 * Class that represents the drawing area of an <code>XYPlot</code>.
 	 */
 	public class XYPlotArea2D extends PlotArea2D {
+		/** Key for specifying whether the horizontal grid lines along the x-axis are drawn. */
 		public static final String KEY_GRID_X = "xyplot.grid.x";
+		/** Key for specifying whether the vertical grid lines along the y-axis are drawn. */
 		public static final String KEY_GRID_Y = "xyplot.grid.y";
+		/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the grid. */
 		public static final String KEY_GRID_COLOR = "xyplot.grid.color";
 
 		/**
@@ -101,7 +104,7 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		/**
-		 * Draws the grid into the specified Graphics2D object.
+		 * Draws the grid into the specified <code>Graphics2D</code> object.
 		 * @param g2d Graphics to be used for drawing.
 		 */
 		protected void drawGrid(Graphics2D g2d) {
@@ -217,7 +220,7 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Class that displays a Legend in an XYPlot.
+	 * Class that displays a legend in an <code>XYPlot</code>.
 	 */
 	public class XYLegend extends Legend {
 		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 1.0);
@@ -258,7 +261,7 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Creates a new XYPlot object with the specified DataSources and
+	 * Creates a new <code>XYPlot</code> object with the specified <code>DataSource</code>s and
 	 * default settings.
 	 * @param data Data to be displayed.
 	 */
@@ -396,7 +399,7 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the ShapeRenderer for the specified DataSource.
+	 * Returns the <code>ShapeRenderer</code> for the specified <code>DataSource</code>.
 	 * @param s DataSource.
 	 * @return ShapeRenderer.
 	 */
@@ -405,8 +408,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Sets the ShapeRenderer for the specified DataSource to the specified
-	 * value.
+	 * Sets the <code>ShapeRenderer</code> for a certain <code>DataSource</code> to the
+	 * specified instance.
 	 * @param s DataSource.
 	 * @param shapeRenderer ShapeRenderer to be set.
 	 */
@@ -415,19 +418,19 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the LineRenderer for the specified DataSource.
-	 * @param s DataSource.
-	 * @return LineRenderer2D.
+	 * Returns the <code>LineRenderer2D</code> for the specified <code>DataSource</code>.
+	 * @param s <code>DataSource</code>.
+	 * @return <code>LineRenderer2D</code>.
 	 */
 	public LineRenderer2D getLineRenderer(DataSource s) {
 		return lineRenderers.get(s);
 	}
 
 	/**
-	 * Sets the LineRenderer for the specified DataSource to the specified
-	 * value.
-	 * @param s DataSource.
-	 * @param lineRenderer LineRenderer to be set.
+	 * Sets the <code>LineRenderer2D</code> for a certain <code>DataSource</code> to the
+	 * specified value.
+	 * @param s <code>DataSource</code>.
+	 * @param lineRenderer <code>LineRenderer</code> to be set.
 	 */
 	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
 		lineRenderers.put(s, lineRenderer);

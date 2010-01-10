@@ -32,43 +32,43 @@ import openjchart.util.SettingsStorage;
  * Basic interface for classes that want to display a 2-dimensional axis.
  */
 public interface AxisRenderer2D extends SettingsStorage {
-	/** Intersection point of axis. */
+	/** Key for specifying the intersection point of axis. */
 	static final String KEY_INTERSECTION = "axis.intersection";
 
-	/** Shape of the axis. */
+	/** Key for specifying the {@link java.awt.Shape} instance that defines the shape of the axis. */
 	static final String KEY_SHAPE = "axis.shape";
-	/** Determines whether normal vector is calculated using clockwise rotation. */
+	/** Key for specifying whether normal vector is calculated using clockwise or counterclockwise rotation. */
 	static final String KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE = "axis.shape.normalOrientationClockwise";
-	/** Color of axis, ticks and labels. */
+	/** Key for specifying {@link java.awt.Paint} instance to be used to paint the axis, its ticks and its labels. */
 	static final String KEY_SHAPE_COLOR = "axis.shape.color";
-	/** Stroke style of the axis */
+	/** Key for specifying the {@link java.awt.Stroke} instance which defines the shape of the axis. */
 	static final String KEY_SHAPE_STROKE = "axis.shape.stroke";
-	/** Determines whether the axis direction will be swapped. */
+	/** Key for specifying whether the axis direction will be swapped. */
 	static final String KEY_SHAPE_DIRECTION_SWAPPED = "axis.shape.directionSwapped";
 
-	/** Interval for ticks. */
+	/** Key for specifying the interval for ticks. */
 	static final String KEY_TICK_SPACING = "axis.tick.spacing";
-	/** Length of tick strokes. */
+	/** Key for specifying the length of tick strokes. */
 	static final String KEY_TICK_LENGTH = "axis.tick.length";
-	/** Stroke style of the tick */
+	/** Key for specifying the {@link java.awt.Stroke} instance which defines the shape of all axis ticks. */
 	static final String KEY_TICK_STROKE = "axis.tick.stroke";
-	/** Alignment of ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
+	/** Key for specifying the alignment of ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	static final String KEY_TICK_ALIGNMENT = "axis.tick.alignment";
 
-	/** Format of labels. */
+	/** Key for specifying the format of labels. */
 	static final String KEY_TICK_LABEL_FORMAT = "axis.tick.label.format";
-	/** Distance of labels to their ticks. */
+	/** Key for specifying the distance of labels to their ticks. */
 	static final String KEY_TICK_LABEL_DISTANCE = "axis.tick.label.distance";
-	/** Draw labels outside of the plot. */
+	/** Key for specifying the draw labels outside of the plot. */
 	static final String KEY_TICK_LABEL_OUTSIDE = "axis.tick.label.outside";
-	/** Rotation of the tick labels in degrees. */
+	/** Key for specifying the rotation of the tick labels in degrees. */
 	static final String KEY_TICK_LABEL_ROTATION = "axis.tick.label.rotation";
 
-	/** Label text of the axis. */
+	/** Key for specifying the {@link java.lang.String} instance for the label text of the axis. */
 	static final String KEY_LABEL = "axis.label";
-	/** Distance from the axis to the label. */
+	/** Key for specifying the distance from the axis to the label. */
 	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
-	/** Rotation of the axis label in degrees. */
+	/** Key for specifying the rotation of the axis label in degrees. */
 	static final String KEY_LABEL_ROTATION = "axis.label.rotation";
 
 	/**

@@ -41,7 +41,7 @@ import openjchart.util.MathUtils;
  * Class that displays data in a bar plot.
  */
 public class BarPlot extends XYPlot {
-	/** Relative width of the bars */
+	/** Key for specifying the relative width of the bars. */
 	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
 
 	/**
@@ -112,7 +112,7 @@ public class BarPlot extends XYPlot {
 	}
 
 	/**
-	 * Creates a new BarPlot object with the specified DataSources.
+	 * Creates a new <code>BarPlot</code> object with the specified <code>DataSource</code>s.
 	 * @param data Data to be displayed.
 	 */
 	public BarPlot(DataSource... data) {
@@ -127,4 +127,5 @@ public class BarPlot extends XYPlot {
 			setShapeRenderer(s, shapeRendererDefault);
 		}
 	}
+
 }

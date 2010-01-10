@@ -57,20 +57,30 @@ import openjchart.util.SettingsStorage;
  * </ul>
  */
 public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
-	/** Title of the plot. */
+	/** Key for specifying the {@link java.lang.String} instance for the title of the plot. */
 	public static final String KEY_TITLE = "plot.title";
-	/** Background paint. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot. */
 	public static final String KEY_BACKGROUND = "plot.background";
-	/** Border of the plot. */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot. */
 	public static final String KEY_BORDER = "plot.border";
-	/** Antialiasing enabled. */
+	/** Key for specifying the whether antialiasing is enabled. */
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
-	/** Legend enabled. */
+	/** Key for specifying whether the legend should be shown. */
 	public static final String KEY_LEGEND = "plot.legend";
-	/** Location of the Legend. */
+	/** Key for specifying the positioning of the legend using a {@link openjchart.DrawableConstants.Location} value. */
 	public static final String KEY_LEGEND_LOCATION = "plot.legend.location";
-	/** Margin of the Legend. */
+	/** Key for specifying the width of the legend's margin. */
 	public static final String KEY_LEGEND_MARGIN = "plot.legend.margin";
+	/** Key for specifying the scaling behavior of the plot using a {@link ScaleMode} value. */
+	public static final String KEY_SCALING_MODE = "plot.scalingMode";
+
+	/** Constants for specifying the scaling behavior values. */
+	public static enum ScaleMode {
+		/** Constant for specifying that when a plot is scaled the axis extremes should be kept. */
+		KEEP_AXES,
+		/** Constant for specifying that when a plot is scaled its scale should be kept and axes can be scaled. */
+		KEEP_SCALE
+	};
 
 	private final Settings settings;
 
@@ -85,7 +95,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private Legend legend;
 
 	/**
-	 * Creates a new Plot object with the specified DataSources.
+	 * Creates a new <code>Plot</code> object with the specified <code>DataSource</code>s.
 	 * @param data Data to be displayed.
 	 */
 	public Plot(DataSource... data) {
@@ -137,7 +147,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Draws the Plot's axes into the specified Graphics2D object.
+	 * Draws the plot's axes into the specified <code>Graphics2D</code> object.
 	 * @param g2d Graphics to be used for drawing.
 	 */
 	protected void drawAxes(Graphics2D g2d) {
@@ -147,7 +157,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Draws the Plot's Legend into the specified Graphics2D object.
+	 * Draws the plot's legend into the specified <code>Graphics2D</code> object.
 	 * @param g2d Graphics to be used for drawing.
 	 */
 	protected void drawLegend(Graphics2D g2d) {
@@ -159,8 +169,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Returns the Axis with the specified name.
-	 * @param name Name of the Axis.
+	 * Returns the axis with the specified name.
+	 * @param name Name of the axis.
 	 * @return Axis.
 	 */
 	public Axis getAxis(String name) {
@@ -168,10 +178,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Sets the Axis with the specified name and the associated Drawable.
-	 * @param name Name of the Axis.
+	 * Sets the axis with the specified name and the associated <code>Drawable</code>.
+	 * @param name Name of the axis.
 	 * @param axis Axis.
-	 * @param drawable Representation of the Axis.
+	 * @param drawable Representation of the axis.
 	 */
 	public void setAxis(String name, Axis axis, Drawable drawable) {
 		if (axis == null || drawable == null) {
@@ -183,7 +193,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Removes the Axis with the specified name.
+	 * Removes the axis with the specified name.
 	 * @param name Name of the axis to be removed.
 	 */
 	public void removeAxis(String name) {
@@ -193,7 +203,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	/**
 	 * Returns the drawing area of this plot.
-	 * @return PlotArea.
+	 * @return <code>PlotArea2D</code>.
 	 */
 	public PlotArea2D getPlotArea() {
 		return plotArea;
@@ -201,7 +211,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	/**
 	 * Sets the drawing area to the specified value.
-	 * @param plotArea PlotArea to be set.
+	 * @param plotArea <code>PlotArea2D</code> to be set.
 	 */
 	protected void setPlotArea(PlotArea2D plotArea) {
 		if (this.plotArea != null) {
@@ -230,7 +240,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Returns the Legend.
+	 * Returns the legend.
 	 * @return Legend.
 	 */
 	public Legend getLegend() {
@@ -238,7 +248,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Sets the Legend to the specified value.
+	 * Sets the legend to the specified value.
 	 * @param legend Legend to be set.
 	 */
 	protected void setLegend(Legend legend) {

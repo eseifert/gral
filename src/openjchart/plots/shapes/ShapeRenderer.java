@@ -37,9 +37,9 @@ import openjchart.util.SettingsStorage;
  * </ul>
  */
 public interface ShapeRenderer extends SettingsStorage {
-	/** Form of the shape */
+	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the point. */
 	static final String KEY_SHAPE = "shape";
-	/** Color of the shape */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the point shape. */
 	static final String KEY_COLOR = "shape.color";
 
 	/**

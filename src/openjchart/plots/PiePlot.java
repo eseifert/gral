@@ -37,20 +37,20 @@ import openjchart.util.GraphicsUtils;
  * Class that displays data in a pie plot.
  */
 public class PiePlot extends Plot implements DataListener {
-	/** Relative radius of the pie. */
+	/** Key for specifying the relative radius of the pie. */
 	public static final String KEY_RADIUS = "pieplot.radius";
-	/** ColorMapper used for the segments. */
+	/** Key for specifying the {@link openjchart.plots.colors.ColorMapper} instance used for the segments. */
 	public static final String KEY_COLORS = "pieplot.colorlist";
-	/** Segments being ordered clockwise. */
+	/** Key for specifying whether the segments should be ordered clockwise or counterclockwise. */
 	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
-	/** Starting angle of the first segment. */
+	/** Key for specifying the starting angle of the first segment in degrees. */
 	public static final String KEY_START = "pieplot.start";
 
 	private double degreesPerValue;
 	private double[] startValues;
 
 	/**
-	 * Class that represents the drawing area of a PiePlot.
+	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
 	public class PiePlotArea2D extends PlotArea2D {
 		@Override
@@ -85,7 +85,7 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	/**
-	 * Creates a new PiePlot object with the specified DataSource.
+	 * Creates a new <code>PiePlot</code> object with the specified <code>DataSource</code>.
 	 * @param data Data to be displayed.
 	 */
 	public PiePlot(DataSource data) {

@@ -34,31 +34,31 @@ import openjchart.util.MathUtils;
  * on a data source.
  */
 public class Statistics implements DataListener {
-	/** Sum of all values. */
+	/** Key for specifying the sum of all values. */
 	public static final String SUM = "sum";
-	/** Sum of all value squares. */
+	/** Key for specifying the sum of all value squares. */
 	public static final String SUM2 = "sum2";
-	/** Sum of all value cubics. */
+	/** Key for specifying the sum of all value cubics. */
 	public static final String SUM3 = "sum3";
-	/** Sum of all value quads. */
+	/** Key for specifying the sum of all value quads. */
 	public static final String SUM4 = "sum4";
-	/** Arithmetic mean of all values. */
+	/** Key for specifying the arithmetic mean of all values. */
 	public static final String MEAN = "mean";
-	/** Minimum: Smallest value. */
+	/** Key for specifying the minimum, i.e. the smallest value. */
 	public static final String MIN = "min";
-	/** Maximum: Largest value. */
+	/** Key for specifying the maximum, i.e. the largest value. */
 	public static final String MAX = "max";
-	/** Number of elements. This is the zeroth central moment: E((x - µ)^0) */
+	/** Key for specifying the total number of elements. This is the zeroth central moment: E((x - µ)^0) */
 	public static final String N = "n";
-	/** Expected value. This is the first central moment: E((x - E(x))^1) */
+	/** Key for specifying the expected value. This is the first central moment: E((x - E(x))^1) */
 	public static final String MEAN_DEVIATION = "mean deviation";
-	/** Variance. This is the second central moment: E((x - E(x))^2) */
+	/** Key for specifying the variance. This is the second central moment: E((x - E(x))^2) */
 	public static final String VARIANCE = "variance";
-	/** Skewness. This is the third central moment: E((x - E(x))^3) */
+	/** Key for specifying the skewness. This is the third central moment: E((x - E(x))^3) */
 	public static final String SKEWNESS = "skewness";
-	/** Kurtosis. This is the fourth central moment: E((x - E(x))^4) */
+	/** Key for specifying the kurtosis. This is the fourth central moment: E((x - E(x))^4) */
 	public static final String KURTOSIS = "kurtosis";
-	/** Median / 50% quantile. */
+	/** Key for specifying the median (or 50% quantile). */
 	public static final String MEDIAN = "median";
 
 	private DataSource data;

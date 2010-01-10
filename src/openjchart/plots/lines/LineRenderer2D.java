@@ -36,17 +36,17 @@ import openjchart.util.SettingsStorage;
  * </ul>
  */
 public interface LineRenderer2D extends SettingsStorage {
-	/** Stroke used to paint the line */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
 	public static final String KEY_LINE_STROKE = "line.stroke";
-	/** Distance between the line and a shape */
+	/** Key for specifying the distance between the line and a shape. */
 	public static final String KEY_LINE_GAP = "line.gap.size";
-	/** Rounded corners of a gap */
+	/** Key for specifying whether the gaps should have rounded corners. */
 	public static final String KEY_LINE_GAP_ROUNDED = "line.gap.rounded";
-	/** Color of the line */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the line shape. */
 	public static final String KEY_LINE_COLOR = "line.color";
 
 	/**
-	 * Returns a Drawable for the line represented by the specified points.
+	 * Returns a <code>Drawable</code> for the line represented by the specified points.
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */
@@ -56,7 +56,7 @@ public interface LineRenderer2D extends SettingsStorage {
 	 * Returns the shape of a line from which the shapes of the specified
 	 * points was subtracted.
 	 * @param lineShape Shape of the line.
-	 * @param points DataPoints on the line.
+	 * @param points Data points on the line.
 	 * @return Punched shape.
 	 */
 	Shape punchShapes(Shape lineShape, DataPoint2D... points);

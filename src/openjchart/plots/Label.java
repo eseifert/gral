@@ -39,17 +39,17 @@ import openjchart.util.SettingsStorage;
 
 /**
  * Class that draws a label to a specific location.
- * A Label is able to administrate its settings and to set and get the
+ * A Label is able to manage its settings and to set and get the
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
-	/** Horizontal alignment within the bounding rectangle. */
+	/** Key for specifying the horizontal alignment within the bounding rectangle. */
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
-	/** Vertical alignment within the bounding rectangle. */
+	/** Key for specifying the vertical alignment within the bounding rectangle. */
 	public static final String KEY_ALIGNMENT_Y = "label.alignment.y";
-	/** Font of this Label. */
+	/** Key for specifying the font of this label. */
 	public static final String KEY_FONT = "label.font";
-	/** Rotation of this Label */
+	/** Key for specifying the rotation of this label, */
 	public static final String KEY_ROTATION = "label.rotation";
 
 	private final Settings settings;
@@ -57,7 +57,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	private TextLayout layout;
 
 	/**
-	 * Creates a new Label object with the specified text.
+	 * Creates a new <code>Label</code> object with the specified text.
 	 * @param text Text to be displayed.
 	 */
 	public Label(String text) {
@@ -140,7 +140,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	}
 
 	/**
-	 * Returns the text of this Label.
+	 * Returns the text of this label.
 	 * @return Text.
 	 */
 	public String getText() {

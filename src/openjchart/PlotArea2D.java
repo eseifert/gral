@@ -36,9 +36,9 @@ import openjchart.util.SettingsStorage;
  * Abstract class that represents a canvas for the plot which will be drawn.
  */
 public abstract class PlotArea2D extends AbstractDrawable implements SettingsStorage, SettingsListener {
-	/** Background color. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot area. */
 	public static final String KEY_BACKGROUND = "plotarea.background";
-	/** Border stroke of the PlotArea. */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot area. */
 	public static final String KEY_BORDER = "plotarea.border";
 
 	private final Settings settings;

@@ -35,7 +35,7 @@ import openjchart.util.GraphicsUtils;
  * Class that connects DataPoints2D with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
-	/** Percentage of the distance between two points, which indicates the "step" of a stair. */
+	/** Key for specifying the percentage of the distance between two points, which indicates the "step" of a stair. */
 	public static final String KEY_ASCENDING_POINT = "line.discrete.ascending";
 
 	/**

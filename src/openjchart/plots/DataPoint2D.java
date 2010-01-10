@@ -36,7 +36,7 @@ public class DataPoint2D {
 	private final String label;
 
 	/**
-	 * Creates a new DataPoint2D object with the specified position, normal,
+	 * Creates a new <code>DataPoint2D</code> object with the specified position, normal,
 	 * drawable, shape and label.
 	 * @param position Coordinates.
 	 * @param normal Normal.
@@ -53,7 +53,7 @@ public class DataPoint2D {
 	}
 
 	/**
-	 * Returns the coordinates of this DataPoint2D.
+	 * Returns the coordinates of this <code>DataPoint2D</code>.
 	 * @return Position.
 	 */
 	public Point2D getPosition() {
@@ -61,7 +61,7 @@ public class DataPoint2D {
 	}
 
 	/**
-	 * Returns the normal on this DataPoint2D.
+	 * Returns the normal vector of this <code>DataPoint2D</code>.
 	 * @return Normal.
 	 */
 	public Point2D getNormal() {
@@ -69,23 +69,23 @@ public class DataPoint2D {
 	}
 
 	/**
-	 * Returns the Drawable which represents this DataPoint2D.
-	 * @return Drawable.
+	 * Returns the <code>Drawable</code> which represents this <code>DataPoint2D</code>.
+	 * @return <code>Drawable</code> instance.
 	 */
 	public Drawable getDrawable() {
 		return drawable;
 	}
 
 	/**
-	 * Returns the Shape of this DataPoint2D.
-	 * @return Shape.
+	 * Returns the shape of this <code>DataPoint2D</code>.
+	 * @return <code>Shape</code>.
 	 */
 	public Shape getShape() {
 		return shape;
 	}
 
 	/**
-	 * Returns the label of this DataPoint2D.
+	 * Returns the label of this <code>DataPoint2D</code>.
 	 * @return Label.
 	 */
 	public String getLabel() {

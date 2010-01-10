@@ -61,7 +61,7 @@ Version 1.0
 
 - Bug fixing
 
-- Cleanup/Optmization
+- Cleanup/Optimization
 
 - Examples
 
