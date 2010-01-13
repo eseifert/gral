@@ -30,8 +30,7 @@ Version 0.8
 
 - Add support for DiscreteLineRenderer2D to start steps in y-direction
 
-- Add export support to bitmap (PNG, GIF, JFIF/JPEG) as well as vector
-  (SVG, EPS) file formats
+- Add export support to vector file formats (SVG, EPS)
 
 - Add more possibilities to style plot area (multiple gradients,
   background images, etc.)
