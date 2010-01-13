@@ -34,6 +34,7 @@ import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import openjchart.AbstractDrawable;
@@ -85,6 +86,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		setSettingDefault(KEY_TICK_LABEL_DISTANCE, 1.0);
 		setSettingDefault(KEY_TICK_LABEL_OUTSIDE, true);
 		setSettingDefault(KEY_TICK_LABEL_ROTATION, 0.0);
+		setSettingDefault(KEY_TICK_LABEL_CUSTOM, null);
 
 		setSettingDefault(KEY_LABEL, null);
 		setSettingDefault(KEY_LABEL_DISTANCE, 10.0);
@@ -263,8 +265,18 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		// Calculate tick normal
 		Point2D tickNormal = getNormal(axis, tickPositionWorld, false, false);
 
-		Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
-		String tickLabel = labelFormat.format(tickPositionWorld);
+		// Retrieve tick label
+		String tickLabel;
+		Map<Number, String> labelsCustom = getSetting(KEY_TICK_LABEL_CUSTOM);
+		// FIXME: You have to specify the number type in the Map, i.e. the number 2 would not match, if you have double values on the axis.
+		// TODO: Option to show custom tick labels, whether the specified Number value is a tick or not
+		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
+			tickLabel = labelsCustom.get(tickPositionWorld);
+		}
+		else {
+			Format labelFormat = getSetting(KEY_TICK_LABEL_FORMAT);
+			tickLabel = labelFormat.format(tickPositionWorld);
+		}
 
 		DataPoint2D tick = new DataPoint2D(tickPoint, tickNormal, null, null, tickLabel);
 		return tick;

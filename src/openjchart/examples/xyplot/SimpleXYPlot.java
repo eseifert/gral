@@ -24,6 +24,8 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.LinearGradientPaint;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -93,6 +95,10 @@ public class SimpleXYPlot extends JFrame {
 		AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
 		axisRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
 		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, axisRendererX);
+		// Custom tick labels
+		Map<Number, String> labels = new HashMap<Number, String>();
+		labels.put(2.0, "Two");
+		axisRendererX.setSetting(AxisRenderer2D.KEY_TICK_LABEL_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
