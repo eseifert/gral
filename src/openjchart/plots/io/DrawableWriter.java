@@ -3,53 +3,76 @@ package openjchart.plots.io;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
 import openjchart.Drawable;
 
+/**
+ * Class for rendering <code>Drawable</code> instances and writing them
+ * to an output stream. As an example: the class can save a plot to a
+ * bitmap file.
+ */
 public class DrawableWriter {
-	/** Saves the file as PNG. */
-	public static final String FORMAT_PNG = "PNG";
-	/** Saves the file as JPG. */
-	public static final String FORMAT_JPG = "JPG";
-	/** Saves the file as GIF. */
-	public static final String FORMAT_GIF = "GIF";
-	/** Saves the file as BMP. */
+	/** Use the BMP format for saving. */
 	public static final String FORMAT_BMP = "BMP";
-	/** Saves the file as WBMP. */
+	/** Use the GIF format for saving. */
+	public static final String FORMAT_GIF = "GIF";
+	/** Use the PNG format for saving. */
+	public static final String FORMAT_PNG = "PNG";
+	/** Use the JFIF/JPEG format for saving. */
+	public static final String FORMAT_JPG = "JPG";
+	/** Use the WBMP format for saving. */
 	public static final String FORMAT_WBMP = "WBMP";
 
-	private final File dest;
+	private final OutputStream dest;
 	private final String format;
+	private final int rasterFormat;
 
 	/**
-	 * Creates a new DrawableWriter object with the specified output File
+	 * Creates a new <code>DrawableWriter</code> object with the specified output File
 	 * format.
-	 * @param dest Destination file.
+	 * @param dest Destination stream.
 	 * @param format File format.
 	 */
-	public DrawableWriter(File dest, String format) {
+	public DrawableWriter(OutputStream dest, String format) {
 		// FIXME: Specifiy MIME-Type instead of format
 		// TODO: Option to set transparency
 		// TODO: Possibility to choose a background color
 		this.dest = dest;
 		this.format = format;
+		rasterFormat = FORMAT_GIF.equals(format) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
 	}
 
 	/**
-	 * Stores the specified Drawable.
-	 * @param d Drawable to be written.
+	 * Returns the output stream this class is writing to.
+	 * @return OutputStream instance that this class is writing to
+	 */
+	public OutputStream getDestination() {
+		return dest;
+	}
+
+	/**
+	 * Returns the output format of this writer.
+	 * @return String describing the output format
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Stores the specified <code>Drawable</code> instance.
+	 * @param d <code>Drawable</code> to be written.
 	 * @param width Width of the image.
 	 * @param height Height of the image.
-	 * @throws IOException
+	 * @throws IOException if writing to stream fails
 	 */
 	public void write(Drawable d, int width, int height) throws IOException {
 		Rectangle2D boundsOld = d.getBounds();
 		d.setBounds(0, 0, width, height);
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(width, height, rasterFormat);
 		d.draw((Graphics2D) image.getGraphics());
 		d.setBounds(boundsOld);
 		ImageIO.write(image, format, dest);

@@ -1,6 +1,7 @@
 package openjchart.examples.io;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
@@ -14,7 +15,6 @@ import openjchart.util.Insets2D;
 public class DrawableWriterTest {
 	private final DataTable data;
 	private final XYPlot plot;
-	private DrawableWriter writer;
 
 	public DrawableWriterTest() {
 		data = new DataTable(Double.class, Double.class);
@@ -34,9 +34,8 @@ public class DrawableWriterTest {
 		int option = chooser.showSaveDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			writer = new DrawableWriter(file, DrawableWriter.FORMAT_PNG);
 			try {
-				file.createNewFile();
+				DrawableWriter writer = new DrawableWriter(new FileOutputStream(file), DrawableWriter.FORMAT_PNG);
 				writer.write(plot, 800, 600);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
