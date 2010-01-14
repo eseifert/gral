@@ -35,7 +35,7 @@ public class DrawableWriterTest {
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				DrawableWriter writer = new DrawableWriter(new FileOutputStream(file), DrawableWriter.FORMAT_PNG);
+				DrawableWriter writer = new DrawableWriter(new FileOutputStream(file), DrawableWriter.FORMAT_SVG);
 				writer.write(plot, 800, 600);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

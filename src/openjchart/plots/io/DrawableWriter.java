@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import openjchart.Drawable;
+import openjchart.util.SVGGraphics2D;
 
 /**
  * Class for rendering <code>Drawable</code> instances and writing them
@@ -16,20 +17,21 @@ import openjchart.Drawable;
  * bitmap file.
  */
 public class DrawableWriter {
-	/** Use the BMP format for saving. */
+	/** Use the BMP bitmap format for saving. */
 	public static final String FORMAT_BMP = "BMP";
-	/** Use the GIF format for saving. */
+	/** Use the GIF bitmap format for saving. */
 	public static final String FORMAT_GIF = "GIF";
-	/** Use the PNG format for saving. */
+	/** Use the PNG bitmap format for saving. */
 	public static final String FORMAT_PNG = "PNG";
-	/** Use the JFIF/JPEG format for saving. */
+	/** Use the JFIF/JPEG bitmap format for saving. */
 	public static final String FORMAT_JPG = "JPG";
-	/** Use the WBMP format for saving. */
+	/** Use the WBMP bitmap format for saving. */
 	public static final String FORMAT_WBMP = "WBMP";
+	/** Use the SVG vector format for saving. */
+	public static final String FORMAT_SVG = "SVG";
 
 	private final OutputStream dest;
 	private final String format;
-	private final int rasterFormat;
 
 	/**
 	 * Creates a new <code>DrawableWriter</code> object with the specified output File
@@ -43,7 +45,6 @@ public class DrawableWriter {
 		// TODO: Possibility to choose a background color
 		this.dest = dest;
 		this.format = format;
-		rasterFormat = FORMAT_GIF.equals(format) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
 	}
 
 	/**
@@ -69,13 +70,39 @@ public class DrawableWriter {
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, int width, int height) throws IOException {
+	public void write(Drawable d, double width, double height) throws IOException {
+		write(d, 0.0, 0.0, width, height);
+	}
+	
+	public void write(Drawable d, double x, double y, double width, double height) throws IOException {
 		Rectangle2D boundsOld = d.getBounds();
-		d.setBounds(0, 0, width, height);
-		BufferedImage image = new BufferedImage(width, height, rasterFormat);
-		d.draw((Graphics2D) image.getGraphics());
+		d.setBounds(x, y, width, height);
+
+		if (isVectorFormat(getFormat())) {
+			if (FORMAT_SVG.equals(getFormat())) {
+				SVGGraphics2D svg = new SVGGraphics2D(x, y, width, height);
+				d.draw(svg);
+				dest.write(svg.toString().getBytes());
+			}
+		} else {
+			int rasterFormat = BufferedImage.TYPE_INT_ARGB;
+			if (FORMAT_GIF.equals(format)) {
+				rasterFormat = BufferedImage.TYPE_INT_RGB;
+			}
+			BufferedImage image = new BufferedImage(
+					(int)Math.round(width), (int)Math.round(height), rasterFormat);
+			d.draw((Graphics2D) image.getGraphics());
+			ImageIO.write(image, format, dest);
+		}
+
 		d.setBounds(boundsOld);
-		ImageIO.write(image, format, dest);
+	}
+
+	public static boolean isVectorFormat(String format) {
+		if (FORMAT_SVG.equals(format)) {
+			return true;
+		}
+		return false;
 	}
 
 }
