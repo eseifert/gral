@@ -18,8 +18,13 @@ import java.awt.RenderingHints.Key;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.Line2D.Double;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
@@ -30,10 +35,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
+ */
 public class SVGGraphics2D extends Graphics2D {
+	protected static final String INDENT = " ";
 	private final Map hints;
 	private final StringBuffer document;
 	private Rectangle2D bounds;
+
+	private double strokeWidth;
 
 	private Color background;
 	private Color color;
@@ -57,12 +68,14 @@ public class SVGGraphics2D extends Graphics2D {
 		document = new StringBuffer();
 		bounds = new Rectangle2D.Double(x, y, width, height);
 
+		strokeWidth = 1.0;
+
 		background = Color.white;
 		color = Color.BLACK;
-		font = new Font("Arial", Font.PLAIN, 10);
+		font = Font.decode(null);
 		fontRenderContext = new FontRenderContext(null, false, true);
 		paint = color;
-		stroke = new BasicStroke(1f);
+		stroke = new BasicStroke((float)strokeWidth);
 		transform = new AffineTransform();
 		xorMode = Color.BLACK;
 	}
@@ -79,10 +92,8 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void draw(Shape s) {
-		write("<path d=\"");
-		writeShape(transform.createTransformedShape(s));
-		write("\" ");
-		writeln("style=\"fill:none;stroke:", getSvg(color), "\" />");
+		writeShape(s);
+		writeClosingDraw();
 	}
 
 	@Override
@@ -121,7 +132,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		write("<text x=\"", x, "\" y=\"", y, "\">");
+		write(INDENT, "<text x=\"", x, "\" y=\"", y, "\">");
 		write(str);  // TODO: Do XML escaping to prevent code injection
 		writeln("</text>");
 	}
@@ -133,7 +144,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, float x, float y) {
-		write("<text x=\"", x, "\" y=\"", y, "\">");
+		write(INDENT, "<text x=\"", x, "\" y=\"", y, "\">");
 		for (char c = iterator.first(); c != AttributedCharacterIterator.DONE; c = iterator.next()) {
 			write(c);  // TODO: Do XML escaping to prevent code injection
 		}
@@ -142,10 +153,8 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void fill(Shape s) {
-		write("<path d=\"");
-		writeShape(transform.createTransformedShape(s));
-		write("\" ");
-		writeln("style=\"fill:", getSvg(color), ";stroke:none\" />");
+		writeShape(s);
+		writeClosingFill();
 	}
 
 	@Override
@@ -247,6 +256,9 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void setStroke(Stroke s) {
 		stroke = s;
+		if (stroke instanceof BasicStroke) {
+			strokeWidth = ((BasicStroke) s).getLineWidth();
+		}
 	}
 
 	@Override
@@ -303,9 +315,9 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void drawArc(int x, int y, int width, int height, int startAngle,
 			int arcAngle) {
-		// TODO
-		writeln("<!-- path arc ");
-		writeln("/ -->");
+		// TODO: Use arc command of SVG's <path> tag
+		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.OPEN));
+		writeClosingDraw();
 	}
 
 	@Override
@@ -352,21 +364,19 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawLine(int x1, int y1, int x2, int y2) {
-		writeln("<line x1=\"", x1, "\" y1=\"", y1, "\" x2=\"", x2, "\" y2=\"", y2, "\" ");
-		writeln("style=\"stroke:", getSvg(color), "\" />");
+		writeShape(new Line2D.Double(x1, y1, x2, y2));
+		writeClosingDraw();
 	}
 
 	@Override
 	public void drawOval(int x, int y, int width, int height) {
-		double rx = width/2.0;
-		double ry = height/2.0;
-		write("<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
-		writeln("style=\"fill:none;stroke:", getSvg(color), "\" />");
+		write(new Ellipse2D.Double(x, y, width, height));
+		writeClosingDraw();
 	}
 
 	@Override
 	public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write("<polygon points=\"");
+		write(INDENT, "<polygon points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -374,12 +384,12 @@ public class SVGGraphics2D extends Graphics2D {
 			write(xPoints[i], ",", yPoints[i]);
 		}
 		write("\" ");
-		writeln("style=\"fill:none;stroke:", getSvg(color), "\" />");
+		writeClosingDraw();
 	}
 
 	@Override
 	public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
-		write("<polyline points=\"");
+		write(INDENT, "<polyline points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -387,35 +397,33 @@ public class SVGGraphics2D extends Graphics2D {
 			write(xPoints[i], ",", yPoints[i]);
 		}
 		write("\" ");
-		writeln("style=\"stroke:", getSvg(color), "\" />");
+		writeClosingDraw();
 	}
 
 	@Override
 	public void drawRoundRect(int x, int y, int width, int height,
 			int arcWidth, int arcHeight) {
-		write("<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
-		writeln("style=\"fill:none;stroke:", getSvg(color), "\" />");
+		write(new RoundRectangle2D.Double(x, y, width, height, arcWidth, arcHeight));
+		writeClosingFill();
 	}
 
 	@Override
 	public void fillArc(int x, int y, int width, int height, int startAngle,
 			int arcAngle) {
-		// TODO Auto-generated method stub
-		write("<!-- path ");
-		writeln("/ -->");
+		// TODO: Use arc command of SVG's <path> tag
+		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.PIE));
+		writeClosingFill();
 	}
 
 	@Override
 	public void fillOval(int x, int y, int width, int height) {
-		double rx = width/2.0;
-		double ry = height/2.0;
-		write("<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
-		writeln("style=\"fill:", getSvg(color), ";stroke:none\" />");
+		write(new Ellipse2D.Double(x, y, width, height));
+		writeClosingFill();
 	}
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write("<polygon points=\"");
+		write(INDENT, "<polygon points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -428,14 +436,15 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void fillRect(int x, int y, int width, int height) {
-		fillRoundRect(x, y, width, height, 0, 0);
+		write(new Rectangle2D.Double(x, y, width, height));
+		writeClosingFill();
 	}
 
 	@Override
 	public void fillRoundRect(int x, int y, int width, int height,
 			int arcWidth, int arcHeight) {
-		write("<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
-		writeln("style=\"fill:", getSvg(color), ";stroke:none\" />");
+		write(new RoundRectangle2D.Double(x, y, width, height, arcWidth, arcHeight));
+		writeClosingFill();
 	}
 
 	@Override
@@ -495,7 +504,10 @@ public class SVGGraphics2D extends Graphics2D {
 		xorMode = c1;
 	}
 
-	
+	/**
+	 * Utility method for writing multiple objects to the SVG document.
+	 * @param strs Objects to be written
+	 */
 	protected void write(Object... strs) {
 		for (Object o : strs) {
 			String str = o.toString();
@@ -506,12 +518,78 @@ public class SVGGraphics2D extends Graphics2D {
 		}
 	}
 
+	/**
+	 * Utility method for writing a line of multiple objects to the SVG document.
+	 * @param strs Objects to be written
+	 */
 	protected void writeln(Object... strs) {
 		write(strs);
 		write("\n");
 	}
-	
+
+	/**
+	 * Utility method for writing a tag closing fragment for drawing operations.
+	 */
+	protected void writeClosingDraw() {
+		writeln("style=\"fill:none;stroke:", getSvg(color), ";stroke-width:", strokeWidth, "\" />");
+	}
+
+	/**
+	 * Utility method for writing a tag closing fragment for filling operations.
+	 */
+	protected void writeClosingFill() {
+		writeln("style=\"fill:", getSvg(color), ";stroke:none\" />");
+	}
+
+	/**
+	 * Utility method for writing an arbitrary shape to.
+	 * It tries to translate Java2D shapes to the corresponding SVG shape tags.
+	 */
 	protected void writeShape(Shape s) {
+		if (!isDistorted()) {
+			double sx = transform.getScaleX();
+			double sy = transform.getScaleX();
+			double tx = transform.getTranslateX();
+			double ty = transform.getTranslateY();
+			if (s instanceof Line2D) {
+				Line2D l = (Line2D) s;
+				double x1 = sx*l.getX1() + tx;
+				double y1 = sy*l.getY1() + ty;
+				double x2 = sx*l.getX2() + tx;
+				double y2 = sy*l.getY2() + ty;
+				write(INDENT, "<line x1=\"", x1, "\" y1=\"", y1, "\" x2=\"", x2, "\" y2=\"", y2, "\" ");
+				return;
+			} else if (s instanceof Rectangle2D) {
+				Rectangle2D r = (Rectangle2D) s;
+				double x = sx*r.getX() + tx;
+				double y = sy*r.getY() + ty;
+				double width = sx*r.getWidth();
+				double height = sy*r.getHeight();
+				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" ");
+				return;
+			} else if (s instanceof RoundRectangle2D) {
+				RoundRectangle2D r = (RoundRectangle2D) s;
+				double x = sx*r.getX() + tx;
+				double y = sy*r.getY() + ty;
+				double width = sx*r.getWidth();
+				double height = sy*r.getHeight();
+				double arcWidth = sx*r.getArcWidth();
+				double arcHeight = sy*r.getArcHeight();
+				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
+				return;
+			} else if (s instanceof Ellipse2D) {
+				Ellipse2D r = (Ellipse2D) s;
+				double x = sx*r.getX() + tx;
+				double y = sy*r.getY() + ty;
+				double rx = sx*r.getWidth()/2.0;
+				double ry = sy*r.getHeight()/2.0;
+				write(INDENT, "<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
+				return;
+			}
+		}
+
+		s = transform.createTransformedShape(s);
+		write(INDENT, "<path d=\"");
 		PathIterator segments = s.getPathIterator(null);
 		double[] coords = new double[6];
 		for (int i = 0; !segments.isDone(); i++, segments.next()) {
@@ -527,19 +605,17 @@ public class SVGGraphics2D extends Graphics2D {
 				write("L", coords[0], ",", coords[1]);
 				break;
 			case PathIterator.SEG_CUBICTO:
-				write("C", coords[0], ",", coords[1], " ",
-						coords[2], ",", coords[3], " ",
-						coords[2], ",", coords[3]);
+				write("C", coords[0], ",", coords[1], " ", coords[2], ",", coords[3], " ", coords[4], ",", coords[5]);
 				break;
 			case PathIterator.SEG_QUADTO:
-				write("Q", coords[0], ",", coords[1], " ",
-						coords[2], ",", coords[3]);
+				write("Q", coords[0], ",", coords[1], " ", coords[2], ",", coords[3]);
 				break;
 			case PathIterator.SEG_CLOSE:
 				write("Z");
 				break;
 			}
 		}
+		write("\" ");
 	}
 
 	private static String getSvg(Color c) {
@@ -549,6 +625,12 @@ public class SVGGraphics2D extends Graphics2D {
 			color += ";opacity:" + opacity;
 		}
 		return color;
+	}
+
+	private boolean isDistorted() {
+		int type = transform.getType();
+		int otherButTranslatedOrScaled = ~(AffineTransform.TYPE_TRANSLATION | AffineTransform.TYPE_MASK_SCALE);
+		return (type & otherButTranslatedOrScaled) != 0;
 	}
 
 	@Override
