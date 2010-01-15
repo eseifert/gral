@@ -28,6 +28,7 @@ import java.awt.geom.Point2D;
 
 import openjchart.AbstractDrawable;
 import openjchart.Drawable;
+import openjchart.DrawableConstants.Orientation;
 import openjchart.plots.DataPoint2D;
 import openjchart.util.GraphicsUtils;
 
@@ -35,13 +36,16 @@ import openjchart.util.GraphicsUtils;
  * Class that connects DataPoints2D with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
+	/** Key for specifying an {@link openjchart.DrawableConstants.Orientation} instance which indicates the primary direction of the "steps". */
+	public static final String KEY_ASCENT_DIRECTION = "line.discrete.ascentDirection";
 	/** Key for specifying the percentage of the distance between two points, which indicates the "step" of a stair. */
-	public static final String KEY_ASCENDING_POINT = "line.discrete.ascending";
+	public static final String KEY_ASCENDING_POINT = "line.discrete.ascendingPoint";
 
 	/**
 	 * Creates a new DiscreteLineRenderer2D object with default settings.
 	 */
 	public DiscreteLineRenderer2D() {
+		setSettingDefault(KEY_ASCENT_DIRECTION, Orientation.HORIZONTAL);
 		setSettingDefault(KEY_ASCENDING_POINT, 1.0);
 	}
 
@@ -50,7 +54,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
+				Orientation dir = getSetting(KEY_ASCENT_DIRECTION);
+				double ascendingPoint = getSetting(KEY_ASCENDING_POINT);
 
 				// Construct shape
 				GeneralPath line = new GeneralPath();
@@ -60,11 +65,18 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 						line.moveTo(pos.getX(), pos.getY());
 					} else {
 						Point2D posPrev = line.getCurrentPoint();
-						double ascendingX = posPrev.getX() + (pos.getX() - posPrev.getX()) * ascendingPoint;
-						line.lineTo(ascendingX,  posPrev.getY());
-						line.lineTo(ascendingX,  pos.getY());
+						if (Orientation.HORIZONTAL.equals(dir)) {
+							double ascendingX = posPrev.getX() +
+								(pos.getX() - posPrev.getX()) * ascendingPoint;
+							line.lineTo(ascendingX,  posPrev.getY());
+							line.lineTo(ascendingX,  pos.getY());
+						} else {
+							double ascendingY = posPrev.getY() +
+								(pos.getY() - posPrev.getY()) * ascendingPoint;
+							line.lineTo(posPrev.getX(), ascendingY);
+							line.lineTo(pos.getX(), ascendingY);
+						}
 						line.lineTo(pos.getX(), pos.getY());
-
 					}
 				}
 

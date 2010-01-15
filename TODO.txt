@@ -25,8 +25,6 @@ Version 0.8
 - Set font sizes relative to the size of a standard font size 
   (like "em" in HTML)
 
-- Add support for DiscreteLineRenderer2D to start steps in y-direction
-
 - Add more possibilities to style plot area (rounded edges, etc.)
   How to do drop shadows? -> Renderer for plot area?
 

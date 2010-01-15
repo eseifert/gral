@@ -29,6 +29,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import openjchart.Drawable;
+import openjchart.DrawableConstants.Orientation;
 import openjchart.plots.DataPoint2D;
 import openjchart.plots.lines.DiscreteLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
@@ -46,13 +47,15 @@ public class DiscreteLineRendererTest {
 			new DataPoint2D(new Point2D.Double(0.0, 0.0), normal, null, null, "0"),
 			new DataPoint2D(new Point2D.Double(1.0, 1.0), normal, null, null, "1")
 		};
-		Drawable line = r.getLine(points);
-		assertNotNull(line);
 
-		// Draw line
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		line.draw(g2d);
+		for (Orientation dir : Orientation.values()) {
+			r.setSetting(DiscreteLineRenderer2D.KEY_ASCENT_DIRECTION, dir);
+			Drawable line = r.getLine(points);
+			assertNotNull(line);
+			line.draw(g2d);
+		}
 	}
 
 	@Test

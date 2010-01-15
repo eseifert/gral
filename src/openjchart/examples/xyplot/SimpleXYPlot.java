@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 
 import openjchart.DrawablePanel;
 import openjchart.PlotArea2D;
+import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
@@ -89,7 +90,8 @@ public class SimpleXYPlot extends JFrame {
 		// Custom gaps for shapes
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 2.0);
 		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP_ROUNDED, true);
-		// Custom ascending point
+		// Custom ascending
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENT_DIRECTION, Orientation.VERTICAL);
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
