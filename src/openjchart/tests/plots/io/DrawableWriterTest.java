@@ -39,6 +39,7 @@ public class DrawableWriterTest {
 		DrawableWriter.FORMAT_JPG,
 		DrawableWriter.FORMAT_PNG,
 		DrawableWriter.FORMAT_WBMP,
+		DrawableWriter.FORMAT_EPS,
 		DrawableWriter.FORMAT_SVG
 	};
 

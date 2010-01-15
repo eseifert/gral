@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import openjchart.Drawable;
+import openjchart.util.EPSGraphics2D;
 import openjchart.util.SVGGraphics2D;
 
 /**
@@ -27,6 +28,8 @@ public class DrawableWriter {
 	public static final String FORMAT_JPG = "JPG";
 	/** Use the WBMP bitmap format for saving. */
 	public static final String FORMAT_WBMP = "WBMP";
+	/** Use the EPS vector format for saving. */
+	public static final String FORMAT_EPS = "EPS";
 	/** Use the SVG vector format for saving. */
 	public static final String FORMAT_SVG = "SVG";
 
@@ -79,11 +82,14 @@ public class DrawableWriter {
 		d.setBounds(x, y, width, height);
 
 		if (isVectorFormat(getFormat())) {
-			if (FORMAT_SVG.equals(getFormat())) {
-				SVGGraphics2D svg = new SVGGraphics2D(x, y, width, height);
-				d.draw(svg);
-				dest.write(svg.toString().getBytes());
+			Graphics2D g2d = null;
+			if (FORMAT_EPS.equals(getFormat())) {
+				g2d = new EPSGraphics2D(x, y, width, height);
+			} else if (FORMAT_SVG.equals(getFormat())) {
+				g2d = new SVGGraphics2D(x, y, width, height);
 			}
+			d.draw(g2d);
+			dest.write(g2d.toString().getBytes());
 		} else {
 			int rasterFormat = BufferedImage.TYPE_INT_ARGB;
 			if (FORMAT_GIF.equals(format)) {
@@ -99,6 +105,9 @@ public class DrawableWriter {
 	}
 
 	public static boolean isVectorFormat(String format) {
+		if (FORMAT_EPS.equals(format)) {
+			return true;
+		}
 		if (FORMAT_SVG.equals(format)) {
 			return true;
 		}

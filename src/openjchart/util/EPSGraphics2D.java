@@ -20,6 +20,7 @@ import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
@@ -37,22 +38,9 @@ import java.util.Map;
 /**
  * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
  */
-public class SVGGraphics2D extends Graphics2D {
+public class EPSGraphics2D extends Graphics2D {
 	protected static final String INDENT = " ";
-	private static final Map<Integer, String> STROKE_ENDCAPS;
-	private static final Map<Integer, String> STROKE_LINEJOIN;
-
-	static {
-		STROKE_ENDCAPS = new HashMap<Integer, String>();
-		STROKE_ENDCAPS.put(BasicStroke.CAP_BUTT, "butt");
-		STROKE_ENDCAPS.put(BasicStroke.CAP_ROUND, "round");
-		STROKE_ENDCAPS.put(BasicStroke.CAP_SQUARE, "square");
-		
-		STROKE_LINEJOIN = new HashMap<Integer, String>();
-		STROKE_LINEJOIN.put(BasicStroke.JOIN_BEVEL, "bevel");
-		STROKE_LINEJOIN.put(BasicStroke.JOIN_MITER, "miter");
-		STROKE_LINEJOIN.put(BasicStroke.JOIN_ROUND, "round");
-	}
+	protected static final double MM_IN_UNITS = 72.0 / 25.4;
 
 	private final Map hints;
 	private final StringBuffer document;
@@ -75,7 +63,7 @@ public class SVGGraphics2D extends Graphics2D {
 	/**
 	 * Constructor that initializes a new <code>SVGGraphics2D</code> instance.
 	 */
-	public SVGGraphics2D(double x, double y, double width, double height) {
+	public EPSGraphics2D(double x, double y, double width, double height) {
 		hints = new HashMap();
 		document = new StringBuffer();
 		bounds = new Rectangle2D.Double(x, y, width, height);
@@ -141,11 +129,11 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		write(INDENT, "<text x=\"", x, "\" y=\"", y, "\">");
-		String strEscaped = str.replaceAll("&", "&amp;")
-			.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-		write(strEscaped);
-		writeln("</text>");
+		String strEscaped = str.replaceAll("\\", "\\\\")
+			.replaceAll("\n", "\\n").replaceAll("\r", "\\r")
+			.replaceAll("\t", "\\t").replaceAll("\b", "\\b").replaceAll("\f", "\\f")
+			.replaceAll("(", "\\(").replaceAll(")", "\\)");
+		writeln("(", strEscaped, ") show");
 	}
 
 	@Override
@@ -384,28 +372,29 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polygon points=\"");
+		GeneralPath p = new GeneralPath();
 		for (int i = 0; i < nPoints; i++) {
-			if (i > 0) {
-				write(" ");
+			if (i == 0) {
+				p.moveTo(xPoints[i], yPoints[i]);
+			} else {
+				p.lineTo(xPoints[i], yPoints[i]);
 			}
-			write(xPoints[i], ",", yPoints[i]);
 		}
-		write("\" ");
-		writeClosingDraw();
+		p.closePath();
+		draw(p);
 	}
 
 	@Override
 	public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polyline points=\"");
+		GeneralPath p = new GeneralPath();
 		for (int i = 0; i < nPoints; i++) {
-			if (i > 0) {
-				write(" ");
+			if (i == 0) {
+				p.moveTo(xPoints[i], yPoints[i]);
+			} else {
+				p.lineTo(xPoints[i], yPoints[i]);
 			}
-			write(xPoints[i], ",", yPoints[i]);
 		}
-		write("\" ");
-		writeClosingDraw();
+		draw(p);
 	}
 
 	@Override
@@ -429,15 +418,16 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polygon points=\"");
+		GeneralPath p = new GeneralPath();
 		for (int i = 0; i < nPoints; i++) {
-			if (i > 0) {
-				write(" ");
+			if (i == 0) {
+				p.moveTo(xPoints[i], yPoints[i]);
+			} else {
+				p.lineTo(xPoints[i], yPoints[i]);
 			}
-			write(xPoints[i], ",", yPoints[i]);
 		}
-		write("\" ");
-		writeClosingFill();
+		p.closePath();
+		fill(p);
 	}
 
 	@Override
@@ -490,6 +480,7 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void setColor(Color c) {
 		color = c;
+		writeln(getColorString(c), " setrgbcolor");
 	}
 
 	@Override
@@ -532,50 +523,32 @@ public class SVGGraphics2D extends Graphics2D {
 	}
 
 	protected void writeHeader() {
-		double x = bounds.getX();
-		double y = bounds.getY();
-		double w = bounds.getWidth();
-		double h = bounds.getHeight();
-		writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		writeln("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
-		writeln("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" ",
-			"x=\"", x, "mm\" y=\"", y, "mm\" ",
-			"width=\"", w, "mm\" height=\"", h, "mm\" " +
-			"viewBox=\"", x, " ", y, " ", w, " ", h, "\"",
-			">"
-		);
+		int x = (int)Math.round(bounds.getX() * MM_IN_UNITS);
+		int y = (int)Math.round(bounds.getY() * MM_IN_UNITS);
+		int w = (int)Math.round(bounds.getWidth() * MM_IN_UNITS);
+		int h = (int)Math.round(bounds.getHeight() * MM_IN_UNITS);
+
+		writeln("%!PS-Adobe-3.0 EPSF-3.0");
+		writeln("%%BoundingBox: ", x, " ", y, " ", w, " ", h);
+		writeln("%%Pages: 0");
+		// Move origin to upper left
+		writeln("0 ", h, " translate 1 -1 scale");
+		// Convert from 1/72 inches to millimeters
+		writeln(MM_IN_UNITS, " ", MM_IN_UNITS, " scale");
 	}
-	
+
 	/**
 	 * Utility method for writing a tag closing fragment for drawing operations.
 	 */
 	protected void writeClosingDraw() {
-		write("style=\"fill:none;stroke:", getColorString(color)); 
-		if (stroke instanceof BasicStroke) {
-			BasicStroke s = (BasicStroke) stroke;
-			if (s.getLineWidth() != 1f) {
-				write(";stroke-width:", s.getLineWidth());
-			}
-			if (s.getEndCap() != BasicStroke.CAP_BUTT) {
-				write(";stroke-linecap:", STROKE_ENDCAPS.get(s.getEndCap()));
-			}
-			if (s.getLineJoin() != BasicStroke.JOIN_MITER) {
-				write(";stroke-linejoin:", STROKE_LINEJOIN.get(s.getLineJoin()));
-			}
-			//write(";stroke-miterlimit:", s.getMiterLimit());
-			if (s.getDashArray() != null && s.getDashArray().length>0) {
-				write(";stroke-dasharray:"); write(s.getDashArray());
-				write(";stroke-dashoffset:", s.getDashPhase());
-			}
-		}
-		writeln("\" />");
+		writeln("stroke");
 	}
 
 	/**
 	 * Utility method for writing a tag closing fragment for filling operations.
 	 */
 	protected void writeClosingFill() {
-		writeln("style=\"fill:", getColorString(color), ";stroke:none\" />");
+		writeln("fill");
 	}
 
 	/**
@@ -583,6 +556,7 @@ public class SVGGraphics2D extends Graphics2D {
 	 * It tries to translate Java2D shapes to the corresponding SVG shape tags.
 	 */
 	protected void writeShape(Shape s) {
+		writeln("newpath");
 		if (!isDistorted()) {
 			double sx = transform.getScaleX();
 			double sy = transform.getScaleX();
@@ -594,7 +568,7 @@ public class SVGGraphics2D extends Graphics2D {
 				double y1 = sy*l.getY1() + ty;
 				double x2 = sx*l.getX2() + tx;
 				double y2 = sy*l.getY2() + ty;
-				write(INDENT, "<line x1=\"", x1, "\" y1=\"", y1, "\" x2=\"", x2, "\" y2=\"", y2, "\" ");
+				writeln(INDENT, x1, " ", y1, " moveto ", x2, " ", y2, " lineto");
 				return;
 			} else if (s instanceof Rectangle2D) {
 				Rectangle2D r = (Rectangle2D) s;
@@ -602,65 +576,84 @@ public class SVGGraphics2D extends Graphics2D {
 				double y = sy*r.getY() + ty;
 				double width = sx*r.getWidth();
 				double height = sy*r.getHeight();
-				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" ");
+				writeln(INDENT, x, " ", y, " moveto");
+				writeln(INDENT, width, " ", 0.0, " rlineto");
+				writeln(INDENT, 0.0, " ", height, " rlineto");
+				writeln(INDENT, -width, " ", 0.0, " rlineto");
+				writeln(INDENT, "closepath");
 				return;
 			} else if (s instanceof RoundRectangle2D) {
+				// TODO: Use arc
 				RoundRectangle2D r = (RoundRectangle2D) s;
 				double x = sx*r.getX() + tx;
 				double y = sy*r.getY() + ty;
 				double width = sx*r.getWidth();
 				double height = sy*r.getHeight();
-				double arcWidth = sx*r.getArcWidth();
-				double arcHeight = sy*r.getArcHeight();
-				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
+				writeln(INDENT, x, " ", y, " moveto");
+				writeln(INDENT, width, " ", 0.0, " rlineto");
+				writeln(INDENT, 0.0, " ", height, " rlineto");
+				writeln(INDENT, -width, " ", 0.0, " rlineto");
+				writeln(INDENT, "closepath");
 				return;
 			} else if (s instanceof Ellipse2D) {
+				// TODO: Use arc
 				Ellipse2D e = (Ellipse2D) s;
 				double x = sx*e.getX() + tx;
 				double y = sy*e.getY() + ty;
-				double rx = sx*e.getWidth()/2.0;
-				double ry = sy*e.getHeight()/2.0;
-				write(INDENT, "<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
+				double width = sx*e.getWidth();
+				double height = sy*e.getHeight();
+				writeln(INDENT, x, " ", y, " moveto");
+				writeln(INDENT, width, " ", 0.0, " rlineto");
+				writeln(INDENT, 0.0, " ", height, " rlineto");
+				writeln(INDENT, -width, " ", 0.0, " rlineto");
+				writeln(INDENT, "closepath");
 				return;
 			}
+			// TODO: Handle Arc2D with arc operator
 		}
 
 		s = transform.createTransformedShape(s);
-		write(INDENT, "<path d=\"");
 		PathIterator segments = s.getPathIterator(null);
-		double[] coords = new double[6];
+		double[] coordsCur = new double[6];
+		double[] pointPrev = new double[2];
 		for (int i = 0; !segments.isDone(); i++, segments.next()) {
-			if (i > 0) {
-				write(" ");
-			}
-			int segmentType = segments.currentSegment(coords);
+			int segmentType = segments.currentSegment(coordsCur);
 			switch (segmentType) {
 			case PathIterator.SEG_MOVETO:
-				write("M", coords[0], ",", coords[1]);
+				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " moveto");
+				pointPrev[0] = coordsCur[0];
+				pointPrev[1] = coordsCur[1];
 				break;
 			case PathIterator.SEG_LINETO:
-				write("L", coords[0], ",", coords[1]);
+				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " lineto");
+				pointPrev[0] = coordsCur[0];
+				pointPrev[1] = coordsCur[1];
 				break;
 			case PathIterator.SEG_CUBICTO:
-				write("C", coords[0], ",", coords[1], " ", coords[2], ",", coords[3], " ", coords[4], ",", coords[5]);
+				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " ", coordsCur[2], " ", coordsCur[3], " ", coordsCur[4], " ", coordsCur[5], " curveto");
+				pointPrev[0] = coordsCur[4];
+				pointPrev[1] = coordsCur[5];
 				break;
 			case PathIterator.SEG_QUADTO:
-				write("Q", coords[0], ",", coords[1], " ", coords[2], ",", coords[3]);
+				double x1 = pointPrev[0] + 2.0/3.0*(coordsCur[0] - pointPrev[0]);
+				double y1 = pointPrev[1] + 2.0/3.0*(coordsCur[1] - pointPrev[1]);
+				double x2 = coordsCur[0] + 1.0/3.0*(coordsCur[2] - coordsCur[0]);
+				double y2 = coordsCur[1] + 1.0/3.0*(coordsCur[3] - coordsCur[1]);
+				double x3 = coordsCur[2];
+				double y3 = coordsCur[3];
+				writeln(INDENT, x1, " ", y1, " ", x2, " ", y2, " ", x3, " ", y3, " curveto");
+				pointPrev[0] = x3;
+				pointPrev[1] = y3;
 				break;
 			case PathIterator.SEG_CLOSE:
-				write("Z");
+				writeln(INDENT, "closepath");
 				break;
 			}
 		}
-		write("\" ");
 	}
 
 	private static String getColorString(Color c) {
-		String color = "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
-		if (c.getAlpha() < 255) {
-			double opacity = c.getAlpha()/255.0;
-			color += ";opacity:" + opacity;
-		}
+		String color = c.getRed()/255.0 + " " + c.getGreen()/255.0 + " " + c.getBlue()/255.0;
 		return color;
 	}
 
@@ -672,7 +665,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public String toString() {
-		return document.toString() + "</svg>\n";
+		return document.toString() + "%%EOF\n";
 	}
 
 }
