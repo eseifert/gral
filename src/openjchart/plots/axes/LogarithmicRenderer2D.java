@@ -108,6 +108,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			}
 		}
 
+		// Add custom ticks
+		ticks.addAll(getCustomTicks(axis));
+
 		return ticks;
 	}
 }

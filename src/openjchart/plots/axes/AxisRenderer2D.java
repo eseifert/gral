@@ -63,7 +63,7 @@ public interface AxisRenderer2D extends SettingsStorage {
 	static final String KEY_TICK_LABEL_OUTSIDE = "axis.tick.label.outside";
 	/** Key for specifying the rotation of the tick labels in degrees. */
 	static final String KEY_TICK_LABEL_ROTATION = "axis.tick.label.rotation";
-	/** Custom labels as a {@link java.lang.Map} with a Number as key and String as value. */
+	/** Custom labels as a {@link java.lang.Map} with a Double as key and String as value. */
 	static final String KEY_TICK_LABEL_CUSTOM = "axis.tick.label.custom";
 
 	/** Key for specifying the {@link java.lang.String} instance for the label text of the axis. */

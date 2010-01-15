@@ -96,8 +96,9 @@ public class SimpleXYPlot extends JFrame {
 		axisRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
 		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, axisRendererX);
 		// Custom tick labels
-		Map<Number, String> labels = new HashMap<Number, String>();
+		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
+		labels.put(1.5, "OnePointFive");
 		axisRendererX.setSetting(AxisRenderer2D.KEY_TICK_LABEL_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);

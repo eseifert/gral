@@ -31,6 +31,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -240,11 +241,33 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
 		Set<Double> tickPositions = new HashSet<Double>();
+		// Add standard tick labels
 		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacing) {
 			DataPoint2D tick = getTick(axis, tickPositionWorld);
 			if (tick.getPosition() != null && !tickPositions.contains(tickPositionWorld)) {
 				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
+			}
+		}
+
+		// Add custom tick labels
+		ticks.addAll(getCustomTicks(axis));
+
+		return ticks;
+	}
+
+	/**
+	 * Returns a List of custom defined ticks.
+	 * @param axis Axis containing the ticks.
+	 * @return List of custom ticks.
+	 */
+	protected List<DataPoint2D> getCustomTicks(Axis axis) {
+		List<DataPoint2D> ticks = new ArrayList<DataPoint2D>();
+		Map<Double, String> labelsCustom = getSetting(KEY_TICK_LABEL_CUSTOM);
+		if (labelsCustom != null) {
+			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
+				DataPoint2D tick = getTick(axis, entry.getKey());
+				ticks.add(tick);
 			}
 		}
 
@@ -267,9 +290,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 		// Retrieve tick label
 		String tickLabel;
-		Map<Number, String> labelsCustom = getSetting(KEY_TICK_LABEL_CUSTOM);
-		// FIXME: You have to specify the number type in the Map, i.e. the number 2 would not match, if you have double values on the axis.
-		// TODO: Option to show custom tick labels, whether the specified Number value is a tick or not
+		Map<Double, String> labelsCustom = getSetting(KEY_TICK_LABEL_CUSTOM);
 		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		}
