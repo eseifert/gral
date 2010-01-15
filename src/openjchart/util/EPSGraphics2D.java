@@ -52,7 +52,7 @@ public class EPSGraphics2D extends Graphics2D {
 		STROKE_ENDCAPS.put(BasicStroke.CAP_BUTT, 0);
 		STROKE_ENDCAPS.put(BasicStroke.CAP_ROUND, 1);
 		STROKE_ENDCAPS.put(BasicStroke.CAP_SQUARE, 2);
-		
+
 		STROKE_LINEJOIN = new HashMap<Integer, Integer>();
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_BEVEL, 2);
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_MITER, 0);
@@ -390,12 +390,14 @@ public class EPSGraphics2D extends Graphics2D {
 	public boolean drawImage(Image img, int x, int y, int width, int height,
 			ImageObserver observer) {
 		String imgData = getEps(img);
-		writeln(width, " " , height, " ", 8,
-			"[", width, " 0 0 ", height, " neg 0 ", height, "]",
-			"{currentfile pstr readhexstring pop} colorimage",
-			"<"
+		int imgWidth = img.getWidth(observer);
+		int imgHeight = img.getHeight(observer);
+		writeln("gsave");
+		writeln(x, " ", y, " ", width, " ", height, " ",
+				imgWidth, " ", imgHeight, " img"
 		);
 		writeln(imgData, ">");
+		writeln("grestore");
 		return true;  // TODO: Return only true if image data was complete
 	}
 
@@ -623,8 +625,19 @@ public class EPSGraphics2D extends Graphics2D {
 			"x y translate rx ry scale 0 0 1 startangle endangle arc ",
 			"savematrix setmatrix ",
 			"} bind def");
+		writeln("/img { ",
+				"/imgheight exch def /imgwidth exch def /height exch def /width exch def /y exch def /x exch def ",
+				"x y translate width height scale << ",
+				"/ImageType 1 /Width imgwidth /Height imgheight ",
+				"/BitsPercomponent 8 /Decode [0 1 0 1 0 1] ",
+				"/ImageMatrix [imgwidth 0 0 imgheight 0 imgheight] ",
+				"/DataSource currentfile /ASCIIHexDecode filter ",
+				">> image",
+				"} bind def");
 		// Save state
 		writeln("gsave  % Save current state");
+		// Settings
+		writeln("/DeviceRGB setcolorspace");
 		// Adjust EPS page size and page origin
 		writeln("% Move origin to upper left and scale to millimeters");
 		writeln("0 ", h, " translate 1 -1 scale");
