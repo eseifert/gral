@@ -24,7 +24,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.geom.Line2D.Double;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
@@ -39,12 +38,27 @@ import java.util.Map;
  * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
  */
 public class SVGGraphics2D extends Graphics2D {
-	protected static final String INDENT = " ";
+	protected static final String INDENT;
+	private static final Map<Integer, String> STROKE_ENDCAPS;
+	private static final Map<Integer, String> STROKE_LINEJOIN;
+
+	static {
+		INDENT = " ";
+
+		STROKE_ENDCAPS = new HashMap<Integer, String>();
+		STROKE_ENDCAPS.put(BasicStroke.CAP_BUTT, "butt");
+		STROKE_ENDCAPS.put(BasicStroke.CAP_ROUND, "round");
+		STROKE_ENDCAPS.put(BasicStroke.CAP_SQUARE, "square");
+		
+		STROKE_LINEJOIN = new HashMap<Integer, String>();
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_BEVEL, "bevel");
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_MITER, "miter");
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_ROUND, "round");
+	}
+
 	private final Map hints;
 	private final StringBuffer document;
 	private Rectangle2D bounds;
-
-	private double strokeWidth;
 
 	private Color background;
 	private Color color;
@@ -68,16 +82,23 @@ public class SVGGraphics2D extends Graphics2D {
 		document = new StringBuffer();
 		bounds = new Rectangle2D.Double(x, y, width, height);
 
-		strokeWidth = 1.0;
-
 		background = Color.white;
 		color = Color.BLACK;
 		font = Font.decode(null);
 		fontRenderContext = new FontRenderContext(null, false, true);
 		paint = color;
-		stroke = new BasicStroke((float)strokeWidth);
+		stroke = new BasicStroke(1f);
 		transform = new AffineTransform();
 		xorMode = Color.BLACK;
+
+		writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		writeln("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
+		writeln("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" ",
+			"x=\"", bounds.getX(), "mm\" y=\"", bounds.getY(), "mm\" ",
+			"width=\"", bounds.getWidth(), "mm\" height=\"", bounds.getHeight(), "mm\" " +
+			"viewBox=\"", bounds.getX(), " ", bounds.getY(), " ", bounds.getWidth(), " ", bounds.getHeight(), "\"",
+			">"
+		);
 	}
 
 	@Override
@@ -256,9 +277,6 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void setStroke(Stroke s) {
 		stroke = s;
-		if (stroke instanceof BasicStroke) {
-			strokeWidth = ((BasicStroke) s).getLineWidth();
-		}
 	}
 
 	@Override
@@ -511,8 +529,8 @@ public class SVGGraphics2D extends Graphics2D {
 	protected void write(Object... strs) {
 		for (Object o : strs) {
 			String str = o.toString();
-			if (o instanceof Double || o instanceof Float) {
-				str = String.format(Locale.ENGLISH, "%.15f", o);
+			if ((o instanceof Double) || (o instanceof Float)) {
+				str = String.format(Locale.ENGLISH, "%.7f", o).replaceAll("\\.?0+$", "");
 			}
 			document.append(str);
 		}
@@ -531,7 +549,25 @@ public class SVGGraphics2D extends Graphics2D {
 	 * Utility method for writing a tag closing fragment for drawing operations.
 	 */
 	protected void writeClosingDraw() {
-		writeln("style=\"fill:none;stroke:", getSvg(color), ";stroke-width:", strokeWidth, "\" />");
+		write("style=\"fill:none;stroke:", getSvg(color)); 
+		if (stroke instanceof BasicStroke) {
+			BasicStroke s = (BasicStroke) stroke;
+			if (s.getLineWidth() != 1f) {
+				write(";stroke-width:", s.getLineWidth());
+			}
+			if (s.getEndCap() != BasicStroke.CAP_BUTT) {
+				write(";stroke-linecap:", STROKE_ENDCAPS.get(s.getEndCap()));
+			}
+			if (s.getLineJoin() != BasicStroke.JOIN_MITER) {
+				write(";stroke-linejoin:", STROKE_LINEJOIN.get(s.getLineJoin()));
+			}
+			//write(";stroke-miterlimit:", s.getMiterLimit());
+			if (s.getDashArray() != null && s.getDashArray().length>0) {
+				write(";stroke-dasharray:"); write(s.getDashArray());
+				write(";stroke-dashoffset:", s.getDashPhase());
+			}
+		}
+		writeln("\" />");
 	}
 
 	/**
@@ -635,17 +671,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public String toString() {
-		String header = String.format(Locale.ENGLISH,
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
-			"<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" " +
-			"x=\"%fmm\" y=\"%fmm\" width=\"%fmm\" height=\"%fmm\" " +
-			"viewBox=\"%f %f %f %f\">\n",
-			bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(),
-			bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight()
-		);
-		String content = document.toString();
-		String footer = "</svg>\n";
-		return header + content + footer;
+		return document.toString() + "</svg>\n";
 	}
+
 }
