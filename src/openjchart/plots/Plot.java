@@ -76,10 +76,12 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	/** Constants for specifying the scaling behavior values. */
 	public static enum ScaleMode {
-		/** Constant for specifying that when a plot is scaled the axis extremes should be kept. */
-		KEEP_AXES,
-		/** Constant for specifying that when a plot is scaled its scale should be kept and axes can be scaled. */
-		KEEP_SCALE
+		/** Constant for specifying that when a plot is scaled
+		 *  the axis extremes should be preserved. */
+		PRESERVE_AXIS_BOUNDS,
+		/** Constant for specifying that when a plot is scaled
+		 *  its scale should be preserved and axes can be scaled. */
+		PRESERVE_PLOT_SCALE
 	};
 
 	private final Settings settings;

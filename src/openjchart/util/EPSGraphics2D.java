@@ -26,6 +26,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
@@ -58,7 +59,7 @@ public class EPSGraphics2D extends Graphics2D {
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_ROUND, 1);
 	}
 	
-	private final Map hints;
+	private final RenderingHints hints;
 	private final StringBuffer document;
 	private Rectangle2D bounds;
 
@@ -80,7 +81,7 @@ public class EPSGraphics2D extends Graphics2D {
 	 * Constructor that initializes a new <code>SVGGraphics2D</code> instance.
 	 */
 	public EPSGraphics2D(double x, double y, double width, double height) {
-		hints = new HashMap();
+		hints = new RenderingHints(new HashMap<RenderingHints.Key, Object>());
 		document = new StringBuffer();
 		bounds = new Rectangle2D.Double(x, y, width, height);
 
@@ -98,7 +99,7 @@ public class EPSGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public void addRenderingHints(Map hints) {
+	public void addRenderingHints(Map<?,?> hints) {
 		this.hints.putAll(hints);
 	}
 
@@ -120,23 +121,27 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
-		// TODO Auto-generated method stub
-		return false;
+		BufferedImage bimg = getTransformedImage(img, xform);
+		drawImage(bimg, null, bimg.getMinX(), bimg.getMinY());
+		return true;
 	}
 
 	@Override
 	public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {
-		// TODO Auto-generated method stub
+		if (op != null) {			
+			img = op.filter(img, null);
+		}
+		drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 	}
 
 	@Override
 	public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
-		// TODO Auto-generated method stub
+		// TODO
 	}
 
 	@Override
 	public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
-		// TODO Auto-generated method stub
+		// TODO
 	}
 
 	@Override
@@ -203,13 +208,13 @@ public class EPSGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public Object getRenderingHint(Key hintKey) {
+	public Object getRenderingHint(RenderingHints.Key hintKey) {
 		return hints.get(hintKey);
 	}
 
 	@Override
 	public RenderingHints getRenderingHints() {
-		return new RenderingHints(hints);
+		return hints;
 	}
 
 	@Override
@@ -273,7 +278,7 @@ public class EPSGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public void setRenderingHints(Map hints) {
+	public void setRenderingHints(Map<?, ?> hints) {
 		this.hints.putAll(hints);
 	}
 
@@ -372,29 +377,32 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, Color bgcolor,
 			ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height,
 			ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		String imgData = getEps(img);
+		writeln(width, " " , height, " ", 8,
+			"[", width, " 0 0 ", height, " neg 0 ", height, "]",
+			"{currentfile pstr readhexstring pop} colorimage",
+			"<"
+		);
+		writeln(imgData, ">");
+		return true;  // TODO: Return only true if image data was complete
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height,
 			Color bgcolor, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, width, height, observer);
 	}
 
 	@Override
@@ -665,7 +673,6 @@ public class EPSGraphics2D extends Graphics2D {
 				write(x, " ", y, " ", width, " ", height, " rect Z");
 				return;
 			} else if (s instanceof RoundRectangle2D) {
-				// TODO: Use arc
 				RoundRectangle2D r = (RoundRectangle2D) s;
 				double x = sx*r.getX() + tx;
 				double y = sy*r.getY() + ty;
@@ -676,7 +683,6 @@ public class EPSGraphics2D extends Graphics2D {
 				write(x, " ", y, " ", width, " ", height, " ", arcWidth, " ", arcHeight, " rrect Z");
 				return;
 			} else if (s instanceof Ellipse2D) {
-				// TODO: Use arc
 				Ellipse2D e = (Ellipse2D) s;
 				double x = sx*e.getX() + tx;
 				double y = sy*e.getY() + ty;
@@ -685,7 +691,6 @@ public class EPSGraphics2D extends Graphics2D {
 				write(x, " ", y, " ", rx, " ", ry, " ", 0.0, " ", 360.0, " ellipse Z");
 				return;
 			} else if (s instanceof Arc2D) {
-				// TODO: Use arc
 				Arc2D e = (Arc2D) s;
 				double x = sx*e.getX() + tx;
 				double y = sy*e.getY() + ty;
@@ -739,6 +744,32 @@ public class EPSGraphics2D extends Graphics2D {
 				break;
 			}
 		}
+	}
+
+	public static String getEps(Image img) {
+		BufferedImage bufferedImg = GraphicsUtils.toBufferedImage(img);
+		int[] data = bufferedImg.getRaster().getPixels(
+				bufferedImg.getMinX(), bufferedImg.getMinY(),
+				bufferedImg.getWidth(), bufferedImg.getHeight(),
+				(int[])null);
+		StringBuffer str = new StringBuffer(data.length*6);
+		for (int i : data) {
+			if ((i > 0) && (i%bufferedImg.getWidth() == 0)) {
+				str.append("\n");
+			}
+			str.append(Integer.toHexString(i).substring(2));
+		}
+		return str.toString();
+	}
+
+	public BufferedImage getTransformedImage(Image image, AffineTransform xform) {
+		Integer interpolationType = (Integer)hints.get(RenderingHints.KEY_INTERPOLATION);
+		if (interpolationType == null) {
+			interpolationType = (Integer)RenderingHints.VALUE_INTERPOLATION_BILINEAR;
+		}
+		AffineTransformOp op = new AffineTransformOp(xform, interpolationType);
+		BufferedImage bufferedImage = GraphicsUtils.toBufferedImage(image);
+		return op.filter(bufferedImage, null);
 	}
 
 	private boolean isDistorted() {

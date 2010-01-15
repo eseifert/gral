@@ -25,15 +25,22 @@ import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.AttributedCharacterIterator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import sun.misc.BASE64Encoder;
 
 /**
  * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
@@ -47,14 +54,14 @@ public class SVGGraphics2D extends Graphics2D {
 		STROKE_ENDCAPS.put(BasicStroke.CAP_BUTT, "butt");
 		STROKE_ENDCAPS.put(BasicStroke.CAP_ROUND, "round");
 		STROKE_ENDCAPS.put(BasicStroke.CAP_SQUARE, "square");
-		
+
 		STROKE_LINEJOIN = new HashMap<Integer, String>();
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_BEVEL, "bevel");
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_MITER, "miter");
 		STROKE_LINEJOIN.put(BasicStroke.JOIN_ROUND, "round");
 	}
 
-	private final Map hints;
+	private final RenderingHints hints;
 	private final StringBuffer document;
 	private Rectangle2D bounds;
 
@@ -76,7 +83,7 @@ public class SVGGraphics2D extends Graphics2D {
 	 * Constructor that initializes a new <code>SVGGraphics2D</code> instance.
 	 */
 	public SVGGraphics2D(double x, double y, double width, double height) {
-		hints = new HashMap();
+		hints = new RenderingHints(new HashMap<RenderingHints.Key, Object>());
 		document = new StringBuffer();
 		bounds = new Rectangle2D.Double(x, y, width, height);
 
@@ -94,7 +101,7 @@ public class SVGGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public void addRenderingHints(Map hints) {
+	public void addRenderingHints(Map<?,?> hints) {
 		this.hints.putAll(hints);
 	}
 
@@ -116,23 +123,27 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
-		// TODO Auto-generated method stub
-		return false;
+		BufferedImage bimg = getTransformedImage(img, xform);
+		drawImage(bimg, null, bimg.getMinX(), bimg.getMinY());
+		return true;
 	}
 
 	@Override
 	public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {
-		// TODO Auto-generated method stub
+		if (op != null) {			
+			img = op.filter(img, null);
+		}
+		drawImage(img, x, y, img.getWidth(), img.getHeight(), null);
 	}
 
 	@Override
 	public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
-		// TODO Auto-generated method stub
+		// TODO
 	}
 
 	@Override
 	public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
-		// TODO Auto-generated method stub
+		// TODO
 	}
 
 	@Override
@@ -142,8 +153,6 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		// Encode string
-		//str = str;
 		// Escape string
 		str = str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		// Output
@@ -202,7 +211,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public RenderingHints getRenderingHints() {
-		return new RenderingHints(hints);
+		return hints;
 	}
 
 	@Override
@@ -257,12 +266,12 @@ public class SVGGraphics2D extends Graphics2D {
 	}
 
 	@Override
-	public void setRenderingHint(Key hintKey, Object hintValue) {
+	public void setRenderingHint(RenderingHints.Key hintKey, Object hintValue) {
 		hints.put(hintKey, hintValue);
 	}
 
 	@Override
-	public void setRenderingHints(Map hints) {
+	public void setRenderingHints(Map<?, ?> hints) {
 		this.hints.putAll(hints);
 	}
 
@@ -325,36 +334,36 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void drawArc(int x, int y, int width, int height, int startAngle,
 			int arcAngle) {
-		// TODO: Use arc command of SVG's <path> tag
 		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.OPEN));
 		writeClosingDraw();
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, Color bgcolor,
 			ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height,
 			ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		String imgData = getSvg(img);
+		write("<image x=\"" , x, "\" y=\"" , y, "\" ",
+				"width=\"" , width, "\" height=\"" , height, "\" ",
+				"xlink:href=\"", imgData, "\" ",
+				"/>");
+		return true;  // TODO: Return only true if image data was complete
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height,
 			Color bgcolor, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, width, height, observer);
 	}
 
 	@Override
@@ -418,7 +427,6 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-		// TODO: Use arc command of SVG's <path> tag
 		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.PIE));
 		writeClosingFill();
 	}
@@ -502,7 +510,6 @@ public class SVGGraphics2D extends Graphics2D {
 	@Override
 	public void setPaintMode() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -539,8 +546,10 @@ public class SVGGraphics2D extends Graphics2D {
 		double w = bounds.getWidth();
 		double h = bounds.getHeight();
 		writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		writeln("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
-		writeln("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" ",
+		writeln("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" ",
+				"\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
+		writeln("<svg version=\"1.2\" xmlns=\"http://www.w3.org/2000/svg\" ",
+			"xmlns:xlink=\"http://www.w3.org/1999/xlink\" ",
 			"x=\"", x, "mm\" y=\"", y, "mm\" ",
 			"width=\"", w, "mm\" height=\"", h, "mm\" " +
 			"viewBox=\"", x, " ", y, " ", w, " ", h, "\"",
@@ -552,7 +561,7 @@ public class SVGGraphics2D extends Graphics2D {
 	 * Utility method for writing a tag closing fragment for drawing operations.
 	 */
 	protected void writeClosingDraw() {
-		write("style=\"fill:none;stroke:", getColorString(color)); 
+		write("style=\"fill:none;stroke:", getSvg(color)); 
 		if (stroke instanceof BasicStroke) {
 			BasicStroke s = (BasicStroke) stroke;
 			if (s.getLineWidth() != 1f) {
@@ -577,7 +586,7 @@ public class SVGGraphics2D extends Graphics2D {
 	 * Utility method for writing a tag closing fragment for filling operations.
 	 */
 	protected void writeClosingFill() {
-		writeln("style=\"fill:", getColorString(color), ";stroke:none\" />");
+		writeln("style=\"fill:", getSvg(color), ";stroke:none\" />");
 	}
 
 	/**
@@ -657,13 +666,35 @@ public class SVGGraphics2D extends Graphics2D {
 		write("\" ");
 	}
 
-	private static String getColorString(Color c) {
+	private static String getSvg(Color c) {
 		String color = "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
 		if (c.getAlpha() < 255) {
 			double opacity = c.getAlpha()/255.0;
 			color += ";opacity:" + opacity;
 		}
 		return color;
+	}
+
+	private static String getSvg(Image img) {
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		BufferedImage bufferedImg = GraphicsUtils.toBufferedImage(img);
+		try {
+			ImageIO.write(bufferedImg, "png", data);
+		} catch (IOException e) {
+			return "";
+		}
+		String dataBase64 = new BASE64Encoder().encode(data.toByteArray());
+		return "data:image/png;base64," + dataBase64;
+	}
+
+	public BufferedImage getTransformedImage(Image image, AffineTransform xform) {
+		Integer interpolationType = (Integer)hints.get(RenderingHints.KEY_INTERPOLATION);
+		if (interpolationType == null) {
+			interpolationType = (Integer)RenderingHints.VALUE_INTERPOLATION_BILINEAR;
+		}
+		AffineTransformOp op = new AffineTransformOp(xform, interpolationType);
+		BufferedImage bufferedImage = GraphicsUtils.toBufferedImage(image);
+		return op.filter(bufferedImage, null);
 	}
 
 	private boolean isDistorted() {
