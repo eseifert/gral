@@ -88,8 +88,12 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double powerMin = Math.pow(BASE, Math.floor(Math.log10(min)));
 		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
 
+		// Add custom ticks
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		ticks.addAll(getCustomTicks(axis));
 		Set<Double> tickPositions = new HashSet<Double>();
+		Set<Double> tickPositionsCustom = getTickPositionsCustom();
+		// Add stadard ticks
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
 			double step = power*tickSpacing;
 			double powerNext = power*BASE;
@@ -101,15 +105,14 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 					break;
 				}
 				DataPoint2D tick = getTick(axis, tickPositionWorld);
-				if (tick.getPosition() != null && !tickPositions.contains(tickPositionWorld)) {
+				if (tick.getPosition() != null
+						&& !tickPositions.contains(tickPositionWorld)
+						&& !tickPositionsCustom.contains(tickPositionWorld)) {
 					ticks.add(tick);
 					tickPositions.add(tickPositionWorld);
 				}
 			}
 		}
-
-		// Add custom ticks
-		ticks.addAll(getCustomTicks(axis));
 
 		return ticks;
 	}

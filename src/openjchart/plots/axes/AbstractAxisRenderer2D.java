@@ -239,19 +239,22 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double minTick = MathUtils.ceil(min, tickSpacing);
 		double maxTick = MathUtils.floor(max, tickSpacing);
 
+		// Add custom tick labels
 		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
+		ticks.addAll(getCustomTicks(axis));
 		Set<Double> tickPositions = new HashSet<Double>();
+		Set<Double> ticksPositionsCustom = getTickPositionsCustom();
+
 		// Add standard tick labels
 		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacing) {
 			DataPoint2D tick = getTick(axis, tickPositionWorld);
-			if (tick.getPosition() != null && !tickPositions.contains(tickPositionWorld)) {
+			if (tick.getPosition() != null
+					&& !tickPositions.contains(tickPositionWorld)
+					&& !ticksPositionsCustom.contains(tickPositionWorld)) {
 				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
 			}
 		}
-
-		// Add custom tick labels
-		ticks.addAll(getCustomTicks(axis));
 
 		return ticks;
 	}
@@ -272,6 +275,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		return ticks;
+	}
+
+	protected Set<Double> getTickPositionsCustom() {
+		Map<Double, String> labelsCustom = getSetting(KEY_TICK_LABEL_CUSTOM);
+		if (labelsCustom != null) {
+			return labelsCustom.keySet();
+		}
+		return new HashSet<Double>();
 	}
 
 	/**
