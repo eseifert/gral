@@ -1,5 +1,6 @@
 package openjchart.util;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
@@ -38,7 +39,6 @@ import java.util.Map;
  * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
  */
 public class SVGGraphics2D extends Graphics2D {
-	protected static final String INDENT = " ";
 	private static final Map<Integer, String> STROKE_ENDCAPS;
 	private static final Map<Integer, String> STROKE_LINEJOIN;
 
@@ -82,6 +82,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 		background = Color.white;
 		color = Color.BLACK;
+		composite = AlphaComposite.getInstance(AlphaComposite.CLEAR);
 		font = Font.decode(null);
 		fontRenderContext = new FontRenderContext(null, false, true);
 		paint = color;
@@ -141,11 +142,12 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		write(INDENT, "<text x=\"", x, "\" y=\"", y, "\">");
-		String strEscaped = str.replaceAll("&", "&amp;")
-			.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-		write(strEscaped);
-		writeln("</text>");
+		// Encode string
+		//str = str;
+		// Escape string
+		str = str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		// Output
+		writeln("<text x=\"", x, "\" y=\"", y, "\">", str, "</text>");
 	}
 
 	@Override
@@ -384,7 +386,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polygon points=\"");
+		write("<polygon points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -397,7 +399,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polyline points=\"");
+		write("<polyline points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -429,7 +431,7 @@ public class SVGGraphics2D extends Graphics2D {
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		write(INDENT, "<polygon points=\"");
+		write("<polygon points=\"");
 		for (int i = 0; i < nPoints; i++) {
 			if (i > 0) {
 				write(" ");
@@ -594,7 +596,7 @@ public class SVGGraphics2D extends Graphics2D {
 				double y1 = sy*l.getY1() + ty;
 				double x2 = sx*l.getX2() + tx;
 				double y2 = sy*l.getY2() + ty;
-				write(INDENT, "<line x1=\"", x1, "\" y1=\"", y1, "\" x2=\"", x2, "\" y2=\"", y2, "\" ");
+				write("<line x1=\"", x1, "\" y1=\"", y1, "\" x2=\"", x2, "\" y2=\"", y2, "\" ");
 				return;
 			} else if (s instanceof Rectangle2D) {
 				Rectangle2D r = (Rectangle2D) s;
@@ -602,7 +604,7 @@ public class SVGGraphics2D extends Graphics2D {
 				double y = sy*r.getY() + ty;
 				double width = sx*r.getWidth();
 				double height = sy*r.getHeight();
-				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" ");
+				write("<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" ");
 				return;
 			} else if (s instanceof RoundRectangle2D) {
 				RoundRectangle2D r = (RoundRectangle2D) s;
@@ -612,7 +614,7 @@ public class SVGGraphics2D extends Graphics2D {
 				double height = sy*r.getHeight();
 				double arcWidth = sx*r.getArcWidth();
 				double arcHeight = sy*r.getArcHeight();
-				write(INDENT, "<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
+				write("<rect x=\"", x, "\" y=\"", y, "\" width=\"", width, "\" height=\"", height, "\" rx=\"", arcWidth, "\" ry=\"", arcHeight, "\" ");
 				return;
 			} else if (s instanceof Ellipse2D) {
 				Ellipse2D e = (Ellipse2D) s;
@@ -620,13 +622,13 @@ public class SVGGraphics2D extends Graphics2D {
 				double y = sy*e.getY() + ty;
 				double rx = sx*e.getWidth()/2.0;
 				double ry = sy*e.getHeight()/2.0;
-				write(INDENT, "<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
+				write("<ellipse cx=\"", x+rx, "\" cy=\"", y+ry, "\" rx=\"", rx, "\" ry=\"", ry, "\" ");
 				return;
 			}
 		}
 
 		s = transform.createTransformedShape(s);
-		write(INDENT, "<path d=\"");
+		write("<path d=\"");
 		PathIterator segments = s.getPathIterator(null);
 		double[] coords = new double[6];
 		for (int i = 0; !segments.isDone(); i++, segments.next()) {

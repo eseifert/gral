@@ -1,5 +1,6 @@
 package openjchart.util;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
@@ -31,6 +32,7 @@ import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -39,9 +41,23 @@ import java.util.Map;
  * <code>Graphics2D</code> implementation that saves all operations to a SVG string.
  */
 public class EPSGraphics2D extends Graphics2D {
-	protected static final String INDENT = " ";
 	protected static final double MM_IN_UNITS = 72.0 / 25.4;
 
+	private static final Map<Integer, Integer> STROKE_ENDCAPS;
+	private static final Map<Integer, Integer> STROKE_LINEJOIN;
+
+	static {
+		STROKE_ENDCAPS = new HashMap<Integer, Integer>();
+		STROKE_ENDCAPS.put(BasicStroke.CAP_BUTT, 0);
+		STROKE_ENDCAPS.put(BasicStroke.CAP_ROUND, 1);
+		STROKE_ENDCAPS.put(BasicStroke.CAP_SQUARE, 2);
+		
+		STROKE_LINEJOIN = new HashMap<Integer, Integer>();
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_BEVEL, 2);
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_MITER, 0);
+		STROKE_LINEJOIN.put(BasicStroke.JOIN_ROUND, 1);
+	}
+	
 	private final Map hints;
 	private final StringBuffer document;
 	private Rectangle2D bounds;
@@ -70,13 +86,14 @@ public class EPSGraphics2D extends Graphics2D {
 
 		background = Color.white;
 		color = Color.BLACK;
+		composite = AlphaComposite.getInstance(AlphaComposite.CLEAR);
 		font = Font.decode(null);
 		fontRenderContext = new FontRenderContext(null, false, true);
 		paint = color;
 		stroke = new BasicStroke(1f);
 		transform = new AffineTransform();
 		xorMode = Color.BLACK;
-
+		
 		writeHeader();
 	}
 
@@ -129,11 +146,15 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		String strEscaped = str.replaceAll("\\", "\\\\")
+		// TODO: Encode string
+		//byte[] bytes = str.getBytes("ISO-8859-1");
+		// Escape string
+		str = str.replaceAll("\\", "\\\\")
 			.replaceAll("\n", "\\n").replaceAll("\r", "\\r")
 			.replaceAll("\t", "\\t").replaceAll("\b", "\\b").replaceAll("\f", "\\f")
 			.replaceAll("(", "\\(").replaceAll(")", "\\)");
-		writeln("(", strEscaped, ") show");
+		// Output
+		writeln(x, " ", y, " M (", str, ") show");
 	}
 
 	@Override
@@ -203,8 +224,12 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean hit(Rectangle rect, Shape s, boolean onStroke) {
-		// TODO Auto-generated method stub
-		return false;
+		if (onStroke) {
+			Shape sStroke = getStroke().createStrokedShape(s);
+			return sStroke.intersects(rect);
+		} else  {
+			return s.intersects(rect);
+		}
 	}
 
 	@Override
@@ -254,7 +279,39 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public void setStroke(Stroke s) {
+		BasicStroke bsPrev;
+		if (getStroke() instanceof BasicStroke) {
+			bsPrev = (BasicStroke) getStroke();
+		} else {
+			bsPrev = new BasicStroke();
+		}
+
 		stroke = s;
+
+		if (s instanceof BasicStroke) {
+			BasicStroke bs = (BasicStroke) s;
+			if (bs.getLineWidth() != bsPrev.getLineWidth()) {
+				writeln(bs.getLineWidth(), " setlinewidth");
+			}
+			if (bs.getLineJoin() != bsPrev.getLineJoin()) {
+				writeln(STROKE_LINEJOIN.get(bs.getLineWidth()), " setlinejoin");
+			}
+			if (bs.getEndCap() != bsPrev.getEndCap()) {
+				writeln(STROKE_ENDCAPS.get(bs.getEndCap()), " setlinecap");
+			}
+			if ((!Arrays.equals(bs.getDashArray(), bsPrev.getDashArray())) ||
+				(bs.getDashPhase() != bsPrev.getDashPhase())) {
+				write("[");
+				float[] pattern = bs.getDashArray();
+				for (int i = 0; i < pattern.length; i++) {
+					if (i > 0) {
+						write(" ");
+					}
+					write(pattern[i]);
+				}
+				writeln("] ", bs.getDashPhase(), " setlinedash");
+			}
+		}
 	}
 
 	@Override
@@ -299,19 +356,16 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public Graphics create() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void drawArc(int x, int y, int width, int height, int startAngle,
 			int arcAngle) {
-		// TODO: Use arc command of SVG's <path> tag
 		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.OPEN));
 		writeClosingDraw();
 	}
@@ -405,7 +459,6 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-		// TODO: Use arc command of SVG's <path> tag
 		writeShape(new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.PIE));
 		writeClosingFill();
 	}
@@ -479,13 +532,19 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public void setColor(Color c) {
-		color = c;
-		writeln(getColorString(c), " setrgbcolor");
+		if (c != null && (color.getRed() != c.getRed() || color.getGreen() != c.getGreen() || color.getBlue() != c.getBlue())) {
+			color = c;
+			writeln(c.getRed()/255.0, " ", c.getGreen()/255.0, " ", c.getBlue()/255.0, " rgb");
+		}
 	}
 
 	@Override
 	public void setFont(Font font) {
-		this.font = font;
+		if (!this.font.equals(font)) {
+			this.font = font;
+			writeln("/", font.getPSName(), " findfont");
+			writeln(font.getSize2D(), " scalefont");
+		}
 	}
 
 	@Override
@@ -523,17 +582,45 @@ public class EPSGraphics2D extends Graphics2D {
 	}
 
 	protected void writeHeader() {
-		int x = (int)Math.round(bounds.getX() * MM_IN_UNITS);
-		int y = (int)Math.round(bounds.getY() * MM_IN_UNITS);
-		int w = (int)Math.round(bounds.getWidth() * MM_IN_UNITS);
-		int h = (int)Math.round(bounds.getHeight() * MM_IN_UNITS);
+		int x = (int)Math.floor(bounds.getX() * MM_IN_UNITS);
+		int y = (int)Math.floor(bounds.getY() * MM_IN_UNITS);
+		int w = (int)Math.ceil(bounds.getWidth() * MM_IN_UNITS);
+		int h = (int)Math.ceil(bounds.getHeight() * MM_IN_UNITS);
 
 		writeln("%!PS-Adobe-3.0 EPSF-3.0");
 		writeln("%%BoundingBox: ", x, " ", y, " ", w, " ", h);
-		writeln("%%Pages: 0");
-		// Move origin to upper left
+		writeln("%%LanguageLevel: 2");
+		writeln("%%Pages: 1");
+		writeln("%%Page: 1 1");
+
+		// Utility functions
+		writeln("% Utility functions");
+		writeln("/M /moveto load def");
+		writeln("/L /lineto load def");
+		writeln("/C /curveto load def");
+		writeln("/Z /closepath load def");
+		writeln("/RL /rlineto load def");
+		writeln("/rgb /setrgbcolor load def");
+		writeln("/rect { ",
+				"/height exch def /width exch def /y exch def /x exch def ",
+				"x y M width 0 RL 0 height RL width neg 0 RL ",
+				"} bind def");
+		// TODO: Round rectangle
+		writeln("/rrect { ",
+				"/archeight exch def /arcwidth exch def /height exch def /width exch def /y exch def /x exch def ",
+				"x y M width 0 RL 0 height RL width neg 0 RL ",
+				"} bind def");
+		writeln("/ellipse { ",
+			"/endangle exch def /startangle exch def /ry exch def /rx exch def /y exch def /x exch def ",
+			"/savematrix matrix currentmatrix def ",
+			"x y translate rx ry scale 0 0 1 startangle endangle arc ",
+			"savematrix setmatrix ",
+			"} bind def");
+		// Save state
+		writeln("gsave  % Save current state");
+		// Adjust EPS page size and page origin
+		writeln("% Move origin to upper left and scale to millimeters");
 		writeln("0 ", h, " translate 1 -1 scale");
-		// Convert from 1/72 inches to millimeters
 		writeln(MM_IN_UNITS, " ", MM_IN_UNITS, " scale");
 	}
 
@@ -541,14 +628,14 @@ public class EPSGraphics2D extends Graphics2D {
 	 * Utility method for writing a tag closing fragment for drawing operations.
 	 */
 	protected void writeClosingDraw() {
-		writeln("stroke");
+		writeln(" stroke");
 	}
 
 	/**
 	 * Utility method for writing a tag closing fragment for filling operations.
 	 */
 	protected void writeClosingFill() {
-		writeln("fill");
+		writeln(" fill");
 	}
 
 	/**
@@ -556,7 +643,7 @@ public class EPSGraphics2D extends Graphics2D {
 	 * It tries to translate Java2D shapes to the corresponding SVG shape tags.
 	 */
 	protected void writeShape(Shape s) {
-		writeln("newpath");
+		write("newpath ");
 		if (!isDistorted()) {
 			double sx = transform.getScaleX();
 			double sy = transform.getScaleX();
@@ -568,7 +655,7 @@ public class EPSGraphics2D extends Graphics2D {
 				double y1 = sy*l.getY1() + ty;
 				double x2 = sx*l.getX2() + tx;
 				double y2 = sy*l.getY2() + ty;
-				writeln(INDENT, x1, " ", y1, " moveto ", x2, " ", y2, " lineto");
+				write(x1, " ", y1, " M ", x2, " ", y2, " L");
 				return;
 			} else if (s instanceof Rectangle2D) {
 				Rectangle2D r = (Rectangle2D) s;
@@ -576,11 +663,7 @@ public class EPSGraphics2D extends Graphics2D {
 				double y = sy*r.getY() + ty;
 				double width = sx*r.getWidth();
 				double height = sy*r.getHeight();
-				writeln(INDENT, x, " ", y, " moveto");
-				writeln(INDENT, width, " ", 0.0, " rlineto");
-				writeln(INDENT, 0.0, " ", height, " rlineto");
-				writeln(INDENT, -width, " ", 0.0, " rlineto");
-				writeln(INDENT, "closepath");
+				write(x, " ", y, " ", width, " ", height, " rect Z");
 				return;
 			} else if (s instanceof RoundRectangle2D) {
 				// TODO: Use arc
@@ -589,27 +672,31 @@ public class EPSGraphics2D extends Graphics2D {
 				double y = sy*r.getY() + ty;
 				double width = sx*r.getWidth();
 				double height = sy*r.getHeight();
-				writeln(INDENT, x, " ", y, " moveto");
-				writeln(INDENT, width, " ", 0.0, " rlineto");
-				writeln(INDENT, 0.0, " ", height, " rlineto");
-				writeln(INDENT, -width, " ", 0.0, " rlineto");
-				writeln(INDENT, "closepath");
+				double arcWidth = sx*r.getArcWidth();
+				double arcHeight = sy*r.getArcWidth();
+				write(x, " ", y, " ", width, " ", height, " ", arcWidth, " ", arcHeight, " rrect Z");
 				return;
 			} else if (s instanceof Ellipse2D) {
 				// TODO: Use arc
 				Ellipse2D e = (Ellipse2D) s;
 				double x = sx*e.getX() + tx;
 				double y = sy*e.getY() + ty;
-				double width = sx*e.getWidth();
-				double height = sy*e.getHeight();
-				writeln(INDENT, x, " ", y, " moveto");
-				writeln(INDENT, width, " ", 0.0, " rlineto");
-				writeln(INDENT, 0.0, " ", height, " rlineto");
-				writeln(INDENT, -width, " ", 0.0, " rlineto");
-				writeln(INDENT, "closepath");
+				double rx = sx*e.getWidth() / 2.0;
+				double ry = sy*e.getHeight() / 2.0;
+				write(x, " ", y, " ", rx, " ", ry, " ", 0.0, " ", 360.0, " ellipse Z");
+				return;
+			} else if (s instanceof Arc2D) {
+				// TODO: Use arc
+				Arc2D e = (Arc2D) s;
+				double x = sx*e.getX() + tx;
+				double y = sy*e.getY() + ty;
+				double rx = sx*e.getWidth() / 2.0;
+				double ry = sy*e.getHeight() / 2.0;
+				double startAngle = e.getAngleStart();
+				double endAngle = e.getAngleExtent();
+				write(x, " ", y, " ", rx, " ", ry, " ", startAngle, " ", endAngle, " ellipse Z");
 				return;
 			}
-			// TODO: Handle Arc2D with arc operator
 		}
 
 		s = transform.createTransformedShape(s);
@@ -617,20 +704,23 @@ public class EPSGraphics2D extends Graphics2D {
 		double[] coordsCur = new double[6];
 		double[] pointPrev = new double[2];
 		for (int i = 0; !segments.isDone(); i++, segments.next()) {
+			if (i > 0) {
+				write(" ");
+			}
 			int segmentType = segments.currentSegment(coordsCur);
 			switch (segmentType) {
 			case PathIterator.SEG_MOVETO:
-				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " moveto");
+				write(coordsCur[0], " ", coordsCur[1], " M");
 				pointPrev[0] = coordsCur[0];
 				pointPrev[1] = coordsCur[1];
 				break;
 			case PathIterator.SEG_LINETO:
-				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " lineto");
+				write(coordsCur[0], " ", coordsCur[1], " L");
 				pointPrev[0] = coordsCur[0];
 				pointPrev[1] = coordsCur[1];
 				break;
 			case PathIterator.SEG_CUBICTO:
-				writeln(INDENT, coordsCur[0], " ", coordsCur[1], " ", coordsCur[2], " ", coordsCur[3], " ", coordsCur[4], " ", coordsCur[5], " curveto");
+				write(coordsCur[0], " ", coordsCur[1], " ", coordsCur[2], " ", coordsCur[3], " ", coordsCur[4], " ", coordsCur[5], " C");
 				pointPrev[0] = coordsCur[4];
 				pointPrev[1] = coordsCur[5];
 				break;
@@ -641,20 +731,15 @@ public class EPSGraphics2D extends Graphics2D {
 				double y2 = coordsCur[1] + 1.0/3.0*(coordsCur[3] - coordsCur[1]);
 				double x3 = coordsCur[2];
 				double y3 = coordsCur[3];
-				writeln(INDENT, x1, " ", y1, " ", x2, " ", y2, " ", x3, " ", y3, " curveto");
+				write(x1, " ", y1, " ", x2, " ", y2, " ", x3, " ", y3, " C");
 				pointPrev[0] = x3;
 				pointPrev[1] = y3;
 				break;
 			case PathIterator.SEG_CLOSE:
-				writeln(INDENT, "closepath");
+				write("Z");
 				break;
 			}
 		}
-	}
-
-	private static String getColorString(Color c) {
-		String color = c.getRed()/255.0 + " " + c.getGreen()/255.0 + " " + c.getBlue()/255.0;
-		return color;
 	}
 
 	private boolean isDistorted() {
@@ -665,7 +750,7 @@ public class EPSGraphics2D extends Graphics2D {
 
 	@Override
 	public String toString() {
-		return document.toString() + "%%EOF\n";
+		return document.toString() + "grestore  % Restore state\n%%EOF\n";
 	}
 
 }
