@@ -42,7 +42,7 @@ public class GraphicsUtilsTest {
 
 	@Test
 	public void testGetLayout() {
-		TextLayout layout = GraphicsUtils.getLayout("M", new Font("Arial", Font.PLAIN, 12));
+		TextLayout layout = GraphicsUtils.getLayout("M", Font.decode(null));
 		assertNotNull(layout);
 		Rectangle2D bounds = layout.getBounds();
 		assertTrue(bounds.getWidth() > 0.0);

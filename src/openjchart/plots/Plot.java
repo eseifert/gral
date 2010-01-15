@@ -102,7 +102,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		super(new EdgeLayout(20.0, 20.0));
 
 		title = new Label("");
-		title.setSetting(Label.KEY_FONT, new Font("Arial", Font.BOLD, 18));
+		title.setSetting(Label.KEY_FONT, Font.decode(null).deriveFont(18f));
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
 
@@ -304,4 +304,5 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 			legendContainer.setInsets(margin);
 		}
 	}
+
 }

@@ -15,9 +15,9 @@ Version 0.8
 - Add new chart for drawing a pair of rows as line segments;
   Extension of scatter plot possible (Connect every nth pair)
 
-- Allow axes to be rescaled on Chart/window resizing
-  Example: Axis is scaled from -3 to +3 -> chart is resized -> 
-  new scale for Axis: -4 to +4
+- Allow axes to be rescaled on Chart/window resizing.
+  For example: Axis is scaled from -3 to +3 and chart is resized
+  -> new scale for Axis is set to -4 to +4 to keep aspect scale
 
 - Setting to keep aspect ratio when resizing a chart
   (take alignment into account)
@@ -26,8 +26,6 @@ Version 0.8
   (like "em" in HTML)
 
 - Add support for DiscreteLineRenderer2D to start steps in y-direction
-
-- Add export support to vector file formats (SVG, EPS)
 
 - Add more possibilities to style plot area (multiple gradients,
   background images, etc.)

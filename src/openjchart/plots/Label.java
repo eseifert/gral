@@ -66,7 +66,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 		setSettingDefault(KEY_ALIGNMENT_X, 0.5);
 		setSettingDefault(KEY_ALIGNMENT_Y, 0.5);
-		setSettingDefault(KEY_FONT, new Font("Arial", Font.PLAIN, 12));
+		setSettingDefault(KEY_FONT, Font.decode(null));
 		setSettingDefault(KEY_ROTATION, 0.0);
 	}
 

@@ -542,8 +542,7 @@ public class EPSGraphics2D extends Graphics2D {
 	public void setFont(Font font) {
 		if (!this.font.equals(font)) {
 			this.font = font;
-			writeln("/", font.getPSName(), " findfont");
-			writeln(font.getSize2D(), " scalefont");
+			writeln("/", font.getPSName(), " ", font.getSize2D(), " selectfont");
 		}
 	}
 
