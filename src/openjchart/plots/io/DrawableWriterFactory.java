@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -24,6 +25,36 @@ public class DrawableWriterFactory {
 		for (WriterCapabilities c : VectorWriter.CAPABILITIES) {
 			writers.put(c, VectorWriter.class);
 		}
+	}
+
+	/**
+	 * Returns an array of Strings containing all supported output formats.
+	 * @return Supported formats.
+	 */
+	public String[] getSupportedFormats() {
+		String[] formats = new String[writers.size()];
+		Iterator<WriterCapabilities> iter = writers.keySet().iterator();
+		for (int i = 0; iter.hasNext(); i++) {
+			WriterCapabilities c = iter.next();
+			formats[i] = c.getFormat();
+		}
+
+		return formats;
+	}
+
+	/**
+	 * Returns true if the specified format is supported.
+	 * @param format Output format.
+	 * @return True if supported.
+	 */
+	public boolean isFormatSupported(String format) {
+		for (WriterCapabilities c : writers.keySet()) {
+			if (c.getFormat().equals(format)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

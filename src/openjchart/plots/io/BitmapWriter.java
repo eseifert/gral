@@ -10,27 +10,24 @@ import javax.imageio.ImageIO;
 
 import openjchart.Drawable;
 
+/**
+ * Class that stores Drawables as bitmap graphics.
+ * Supported formats:
+ * <ul>
+ * <li>BMP</li>
+ * <li>GIF</li>
+ * <li>JPEG</li>
+ * <li>PNG</li>
+ * <li>WBMP</li>
+ * </ul>
+ */
 public class BitmapWriter extends AbstractDrawableWriter {
 	static {
-		WriterCapabilities PNG_CAPABILITIES = new WriterCapabilities(
-			FORMAT_PNG,
-			"Portable Network Grahpics",
-			"image/png",
-			"png"
-		);
-
 		WriterCapabilities BMP_CAPABILITIES = new WriterCapabilities(
 			FORMAT_BMP,
 			"Windows Bitmap",
 			"image/bmp",
 			"bmp", "dib"
-		);
-
-		WriterCapabilities WBMP_CAPABILITIES = new WriterCapabilities(
-			FORMAT_WBMP,
-			"Wireless Application Protocol Bitmap Format",
-			"image/vnd.wap.wbmp",
-			"wbmp"
 		);
 
 		WriterCapabilities GIF_CAPABILITIES = new WriterCapabilities(
@@ -47,12 +44,32 @@ public class BitmapWriter extends AbstractDrawableWriter {
 			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
 		);
 
+		WriterCapabilities PNG_CAPABILITIES = new WriterCapabilities(
+				FORMAT_PNG,
+				"Portable Network Grahpics",
+				"image/png",
+				"png"
+		);
+
+		WriterCapabilities WBMP_CAPABILITIES = new WriterCapabilities(
+				FORMAT_WBMP,
+				"Wireless Application Protocol Bitmap Format",
+				"image/vnd.wap.wbmp",
+				"wbmp"
+		);
+
 		CAPABILITIES = new WriterCapabilities[] {
-				PNG_CAPABILITIES, BMP_CAPABILITIES, WBMP_CAPABILITIES,
-				GIF_CAPABILITIES, JPG_CAPABILITIES
+				BMP_CAPABILITIES, GIF_CAPABILITIES, JPG_CAPABILITIES,
+				PNG_CAPABILITIES, WBMP_CAPABILITIES
 		};
 	}
 
+	/**
+	 * Creates a new BitmapWriter object with the specified destination and
+	 * format.
+	 * @param destination Output destination.
+	 * @param format Output format.
+	 */
 	protected BitmapWriter(OutputStream destination, String format) {
 		super(destination, format);
 		// TODO: Option to set transparency
@@ -80,15 +97,4 @@ public class BitmapWriter extends AbstractDrawableWriter {
 
 		d.setBounds(boundsOld);
 	}
-
-	public static boolean isVectorFormat(String format) {
-		if (FORMAT_EPS.equals(format)) {
-			return true;
-		}
-		if (FORMAT_SVG.equals(format)) {
-			return true;
-		}
-		return false;
-	}
-
 }

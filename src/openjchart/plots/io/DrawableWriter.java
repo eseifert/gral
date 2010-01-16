@@ -47,5 +47,14 @@ public interface DrawableWriter {
 	 */
 	public void write(Drawable d, double width, double height) throws IOException;
 
+	/**
+	 * Stores the specified <code>Drawable</code> instance.
+	 * @param d <code>Drawable</code> to be written.
+	 * @param x Horizontal position.
+	 * @param y Vertical position.
+	 * @param width Width of the image.
+	 * @param height Height of the image.
+	 * @throws IOException if writing to stream fails
+	 */
 	public void write(Drawable d, double x, double y, double width, double height) throws IOException;
 }
