@@ -29,6 +29,7 @@ import java.io.IOException;
 import openjchart.Drawable;
 import openjchart.DrawableContainer;
 import openjchart.plots.io.DrawableWriter;
+import openjchart.plots.io.DrawableWriterFactory;
 
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class DrawableWriterTest {
 	public void testCreate() {
 		for (String format : FORMATS) {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter dw = new DrawableWriter(dest, format);
+			DrawableWriter dw = DrawableWriterFactory.getInstance().getDrawableWriter(dest, format);
 			assertEquals(dest, dw.getDestination());
 			assertEquals(format, dw.getFormat());
 		}
@@ -58,7 +59,7 @@ public class DrawableWriterTest {
 		Drawable d = new DrawableContainer();
 		for (String format : FORMATS) {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter writer = new DrawableWriter(dest, format);
+			DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(dest, format);
 			try {
 				writer.write(d, 320, 240);
 			} catch (IOException e) {

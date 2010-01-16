@@ -11,6 +11,7 @@ import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
 import openjchart.plots.XYPlot;
 import openjchart.plots.io.DrawableWriter;
+import openjchart.plots.io.DrawableWriterFactory;
 import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.util.Insets2D;
@@ -52,7 +53,7 @@ public class DrawableWriterTest {
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				DrawableWriter writer = new DrawableWriter(new FileOutputStream(file), DrawableWriter.FORMAT_EPS);
+				DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(new FileOutputStream(file), DrawableWriter.FORMAT_EPS);
 				writer.write(plot, 800, 600);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
