@@ -30,9 +30,6 @@ import openjchart.data.filters.Kernel;
  */
 public abstract class KernelUtils {
 
-	private KernelUtils() {
-	}
-
 	/**
 	 * Returns a Kernel of specified variance with binomial coefficients.
 	 * @param variance Variance.

@@ -42,9 +42,6 @@ public abstract class GeometryUtils {
 	/** Precision squared */
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
 
-	private GeometryUtils() {
-	}
-
 	/**
 	 * Returns the line fragments of the specified Shape.
 	 * @param path Shape to be divided.

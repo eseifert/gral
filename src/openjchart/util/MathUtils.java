@@ -30,9 +30,6 @@ import java.util.Random;
 public abstract class MathUtils {
 	private static final Random random = new Random();
 
-	private MathUtils() {
-	}
-
 	/**
 	 * Check whether two floating point values match with a given precision.
 	 * @param a First value

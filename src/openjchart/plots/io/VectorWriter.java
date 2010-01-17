@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import openjchart.Drawable;
-import openjchart.util.EPSGraphics2D;
-import openjchart.util.SVGGraphics2D;
+import vectorgraphics2d.EPSGraphics2D;
+import vectorgraphics2d.SVGGraphics2D;
 
 /**
  * Class that stores Drawables as vector graphics.
