@@ -24,44 +24,44 @@ import openjchart.Drawable;
 public class BitmapWriter extends AbstractDrawableWriter {
 	static {
 		WriterCapabilities BMP_CAPABILITIES = new WriterCapabilities(
-			FORMAT_BMP,
+			"BMP",
 			"Windows Bitmap",
-			"image/bmp",
+			TYPE_BMP,
 			"bmp", "dib"
 		);
+		addCapabilities(BMP_CAPABILITIES);
 
 		WriterCapabilities GIF_CAPABILITIES = new WriterCapabilities(
-			FORMAT_GIF,
+			"GIF",
 			"Graphics Interchange Format",
-			"image/gif",
+			TYPE_GIF,
 			"gif"
 		);
+		addCapabilities(GIF_CAPABILITIES);
 
 		WriterCapabilities JPG_CAPABILITIES = new WriterCapabilities(
-			FORMAT_JPG,
+			"JPG",
 			"JPEG",
-			"image/jpeg",
+			TYPE_JPEG,
 			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
 		);
+		addCapabilities(JPG_CAPABILITIES);
 
 		WriterCapabilities PNG_CAPABILITIES = new WriterCapabilities(
-				FORMAT_PNG,
-				"Portable Network Grahpics",
-				"image/png",
-				"png"
+			"PNG",
+			"Portable Network Grahpics",
+			TYPE_PNG,
+			"png"
 		);
+		addCapabilities(PNG_CAPABILITIES);
 
 		WriterCapabilities WBMP_CAPABILITIES = new WriterCapabilities(
-				FORMAT_WBMP,
-				"Wireless Application Protocol Bitmap Format",
-				"image/vnd.wap.wbmp",
-				"wbmp"
+			"WBMP",
+			"Wireless Application Protocol Bitmap Format",
+			TYPE_WBMP,
+			"wbmp"
 		);
-
-		CAPABILITIES = new WriterCapabilities[] {
-				BMP_CAPABILITIES, GIF_CAPABILITIES, JPG_CAPABILITIES,
-				PNG_CAPABILITIES, WBMP_CAPABILITIES
-		};
+		addCapabilities(WBMP_CAPABILITIES);
 	}
 
 	/**
@@ -87,13 +87,13 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		d.setBounds(x, y, width, height);
 
 		int rasterFormat = BufferedImage.TYPE_INT_ARGB;
-		if (FORMAT_GIF.equals(getFormat())) {
+		if (TYPE_GIF.equals(getMimeType())) {
 			rasterFormat = BufferedImage.TYPE_INT_RGB;
 		}
 		BufferedImage image = new BufferedImage(
 				(int)Math.round(width), (int)Math.round(height), rasterFormat);
 		d.draw((Graphics2D) image.getGraphics());
-		ImageIO.write(image, getFormat(), getDestination());
+		ImageIO.write(image, getMimeType(), getDestination());
 
 		d.setBounds(boundsOld);
 	}

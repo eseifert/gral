@@ -20,22 +20,20 @@ import vectorgraphics2d.SVGGraphics2D;
 public class VectorWriter extends AbstractDrawableWriter {
 	static {
 		WriterCapabilities EPS_CAPABILITIES = new WriterCapabilities(
-				FORMAT_EPS,
-				"Encapsulated PostScript",
-				"application/postscript",
-				"eps", "epsf", "epsi"
+			"EPS",
+			"Encapsulated PostScript",
+			TYPE_EPS,
+			"eps", "epsf", "epsi"
 		);
+		addCapabilities(EPS_CAPABILITIES);
 
 		WriterCapabilities SVG_CAPABILITIES = new WriterCapabilities(
-			FORMAT_SVG,
+			"SVG",
 			"Scalable Vector Graphics",
-			"image/svg+xml",
+			TYPE_SVG,
 			"svg", "svgz"
 		);
-
-		CAPABILITIES = new WriterCapabilities[] {
-				EPS_CAPABILITIES, SVG_CAPABILITIES
-		};
+		addCapabilities(SVG_CAPABILITIES);
 	}
 
 	/**
@@ -59,9 +57,9 @@ public class VectorWriter extends AbstractDrawableWriter {
 		d.setBounds(x, y, width, height);
 
 		Graphics2D g2d = null;
-		if (FORMAT_EPS.equals(getFormat())) {
+		if (TYPE_EPS.equals(getMimeType())) {
 			g2d = new EPSGraphics2D(x, y, width, height);
-		} else if (FORMAT_SVG.equals(getFormat())) {
+		} else if (TYPE_SVG.equals(getMimeType())) {
 			g2d = new SVGGraphics2D(x, y, width, height);
 		}
 		d.draw(g2d);

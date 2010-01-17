@@ -11,20 +11,20 @@ import openjchart.Drawable;
  * can be saved into a bitmap file.
  */
 public interface DrawableWriter {
-	/** Use the BMP bitmap format for saving. */
-	public static final String FORMAT_BMP = "BMP";
-	/** Use the GIF bitmap format for saving. */
-	public static final String FORMAT_GIF = "GIF";
-	/** Use the PNG bitmap format for saving. */
-	public static final String FORMAT_PNG = "PNG";
-	/** Use the JFIF/JPEG bitmap format for saving. */
-	public static final String FORMAT_JPG = "JPG";
-	/** Use the WBMP bitmap format for saving. */
-	public static final String FORMAT_WBMP = "WBMP";
 	/** Use the EPS vector format for saving. */
-	public static final String FORMAT_EPS = "EPS";
+	public static final String TYPE_EPS = "application/postscript";
+	/** Use the BMP bitmap format for saving. */
+	public static final String TYPE_BMP = "image/bmp";
+	/** Use the GIF bitmap format for saving. */
+	public static final String TYPE_GIF = "image/gif";
+	/** Use the JFIF/JPEG bitmap format for saving. */
+	public static final String TYPE_JPEG = "image/jpeg";
+	/** Use the PNG bitmap format for saving. */
+	public static final String TYPE_PNG = "image/png";
 	/** Use the SVG vector format for saving. */
-	public static final String FORMAT_SVG = "SVG";
+	public static final String TYPE_SVG = "image/svg+xml";
+	/** Use the WBMP bitmap format for saving. */
+	public static final String TYPE_WBMP = "image/vnd.wap.wbmp";
 
 	/**
 	 * Returns the output stream this class is writing to.
@@ -36,7 +36,7 @@ public interface DrawableWriter {
 	 * Returns the output format of this writer.
 	 * @return String representing the MIME-Type.
 	 */
-	public String getFormat();
+	public String getMimeType();
 
 	/**
 	 * Stores the specified <code>Drawable</code> instance.

@@ -35,13 +35,13 @@ import org.junit.Test;
 
 public class DrawableWriterTest {
 	private static final String[] FORMATS = new String[] {
-		DrawableWriter.FORMAT_BMP,
-		DrawableWriter.FORMAT_GIF,
-		DrawableWriter.FORMAT_JPG,
-		DrawableWriter.FORMAT_PNG,
-		DrawableWriter.FORMAT_WBMP,
-		DrawableWriter.FORMAT_EPS,
-		DrawableWriter.FORMAT_SVG
+		DrawableWriter.TYPE_BMP,
+		DrawableWriter.TYPE_GIF,
+		DrawableWriter.TYPE_JPEG,
+		DrawableWriter.TYPE_PNG,
+		DrawableWriter.TYPE_WBMP,
+		DrawableWriter.TYPE_EPS,
+		DrawableWriter.TYPE_SVG
 	};
 
 	@Test
@@ -50,7 +50,7 @@ public class DrawableWriterTest {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
 			DrawableWriter dw = DrawableWriterFactory.getInstance().getDrawableWriter(dest, format);
 			assertEquals(dest, dw.getDestination());
-			assertEquals(format, dw.getFormat());
+			assertEquals(format, dw.getMimeType());
 		}
 	}
 
