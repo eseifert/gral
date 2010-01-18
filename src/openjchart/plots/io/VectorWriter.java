@@ -81,6 +81,8 @@ public class VectorWriter extends AbstractDrawableWriter {
 			g2d = new EPSGraphics2D(x, y, width, height);
 		} else if (TYPE_SVG.equals(getMimeType())) {
 			g2d = new SVGGraphics2D(x, y, width, height);
+		} else {
+			throw new IllegalArgumentException("Unsupported format: " +getMimeType());
 		}
 		d.draw(g2d);
 		getDestination().write(g2d.toString().getBytes());

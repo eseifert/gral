@@ -20,6 +20,7 @@
 
 package openjchart.plots.io;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,35 +45,56 @@ public class DrawableWriterFactory {
 
 	private DrawableWriterFactory() {
 		// Retrieve property-files
-		Enumeration<URL> propFiles;
+		Enumeration<URL> propFiles = null;
 		try {
 			propFiles = ClassLoader.getSystemResources("drawablewriters.properties");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (propFiles != null) {
 			Properties props = new Properties();
 			while (propFiles.hasMoreElements()) {
 				URL propURL = propFiles.nextElement();
-				props.load(new FileReader(propURL.getFile()));
+				FileReader fr = null;
+				try {
+					fr = new FileReader(propURL.getFile());
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					continue;
+				}
+				try {
+					props.load(fr);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					continue;
+				} finally {
+					try {
+						fr.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				// Parse property files and register entries as writers
 				for (Map.Entry<Object, Object> prop : props.entrySet()) {
 					String mimeType = (String) prop.getKey();
 					String className = (String) prop.getValue();
-					Class<?> clazz = Class.forName(className);
+					Class<?> clazz = null;
+					try {
+						clazz = Class.forName(className);
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						continue;
+					}
 					if (DrawableWriter.class.isAssignableFrom(clazz)) {
 						writers.put(mimeType, (Class<? extends DrawableWriter>) clazz);
 					}
 				}
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
@@ -111,7 +133,8 @@ public class DrawableWriterFactory {
 	 * @return Supported formats.
 	 */
 	public String[] getSupportedFormats() {
-		String[] formats = (String[]) writers.keySet().toArray();
+		String[] formats = new String[writers.size()];
+		writers.keySet().toArray(formats);
 		return formats;
 	}
 
