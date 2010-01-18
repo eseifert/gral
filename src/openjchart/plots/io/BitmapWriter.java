@@ -72,7 +72,7 @@ public class BitmapWriter extends AbstractDrawableWriter {
 
 		WriterCapabilities PNG_CAPABILITIES = new WriterCapabilities(
 			"PNG",
-			"Portable Network Grahpics",
+			"Portable Network Graphics",
 			TYPE_PNG,
 			"png"
 		);

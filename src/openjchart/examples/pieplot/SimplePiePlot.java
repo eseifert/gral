@@ -25,7 +25,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import openjchart.DrawablePanel;
+import openjchart.InteractivePanel;
 import openjchart.data.DataTable;
 import openjchart.plots.PiePlot;
 import openjchart.util.Insets2D;
@@ -62,7 +62,7 @@ public class SimplePiePlot extends JFrame {
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.KEY_COLORS, colors);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
+		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);

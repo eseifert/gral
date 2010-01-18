@@ -26,7 +26,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import openjchart.DrawablePanel;
+import openjchart.InteractivePanel;
 import openjchart.Legend;
 import openjchart.DrawableConstants.Location;
 import openjchart.DrawableConstants.Orientation;
@@ -111,7 +111,7 @@ public class ConvolutionExample extends JFrame {
 		plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
+		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(getContentPane().getMinimumSize());

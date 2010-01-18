@@ -26,7 +26,7 @@ import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 
-import openjchart.DrawablePanel;
+import openjchart.InteractivePanel;
 import openjchart.data.DataTable;
 import openjchart.plots.BarPlot;
 import openjchart.plots.axes.Axis;
@@ -55,7 +55,7 @@ public class SimpleBarPlot extends JFrame {
 				new LinearGradientPaint(0f,0f, 0f,1f,
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
-		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
+		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);

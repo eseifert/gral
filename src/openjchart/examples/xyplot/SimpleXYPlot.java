@@ -30,7 +30,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import openjchart.DrawablePanel;
+import openjchart.InteractivePanel;
 import openjchart.PlotArea2D;
 import openjchart.DrawableConstants.Orientation;
 import openjchart.data.DataSeries;
@@ -119,7 +119,7 @@ public class SimpleXYPlot extends JFrame {
 		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new DrawablePanel(plot), BorderLayout.CENTER);
+		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
