@@ -63,8 +63,8 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		addCapabilities(GIF_CAPABILITIES);
 
 		WriterCapabilities JPG_CAPABILITIES = new WriterCapabilities(
-			"JPG",
-			"JPEG",
+			"JFIF",
+			"JPEG File Interchange Format",
 			TYPE_JPEG,
 			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
 		);

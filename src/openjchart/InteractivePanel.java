@@ -61,7 +61,7 @@ public class InteractivePanel extends DrawablePanel {
 		String[] exportFormats = DrawableWriterFactory.getInstance().getSupportedFormats();
 		for (final String format : exportFormats) {
 			WriterCapabilities capabilities = DrawableWriterFactory.getInstance().getCapabilities(format);
-			String exporterLabel = String.format("%s (%s)...", capabilities.getName(), capabilities.getFormat());
+			String exporterLabel = String.format("%s: %s...", capabilities.getFormat(), capabilities.getName());
 			Action a = new AbstractAction(exporterLabel) {
 				@Override
 				public void actionPerformed(ActionEvent e) {
