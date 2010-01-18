@@ -90,7 +90,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		setSettingDefault(KEY_TICK_LABEL_CUSTOM, null);
 
 		setSettingDefault(KEY_LABEL, null);
-		setSettingDefault(KEY_LABEL_DISTANCE, 10.0);
+		setSettingDefault(KEY_LABEL_DISTANCE, 1.0);
 		setSettingDefault(KEY_LABEL_ROTATION, 0.0);
 	}
 
@@ -162,7 +162,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					Label axisLabel = new Label(labelText);
 					// FIXME: use tick label height instead of constant value
 					double fontHeight = 10.0;
-					double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_DISTANCE);
+					double labelDistance = fontHeight * AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_DISTANCE);
 					double labelDist = tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
 					double labelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_LABEL_ROTATION);
 					double axisLabelPos = (axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
