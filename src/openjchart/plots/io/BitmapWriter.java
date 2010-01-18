@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import openjchart.Drawable;
 
@@ -108,20 +109,27 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		Rectangle2D boundsOld = d.getBounds();
 		d.setBounds(x, y, width, height);
 
-		int rasterFormat = BufferedImage.TYPE_INT_ARGB;
-		if (TYPE_GIF.equals(getMimeType())) {
-			rasterFormat = BufferedImage.TYPE_INT_RGB;
+		int rasterFormat = BufferedImage.TYPE_INT_RGB;
+		if (TYPE_PNG.equals(getMimeType())) {
+			rasterFormat = BufferedImage.TYPE_INT_ARGB;
+		} else if (TYPE_WBMP.equals(getMimeType())) {
+			rasterFormat = BufferedImage.TYPE_BYTE_BINARY;
 		}
 		BufferedImage image = new BufferedImage(
-				(int)Math.round(width), (int)Math.round(height), rasterFormat);
+				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 		d.draw((Graphics2D) image.getGraphics());
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
 		while (writers.hasNext()) {
 			ImageWriter writer = writers.next();
-			writer.setOutput(ImageIO.createImageOutputStream(getDestination()));
-			writer.write(image);
+			ImageOutputStream ios = ImageIO.createImageOutputStream(getDestination());
+			writer.setOutput(ios);
+			try {
+				writer.write(image);
+			} finally {
+				ios.close();
+			}
+			return;
 		}
-
 		d.setBounds(boundsOld);
 	}
 }
