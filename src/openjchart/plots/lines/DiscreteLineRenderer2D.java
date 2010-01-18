@@ -46,7 +46,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public DiscreteLineRenderer2D() {
 		setSettingDefault(KEY_ASCENT_DIRECTION, Orientation.HORIZONTAL);
-		setSettingDefault(KEY_ASCENDING_POINT, 1.0);
+		setSettingDefault(KEY_ASCENDING_POINT, 0.5);
 	}
 
 	@Override

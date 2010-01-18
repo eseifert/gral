@@ -25,8 +25,10 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 
 import openjchart.Drawable;
 
@@ -113,7 +115,12 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		BufferedImage image = new BufferedImage(
 				(int)Math.round(width), (int)Math.round(height), rasterFormat);
 		d.draw((Graphics2D) image.getGraphics());
-		ImageIO.write(image, getMimeType(), getDestination());
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
+		while (writers.hasNext()) {
+			ImageWriter writer = writers.next();
+			writer.setOutput(ImageIO.createImageOutputStream(getDestination()));
+			writer.write(image);
+		}
 
 		d.setBounds(boundsOld);
 	}
