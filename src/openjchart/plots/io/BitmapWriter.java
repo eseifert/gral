@@ -88,27 +88,22 @@ public class BitmapWriter extends AbstractDrawableWriter {
 	}
 
 	/**
-	 * Creates a new BitmapWriter object with the specified destination and
-	 * format.
-	 * @param destination Output destination.
+	 * Creates a new <code>BitmapWriter</code> object with the specified format.
 	 * @param format Output format.
 	 */
-	protected BitmapWriter(OutputStream destination, String format) {
-		super(destination, format);
+	protected BitmapWriter(String format) {
+		super(format);
 		// TODO: Option to set transparency
 		// TODO: Possibility to choose a background color
 	}
 
 	@Override
-	public void write(Drawable d, double width, double height) throws IOException {
-		write(d, 0.0, 0.0, width, height);
+	public void write(Drawable d, OutputStream destination, double width, double height) throws IOException {
+		write(d, destination, 0.0, 0.0, width, height);
 	}
 
 	@Override
-	public void write(Drawable d, double x, double y, double width, double height) throws IOException {
-		Rectangle2D boundsOld = d.getBounds();
-		d.setBounds(x, y, width, height);
-
+	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException {
 		int rasterFormat = BufferedImage.TYPE_INT_RGB;
 		if (TYPE_PNG.equals(getMimeType())) {
 			rasterFormat = BufferedImage.TYPE_INT_ARGB;
@@ -121,15 +116,17 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
 		while (writers.hasNext()) {
 			ImageWriter writer = writers.next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(getDestination());
+			ImageOutputStream ios = ImageIO.createImageOutputStream(destination);
 			writer.setOutput(ios);
+			Rectangle2D boundsOld = d.getBounds();
+			d.setBounds(x, y, width, height);
 			try {
 				writer.write(image);
 			} finally {
+				d.setBounds(boundsOld);
 				ios.close();
 			}
 			return;
 		}
-		d.setBounds(boundsOld);
 	}
 }

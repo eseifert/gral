@@ -22,7 +22,6 @@ package openjchart.plots.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -158,13 +157,13 @@ public class DrawableWriterFactory {
 	 * @param format Output format.
 	 * @return DrawableWriter.
 	 */
-	public DrawableWriter getDrawableWriter(OutputStream destination, String mimeType) {
+	public DrawableWriter getDrawableWriter(String mimeType) {
 		DrawableWriter writer = null;
 		Class<? extends DrawableWriter> clazz = writers.get(mimeType);
-		WriterCapabilities capabilities = getCapabilities(mimeType);
+		//WriterCapabilities capabilities = getCapabilities(mimeType);
 		try {
-			Constructor<? extends DrawableWriter> constructor = clazz.getDeclaredConstructor(OutputStream.class, String.class);
-			writer = constructor.newInstance(destination, mimeType);
+			Constructor<? extends DrawableWriter> constructor = clazz.getDeclaredConstructor(String.class);
+			writer = constructor.newInstance(mimeType);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -47,12 +47,6 @@ public interface DrawableWriter {
 	public static final String TYPE_WBMP = "image/vnd.wap.wbmp";
 
 	/**
-	 * Returns the output stream this class is writing to.
-	 * @return OutputStream instance that this class is writing to
-	 */
-	public OutputStream getDestination();
-
-	/**
 	 * Returns the output format of this writer.
 	 * @return String representing the MIME-Type.
 	 */
@@ -61,20 +55,22 @@ public interface DrawableWriter {
 	/**
 	 * Stores the specified <code>Drawable</code> instance.
 	 * @param d <code>Drawable</code> to be written.
+	 * @param destination Stream to write to
 	 * @param width Width of the image.
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, double width, double height) throws IOException;
+	public void write(Drawable d, OutputStream destination, double width, double height) throws IOException;
 
 	/**
 	 * Stores the specified <code>Drawable</code> instance.
 	 * @param d <code>Drawable</code> to be written.
+	 * @param destination Stream to write to
 	 * @param x Horizontal position.
 	 * @param y Vertical position.
 	 * @param width Width of the image.
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, double x, double y, double width, double height) throws IOException;
+	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException;
 }

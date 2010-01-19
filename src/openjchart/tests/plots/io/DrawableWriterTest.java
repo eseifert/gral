@@ -47,9 +47,7 @@ public class DrawableWriterTest {
 	@Test
 	public void testCreate() {
 		for (String format : FORMATS) {
-			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter dw = DrawableWriterFactory.getInstance().getDrawableWriter(dest, format);
-			assertEquals(dest, dw.getDestination());
+			DrawableWriter dw = DrawableWriterFactory.getInstance().getDrawableWriter(format);
 			assertEquals(format, dw.getMimeType());
 		}
 	}
@@ -59,9 +57,9 @@ public class DrawableWriterTest {
 		Drawable d = new DrawableContainer();
 		for (String format : FORMATS) {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(dest, format);
+			DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(format);
 			try {
-				writer.write(d, 320, 240);
+				writer.write(d, dest, 320, 240);
 			} catch (IOException e) {
 				fail("Error writing Drawable to " + format + "image: " + e.getMessage());
 			}

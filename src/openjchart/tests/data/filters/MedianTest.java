@@ -29,7 +29,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MedianTest {
-	private static final double DELTA = 1e-15;
 	private static DataTable table;
 
 	@BeforeClass

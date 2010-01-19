@@ -73,8 +73,8 @@ public class DrawableWriterTest {
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(new FileOutputStream(file), DrawableWriter.TYPE_EPS);
-				writer.write(plot, 800, 600);
+				DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(DrawableWriter.TYPE_EPS);
+				writer.write(plot, new FileOutputStream(file), 800, 600);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

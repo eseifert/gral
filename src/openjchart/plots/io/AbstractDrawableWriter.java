@@ -20,7 +20,6 @@
 
 package openjchart.plots.io;
 
-import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,23 +31,15 @@ import java.util.Set;
 public abstract class AbstractDrawableWriter implements DrawableWriter {
 	private static final Set<WriterCapabilities> capabilities = new HashSet<WriterCapabilities>();
 
-	private final OutputStream destination;
 	private final String mimeType;
 
 	/**
 	 * Creates a new AbstractDrawableWriter object with the specified
 	 * destination and format.
-	 * @param destination Output destination.
 	 * @param mimeType MIME-Type.
 	 */
-	protected AbstractDrawableWriter(OutputStream destination, String mimeType) {
-		this.destination = destination;
+	protected AbstractDrawableWriter(String mimeType) {
 		this.mimeType = mimeType;
-	}
-
-	@Override
-	public OutputStream getDestination() {
-		return destination;
 	}
 
 	@Override

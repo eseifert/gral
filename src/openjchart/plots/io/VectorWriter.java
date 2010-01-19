@@ -57,22 +57,20 @@ public class VectorWriter extends AbstractDrawableWriter {
 	}
 
 	/**
-	 * Creates a new VectorWriter object with the specified destination and
-	 * format.
-	 * @param destination Output destination.
+	 * Creates a new <code>VectorWriter</code> object with the specified format.
 	 * @param format Output format.
 	 */
-	protected VectorWriter(OutputStream destination, String format) {
-		super(destination, format);
+	protected VectorWriter(String format) {
+		super(format);
 	}
 
 	@Override
-	public void write(Drawable d, double width, double height) throws IOException {
-		write(d, 0.0, 0.0, width, height);
+	public void write(Drawable d, OutputStream destination, double width, double height) throws IOException {
+		write(d, destination, 0.0, 0.0, width, height);
 	}
 
 	@Override
-	public void write(Drawable d, double x, double y, double width,	double height) throws IOException {
+	public void write(Drawable d, OutputStream destination, double x, double y, double width,	double height) throws IOException {
 		Rectangle2D boundsOld = d.getBounds();
 		d.setBounds(x, y, width, height);
 
@@ -85,7 +83,7 @@ public class VectorWriter extends AbstractDrawableWriter {
 			throw new IllegalArgumentException("Unsupported format: " +getMimeType());
 		}
 		d.draw(g2d);
-		getDestination().write(g2d.toString().getBytes());
+		destination.write(g2d.toString().getBytes());
 
 		d.setBounds(boundsOld);
 	}
