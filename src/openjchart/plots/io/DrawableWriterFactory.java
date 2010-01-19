@@ -20,9 +20,8 @@
 
 package openjchart.plots.io;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -47,7 +46,7 @@ public class DrawableWriterFactory {
 		// Retrieve property-files
 		Enumeration<URL> propFiles = null;
 		try {
-			propFiles = ClassLoader.getSystemResources("drawablewriters.properties");
+			propFiles = getClass().getClassLoader().getResources("drawablewriters.properties");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,26 +55,22 @@ public class DrawableWriterFactory {
 			Properties props = new Properties();
 			while (propFiles.hasMoreElements()) {
 				URL propURL = propFiles.nextElement();
-				FileReader fr = null;
+				InputStream stream = null;
 				try {
-					fr = new FileReader(propURL.getFile());
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				}
-				try {
-					props.load(fr);
+					stream = propURL.openStream();
+					props.load(stream);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					continue;
 				} finally {
-					try {
-						fr.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if (stream != null) {
+						try {
+							stream.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				// Parse property files and register entries as writers
