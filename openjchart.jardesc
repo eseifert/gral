@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="messanlage/lib/openjchart.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/openjchart/openjchart.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.data"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.data.comparators"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.data.filters"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.data.io"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.data.statistics"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots.axes"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots.colors"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots.io"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots.lines"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.plots.shapes"/>
+        <javaElement handleIdentifier="=openjchart/src&lt;openjchart.util"/>
+        <javaElement handleIdentifier="=openjchart/resources"/>
+        <file path="/openjchart/COPYING.LESSER"/>
+    </selectedElements>
+</jardesc>

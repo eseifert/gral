@@ -123,39 +123,43 @@ public class XYPlot extends Plot implements DataListener  {
 			// Draw gridX
 			if (isGridX) {
 				AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
-				Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
-				Rectangle2D shapeBoundsX = shapeX.getBounds2D();
-				List<DataPoint2D> ticksX = axisXRenderer.getTicks(axisX);
-				Line2D gridLineVert = new Line2D.Double(
-					-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
-					-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
-				);
-				for (DataPoint2D tick : ticksX) {
-					Point2D tickPoint = tick.getPosition();
-					if (tickPoint == null) {
-						continue;
+				if (axisXRenderer != null) {
+					Shape shapeX = axisXRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
+					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
+					List<DataPoint2D> ticksX = axisXRenderer.getTicks(axisX);
+					Line2D gridLineVert = new Line2D.Double(
+						-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
+						-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
+					);
+					for (DataPoint2D tick : ticksX) {
+						Point2D tickPoint = tick.getPosition();
+						if (tickPoint == null) {
+							continue;
+						}
+						g2d.translate(tickPoint.getX(), tickPoint.getY());
+						GraphicsUtils.drawPaintedShape(g2d, gridLineVert, paint, null, null);
+						g2d.setTransform(txOffset);
 					}
-					g2d.translate(tickPoint.getX(), tickPoint.getY());
-					GraphicsUtils.drawPaintedShape(g2d, gridLineVert, paint, null, null);
-					g2d.setTransform(txOffset);
 				}
 			}
 
 			// Draw gridY
 			if (isGridY) {
 				AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
-				Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
-				Rectangle2D shapeBoundsY = shapeY.getBounds2D();
-				List<DataPoint2D> ticksY = axisYRenderer.getTicks(axisY);
-				Line2D gridLineHoriz = new Line2D.Double(
-					-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
-					bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
-				);
-				for (DataPoint2D tick : ticksY) {
-					Point2D tickPoint = tick.getPosition();
-					g2d.translate(tickPoint.getX(), tickPoint.getY());
-					GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
-					g2d.setTransform(txOffset);
+				if (axisYRenderer != null) {
+					Shape shapeY = axisYRenderer.getSetting(AxisRenderer2D.KEY_SHAPE);
+					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
+					List<DataPoint2D> ticksY = axisYRenderer.getTicks(axisY);
+					Line2D gridLineHoriz = new Line2D.Double(
+						-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
+						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
+					);
+					for (DataPoint2D tick : ticksY) {
+						Point2D tickPoint = tick.getPosition();
+						g2d.translate(tickPoint.getX(), tickPoint.getY());
+						GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
+						g2d.setTransform(txOffset);
+					}
 				}
 			}
 

@@ -59,6 +59,8 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	public static final String KEY_ORIENTATION = "legend.orientation";
 	/** Key for specifying the gap between items. */
 	public static final String KEY_GAP = "legend.gap";
+	/** Key for specifying the gap between items. */
+	public static final String KEY_SYMBOL_SIZE = "legend.symbol.size";
 
 	private final Settings settings;
 
@@ -89,8 +91,10 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 
 				@Override
 				public Dimension2D getPreferredSize() {
+					final double fontSize = 10.0;  // TODO: Use real font size
+					Dimension2D symbolSize = Legend.this.getSetting(KEY_SYMBOL_SIZE);
 					Dimension2D size = super.getPreferredSize();
-					size.setSize(20.0, 20.0);
+					size.setSize(symbolSize.getWidth()*fontSize, symbolSize.getHeight()*fontSize);
 					return size;
 				}
 			};
@@ -129,6 +133,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
 		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(KEY_GAP, new openjchart.util.Dimension2D.Double(20.0, 5.0));
+		setSettingDefault(KEY_SYMBOL_SIZE, new openjchart.util.Dimension2D.Double(2.0, 2.0));
 	}
 
 	@Override

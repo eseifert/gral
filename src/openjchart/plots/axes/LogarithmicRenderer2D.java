@@ -41,6 +41,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
+		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 		double val = value.doubleValue();
@@ -52,15 +53,14 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				return getShapeLength();
 			}
 		}
-		double axisMin = axis.getMin().doubleValue();
-		double axisMax = axis.getMax().doubleValue();
-		double axisMinLog = (axisMin > 0.0) ? Math.log10(axisMin) : 0.0;
-		double axisMaxLog = (axisMax > 0.0) ? Math.log10(axisMax) : 1.0;
-		return (Math.log10(value.doubleValue()) - axisMinLog)*getShapeLength() / (axisMaxLog - axisMinLog);
+		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
+		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
+		return (Math.log10(value.doubleValue()) - minLog)*getShapeLength() / (maxLog - minLog);
 	}
 
 	@Override
 	public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
+		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 		if (!extrapolate) {
@@ -71,15 +71,14 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				return max;
 			}
 		}
-		double axisMin = axis.getMin().doubleValue();
-		double axisMax = axis.getMax().doubleValue();
-		double axisMinLog = (axisMin > 0.0) ? Math.log10(axisMin) : 0.0;
-		double axisMaxLog = (axisMax > 0.0) ? Math.log10(axisMax) : 1.0;
-		return Math.pow(10.0, value*(axisMaxLog - axisMinLog)/getShapeLength() + axisMinLog);
+		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
+		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
+		return Math.pow(10.0, value*(maxLog - minLog)/getShapeLength() + minLog);
 	}
 
 	@Override
 	public List<DataPoint2D> getTicks(Axis axis) {
+		checkAxisBounds(axis);
 		double tickSpacing = getSetting(KEY_TICK_SPACING);
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -93,7 +92,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		ticks.addAll(getCustomTicks(axis));
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
-		// Add stadard ticks
+		// Add standard ticks
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
 			double step = power*tickSpacing;
 			double powerNext = power*BASE;
@@ -116,4 +115,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 		return ticks;
 	}
+
+	private static void checkAxisBounds(Axis axis) {
+		if (axis.getMin().doubleValue() <= 0.0 || axis.getMax().doubleValue() <= 0.0) {
+			throw new IllegalStateException("All axis bounds must be greater than zero for a logarithmic axis renderer.");
+		}
+	}
+
 }

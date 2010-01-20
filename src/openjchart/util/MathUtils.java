@@ -104,6 +104,9 @@ public abstract class MathUtils {
 	 * @return Index of the array element whose value is less than or equal to <code>key</code>
 	 */
 	public static int binarySearchFloor(double[] a, double key) {
+		if (a.length == 0) {
+			return -1;
+		}
 		int i = binarySearch(a, key);
 		if (i >= 0 && a[i] > key) {
 			i--;
@@ -120,6 +123,9 @@ public abstract class MathUtils {
 	 * @return Index of the array element whose value is greater than or equal to <code>key</code>
 	 */
 	public static int binarySearchCeil(double[] a, double key) {
+		if (a.length == 0) {
+			return -1;
+		}
 		int i = binarySearch(a, key);
 		if (i >= 0 && a[i] < key) {
 			i++;

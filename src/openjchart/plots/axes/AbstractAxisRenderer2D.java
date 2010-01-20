@@ -137,7 +137,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					Point2D tickNormal = tick.getNormal();
 
 					// Draw tick
-					if (tickPoint == null) {
+					if (tickPoint == null || tickNormal == null) {
 						continue;
 					}
 					tickShape.setLine(
@@ -324,8 +324,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, valueView);
-		if (segmentIndex < 0) {
-			throw new IndexOutOfBoundsException("Could not find shape segment for value "+value+".");
+		if (segmentIndex < 0 || segmentIndex >= shapeLines.length) {
+			return null;
 		}
 
 		segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
