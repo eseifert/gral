@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -59,10 +60,10 @@ import openjchart.plots.io.WriterCapabilities;
  */
 public class InteractivePanel extends DrawablePanel {
 	private static final long serialVersionUID = 1L;
-	
-	private JPopupMenu menu;
-	private JMenuItem export;
-	private JFileChooser exportChooser;
+
+	private final JPopupMenu menu;
+	private final JMenuItem export;
+	private final JFileChooser exportChooser;
 
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
@@ -83,9 +84,7 @@ public class InteractivePanel extends DrawablePanel {
 					if (ed.getUserAction().equals(ExportDialog.UserAction.APPROVE)) {
 						File file = exportChooser.getSelectedFile();
 						DrawableWriterFilter filter = (DrawableWriterFilter) exportChooser.getFileFilter();
-						export(d, filter.getWriterCapabilities().getMimeType(), file,
-								ed.getDocumentX(), ed.getDocumentY(),
-								ed.getDocumentWidth(), ed.getDocumentHeight());
+						export(d, filter.getWriterCapabilities().getMimeType(), file, ed.getDocumentBounds());
 					}
 				}
 			}
@@ -95,8 +94,7 @@ public class InteractivePanel extends DrawablePanel {
 		addMouseListener(new PopupListener());
 	}
 
-	private void export(Drawable d, String mimeType, File f,
-			double x, double y, double width, double height) {
+	private void export(Drawable d, String mimeType, File f, Rectangle2D documentBounds) {
 		FileOutputStream destination;
 		try {
 			destination = new FileOutputStream(f);
@@ -107,7 +105,8 @@ public class InteractivePanel extends DrawablePanel {
 		}
 		DrawableWriter w = DrawableWriterFactory.getInstance().getDrawableWriter(mimeType);
 		try {
-			w.write(d, destination, x, y, width, height);
+			w.write(d, destination, documentBounds.getX(), documentBounds.getY(),
+					documentBounds.getWidth(), documentBounds.getHeight());
 		} catch (IOException ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
@@ -120,13 +119,15 @@ public class InteractivePanel extends DrawablePanel {
 			}
 		}
 	}
-	
+
 	private class PopupListener extends MouseAdapter {
-	    public void mousePressed(MouseEvent e) {
+	    @Override
+		public void mousePressed(MouseEvent e) {
 	        showPopup(e);
 	    }
 
-	    public void mouseReleased(MouseEvent e) {
+	    @Override
+		public void mouseReleased(MouseEvent e) {
 	        showPopup(e);
 	    }
 
@@ -138,7 +139,7 @@ public class InteractivePanel extends DrawablePanel {
 	}
 
 	public final static class DrawableWriterFilter extends FileFilter {
-		private WriterCapabilities capabilities;
+		private final WriterCapabilities capabilities;
 
 		public DrawableWriterFilter(WriterCapabilities capabilities) {
 			this.capabilities = capabilities;
@@ -176,7 +177,7 @@ public class InteractivePanel extends DrawablePanel {
 			return name.substring(lastDot + 1);
 		}
 	}
-	
+
 	public final static class ExportChooser extends JFileChooser {
 		public ExportChooser(WriterCapabilities... capabilities) {
 			setAcceptAllFileFilterUsed(false);
@@ -188,21 +189,21 @@ public class InteractivePanel extends DrawablePanel {
 
 	public final static class ExportDialog extends JDialog {
 		public static enum UserAction { APPROVE, CANCEL };
-		
-		private double documentX;
-		private double documentY;
-		private double documentWidth;
-		private double documentHeight;
+
+		private final Rectangle2D documentBounds;
 		private UserAction userAction;
+
+		private final JFormattedTextField inputX;
+		private final JFormattedTextField inputY;
+		private final JFormattedTextField inputW;
+		private final JFormattedTextField inputH;
 
 		public ExportDialog(Component parent, Drawable d) {
 			super(JOptionPane.getFrameForComponent(parent), true);
 			setTitle("Export options");
 
-			documentX = d.getX();
-			documentY = d.getX();
-			documentWidth = d.getWidth();
-			documentHeight = d.getHeight();
+			documentBounds = new Rectangle2D.Double();
+			documentBounds.setFrame(d.getBounds());
 			userAction = UserAction.CANCEL;
 
 			JPanel cp = new JPanel(new BorderLayout());
@@ -215,30 +216,24 @@ public class InteractivePanel extends DrawablePanel {
 			JPanel options = new JPanel(new GridLayout(4, 2, 10, 2));
 			getContentPane().add(options, BorderLayout.NORTH);
 
-			addInputField("Left", options, formatMm, documentX, new PropertyChangeListener() {
+			PropertyChangeListener docBoundsListener = new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					documentX = ((Number)evt.getNewValue()).doubleValue();
+					documentBounds.setFrame(
+						((Number)inputX.getValue()).doubleValue(),
+						((Number)inputY.getValue()).doubleValue(),
+						((Number)inputW.getValue()).doubleValue(),
+						((Number)inputH.getValue()).doubleValue());
 				}
-			});
-			addInputField("Top", options, formatMm, documentY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					documentY = ((Number)evt.getNewValue()).doubleValue();
-				}
-			});
-			addInputField("Width", options, formatMm, documentWidth, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					documentWidth = ((Number)evt.getNewValue()).doubleValue();
-				}
-			});
-			addInputField("Height", options, formatMm, documentHeight, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					documentHeight = ((Number)evt.getNewValue()).doubleValue();
-				}
-			});
+			};
+			inputX = new JFormattedTextField(formatMm);
+			addInputField(inputX, "Left", options, documentBounds.getX(), docBoundsListener);
+			inputY = new JFormattedTextField(formatMm);
+			addInputField(inputY, "Top", options, documentBounds.getY(), docBoundsListener);
+			inputW = new JFormattedTextField(formatMm);
+			addInputField(inputW, "Width", options, documentBounds.getWidth(), docBoundsListener);
+			inputH = new JFormattedTextField(formatMm);
+			addInputField(inputH, "Height", options, documentBounds.getHeight(), docBoundsListener);
 
 			JPanel controls = new JPanel(new FlowLayout());
 			cp.add(controls, BorderLayout.SOUTH);
@@ -267,12 +262,11 @@ public class InteractivePanel extends DrawablePanel {
 			setLocationRelativeTo(parent);
 		}
 
-		private static void addInputField(String labelText, java.awt.Container cont,
-				DecimalFormat format, Object initialValue, PropertyChangeListener pcl) {
+		private static void addInputField(JFormattedTextField input, String labelText,
+				java.awt.Container cont, Object initialValue, PropertyChangeListener pcl) {
 			JLabel label = new JLabel(labelText);
 			label.setHorizontalAlignment(JLabel.RIGHT);
 			cont.add(label);
-			JFormattedTextField input = new JFormattedTextField(format);
 			input.setValue(initialValue);
 			input.setHorizontalAlignment(JFormattedTextField.RIGHT);
 			input.addPropertyChangeListener("value", pcl);
@@ -280,17 +274,10 @@ public class InteractivePanel extends DrawablePanel {
 			label.setLabelFor(input);
 		}
 
-		public double getDocumentX() {
-			return documentX;
-		}
-		public double getDocumentY() {
-			return documentY;
-		}
-		public double getDocumentWidth() {
-			return documentWidth;
-		}
-		public double getDocumentHeight() {
-			return documentHeight;
+		public Rectangle2D getDocumentBounds() {
+			Rectangle2D bounds = new Rectangle2D.Double();
+			bounds.setFrame(documentBounds);
+			return bounds;
 		}
 		public UserAction getUserAction() {
 			return userAction;

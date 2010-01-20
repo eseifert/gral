@@ -80,7 +80,7 @@ public class BitmapWriter extends AbstractDrawableWriter {
 
 		WriterCapabilities WBMP_CAPABILITIES = new WriterCapabilities(
 			"WBMP",
-			"Wireless Application Protocol Bitmap Format",
+			"Wireless Application Protocol Bitmap",
 			TYPE_WBMP,
 			"wbmp"
 		);
