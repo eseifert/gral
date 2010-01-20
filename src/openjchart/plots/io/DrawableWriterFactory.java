@@ -27,10 +27,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Class that provides <code>DrawableWriter</code> implementations for
@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public class DrawableWriterFactory {
 	private static DrawableWriterFactory instance;
-	private final Map<String, Class<? extends DrawableWriter>> writers = new HashMap<String, Class<? extends DrawableWriter>>();
+	private final Map<String, Class<? extends DrawableWriter>> writers = new TreeMap<String, Class<? extends DrawableWriter>>();
 
 	private DrawableWriterFactory() {
 		// Retrieve property-files
@@ -120,6 +120,19 @@ public class DrawableWriterFactory {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns an array of capabilities for all supported output formats.
+	 * @return Supported capabilities.
+	 */
+	public WriterCapabilities[] getCapabilities() {
+		WriterCapabilities[] caps = new WriterCapabilities[writers.size()];
+		int i=0;
+		for (String mimeType : writers.keySet()) {
+			caps[i++] = getCapabilities(mimeType);
+		}
+		return caps;
 	}
 
 	/**

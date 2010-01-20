@@ -37,17 +37,17 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
 
 import openjchart.plots.io.DrawableWriter;
 import openjchart.plots.io.DrawableWriterFactory;
@@ -61,45 +61,41 @@ public class InteractivePanel extends DrawablePanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JPopupMenu menu;
-	private JMenu exportMenu;
+	private JMenuItem export;
 	private JFileChooser exportChooser;
 
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
-		
-		exportChooser = new JFileChooser();
+
+		WriterCapabilities[] exportFormats = DrawableWriterFactory.getInstance().getCapabilities();
+		exportChooser = new ExportChooser(exportFormats);
 
 		menu = new JPopupMenu();
-
-		exportMenu = new JMenu("Export");
-		menu.add(exportMenu);
-		String[] exportFormats = DrawableWriterFactory.getInstance().getSupportedFormats();
-		for (final String format : exportFormats) {
-			WriterCapabilities capabilities = DrawableWriterFactory.getInstance().getCapabilities(format);
-			String exporterLabel = String.format("%s: %s...", capabilities.getFormat(), capabilities.getName());
-			Action a = new AbstractAction(exporterLabel) {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int ret = exportChooser.showSaveDialog(InteractivePanel.this);
-					if (ret == JFileChooser.APPROVE_OPTION) {
-						Drawable d = getDrawable();
-						ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
-						ed.setVisible(true);
-						if (ed.getUserAction().equals(ExportDialog.UserAction.APPROVE)) {
-							File file = exportChooser.getSelectedFile();
-							export(d, format, file, ed.getDocumentX(), ed.getDocumentY(),
-									ed.getDocumentWidth(), ed.getDocumentHeight());
-						}
+		export = new JMenuItem(new AbstractAction("Export...") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exportChooser.setDialogTitle("Export");
+				int ret = exportChooser.showSaveDialog(InteractivePanel.this);
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					Drawable d = getDrawable();
+					ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
+					ed.setVisible(true);
+					if (ed.getUserAction().equals(ExportDialog.UserAction.APPROVE)) {
+						File file = exportChooser.getSelectedFile();
+						DrawableWriterFilter filter = (DrawableWriterFilter) exportChooser.getFileFilter();
+						export(d, filter.getWriterCapabilities().getMimeType(), file,
+								ed.getDocumentX(), ed.getDocumentY(),
+								ed.getDocumentWidth(), ed.getDocumentHeight());
 					}
 				}
-			};
-			exportMenu.add(a);
-		}
+			}
+		});
+		menu.add(export);
 
 		addMouseListener(new PopupListener());
 	}
 
-	private void export(Drawable d, String format, File f,
+	private void export(Drawable d, String mimeType, File f,
 			double x, double y, double width, double height) {
 		FileOutputStream destination;
 		try {
@@ -109,7 +105,7 @@ public class InteractivePanel extends DrawablePanel {
 			ex.printStackTrace();
 			return;
 		}
-		DrawableWriter w = DrawableWriterFactory.getInstance().getDrawableWriter(format);
+		DrawableWriter w = DrawableWriterFactory.getInstance().getDrawableWriter(mimeType);
 		try {
 			w.write(d, destination, x, y, width, height);
 		} catch (IOException ex) {
@@ -139,6 +135,55 @@ public class InteractivePanel extends DrawablePanel {
 	            menu.show(e.getComponent(), e.getX(), e.getY());
 	        }
 	    }
+	}
+
+	public final static class DrawableWriterFilter extends FileFilter {
+		private WriterCapabilities capabilities;
+
+		public DrawableWriterFilter(WriterCapabilities capabilities) {
+			this.capabilities = capabilities;
+		}
+
+		@Override
+		public boolean accept(File f) {
+			if (f.isDirectory()) {
+				return true;
+			}
+			String ext = getExtension(f).toLowerCase();
+			for (String extension : capabilities.getExtensions()) {
+				if (extension.equals(ext)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return String.format("%s: %s", capabilities.getFormat(), capabilities.getName());
+		}
+
+		public WriterCapabilities getWriterCapabilities() {
+			return capabilities;
+		}
+
+		private final static String getExtension(File f) {
+			String name = f.getName();
+			int lastDot = name.lastIndexOf('.');
+			if ((lastDot <= 0) || (lastDot == name.length() - 1)) {
+				return "";
+			}
+			return name.substring(lastDot + 1);
+		}
+	}
+	
+	public final static class ExportChooser extends JFileChooser {
+		public ExportChooser(WriterCapabilities... capabilities) {
+			setAcceptAllFileFilterUsed(false);
+			for (WriterCapabilities c : capabilities) {
+				addChoosableFileFilter(new DrawableWriterFilter(c));
+			}
+		}
 	}
 
 	public final static class ExportDialog extends JDialog {
