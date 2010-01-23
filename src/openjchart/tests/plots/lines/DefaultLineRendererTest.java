@@ -41,10 +41,9 @@ public class DefaultLineRendererTest {
 	public void testLine() {
 		// Get line
 		LineRenderer2D r = new DefaultLineRenderer2D();
-		Point2D normal = new Point2D.Double(-Math.sqrt(2.0), 0.0);
 		DataPoint2D[] points = {
-			new DataPoint2D(new Point2D.Double(0.0, 0.0), normal, null, null, "0"),
-			new DataPoint2D(new Point2D.Double(1.0, 1.0), normal, null, null, "1")
+			new DataPoint2D(new Point2D.Double(0.0, 0.0), null, null),
+			new DataPoint2D(new Point2D.Double(1.0, 1.0), null, null)
 		};
 		Drawable line = r.getLine(points);
 		assertNotNull(line);
@@ -59,13 +58,13 @@ public class DefaultLineRendererTest {
 	public void testSettings() {
 		// Get
 		LineRenderer2D r = new DefaultLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_LINE_COLOR));
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
 		// Set
-		r.setSetting(LineRenderer2D.KEY_LINE_COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer2D.KEY_LINE_COLOR));
+		r.setSetting(LineRenderer2D.KEY_COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(LineRenderer2D.KEY_COLOR));
 		// Remove
-		r.removeSetting(LineRenderer2D.KEY_LINE_COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_LINE_COLOR));
+		r.removeSetting(LineRenderer2D.KEY_COLOR);
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
 	}
 
 }

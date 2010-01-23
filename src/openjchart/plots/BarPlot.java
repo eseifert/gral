@@ -118,7 +118,7 @@ public class BarPlot extends XYPlot {
 	public BarPlot(DataSource... data) {
 		super(data);
 
-		getPlotArea().setSettingDefault(XYPlotArea2D.KEY_GRID_X, false);
+		getPlotArea().setSettingDefault(XYPlotArea2D.KEY_GRID_MAJOR_X, false);
 		setSettingDefault(KEY_BAR_WIDTH, 1.0);
 
 		ShapeRenderer shapeRendererDefault = new BarRenderer();

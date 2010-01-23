@@ -23,9 +23,10 @@ package openjchart.plots.axes;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import openjchart.plots.DataPoint2D;
+import openjchart.plots.axes.Tick2D.TickType;
 import openjchart.util.MathUtils;
 
 /**
@@ -77,9 +78,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	}
 
 	@Override
-	public List<DataPoint2D> getTicks(Axis axis) {
+	public List<Tick2D> getTicks(Axis axis) {
 		checkAxisBounds(axis);
-		double tickSpacing = getSetting(KEY_TICK_SPACING);
+		double tickSpacing = getSetting(KEY_TICKS_SPACING);
+		int ticksMinorCount = getSetting(KEY_TICKS_MINOR_COUNT);
+		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 
@@ -87,29 +90,37 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double powerMin = Math.pow(BASE, Math.floor(Math.log10(min)));
 		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
 
-		// Add custom ticks
-		List<DataPoint2D> ticks = new LinkedList<DataPoint2D>();
-		ticks.addAll(getCustomTicks(axis));
+		List<Tick2D> ticks = new LinkedList<Tick2D>();
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
-		// Add standard ticks
+		// Add major ticks
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
 			double step = power*tickSpacing;
+			double stepMinor = power*tickSpacingMinor;
 			double powerNext = power*BASE;
-			for (double tickPositionWorld = step; tickPositionWorld <= powerNext;
-					tickPositionWorld = MathUtils.round(tickPositionWorld + step, 1e-14)) {
+
+			for (double tickPositionWorld = 0.0; tickPositionWorld <= powerNext; tickPositionWorld += stepMinor) {
 				if (tickPositionWorld < min) {
 					continue;
 				} else if (tickPositionWorld > max) {
 					break;
 				}
-				DataPoint2D tick = getTick(axis, tickPositionWorld);
-				if (tick.getPosition() != null
+				TickType tickType = MathUtils.almostEqual(tickPositionWorld % step, 0.0, 1e-14) ? TickType.MAJOR : TickType.MINOR;
+				Tick2D major = getTick(tickType, axis, tickPositionWorld);
+				if (major.getPosition() != null
 						&& !tickPositions.contains(tickPositionWorld)
 						&& !tickPositionsCustom.contains(tickPositionWorld)) {
-					ticks.add(tick);
+					ticks.add(major);
 					tickPositions.add(tickPositionWorld);
 				}
+			}
+		}
+		// Add custom ticks
+		Map<Double, String> labelsCustom = getSetting(KEY_TICKS_CUSTOM);
+		if (labelsCustom != null) {
+			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
+				Tick2D tick = getTick(TickType.CUSTOM, axis, entry.getKey());
+				ticks.add(tick);
 			}
 		}
 
@@ -117,8 +128,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	}
 
 	private static void checkAxisBounds(Axis axis) {
-		if (axis.getMin().doubleValue() <= 0.0 || axis.getMax().doubleValue() <= 0.0) {
-			throw new IllegalStateException("All axis bounds must be greater than zero for a logarithmic axis renderer.");
+		if (axis.getMin().doubleValue() < 0.0 || axis.getMax().doubleValue() < 0.0) {
+			throw new IllegalStateException("Axis bounds must not be less than zero for a logarithmic axis renderer.");
 		}
 	}
 

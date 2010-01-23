@@ -60,7 +60,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw line
 				Shape lineShape = punchShapes(line, points);
-				Paint paint = getSetting(LineRenderer2D.KEY_LINE_COLOR);
+				Paint paint = getSetting(LineRenderer2D.KEY_COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};

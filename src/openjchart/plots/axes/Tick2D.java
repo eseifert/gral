@@ -18,56 +18,62 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.plots;
+package openjchart.plots.axes;
 
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 
 import openjchart.Drawable;
+import openjchart.plots.DataPoint2D;
 
 /**
  * Class for storing points of a plot.
  */
-public class DataPoint2D {
-	private final Point2D position;
-	private final Drawable drawable;
-	private final Shape shape;
+public class Tick2D extends DataPoint2D {
+	public static enum TickType { MAJOR, MINOR, CUSTOM };
+
+	private final TickType type;
+	private final Point2D normal;
+	private final String label;
 
 	/**
-	 * Creates a new <code>DataPoint2D</code> object with the specified position,
-	 * <code>Drawable</code>, and shape.
+	 * Creates a new <code>Tick2D</code> object with the specified position, normal,
+	 * <code>Drawable</code>, shape and label.
 	 * @param position Coordinates.
+	 * @param normal Normal.
 	 * @param drawable Representation.
 	 * @param shape Shape.
+	 * @param label Description.
 	 */
-	public DataPoint2D(Point2D position, Drawable drawable, Shape shape) {
-		this.position = position;
-		this.drawable = drawable;
-		this.shape = shape;
+	public Tick2D(TickType type, Point2D position, Point2D normal, Drawable drawable, Shape shape, String label) {
+		super(position, drawable, shape);
+		this.type = type;
+		this.normal = normal;
+		this.label = label;
 	}
 
 	/**
-	 * Returns the coordinates of this <code>DataPoint2D</code>.
-	 * @return Position.
+	 * Returns the kind of tick this object represents.
+	 * @return Tick type
 	 */
-	public Point2D getPosition() {
-		return position;
+	public TickType getType() {
+		return type;
 	}
 
 	/**
-	 * Returns the <code>Drawable</code> which represents this <code>DataPoint2D</code>.
-	 * @return <code>Drawable</code> instance.
+	 * Returns the normal vector of this <code>DataPoint2D</code>.
+	 * @return Normal.
 	 */
-	public Drawable getDrawable() {
-		return drawable;
+	public Point2D getNormal() {
+		return normal;
 	}
 
 	/**
-	 * Returns the shape of this <code>DataPoint2D</code>.
-	 * @return <code>Shape</code>.
+	 * Returns the label of this <code>DataPoint2D</code>.
+	 * @return Label.
 	 */
-	public Shape getShape() {
-		return shape;
+	public String getLabel() {
+		return label;
 	}
 
 }

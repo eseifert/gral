@@ -37,13 +37,13 @@ import openjchart.util.SettingsStorage;
  */
 public interface LineRenderer2D extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
-	public static final String KEY_LINE_STROKE = "line.stroke";
+	public static final String KEY_STROKE = "line.stroke";
 	/** Key for specifying the distance between the line and a shape. */
-	public static final String KEY_LINE_GAP = "line.gap.size";
+	public static final String KEY_GAP = "line.gap.size";
 	/** Key for specifying whether the gaps should have rounded corners. */
-	public static final String KEY_LINE_GAP_ROUNDED = "line.gap.rounded";
+	public static final String KEY_GAP_ROUNDED = "line.gap.rounded";
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the line shape. */
-	public static final String KEY_LINE_COLOR = "line.color";
+	public static final String KEY_COLOR = "line.color";
 
 	/**
 	 * Returns a <code>Drawable</code> for the line represented by the specified points.

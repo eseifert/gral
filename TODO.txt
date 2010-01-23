@@ -5,10 +5,6 @@ Version 0.8
 
 - Add option for automatic selection of tick spacing
 
-- Add support for minor ticks (ticks without labels)
-
-- Add support for minor grid (grid lines along minor ticks)
-
 - Add category support to axis (instead of ticks)
 
 - Add a PlotPanel class which provides pre-defined context menus and

@@ -52,21 +52,21 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 	public AbstractLineRenderer2D() {
 		this.settings = new Settings(this);
 
-		setSettingDefault(KEY_LINE_STROKE, new BasicStroke(1.5f));
-		setSettingDefault(KEY_LINE_GAP, 0.0);
-		setSettingDefault(KEY_LINE_GAP_ROUNDED, false);
-		setSettingDefault(KEY_LINE_COLOR, Color.BLACK);
+		setSettingDefault(KEY_STROKE, new BasicStroke(1.5f));
+		setSettingDefault(KEY_GAP, 0.0);
+		setSettingDefault(KEY_GAP_ROUNDED, false);
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 
 	@Override
 	public Shape punchShapes(Shape line, DataPoint2D... points) {
-		Stroke stroke = getSetting(LineRenderer2D.KEY_LINE_STROKE);
+		Stroke stroke = getSetting(LineRenderer2D.KEY_STROKE);
 		Area lineShape = new Area(stroke.createStrokedShape(line));
 
 		// Subtract shape of data points from line to yield gaps.
-		double gapSize = getSetting(KEY_LINE_GAP);
+		double gapSize = getSetting(KEY_GAP);
 		if (!MathUtils.almostEqual(gapSize, 0.0, 1e-10)) {
-			boolean isGapRounded = getSetting(KEY_LINE_GAP_ROUNDED);
+			boolean isGapRounded = getSetting(KEY_GAP_ROUNDED);
 			int gapJoin = (isGapRounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
 			for (DataPoint2D p : points) {
 				Shape shape = p.getShape();

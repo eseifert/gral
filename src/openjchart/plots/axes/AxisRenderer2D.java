@@ -24,7 +24,6 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import openjchart.Drawable;
-import openjchart.plots.DataPoint2D;
 import openjchart.util.SettingsStorage;
 
 
@@ -46,32 +45,52 @@ public interface AxisRenderer2D extends SettingsStorage {
 	/** Key for specifying whether the axis direction will be swapped. */
 	static final String KEY_SHAPE_DIRECTION_SWAPPED = "axis.shape.directionSwapped";
 
-	/** Key for specifying the interval for ticks. */
-	static final String KEY_TICK_SPACING = "axis.tick.spacing";
-	/** Key for specifying the length of tick strokes. */
-	static final String KEY_TICK_LENGTH = "axis.tick.length";
-	/** Key for specifying the {@link java.awt.Stroke} instance which defines the shape of all axis ticks. */
-	static final String KEY_TICK_STROKE = "axis.tick.stroke";
-	/** Key for specifying the alignment of ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
-	static final String KEY_TICK_ALIGNMENT = "axis.tick.alignment";
+	/** Key for specifying whether major ticks are drawn. */
+	static final String KEY_TICKS = "axis.ticks.major";
+	/** Key for specifying the interval for major ticks. */
+	static final String KEY_TICKS_SPACING = "axis.ticks.major.spacing";
+	/** Key for specifying the length of major tick strokes. The length is specified relative to font height. */
+	static final String KEY_TICKS_LENGTH = "axis.ticks.major.length";
+	/** Key for specifying the {@link java.awt.Stroke} instance which is used to draw all major ticks. */
+	static final String KEY_TICKS_STROKE = "axis.ticks.major.stroke";
+	/** Key for specifying the alignment of major ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
+	static final String KEY_TICKS_ALIGNMENT = "axis.ticks.major.alignment";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the shapes of major ticks. */
+	static final String KEY_TICKS_COLOR = "label.color";
 
-	/** Key for specifying the format of labels. */
-	static final String KEY_TICK_LABEL_FORMAT = "axis.tick.label.format";
-	/** Key for specifying the distance of labels to their ticks. */
-	static final String KEY_TICK_LABEL_DISTANCE = "axis.tick.label.distance";
+	/** Key for specifying the format of tick labels. */
+	static final String KEY_TICK_LABELS_FORMAT = "axis.ticks.major.labels.format";
+	/** Key for specifying the distance of labels to their ticks. The distance is specified relative to font height. */
+	static final String KEY_TICK_LABELS_DISTANCE = "axis.ticks.major.labels.distance";
 	/** Key for specifying the draw labels outside of the plot. */
-	static final String KEY_TICK_LABEL_OUTSIDE = "axis.tick.label.outside";
+	static final String KEY_TICK_LABELS_OUTSIDE = "axis.ticks.major.labels.outside";
 	/** Key for specifying the rotation of the tick labels in degrees. */
-	static final String KEY_TICK_LABEL_ROTATION = "axis.tick.label.rotation";
-	/** Custom labels as a {@link java.lang.Map} with a Double as key and String as value. */
-	static final String KEY_TICK_LABEL_CUSTOM = "axis.tick.label.custom";
+	static final String KEY_TICK_LABELS_ROTATION = "axis.ticks.major.labels.rotation";
+
+	/** Key for specifying whether minor ticks are drawn. */
+	static final String KEY_TICKS_MINOR = "axis.ticks.minor";
+	/** Key for specifying the count of minor ticks. */
+	static final String KEY_TICKS_MINOR_COUNT = "axis.ticks.minor.count";
+	/** Key for specifying the length of minor tick strokes. The length is specified relative to font height. */
+	static final String KEY_TICKS_MINOR_LENGTH = "axis.ticks.minor.length";
+	/** Key for specifying the {@link java.awt.Stroke} instance which is used to draw all minor ticks. */
+	static final String KEY_TICKS_MINOR_STROKE = "axis.ticks.minor.stroke";
+	/** Key for specifying the alignment of minor ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
+	static final String KEY_TICKS_MINOR_ALIGNMENT = "axis.ticks.minor.alignment";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the the shapes of minor ticks. */
+	static final String KEY_TICKS_MINOR_COLOR = "label.color";
+
+	/** Custom labels as a {@link java.lang.Map} with a position (<code>Double</code>) as key and a label (<code>String</code>) as value. */
+	static final String KEY_TICKS_CUSTOM = "axis.ticks.custom";
 
 	/** Key for specifying the {@link java.lang.String} instance for the label text of the axis. */
 	static final String KEY_LABEL = "axis.label";
-	/** Key for specifying the distance from the axis to the label. */
+	/** Key for specifying the distance from the axis to the label. The length is specified relative to font height. */
 	static final String KEY_LABEL_DISTANCE = "axis.label.distance";
 	/** Key for specifying the rotation of the axis label in degrees. */
 	static final String KEY_LABEL_ROTATION = "axis.label.rotation";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the axis label. */
+	static final String KEY_LABEL_COLOR = "axis.label.color";
 
 	/**
 	 * Returns a component that displays the specified axis.
@@ -122,8 +141,8 @@ public interface AxisRenderer2D extends SettingsStorage {
 	/**
 	 * Returns a list of all tick element on the axis.
 	 * @param axis Axis
-	 * @return A list of <code>Tick</code> instances
+	 * @return A list of <code>Tick2D</code> instances
 	 */
-	List<DataPoint2D> getTicks(Axis axis);
+	List<Tick2D> getTicks(Axis axis);
 
 }

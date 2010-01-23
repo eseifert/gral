@@ -53,7 +53,7 @@ public abstract class GraphicsUtils {
 	 * @param g2d Graphics to be painted into.
 	 * @param shape Shape to be filled.
 	 * @param paint Paint to be used.
-	 * @param paintBounds Bounds of the paint.
+	 * @param paintBounds Optional bounds describing the painted area.
 	 */
 	public static void fillPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds) {
 		if (paintBounds == null) {
@@ -81,7 +81,7 @@ public abstract class GraphicsUtils {
 	 * @param g2d Graphics to be painted into.
 	 * @param shape Shape to be filled.
 	 * @param paint Paint to be used.
-	 * @param paintBounds Bounds of the paint.
+	 * @param paintBounds Optional bounds describing the painted area.
 	 * @param stroke Stroke to be used for outlines.
 	 */
 	public static void drawPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds, Stroke stroke) {

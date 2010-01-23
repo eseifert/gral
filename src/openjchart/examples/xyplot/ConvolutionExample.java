@@ -81,29 +81,29 @@ public class ConvolutionExample extends JFrame {
 
 		plot.setShapeRenderer(ds, null);
 		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
-		lineData.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0f, 0f));
+		lineData.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0f, 0f, 0f));
 		plot.setLineRenderer(ds, lineData);
 
 		//*
 		plot.setShapeRenderer(dsLowpass, null);
 		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
-		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(1.0f, 0.2f, 0.0f));
+		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(1.0f, 0.2f, 0.0f));
 		plot.setLineRenderer(dsLowpass, lineLowpass);
 
 		plot.setShapeRenderer(dsHighpass, null);
 		DefaultLineRenderer2D lineHighpass = new DefaultLineRenderer2D();
-		lineHighpass.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0.2f, 0.4f, 0.8f));
+		lineHighpass.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0.2f, 0.4f, 0.8f));
 		plot.setLineRenderer(dsHighpass, lineHighpass);
 
 		plot.setShapeRenderer(dsMovingAverage, null);
 		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
-		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0f, 0.67f, 0f));
+		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0f, 0.67f, 0f));
 		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
 		//*/
 
 		plot.setShapeRenderer(dsMovingMedian, null);
 		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
-		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_LINE_COLOR, new Color(0.5f, 0f, 0.5f));
+		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0.5f, 0f, 0.5f));
 		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);
 
 		plot.setSetting(Plot.KEY_LEGEND, true);

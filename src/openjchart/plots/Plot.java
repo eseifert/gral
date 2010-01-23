@@ -20,6 +20,7 @@
 
 package openjchart.plots;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -63,6 +64,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final String KEY_BACKGROUND = "plot.background";
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot. */
 	public static final String KEY_BORDER = "plot.border";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot. */
+	public static final String KEY_COLOR = "plot.color";
 	/** Key for specifying the whether antialiasing is enabled. */
 	public static final String KEY_ANTIALISING = "plot.antialiasing";
 	/** Key for specifying whether the legend should be shown. */
@@ -91,7 +94,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private final Map<String, Axis> axes;
 	private final Map<String, Drawable> axisDrawables;
 
-	private Label title;
+	private final Label title;
 	private PlotArea2D plotArea;
 	private final Container legendContainer;
 	private Legend legend;
@@ -119,6 +122,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		setSettingDefault(KEY_TITLE, null);
 		setSettingDefault(KEY_BACKGROUND, null);
 		setSettingDefault(KEY_BORDER, null);
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 		setSettingDefault(KEY_ANTIALISING, true);
 		setSettingDefault(KEY_LEGEND, false);
 		setSettingDefault(KEY_LEGEND_LOCATION, Location.NORTH_WEST);
@@ -137,12 +141,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 		}
 
-		Stroke borderStroke = getSetting(KEY_BORDER);
-		if (borderStroke != null) {
-			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(borderStroke);
-			g2d.draw(getBounds());
-			g2d.setStroke(strokeOld);
+		Stroke stroke = getSetting(KEY_BORDER);
+		if (stroke != null) {
+			Paint fg = getSetting(KEY_COLOR);
+			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
 		}
 
 		drawComponents(g2d);

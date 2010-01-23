@@ -84,12 +84,12 @@ public class SimpleXYPlot extends JFrame {
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
+		discreteRenderer.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
+		discreteRenderer.setSetting(LineRenderer2D.KEY_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for shapes
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP, 2.0);
-		discreteRenderer.setSetting(LineRenderer2D.KEY_LINE_GAP_ROUNDED, true);
+		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP, 2.0);
+		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
 		// Custom ascending
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENT_DIRECTION, Orientation.VERTICAL);
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
@@ -101,7 +101,7 @@ public class SimpleXYPlot extends JFrame {
 		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
-		axisRendererX.setSetting(AxisRenderer2D.KEY_TICK_LABEL_CUSTOM, labels);
+		axisRendererX.setSetting(AxisRenderer2D.KEY_TICKS_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
@@ -115,8 +115,8 @@ public class SimpleXYPlot extends JFrame {
 		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER);
 		axisRendererY.setSetting(AxisRenderer2D.KEY_INTERSECTION, 1.0);
 		// Change tick spacing
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_SPACING, 2.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, 2.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);

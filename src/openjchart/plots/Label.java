@@ -51,6 +51,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	public static final String KEY_FONT = "label.font";
 	/** Key for specifying the rotation of this label, */
 	public static final String KEY_ROTATION = "label.rotation";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the label shape. */
+	public static final String KEY_COLOR = "label.color";
 
 	private final Settings settings;
 	private String text;
@@ -68,6 +70,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		setSettingDefault(KEY_ALIGNMENT_Y, 0.5);
 		setSettingDefault(KEY_FONT, Font.decode(null));
 		setSettingDefault(KEY_ROTATION, 0.0);
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 
 	@Override
@@ -103,8 +106,9 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		g2d.fill(labelShape.getBounds2D());
 		//*/
 
-		g2d.setPaint(Color.BLACK);
-		g2d.fill(labelShape);
+		Paint paint = getSetting(KEY_COLOR);
+		g2d.setPaint(paint);
+		GraphicsUtils.fillPaintedShape(g2d, labelShape, paint, null);
 		g2d.setPaint(paintOld);
 
 	}

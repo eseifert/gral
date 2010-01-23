@@ -40,6 +40,8 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	public static final String KEY_BACKGROUND = "plotarea.background";
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot area. */
 	public static final String KEY_BORDER = "plotarea.border";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot area. */
+	public static final String KEY_COLOR = "plotarea.color";
 
 	private final Settings settings;
 
@@ -51,6 +53,7 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 		settings = new Settings(this);
 		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 
 	/**
@@ -60,9 +63,9 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	 */
 	protected void drawBackground(Graphics2D g2d) {
 		// FIXME: duplicate code! See openjchart.Legend
-		Paint bg = getSetting(KEY_BACKGROUND);
-		if (bg != null) {
-			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
+		Paint paint = getSetting(KEY_BACKGROUND);
+		if (paint != null) {
+			GraphicsUtils.fillPaintedShape(g2d, getBounds(), paint, null);
 		}
 	}
 
@@ -73,12 +76,10 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	 */
 	protected void drawBorder(Graphics2D g2d) {
 		// FIXME: duplicate code! See openjchart.Legend
-		Stroke borderStroke = getSetting(KEY_BORDER);
-		if (borderStroke != null) {
-			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(borderStroke);
-			g2d.draw(getBounds());
-			g2d.setStroke(strokeOld);
+		Stroke stroke = getSetting(KEY_BORDER);
+		if (stroke != null) {
+			Paint paint = getSetting(KEY_COLOR);
+			GraphicsUtils.drawPaintedShape(g2d, getBounds(), paint, null, stroke);
 		}
 	}
 

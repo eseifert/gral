@@ -55,6 +55,8 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	public static final String KEY_BACKGROUND = "legend.background";
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the legend. */
 	public static final String KEY_BORDER = "legend.border";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the legend. */
+	public static final String KEY_COLOR = "legend.color";
 	/** Key for specifying the orientation of the legend using a {@link openjchart.DrawableConstants.Orientation} value. */
 	public static final String KEY_ORIENTATION = "legend.orientation";
 	/** Key for specifying the gap between items. */
@@ -131,6 +133,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		settings = new Settings(this);
 		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
 		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(KEY_GAP, new openjchart.util.Dimension2D.Double(20.0, 5.0));
 		setSettingDefault(KEY_SYMBOL_SIZE, new openjchart.util.Dimension2D.Double(2.0, 2.0));
@@ -161,12 +164,10 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	 * @param g2d Graphics object to draw with.
 	 */
 	protected void drawBorder(Graphics2D g2d) {
-		Stroke borderStroke = getSetting(KEY_BORDER);
-		if (borderStroke != null) {
-			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(borderStroke);
-			g2d.draw(getBounds());
-			g2d.setStroke(strokeOld);
+		Stroke stroke = getSetting(KEY_BORDER);
+		if (stroke != null) {
+			Paint fg = getSetting(KEY_COLOR);
+			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
 		}
 	}
 
