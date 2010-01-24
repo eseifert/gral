@@ -1,6 +1,6 @@
 /* OpenJChart : a free plotting library for the Java(tm) platform
  *
- * (C) Copyright 2009, by Erich Seifert and Michael Seifert.
+ * (C) Copyright 2009-2010, by Erich Seifert and Michael Seifert.
  *
  * This file is part of OpenJChart.
  *
