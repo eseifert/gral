@@ -279,21 +279,25 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
-		double minTick = MathUtils.ceil(min, tickSpacing);
-		double maxTick = MathUtils.floor(max, tickSpacing);
+		double minTickMajor = MathUtils.ceil(min, tickSpacing);
+		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
+
+		int ticksTotal = (int)Math.floor((max - min)/tickSpacingMinor);
+		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/tickSpacingMinor);
 
 		List<Tick2D> ticks = new LinkedList<Tick2D>();
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
 
-		// Add major ticks
-		for (double tickPositionWorld = minTick; tickPositionWorld <= maxTick; tickPositionWorld += tickSpacingMinor) {
-			TickType tickType = MathUtils.almostEqual(tickPositionWorld % tickSpacing, 0.0, 1e-14) ? TickType.MAJOR : TickType.MINOR;
-			Tick2D major = getTick(tickType, axis, tickPositionWorld);
-			if (major.getPosition() != null
+		// Add major and minor ticks
+		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
+			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
+			TickType tickType = ((tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0) ? TickType.MAJOR : TickType.MINOR;
+			Tick2D tick = getTick(tickType, axis, tickPositionWorld);
+			if (tick.getPosition() != null
 					&& !tickPositionsCustom.contains(tickPositionWorld)
 					&& !tickPositions.contains(tickPositionWorld)) {
-				ticks.add(major);
+				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
 			}
 		}

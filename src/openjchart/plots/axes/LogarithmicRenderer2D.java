@@ -89,28 +89,33 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		final double BASE = 10.0;
 		double powerMin = Math.pow(BASE, Math.floor(Math.log10(min)));
 		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
+		double minTickMajor = MathUtils.ceil(min, powerMin*tickSpacing);
+
+		int ticksPerPower = (int)Math.floor(BASE/tickSpacingMinor);
+		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/(powerMin*tickSpacingMinor));
 
 		List<Tick2D> ticks = new LinkedList<Tick2D>();
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
 		// Add major ticks
+		int i = 0;
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
-			double step = power*tickSpacing;
-			double stepMinor = power*tickSpacingMinor;
-			double powerNext = power*BASE;
+			double multipliedTickSpacingMinor = power*tickSpacingMinor;
+			double minTick = MathUtils.ceil(power, multipliedTickSpacingMinor);
 
-			for (double tickPositionWorld = 0.0; tickPositionWorld <= powerNext; tickPositionWorld += stepMinor) {
+			for (int pi = 0; pi < ticksPerPower; pi++) {
+				double tickPositionWorld = minTick + pi*multipliedTickSpacingMinor;
 				if (tickPositionWorld < min) {
 					continue;
 				} else if (tickPositionWorld > max) {
 					break;
 				}
-				TickType tickType = MathUtils.almostEqual(tickPositionWorld % step, 0.0, 1e-14) ? TickType.MAJOR : TickType.MINOR;
-				Tick2D major = getTick(tickType, axis, tickPositionWorld);
-				if (major.getPosition() != null
+				TickType tickType = ((i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0) ? TickType.MAJOR : TickType.MINOR;
+				Tick2D tick = getTick(tickType, axis, tickPositionWorld);
+				if (tick.getPosition() != null
 						&& !tickPositions.contains(tickPositionWorld)
 						&& !tickPositionsCustom.contains(tickPositionWorld)) {
-					ticks.add(major);
+					ticks.add(tick);
 					tickPositions.add(tickPositionWorld);
 				}
 			}
