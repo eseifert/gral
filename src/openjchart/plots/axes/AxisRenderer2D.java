@@ -36,6 +36,8 @@ public interface AxisRenderer2D extends SettingsStorage {
 
 	/** Key for specifying the {@link java.awt.Shape} instance that defines the shape of the axis. */
 	static final String KEY_SHAPE = "axis.shape";
+	/** Key for specifying whether the shape of the axis will be drawn. This won't influence ticks or labels. */
+	static final String KEY_SHAPE_VISIBLE = "axis.shape.visible";
 	/** Key for specifying whether normal vector is calculated using clockwise or counterclockwise rotation. */
 	static final String KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE = "axis.shape.normalOrientationClockwise";
 	/** Key for specifying {@link java.awt.Paint} instance to be used to paint the axis, its ticks and its labels. */
@@ -58,7 +60,9 @@ public interface AxisRenderer2D extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the shapes of major ticks. */
 	static final String KEY_TICKS_COLOR = "label.color";
 
-	/** Key for specifying the format of tick labels. */
+	/** Key for specifying whether tick labels are drawn. */
+	static final String KEY_TICK_LABELS = "axis.ticks.major.labels";
+	/** Key for specifying the {java.text.Format} instance which converts the tick values to labels. */
 	static final String KEY_TICK_LABELS_FORMAT = "axis.ticks.major.labels.format";
 	/** Key for specifying the distance of labels to their ticks. The distance is specified relative to font height. */
 	static final String KEY_TICK_LABELS_DISTANCE = "axis.ticks.major.labels.distance";

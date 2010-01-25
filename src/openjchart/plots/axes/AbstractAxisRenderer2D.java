@@ -75,11 +75,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 		setSettingDefault(KEY_INTERSECTION, 0.0);
 
-		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
+		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);  // Must be set before KEY_SHAPE
 		setSettingDefault(KEY_SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
+		setSettingDefault(KEY_SHAPE_VISIBLE, true);
 		setSettingDefault(KEY_SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
 		setSettingDefault(KEY_SHAPE_STROKE, new BasicStroke());
 		setSettingDefault(KEY_SHAPE_COLOR, Color.BLACK);
+		setSettingDefault(KEY_SHAPE_DIRECTION_SWAPPED, false);
 
 		setSettingDefault(KEY_TICKS, true);
 		setSettingDefault(KEY_TICKS_SPACING, 1.0);
@@ -88,6 +90,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		setSettingDefault(KEY_TICKS_ALIGNMENT, 0.5);
 		setSettingDefault(KEY_TICKS_COLOR, Color.BLACK);
 
+		setSettingDefault(KEY_TICK_LABELS, true);
 		setSettingDefault(KEY_TICK_LABELS_FORMAT, NumberFormat.getInstance());
 		setSettingDefault(KEY_TICK_LABELS_DISTANCE, 1.0);
 		setSettingDefault(KEY_TICK_LABELS_OUTSIDE, true);
@@ -124,10 +127,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				Paint paintOld = g2d.getPaint();
 
 				// Draw axis shape
-				Paint axisPaint = AbstractAxisRenderer2D.this.<Paint>getSetting(KEY_SHAPE_COLOR);
-				Stroke axisStroke = AbstractAxisRenderer2D.this.<Stroke>getSetting(KEY_SHAPE_STROKE);
-				Shape shape = AbstractAxisRenderer2D.this.<Shape>getSetting(KEY_SHAPE);
-				GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
+				Paint axisPaint = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_COLOR);
+				Stroke axisStroke = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_STROKE);
+				boolean isShapeVisible = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_VISIBLE);
+				if (isShapeVisible) {
+					Shape shape = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE);
+					GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
+				}
 
 				final double fontHeight = 10.0;
 
@@ -137,8 +143,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				if (drawTicksMajor || drawTicksMinor) {
 					List<Tick2D> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
-					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_TICK_LABELS_OUTSIDE);
-					double tickLabelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICK_LABELS_ROTATION);
+					boolean isTickLabelVisible = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS);
+					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS_OUTSIDE);
+					double tickLabelRotation = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS_ROTATION);
 					double tickLabelDist = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICK_LABELS_DISTANCE)*fontHeight;
 					Line2D tickShape = new Line2D.Double();
 
@@ -171,7 +178,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 						GraphicsUtils.drawPaintedShape(g2d, tickShape, tickPaint, null, tickStroke);
 
 						// Draw label
-						if (TickType.MAJOR.equals(tick.getType()) || TickType.CUSTOM.equals(tick.getType())) {
+						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) || TickType.CUSTOM.equals(tick.getType()))) {
 							String tickLabelText = tick.getLabel();
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);

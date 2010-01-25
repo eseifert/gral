@@ -23,12 +23,19 @@ package openjchart;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -58,38 +65,78 @@ import openjchart.plots.io.WriterCapabilities;
 /**
  * A class that displays a <code>Drawable</code> instance as a rich Swing component.
  */
-public class InteractivePanel extends DrawablePanel {
+public class InteractivePanel extends DrawablePanel implements Printable {
 	private static final long serialVersionUID = 1L;
 
+	// FIXME: Find better method to adjust resolution
+	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
+	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
+	private final PrinterJob printerJob;
+
 	private final JPopupMenu menu;
-	private final JMenuItem export;
-	private final JFileChooser exportChooser;
+	private final JMenuItem refresh;
+	private final JMenuItem exportImage;
+	private final JMenuItem print;
+
+	private final JFileChooser exportImageChooser;
 
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
 
+		printerJob = PrinterJob.getPrinterJob();
+		printerJob.setPrintable(this);
+		
 		WriterCapabilities[] exportFormats = DrawableWriterFactory.getInstance().getCapabilities();
-		exportChooser = new ExportChooser(exportFormats);
+		exportImageChooser = new ExportChooser(exportFormats);
+		exportImageChooser.setDialogTitle("Export image");
 
 		menu = new JPopupMenu();
-		export = new JMenuItem(new AbstractAction("Export...") {
+
+		refresh = new JMenuItem(new AbstractAction("Refresh") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				exportChooser.setDialogTitle("Export");
-				int ret = exportChooser.showSaveDialog(InteractivePanel.this);
+				repaint();
+			}
+		});
+		menu.add(refresh);
+
+		menu.addSeparator();
+
+		exportImage = new JMenuItem(new AbstractAction("Export image...") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int ret = exportImageChooser.showSaveDialog(InteractivePanel.this);
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					Drawable d = getDrawable();
 					ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
 					ed.setVisible(true);
 					if (ed.getUserAction().equals(ExportDialog.UserAction.APPROVE)) {
-						File file = exportChooser.getSelectedFile();
-						DrawableWriterFilter filter = (DrawableWriterFilter) exportChooser.getFileFilter();
+						File file = exportImageChooser.getSelectedFile();
+						if (exportImageChooser.getSelectedFile() == null) {
+							return;
+						}
+						DrawableWriterFilter filter = (DrawableWriterFilter) exportImageChooser.getFileFilter();
 						export(d, filter.getWriterCapabilities().getMimeType(), file, ed.getDocumentBounds());
 					}
 				}
 			}
 		});
-		menu.add(export);
+		menu.add(exportImage);
+
+		print = new JMenuItem(new AbstractAction("Print...") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (printerJob.printDialog()) {
+					try {
+						printerJob.print();
+					} catch (PrinterException ex) {
+						// TODO Show error dialog
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
+		menu.add(print);
 
 		addMouseListener(new PopupListener());
 	}
@@ -283,4 +330,34 @@ public class InteractivePanel extends DrawablePanel {
 			return userAction;
 		}
 	}
+
+	@Override
+	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
+			throws PrinterException {
+		if (pageIndex > 0) {
+            return NO_SUCH_PAGE;
+        }
+
+		Graphics2D g2d = (Graphics2D) g;
+		AffineTransform txOld = g2d.getTransform();
+		g2d.scale(MM_PER_PX, MM_PER_PX);
+
+		Rectangle2D boundsOld = getDrawable().getBounds();
+		Rectangle2D pageBounds = new Rectangle2D.Double(
+				pageFormat.getImageableX()/MM_PER_PX, pageFormat.getImageableY()/MM_PER_PX,
+				pageFormat.getImageableWidth()/MM_PER_PX, pageFormat.getImageableHeight()/MM_PER_PX);
+
+		// Set size
+		// TODO: Keep Drawable's aspect ratio when scaling
+		getDrawable().setBounds(pageBounds);
+		// TODO: Be sure to temporarily turn off antialiasing before printing
+		try {
+			getDrawable().draw(g2d);
+		} finally {
+			getDrawable().setBounds(boundsOld);
+		}
+		g2d.setTransform(txOld);
+		return Printable.PAGE_EXISTS;
+	}
+
 }

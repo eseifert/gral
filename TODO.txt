@@ -7,9 +7,6 @@ Version 0.8
 
 - Add category support to axis (instead of ticks)
 
-- Add a PlotPanel class which provides pre-defined context menus and
-  other interactive features
-
 - Add support for displaying point value to ShapeRenderer
   Example: BarPlot displaying value for each bar
 
