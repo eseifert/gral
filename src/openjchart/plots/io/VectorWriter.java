@@ -27,6 +27,7 @@ import java.io.OutputStream;
 
 import openjchart.Drawable;
 import vectorgraphics2d.EPSGraphics2D;
+import vectorgraphics2d.PDFGraphics2D;
 import vectorgraphics2d.SVGGraphics2D;
 
 /**
@@ -46,6 +47,14 @@ public class VectorWriter extends AbstractDrawableWriter {
 			"eps", "epsf", "epsi"
 		);
 		addCapabilities(EPS_CAPABILITIES);
+
+		WriterCapabilities PDF_CAPABILITIES = new WriterCapabilities(
+			"PDF",
+			"Portable Document Format",
+			TYPE_PDF,
+			"pdf"
+		);
+		addCapabilities(PDF_CAPABILITIES);
 
 		WriterCapabilities SVG_CAPABILITIES = new WriterCapabilities(
 			"SVG",
@@ -77,6 +86,8 @@ public class VectorWriter extends AbstractDrawableWriter {
 		Graphics2D g2d = null;
 		if (TYPE_EPS.equals(getMimeType())) {
 			g2d = new EPSGraphics2D(x, y, width, height);
+		} else if (TYPE_PDF.equals(getMimeType())) {
+			g2d = new PDFGraphics2D(x, y, width, height);
 		} else if (TYPE_SVG.equals(getMimeType())) {
 			g2d = new SVGGraphics2D(x, y, width, height);
 		} else {

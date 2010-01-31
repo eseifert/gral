@@ -31,14 +31,16 @@ import openjchart.Drawable;
  * can be saved into a bitmap file.
  */
 public interface DrawableWriter {
-	/** Use the EPS vector format for saving. */
-	public static final String TYPE_EPS = "application/postscript";
 	/** Use the BMP bitmap format for saving. */
 	public static final String TYPE_BMP = "image/bmp";
+	/** Use the EPS vector format for saving. */
+	public static final String TYPE_EPS = "application/postscript";
 	/** Use the GIF bitmap format for saving. */
 	public static final String TYPE_GIF = "image/gif";
 	/** Use the JFIF/JPEG bitmap format for saving. */
 	public static final String TYPE_JPEG = "image/jpeg";
+	/** Use the PDF vector format for saving. */
+	public static final String TYPE_PDF = "application/pdf";
 	/** Use the PNG bitmap format for saving. */
 	public static final String TYPE_PNG = "image/png";
 	/** Use the SVG vector format for saving. */
