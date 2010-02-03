@@ -35,12 +35,12 @@ import openjchart.data.DataTable;
 import openjchart.data.filters.Convolution;
 import openjchart.data.filters.Filter;
 import openjchart.data.filters.Kernel;
+import openjchart.data.filters.KernelUtils;
 import openjchart.data.filters.Median;
 import openjchart.plots.Plot;
 import openjchart.plots.XYPlot;
 import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.util.Insets2D;
-import openjchart.util.KernelUtils;
 
 public class ConvolutionExample extends JFrame {
 

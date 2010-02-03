@@ -80,12 +80,33 @@ public class LegendTest {
 		legend.setSetting(Legend.KEY_BACKGROUND, Color.WHITE);
 		legend.setSetting(Legend.KEY_BORDER, new BasicStroke(1f));
 		legend.add(new DummyData(1, 1, 1.0));
-		
+
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		legend.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		legend.draw(g2d);
 		assertTrue(isDrawn);
+		assertFalse(isEmpty(image, true));
+	}
+
+	protected static boolean isEmpty(BufferedImage image, boolean checkAlpha) {
+		int[] data = image.getRaster().getPixels(
+				image.getMinX(), image.getMinY(),
+				image.getWidth(), image.getHeight(),
+				(int[])null);
+		for (int i = 0; i < data.length; i++) {
+			int argb = data[i];
+			if (checkAlpha) {
+				if (argb != 0) {
+					return false;
+				}
+			} else {
+				if ((argb & 0xFFFFFF) != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 }

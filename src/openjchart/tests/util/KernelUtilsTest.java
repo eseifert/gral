@@ -22,7 +22,7 @@ package openjchart.tests.util;
 
 import static org.junit.Assert.assertEquals;
 import openjchart.data.filters.Kernel;
-import openjchart.util.KernelUtils;
+import openjchart.data.filters.KernelUtils;
 
 import org.junit.Test;
 

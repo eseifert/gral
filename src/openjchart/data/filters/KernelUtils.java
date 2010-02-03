@@ -18,11 +18,10 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.util;
+package openjchart.data.filters;
 
 import java.util.Arrays;
 
-import openjchart.data.filters.Kernel;
 
 /**
  * Abstract class that provides utility functions which are useful for
