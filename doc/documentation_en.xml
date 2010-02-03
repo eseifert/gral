@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book xmlns="http://docbook.org/ns/docbook">
+<info>
+	<title>OpenJChart Documentation</title>
+	<author><firstname>Michael</firstname><surname>Seifert</surname></author>
+	<copyright><year>2010</year><holder>Michael Seifert</holder></copyright>
+</info>
+
+<chapter>
+	<title>Data administration</title>
+	<para>The first step, before we are able to plot anything, is to load or create data, a process which OpenJChart provides several ways for. The basic interface that will be used when you have to provide data is the DataSource interface. Think of it as a table with a (theoretically) arbitrary number of rows and columns. Every column has its own data type, but only Number values are allowed. The functions a DataSource provides are solely for retrieving data rows, but it also supports statistics on the contained data, as well as the capability to listen for data changes. The following sections describe the different ways for providing and manipulating data.</para>
+
+	<sect1>
+		<title>Creating data</title>
+		<para>Assuming you have computed some values you want to plot, how can you store your data in a DataSource? You can do so through the DataTable class. DataTable is an implementation of DataSource (or AbstractDataSource to be more precise) and supports adding rows. The values must match the number of columns and their types, which both had already been specified in the constructor.</para>
+
+		<example>
+			<title>Populating a DataTable</title>
+			<programlisting>
+				# Create the table with the specified column types
+				DataTable table = new DataTable(Double.class, Double.class);
+
+				# Iterate your available data. In this case, data is an Iterable&lt;Double[]&gt;
+				for (Double[] coords : data) {
+					double x = coords[0];
+					double y = coords[1];
+					table.add(x, y);
+				}
+			</programlisting>
+		</example>
+
+		<para>You might want to have a DataTable for testing purposes only and do not want to create random values for it at each start. In this case, the DummyData class is your remedy. DummyData is a DataSource filled with a single value. As I already mentioned, this is not used very often, but suited very well for testing due to it's efficientsy, especially, when dealing with large tables.</para>
+	</sect1>
+
+	<sect1>
+		<title>Sorting data</title>
+	</sect1>
+
+	<sect1>
+		<title>Filtering data</title>
+	</sect1>
+
+	<sect1>
+		<title>Importing data</title>
+	</sect1>
+
+	<sect1>
+		<title>Exporting data</title>
+	</sect1>
+
+	<sect1>
+		<title>Statistics</title>
+	</sect1>
+</chapter>
+
+<chapter>
+	<title>Displaying data</title>
+
+	<sect1>
+		<title>Plot types</title>
+
+		<sect2>
+			<title>XY-Plot</title>
+
+			<sect3>
+				<title>Legends</title>
+			</sect3>
+		</sect2>
+
+		<sect2>
+			<title>Bar plot</title>
+		</sect2>
+
+		<sect2>
+			<title>Pie plot</title>
+		</sect2>
+	</sect>
+
+	<sect1>
+		<title>Customizing the plot</title>
+	</sect1>
+
+	<sect1>
+		<title>Customizing axes</title>
+	</sect1>
+
+	<sect1>
+		<title>Customizing shapes</title>
+	</sect1>
+
+	<sect1>
+		<title>Customizing lines</title>
+	</sect1>
+
+	<sect1>
+		<title>Exporting plots</title>
+	</sect>
+</chapter>
+
+<chapter>
+	<title>Expanding the library</title>
+
+	<sect1>
+		<title>Custom plots</title>
+	</sect>
+
+	<sect1>
+		<title>Custom plot writers</title>
+	</sect>
+</chapter>
+
+<chapter>
+   <title>Limitations</title>
+</chapter>
+</book>
