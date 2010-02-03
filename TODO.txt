@@ -7,9 +7,6 @@ Version 0.8
 
 - Add category support to axis (instead of ticks)
 
-- Add support for displaying point value to ShapeRenderer
-  Example: BarPlot displaying value for each bar
-
 - Add support for error bars to ShapeRenderer
 
 - Add new chart for drawing a pair of rows as line segments;

@@ -42,6 +42,10 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 				Paint paint = getSetting(KEY_COLOR);
 				Shape shape = getShapePath(row);
 				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
+
+				if (getSetting(KEY_VALUE_DISPLAYED)) {
+					drawValue(g2d, shape, row.get(1).doubleValue());
+				}
 			}
 		};
 

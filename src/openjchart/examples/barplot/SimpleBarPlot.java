@@ -51,10 +51,12 @@ public class SimpleBarPlot extends JFrame {
 		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
 		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
-		plot.getShapeRenderer(data).setSetting(ShapeRenderer.KEY_COLOR,
+		ShapeRenderer pointRenderer = plot.getShapeRenderer(data);
+		pointRenderer.setSetting(ShapeRenderer.KEY_COLOR,
 				new LinearGradientPaint(0f,0f, 0f,1f,
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
+		pointRenderer.setSetting(ShapeRenderer.KEY_VALUE_DISPLAYED, true);
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

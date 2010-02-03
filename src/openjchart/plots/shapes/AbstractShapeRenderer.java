@@ -21,8 +21,13 @@
 package openjchart.plots.shapes;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.text.Format;
+import java.text.NumberFormat;
 
+import openjchart.plots.Label;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
 import openjchart.util.SettingsListener;
@@ -42,6 +47,23 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsLi
 
 		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
 		setSettingDefault(KEY_COLOR, Color.BLACK);
+
+		setSettingDefault(KEY_VALUE_DISPLAYED, false);
+		setSettingDefault(KEY_FORMAT, NumberFormat.getInstance());
+	}
+
+	/**
+	 * Draws the specified value for the specified shape.
+	 * @param g2d Graphics2D to be used for drawing.
+	 * @param shape Shape to draw into.
+	 * @param value Value to be displayed.
+	 */
+	protected void drawValue(Graphics2D g2d, Shape shape, Object value) {
+		Format format = getSetting(KEY_FORMAT);
+		String text = format.format(value);
+		Label valueLabel = new Label(text);
+		valueLabel.setBounds(shape.getBounds2D());
+		valueLabel.draw(g2d);
 	}
 
 	@Override

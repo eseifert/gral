@@ -69,6 +69,10 @@ public class BarPlot extends XYPlot {
 					);
 					*/
 					GraphicsUtils.fillPaintedShape(g2d, shape, paint, paintBoundaries);
+
+					if (getSetting(KEY_VALUE_DISPLAYED)) {
+						drawValue(g2d, shape, row.get(1).doubleValue());
+					}
 				}
 			};
 		}
