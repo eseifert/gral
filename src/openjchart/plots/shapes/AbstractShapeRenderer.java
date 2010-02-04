@@ -49,7 +49,10 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsLi
 		setSettingDefault(KEY_COLOR, Color.BLACK);
 
 		setSettingDefault(KEY_VALUE_DISPLAYED, false);
-		setSettingDefault(KEY_FORMAT, NumberFormat.getInstance());
+		setSettingDefault(KEY_VALUE_FORMAT, NumberFormat.getInstance());
+		setSettingDefault(KEY_VALUE_ALIGNMENT_X, 0.5);
+		setSettingDefault(KEY_VALUE_ALIGNMENT_Y, 0.5);
+		setSettingDefault(KEY_COLOR, Color.BLACK);
 	}
 
 	/**
@@ -59,9 +62,12 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsLi
 	 * @param value Value to be displayed.
 	 */
 	protected void drawValue(Graphics2D g2d, Shape shape, Object value) {
-		Format format = getSetting(KEY_FORMAT);
+		Format format = getSetting(KEY_VALUE_FORMAT);
 		String text = format.format(value);
 		Label valueLabel = new Label(text);
+		valueLabel.setSetting(Label.KEY_ALIGNMENT_X, getSetting(KEY_VALUE_ALIGNMENT_X));
+		valueLabel.setSetting(Label.KEY_ALIGNMENT_Y, getSetting(KEY_VALUE_ALIGNMENT_Y));
+		valueLabel.setSetting(Label.KEY_COLOR, getSetting(KEY_VALUE_COLOR));
 		valueLabel.setBounds(shape.getBounds2D());
 		valueLabel.draw(g2d);
 	}

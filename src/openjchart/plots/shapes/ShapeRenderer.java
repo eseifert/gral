@@ -41,10 +41,17 @@ public interface ShapeRenderer extends SettingsStorage {
 	static final String KEY_SHAPE = "shape";
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the point shape. */
 	static final String KEY_COLOR = "shape.color";
+
 	/** Key for specifying whether the data value of a point is displayed or not. */
-	static final String KEY_VALUE_DISPLAYED = "shape.valuedisplayed";
+	static final String KEY_VALUE_DISPLAYED = "shape.value.displayed";
 	/** Key for specifying the {@link java.text.Format} instance to be used to format the displayed data values. */
-	static final String KEY_FORMAT = "shape.format";
+	static final String KEY_VALUE_FORMAT = "shape.value.format";
+	/** Key for specifying the {@link java.lang.Float} value that positions the value horizontally. */
+	static final String KEY_VALUE_ALIGNMENT_X = "shape.value.alignment.x";
+	/** Key for specifying the {@link java.lang.Float} value that positions the value vertically. */
+	static final String KEY_VALUE_ALIGNMENT_Y = "shape.value.alignment.y";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the value. */
+	static final String KEY_VALUE_COLOR = "shape.value.paint";
 
 	/**
 	 * Returns the shape to be drawn for the specified data value.
