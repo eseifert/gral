@@ -31,6 +31,7 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import openjchart.AbstractDrawable;
+import openjchart.DrawableConstants;
 import openjchart.util.GraphicsUtils;
 import openjchart.util.SettingChangeEvent;
 import openjchart.util.Settings;
@@ -47,6 +48,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
 	/** Key for specifying the vertical alignment within the bounding rectangle. */
 	public static final String KEY_ALIGNMENT_Y = "label.alignment.y";
+	/** Key for specifying the {@link openjchart.DrawableConstants} value where the label will be aligned at. */
+	public static final String KEY_ANCHOR = "label.anchor";
 	/** Key for specifying the font of this label. */
 	public static final String KEY_FONT = "label.font";
 	/** Key for specifying the rotation of this label, */
@@ -68,6 +71,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 		setSettingDefault(KEY_ALIGNMENT_X, 0.5);
 		setSettingDefault(KEY_ALIGNMENT_Y, 0.5);
+		setSettingDefault(KEY_ANCHOR, DrawableConstants.Location.CENTER);
 		setSettingDefault(KEY_FONT, Font.decode(null));
 		setSettingDefault(KEY_ROTATION, 0.0);
 		setSettingDefault(KEY_COLOR, Color.BLACK);
@@ -93,9 +97,40 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		Rectangle2D textBounds = layout.getBounds();
 		double alignmentX = getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
+		DrawableConstants.Location anchor = getSetting(KEY_ANCHOR);
+		double anchorModifierX = 0.0;
+		double anchorModifierY = 0.0;
+		if (DrawableConstants.Location.NORTH == anchor) {
+			anchorModifierY = 0.5;
+		}
+		else if (DrawableConstants.Location.NORTH_EAST == anchor) {
+			anchorModifierX = 0.5;
+			anchorModifierY = 0.5;
+		}
+		else if (DrawableConstants.Location.EAST == anchor) {
+			anchorModifierX = 0.5;
+		}
+		else if (DrawableConstants.Location.SOUTH_EAST == anchor) {
+			anchorModifierX = 0.5;
+			anchorModifierY = -0.5;
+		}
+		else if (DrawableConstants.Location.SOUTH == anchor) {
+			anchorModifierY = -0.5;
+		}
+		else if (DrawableConstants.Location.SOUTH_WEST == anchor) {
+			anchorModifierX = -0.5;
+			anchorModifierY = -0.5;
+		}
+		else if (DrawableConstants.Location.WEST == anchor) {
+			anchorModifierX = -0.5;
+		}
+		else if (DrawableConstants.Location.NORTH_WEST == anchor) {
+			anchorModifierX = -0.5;
+			anchorModifierY = 0.5;
+		}
 		txLabel.translate(
-			-textBounds.getX() - alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
-			-textBounds.getY() - alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
+			-textBounds.getX() - anchorModifierX*textBounds.getWidth() - alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
+			-textBounds.getY() - anchorModifierY*textBounds.getHeight() - alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
 		);
 
 		Shape labelShape = layout.getOutline(txLabel);
