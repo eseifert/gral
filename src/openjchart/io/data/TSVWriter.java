@@ -21,37 +21,56 @@
 package openjchart.io.data;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import openjchart.data.DataSource;
+import openjchart.io.AbstractWriter;
+import openjchart.io.WriterCapabilities;
 
 /**
  * Class that writes a DataSource in a TSV-file.
  */
-public class TSVWriter implements DataWriter {
-	private final Writer output;
+public class TSVWriter extends AbstractWriter implements DataWriter {
+	static {
+		WriterCapabilities CSV_CAPABILITIES = new WriterCapabilities(
+			"CSV",
+			"Comma separated value",
+			TYPE_CSV,
+			"csv", "txt"
+		);
+		addCapabilities(CSV_CAPABILITIES);
+	}
+
+	private String mimeType;
 
 	/**
-	 * Creates a new TSVWrites object with the specified Writer.
-	 * @param output Writer used to export the DataSource.
+	 * Creates a new TSVWrites object with the specified MIME-Type.
+	 * @param MIME-Type of the output file.
 	 */
-	public TSVWriter(Writer output) {
-		this.output = output;
+	public TSVWriter(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override
-	public void write(DataSource data) throws IOException {
-		PrintWriter writer = new PrintWriter(output);
+	public void write(DataSource data, OutputStream output) throws IOException {
+		OutputStreamWriter writer = new OutputStreamWriter(output);
 		for (Number[] row : data) {
 			for (int col = 0; col < row.length; col++) {
 				if (col > 0) {
-					writer.print("\t");
+					writer.write("\t");
 				}
-				writer.print(row[col]);
+				writer.write(String.valueOf(row[col]));
 			}
-			writer.println();
+			// FIXME: Only works on *NIX systems
+			writer.write("\n");
 		}
+
+		writer.close();
+	}
+
+	public String getMimeType() {
+		return mimeType;
 	}
 
 }

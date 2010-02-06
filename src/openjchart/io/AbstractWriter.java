@@ -18,33 +18,22 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.io.plots;
+package openjchart.io;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Abstract class that implements the basic functions of a DrawableWriter.
- * Functionality includes the implementation of getters.
+ * Abstract class that implements the basic functions of a writer.
  */
-public abstract class AbstractDrawableWriter implements DrawableWriter {
+public abstract class AbstractWriter {
 	private static final Set<WriterCapabilities> capabilities = new HashSet<WriterCapabilities>();
 
-	private final String mimeType;
-
 	/**
-	 * Creates a new AbstractDrawableWriter object with the specified
-	 * destination and format.
-	 * @param mimeType MIME-Type.
+	 * Creates a new AbstractWriter object.
 	 */
-	protected AbstractDrawableWriter(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
-	@Override
-	public String getMimeType() {
-		return mimeType;
+	protected AbstractWriter() {
 	}
 
 	/**
@@ -60,6 +49,6 @@ public abstract class AbstractDrawableWriter implements DrawableWriter {
 	 * @param capabilities WriterCapabilities to be added.
 	 */
 	protected final static void addCapabilities(WriterCapabilities capabilities) {
-		AbstractDrawableWriter.capabilities.add(capabilities);
+		AbstractWriter.capabilities.add(capabilities);
 	}
 }

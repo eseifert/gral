@@ -20,7 +20,6 @@
 
 package openjchart.tests.io.plots;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -45,19 +44,11 @@ public class DrawableWriterTest {
 	};
 
 	@Test
-	public void testCreate() {
-		for (String format : FORMATS) {
-			DrawableWriter dw = DrawableWriterFactory.getInstance().getDrawableWriter(format);
-			assertEquals(format, dw.getMimeType());
-		}
-	}
-
-	@Test
 	public void testWrite() {
 		Drawable d = new DrawableContainer();
 		for (String format : FORMATS) {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter writer = DrawableWriterFactory.getInstance().getDrawableWriter(format);
+			DrawableWriter writer = DrawableWriterFactory.getInstance().getWriter(format);
 			try {
 				writer.write(d, dest, 320, 240);
 			} catch (IOException e) {

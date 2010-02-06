@@ -57,9 +57,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
+import openjchart.io.WriterCapabilities;
 import openjchart.io.plots.DrawableWriter;
 import openjchart.io.plots.DrawableWriterFactory;
-import openjchart.io.plots.WriterCapabilities;
 
 
 /**
@@ -150,7 +150,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			ex.printStackTrace();
 			return;
 		}
-		DrawableWriter w = DrawableWriterFactory.getInstance().getDrawableWriter(mimeType);
+		DrawableWriter w = DrawableWriterFactory.getInstance().getWriter(mimeType);
 		try {
 			w.write(d, destination, documentBounds.getX(), documentBounds.getY(),
 					documentBounds.getWidth(), documentBounds.getHeight());

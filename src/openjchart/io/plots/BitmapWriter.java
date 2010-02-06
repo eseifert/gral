@@ -32,6 +32,8 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 import openjchart.Drawable;
+import openjchart.io.AbstractWriter;
+import openjchart.io.WriterCapabilities;
 
 /**
  * Class that stores <code>Drawable</code> instances as bitmap graphics.
@@ -44,7 +46,7 @@ import openjchart.Drawable;
  *   <li>WBMP</li>
  * </ul>
  */
-public class BitmapWriter extends AbstractDrawableWriter {
+public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 	static {
 		WriterCapabilities BMP_CAPABILITIES = new WriterCapabilities(
 			"BMP",
@@ -87,12 +89,14 @@ public class BitmapWriter extends AbstractDrawableWriter {
 		addCapabilities(WBMP_CAPABILITIES);
 	}
 
+	private String mimeType;
+
 	/**
-	 * Creates a new <code>BitmapWriter</code> object with the specified format.
-	 * @param format Output format.
+	 * Creates a new <code>BitmapWriter</code> object with the specified MIME-Type.
+	 * @param mimeType Output MIME-Type.
 	 */
-	protected BitmapWriter(String format) {
-		super(format);
+	protected BitmapWriter(String mimeType) {
+		this.mimeType = mimeType;
 		// TODO: Option to set transparency
 		// TODO: Possibility to choose a background color
 	}
@@ -128,5 +132,10 @@ public class BitmapWriter extends AbstractDrawableWriter {
 			}
 			return;
 		}
+	}
+
+	@Override
+	public String getMimeType() {
+		return this.mimeType;
 	}
 }

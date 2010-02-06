@@ -22,12 +22,13 @@ package openjchart.tests.io.data;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.OutputStream;
 
 import openjchart.data.DataTable;
-import openjchart.io.data.TSVWriter;
+import openjchart.io.data.DataWriter;
+import openjchart.io.data.DataWriterFactory;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,10 +46,10 @@ public class TSVWriterTest {
 
 	@Test
 	public void testWriter() throws IOException {
-		Writer output = new StringWriter();
+		OutputStream output = new ByteArrayOutputStream();
 
-		TSVWriter tsv = new TSVWriter(output);
-		tsv.write(data);
+		DataWriter tsv = DataWriterFactory.getInstance().getWriter(DataWriter.TYPE_CSV);
+		tsv.write(data, output);
 
 		assertEquals(
 			"0.0\t10.0\t20\n" +

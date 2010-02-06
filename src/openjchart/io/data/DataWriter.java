@@ -21,6 +21,7 @@
 package openjchart.io.data;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import openjchart.data.DataSource;
 
@@ -28,10 +29,14 @@ import openjchart.data.DataSource;
  * Interface that provides a function to store a DataSource.
  */
 public interface DataWriter {
+	/** Use the BMP bitmap format for saving. */
+	static final String TYPE_CSV = "text/csv";
+
 	/**
 	 * Stores the specified DataSource
 	 * @param data DataSource to be stored.
+	 * @param data OutputStream to be written to.
 	 * @throws IOException
 	 */
-	void write(DataSource data) throws IOException;
+	void write(DataSource data, OutputStream output) throws IOException;
 }

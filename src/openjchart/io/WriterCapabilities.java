@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.io.plots;
+package openjchart.io;
 
 /**
  * Class that stores information on a {@link DrawableWriter}.
@@ -37,7 +37,7 @@ public class WriterCapabilities {
 	 * @param mimeType MIME-Type
 	 * @param extensions Extensions.
 	 */
-	protected WriterCapabilities(String format, String name, String mimeType, String... extensions) {
+	public WriterCapabilities(String format, String name, String mimeType, String... extensions) {
 		this.format = format;
 		this.name = name;
 		this.mimeType = mimeType;

@@ -20,138 +20,21 @@
 
 package openjchart.io.plots;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
+
+import openjchart.io.AbstractWriterFactory;
 
 /**
  * Class that provides <code>DrawableWriter</code> implementations for
  * different file formats.
  * @see DrawableWriter
  */
-public class DrawableWriterFactory {
+public class DrawableWriterFactory extends AbstractWriterFactory<DrawableWriter> {
 	private static DrawableWriterFactory instance;
-	private final Map<String, Class<? extends DrawableWriter>> writers = new TreeMap<String, Class<? extends DrawableWriter>>();
 
 	private DrawableWriterFactory() {
-		// Retrieve property-files
-		Enumeration<URL> propFiles = null;
-		try {
-			propFiles = getClass().getClassLoader().getResources("drawablewriters.properties");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (propFiles != null) {
-			Properties props = new Properties();
-			while (propFiles.hasMoreElements()) {
-				URL propURL = propFiles.nextElement();
-				InputStream stream = null;
-				try {
-					stream = propURL.openStream();
-					props.load(stream);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				} finally {
-					if (stream != null) {
-						try {
-							stream.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-				// Parse property files and register entries as writers
-				for (Map.Entry<Object, Object> prop : props.entrySet()) {
-					String mimeType = (String) prop.getKey();
-					String className = (String) prop.getValue();
-					Class<?> clazz = null;
-					try {
-						clazz = Class.forName(className);
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						continue;
-					}
-					if (DrawableWriter.class.isAssignableFrom(clazz)) {
-						writers.put(mimeType, (Class<? extends DrawableWriter>) clazz);
-					}
-				}
-			}
-		}
-	}
-
-	public WriterCapabilities getCapabilities(String mimeType) {
-		Class<? extends DrawableWriter> clazz = writers.get(mimeType);
-		try {
-			Method capabilitiesGetter = clazz.getMethod("getCapabilities");
-			Set<WriterCapabilities> capabilities = (Set<WriterCapabilities>) capabilitiesGetter.invoke(clazz);
-			for (WriterCapabilities c : capabilities) {
-				if (c.getMimeType().equals(mimeType)) {
-					return c;
-				}
-			}
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns an array of capabilities for all supported output formats.
-	 * @return Supported capabilities.
-	 */
-	public WriterCapabilities[] getCapabilities() {
-		WriterCapabilities[] caps = new WriterCapabilities[writers.size()];
-		int i=0;
-		for (String mimeType : writers.keySet()) {
-			caps[i++] = getCapabilities(mimeType);
-		}
-		return caps;
-	}
-
-	/**
-	 * Returns an array of Strings containing all supported output formats.
-	 * @return Supported formats.
-	 */
-	public String[] getSupportedFormats() {
-		String[] formats = new String[writers.size()];
-		writers.keySet().toArray(formats);
-		return formats;
-	}
-
-	/**
-	 * Returns true if the specified MIME-Type is supported.
-	 * @param mimeType MIME-Type.
-	 * @return True if supported.
-	 */
-	public boolean isFormatSupported(String mimeType) {
-		return writers.containsKey(mimeType);
+		super("drawablewriters.properties");
 	}
 
 	/**
@@ -165,12 +48,8 @@ public class DrawableWriterFactory {
 		return instance;
 	}
 
-	/**
-	 * Returns a DrawableWriter for the specified format.
-	 * @param format Output format.
-	 * @return DrawableWriter.
-	 */
-	public DrawableWriter getDrawableWriter(String mimeType) {
+	@Override
+	public DrawableWriter getWriter(String mimeType) {
 		DrawableWriter writer = null;
 		Class<? extends DrawableWriter> clazz = writers.get(mimeType);
 		//WriterCapabilities capabilities = getCapabilities(mimeType);

@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import openjchart.Drawable;
+import openjchart.io.AbstractWriter;
+import openjchart.io.WriterCapabilities;
 import vectorgraphics2d.EPSGraphics2D;
 import vectorgraphics2d.PDFGraphics2D;
 import vectorgraphics2d.SVGGraphics2D;
@@ -38,7 +40,7 @@ import vectorgraphics2d.SVGGraphics2D;
  * <li>SVG</li>
  * </ul>
  */
-public class VectorWriter extends AbstractDrawableWriter {
+public class VectorWriter extends AbstractWriter implements DrawableWriter {
 	static {
 		WriterCapabilities EPS_CAPABILITIES = new WriterCapabilities(
 			"EPS",
@@ -65,12 +67,14 @@ public class VectorWriter extends AbstractDrawableWriter {
 		addCapabilities(SVG_CAPABILITIES);
 	}
 
+	private String mimeType;
+
 	/**
-	 * Creates a new <code>VectorWriter</code> object with the specified format.
-	 * @param format Output format.
+	 * Creates a new <code>VectorWriter</code> object with the specified MIME-Type.
+	 * @param mimeType Output MIME-Type.
 	 */
-	protected VectorWriter(String format) {
-		super(format);
+	protected VectorWriter(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@Override
@@ -97,6 +101,11 @@ public class VectorWriter extends AbstractDrawableWriter {
 		destination.write(g2d.toString().getBytes());
 
 		d.setBounds(boundsOld);
+	}
+
+	@Override
+	public String getMimeType() {
+		return mimeType;
 	}
 
 }
