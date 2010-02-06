@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.plots.io;
+package openjchart.tests.io.plots;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -28,8 +28,8 @@ import java.io.IOException;
 
 import openjchart.Drawable;
 import openjchart.DrawableContainer;
-import openjchart.plots.io.DrawableWriter;
-import openjchart.plots.io.DrawableWriterFactory;
+import openjchart.io.plots.DrawableWriter;
+import openjchart.io.plots.DrawableWriterFactory;
 
 import org.junit.Test;
 

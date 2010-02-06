@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.data.io;
+package openjchart.io.data;
 
 import java.io.IOException;
 

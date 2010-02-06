@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.plots.io;
+package openjchart.io.plots;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;

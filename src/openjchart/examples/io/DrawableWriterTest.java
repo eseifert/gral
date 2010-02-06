@@ -29,9 +29,9 @@ import javax.swing.JFileChooser;
 
 import openjchart.data.DataSeries;
 import openjchart.data.DataTable;
+import openjchart.io.plots.DrawableWriter;
+import openjchart.io.plots.DrawableWriterFactory;
 import openjchart.plots.XYPlot;
-import openjchart.plots.io.DrawableWriter;
-import openjchart.plots.io.DrawableWriterFactory;
 import openjchart.plots.lines.DefaultLineRenderer2D;
 import openjchart.plots.lines.LineRenderer2D;
 import openjchart.util.Insets2D;

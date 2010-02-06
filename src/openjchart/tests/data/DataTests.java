@@ -22,8 +22,8 @@ package openjchart.tests.data;
 
 import openjchart.tests.data.comparators.ComparatorTest;
 import openjchart.tests.data.filters.FiltersTests;
-import openjchart.tests.data.io.IoTests;
 import openjchart.tests.data.statistics.StatisticsTests;
+import openjchart.tests.io.data.IoTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

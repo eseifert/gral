@@ -57,9 +57,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
-import openjchart.plots.io.DrawableWriter;
-import openjchart.plots.io.DrawableWriterFactory;
-import openjchart.plots.io.WriterCapabilities;
+import openjchart.io.plots.DrawableWriter;
+import openjchart.io.plots.DrawableWriterFactory;
+import openjchart.io.plots.WriterCapabilities;
 
 
 /**

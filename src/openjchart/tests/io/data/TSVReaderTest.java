@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data.io;
+package openjchart.tests.io.data;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -29,7 +29,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 
 import openjchart.data.DataSource;
-import openjchart.data.io.TSVReader;
+import openjchart.io.data.TSVReader;
 
 import org.junit.Test;
 

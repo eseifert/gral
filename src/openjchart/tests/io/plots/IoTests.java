@@ -18,40 +18,14 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.data.io;
+package openjchart.tests.io.plots;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-import openjchart.data.DataSource;
-
-/**
- * Class that writes a DataSource in a TSV-file.
- */
-public class TSVWriter implements DataWriter {
-	private final Writer output;
-
-	/**
-	 * Creates a new TSVWrites object with the specified Writer.
-	 * @param output Writer used to export the DataSource.
-	 */
-	public TSVWriter(Writer output) {
-		this.output = output;
-	}
-
-	@Override
-	public void write(DataSource data) throws IOException {
-		PrintWriter writer = new PrintWriter(output);
-		for (Number[] row : data) {
-			for (int col = 0; col < row.length; col++) {
-				if (col > 0) {
-					writer.print("\t");
-				}
-				writer.print(row[col]);
-			}
-			writer.println();
-		}
-	}
-
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	DrawableWriterTest.class
+})
+public class IoTests {
 }

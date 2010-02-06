@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.plots.io;
+package openjchart.io.plots;
 
 /**
  * Class that stores information on a {@link DrawableWriter}.

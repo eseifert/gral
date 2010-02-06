@@ -18,7 +18,7 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests.data.io;
+package openjchart.tests.io.data;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
