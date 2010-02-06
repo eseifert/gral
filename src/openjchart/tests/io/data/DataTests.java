@@ -28,5 +28,5 @@ import org.junit.runners.Suite;
 	TSVReaderTest.class,
 	TSVWriterTest.class
 })
-public class IoTests {
+public class DataTests {
 }

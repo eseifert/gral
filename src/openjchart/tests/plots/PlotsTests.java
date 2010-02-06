@@ -20,7 +20,6 @@
 
 package openjchart.tests.plots;
 
-import openjchart.tests.io.plots.IoTests;
 import openjchart.tests.plots.axes.AxesTests;
 import openjchart.tests.plots.colors.ColorsTests;
 import openjchart.tests.plots.lines.LinesTests;
@@ -35,7 +34,6 @@ import org.junit.runners.Suite;
 	ColorsTests.class,
 	LinesTests.class,
 	ShapesTests.class,
-	IoTests.class,
 	PlotArea2DTest.class,
 	LegendTest.class,
 	PlotTest.class,

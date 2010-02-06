@@ -18,25 +18,14 @@
  * along with OpenJChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package openjchart.tests;
-
-import openjchart.tests.data.DataTests;
-import openjchart.tests.io.IoTests;
-import openjchart.tests.plots.PlotsTests;
-import openjchart.tests.util.UtilTests;
+package openjchart.tests.io.plots;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
+	DrawableWriterTest.class
 })
-public class AllTests {
+public class PlotsTests {
 }

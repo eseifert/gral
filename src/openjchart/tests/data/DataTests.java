@@ -23,7 +23,6 @@ package openjchart.tests.data;
 import openjchart.tests.data.comparators.ComparatorTest;
 import openjchart.tests.data.filters.FiltersTests;
 import openjchart.tests.data.statistics.StatisticsTests;
-import openjchart.tests.io.data.IoTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -37,8 +36,7 @@ import org.junit.runners.Suite;
 	RowTest.class,
 	ComparatorTest.class,
 	StatisticsTests.class,
-	FiltersTests.class,
-	IoTests.class
+	FiltersTests.class
 })
 public class DataTests {
 }
