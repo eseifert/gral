@@ -5,18 +5,71 @@
   <name>Graphing Library</name>
   <version>0.7</version>
   <description>A Java library for rendering graphs.</description>
+  <inceptionYear>2010</inceptionYear>
+
+  <licenses>
+    <license>
+        <name>GNU Library or Lesser General Public License (LGPL)</name>
+        <url>http://www.gnu.org/licenses/lgpl.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+        <name>Erich Seifert</name>
+        <email>info[at]erichseifert.de</email>
+    </developer>
+    <developer>
+        <name>Michael Seifert</name>
+        <email>michael.seifert[at]gmx.net</email>
+    </developer>
+  </developers>
+
   <build>
-  	<plugins>
-  		<plugin>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<version>2.1</version>
-  			<configuration>
+    <plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.1</version>
+            <configuration>
                 <source>1.6</source>
                 <target>1.6</target>
-  			</configuration>
-  		</plugin>
-  	</plugins>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>com.mycila.maven-license-plugin</groupId>
+            <artifactId>maven-license-plugin</artifactId>
+            <version>1.5.0</version>
+            <configuration>
+                <header>src/etc/header.txt</header>
+                <properties>
+                    <year>${project.inceptionYear}</year>
+                    <owner1>Erich Seifert</owner1>
+                    <email1>info[at]erichseifert.de</email1>
+                    <owner2>Michael Seifert</owner2>
+                    <email2>michael.seifert[at]gmx.net</email2>
+                </properties>
+                <excludes>
+                    <exclude>COPYING</exclude>
+                    <exclude>COPYING.LESSER</exclude>
+                    <exclude>TODO.txt</exclude>
+                    <exclude>bin/**</exclude>
+                    <exclude>src/main/resources/**</exclude>
+                    <exclude>src/test/resources/**</exclude>
+                    <exclude>doc/**</exclude>
+                </excludes>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
   </build>
+
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
