@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>GRAL</artifactId>
-  <name>Graph Library</name>
+  <name>Graphing Library</name>
   <version>0.7</version>
-  <description>A Java library for displaying graphs.</description>
+  <description>A Java library for rendering graphs.</description>
 </project>
