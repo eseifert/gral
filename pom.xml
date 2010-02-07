@@ -5,4 +5,16 @@
   <name>Graphing Library</name>
   <version>0.7</version>
   <description>A Java library for rendering graphs.</description>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>2.1</version>
+  			<configuration>
+                <source>1.5</source>
+                <target>1.5</target>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
 </project>
