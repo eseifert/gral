@@ -21,7 +21,7 @@
 package openjchart.io;
 
 /**
- * Class that stores information on a {@link DrawableWriter}.
+ * Class that stores information on a {@link openjchart.io.plots.DrawableWriter}.
  */
 public class WriterCapabilities {
 	private final String format;

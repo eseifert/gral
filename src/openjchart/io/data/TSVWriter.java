@@ -42,11 +42,11 @@ public class TSVWriter extends AbstractWriter implements DataWriter {
 		addCapabilities(CSV_CAPABILITIES);
 	}
 
-	private String mimeType;
+	private final String mimeType;
 
 	/**
 	 * Creates a new TSVWrites object with the specified MIME-Type.
-	 * @param MIME-Type of the output file.
+	 * @param mimeType MIME-Type of the output file.
 	 */
 	public TSVWriter(String mimeType) {
 		this.mimeType = mimeType;

@@ -84,7 +84,7 @@ public interface AxisRenderer2D extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the the shapes of minor ticks. */
 	static final String KEY_TICKS_MINOR_COLOR = "label.color";
 
-	/** Custom labels as a {@link java.lang.Map} with a position (<code>Double</code>) as key and a label (<code>String</code>) as value. */
+	/** Custom labels as a {@link java.util.Map} with a position (<code>Double</code>) as key and a label (<code>String</code>) as value. */
 	static final String KEY_TICKS_CUSTOM = "axis.ticks.custom";
 
 	/** Key for specifying the {@link java.lang.String} instance for the label text of the axis. */

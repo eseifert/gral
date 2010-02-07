@@ -35,7 +35,7 @@ public interface DataWriter {
 	/**
 	 * Stores the specified DataSource
 	 * @param data DataSource to be stored.
-	 * @param data OutputStream to be written to.
+	 * @param output OutputStream to be written to.
 	 * @throws IOException
 	 */
 	void write(DataSource data, OutputStream output) throws IOException;
