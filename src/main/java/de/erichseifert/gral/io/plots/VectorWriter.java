@@ -28,10 +28,9 @@ import java.io.OutputStream;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.io.AbstractWriter;
 import de.erichseifert.gral.io.WriterCapabilities;
-
-import vectorgraphics2d.EPSGraphics2D;
-import vectorgraphics2d.PDFGraphics2D;
-import vectorgraphics2d.SVGGraphics2D;
+import de.erichseifert.vectorgraphics2d.EPSGraphics2D;
+import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
+import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
 
 /**
  * Class that stores <code>Drawable</code> instances as vector graphics.
@@ -68,7 +67,7 @@ public class VectorWriter extends AbstractWriter implements DrawableWriter {
 		addCapabilities(SVG_CAPABILITIES);
 	}
 
-	private String mimeType;
+	private final String mimeType;
 
 	/**
 	 * Creates a new <code>VectorWriter</code> object with the specified MIME-Type.
