@@ -81,8 +81,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	@Override
 	public List<Tick2D> getTicks(Axis axis) {
 		checkAxisBounds(axis);
-		double tickSpacing = getSetting(KEY_TICKS_SPACING);
-		int ticksMinorCount = getSetting(KEY_TICKS_MINOR_COUNT);
+		double tickSpacing = this.<Double>getSetting(KEY_TICKS_SPACING);
+		int ticksMinorCount = this.<Integer>getSetting(KEY_TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();

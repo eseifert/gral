@@ -65,9 +65,9 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 		Area lineShape = new Area(stroke.createStrokedShape(line));
 
 		// Subtract shape of data points from line to yield gaps.
-		double gapSize = getSetting(KEY_GAP);
+		double gapSize = this.<Double>getSetting(KEY_GAP);
 		if (!MathUtils.almostEqual(gapSize, 0.0, 1e-10)) {
-			boolean isGapRounded = getSetting(KEY_GAP_ROUNDED);
+			boolean isGapRounded = this.<Boolean>getSetting(KEY_GAP_ROUNDED);
 			int gapJoin = (isGapRounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
 			for (DataPoint2D p : points) {
 				Shape shape = p.getShape();

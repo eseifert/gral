@@ -56,7 +56,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 			@Override
 			public void draw(Graphics2D g2d) {
 				Orientation dir = getSetting(KEY_ASCENT_DIRECTION);
-				double ascendingPoint = getSetting(KEY_ASCENDING_POINT);
+				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
 
 				// Construct shape
 				GeneralPath line = new GeneralPath();

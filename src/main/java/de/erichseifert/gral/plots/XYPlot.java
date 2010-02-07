@@ -122,10 +122,10 @@ public class XYPlot extends Plot implements DataListener  {
 		 * @param g2d Graphics to be used for drawing.
 		 */
 		protected void drawGrid(Graphics2D g2d) {
-			boolean isGridMajorX = getSetting(KEY_GRID_MAJOR_X);
-			boolean isGridMajorY = getSetting(KEY_GRID_MAJOR_Y);
-			boolean isGridMinorX = getSetting(KEY_GRID_MINOR_X);
-			boolean isGridMinorY = getSetting(KEY_GRID_MINOR_Y);
+			boolean isGridMajorX = this.<Boolean>getSetting(KEY_GRID_MAJOR_X);
+			boolean isGridMajorY = this.<Boolean>getSetting(KEY_GRID_MAJOR_Y);
+			boolean isGridMinorX = this.<Boolean>getSetting(KEY_GRID_MINOR_X);
+			boolean isGridMinorY = this.<Boolean>getSetting(KEY_GRID_MINOR_Y);
 
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());

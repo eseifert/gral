@@ -96,8 +96,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		}
 
 		Rectangle2D textBounds = layout.getBounds();
-		double alignmentX = getSetting(KEY_ALIGNMENT_X);
-		double alignmentY = getSetting(KEY_ALIGNMENT_Y);
+		double alignmentX = this.<Double>getSetting(KEY_ALIGNMENT_X);
+		double alignmentY = this.<Double>getSetting(KEY_ALIGNMENT_Y);
 		DrawableConstants.Location anchor = getSetting(KEY_ANCHOR);
 		double anchorModifierX = 0.0;
 		double anchorModifierY = 0.0;

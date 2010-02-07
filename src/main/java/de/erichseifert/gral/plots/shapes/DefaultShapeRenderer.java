@@ -44,7 +44,7 @@ public class DefaultShapeRenderer extends AbstractShapeRenderer {
 				Shape shape = getShapePath(row);
 				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
 
-				if (getSetting(KEY_VALUE_DISPLAYED)) {
+				if (DefaultShapeRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
 					drawValue(g2d, shape, row.get(1).doubleValue());
 				}
 			}

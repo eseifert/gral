@@ -130,7 +130,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				// Draw axis shape
 				Paint axisPaint = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_COLOR);
 				Stroke axisStroke = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_STROKE);
-				boolean isShapeVisible = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE_VISIBLE);
+				boolean isShapeVisible = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_SHAPE_VISIBLE);
 				if (isShapeVisible) {
 					Shape shape = AbstractAxisRenderer2D.this.getSetting(KEY_SHAPE);
 					GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
@@ -139,14 +139,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				final double fontHeight = 10.0;
 
 				// Draw ticks
-				boolean drawTicksMajor = getSetting(KEY_TICKS);
-				boolean drawTicksMinor = getSetting(KEY_TICKS_MINOR);
+				boolean drawTicksMajor = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_TICKS);
+				boolean drawTicksMinor = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_TICKS_MINOR);
 				if (drawTicksMajor || drawTicksMinor) {
 					List<Tick2D> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
-					boolean isTickLabelVisible = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS);
-					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS_OUTSIDE);
-					double tickLabelRotation = AbstractAxisRenderer2D.this.getSetting(KEY_TICK_LABELS_ROTATION);
+					boolean isTickLabelVisible = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_TICK_LABELS);
+					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.<Boolean>getSetting(KEY_TICK_LABELS_OUTSIDE);
+					double tickLabelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICK_LABELS_ROTATION);
 					double tickLabelDist = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICK_LABELS_DISTANCE)*fontHeight;
 					Line2D tickShape = new Line2D.Double();
 
@@ -265,11 +265,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			public Dimension2D getPreferredSize() {
 				// FIXME: use real font height instead of fixed value
 				final double fontHeight = 10.0;
-				double tickLength = getSetting(KEY_TICKS_LENGTH);
+				double tickLength = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICKS_LENGTH);
 				tickLength *= fontHeight;
-				double tickAlignment = getSetting(KEY_TICKS_ALIGNMENT);
+				double tickAlignment = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICKS_ALIGNMENT);
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-				double labelDistance = getSetting(KEY_TICK_LABELS_DISTANCE);
+				double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(KEY_TICK_LABELS_DISTANCE);
 				double labelDist = labelDistance*fontHeight + tickLengthOuter;
 				double minSize = fontHeight + labelDist + tickLengthOuter;
 				return new de.erichseifert.gral.util.Dimension2D.Double(minSize, minSize);
@@ -281,8 +281,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 
 	@Override
 	public List<Tick2D> getTicks(Axis axis) {
-		double tickSpacing = getSetting(KEY_TICKS_SPACING);
-		int ticksMinorCount = getSetting(KEY_TICKS_MINOR_COUNT);
+		double tickSpacing = this.<Double>getSetting(KEY_TICKS_SPACING);
+		int ticksMinorCount = this.<Integer>getSetting(KEY_TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 
 		double min = axis.getMin().doubleValue();
@@ -450,7 +450,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	 * @param shape Shape to be evaluated.
 	 */
 	protected void evaluateShape(Shape shape) {
-		boolean directionSwapped =  getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
+		boolean directionSwapped =  this.<Boolean>getSetting(KEY_SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 		shapeSegmentLengths = new double[shapeLines.length];
 		shapeLengths = new double[shapeLines.length + 1];  // First length is always 0.0, last length is the total length

@@ -72,7 +72,7 @@ public class PiePlot extends Plot implements DataListener {
 			double h = getHeight();
 			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
 			g2d.translate(w/2d, h/2d);
-			startValues[0] = PiePlot.this.getSetting(KEY_START);
+			startValues[0] = PiePlot.this.<Double>getSetting(KEY_START);
 			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
 			ColorMapper colorList = PiePlot.this.getSetting(KEY_COLORS);
 			for (int i = 1; i < startValues.length;  i++) {
@@ -116,7 +116,7 @@ public class PiePlot extends Plot implements DataListener {
 			colYSum += val;
 		}
 
-		if (getSetting(KEY_CLOCKWISE)) {
+		if (this.<Boolean>getSetting(KEY_CLOCKWISE)) {
 			degreesPerValue = -360.0/colYSum;
 		}
 		else {

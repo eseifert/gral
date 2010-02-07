@@ -166,7 +166,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param g2d Graphics to be used for drawing.
 	 */
 	protected void drawLegend(Graphics2D g2d) {
-		boolean isVisible = getSetting(KEY_LEGEND);
+		boolean isVisible = this.<Boolean>getSetting(KEY_LEGEND);
 		if (!isVisible || legend == null) {
 			return;
 		}

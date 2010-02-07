@@ -71,7 +71,7 @@ public class BarPlot extends XYPlot {
 					*/
 					GraphicsUtils.fillPaintedShape(g2d, shape, paint, paintBoundaries);
 
-					if (getSetting(KEY_VALUE_DISPLAYED)) {
+					if (BarRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
 						drawValue(g2d, shape, row.get(1).doubleValue());
 					}
 				}
@@ -94,7 +94,7 @@ public class BarPlot extends XYPlot {
 				return new GeneralPath();
 			}
 
-			double barWidthRel = BarPlot.this.getSetting(KEY_BAR_WIDTH);
+			double barWidthRel = BarPlot.this.<Double>getSetting(KEY_BAR_WIDTH);
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(axisX, valueX - barWidthRel*barAlign, true, false).getX();

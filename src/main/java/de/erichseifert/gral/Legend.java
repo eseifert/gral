@@ -215,7 +215,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 
 	@Override
 	public <T> T getSetting(String key) {
-		return settings.get(key);
+		return (T)settings.get(key);
 	}
 
 	@Override
