@@ -18,26 +18,26 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.data;
 
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
+import de.erichseifert.gral.data.comparators.ComparatorTest;
+import de.erichseifert.gral.data.filters.FiltersTests;
+import de.erichseifert.gral.data.statistics.StatisticsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
+	DataTableTest.class,
+	DataSeriesTest.class,
+	DataSubsetTest.class,
+	DummyDataTest.class,
+	RowTest.class,
+	ComparatorTest.class,
+	StatisticsTests.class,
+	FiltersTests.class
 })
-public class AllTests {
+public class DataTests {
 }

@@ -18,26 +18,17 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
-
+package de.erichseifert.gral.plots.colors;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
+	RainbowColorsTest.class,
+	SingleColorTest.class,
+	RandomColorsTest.class,
+	QuasiRandomColorsTest.class
 })
-public class AllTests {
+public class ColorsTests {
 }

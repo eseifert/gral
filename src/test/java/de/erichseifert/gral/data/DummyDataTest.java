@@ -18,26 +18,23 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.data;
 
+import static org.junit.Assert.assertEquals;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
+import de.erichseifert.gral.data.DummyData;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
-})
-public class AllTests {
+public class DummyDataTest {
+	private static final double DELTA = 1e-15;
+
+	@Test
+	public void testCreation() {
+		DummyData data = new DummyData(1, 1, 1.0);
+		assertEquals(1, data.getColumnCount());
+		assertEquals(1, data.getRowCount());
+		assertEquals(1.0, data.get(0, 0).doubleValue(), DELTA);
+	}
+
 }

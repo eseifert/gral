@@ -18,26 +18,24 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.plots.colors;
+
+import static org.junit.Assert.assertEquals;
+
+import java.awt.Color;
 
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
+import de.erichseifert.gral.plots.colors.RainbowColors;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
-})
-public class AllTests {
+public class RainbowColorsTest {
+	@Test
+	public void testGet() {
+		RainbowColors c = new RainbowColors();
+		for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
+			assertEquals(Color.getHSBColor(i, 1f, 1f), c.get(i));
+		}
+	}
+
 }

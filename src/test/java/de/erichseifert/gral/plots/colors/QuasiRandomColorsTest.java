@@ -18,26 +18,29 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.plots.colors;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.awt.Color;
 
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
+import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
-})
-public class AllTests {
+public class QuasiRandomColorsTest {
+	@Test
+	public void testGet() {
+		QuasiRandomColors c = new QuasiRandomColors();
+		Color prv = null;
+		for (double i = 0.0; i <= 1.0; i += 0.1) {
+			Color cur = c.get(i);
+			assertNotNull(cur);
+			assertFalse(cur.equals(prv));
+			prv = cur;
+		}
+	}
+
 }

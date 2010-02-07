@@ -18,26 +18,24 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTests;
-import de.erichseifert.gral.io.IoTests;
-import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.util.UtilTests;
+import de.erichseifert.gral.util.SettingChangeEvent;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	UtilTests.class,
-	DataTests.class,
-	PlotsTests.class,
-	DrawablePanelTest.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	IoTests.class
-})
-public class AllTests {
+public class SettingChangeEventTest {
+	@Test
+	public void testCreation() {
+		SettingChangeEvent e = new SettingChangeEvent(this, "test", 0.0, 1.0, true);
+		assertEquals(this, e.getSource());
+		assertEquals("test", e.getKey());
+		assertEquals(0.0, e.getValOld());
+		assertEquals(1.0, e.getValNew());
+		assertTrue(e.isDefaultSetting());
+	}
+
 }
