@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -50,7 +50,7 @@ public class DrawableWriterTest {
 		Drawable d = new DrawableContainer();
 		for (String format : FORMATS) {
 			ByteArrayOutputStream dest = new ByteArrayOutputStream();
-			DrawableWriter writer = DrawableWriterFactory.getInstance().getWriter(format);
+			DrawableWriter writer = DrawableWriterFactory.getInstance().get(format);
 			try {
 				writer.write(d, dest, 320, 240);
 			} catch (IOException e) {

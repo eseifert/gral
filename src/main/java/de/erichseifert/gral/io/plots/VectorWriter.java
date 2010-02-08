@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -28,7 +28,7 @@ import java.io.OutputStream;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.io.AbstractWriter;
-import de.erichseifert.gral.io.WriterCapabilities;
+import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.vectorgraphics2d.EPSGraphics2D;
 import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
 import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
@@ -43,7 +43,7 @@ import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
  */
 public class VectorWriter extends AbstractWriter implements DrawableWriter {
 	static {
-		WriterCapabilities EPS_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities EPS_CAPABILITIES = new IOCapabilities(
 			"EPS",
 			"Encapsulated PostScript",
 			TYPE_EPS,
@@ -51,7 +51,7 @@ public class VectorWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(EPS_CAPABILITIES);
 
-		WriterCapabilities PDF_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities PDF_CAPABILITIES = new IOCapabilities(
 			"PDF",
 			"Portable Document Format",
 			TYPE_PDF,
@@ -59,7 +59,7 @@ public class VectorWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(PDF_CAPABILITIES);
 
-		WriterCapabilities SVG_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities SVG_CAPABILITIES = new IOCapabilities(
 			"SVG",
 			"Scalable Vector Graphics",
 			TYPE_SVG,

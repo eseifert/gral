@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -27,20 +27,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
- * Abstract implementation of <code>WriterFactory</code> which provides basic functionality.
+ * Abstract implementation of <code>IOFactory</code> which provides basic functionality.
  *
  * @param <T> The type of objects which should be produced by this factory
  */
-public abstract class AbstractWriterFactory<T> implements WriterFactory<T> {
-	protected final Map<String, Class<? extends T>> writers = new TreeMap<String, Class<? extends T>>();
+public abstract class AbstractIOFactory<T> implements IOFactory<T> {
+	protected final Map<String, Class<? extends T>> entries = new HashMap<String, Class<? extends T>>();
 
-	protected AbstractWriterFactory(String propFileName) {
+	protected AbstractIOFactory(String propFileName) {
 		// Retrieve property-files
 		Enumeration<URL> propFiles = null;
 		try {
@@ -71,7 +71,7 @@ public abstract class AbstractWriterFactory<T> implements WriterFactory<T> {
 						}
 					}
 				}
-				// Parse property files and register entries as writers
+				// Parse property files and register entries as items
 				for (Map.Entry<Object, Object> prop : props.entrySet()) {
 					String mimeType = (String) prop.getKey();
 					String className = (String) prop.getValue();
@@ -84,19 +84,19 @@ public abstract class AbstractWriterFactory<T> implements WriterFactory<T> {
 						continue;
 					}
 					// FIXME: Missing type safety check
-					writers.put(mimeType, (Class<? extends T>) clazz);
+					entries.put(mimeType, (Class<? extends T>) clazz);
 				}
 			}
 		}
 	}
 
 	@Override
-	public WriterCapabilities getCapabilities(String mimeType) {
-		Class<? extends T> clazz = writers.get(mimeType);
+	public IOCapabilities getCapabilities(String mimeType) {
+		Class<? extends T> clazz = entries.get(mimeType);
 		try {
 			Method capabilitiesGetter = clazz.getMethod("getCapabilities");
-			Set<WriterCapabilities> capabilities = (Set<WriterCapabilities>) capabilitiesGetter.invoke(clazz);
-			for (WriterCapabilities c : capabilities) {
+			Set<IOCapabilities> capabilities = (Set<IOCapabilities>) capabilitiesGetter.invoke(clazz);
+			for (IOCapabilities c : capabilities) {
 				if (c.getMimeType().equals(mimeType)) {
 					return c;
 				}
@@ -122,10 +122,10 @@ public abstract class AbstractWriterFactory<T> implements WriterFactory<T> {
 	}
 
 	@Override
-	public WriterCapabilities[] getCapabilities() {
-		WriterCapabilities[] caps = new WriterCapabilities[writers.size()];
+	public IOCapabilities[] getCapabilities() {
+		IOCapabilities[] caps = new IOCapabilities[entries.size()];
 		int i=0;
-		for (String mimeType : writers.keySet()) {
+		for (String mimeType : entries.keySet()) {
 			caps[i++] = getCapabilities(mimeType);
 		}
 		return caps;
@@ -133,13 +133,13 @@ public abstract class AbstractWriterFactory<T> implements WriterFactory<T> {
 
 	@Override
 	public String[] getSupportedFormats() {
-		String[] formats = new String[writers.size()];
-		writers.keySet().toArray(formats);
+		String[] formats = new String[entries.size()];
+		entries.keySet().toArray(formats);
 		return formats;
 	}
 
 	@Override
 	public boolean isFormatSupported(String mimeType) {
-		return writers.containsKey(mimeType);
+		return entries.containsKey(mimeType);
 	}
 }

@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.io.plots;
+package de.erichseifert.gral.io.data;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,37 +27,28 @@ import java.lang.reflect.InvocationTargetException;
 import de.erichseifert.gral.io.AbstractIOFactory;
 
 
-/**
- * Class that provides <code>DrawableWriter</code> implementations for
- * different file formats.
- * @see DrawableWriter
- */
-public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
-	private static DrawableWriterFactory instance;
+public class DataReaderFactory extends AbstractIOFactory<DataReader> {
+	private static DataReaderFactory instance;
 
-	private DrawableWriterFactory() {
-		super("drawablewriters.properties");
+	private DataReaderFactory() {
+		super("datareaders.properties");
 	}
 
-	/**
-	 * Returns an instance of this DrawableWriterFactory.
-	 * @return Instance.
-	 */
-	public static DrawableWriterFactory getInstance() {
+	public static DataReaderFactory getInstance() {
 		if (instance == null) {
-			instance = new DrawableWriterFactory();
+			instance = new DataReaderFactory();
 		}
 		return instance;
 	}
 
 	@Override
-	public DrawableWriter get(String mimeType) {
-		DrawableWriter writer = null;
-		Class<? extends DrawableWriter> clazz = entries.get(mimeType);
+	public DataReader get(String mimeType) {
+		DataReader reader = null;
+		Class<? extends DataReader> clazz = entries.get(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
-			Constructor<? extends DrawableWriter> constructor = clazz.getDeclaredConstructor(String.class);
-			writer = constructor.newInstance(mimeType);
+			Constructor<? extends DataReader> constructor = clazz.getDeclaredConstructor(String.class);
+			reader = constructor.newInstance(mimeType);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,10 +69,10 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 			e.printStackTrace();
 		}
 
-		if (writer == null) {
+		if (reader == null) {
 			throw new IllegalArgumentException("Unsupported MIME-Type: "+mimeType);
 		}
 
-		return writer;
+		return reader;
 	}
 }

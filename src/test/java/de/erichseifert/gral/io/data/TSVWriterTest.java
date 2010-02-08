@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -50,7 +50,7 @@ public class TSVWriterTest {
 	public void testWriter() throws IOException {
 		OutputStream output = new ByteArrayOutputStream();
 
-		DataWriter tsv = DataWriterFactory.getInstance().getWriter(DataWriter.TYPE_CSV);
+		DataWriter tsv = DataWriterFactory.getInstance().get(DataWriter.TYPE_CSV);
 		tsv.write(data, output);
 
 		assertEquals(

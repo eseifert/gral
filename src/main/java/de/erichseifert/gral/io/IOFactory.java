@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -22,22 +22,22 @@
 package de.erichseifert.gral.io;
 
 
-public interface WriterFactory<T> {
+public interface IOFactory<T> {
 
 	/**
-	 * Returns a DrawableWriter for the specified format.
+	 * Returns an object for reading or writing the specified format.
 	 * @param mimeType Output MIME-Type.
-	 * @return Writer for the specified MIME-Type.
+	 * @return Reader or writer for the specified MIME-Type.
 	 */
-	public abstract T getWriter(String mimeType);
+	public abstract T get(String mimeType);
 
-	public abstract WriterCapabilities getCapabilities(String mimeType);
+	public abstract IOCapabilities getCapabilities(String mimeType);
 
 	/**
 	 * Returns an array of capabilities for all supported output formats.
 	 * @return Supported capabilities.
 	 */
-	public abstract WriterCapabilities[] getCapabilities();
+	public abstract IOCapabilities[] getCapabilities();
 
 	/**
 	 * Returns an array of Strings containing all supported output formats.

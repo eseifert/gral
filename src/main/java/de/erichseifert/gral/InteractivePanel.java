@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -58,7 +58,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
-import de.erichseifert.gral.io.WriterCapabilities;
+import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 
@@ -88,7 +88,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		printerJob = PrinterJob.getPrinterJob();
 		printerJob.setPrintable(this);
 		
-		WriterCapabilities[] exportFormats = DrawableWriterFactory.getInstance().getCapabilities();
+		IOCapabilities[] exportFormats = DrawableWriterFactory.getInstance().getCapabilities();
 		exportImageChooser = new ExportChooser(exportFormats);
 		exportImageChooser.setDialogTitle("Export image");
 
@@ -152,7 +152,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			ex.printStackTrace();
 			return;
 		}
-		DrawableWriter w = DrawableWriterFactory.getInstance().getWriter(mimeType);
+		DrawableWriter w = DrawableWriterFactory.getInstance().get(mimeType);
 		try {
 			w.write(d, destination, documentBounds.getX(), documentBounds.getY(),
 					documentBounds.getWidth(), documentBounds.getHeight());
@@ -188,9 +188,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	}
 
 	public final static class DrawableWriterFilter extends FileFilter {
-		private final WriterCapabilities capabilities;
+		private final IOCapabilities capabilities;
 
-		public DrawableWriterFilter(WriterCapabilities capabilities) {
+		public DrawableWriterFilter(IOCapabilities capabilities) {
 			this.capabilities = capabilities;
 		}
 
@@ -213,7 +213,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			return String.format("%s: %s", capabilities.getFormat(), capabilities.getName());
 		}
 
-		public WriterCapabilities getWriterCapabilities() {
+		public IOCapabilities getWriterCapabilities() {
 			return capabilities;
 		}
 
@@ -228,9 +228,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	}
 
 	public final static class ExportChooser extends JFileChooser {
-		public ExportChooser(WriterCapabilities... capabilities) {
+		public ExportChooser(IOCapabilities... capabilities) {
 			setAcceptAllFileFilterUsed(false);
-			for (WriterCapabilities c : capabilities) {
+			for (IOCapabilities c : capabilities) {
 				addChoosableFileFilter(new DrawableWriterFilter(c));
 			}
 		}

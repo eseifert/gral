@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -24,21 +24,21 @@ package de.erichseifert.gral.io;
 /**
  * Class that stores information on a {@link de.erichseifert.gral.io.plots.DrawableWriter}.
  */
-public class WriterCapabilities {
+public class IOCapabilities {
 	private final String format;
 	private final String name;
 	private final String mimeType;
 	private final String[] extensions;
 
 	/**
-	 * Creates a new <code>WriterCapabilities</code> object with the specified format,
+	 * Creates a new <code>IOCapabilities</code> object with the specified format,
 	 * name, MIME-Type and filename extensions.
 	 * @param format Format.
 	 * @param name Name.
 	 * @param mimeType MIME-Type
 	 * @param extensions Extensions.
 	 */
-	public WriterCapabilities(String format, String name, String mimeType, String... extensions) {
+	public IOCapabilities(String format, String name, String mimeType, String... extensions) {
 		this.format = format;
 		this.name = name;
 		this.mimeType = mimeType;

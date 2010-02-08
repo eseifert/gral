@@ -107,7 +107,7 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
 		<example>
 			<title>Import example</title>
 			<programlisting language="java"><![CDATA[
-DataReader reader.read = DataReaderFactory.getInstance().getReader("text/csv");
+DataReader reader.read = DataReaderFactory.getInstance().get("text/csv");
 FileInputStream file = new FileInputStream("foobar.csv");
 DataSource data = reader.read(file);
 ]]></programlisting>
@@ -119,7 +119,7 @@ DataSource data = reader.read(file);
 		<example>
 			<title>Export example</title>
 			<programlisting language="java"><![CDATA[
-DataWriter writer = DataWriterFactory.getInstance().getWriter("text/csv");
+DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 FileOutputStream file = new FileOutputStream("foobar.csv");
 writer.write(table, file);
 ]]></programlisting>

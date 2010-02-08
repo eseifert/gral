@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -27,7 +27,7 @@ import java.io.OutputStreamWriter;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.io.AbstractWriter;
-import de.erichseifert.gral.io.WriterCapabilities;
+import de.erichseifert.gral.io.IOCapabilities;
 
 
 /**
@@ -35,7 +35,7 @@ import de.erichseifert.gral.io.WriterCapabilities;
  */
 public class TSVWriter extends AbstractWriter implements DataWriter {
 	static {
-		WriterCapabilities CSV_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
 			"CSV",
 			"Comma separated value",
 			TYPE_CSV,

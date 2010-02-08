@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -29,7 +29,7 @@ import java.util.Set;
  * Abstract class that implements the basic functions of a writer.
  */
 public abstract class AbstractWriter {
-	private static final Set<WriterCapabilities> capabilities = new HashSet<WriterCapabilities>();
+	private static final Set<IOCapabilities> capabilities = new HashSet<IOCapabilities>();
 
 	/**
 	 * Creates a new AbstractWriter object.
@@ -38,18 +38,18 @@ public abstract class AbstractWriter {
 	}
 
 	/**
-	 * Returns a Set with WriterCapabilities for all supported formats.
-	 * @return WriterCapabilities.
+	 * Returns a Set with IOCapabilities for all supported formats.
+	 * @return IOCapabilities.
 	 */
-	public static Set<WriterCapabilities> getCapabilities() {
+	public static Set<IOCapabilities> getCapabilities() {
 		return Collections.unmodifiableSet(capabilities);
 	}
 
 	/**
-	 * Adds the specified WriterCapabilities to the Set of supported formats.
-	 * @param capabilities WriterCapabilities to be added.
+	 * Adds the specified IOCapabilities to the Set of supported formats.
+	 * @param capabilities IOCapabilities to be added.
 	 */
-	protected final static void addCapabilities(WriterCapabilities capabilities) {
+	protected final static void addCapabilities(IOCapabilities capabilities) {
 		AbstractWriter.capabilities.add(capabilities);
 	}
 }

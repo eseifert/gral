@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -34,7 +34,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.io.AbstractWriter;
-import de.erichseifert.gral.io.WriterCapabilities;
+import de.erichseifert.gral.io.IOCapabilities;
 
 
 /**
@@ -50,7 +50,7 @@ import de.erichseifert.gral.io.WriterCapabilities;
  */
 public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 	static {
-		WriterCapabilities BMP_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities BMP_CAPABILITIES = new IOCapabilities(
 			"BMP",
 			"Windows Bitmap",
 			TYPE_BMP,
@@ -58,7 +58,7 @@ public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(BMP_CAPABILITIES);
 
-		WriterCapabilities GIF_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities GIF_CAPABILITIES = new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
 			TYPE_GIF,
@@ -66,7 +66,7 @@ public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(GIF_CAPABILITIES);
 
-		WriterCapabilities JPG_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities JPG_CAPABILITIES = new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
 			TYPE_JPEG,
@@ -74,7 +74,7 @@ public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(JPG_CAPABILITIES);
 
-		WriterCapabilities PNG_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities PNG_CAPABILITIES = new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
 			TYPE_PNG,
@@ -82,7 +82,7 @@ public class BitmapWriter extends AbstractWriter implements DrawableWriter {
 		);
 		addCapabilities(PNG_CAPABILITIES);
 
-		WriterCapabilities WBMP_CAPABILITIES = new WriterCapabilities(
+		IOCapabilities WBMP_CAPABILITIES = new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
 			TYPE_WBMP,

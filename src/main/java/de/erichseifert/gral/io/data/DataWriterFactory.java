@@ -1,7 +1,7 @@
 /**
- * GRAL : Vector export for Java(R) Graphics2D
+ * GRAL: Vector export for Java(R) Graphics2D
  *
- * (C) Copyright 2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -24,10 +24,10 @@ package de.erichseifert.gral.io.data;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import de.erichseifert.gral.io.AbstractWriterFactory;
+import de.erichseifert.gral.io.AbstractIOFactory;
 
 
-public class DataWriterFactory extends AbstractWriterFactory<DataWriter> {
+public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	private static DataWriterFactory instance;
 
 	private DataWriterFactory() {
@@ -42,10 +42,10 @@ public class DataWriterFactory extends AbstractWriterFactory<DataWriter> {
 	}
 
 	@Override
-	public DataWriter getWriter(String mimeType) {
+	public DataWriter get(String mimeType) {
 		DataWriter writer = null;
-		Class<? extends DataWriter> clazz = writers.get(mimeType);
-		//WriterCapabilities capabilities = getCapabilities(mimeType);
+		Class<? extends DataWriter> clazz = entries.get(mimeType);
+		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
 			Constructor<? extends DataWriter> constructor = clazz.getDeclaredConstructor(String.class);
 			writer = constructor.newInstance(mimeType);

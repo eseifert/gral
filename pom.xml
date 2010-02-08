@@ -46,7 +46,7 @@
             <configuration>
                 <header>src/etc/header.txt</header>
                 <properties>
-                    <year>${project.inceptionYear}</year>
+                    <year>${project.inceptionYear}-2010</year>
                     <owner1>Erich Seifert</owner1>
                     <email1>info[at]erichseifert.de</email1>
                     <owner2>Michael Seifert</owner2>
@@ -59,7 +59,7 @@
                     <exclude>bin/**</exclude>
                     <exclude>src/main/resources/**</exclude>
                     <exclude>src/test/resources/**</exclude>
-                    <exclude>doc/**</exclude>
+                    <exclude>src/docbook/**</exclude>
                 </excludes>
             </configuration>
             <executions>
