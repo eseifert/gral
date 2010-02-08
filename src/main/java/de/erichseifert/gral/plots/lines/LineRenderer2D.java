@@ -40,7 +40,7 @@ import de.erichseifert.gral.util.SettingsStorage;
 public interface LineRenderer2D extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
 	public static final String KEY_STROKE = "line.stroke";
-	/** Key for specifying the distance between the line and a shape. */
+	/** Key for specifying the distance between the line and a point. */
 	public static final String KEY_GAP = "line.gap.size";
 	/** Key for specifying whether the gaps should have rounded corners. */
 	public static final String KEY_GAP_ROUNDED = "line.gap.rounded";
@@ -61,5 +61,5 @@ public interface LineRenderer2D extends SettingsStorage {
 	 * @param points Data points on the line.
 	 * @return Punched shape.
 	 */
-	Shape punchShapes(Shape lineShape, DataPoint2D... points);
+	Shape punchPoints(Shape lineShape, DataPoint2D... points);
 }

@@ -40,15 +40,15 @@ public class Tick2D extends DataPoint2D {
 
 	/**
 	 * Creates a new <code>Tick2D</code> object with the specified position, normal,
-	 * <code>Drawable</code>, shape and label.
+	 * <code>Drawable</code>, point and label.
 	 * @param position Coordinates.
 	 * @param normal Normal.
 	 * @param drawable Representation.
-	 * @param shape Shape.
+	 * @param point Point.
 	 * @param label Description.
 	 */
-	public Tick2D(TickType type, Point2D position, Point2D normal, Drawable drawable, Shape shape, String label) {
-		super(position, drawable, shape);
+	public Tick2D(TickType type, Point2D position, Point2D normal, Drawable drawable, Shape point, String label) {
+		super(position, drawable, point);
 		this.type = type;
 		this.normal = normal;
 		this.label = label;

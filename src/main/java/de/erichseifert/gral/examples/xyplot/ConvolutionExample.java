@@ -50,7 +50,7 @@ public class ConvolutionExample extends JFrame {
 		super("GRALTest");
 		DataTable data = new DataTable(Double.class, Double.class);
 		Random r = new Random();
-		for (int i=0; i<200; i++) {
+		for (int i = 0; i < 200; i++) {
 			double x = i/2.0/3.141;
 			double yError = Math.sqrt(3.0*0.1)*r.nextGaussian();
 			double y = 10.0*Math.sin(x/5.0) + yError*yError*yError;
@@ -81,29 +81,29 @@ public class ConvolutionExample extends JFrame {
 
 		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
 
-		plot.setShapeRenderer(ds, null);
+		plot.setPointRenderer(ds, null);
 		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
 		lineData.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0f, 0f, 0f));
 		plot.setLineRenderer(ds, lineData);
 
 		//*
-		plot.setShapeRenderer(dsLowpass, null);
+		plot.setPointRenderer(dsLowpass, null);
 		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
 		lineLowpass.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(1.0f, 0.2f, 0.0f));
 		plot.setLineRenderer(dsLowpass, lineLowpass);
 
-		plot.setShapeRenderer(dsHighpass, null);
+		plot.setPointRenderer(dsHighpass, null);
 		DefaultLineRenderer2D lineHighpass = new DefaultLineRenderer2D();
 		lineHighpass.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0.2f, 0.4f, 0.8f));
 		plot.setLineRenderer(dsHighpass, lineHighpass);
 
-		plot.setShapeRenderer(dsMovingAverage, null);
+		plot.setPointRenderer(dsMovingAverage, null);
 		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
 		lineMovingAverage.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0f, 0.67f, 0f));
 		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
 		//*/
 
-		plot.setShapeRenderer(dsMovingMedian, null);
+		plot.setPointRenderer(dsMovingMedian, null);
 		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
 		lineMovingMedian.setSetting(DefaultLineRenderer2D.KEY_COLOR, new Color(0.5f, 0f, 0.5f));
 		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);

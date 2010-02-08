@@ -33,8 +33,8 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
-import de.erichseifert.gral.plots.shapes.AbstractShapeRenderer;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
+import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -49,15 +49,15 @@ public class BarPlot extends XYPlot {
 	/**
 	 * Class that renders a bar in a bar plot.
 	 */
-	protected class BarRenderer extends AbstractShapeRenderer {
+	protected class BarRenderer extends AbstractPointRenderer {
 		@Override
-		public Drawable getShape(final Row row) {
+		public Drawable getPoint(final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
 				public void draw(Graphics2D g2d) {
 					// TODO: Translate?
-					Shape shape = getShapePath(row);
+					Shape point = getPointPath(row);
 					Paint paint = getSetting(KEY_COLOR);
 					Rectangle2D paintBoundaries = null;
 					/*
@@ -70,17 +70,17 @@ public class BarPlot extends XYPlot {
 						shapeBounds.getWidth(), paintBoundaries.getHeight()
 					);
 					*/
-					GraphicsUtils.fillPaintedShape(g2d, shape, paint, paintBoundaries);
+					GraphicsUtils.fillPaintedShape(g2d, point, paint, paintBoundaries);
 
 					if (BarRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
-						drawValue(g2d, shape, row.get(1).doubleValue());
+						drawValue(g2d, point, row.get(1).doubleValue());
 					}
 				}
 			};
 		}
 
 		@Override
-		public Shape getShapePath(Row row) {
+		public Shape getPointPath(Row row) {
 			double valueX = row.get(0).doubleValue();
 			double valueY = row.get(1).doubleValue();
 			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_AXIS_X_RENDERER);
@@ -127,10 +127,10 @@ public class BarPlot extends XYPlot {
 		getPlotArea().setSettingDefault(XYPlotArea2D.KEY_GRID_MAJOR_X, false);
 		setSettingDefault(KEY_BAR_WIDTH, 1.0);
 
-		ShapeRenderer shapeRendererDefault = new BarRenderer();
+		PointRenderer shapeRendererDefault = new BarRenderer();
 		for (DataSource s : data) {
 			setLineRenderer(s, null);
-			setShapeRenderer(s, shapeRendererDefault);
+			setPointRenderer(s, shapeRendererDefault);
 		}
 	}
 

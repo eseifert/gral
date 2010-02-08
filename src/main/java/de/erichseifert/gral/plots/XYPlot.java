@@ -50,8 +50,8 @@ import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.axes.Tick2D;
 import de.erichseifert.gral.plots.axes.Tick2D.TickType;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
-import de.erichseifert.gral.plots.shapes.DefaultShapeRenderer;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 
@@ -74,7 +74,7 @@ public class XYPlot extends Plot implements DataListener  {
 	private Drawable axisXComp;
 	private Drawable axisYComp;
 
-	private final Map<DataSource, ShapeRenderer> shapeRenderers;
+	private final Map<DataSource, PointRenderer> pointRenderers;
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
 
 	/**
@@ -206,12 +206,12 @@ public class XYPlot extends Plot implements DataListener  {
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 
-			// Paint shapes and lines
+			// Paint points and lines
 			for (DataSource s : data) {
-				ShapeRenderer shapeRenderer = getShapeRenderer(s);
+				PointRenderer pointRenderer = getPointRenderer(s);
 				LineRenderer2D lineRenderer = getLineRenderer(s);
 
-				List<DataPoint2D> points = new LinkedList<DataPoint2D>();
+				List<DataPoint2D> dataPoints = new LinkedList<DataPoint2D>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
@@ -227,25 +227,25 @@ public class XYPlot extends Plot implements DataListener  {
 
 
 					Drawable drawable = null;
-					Shape shape = null;
-					if (shapeRenderer != null) {
-						drawable = shapeRenderer.getShape(row);
-						shape = shapeRenderer.getShapePath(row);
+					Shape point = null;
+					if (pointRenderer != null) {
+						drawable = pointRenderer.getPoint(row);
+						point = pointRenderer.getPointPath(row);
 					}
 
-					DataPoint2D point = new DataPoint2D(pos, drawable, shape);
-					points.add(point);
+					DataPoint2D dataPoint = new DataPoint2D(pos, drawable, point);
+					dataPoints.add(dataPoint);
 				}
 
 				if (lineRenderer != null) {
-					DataPoint2D[] pointArray = new DataPoint2D[points.size()];
-					points.toArray(pointArray);
+					DataPoint2D[] pointArray = new DataPoint2D[dataPoints.size()];
+					dataPoints.toArray(pointArray);
 					Drawable drawable = lineRenderer.getLine(pointArray);
 					drawable.draw(g2d);
 				}
 
-				if (shapeRenderer != null) {
-					for (DataPoint2D point : points) {
+				if (pointRenderer != null) {
+					for (DataPoint2D point : dataPoints) {
 						g2d.translate(point.getPosition().getX(), point.getPosition().getY());
 						Drawable drawable = point.getDrawable();
 						drawable.draw(g2d);
@@ -265,7 +265,7 @@ public class XYPlot extends Plot implements DataListener  {
 
 		@Override
 		protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
-			ShapeRenderer shapeRenderer = shapeRenderers.get(data);
+			PointRenderer pointRenderer = pointRenderers.get(data);
 			LineRenderer2D lineRenderer = lineRenderers.get(data);
 
 			Row row = new Row(DUMMY_DATA, 0);
@@ -276,7 +276,7 @@ public class XYPlot extends Plot implements DataListener  {
 			);
 			DataPoint2D p2 = new DataPoint2D(
 				new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()),
-				null, (shapeRenderer != null) ? shapeRenderer.getShapePath(row) : null
+				null, (pointRenderer != null) ? pointRenderer.getPointPath(row) : null
 			);
 			DataPoint2D p3 = new DataPoint2D(
 				new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null, null
@@ -285,11 +285,11 @@ public class XYPlot extends Plot implements DataListener  {
 			if (lineRenderer != null) {
 				lineRenderer.getLine(p1, p2, p3).draw(g2d);
 			}
-			if (shapeRenderer != null) {
+			if (pointRenderer != null) {
 				Point2D pos = p2.getPosition();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
-				shapeRenderer.getShape(row).draw(g2d);
+				pointRenderer.getPoint(row).draw(g2d);
 				g2d.setTransform(txOrig);
 			}
 		}
@@ -304,16 +304,16 @@ public class XYPlot extends Plot implements DataListener  {
 	public XYPlot(DataSource... data) {
 		super(data);
 
-		shapeRenderers = new HashMap<DataSource, ShapeRenderer>();
+		pointRenderers = new HashMap<DataSource, PointRenderer>();
 		lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
 
 		setPlotArea(new XYPlotArea2D());
 		setLegend(new XYLegend());
 
-		ShapeRenderer shapeRendererDefault = new DefaultShapeRenderer();
+		PointRenderer pointRendererDefault = new DefaultPointRenderer();
 		for (DataSource source : data) {
 			getLegend().add(source);
-			setShapeRenderer(source, shapeRendererDefault);
+			setPointRenderer(source, pointRendererDefault);
 			source.addDataListener(this);
 			dataChanged(source);
 		}
@@ -435,22 +435,22 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the <code>ShapeRenderer</code> for the specified <code>DataSource</code>.
+	 * Returns the <code>PointRenderer</code> for the specified <code>DataSource</code>.
 	 * @param s DataSource.
-	 * @return ShapeRenderer.
+	 * @return PointRenderer.
 	 */
-	public ShapeRenderer getShapeRenderer(DataSource s) {
-		return shapeRenderers.get(s);
+	public PointRenderer getPointRenderer(DataSource s) {
+		return pointRenderers.get(s);
 	}
 
 	/**
-	 * Sets the <code>ShapeRenderer</code> for a certain <code>DataSource</code> to the
+	 * Sets the <code>PointRenderer</code> for a certain <code>DataSource</code> to the
 	 * specified instance.
 	 * @param s DataSource.
-	 * @param shapeRenderer ShapeRenderer to be set.
+	 * @param pointRenderer PointRenderer to be set.
 	 */
-	public void setShapeRenderer(DataSource s, ShapeRenderer shapeRenderer) {
-		this.shapeRenderers.put(s, shapeRenderer);
+	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
+		this.pointRenderers.put(s, pointRenderer);
 	}
 
 	/**

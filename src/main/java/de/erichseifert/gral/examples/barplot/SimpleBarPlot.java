@@ -31,7 +31,7 @@ import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.Insets2D;
 
 
@@ -53,12 +53,12 @@ public class SimpleBarPlot extends JFrame {
 		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
 		plot.setSetting(BarPlot.KEY_BAR_WIDTH, 0.75);
-		ShapeRenderer pointRenderer = plot.getShapeRenderer(data);
-		pointRenderer.setSetting(ShapeRenderer.KEY_COLOR,
+		PointRenderer pointRenderer = plot.getPointRenderer(data);
+		pointRenderer.setSetting(PointRenderer.KEY_COLOR,
 				new LinearGradientPaint(0f,0f, 0f,1f,
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
-		pointRenderer.setSetting(ShapeRenderer.KEY_VALUE_DISPLAYED, true);
+		pointRenderer.setSetting(PointRenderer.KEY_VALUE_DISPLAYED, true);
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

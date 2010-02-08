@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.shapes;
+package de.erichseifert.gral.plots.points;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,10 +35,10 @@ import org.junit.Test;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.shapes.DefaultShapeRenderer;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 
-public class DefaultShapeRendererTest {
+public class DefaultPointRendererTest {
 	private static DataTable table;
 	private static Row row;
 
@@ -60,8 +60,8 @@ public class DefaultShapeRendererTest {
 	@Test
 	public void testPoint() {
 		// Get line
-		ShapeRenderer r = new DefaultShapeRenderer();
-		Drawable point = r.getShape(row);
+		PointRenderer r = new DefaultPointRenderer();
+		Drawable point = r.getPoint(row);
 		assertNotNull(point);
 
 		// Draw line
@@ -73,14 +73,14 @@ public class DefaultShapeRendererTest {
 	@Test
 	public void testSettings() {
 		// Get
-		ShapeRenderer r = new DefaultShapeRenderer();
-		assertEquals(Color.BLACK, r.getSetting(ShapeRenderer.KEY_COLOR));
+		PointRenderer r = new DefaultPointRenderer();
+		assertEquals(Color.BLACK, r.getSetting(PointRenderer.KEY_COLOR));
 		// Set
-		r.setSetting(ShapeRenderer.KEY_COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(ShapeRenderer.KEY_COLOR));
+		r.setSetting(PointRenderer.KEY_COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(PointRenderer.KEY_COLOR));
 		// Remove
-		r.removeSetting(ShapeRenderer.KEY_COLOR);
-		assertEquals(Color.BLACK, r.getSetting(ShapeRenderer.KEY_COLOR));
+		r.removeSetting(PointRenderer.KEY_COLOR);
+		assertEquals(Color.BLACK, r.getSetting(PointRenderer.KEY_COLOR));
 	}
 
 }

@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.shapes;
+package de.erichseifert.gral.plots.points;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -37,14 +37,14 @@ import de.erichseifert.gral.util.SettingsListener;
 /**
  * Abstract class implementing functions for the administration of settings.
  */
-public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsListener {
+public abstract class AbstractPointRenderer implements PointRenderer, SettingsListener {
 	private final Settings settings;
 
 	/**
-	 * Creates a new AbstractShapeRenderer object with default shape and
+	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.
 	 */
-	public AbstractShapeRenderer() {
+	public AbstractPointRenderer() {
 		settings = new Settings(this);
 
 		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
@@ -60,17 +60,17 @@ public abstract class AbstractShapeRenderer implements ShapeRenderer, SettingsLi
 	/**
 	 * Draws the specified value for the specified shape.
 	 * @param g2d Graphics2D to be used for drawing.
-	 * @param shape Shape to draw into.
+	 * @param point Point to draw into.
 	 * @param value Value to be displayed.
 	 */
-	protected void drawValue(Graphics2D g2d, Shape shape, Object value) {
+	protected void drawValue(Graphics2D g2d, Shape point, Object value) {
 		Format format = getSetting(KEY_VALUE_FORMAT);
 		String text = format.format(value);
 		Label valueLabel = new Label(text);
 		valueLabel.setSetting(Label.KEY_ALIGNMENT_X, getSetting(KEY_VALUE_ALIGNMENT_X));
 		valueLabel.setSetting(Label.KEY_ALIGNMENT_Y, getSetting(KEY_VALUE_ALIGNMENT_Y));
 		valueLabel.setSetting(Label.KEY_COLOR, getSetting(KEY_VALUE_COLOR));
-		valueLabel.setBounds(shape.getBounds2D());
+		valueLabel.setBounds(point.getBounds2D());
 		valueLabel.draw(g2d);
 	}
 

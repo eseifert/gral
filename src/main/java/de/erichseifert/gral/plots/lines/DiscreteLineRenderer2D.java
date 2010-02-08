@@ -83,7 +83,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				}
 
 				// Draw path
-				Shape lineShape = punchShapes(line, points);
+				Shape lineShape = punchPoints(line, points);
 				Paint paint = getSetting(LineRenderer2D.KEY_COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}

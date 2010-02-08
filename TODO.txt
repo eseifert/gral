@@ -1,8 +1,6 @@
 Version 0.8
 ===========
 
-- Rename "shape" to "point" (e.g. ShapeRenderer becomes PointRenderer)?
-
 - Add option for automatic selection of tick spacing
 
 - Add category support to axis (instead of ticks)

@@ -28,14 +28,14 @@ import org.junit.runners.Suite;
 import de.erichseifert.gral.plots.axes.AxesTests;
 import de.erichseifert.gral.plots.colors.ColorsTests;
 import de.erichseifert.gral.plots.lines.LinesTests;
-import de.erichseifert.gral.plots.shapes.ShapesTests;
+import de.erichseifert.gral.plots.points.PointsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	AxesTests.class,
 	ColorsTests.class,
 	LinesTests.class,
-	ShapesTests.class,
+	PointsTests.class,
 	PlotArea2DTest.class,
 	LegendTest.class,
 	PlotTest.class,

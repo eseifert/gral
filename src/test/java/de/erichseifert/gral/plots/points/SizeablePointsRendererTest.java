@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.shapes;
+package de.erichseifert.gral.plots.points;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,10 +31,10 @@ import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
-import de.erichseifert.gral.plots.shapes.SizeableShapeRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 
-public class SizeableShapeRendererTest {
+public class SizeablePointsRendererTest {
 	private static DataTable table;
 	private static Row row;
 
@@ -54,11 +54,11 @@ public class SizeableShapeRendererTest {
 	}
 
 	@Test
-	public void testShapePath() {
+	public void testPointPath() {
 		// Get line
-		ShapeRenderer r = new SizeableShapeRenderer();
-		Shape expected = r.<Shape>getSetting(ShapeRenderer.KEY_SHAPE);
-		Shape path = r.getShapePath(row);
+		PointRenderer r = new SizeablePointRenderer();
+		Shape expected = r.<Shape>getSetting(PointRenderer.KEY_SHAPE);
+		Shape path = r.getPointPath(row);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}
 

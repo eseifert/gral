@@ -41,8 +41,8 @@ import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
-import de.erichseifert.gral.plots.shapes.ShapeRenderer;
-import de.erichseifert.gral.plots.shapes.SizeableShapeRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.util.Insets2D;
 
 
@@ -72,13 +72,13 @@ public class SimpleXYPlot extends JFrame {
 		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
 		// Custom title alignment
 		//plot.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
-		// Custom shape renderer
-		ShapeRenderer sizeableShapeRenderer = new SizeableShapeRenderer();
-		plot.setShapeRenderer(seriesLin, sizeableShapeRenderer);
-		// Custom shape bounds
-		//plot.getShapeRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
-		// Custom shape coloring
-		//plot.getShapeRenderer().setColor(Color.RED);
+		// Custom point renderer
+		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
+		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
+		// Custom point bounds
+		//plot.getPointRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
+		// Custom point coloring
+		//plot.getPointRenderer().setColor(Color.RED);
 		// Custom grid color
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_COLOR, Color.BLUE);
 		// Grid disabled
@@ -89,7 +89,7 @@ public class SimpleXYPlot extends JFrame {
 		discreteRenderer.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
 		discreteRenderer.setSetting(LineRenderer2D.KEY_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
-		// Custom gaps for shapes
+		// Custom gaps for points
 		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP, 2.0);
 		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
 		// Custom ascending

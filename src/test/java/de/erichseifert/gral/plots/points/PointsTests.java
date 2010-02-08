@@ -19,15 +19,15 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.shapes;
+package de.erichseifert.gral.plots.points;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	DefaultShapeRendererTest.class,
-	SizeableShapeRendererTest.class
+	DefaultPointRendererTest.class,
+	SizeablePointsRendererTest.class
 })
-public class ShapesTests {
+public class PointsTests {
 }

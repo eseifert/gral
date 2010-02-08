@@ -33,19 +33,19 @@ import de.erichseifert.gral.Drawable;
 public class DataPoint2D {
 	private final Point2D position;
 	private final Drawable drawable;
-	private final Shape shape;
+	private final Shape point;
 
 	/**
 	 * Creates a new <code>DataPoint2D</code> object with the specified position,
 	 * <code>Drawable</code>, and shape.
 	 * @param position Coordinates.
 	 * @param drawable Representation.
-	 * @param shape Shape.
+	 * @param point Point.
 	 */
-	public DataPoint2D(Point2D position, Drawable drawable, Shape shape) {
+	public DataPoint2D(Point2D position, Drawable drawable, Shape point) {
 		this.position = position;
 		this.drawable = drawable;
-		this.shape = shape;
+		this.point = point;
 	}
 
 	/**
@@ -65,11 +65,11 @@ public class DataPoint2D {
 	}
 
 	/**
-	 * Returns the shape of this <code>DataPoint2D</code>.
-	 * @return <code>Shape</code>.
+	 * Returns the point of this <code>DataPoint2D</code>.
+	 * @return Point.
 	 */
-	public Shape getShape() {
-		return shape;
+	public Shape getPoint() {
+		return point;
 	}
 
 }

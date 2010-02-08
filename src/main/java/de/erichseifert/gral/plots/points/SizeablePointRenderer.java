@@ -19,44 +19,33 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.shapes;
+package de.erichseifert.gral.plots.points;
 
-import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 
-import de.erichseifert.gral.AbstractDrawable;
-import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that creates Drawables for a row of data.
+ * Class that provides Drawables, which are sized accordingly to the data.
  */
-public class DefaultShapeRenderer extends AbstractShapeRenderer {
+public class SizeablePointRenderer extends DefaultPointRenderer {
 
-	@Override
-	public Drawable getShape(final Row row) {
-		Drawable drawable = new AbstractDrawable() {
-			@Override
-			public void draw(Graphics2D g2d) {
-				Paint paint = getSetting(KEY_COLOR);
-				Shape shape = getShapePath(row);
-				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
-
-				if (DefaultShapeRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
-					drawValue(g2d, shape, row.get(1).doubleValue());
-				}
-			}
-		};
-
-		return drawable;
+	/**
+	 * Creates a new SizeablePointRenderer object.
+	 */
+	public SizeablePointRenderer() {
 	}
 
 	@Override
-	public Shape getShapePath(Row row) {
+	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(KEY_SHAPE);
+		if (row.getSource().getColumnCount() >= 3) {
+			double size = row.get(2).doubleValue();
+			AffineTransform tx = AffineTransform.getScaleInstance(size, size);
+			shape = tx.createTransformedShape(shape);
+		}
 		return shape;
 	}
 }
