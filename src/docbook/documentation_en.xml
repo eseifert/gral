@@ -3,14 +3,14 @@
   PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <book xmlns="http://docbook.org/ns/docbook">
 <info>
-	<title>OpenJChart Documentation</title>
+	<title>GRAL Documentation</title>
 	<author><firstname>Michael</firstname><surname>Seifert</surname></author>
 	<copyright><year>2010</year><holder>Michael Seifert</holder></copyright>
 </info>
 
 <chapter>
 	<title>Data administration</title>
-	<para>The first step, before we are able to plot anything, is to load or create data, a process which OpenJChart provides several ways for. The basic interface that will be used when you have to provide data is the DataSource interface. Think of it as a table with a (theoretically) arbitrary number of rows and columns. Every column has its own data type, but only Number values are allowed. The functions a DataSource provides are solely for retrieving data rows, but it also supports statistics on the contained data, as well as the capability to listen for data changes. The following sections describe the different ways for providing and manipulating data.</para>
+	<para>The first step, before we are able to plot anything, is to load or create data, a process which GRAL provides several ways for. The basic interface that will be used when you have to provide data is the DataSource interface. Think of it as a table with a (theoretically) arbitrary number of rows and columns. Every column has its own data type, but only Number values are allowed. The functions a DataSource provides are solely for retrieving data rows, but it also supports statistics on the contained data, as well as the capability to listen for data changes. The following sections describe the different ways for providing and manipulating data.</para>
 
 	<sect1>
 		<title>Creating data</title>
@@ -58,11 +58,26 @@ table.sort(new Ascending(1), new Descending(0), new Ascending(2));
 		<title>Filtering data</title>
 
 		<sect2>
-			<title>Filtering</title>
+			<title>Filtering columns</title>
+			<example>
+				<title>Creation of data series</title>
+				<programlisting language="java"><![CDATA[
+// Create a new series from columns 0 and 1
+DataSeries series1 = new DataSeries("Series 1", table, 0, 1);
+// Create a new series from columns 2 and 0
+DataSeries series2 = new DataSeries("Series 2", table, 2, 0);
+// Create a new series from column 1
+DataSeries series3 = new DataSeries("Series 3", table, 1);
+]]></programlisting>
+			</example>
+		</sect2>
+
+		<sect2>
+			<title>Filtering rows</title>
 			<example>
 				<title>Filtering rows with DataSubSet</title>
 				<programlisting language="java"><![CDATA[
-// Leave out even rows
+// Leave out rows where column 1 has an even value
 DataSubset data = new DataSubset(table) {
     @Override
     public boolean accept(Number[] row) {
@@ -131,18 +146,44 @@ stats.get(Statistics.MEAN, 1);
 
 		<sect2>
 			<title>XY-Plot</title>
+			<example>
+				<title>Creating an XYPlot</title>
+				<programlisting language="java"><![CDATA[
+Plot plot = new XYPlot(series1, series2);
+]]></programlisting>
+			</example>
 
 			<sect3>
 				<title>Legends</title>
+				<example>
+					<title>Creating a scatter plot</title>
+					<programlisting language="java"><![CDATA[
+plot.setSetting(Plot.KEY_LEGEND, true);
+plot.setSetting(Plot.KEY_LEGEND_LOCATION, Location.SOUTH_WEST);
+plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
+]]></programlisting>
+				</example>
 			</sect3>
 		</sect2>
 
 		<sect2>
 			<title>Bar plot</title>
+			<example>
+				<title>Creating a bar plot</title>
+				<programlisting language="java"><![CDATA[
+Plot plot = new BarPlot(series);
+]]></programlisting>
+			</example>
 		</sect2>
 
 		<sect2>
 			<title>Pie plot</title>
+			<example>
+				<title>Creating a pie plot</title>
+				<programlisting language="java"><![CDATA[
+Plot plot = new PiePlot(series);
+]]></programlisting>
+			</example>
 		</sect2>
 	</sect1>
 
