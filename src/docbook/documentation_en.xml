@@ -18,7 +18,7 @@
 
 		<example>
 			<title>Populating a DataTable</title>
-			<programlisting>
+			<programlisting language="java">
 				# Create the table with the specified column types
 				DataTable table = new DataTable(Double.class, Double.class);
 
@@ -76,7 +76,7 @@
 		<sect2>
 			<title>Pie plot</title>
 		</sect2>
-	</sect>
+	</sect1>
 
 	<sect1>
 		<title>Customizing the plot</title>
@@ -96,7 +96,7 @@
 
 	<sect1>
 		<title>Exporting plots</title>
-	</sect>
+	</sect1>
 </chapter>
 
 <chapter>
@@ -104,11 +104,11 @@
 
 	<sect1>
 		<title>Custom plots</title>
-	</sect>
+	</sect1>
 
 	<sect1>
 		<title>Custom plot writers</title>
-	</sect>
+	</sect1>
 </chapter>
 
 <chapter>

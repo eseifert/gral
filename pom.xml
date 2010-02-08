@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>GRAL</artifactId>
-  <name>Graphing Library</name>
+  <name>GRAL Graphing Library</name>
   <version>0.7</version>
   <description>A Java library for rendering graphs.</description>
-  <inceptionYear>2010</inceptionYear>
+  <inceptionYear>2009</inceptionYear>
 
   <licenses>
     <license>
@@ -16,12 +16,16 @@
 
   <developers>
     <developer>
+    	<id>erich</id>
         <name>Erich Seifert</name>
         <email>info[at]erichseifert.de</email>
+        <timezone>+1</timezone>
     </developer>
     <developer>
+    	<id>michael</id>
         <name>Michael Seifert</name>
         <email>michael.seifert[at]gmx.net</email>
+        <timezone>+1</timezone>
     </developer>
   </developers>
 
@@ -67,8 +71,39 @@
                 </execution>
             </executions>
         </plugin>
-    </plugins>
+        <plugin>
+        	<groupId>org.apache.maven.plugins</groupId>
+        	<artifactId>maven-javadoc-plugin</artifactId>
+        	<version>2.6.1</version>
+        	<configuration>
+          		<show>private</show>
+          		<nohelp>true</nohelp>
+        	</configuration>
+        </plugin>
+     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-changelog-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+        	<artifactId>maven-surefire-report-plugin</artifactId>
+        	<version>2.5</version>
+      	</plugin>
+        <plugin>
+        	<groupId>org.apache.maven.plugins</groupId>
+        	<artifactId>maven-javadoc-plugin</artifactId>
+        	<version>2.6.1</version>
+        	<configuration>
+          		<show>public</show>
+        	</configuration>
+        </plugin>
+     </plugins>
+  </reporting>
 
   <dependencies>
   	<dependency>
@@ -76,6 +111,7 @@
   		<artifactId>junit</artifactId>
   		<version>4.7</version>
   		<scope>test</scope>
+  		<optional>true</optional>
   	</dependency>
   	<dependency>
   		<groupId>de.erichseifert.vectorgraphics2d</groupId>
@@ -83,4 +119,10 @@
   		<version>0.6</version>
   	</dependency>
   </dependencies>
+
+  <scm>
+    <connection>scm:svn:svn://smt.sytes.net/gral/trunk</connection>
+    <developerConnection>scm:svn:svn://smt.sytes.net/gral/trunk</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>
