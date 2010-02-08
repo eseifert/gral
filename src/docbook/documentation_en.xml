@@ -18,40 +18,108 @@
 
 		<example>
 			<title>Populating a DataTable</title>
-			<programlisting language="java">
-				# Create the table with the specified column types
-				DataTable table = new DataTable(Double.class, Double.class);
+			<programlisting language="java"><![CDATA[
+// Create the table with the specified column types
+DataTable table = new DataTable(Double.class, Double.class);
 
-				# Iterate your available data. In this case, data is an Iterable&lt;Double[]&gt;
-				for (Double[] coords : data) {
-					double x = coords[0];
-					double y = coords[1];
-					table.add(x, y);
-				}
-			</programlisting>
+// Iterate your available data. In this case, data is an Iterable<Double[]>;
+for (Double[] coords : data) {
+    double x = coords[0];
+    double y = coords[1];
+    table.add(x, y);
+}
+]]></programlisting>
 		</example>
 
-		<para>You might want to have a DataTable for testing purposes only and do not want to create random values for it at each start. In this case, the DummyData class is your remedy. DummyData is a DataSource filled with a single value. As I already mentioned, this is not used very often, but suited very well for testing due to it's efficientsy, especially, when dealing with large tables.</para>
+		<para>You might want to have a DataTable for testing purposes only and do not want to create random values for it at each start. In this case, the DummyData class is your remedy. DummyData is a DataSource filled with a single value. As I already mentioned, this is not used very often, but suited very well for testing due to its efficiency, especially, when dealing with large tables.</para>
+		<example>
+			<title>Generating dummy data</title>
+			<programlisting language="java"><![CDATA[
+DummyData data = new DummyData(3, 100, 42.0);
+]]></programlisting>
+		</example>
 	</sect1>
 
 	<sect1>
 		<title>Sorting data</title>
+
+		<example>
+			<title>Sorting</title>
+			<programlisting language="java"><![CDATA[
+// Sort the primary column (1) ascending,
+// the secondary column (0) descending, and
+// the ternary column (2) ascending
+table.sort(new Ascending(1), new Descending(0), new Ascending(2));
+]]></programlisting>
+		</example>
 	</sect1>
 
 	<sect1>
 		<title>Filtering data</title>
+
+		<sect2>
+			<title>Filtering</title>
+			<example>
+				<title>Filtering rows with DataSubSet</title>
+				<programlisting language="java"><![CDATA[
+// Leave out even rows
+DataSubset data = new DataSubset(table) {
+    @Override
+    public boolean accept(Number[] row) {
+        return (row[0].doubleValue() % 2.0) == 0.0;
+    }
+};
+]]></programlisting>
+			</example>
+		</sect2>
+
+		<sect2>
+			<title>Convolution</title>
+			<example>
+				<title>Moving average</title>
+				<programlisting language="java"><![CDATA[
+// Create moving average of width 3
+Kernel kernel = new Kernel(1.0, 1.0, 1.0);
+// Filter columns 0 and 1
+Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
+]]></programlisting>
+			</example>
+		</sect2>
 	</sect1>
 
 	<sect1>
 		<title>Importing data</title>
+		<example>
+			<title>Import example</title>
+			<programlisting language="java"><![CDATA[
+DataReader reader.read = DataReaderFactory.getInstance().getReader("text/csv");
+FileInputStream file = new FileInputStream("foobar.csv");
+DataSource data = reader.read(file);
+]]></programlisting>
+		</example>
 	</sect1>
 
 	<sect1>
 		<title>Exporting data</title>
+		<example>
+			<title>Export example</title>
+			<programlisting language="java"><![CDATA[
+DataWriter writer = DataWriterFactory.getInstance().getWriter("text/csv");
+FileOutputStream file = new FileOutputStream("foobar.csv");
+writer.write(table, file);
+]]></programlisting>
+		</example>
 	</sect1>
 
 	<sect1>
 		<title>Statistics</title>
+		<example>
+			<title>Getting the maximum of column 1</title>
+			<programlisting language="java"><![CDATA[
+Statistics stats = table.getStatistics();
+stats.get(Statistics.MEAN, 1);
+]]></programlisting>
+		</example>
 	</sect1>
 </chapter>
 
