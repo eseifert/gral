@@ -147,15 +147,6 @@ public class Histogram extends AbstractDataSource implements DataListener {
 	}
 
 	@Override
-	public Number[] get(int row) {
-		Number[] rowData = new Number[getColumnCount()];
-		for (int col = 0; col < rowData.length; col++) {
-			rowData[col] = colCells.get(col)[row];
-		}
-		return rowData;
-	}
-
-	@Override
 	public Number get(int col, int row) {
 		return colCells.get(col)[row];
 	}

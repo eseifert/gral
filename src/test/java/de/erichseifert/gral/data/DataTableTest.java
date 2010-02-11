@@ -21,14 +21,12 @@
 
 package de.erichseifert.gral.data;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
 
@@ -78,8 +76,8 @@ public class DataTableTest {
 	@Test
 	public void testIterator() {
 		int rowNo = 0;
-		for (Number[] row : table) {
-			assertArrayEquals(table.get(rowNo), row);
+		for (Row row : table) {
+			assertEquals(table.get(rowNo), row);
 			rowNo++;
 		}
 	}

@@ -30,7 +30,7 @@ public class Row {
 	private final int row;
 
 	/**
-	 * Creates a new Row object with the specified DataSource and row index.
+	 * Creates a new <code>Row</code> object with the specified DataSource and row index.
 	 * @param source DataSource.
 	 * @param row Row index.
 	 */
@@ -67,4 +67,40 @@ public class Row {
 		return getSource().get(col, getRow());
 	}
 
+	/**
+	 * Returns the number of elements in this row.
+	 * @return Number of elements
+	 */
+	public int size() {
+		return getSource().getColumnCount();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Row)) {
+			return false;
+		}
+		Row r = (Row)obj;
+		int size = size();
+		if (r.size() != size) {
+			return false;
+		}
+		for (int col = 0; col < size; col++) {
+			if (!r.get(col).equals(get(col))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return source.hashCode() ^ row;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[source=%s,row=%d]",
+				getClass().getName(), getSource(), getRow());
+	}
 }

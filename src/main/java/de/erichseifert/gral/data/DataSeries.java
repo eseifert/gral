@@ -81,17 +81,6 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	}
 
 	@Override
-	public Number[] get(int row) {
-		Number[] rowOrig = data.get(row);
-		Number[] rowFiltered = new Number[cols.size()];
-		int filteredIndex = 0;
-		for (int index : cols) {
-			rowFiltered[filteredIndex++] = rowOrig[index];
-		}
-		return rowFiltered;
-	}
-
-	@Override
 	public Number get(int col, int row) {
 		Number number = null;
 		try {

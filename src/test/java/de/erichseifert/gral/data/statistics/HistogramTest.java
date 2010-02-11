@@ -21,14 +21,12 @@
 
 package de.erichseifert.gral.data.statistics;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.statistics.Histogram;
 
 public class HistogramTest {
 	private static DataTable table;
@@ -94,10 +92,14 @@ public class HistogramTest {
 	public void testGet() {
 		Histogram histogram = new Histogram(table, 4);
 
-		assertArrayEquals(new Number[] {3l, 5l}, histogram.get(0));
-		assertArrayEquals(new Number[] {3l, 2l}, histogram.get(1));
-		assertArrayEquals(new Number[] {0l, 0l}, histogram.get(2));
-		assertArrayEquals(new Number[] {1l, 0l}, histogram.get(3));
+		assertEquals(3l, histogram.get(0, 0));
+		assertEquals(5l, histogram.get(1, 0));
+		assertEquals(3l, histogram.get(0, 1));
+		assertEquals(2l, histogram.get(1, 1));
+		assertEquals(0l, histogram.get(0, 2));
+		assertEquals(0l, histogram.get(1, 2));
+		assertEquals(1l, histogram.get(0, 3));
+		assertEquals(0l, histogram.get(1, 3));
 	}
 
 	@Test

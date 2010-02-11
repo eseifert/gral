@@ -85,16 +85,6 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 		dataChanged(this.original);
 	}
 
-	@Override
-	public Number[] get(int row) {
-		double[] d = data.get(row);
-		Double[] n = new Double[d.length];
-		for (int i = 0; i < n.length; i++) {
-			n[i] = d[i];
-		}
-		return n;
-	}
-
 	/**
 	 * Returns the value of the DataSource at the specified column and row.
 	 * @param col Column index.
@@ -142,7 +132,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 
 	@Override
 	public Number get(int col, int row) {
-		return get(row)[col];
+		return data.get(row)[col];
 	}
 
 	@Override

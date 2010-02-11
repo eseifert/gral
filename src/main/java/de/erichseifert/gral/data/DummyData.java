@@ -21,14 +21,12 @@
 
 package de.erichseifert.gral.data;
 
-import java.util.Arrays;
 
 /**
  * Class that represents a DataSource containing the same value in each cell.
  */
 public class DummyData extends AbstractDataSource {
 	private Number value;
-	private Number[] dummyRow;
 	private int cols;
 	private int rows;
 
@@ -43,18 +41,11 @@ public class DummyData extends AbstractDataSource {
 		this.cols = cols;
 		this.rows = rows;
 		this.value = value;
-		dummyRow = new Number[this.cols];
-		Arrays.fill(dummyRow, this.value);
-	}
-
-	@Override
-	public Number[] get(int row) {
-		return dummyRow;
 	}
 
 	@Override
 	public Number get(int col, int row) {
-		return get(row)[col];
+		return value;
 	}
 
 	@Override

@@ -26,14 +26,14 @@ import de.erichseifert.gral.data.statistics.Statistics;
 /**
  * Immutable view on a source for tabular data.
  */
-public interface DataSource extends Iterable<Number[]> {
+public interface DataSource extends Iterable<Row> {
 
 	/**
 	 * Returns the row with the specified index.
 	 * @param row index of the row to return
 	 * @return the specified row of the table
 	 */
-	Number[] get(int row);
+	Row get(int row);
 
 	/**
 	 * Returns the row with the specified index.

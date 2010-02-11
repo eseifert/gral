@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.io.AbstractWriter;
 import de.erichseifert.gral.io.IOCapabilities;
 
@@ -57,12 +58,12 @@ public class TSVWriter extends AbstractWriter implements DataWriter {
 	@Override
 	public void write(DataSource data, OutputStream output) throws IOException {
 		OutputStreamWriter writer = new OutputStreamWriter(output);
-		for (Number[] row : data) {
-			for (int col = 0; col < row.length; col++) {
+		for (Row row : data) {
+			for (int col = 0; col < row.size(); col++) {
 				if (col > 0) {
 					writer.write("\t");
 				}
-				writer.write(String.valueOf(row[col]));
+				writer.write(String.valueOf(row.get(col)));
 			}
 			// FIXME: Only works on *NIX systems
 			writer.write("\n");

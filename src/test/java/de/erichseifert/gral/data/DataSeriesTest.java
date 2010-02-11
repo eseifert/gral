@@ -26,9 +26,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.data.DataSeries;
-import de.erichseifert.gral.data.DataTable;
-
 public class DataSeriesTest {
 	private static DataTable table;
 
@@ -63,11 +60,11 @@ public class DataSeriesTest {
 		DataSeries series = new DataSeries(table, 2, 1);
 
 		for (int row = 0; row < series.getRowCount(); row++) {
-			Number[] rowTable = table.get(row);
-			Number[] rowSeries = series.get(row);
-			assertEquals(rowTable[2], rowSeries[0]);
-			assertEquals(rowTable[1], rowSeries[1]);
-			assertEquals(2, rowSeries.length);
+			Row rowTable = table.get(row);
+			Row rowSeries = series.get(row);
+			assertEquals(rowTable.get(2), rowSeries.get(0));
+			assertEquals(rowTable.get(1), rowSeries.get(1));
+			assertEquals(2, rowSeries.size());
 		}
 	}
 

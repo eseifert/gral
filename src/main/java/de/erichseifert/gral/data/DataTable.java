@@ -88,13 +88,6 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.data.DataSource#get(int)
-	 */
-	public Number[] get(int row) {
-		return data.get(row);
-	}
-
-	/* (non-Javadoc)
 	 * @see de.erichseifert.gral.data.DataSource#get(int, int)
 	 */
 	public Number get(int col, int row) {

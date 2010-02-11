@@ -21,15 +21,11 @@
 
 package de.erichseifert.gral.data;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.erichseifert.gral.data.DataSubset;
-import de.erichseifert.gral.data.DataTable;
 
 public class DataSubsetTest {
 	private static final double DELTA = 1e-15;
@@ -53,8 +49,8 @@ public class DataSubsetTest {
 	public void setUp() {
 		data = new DataSubset(table) {
 			@Override
-			public boolean accept(Number[] row) {
-				return (row[0].doubleValue() % 2.0) == 0.0;
+			public boolean accept(Row row) {
+				return (row.get(0).doubleValue() % 2.0) == 0.0;
 			}
 		};
 	}
@@ -79,10 +75,10 @@ public class DataSubsetTest {
 
 	@Test
 	public void testGetInt() {
-		assertArrayEquals(table.get(1), data.get(0));
-		assertArrayEquals(table.get(3), data.get(1));
-		assertArrayEquals(table.get(5), data.get(2));
-		assertArrayEquals(table.get(7), data.get(3));
+		assertEquals(table.get(1), data.get(0));
+		assertEquals(table.get(3), data.get(1));
+		assertEquals(table.get(5), data.get(2));
+		assertEquals(table.get(7), data.get(3));
 	}
 
 }

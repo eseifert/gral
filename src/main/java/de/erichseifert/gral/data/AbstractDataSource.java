@@ -45,7 +45,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * Iterator that returns each row of the DataSource.
 	 */
-	private class DataSourceIterator implements Iterator<Number[]> {
+	private class DataSourceIterator implements Iterator<Row> {
 		private int row;
 
 		@Override
@@ -54,7 +54,7 @@ public abstract class AbstractDataSource implements DataSource {
 		}
 
 		@Override
-		public Number[] next() {
+		public Row next() {
 			return get(row++);
 		}
 
@@ -89,7 +89,7 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	@Override
-	public Iterator<Number[]> iterator() {
+	public Iterator<Row> iterator() {
 		return new DataSourceIterator();
 	}
 
@@ -101,6 +101,11 @@ public abstract class AbstractDataSource implements DataSource {
 		for (DataListener dataListener : dataListeners) {
 			dataListener.dataChanged(this);
 		}
+	}
+
+	@Override
+	public Row get(int row) {
+		return new Row(this, row);
 	}
 
 }
