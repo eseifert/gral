@@ -41,6 +41,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.util.Insets2D;
@@ -75,6 +76,9 @@ public class SimpleXYPlot extends JFrame {
 		// Custom point renderer
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
 		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
+		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
+		defaultPointRenderer.setSetting(PointRenderer.KEY_ERROR_DISPLAYED, true);
+		plot.setPointRenderer(seriesLog, defaultPointRenderer);
 		// Custom point bounds
 		//plot.getPointRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom point coloring

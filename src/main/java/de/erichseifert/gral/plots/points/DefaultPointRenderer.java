@@ -28,6 +28,8 @@ import java.awt.Shape;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
@@ -37,7 +39,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultPointRenderer extends AbstractPointRenderer {
 
 	@Override
-	public Drawable getPoint(final Row row) {
+	public Drawable getPoint(final Row row, final Axis axisY, final AxisRenderer2D axisYRenderer) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
@@ -47,6 +49,10 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 
 				if (DefaultPointRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
 					drawValue(g2d, point, row.get(1).doubleValue());
+				}
+				if (DefaultPointRenderer.this.<Boolean>getSetting(KEY_ERROR_DISPLAYED)) {
+					int columnIndex = row.size()-1;
+					drawError(g2d, point, row.get(1).doubleValue(), row.get(columnIndex).doubleValue(), axisY, axisYRenderer);
 				}
 			}
 		};

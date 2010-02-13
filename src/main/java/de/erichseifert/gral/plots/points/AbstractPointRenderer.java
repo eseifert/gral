@@ -24,11 +24,15 @@ package de.erichseifert.gral.plots.points;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
 
 import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
@@ -54,7 +58,9 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 		setSettingDefault(KEY_VALUE_FORMAT, NumberFormat.getInstance());
 		setSettingDefault(KEY_VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(KEY_VALUE_ALIGNMENT_Y, 0.5);
-		setSettingDefault(KEY_COLOR, Color.BLACK);
+		setSettingDefault(KEY_VALUE_COLOR, Color.BLACK);
+
+		setSettingDefault(KEY_ERROR_DISPLAYED, false);
 	}
 
 	/**
@@ -72,6 +78,22 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 		valueLabel.setSetting(Label.KEY_COLOR, getSetting(KEY_VALUE_COLOR));
 		valueLabel.setBounds(point.getBounds2D());
 		valueLabel.draw(g2d);
+	}
+
+	/**
+	 *
+	 */
+	protected void drawError(Graphics2D g2d, Shape point, double value, double error, Axis axis, AxisRenderer2D axisRenderer) {
+		double posX = point.getBounds2D().getCenterX();
+		double valueTop = value + error;
+		double valueBot = value - error;
+		double posY = axisRenderer.getPosition(axis, value, true, false).getY();
+		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).getY() - posY;
+		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).getY() - posY;
+		Point2D errorTop = new Point2D.Double(posX, posYTop);
+		Point2D errorBot = new Point2D.Double(posX, posYBot);
+		Line2D errorBar = new Line2D.Double(errorTop, errorBot);
+		g2d.draw(errorBar);
 	}
 
 	@Override

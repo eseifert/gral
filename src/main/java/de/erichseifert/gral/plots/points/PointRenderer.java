@@ -25,6 +25,8 @@ import java.awt.Shape;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.SettingsStorage;
 
 
@@ -55,12 +57,15 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the value. */
 	static final String KEY_VALUE_COLOR = "point.value.paint";
 
+	/** Key for specifying whether the error value is displayed. */
+	static final String KEY_ERROR_DISPLAYED = "point.error.displayed";
+
 	/**
 	 * Returns the shape to be drawn for the specified data value.
 	 * @param row Row data at point
 	 * @return Drawable that represents the point
 	 */
-	Drawable getPoint(Row row);
+	Drawable getPoint(Row row, Axis axisY, AxisRenderer2D axisYRenderer);
 
 	/**
 	 * Returns a <code>Shape</code> instance that can be used

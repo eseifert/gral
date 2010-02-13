@@ -29,13 +29,10 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.plots.DataPoint2D;
-import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
 
 public class DefaultLineRendererTest {
 

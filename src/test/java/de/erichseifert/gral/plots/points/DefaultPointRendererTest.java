@@ -28,15 +28,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.points.DefaultPointRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class DefaultPointRendererTest {
 	private static DataTable table;
@@ -61,7 +58,7 @@ public class DefaultPointRendererTest {
 	public void testPoint() {
 		// Get line
 		PointRenderer r = new DefaultPointRenderer();
-		Drawable point = r.getPoint(row);
+		Drawable point = r.getPoint(row, null, null);
 		assertNotNull(point);
 
 		// Draw line

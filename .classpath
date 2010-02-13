@@ -11,5 +11,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/vectorgraphics2d.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

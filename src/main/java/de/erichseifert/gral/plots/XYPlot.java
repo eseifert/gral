@@ -229,10 +229,9 @@ public class XYPlot extends Plot implements DataListener  {
 					Drawable drawable = null;
 					Shape point = null;
 					if (pointRenderer != null) {
-						drawable = pointRenderer.getPoint(row);
+						drawable = pointRenderer.getPoint(row, axisY, axisYRenderer);
 						point = pointRenderer.getPointPath(row);
 					}
-
 					DataPoint2D dataPoint = new DataPoint2D(pos, drawable, point);
 					dataPoints.add(dataPoint);
 				}
@@ -289,7 +288,7 @@ public class XYPlot extends Plot implements DataListener  {
 				Point2D pos = p2.getPosition();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(row).draw(g2d);
+				pointRenderer.getPoint(row, null, null).draw(g2d);
 				g2d.setTransform(txOrig);
 			}
 		}
