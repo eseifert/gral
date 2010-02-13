@@ -59,6 +59,12 @@ public interface PointRenderer extends SettingsStorage {
 
 	/** Key for specifying whether the error value is displayed. */
 	static final String KEY_ERROR_DISPLAYED = "point.error.displayed";
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the error bars. */
+	static final String KEY_ERROR_COLOR = "point.error.color";
+	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the points at the end of the error bars. */
+	static final String KEY_ERROR_SHAPE = "point.error.shape";
+	/** Key for specifying the {@link java.awt.Stroke} instance defining the error bars. */
+	static final String KEY_ERROR_STROKE = "point.error.stroke";
 
 	/**
 	 * Returns the shape to be drawn for the specified data value.

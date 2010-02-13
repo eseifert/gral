@@ -52,7 +52,7 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 				}
 				if (DefaultPointRenderer.this.<Boolean>getSetting(KEY_ERROR_DISPLAYED)) {
 					int columnIndex = row.size()-1;
-					drawError(g2d, point, row.get(1).doubleValue(), row.get(columnIndex).doubleValue(), axisY, axisYRenderer);
+					drawError(g2d, point, row.get(1).doubleValue(), row.get(columnIndex-1).doubleValue(), row.get(columnIndex).doubleValue(), axisY, axisYRenderer);
 				}
 			}
 		};

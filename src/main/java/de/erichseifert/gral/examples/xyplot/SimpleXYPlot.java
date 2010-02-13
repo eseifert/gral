@@ -60,7 +60,7 @@ public class SimpleXYPlot extends JFrame {
 			data.add(-Math.sqrt(x2) + 5.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
 		}
 
-		DataSeries seriesLog = new DataSeries(data, 1, 2);
+		DataSeries seriesLog = new DataSeries(data, 1, 2, 3, 3);
 		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
