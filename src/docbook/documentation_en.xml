@@ -24,9 +24,9 @@ DataTable table = new DataTable(Double.class, Double.class);
 
 // Iterate your available data. In this case, data is an Iterable<Double[]>;
 for (Double[] coords : data) {
-    double x = coords[0];
-    double y = coords[1];
-    table.add(x, y);
+	double x = coords[0];
+	double y = coords[1];
+	table.add(x, y);
 }
 ]]></programlisting>
 		</example>
@@ -79,11 +79,45 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
 				<programlisting language="java"><![CDATA[
 // Leave out rows where column 1 has an even value
 DataSubset data = new DataSubset(table) {
-    @Override
-    public boolean accept(Number[] row) {
-        return (row[0].doubleValue() % 2.0) == 0.0;
-    }
+	@Override
+	public boolean accept(Number[] row) {
+		return (row[0].doubleValue() % 2.0) == 0.0;
+	}
 };
+]]></programlisting>
+			</example>
+		</sect2>
+	</sect1>
+
+	<sect1>
+		<title>Processing data</title>
+
+		<sect2>
+			<title>Statistics</title>
+			<example>
+				<title>Getting the maximum of a column</title>
+				<programlisting language="java"><![CDATA[
+// Get the maximum for column 1
+Statistics stats = table.getStatistics();
+stats.get(Statistics.MAX, 1);
+]]></programlisting>
+			</example>
+
+			<example>
+				<title>Generate an equally spaced histogram</title>
+				<programlisting language="java"><![CDATA[
+// Use 4 equally spaced breaks
+Histogram histogram = new Histogram(table, 4);
+]]></programlisting>
+			</example>
+
+			<example>
+				<title>Generate a histogram with user-defined breaks</title>
+				<programlisting language="java"><![CDATA[
+// Use custom breaks for each column
+Number[] breaksCol1 = {1.0, 2.0, 3.0, 4.0, 5.0};
+Number[] breaksCol2 = {1.0, 3.0, 5.0, 7.0, 9.0};
+Histogram histogram = new Histogram(table, new Number[][] {breaksCol1, breaksCol2});
 ]]></programlisting>
 			</example>
 		</sect2>
@@ -103,38 +137,31 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
 	</sect1>
 
 	<sect1>
-		<title>Importing data</title>
-		<example>
-			<title>Import example</title>
-			<programlisting language="java"><![CDATA[
+		<title>Exchanging data</title>
+
+		<sect2>
+			<title>Importing</title>
+			<example>
+				<title>Import example</title>
+				<programlisting language="java"><![CDATA[
 DataReader reader.read = DataReaderFactory.getInstance().get("text/csv");
 FileInputStream file = new FileInputStream("foobar.csv");
 DataSource data = reader.read(file);
 ]]></programlisting>
-		</example>
-	</sect1>
+			</example>
+		</sect2>
 
-	<sect1>
-		<title>Exporting data</title>
-		<example>
-			<title>Export example</title>
-			<programlisting language="java"><![CDATA[
+		<sect2>
+			<title>Exporting</title>
+			<example>
+				<title>Export example</title>
+				<programlisting language="java"><![CDATA[
 DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 FileOutputStream file = new FileOutputStream("foobar.csv");
 writer.write(table, file);
 ]]></programlisting>
-		</example>
-	</sect1>
-
-	<sect1>
-		<title>Statistics</title>
-		<example>
-			<title>Getting the maximum of column 1</title>
-			<programlisting language="java"><![CDATA[
-Statistics stats = table.getStatistics();
-stats.get(Statistics.MEAN, 1);
-]]></programlisting>
-		</example>
+			</example>
+		</sect2>
 	</sect1>
 </chapter>
 
@@ -147,7 +174,7 @@ stats.get(Statistics.MEAN, 1);
 		<sect2>
 			<title>XY-Plot</title>
 			<example>
-				<title>Creating an XYPlot</title>
+				<title>Creating an xy-plot</title>
 				<programlisting language="java"><![CDATA[
 Plot plot = new XYPlot(series1, series2);
 ]]></programlisting>
@@ -204,19 +231,27 @@ Plot plot = new PiePlot(series);
 	</sect1>
 
 	<sect1>
-		<title>Exporting plots</title>
+		<title>Exporting plot images</title>
 	</sect1>
 </chapter>
 
 <chapter>
-	<title>Expanding the library</title>
+	<title>Expanding GRAL</title>
 
 	<sect1>
-		<title>Custom plots</title>
+		<title>Writing a new plot type</title>
 	</sect1>
 
 	<sect1>
-		<title>Custom plot writers</title>
+		<title>Writing a data importer</title>
+	</sect1>
+
+	<sect1>
+		<title>Writing a data exporter</title>
+	</sect1>
+
+	<sect1>
+		<title>Writing a plot exporter</title>
 	</sect1>
 </chapter>
 

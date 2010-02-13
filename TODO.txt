@@ -5,20 +5,25 @@ Version 0.8
 
 - Add category support to axis (instead of ticks)
 
+- Add support for stroking the edges of points/bars/pie arcs
+
 - Add support for error bars to ShapeRenderer
 
 - Add new chart for drawing a pair of rows as line segments;
   Extension of scatter plot possible (Connect every nth pair)
-
-- Allow axes to be rescaled on Chart/window resizing.
-  For example: Axis is scaled from -3 to +3 and chart is resized
-  -> new scale for Axis is set to -4 to +4 to keep aspect scale
 
 - Setting to keep aspect ratio of plot bounds when resizing
   (take alignment into account: left, center, bottom, etc.)
 
 - Set font sizes relative to the size of a standard font size 
   (like "em" in HTML)
+
+- Allow axes to be rescaled on Chart/window resizing.
+  For example: Axis is scaled from -3 to +3 and chart is resized
+  -> new scale for Axis is set to -4 to +4 to keep aspect scale
+  Solution: Extract exchangeable layout class from PlotArea
+  This would allow an implementation of other layouts, too
+  (e.g. median absolute slope [see Cleveland et al. 1988])
 
 - Add more possibilities to style plot area (rounded edges, etc.)
   How to do drop shadows? -> Renderer for plot area?
