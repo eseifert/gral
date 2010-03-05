@@ -32,16 +32,16 @@ import de.erichseifert.gral.data.comparators.DataComparator;
  * DataTable is the basic implementation of DataSource.
  * Implemented functionality includes:
  * <ul>
- * <li>Adding and getting data rows</li>
- * <li>Getting data cells</li>
+ * <li>Adding and getting rows rows</li>
+ * <li>Getting rows cells</li>
  * <li>Deleting the table</li>
  * <li>Getting row and column count</li>
  * <li>Sorting the table with a specific DataComparator</li>
  * </ul>
  */
 public class DataTable extends AbstractDataSource {
-	private final ArrayList<Number[]> data;
-	private Class<?>[] types;
+	private final ArrayList<Number[]> rows;
+	private final Class<?>[] types;
 
 	/**
 	 * Creates a new DataTable object.
@@ -50,7 +50,7 @@ public class DataTable extends AbstractDataSource {
 	public DataTable(Class<? extends Number>... types) {
 		this.types = new Class[types.length];
 		System.arraycopy(types, 0, this.types, 0, types.length);
-		data = new ArrayList<Number[]>();
+		rows = new ArrayList<Number[]>();
 	}
 
 	/**
@@ -75,15 +75,24 @@ public class DataTable extends AbstractDataSource {
 			}
 			row[i] = values[i];
 		}
-		data.add(row);
+		rows.add(row);
 		notifyDataChanged();
 	}
 
 	/**
-	 * Deletes all data this table contains.
+	 * Removes a specified row from the table.
+	 * @param row Index of the row to remove
+	 */
+	public void remove(int row) {
+		rows.remove(row);
+		notifyDataChanged();
+	}
+
+	/**
+	 * Deletes all rows this table contains.
 	 */
 	public void clear() {
-		data.clear();
+		rows.clear();
 		notifyDataChanged();
 	}
 
@@ -91,14 +100,14 @@ public class DataTable extends AbstractDataSource {
 	 * @see de.erichseifert.gral.data.DataSource#get(int, int)
 	 */
 	public Number get(int col, int row) {
-		return data.get(row)[col];
+		return rows.get(row)[col];
 	}
 
 	/* (non-Javadoc)
 	 * @see de.erichseifert.gral.data.DataSource#getRowCount()
 	 */
 	public int getRowCount() {
-		return data.size();
+		return rows.size();
 	}
 
 	/* (non-Javadoc)
@@ -114,7 +123,7 @@ public class DataTable extends AbstractDataSource {
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(final DataComparator... comparators) {
-		Collections.sort(data, new Comparator<Number[]>() {
+		Collections.sort(rows, new Comparator<Number[]>() {
 			@Override
 			public int compare(Number[] o1, Number[] o2) {
 				for (DataComparator comp : comparators) {

@@ -65,7 +65,7 @@ public class DrawablePanel extends JPanel {
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		getDrawable().setBounds(x, y, width, height);
+		getDrawable().setBounds(0.0, 0.0, width, height);
 	}
 
 	@Override
