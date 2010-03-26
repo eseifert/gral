@@ -121,8 +121,8 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:svn://smt.sytes.net/gral/trunk</connection>
-    <developerConnection>scm:svn:svn://smt.sytes.net/gral/trunk</developerConnection>
+    <connection>scm:svn:svn://erichseifert.de/gral/trunk</connection>
+    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk</developerConnection>
     <tag>HEAD</tag>
   </scm>
 </project>
