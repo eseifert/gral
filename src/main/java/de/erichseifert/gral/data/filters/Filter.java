@@ -72,7 +72,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @param cols Column indexes to be filtered.
 	 */
 	public Filter(DataSource original, Mode mode, int... cols) {
-		this.data = new ArrayList<double[]>();
+		this.data = new ArrayList<double[]>(cols.length);
 		this.original = original;
 		this.mode = mode;
 		this.cols = new HashSet<Integer>();

@@ -86,6 +86,9 @@ public class Statistics implements DataListener {
 	 */
 	public double get(String key, int col) {
 		Map<String, Double> colStats = statistics.get(col);
+		if (key.equals(MEDIAN) && !colStats.containsKey(MEDIAN)) {
+			colStats.put(MEDIAN, getMedian(col));
+		}
 		return colStats.get(key);
 	}
 
@@ -161,18 +164,30 @@ public class Statistics implements DataListener {
 			// Kurtosis (fourth moment)
 			colStats.put(KURTOSIS, colStats.get(SUM4) - 4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) - 3.0*mean2*mean*colStats.get(SUM));
 
-			// Median
-			int medianIndex = MathUtils.randomizedSelect(col, 0, col.size() - 1, col.size()/2);
-			double median = col.get(medianIndex);
-			if ((rowCount & 1) == 0) {
-				double medianUpper = col.get(medianIndex + 1);
-				median = (median + medianUpper)/2.0;
-			}
-			colStats.put(MEDIAN, median);
-
 			// Add a Map for each column
 			statistics.add(colStats);
 		}
+	}
+
+	private double getMedian(int colIndex) {
+		int rowCount = data.getRowCount();
+		List<Double> col = new ArrayList<Double>(rowCount);
+		for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+			Number cell = data.get(colIndex, rowIndex);
+			double value = cell.doubleValue();
+
+			// Store value of column row
+			col.add(value);
+		}
+		int medianIndex = MathUtils.randomizedSelect(col, 0, rowCount - 1, col.size()/2);
+		double median = col.get(medianIndex);
+		if ((rowCount & 1) == 0) {
+			double medianUpper = col.get(medianIndex + 1);
+			median = (median + medianUpper)/2.0;
+		}
+		Map<String, Double> colStats = statistics.get(colIndex);
+		colStats.put(MEDIAN, median);
+		return median;
 	}
 
 	/**
