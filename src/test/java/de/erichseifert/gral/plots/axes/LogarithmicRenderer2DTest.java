@@ -28,14 +28,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
-import de.erichseifert.gral.plots.axes.Tick2D;
 
 public class LogarithmicRenderer2DTest {
 	private static final double DELTA = 1e-14;

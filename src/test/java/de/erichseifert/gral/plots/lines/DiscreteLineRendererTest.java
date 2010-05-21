@@ -28,6 +28,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -41,10 +43,10 @@ public class DiscreteLineRendererTest {
 	public void testLine() {
 		// Get line
 		LineRenderer2D r = new DiscreteLineRenderer2D();
-		DataPoint2D[] points = {
+		List<DataPoint2D> points = Arrays.asList(
 			new DataPoint2D(new Point2D.Double(0.0, 0.0), null, null),
 			new DataPoint2D(new Point2D.Double(1.0, 1.0), null, null)
-		};
+		);
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();

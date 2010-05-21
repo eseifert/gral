@@ -30,10 +30,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-
 import org.junit.Test;
-
-import de.erichseifert.gral.util.GeometryUtils;
 
 public class GeometryUtilsTest {
 	private static final double DELTA = 1e-14;

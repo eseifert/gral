@@ -27,8 +27,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.util.Insets2D;
-
 public class Insets2DTest {
 	public static final double DELTA = 1e-15;
 

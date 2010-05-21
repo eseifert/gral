@@ -26,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.util.HaltonSequence;
-
 public class HaltonSequenceTest {
 	private static final double DELTA = 1e-15;
 

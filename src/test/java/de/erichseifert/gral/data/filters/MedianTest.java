@@ -27,8 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.filters.Filter;
-import de.erichseifert.gral.data.filters.Median;
 
 public class MedianTest {
 	private static DataTable table;

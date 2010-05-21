@@ -24,6 +24,7 @@ package de.erichseifert.gral.util;
 import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
@@ -33,6 +34,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+
+import de.erichseifert.gral.plots.DataPoint2D;
 
 /**
  * Abstract class that represents a collection of utility functions
@@ -196,6 +199,32 @@ public abstract class GeometryUtils {
     	}
 
     	return shape;
+    }
+
+    /**
+     * Subtract all shapes of data points from another shape to yield gaps.
+     * @param shape Shape from which to subtract.
+     * @param gap Size of the gap.
+     * @param rounded Gap corners will be rounded if <code>true</code>.
+     * @param dataPoints Collection of data points
+     * @return Shape with punched holes
+     */
+    public static Area punch(Shape shape, double gap, boolean rounded, Iterable<DataPoint2D> dataPoints) {
+    	Area shapeArea = new Area(shape);
+		if (!MathUtils.almostEqual(gap, 0.0, 1e-10)) {
+			int gapJoin = (rounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
+			for (DataPoint2D p : dataPoints) {
+				Shape point = p.getPoint();
+				if (point == null) {
+					continue;
+				}
+				Point2D pos = p.getPosition();
+				AffineTransform tx = AffineTransform.getTranslateInstance(pos.getX(), pos.getY());
+				Area gapShape = GeometryUtils.grow(tx.createTransformedShape(point), gap, gapJoin, 10f);
+				shapeArea.subtract(gapShape);
+			}
+		}
+		return shapeArea;
     }
 
 }

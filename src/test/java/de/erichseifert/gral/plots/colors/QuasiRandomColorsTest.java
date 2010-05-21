@@ -26,10 +26,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 
-
 import org.junit.Test;
-
-import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 
 public class QuasiRandomColorsTest {
 	@Test

@@ -27,13 +27,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.io.data.DataWriter;
-import de.erichseifert.gral.io.data.DataWriterFactory;
 
 public class TSVWriterTest {
 	private static DataTable data;

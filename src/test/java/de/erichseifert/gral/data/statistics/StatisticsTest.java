@@ -27,7 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.statistics.Statistics;
 
 public class StatisticsTest {
 	private static final double DELTA = 1e-10;

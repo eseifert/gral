@@ -51,7 +51,7 @@ public class BarPlot extends XYPlot {
 	 */
 	protected class BarRenderer extends AbstractPointRenderer {
 		@Override
-		public Drawable getPoint(final Row row, final Axis axisY, final AxisRenderer2D axisYRenderer) {
+		public Drawable getPoint(final Axis axisY, final AxisRenderer2D axisYRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override

@@ -28,6 +28,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -40,10 +42,10 @@ public class DefaultLineRendererTest {
 	public void testLine() {
 		// Get line
 		LineRenderer2D r = new DefaultLineRenderer2D();
-		DataPoint2D[] points = {
+		List<DataPoint2D> points = Arrays.asList(
 			new DataPoint2D(new Point2D.Double(0.0, 0.0), null, null),
 			new DataPoint2D(new Point2D.Double(1.0, 1.0), null, null)
-		};
+		);
 		Drawable line = r.getLine(points);
 		assertNotNull(line);
 

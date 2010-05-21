@@ -32,7 +32,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,8 +39,6 @@ import org.junit.Test;
 import de.erichseifert.gral.PlotArea2D;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.plots.Label;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;

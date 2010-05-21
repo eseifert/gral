@@ -28,9 +28,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.filters.Convolution;
-import de.erichseifert.gral.data.filters.Filter;
-import de.erichseifert.gral.data.filters.Kernel;
 
 public class ConvolutionTest {
 	private static final double DELTA = 1e-15;

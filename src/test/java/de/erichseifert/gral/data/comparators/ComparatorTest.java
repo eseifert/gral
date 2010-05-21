@@ -25,10 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.data.comparators.Ascending;
-import de.erichseifert.gral.data.comparators.DataComparator;
-import de.erichseifert.gral.data.comparators.Descending;
-
 public class ComparatorTest {
 
 	@Test

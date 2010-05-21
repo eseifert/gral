@@ -58,7 +58,7 @@ public class DefaultPointRendererTest {
 	public void testPoint() {
 		// Get line
 		PointRenderer r = new DefaultPointRenderer();
-		Drawable point = r.getPoint(row, null, null);
+		Drawable point = r.getPoint(null, null, row);
 		assertNotNull(point);
 
 		// Draw line

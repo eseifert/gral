@@ -26,9 +26,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.Row;
-
 public class RowTest {
 	private static DataTable table;
 

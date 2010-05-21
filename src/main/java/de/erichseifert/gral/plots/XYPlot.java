@@ -30,8 +30,8 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +44,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.plots.areas.AreaRenderer2D;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
@@ -76,6 +77,7 @@ public class XYPlot extends Plot implements DataListener  {
 
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	private final Map<DataSource, LineRenderer2D> lineRenderers;
+	private final Map<DataSource, AreaRenderer2D> areaRenderers;
 
 	/**
 	 * Class that represents the drawing area of an <code>XYPlot</code>.
@@ -206,18 +208,20 @@ public class XYPlot extends Plot implements DataListener  {
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 
+			AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
+			AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
+
 			// Paint points and lines
 			for (DataSource s : data) {
 				PointRenderer pointRenderer = getPointRenderer(s);
 				LineRenderer2D lineRenderer = getLineRenderer(s);
+				AreaRenderer2D areaRenderer = getAreaRenderer(s);
 
 				List<DataPoint2D> dataPoints = new LinkedList<DataPoint2D>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					AxisRenderer2D axisXRenderer = XYPlot.this.getSetting(KEY_AXIS_X_RENDERER);
-					AxisRenderer2D axisYRenderer = XYPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
 					Point2D axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
 					Point2D axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
 					if (axisPosX==null || axisPosY==null) {
@@ -225,21 +229,23 @@ public class XYPlot extends Plot implements DataListener  {
 					}
 					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
 
-
 					Drawable drawable = null;
 					Shape point = null;
 					if (pointRenderer != null) {
-						drawable = pointRenderer.getPoint(row, axisY, axisYRenderer);
+						drawable = pointRenderer.getPoint(axisY, axisYRenderer, row);
 						point = pointRenderer.getPointPath(row);
 					}
 					DataPoint2D dataPoint = new DataPoint2D(pos, drawable, point);
 					dataPoints.add(dataPoint);
 				}
 
+				if (areaRenderer != null) {
+					Drawable drawable = areaRenderer.getArea(axisY, axisYRenderer, dataPoints);
+					drawable.draw(g2d);
+				}
+
 				if (lineRenderer != null) {
-					DataPoint2D[] pointArray = new DataPoint2D[dataPoints.size()];
-					dataPoints.toArray(pointArray);
-					Drawable drawable = lineRenderer.getLine(pointArray);
+					Drawable drawable = lineRenderer.getLine(dataPoints);
 					drawable.draw(g2d);
 				}
 
@@ -282,13 +288,13 @@ public class XYPlot extends Plot implements DataListener  {
 			);
 
 			if (lineRenderer != null) {
-				lineRenderer.getLine(p1, p2, p3).draw(g2d);
+				lineRenderer.getLine(Arrays.asList(p1, p2, p3)).draw(g2d);
 			}
 			if (pointRenderer != null) {
 				Point2D pos = p2.getPosition();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(row, null, null).draw(g2d);
+				pointRenderer.getPoint(null, null, row).draw(g2d);
 				g2d.setTransform(txOrig);
 			}
 		}
@@ -304,7 +310,8 @@ public class XYPlot extends Plot implements DataListener  {
 		super(data);
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
-		lineRenderers = new LinkedHashMap<DataSource, LineRenderer2D>(data.length);
+		lineRenderers = new HashMap<DataSource, LineRenderer2D>(data.length);
+		areaRenderers = new HashMap<DataSource, AreaRenderer2D>(data.length);
 
 		setPlotArea(new XYPlotArea2D());
 		setLegend(new XYLegend());
@@ -469,6 +476,25 @@ public class XYPlot extends Plot implements DataListener  {
 	 */
 	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
 		lineRenderers.put(s, lineRenderer);
+	}
+
+	/**
+	 * Returns the <code>AreaRenderer2D</code> for the specified <code>DataSource</code>.
+	 * @param s <code>DataSource</code>.
+	 * @return <code>AreaRenderer2D</code>.
+	 */
+	public AreaRenderer2D getAreaRenderer(DataSource s) {
+		return areaRenderers.get(s);
+	}
+
+	/**
+	 * Sets the <code>AreaRenderer2D</code> for a certain <code>DataSource</code> to the
+	 * specified value.
+	 * @param s <code>DataSource</code>.
+	 * @param areaRenderer <code>AreaRenderer2D</code> to be set.
+	 */
+	public void setAreaRenderer(DataSource s, AreaRenderer2D areaRenderer) {
+		areaRenderers.put(s, areaRenderer);
 	}
 
 }

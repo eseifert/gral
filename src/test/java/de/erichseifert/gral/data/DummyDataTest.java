@@ -25,8 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.data.DummyData;
-
 public class DummyDataTest {
 	private static final double DELTA = 1e-15;
 

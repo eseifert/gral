@@ -27,15 +27,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.AbstractDrawable;
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
-import de.erichseifert.gral.EdgeLayout;
-import de.erichseifert.gral.Layout;
 import de.erichseifert.gral.DrawableConstants.Location;
 
 public class EdgeLayoutTest {

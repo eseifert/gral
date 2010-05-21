@@ -25,14 +25,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Shape;
 
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 
 public class SizeablePointsRendererTest {
 	private static DataTable table;

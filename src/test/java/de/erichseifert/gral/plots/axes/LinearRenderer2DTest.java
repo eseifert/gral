@@ -27,13 +27,10 @@ import static org.junit.Assert.assertNotNull;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class LinearRenderer2DTest {
 	private static final double DELTA = 1e-15;

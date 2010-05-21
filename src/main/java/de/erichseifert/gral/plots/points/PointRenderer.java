@@ -67,17 +67,19 @@ public interface PointRenderer extends SettingsStorage {
 	static final String KEY_ERROR_STROKE = "point.error.stroke";
 
 	/**
-	 * Returns the shape to be drawn for the specified data value.
-	 * @param row Row data at point
-	 * @return Drawable that represents the point
+	 * Returns the graphical representation to be drawn for the specified data value.
+	 * @param axis that is used to project the point.
+	 * @param row Data row containing the point.
+	 * @param Renderer for the axis.
+	 * @return Component that can be used to draw the point
 	 */
-	Drawable getPoint(Row row, Axis axisY, AxisRenderer2D axisYRenderer);
+	Drawable getPoint(Axis axis, AxisRenderer2D axisRenderer, Row row);
 
 	/**
 	 * Returns a <code>Shape</code> instance that can be used
 	 * for further calculations.
-	 * @param row Row data at point
-	 * @return Outline that describes the point.
+	 * @param row Data row containing the point.
+	 * @return Outline that describes the point's shape.
 	 */
 	Shape getPointPath(Row row);
 }

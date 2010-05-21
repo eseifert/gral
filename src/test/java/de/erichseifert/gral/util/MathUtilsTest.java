@@ -29,10 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 import org.junit.Test;
-
-import de.erichseifert.gral.util.MathUtils;
 
 public class MathUtilsTest {
 	public static final double DELTA = 1e-15;

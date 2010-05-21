@@ -19,37 +19,29 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.lines;
+package de.erichseifert.gral.plots.areas;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.SettingsStorage;
 
-
-/**
- * Interface that provides functions for rendering a line in 2-dimensional
- * space.
- * Functionality includes:
- * <ul>
- * <li>Punching data points out of the line's shape</li>
- * <li>Administration of settings</li>
- * </ul>
- */
-public interface LineRenderer2D extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
-	static final String KEY_STROKE = "line.stroke";
-	/** Key for specifying the distance between the line and a point. */
+public interface AreaRenderer2D extends SettingsStorage {
+	/** Key for specifying the distance between the area and a data point. */
 	static final String KEY_GAP = "line.gap.size";
 	/** Key for specifying whether the gaps should have rounded corners. */
 	static final String KEY_GAP_ROUNDED = "line.gap.rounded";
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the line shape. */
-	static final String KEY_COLOR = "line.color";
+	/** Key for specifying the {@link java.awt.Paint} instance used to fill the area shape. */
+	static final String KEY_COLOR = "area.color";
 
 	/**
-	 * Returns a graphical representation for the line defined by <code>points</code>.
-	 * @param points Points to be used for creating the line.
-	 * @return Representation of the line.
+	 * Returns the graphical representation to be drawn for the specified data points.
+	 * @param axis Reference axis for the specified data points.
+	 * @param axisRenderer Renderer of the reference axis.
+	 * @param points Points to be used for creating the area.
+	 * @return Representation of the area.
 	 */
-	Drawable getLine(Iterable<DataPoint2D> points);
+	Drawable getArea(Axis axis, AxisRenderer2D axisRenderer, Iterable<DataPoint2D> points);
 
 }

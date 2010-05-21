@@ -28,14 +28,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
-import de.erichseifert.gral.DrawablePanel;
 
 public class DrawablePanelTest {
 	private static final double DELTA = 1e-15;

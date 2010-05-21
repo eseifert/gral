@@ -29,14 +29,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
-import de.erichseifert.gral.plots.BarPlot;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.axes.Axis;
 
 public class BarPlotTest {

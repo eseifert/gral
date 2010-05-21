@@ -52,7 +52,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	}
 
 	@Override
-	public Drawable getLine(final DataPoint2D... points) {
+	public Drawable getLine(final Iterable<DataPoint2D> points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
@@ -83,7 +83,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				}
 
 				// Draw path
-				Shape lineShape = punchPoints(line, points);
+				Shape lineShape = punch(line, points);
 				Paint paint = getSetting(LineRenderer2D.KEY_COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}

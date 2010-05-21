@@ -39,7 +39,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultPointRenderer extends AbstractPointRenderer {
 
 	@Override
-	public Drawable getPoint(final Row row, final Axis axisY, final AxisRenderer2D axisYRenderer) {
+	public Drawable getPoint(final Axis axisY, final AxisRenderer2D axisYRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {

@@ -28,11 +28,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 import org.junit.Before;
 import org.junit.Test;
-
-import de.erichseifert.gral.util.Settings;
 
 public class SettingsTest {
 	private Settings settings;

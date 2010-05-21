@@ -26,13 +26,10 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableContainer;
-import de.erichseifert.gral.io.plots.DrawableWriter;
-import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 
 public class DrawableWriterTest {
 	private static final String[] FORMATS = new String[] {

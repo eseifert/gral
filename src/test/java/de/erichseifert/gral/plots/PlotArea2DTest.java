@@ -30,12 +30,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.PlotArea2D;
-import de.erichseifert.gral.plots.Plot;
 
 public class PlotArea2DTest {
 	private PlotArea2D plotArea;

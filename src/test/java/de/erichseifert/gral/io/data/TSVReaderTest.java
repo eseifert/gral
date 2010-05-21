@@ -29,11 +29,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.text.ParseException;
 
-
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.io.data.TSVReader;
 
 public class TSVReaderTest {
 	@Test

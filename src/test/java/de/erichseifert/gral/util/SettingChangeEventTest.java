@@ -26,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.util.SettingChangeEvent;
-
 public class SettingChangeEventTest {
 	@Test
 	public void testCreation() {

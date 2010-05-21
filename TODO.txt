@@ -7,8 +7,6 @@ Version 0.8
 
 - Add support for stroking the edges of points/bars/pie arcs
 
-- Add support for error bars to ShapeRenderer
-
 - Add new chart for drawing a pair of rows as line segments;
   Extension of scatter plot possible (Connect every nth pair)
 

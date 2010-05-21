@@ -19,12 +19,10 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.plots.lines;
+package de.erichseifert.gral.plots.areas;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.Area;
 
 import de.erichseifert.gral.plots.DataPoint2D;
@@ -33,45 +31,40 @@ import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
 
-
 /**
- * Abstract class that renders a line in 2-dimensional space.
+ * Abstract class that renders an area in two-dimensional space.
  * Functionality includes:
  * <ul>
- * <li>Punching data points out of the line's shape</li>
+ * <li>Punching data points out of the area's shape</li>
  * <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractLineRenderer2D implements LineRenderer2D, SettingsListener {
+public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, SettingsListener {
 	private final Settings settings;
 
 	/**
-	 * Creates a new <code>AbstractLineRenderer2D</code> with default settings.
+	 * Creates a new AbstractLineRenderer2D with default settings.
 	 */
-	public AbstractLineRenderer2D() {
+	public AbstractAreaRenderer2D() {
 		this.settings = new Settings(this);
 
-		setSettingDefault(KEY_STROKE, new BasicStroke(1.5f));
 		setSettingDefault(KEY_GAP, 0.0);
 		setSettingDefault(KEY_GAP_ROUNDED, false);
-		setSettingDefault(KEY_COLOR, Color.BLACK);
+		setSettingDefault(KEY_COLOR, Color.GRAY);
 	}
 
 	/**
-	 * Returns the shape of a line from which the shapes of the specified
+	 * Returns the shape of an area from which the shapes of the specified
 	 * points are subtracted.
 	 * @param lineShape Shape of the line.
 	 * @param points Data points on the line.
 	 * @return Punched shape.
 	 */
-	public Shape punch(Shape line, Iterable<DataPoint2D> dataPoints) {
-		Stroke stroke = getSetting(LineRenderer2D.KEY_STROKE);
-		Shape lineShape = stroke.createStrokedShape(line);
-
-		// Subtract shapes of data points from line to yield gaps.
+	public Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {
+		// Subtract shapes of data points from the area to yield gaps.
 		double gapSize = this.<Double>getSetting(KEY_GAP);
 		boolean isGapRounded = this.<Boolean>getSetting(KEY_GAP_ROUNDED);
-		Area punched = GeometryUtils.punch(lineShape, gapSize, isGapRounded, dataPoints);
+		Area punched = GeometryUtils.punch(area, gapSize, isGapRounded, dataPoints);
 
 		return punched;
 	}

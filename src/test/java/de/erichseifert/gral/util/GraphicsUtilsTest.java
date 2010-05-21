@@ -34,10 +34,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-
 import org.junit.Test;
-
-import de.erichseifert.gral.util.GraphicsUtils;
 
 public class GraphicsUtilsTest {
 	//private static final double DELTA = 1e-5;
