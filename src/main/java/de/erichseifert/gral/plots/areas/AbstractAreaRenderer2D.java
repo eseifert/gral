@@ -60,7 +60,7 @@ public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, Settings
 	 * @param points Data points on the line.
 	 * @return Punched shape.
 	 */
-	public Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {
+	protected Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {
 		// Subtract shapes of data points from the area to yield gaps.
 		double gapSize = this.<Double>getSetting(KEY_GAP);
 		boolean isGapRounded = this.<Boolean>getSetting(KEY_GAP_ROUNDED);

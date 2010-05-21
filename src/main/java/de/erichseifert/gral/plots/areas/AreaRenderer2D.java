@@ -29,9 +29,9 @@ import de.erichseifert.gral.util.SettingsStorage;
 
 public interface AreaRenderer2D extends SettingsStorage {
 	/** Key for specifying the distance between the area and a data point. */
-	static final String KEY_GAP = "line.gap.size";
+	static final String KEY_GAP = "area.gap.size";
 	/** Key for specifying whether the gaps should have rounded corners. */
-	static final String KEY_GAP_ROUNDED = "line.gap.rounded";
+	static final String KEY_GAP_ROUNDED = "area.gap.rounded";
 	/** Key for specifying the {@link java.awt.Paint} instance used to fill the area shape. */
 	static final String KEY_COLOR = "area.color";
 

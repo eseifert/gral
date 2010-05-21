@@ -243,12 +243,10 @@ public class XYPlot extends Plot implements DataListener  {
 					Drawable drawable = areaRenderer.getArea(axisY, axisYRenderer, dataPoints);
 					drawable.draw(g2d);
 				}
-
 				if (lineRenderer != null) {
 					Drawable drawable = lineRenderer.getLine(dataPoints);
 					drawable.draw(g2d);
 				}
-
 				if (pointRenderer != null) {
 					for (DataPoint2D point : dataPoints) {
 						g2d.translate(point.getPosition().getX(), point.getPosition().getY());

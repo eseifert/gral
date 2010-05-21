@@ -64,7 +64,7 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 	 * @param points Data points on the line.
 	 * @return Punched shape.
 	 */
-	public Shape punch(Shape line, Iterable<DataPoint2D> dataPoints) {
+	protected Shape punch(Shape line, Iterable<DataPoint2D> dataPoints) {
 		Stroke stroke = getSetting(LineRenderer2D.KEY_STROKE);
 		Shape lineShape = stroke.createStrokedShape(line);
 
