@@ -264,12 +264,13 @@ public class XYPlot extends Plot implements DataListener  {
 	 * Class that displays a legend in an <code>XYPlot</code>.
 	 */
 	public class XYLegend extends Legend {
-		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 1.0);
+		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 0.5);
 
 		@Override
 		protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
 			PointRenderer pointRenderer = pointRenderers.get(data);
 			LineRenderer2D lineRenderer = lineRenderers.get(data);
+			AreaRenderer2D areaRenderer = areaRenderers.get(data);
 
 			Row row = new Row(DUMMY_DATA, 0);
 			Rectangle2D bounds = symbol.getBounds();
@@ -284,15 +285,24 @@ public class XYPlot extends Plot implements DataListener  {
 			DataPoint2D p3 = new DataPoint2D(
 				new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null, null
 			);
+			List<DataPoint2D> dataPoints = Arrays.asList(p1, p2, p3);
 
+			Axis axis = new Axis(0.0, 1.0);
+			LinearRenderer2D axisRenderer = new LinearRenderer2D();
+			axisRenderer.setSetting(LinearRenderer2D.KEY_SHAPE,
+					new Line2D.Double(bounds.getCenterX(), bounds.getMaxY(), bounds.getCenterX(), bounds.getMinY()));
+
+			if (areaRenderer != null) {
+				areaRenderer.getArea(axis, axisRenderer, dataPoints).draw(g2d);
+			}
 			if (lineRenderer != null) {
-				lineRenderer.getLine(Arrays.asList(p1, p2, p3)).draw(g2d);
+				lineRenderer.getLine(dataPoints).draw(g2d);
 			}
 			if (pointRenderer != null) {
 				Point2D pos = p2.getPosition();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(null, null, row).draw(g2d);
+				pointRenderer.getPoint(axis, axisRenderer, row).draw(g2d);
 				g2d.setTransform(txOrig);
 			}
 		}

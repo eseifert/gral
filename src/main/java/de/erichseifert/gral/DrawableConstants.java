@@ -31,23 +31,46 @@ public interface DrawableConstants {
 	 */
 	static enum Location {
 		/** Central location. */
-		CENTER,
+		CENTER(0.5, 0.5),
 		/** Northern location. */
-		NORTH,
+		NORTH(0.5, 0.0),
 		/** North-eastern location. */
-		NORTH_EAST,
+		NORTH_EAST(1.0, 0.0),
 		/** Eastern location. */
-		EAST,
+		EAST(1.0, 0.5),
 		/** South-eastern location. */
-		SOUTH_EAST,
+		SOUTH_EAST(1.0, 1.0),
 		/** Southern location. */
-		SOUTH,
+		SOUTH(0.5, 1.0),
 		/** South-western location. */
-		SOUTH_WEST,
+		SOUTH_WEST(0.0, 1.0),
 		/** Western location. */
-		WEST,
+		WEST(0.0,  0.5),
 		/** North-western location. */
-		NORTH_WEST
+		NORTH_WEST(0.0, 0.0);
+
+		private final double alignH;
+		private final double alignV;
+
+		Location(double alignH, double alignV) {
+			this.alignH = alignH;
+			this.alignV = alignV;
+		}
+
+		/**
+		 * Returns the horizontal alignment as a double value.
+		 * @return horizontal alignment
+		 */
+		public double getAlignmentH() {
+			return alignH;
+		}
+		/**
+		 * Returns the vertical alignment as a double value.
+		 * @return vertical alignment
+		 */
+		public double getAlignmentV() {
+			return alignV;
+		}
 	};
 
 	/**

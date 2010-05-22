@@ -37,7 +37,7 @@ import de.erichseifert.gral.util.MathUtils;
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	/**
-	 * Creates a new LogarithmicRenderer2D object.
+	 * Creates a new renderer for logarithmic scaled axes in two-dimensional space.
 	 */
 	public LogarithmicRenderer2D() {
 	}

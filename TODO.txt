@@ -32,6 +32,8 @@ Version 0.8
 - AreaRenderer2D should be able to use x axis as reference,
   otherwise it's unusable for vertical plots
 
+- Allow zooming with mouse wheel in InteractivePanel
+
 Version 0.9
 ===========
 

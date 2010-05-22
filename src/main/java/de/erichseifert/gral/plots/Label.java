@@ -100,36 +100,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		double alignmentX = this.<Double>getSetting(KEY_ALIGNMENT_X);
 		double alignmentY = this.<Double>getSetting(KEY_ALIGNMENT_Y);
 		DrawableConstants.Location anchor = getSetting(KEY_ANCHOR);
-		double anchorModifierX = 0.0;
-		double anchorModifierY = 0.0;
-		if (DrawableConstants.Location.NORTH == anchor) {
-			anchorModifierY = 0.5;
-		}
-		else if (DrawableConstants.Location.NORTH_EAST == anchor) {
-			anchorModifierX = 0.5;
-			anchorModifierY = 0.5;
-		}
-		else if (DrawableConstants.Location.EAST == anchor) {
-			anchorModifierX = 0.5;
-		}
-		else if (DrawableConstants.Location.SOUTH_EAST == anchor) {
-			anchorModifierX = 0.5;
-			anchorModifierY = -0.5;
-		}
-		else if (DrawableConstants.Location.SOUTH == anchor) {
-			anchorModifierY = -0.5;
-		}
-		else if (DrawableConstants.Location.SOUTH_WEST == anchor) {
-			anchorModifierX = -0.5;
-			anchorModifierY = -0.5;
-		}
-		else if (DrawableConstants.Location.WEST == anchor) {
-			anchorModifierX = -0.5;
-		}
-		else if (DrawableConstants.Location.NORTH_WEST == anchor) {
-			anchorModifierX = -0.5;
-			anchorModifierY = 0.5;
-		}
+		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
+		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
 		txLabel.translate(
 			-textBounds.getX() - anchorModifierX*textBounds.getWidth() - alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
 			-textBounds.getY() - anchorModifierY*textBounds.getHeight() - alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()

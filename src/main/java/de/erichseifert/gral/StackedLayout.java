@@ -32,9 +32,9 @@ import de.erichseifert.gral.util.Insets2D;
  * lying upon another.
  */
 public class StackedLayout implements Layout {
-	private Orientation orientation;
-	private Dimension2D gap;
-	private double alignment;
+	private final Orientation orientation;
+	private final Dimension2D gap;
+	private final double alignment;
 
 	/**
 	 * Creates a new StackedLayout object with the specified orientation
@@ -68,23 +68,27 @@ public class StackedLayout implements Layout {
 		double height = insets.getTop();
 		int count = 0;
 		if (Orientation.HORIZONTAL.equals(orientation)) {
+			double h = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					width += gap.getWidth();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
-				height = Math.max(height, itemBounds.getHeight());
+				h = Math.max(height, itemBounds.getHeight());
 			}
+			height += h;
 		} else if (Orientation.VERTICAL.equals(orientation)) {
+			double w = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					height += gap.getHeight();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
-				width = Math.max(width, itemBounds.getWidth());
+				w = Math.max(w, itemBounds.getWidth());
 				height += itemBounds.getHeight();
 			}
+			width += w;
 		}
 		width += insets.getRight();
 		height += insets.getBottom();

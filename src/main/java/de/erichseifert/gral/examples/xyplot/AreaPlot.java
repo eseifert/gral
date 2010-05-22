@@ -27,6 +27,8 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import de.erichseifert.gral.InteractivePanel;
+import de.erichseifert.gral.data.DataSeries;
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer2D;
@@ -43,49 +45,43 @@ public class AreaPlot extends JFrame {
 	public AreaPlot() {
 		super("GRALTest");
 
-		// Create table 1
-		DataTable data1 = new DataTable(Double.class, Double.class);
-		for (double x=0.0; x<2.25*Math.PI; x+=Math.PI/30.0) {
-			double y = 4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
-			data1.add(x, y);
+		// Create table
+		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		for (double x=0.0; x<2.5*Math.PI; x+=Math.PI/15.0) {
+			double y1 = (x>=0.00*Math.PI && x<2.25*Math.PI) ? (4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian()) : Double.NaN;
+			double y2 = (x>=0.25*Math.PI && x<2.50*Math.PI) ? (4.0*Math.cos(x + 0.5*Math.PI) + 0.1*random.nextGaussian()) : Double.NaN;
+			double y3 = (x>=0.00*Math.PI && x<2.50*Math.PI) ? (2.0*Math.sin(2.0*x/2.5)       + 0.1*random.nextGaussian()) : Double.NaN;
+			data.add(x, y1, y2, y3);
 		}
-		// Create table 2
-		DataTable data2 = new DataTable(Double.class, Double.class);
-		for (double x=0.25*Math.PI; x<2.5*Math.PI; x+=Math.PI/30.0) {
-			double y = 4.0*Math.cos(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
-			data2.add(x, y);
-		}
+		DataSeries data1 = new DataSeries("red",   data, 0, 1);
+		DataSeries data2 = new DataSeries("green", data, 0, 2);
+		DataSeries data3 = new DataSeries("blue",  data, 0, 3);
 
-		XYPlot plot = new XYPlot(data1, data2);
-		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
+		XYPlot plot = new XYPlot(data1, data2, data3);
+		plot.setSetting(XYPlot.KEY_LEGEND, true);
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 		getContentPane().add(new InteractivePanel(plot));
 
-		PointRenderer point1 = new DefaultPointRenderer();
-		point1.setSetting(PointRenderer.KEY_COLOR, new Color(0.9f, 0.3f, 0.2f));
-		plot.setPointRenderer(data1, point1);
-		LineRenderer2D line1 = new DefaultLineRenderer2D();
-		line1.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.9f, 0.3f, 0.2f));
-		line1.setSetting(LineRenderer2D.KEY_GAP, 3.0);
-		line1.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
-		plot.setLineRenderer(data1, line1);
-		AreaRenderer2D area1 = new DefaultAreaRenderer2D();
-		area1.setSetting(AreaRenderer2D.KEY_COLOR, new Color(0.9f, 0.3f, 0.2f, 0.2f));
-		plot.setAreaRenderer(data1, area1);
-
-		PointRenderer point2 = new DefaultPointRenderer();
-		point2.setSetting(PointRenderer.KEY_COLOR, new Color(0.0f, 0.3f, 0.9f));
-		plot.setPointRenderer(data2, point2);
-		LineRenderer2D line2 = new DefaultLineRenderer2D();
-		line2.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.0f, 0.3f, 0.9f));
-		line2.setSetting(LineRenderer2D.KEY_GAP, 3.0);
-		line2.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
-		plot.setLineRenderer(data2, line2);
-		AreaRenderer2D area2 = new DefaultAreaRenderer2D();
-		area2.setSetting(AreaRenderer2D.KEY_COLOR, new Color(0.0f, 0.3f, 0.9f, 0.2f));
-		plot.setAreaRenderer(data2, area2);
+		formatData(plot, data1, new Color(0.9f, 0.3f, 0.2f));
+		formatData(plot, data2, new Color(0.0f, 0.3f, 0.9f));
+		formatData(plot, data3, new Color(0.0f, 0.5f, 0.0f));
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
+	}
+
+	private static void formatData(XYPlot plot, DataSource data, Color color) {
+		PointRenderer point = new DefaultPointRenderer();
+		point.setSetting(PointRenderer.KEY_COLOR, color);
+		plot.setPointRenderer(data, point);
+		LineRenderer2D line = new DefaultLineRenderer2D();
+		line.setSetting(LineRenderer2D.KEY_COLOR, color);
+		line.setSetting(LineRenderer2D.KEY_GAP, 3.0);
+		line.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
+		plot.setLineRenderer(data, line);
+		AreaRenderer2D area = new DefaultAreaRenderer2D();
+		area.setSetting(AreaRenderer2D.KEY_COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+		plot.setAreaRenderer(data, area);
 	}
 
 	public static void main(String[] args) {

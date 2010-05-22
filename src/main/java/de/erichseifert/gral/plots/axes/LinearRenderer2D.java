@@ -27,7 +27,7 @@ package de.erichseifert.gral.plots.axes;
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 	/**
-	 * Creates a new LinearRenderer2D object.
+	 * Creates a new renderer for linear axes in two-dimensional space.
 	 */
 	public LinearRenderer2D() {
 	}
