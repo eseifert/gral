@@ -25,7 +25,13 @@ Version 0.8
 
 - Add more possibilities to style plot area (rounded edges, etc.)
   How to do drop shadows? -> Renderer for plot area?
-  
+
+- Add support for breaks to AreaRenderer2D:
+  NaN values should cause area to be broken up
+
+- AreaRenderer2D should be able to use x axis as reference,
+  otherwise it's unusable for vertical plots
+
 Version 0.9
 ===========
 

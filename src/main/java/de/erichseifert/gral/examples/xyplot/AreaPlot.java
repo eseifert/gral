@@ -45,13 +45,13 @@ public class AreaPlot extends JFrame {
 
 		// Create table 1
 		DataTable data1 = new DataTable(Double.class, Double.class);
-		for (double x=0.0; x<2.25*Math.PI; x+=Math.PI/50.0) {
+		for (double x=0.0; x<2.25*Math.PI; x+=Math.PI/30.0) {
 			double y = 4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
 			data1.add(x, y);
 		}
 		// Create table 2
 		DataTable data2 = new DataTable(Double.class, Double.class);
-		for (double x=0.25*Math.PI; x<2.5*Math.PI; x+=Math.PI/50.0) {
+		for (double x=0.25*Math.PI; x<2.5*Math.PI; x+=Math.PI/30.0) {
 			double y = 4.0*Math.cos(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
 			data2.add(x, y);
 		}
