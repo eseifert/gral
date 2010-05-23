@@ -24,14 +24,14 @@ package de.erichseifert.gral.data.filters;
 import de.erichseifert.gral.data.DataSource;
 
 /**
- * Class that applies a convolution filter with the use of a Kernel.
- * Functionality includes:
+ * <p>Class that applies a convolution filter with the use of a kernel.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Getting and setting the Kernel used for convolution</li>
+ *   <li>Getting and setting the Kernel used for convolution</li>
  * </ul>
  */
 public class Convolution extends Filter {
-	private Kernel kernel;
+	private final Kernel kernel;
 
 	/**
 	 * Creates a new Convolution object with the specified DataSource,
@@ -59,13 +59,10 @@ public class Convolution extends Filter {
 	protected void filter() {
 		clear();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-			double[] filteredRow = new double[getColumnCount()];
+			double[] filteredRow = new double[getColumnCountFiltered()];
 			for (int colIndex = 0; colIndex < filteredRow.length; colIndex++) {
-				if (isFiltered(colIndex)) {
-					filteredRow[colIndex] = convolve(colIndex, rowIndex);
-				} else {
-					filteredRow[colIndex] = getOriginal(colIndex, rowIndex).doubleValue();
-				}
+				int colIndexOriginal = getIndexOriginal(colIndex);
+				filteredRow[colIndex] = convolve(colIndexOriginal, rowIndex);
 			}
 			add(filteredRow);
 		}

@@ -22,8 +22,8 @@
 package de.erichseifert.gral.data.filters;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.DataListener;
@@ -32,14 +32,18 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Abstract class that provides basic functions for filtering arbitrary
- * columns of a DataSource, in other words a set of 1-dimensional data.
- * Functionality includes:
+ * <p>Abstract class that provides basic functions for filtering arbitrary
+ * columns of a DataSource, in other words a set of one-dimensional data.</p>
+ *
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Different modes for filtering (see {@link Mode})</li>
- * <li>Support for listening for changes of the original data</li>
- * <li>Filtering of multiple columns</li>
+ *   <li>Different modes for filtering (see {@link Mode})</li>
+ *   <li>Support for listening for changes of the original data</li>
+ *   <li>Filtering of multiple columns</li>
  * </ul>
+ *
+ * <p>Only filtered columns are stored. Access to unfiltered columns is
+ * delegated to the original data source.</p>
  */
 public abstract class Filter extends AbstractDataSource implements DataListener {
 	/**
@@ -60,8 +64,8 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	};
 
 	private final DataSource original;
-	private final Set<Integer> cols;
-	private final ArrayList<double[]> data;
+	private final int[] cols;
+	private final List<double[]> data;
 	private Mode mode;
 
 	/**
@@ -75,11 +79,9 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 		this.data = new ArrayList<double[]>(cols.length);
 		this.original = original;
 		this.mode = mode;
-		this.cols = new HashSet<Integer>();
-
-		for (int col: cols) {
-			this.cols.add(col);
-		}
+		this.cols = Arrays.copyOf(cols, cols.length);
+		// A sorted array is necessary for binary search
+		Arrays.sort(this.cols);
 
 		this.original.addDataListener(this);
 		dataChanged(this.original);
@@ -132,12 +134,23 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 
 	@Override
 	public Number get(int col, int row) {
-		return data.get(row)[col];
+		int colPos = getIndexFiltered(col);
+		if (colPos < 0)
+			return original.get(col, row);
+		return data.get(row)[colPos];
 	}
 
 	@Override
 	public int getColumnCount() {
 		return original.getColumnCount();
+	}
+
+	/**
+	 * Returns the number of filtered columns
+	 * @return Number of filtered columns
+	 */
+	protected int getColumnCountFiltered() {
+		return cols.length;
 	}
 
 	@Override
@@ -152,12 +165,30 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	/**
+	 * Returns the index of the original column using the index of the filtered column.
+	 * @param col Index of the filtered column
+	 * @return Index of the original column
+	 */
+	protected int getIndexOriginal(int col) {
+		return cols[col];
+	}
+
+	/**
+	 * Returns the index of the filtered column using the index of the original column.
+	 * @param col Index of the original column
+	 * @return Index of the filtered column
+	 */
+	protected int getIndexFiltered(int col) {
+		return Arrays.binarySearch(cols, col);
+	}
+
+	/**
 	 * Returns whether the specified column is filtered.
 	 * @param col Column index.
 	 * @return True, if the column is filtered.
 	 */
 	protected boolean isFiltered(int col) {
-		return cols.contains(col);
+		return getIndexFiltered(col) >= 0;
 	}
 
 	/**

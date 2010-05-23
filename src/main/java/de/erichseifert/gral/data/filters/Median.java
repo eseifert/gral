@@ -29,10 +29,10 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that calculates the Median of a DataSource.
+ * <p>Class that calculates the median of a data sequence</p>.
  * <ul>
- * <li>Setting and getting offset</li>
- * <li>Setting and getting window size</li>
+ *   <li>Setting and getting offset</li>
+ *   <li>Setting and getting window size</li>
  * </ul>
  */
 public class Median extends Filter {
@@ -62,32 +62,27 @@ public class Median extends Filter {
 			return;
 		}
 		List<List<Double>> colWindows = new ArrayList<List<Double>>(getColumnCount());
-		for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
+		for (int colIndex = 0; colIndex < getColumnCountFiltered(); colIndex++) {
+			int colIndexOriginal = getIndexOriginal(colIndex);
 			List<Double> window = new ArrayList<Double>(getWindowSize());
 			colWindows.add(window);
-			if (!isFiltered(colIndex)) {
-				continue;
-			}
 			// Prefill window
 			for (int rowIndex = getOffset() - getWindowSize(); rowIndex < 0; rowIndex++) {
-				double v = getOriginal(colIndex, rowIndex).doubleValue();
+				double v = getOriginal(colIndexOriginal, rowIndex).doubleValue();
 				window.add(v);
 			}
 		}
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-			double[] filteredRow = new double[getColumnCount()];
+			double[] filteredRow = new double[getColumnCountFiltered()];
 			for (int colIndex = 0; colIndex < filteredRow.length; colIndex++) {
-				if (isFiltered(colIndex)) {
-					List<Double> window = colWindows.get(colIndex);
-					if (window.size() >= getWindowSize()) {
-						window.remove(0);
-					}
-					double v = getOriginal(colIndex, rowIndex - getOffset() + getWindowSize()).doubleValue();
-					window.add(v);
-					filteredRow[colIndex] = median(window);
-				} else {
-					filteredRow[colIndex] = getOriginal(colIndex, rowIndex).doubleValue();
+				List<Double> window = colWindows.get(colIndex);
+				if (window.size() >= getWindowSize()) {
+					window.remove(0);
 				}
+				int colIndexOriginal = getIndexOriginal(colIndex);
+				double v = getOriginal(colIndexOriginal, rowIndex - getOffset() + getWindowSize()).doubleValue();
+				window.add(v);
+				filteredRow[colIndex] = median(window);
 			}
 			add(filteredRow);
 		}
