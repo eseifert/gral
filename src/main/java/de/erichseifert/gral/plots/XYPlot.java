@@ -46,6 +46,7 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.areas.AreaRenderer2D;
 import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisListener;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.axes.Tick2D;
@@ -341,6 +342,16 @@ public class XYPlot extends Plot implements DataListener  {
 
 		setSettingDefault(KEY_AXIS_X_RENDERER, new LinearRenderer2D());
 		setSettingDefault(KEY_AXIS_Y_RENDERER, new LinearRenderer2D());
+
+		// Listen for changes of the axis range
+		AxisListener axisListener = new AxisListener() {
+			@Override
+			public void rangeChanged(Number min, Number max) {
+				layoutAxes();
+			}
+		};
+		axisX.addAxisListener(axisListener);
+		axisY.addAxisListener(axisListener);
 	}
 
 	@Override

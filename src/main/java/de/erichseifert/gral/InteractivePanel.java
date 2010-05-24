@@ -31,6 +31,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
@@ -61,6 +63,8 @@ import javax.swing.filechooser.FileFilter;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
+import de.erichseifert.gral.plots.Plot;
+import de.erichseifert.gral.plots.PlotZoomer;
 
 
 
@@ -77,17 +81,20 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 	private final JPopupMenu menu;
 	private final JMenuItem refresh;
+	private final JMenuItem resetZoom;
 	private final JMenuItem exportImage;
 	private final JMenuItem print;
 
 	private final JFileChooser exportImageChooser;
+
+	private final PlotZoomer zoomer;
 
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
 
 		printerJob = PrinterJob.getPrinterJob();
 		printerJob.setPrintable(this);
-		
+
 		IOCapabilities[] exportFormats = DrawableWriterFactory.getInstance().getCapabilities();
 		exportImageChooser = new ExportChooser(exportFormats);
 		exportImageChooser.setDialogTitle("Export image");
@@ -101,6 +108,19 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			}
 		});
 		menu.add(refresh);
+
+		menu.addSeparator();
+
+		resetZoom = new JMenuItem(new AbstractAction("Reset zoom") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (zoomer != null) {
+					zoomer.reset();
+					repaint();
+				}
+			}
+		});
+		menu.add(resetZoom);
 
 		menu.addSeparator();
 
@@ -141,6 +161,20 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		menu.add(print);
 
 		addMouseListener(new PopupListener());
+		if (drawable instanceof Plot) {
+			zoomer = new PlotZoomer((Plot) drawable);
+
+			addMouseWheelListener(new MouseWheelListener() {
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					zoomer.zoom(e.getPoint(), e.getWheelRotation(), e.getWheelRotation());
+					repaint();
+				}
+			});
+		}
+		else {
+			zoomer = null;
+		}
 	}
 
 	private void export(Drawable d, String mimeType, File f, Rectangle2D documentBounds) {
