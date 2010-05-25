@@ -179,7 +179,6 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			});
 
 			if (getDrawable() instanceof XYPlot) {
-				System.out.println("XYPlot");
 				// Register a new handler to move the map by dragging
 				// This requires that an x- and a y-axis do exist in the plot
 				MoveListener moveListener = new MoveListener((XYPlot) getDrawable());
