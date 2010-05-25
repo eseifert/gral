@@ -27,6 +27,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -64,7 +65,10 @@ import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.plots.Plot;
-import de.erichseifert.gral.plots.PlotZoomer;
+import de.erichseifert.gral.plots.PlotNavigator;
+import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 
 
 
@@ -87,7 +91,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 	private final JFileChooser exportImageChooser;
 
-	private final PlotZoomer zoomer;
+	private PlotNavigator navigator;
 
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
@@ -111,11 +115,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 		menu.addSeparator();
 
-		resetZoom = new JMenuItem(new AbstractAction("Reset zoom") {
+		resetZoom = new JMenuItem(new AbstractAction("Reset view") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (zoomer != null) {
-					zoomer.reset();
+				if (navigator != null) {
+					navigator.reset();
 					repaint();
 				}
 			}
@@ -161,19 +165,27 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		menu.add(print);
 
 		addMouseListener(new PopupListener());
-		if (drawable instanceof Plot) {
-			zoomer = new PlotZoomer((Plot) drawable);
 
+		if (getDrawable() instanceof Plot) {
+			navigator = new PlotNavigator((Plot) getDrawable());
+			// Register a new handler to zoom the map with the mouse wheel
 			addMouseWheelListener(new MouseWheelListener() {
 				@Override
 				public void mouseWheelMoved(MouseWheelEvent e) {
-					double zoomNew = zoomer.getZoom()*Math.pow(1.25, e.getWheelRotation());
-					zoomer.zoomTo(e.getPoint(), zoomNew);
+					double zoomNew = navigator.getZoom()*Math.pow(1.25, e.getWheelRotation());
+					navigator.setZoom(zoomNew);
 					repaint();
 				}
 			});
-		} else {
-			zoomer = null;
+
+			if (getDrawable() instanceof XYPlot) {
+				System.out.println("XYPlot");
+				// Register a new handler to move the map by dragging
+				// This requires that an x- and a y-axis do exist in the plot
+				MoveListener moveListener = new MoveListener((XYPlot) getDrawable());
+				addMouseListener(moveListener);
+				addMouseMotionListener(moveListener);
+			}
 		}
 	}
 
@@ -219,6 +231,43 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	            menu.show(e.getComponent(), e.getX(), e.getY());
 	        }
 	    }
+	}
+
+	private class MoveListener extends MouseAdapter {
+		private final Axis axisX;
+		private final Axis axisY;
+		private final AxisRenderer2D axisXRenderer;
+		private final AxisRenderer2D axisYRenderer;
+		private Point posPrev;
+
+		public MoveListener(XYPlot plot) {
+			axisX = plot.getAxis(Axis.X);
+			axisY = plot.getAxis(Axis.Y);
+			axisXRenderer = plot.getSetting(XYPlot.AXIS_X_RENDERER);
+			axisYRenderer = plot.getSetting(XYPlot.AXIS_Y_RENDERER);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			posPrev = e.getPoint();
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			Point pos = e.getPoint();
+			double centerXDelta =
+				axisXRenderer.viewToWorld(axisX, pos.getX(), true).doubleValue() -
+				axisXRenderer.viewToWorld(axisX, posPrev.getX(), true).doubleValue();
+			double centerYDelta =
+				axisYRenderer.viewToWorld(axisY, pos.getY(), true).doubleValue() -
+				axisYRenderer.viewToWorld(axisY, posPrev.getY(), true).doubleValue();
+			double centerXNew = navigator.getCenter(axisX).doubleValue() - centerXDelta;
+			double centerYNew = navigator.getCenter(axisY).doubleValue() + centerYDelta;
+			navigator.setCenter(axisX, centerXNew);
+			navigator.setCenter(axisY, centerYNew);
+			repaint();
+			posPrev = pos;
+		}
 	}
 
 	public final static class DrawableWriterFilter extends FileFilter {
