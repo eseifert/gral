@@ -154,4 +154,10 @@
     <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk</developerConnection>
     <tag>HEAD</tag>
   </scm>
+  
+  <issueManagement>
+    <system>trac</system>
+    <url>http://trac.erichseifert.de/gral/</url>
+  </issueManagement>
+
 </project>

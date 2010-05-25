@@ -57,10 +57,10 @@ public class HistogramTest {
 		Histogram histogram = new Histogram(table, 4);
 
 		long[] expected = {
-			3, 5,  // 1.0-2.0, 1.0-3.0
-			3, 2,  // 2.0-3.0, 3.0-5.0
-			0, 0,  // 3.0-4.0, 5.0-7.0
-			1, 0   // 4.0-5.0, 7.0-9.0
+			3L, 5L,  // 1.0-2.0, 1.0-3.0
+			3L, 2L,  // 2.0-3.0, 3.0-5.0
+			0L, 0L,  // 3.0-4.0, 5.0-7.0
+			1L, 0L   // 4.0-5.0, 7.0-9.0
 		};
 		int i = 0;
 		while (i < expected.length) {
@@ -75,10 +75,10 @@ public class HistogramTest {
 		Histogram histogram = new Histogram(table, new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}});
 
 		long[] expected = {
-			3, 5,  // 1.0-2.0, 1.0-3.0
-			3, 2,  // 2.0-3.0, 3.0-5.0
-			0, 0,  // 3.0-4.0, 5.0-7.0
-			1, 0   // 4.0-5.0, 7.0-9.0
+			3L, 5L,  // 1.0-2.0, 1.0-3.0
+			3L, 2L,  // 2.0-3.0, 3.0-5.0
+			0L, 0L,  // 3.0-4.0, 5.0-7.0
+			1L, 0L   // 4.0-5.0, 7.0-9.0
 		};
 		int i = 0;
 		while (i < expected.length) {
@@ -92,14 +92,14 @@ public class HistogramTest {
 	public void testGet() {
 		Histogram histogram = new Histogram(table, 4);
 
-		assertEquals(3l, histogram.get(0, 0));
-		assertEquals(5l, histogram.get(1, 0));
-		assertEquals(3l, histogram.get(0, 1));
-		assertEquals(2l, histogram.get(1, 1));
-		assertEquals(0l, histogram.get(0, 2));
-		assertEquals(0l, histogram.get(1, 2));
-		assertEquals(1l, histogram.get(0, 3));
-		assertEquals(0l, histogram.get(1, 3));
+		assertEquals(3L, histogram.get(0, 0));
+		assertEquals(5L, histogram.get(1, 0));
+		assertEquals(3L, histogram.get(0, 1));
+		assertEquals(2L, histogram.get(1, 1));
+		assertEquals(0L, histogram.get(0, 2));
+		assertEquals(0L, histogram.get(1, 2));
+		assertEquals(1L, histogram.get(0, 3));
+		assertEquals(0L, histogram.get(1, 3));
 	}
 
 	@Test

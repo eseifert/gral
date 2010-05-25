@@ -135,8 +135,9 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	@Override
 	public Number get(int col, int row) {
 		int colPos = getIndexFiltered(col);
-		if (colPos < 0)
+		if (colPos < 0) {
 			return original.get(col, row);
+		}
 		return data.get(row)[colPos];
 	}
 

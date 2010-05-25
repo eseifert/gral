@@ -27,13 +27,20 @@
 
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
+    <property name="severity" value="${checkstyle.javadoc.severity}" default="warning"/>
     
     <module name="TreeWalker">
+        <module name="LineLength">
+            <property name="max" value="120"/>
+        </module>
+        <module name="NeedBraces"/>
         <module name="Regexp">
-            <property name="severity" value="${checkstyle.javadoc.severity}" default="warning"/>
             <property name="format" value="System\.out\.println"/>
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
         </module>
+        <module name="TodoComment"/>
+        <module name="UnusedImports" />
+        <module name="UpperEll"/>
     </module>
 </module>
