@@ -32,6 +32,7 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.plots.DataPoint2D;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -39,16 +40,16 @@ import de.erichseifert.gral.util.GraphicsUtils;
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Key for specifying an {@link de.erichseifert.gral.DrawableConstants.Orientation} instance which indicates the primary direction of the "steps". */
-	public static final String KEY_ASCENT_DIRECTION = "line.discrete.ascentDirection";
+	public static final Key ASCENT_DIRECTION = new Key("line.discrete.ascentDirection");
 	/** Key for specifying the percentage of the distance between two points, which indicates the "step" of a stair. */
-	public static final String KEY_ASCENDING_POINT = "line.discrete.ascendingPoint";
+	public static final Key ASCENDING_POINT = new Key("line.discrete.ascendingPoint");
 
 	/**
 	 * Creates a new DiscreteLineRenderer2D object with default settings.
 	 */
 	public DiscreteLineRenderer2D() {
-		setSettingDefault(KEY_ASCENT_DIRECTION, Orientation.HORIZONTAL);
-		setSettingDefault(KEY_ASCENDING_POINT, 0.5);
+		setSettingDefault(ASCENT_DIRECTION, Orientation.HORIZONTAL);
+		setSettingDefault(ASCENDING_POINT, 0.5);
 	}
 
 	@Override
@@ -56,8 +57,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Orientation dir = getSetting(KEY_ASCENT_DIRECTION);
-				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(KEY_ASCENDING_POINT);
+				Orientation dir = getSetting(ASCENT_DIRECTION);
+				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(ASCENDING_POINT);
 
 				// Construct shape
 				GeneralPath line = new GeneralPath();
@@ -84,7 +85,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw path
 				Shape lineShape = punch(line, points);
-				Paint paint = getSetting(LineRenderer2D.KEY_COLOR);
+				Paint paint = getSetting(LineRenderer2D.COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};

@@ -65,21 +65,21 @@ public class LegendTest {
 	@Test
 	public void testSettings() {
 		// Get
-		assertEquals(Color.WHITE, legend.getSetting(Legend.KEY_BACKGROUND));
+		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
 
 		// Set
-		legend.setSetting(Legend.KEY_BACKGROUND, Color.RED);
-		assertEquals(Color.RED, legend.<String>getSetting(Legend.KEY_BACKGROUND));
+		legend.setSetting(Legend.BACKGROUND, Color.RED);
+		assertEquals(Color.RED, legend.<String>getSetting(Legend.BACKGROUND));
 
 		// Remove
-		legend.removeSetting(Legend.KEY_BACKGROUND);
-		assertEquals(Color.WHITE, legend.getSetting(Legend.KEY_BACKGROUND));
+		legend.removeSetting(Legend.BACKGROUND);
+		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
 	}
 
 	@Test
 	public void testDraw() {
-		legend.setSetting(Legend.KEY_BACKGROUND, Color.WHITE);
-		legend.setSetting(Legend.KEY_BORDER, new BasicStroke(1f));
+		legend.setSetting(Legend.BACKGROUND, Color.WHITE);
+		legend.setSetting(Legend.BORDER, new BasicStroke(1f));
 		legend.add(new DummyData(1, 1, 1.0));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);

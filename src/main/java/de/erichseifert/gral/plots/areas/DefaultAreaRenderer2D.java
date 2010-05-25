@@ -44,7 +44,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer2D {
 		return new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Paint paint = getSetting(KEY_COLOR);
+				Paint paint = getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, area, paint, area.getBounds2D());
 			}
 		};

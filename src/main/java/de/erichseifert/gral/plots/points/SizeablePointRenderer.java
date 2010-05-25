@@ -40,7 +40,7 @@ public class SizeablePointRenderer extends DefaultPointRenderer {
 
 	@Override
 	public Shape getPointPath(Row row) {
-		Shape shape = getSetting(KEY_SHAPE);
+		Shape shape = getSetting(SHAPE);
 		if (row.getSource().getColumnCount() >= 3) {
 			double size = row.get(2).doubleValue();
 			AffineTransform tx = AffineTransform.getScaleInstance(size, size);

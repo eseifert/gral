@@ -54,7 +54,7 @@ public class SizeablePointsRendererTest {
 	public void testPointPath() {
 		// Get line
 		PointRenderer r = new SizeablePointRenderer();
-		Shape expected = r.<Shape>getSetting(PointRenderer.KEY_SHAPE);
+		Shape expected = r.<Shape>getSetting(PointRenderer.SHAPE);
 		Shape path = r.getPointPath(row);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}

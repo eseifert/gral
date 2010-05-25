@@ -213,6 +213,7 @@ public abstract class GeometryUtils {
     	Area shapeArea = new Area(shape);
 		if (!MathUtils.almostEqual(gap, 0.0, 1e-10)) {
 			int gapJoin = (rounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
+			Area gapsArea = new Area();
 			for (DataPoint2D p : dataPoints) {
 				Shape point = p.getPoint();
 				if (point == null) {
@@ -220,9 +221,10 @@ public abstract class GeometryUtils {
 				}
 				Point2D pos = p.getPosition();
 				AffineTransform tx = AffineTransform.getTranslateInstance(pos.getX(), pos.getY());
-				Area gapShape = GeometryUtils.grow(tx.createTransformedShape(point), gap, gapJoin, 10f);
-				shapeArea.subtract(gapShape);
+				Area gapArea = GeometryUtils.grow(tx.createTransformedShape(point), gap, gapJoin, 10f);
+				gapsArea.add(gapArea);
 			}
+			shapeArea.subtract(gapsArea);
 		}
 		return shapeArea;
     }

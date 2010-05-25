@@ -32,6 +32,7 @@ import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -39,11 +40,11 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public abstract class PlotArea2D extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot area. */
-	public static final String KEY_BACKGROUND = "plotarea.background";
+	public static final Key BACKGROUND = new Key("plotarea.background");
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot area. */
-	public static final String KEY_BORDER = "plotarea.border";
+	public static final Key BORDER = new Key("plotarea.border");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot area. */
-	public static final String KEY_COLOR = "plotarea.color";
+	public static final Key COLOR = new Key("plotarea.color");
 
 	private final Settings settings;
 
@@ -53,9 +54,9 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	 */
 	public PlotArea2D() {
 		settings = new Settings(this);
-		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
-		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
-		setSettingDefault(KEY_COLOR, Color.BLACK);
+		setSettingDefault(BACKGROUND, Color.WHITE);
+		setSettingDefault(BORDER, new BasicStroke(1f));
+		setSettingDefault(COLOR, Color.BLACK);
 	}
 
 	/**
@@ -65,7 +66,7 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	 */
 	protected void drawBackground(Graphics2D g2d) {
 		// FIXME: duplicate code! See de.erichseifert.gral.Legend
-		Paint paint = getSetting(KEY_BACKGROUND);
+		Paint paint = getSetting(BACKGROUND);
 		if (paint != null) {
 			GraphicsUtils.fillPaintedShape(g2d, getBounds(), paint, null);
 		}
@@ -78,9 +79,9 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	 */
 	protected void drawBorder(Graphics2D g2d) {
 		// FIXME: duplicate code! See de.erichseifert.gral.Legend
-		Stroke stroke = getSetting(KEY_BORDER);
+		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
-			Paint paint = getSetting(KEY_COLOR);
+			Paint paint = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(g2d, getBounds(), paint, null, stroke);
 		}
 	}
@@ -92,27 +93,27 @@ public abstract class PlotArea2D extends AbstractDrawable implements SettingsSto
 	protected abstract void drawPlot(Graphics2D g2d);
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return settings.<T>get(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.<T>set(key, value);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.set(key, value);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 

@@ -52,17 +52,17 @@ public class SimplePiePlot extends JFrame {
 			data.add(r.nextInt(10) + 1);
 		}
 		PiePlot plot = new PiePlot(data);
-		plot.setSetting(PiePlot.KEY_TITLE, "A Sample Pie Plot");
+		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
 		// Change rotation
-		//plot.setSetting(PiePlot.KEY_CLOCKWISE, false);
+		//plot.setSetting(PiePlot.CLOCKWISE, false);
 		// Custom start angle
-		//plot.setSetting(PiePlot.KEY_START, 70.0);
+		//plot.setSetting(PiePlot.START, 70.0);
 		// Custom colors
-		//plot.setSetting(PiePlot.KEY_COLORS, new RainbowColors());
+		//plot.setSetting(PiePlot.COLORS, new RainbowColors());
 		// Random blue colors
 		//QuasiRandomColors colors = new QuasiRandomColors();
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
-		//plot.setSetting(PiePlot.KEY_COLORS, colors);
+		//plot.setSetting(PiePlot.COLORS, colors);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 

@@ -65,64 +65,64 @@ public class SimpleXYPlot extends JFrame {
 
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
 		// Custom plot area formatting
-		plot.getPlotArea().setSetting(PlotArea2D.KEY_BACKGROUND, new LinearGradientPaint(
+		plot.getPlotArea().setSetting(PlotArea2D.BACKGROUND, new LinearGradientPaint(
 				0f,0f, 1f,0f, new float[] {0.00f, 0.05f},
 				new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
-		plot.getPlotArea().setSetting(PlotArea2D.KEY_BORDER, null);
+		plot.getPlotArea().setSetting(PlotArea2D.BORDER, null);
 		// Setting the title
-		plot.setSetting(XYPlot.KEY_TITLE, "A Sample XY Plot");
+		plot.setSetting(XYPlot.TITLE, "A Sample XY Plot");
 		// Custom title alignment
-		//plot.getTitle().setSetting(Label.KEY_ALIGNMENT, 0.3);
+		//plot.getTitle().setSetting(Label.ALIGNMENT, 0.3);
 		// Custom point renderer
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
 		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
 		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
-		defaultPointRenderer.setSetting(PointRenderer.KEY_ERROR_DISPLAYED, true);
+		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
 		plot.setPointRenderer(seriesLog, defaultPointRenderer);
 		// Custom point bounds
 		//plot.getPointRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom point coloring
 		//plot.getPointRenderer().setColor(Color.RED);
 		// Custom grid color
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_COLOR, Color.BLUE);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_COLOR, Color.BLUE);
 		// Grid disabled
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_X, false);
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.KEY_GRID_Y, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_X, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_Y, false);
 		// Custom line renderer
 		LineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
-		discreteRenderer.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
-		discreteRenderer.setSetting(LineRenderer2D.KEY_STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
+		discreteRenderer.setSetting(LineRenderer2D.COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
+		discreteRenderer.setSetting(LineRenderer2D.STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for points
-		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP, 2.0);
-		discreteRenderer.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
+		discreteRenderer.setSetting(LineRenderer2D.GAP, 2.0);
+		discreteRenderer.setSetting(LineRenderer2D.GAP_ROUNDED, true);
 		// Custom ascending
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENT_DIRECTION, Orientation.VERTICAL);
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.KEY_ASCENDING_POINT, 0.5);
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, Orientation.VERTICAL);
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
-		axisRendererX.setSetting(AxisRenderer2D.KEY_LABEL, "Logarithmic axis");
-		plot.setSetting(XYPlot.KEY_AXIS_X_RENDERER, axisRendererX);
+		axisRendererX.setSetting(AxisRenderer2D.LABEL, "Logarithmic axis");
+		plot.setSetting(XYPlot.AXIS_X_RENDERER, axisRendererX);
 		// Custom tick labels
 		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
-		axisRendererX.setSetting(AxisRenderer2D.KEY_TICKS_CUSTOM, labels);
+		axisRendererX.setSetting(AxisRenderer2D.TICKS_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
-		axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_STROKE, stroke);
-		((AxisRenderer2D) plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.KEY_LABEL, "Linear axis");
+		axisRendererX.setSetting(AxisRenderer2D.SHAPE_STROKE, stroke);
+		((AxisRenderer2D) plot.getSetting(XYPlot.AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.LABEL, "Linear axis");
 		// Custom stroke for the ticks
-		//axisRendererX.setSetting(AxisRenderer2D.KEY_TICK_STROKE, stroke);
+		//axisRendererX.setSetting(AxisRenderer2D.TICK_STROKE, stroke);
 		// Swap axis direction
-		//axisRendererX.setSetting(AxisRenderer2D.KEY_SHAPE_DIRECTION_SWAPPED, true);
+		//axisRendererX.setSetting(AxisRenderer2D.SHAPE_DIRECTION_SWAPPED, true);
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		// Change intersection point of Y axis
-		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.KEY_AXIS_Y_RENDERER);
-		axisRendererY.setSetting(AxisRenderer2D.KEY_INTERSECTION, 1.0);
+		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.AXIS_Y_RENDERER);
+		axisRendererY.setSetting(AxisRenderer2D.INTERSECTION, 1.0);
 		// Change tick spacing
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, 2.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, 2.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 2.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);

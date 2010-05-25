@@ -58,7 +58,7 @@ public class AreaPlot extends JFrame {
 		DataSeries data3 = new DataSeries("blue",  data, 0, 3);
 
 		XYPlot plot = new XYPlot(data1, data2, data3);
-		plot.setSetting(XYPlot.KEY_LEGEND, true);
+		plot.setSetting(XYPlot.LEGEND, true);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 		getContentPane().add(new InteractivePanel(plot));
 
@@ -72,15 +72,15 @@ public class AreaPlot extends JFrame {
 
 	private static void formatData(XYPlot plot, DataSource data, Color color) {
 		PointRenderer point = new DefaultPointRenderer();
-		point.setSetting(PointRenderer.KEY_COLOR, color);
+		point.setSetting(PointRenderer.COLOR, color);
 		plot.setPointRenderer(data, point);
 		LineRenderer2D line = new DefaultLineRenderer2D();
-		line.setSetting(LineRenderer2D.KEY_COLOR, color);
-		line.setSetting(LineRenderer2D.KEY_GAP, 3.0);
-		line.setSetting(LineRenderer2D.KEY_GAP_ROUNDED, true);
+		line.setSetting(LineRenderer2D.COLOR, color);
+		line.setSetting(LineRenderer2D.GAP, 3.0);
+		line.setSetting(LineRenderer2D.GAP_ROUNDED, true);
 		plot.setLineRenderer(data, line);
 		AreaRenderer2D area = new DefaultAreaRenderer2D();
-		area.setSetting(AreaRenderer2D.KEY_COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+		area.setSetting(AreaRenderer2D.COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
 		plot.setAreaRenderer(data, area);
 	}
 

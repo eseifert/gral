@@ -40,6 +40,7 @@ import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -54,17 +55,17 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public abstract class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background. */
-	public static final String KEY_BACKGROUND = "legend.background";
+	public static final Key BACKGROUND = new Key("legend.background");
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the legend. */
-	public static final String KEY_BORDER = "legend.border";
+	public static final Key BORDER = new Key("legend.border");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the legend. */
-	public static final String KEY_COLOR = "legend.color";
+	public static final Key COLOR = new Key("legend.color");
 	/** Key for specifying the orientation of the legend using a {@link de.erichseifert.gral.DrawableConstants.Orientation} value. */
-	public static final String KEY_ORIENTATION = "legend.orientation";
+	public static final Key ORIENTATION = new Key("legend.orientation");
 	/** Key for specifying the gap between items. */
-	public static final String KEY_GAP = "legend.gap";
+	public static final Key GAP = new Key("legend.gap");
 	/** Key for specifying the gap between items. */
-	public static final String KEY_SYMBOL_SIZE = "legend.symbol.size";
+	public static final Key SYMBOL_SIZE = new Key("legend.symbol.size");
 
 	private final Settings settings;
 
@@ -96,15 +97,15 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 				@Override
 				public Dimension2D getPreferredSize() {
 					final double fontSize = 10.0;  // TODO: Use real font size
-					Dimension2D symbolSize = Legend.this.getSetting(KEY_SYMBOL_SIZE);
+					Dimension2D symbolSize = Legend.this.getSetting(SYMBOL_SIZE);
 					Dimension2D size = super.getPreferredSize();
 					size.setSize(symbolSize.getWidth()*fontSize, symbolSize.getHeight()*fontSize);
 					return size;
 				}
 			};
 			label = new Label(labelText);
-			label.setSetting(Label.KEY_ALIGNMENT_X, 0.0);
-			label.setSetting(Label.KEY_ALIGNMENT_Y, 0.5);
+			label.setSetting(Label.ALIGNMENT_X, 0.0);
+			label.setSetting(Label.ALIGNMENT_Y, 0.5);
 
 			add(symbol, Location.WEST);
 			add(label, Location.CENTER);
@@ -133,12 +134,12 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		setInsets(new Insets2D.Double(10.0));
 
 		settings = new Settings(this);
-		setSettingDefault(KEY_BACKGROUND, Color.WHITE);
-		setSettingDefault(KEY_BORDER, new BasicStroke(1f));
-		setSettingDefault(KEY_COLOR, Color.BLACK);
-		setSettingDefault(KEY_ORIENTATION, Orientation.VERTICAL);
-		setSettingDefault(KEY_GAP, new de.erichseifert.gral.util.Dimension2D.Double(20.0, 5.0));
-		setSettingDefault(KEY_SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
+		setSettingDefault(BACKGROUND, Color.WHITE);
+		setSettingDefault(BORDER, new BasicStroke(1f));
+		setSettingDefault(COLOR, Color.BLACK);
+		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
+		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(20.0, 5.0));
+		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
 	}
 
 	@Override
@@ -154,7 +155,7 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	 * @param g2d Graphics object to draw with.
 	 */
 	protected void drawBackground(Graphics2D g2d) {
-		Paint bg = getSetting(KEY_BACKGROUND);
+		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
 			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 		}
@@ -166,9 +167,9 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	 * @param g2d Graphics object to draw with.
 	 */
 	protected void drawBorder(Graphics2D g2d) {
-		Stroke stroke = getSetting(KEY_BORDER);
+		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
-			Paint fg = getSetting(KEY_COLOR);
+			Paint fg = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
 		}
 	}
@@ -215,36 +216,36 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 	}
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return (T)settings.get(key);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.set(key, value);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.setDefault(key, value);
 	}
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		String key = event.getKey();
-		if (KEY_ORIENTATION.equals(key) || KEY_GAP.equals(key)) {
-			Orientation orientation = getSetting(KEY_ORIENTATION);
-			Dimension2D gap = getSetting(KEY_GAP);
+		Key key = event.getKey();
+		if (ORIENTATION.equals(key) || GAP.equals(key)) {
+			Orientation orientation = getSetting(ORIENTATION);
+			Dimension2D gap = getSetting(GAP);
 			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
 		}

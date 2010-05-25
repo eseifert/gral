@@ -58,19 +58,19 @@ public class PlotArea2DTest {
 	@Test
 	public void testSettings() {
 		// Get
-		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea2D.KEY_BACKGROUND));
+		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea2D.BACKGROUND));
 		// Set
-		plotArea.setSetting(PlotArea2D.KEY_BACKGROUND, "foobar");
-		assertEquals("foobar", plotArea.<String>getSetting(PlotArea2D.KEY_BACKGROUND));
+		plotArea.setSetting(PlotArea2D.BACKGROUND, "foobar");
+		assertEquals("foobar", plotArea.<String>getSetting(PlotArea2D.BACKGROUND));
 		// Remove
-		plotArea.removeSetting(PlotArea2D.KEY_BACKGROUND);
-		assertNull(plotArea.getSetting(PlotArea2D.KEY_BACKGROUND));
+		plotArea.removeSetting(PlotArea2D.BACKGROUND);
+		assertNull(plotArea.getSetting(PlotArea2D.BACKGROUND));
 	}
 
 	@Test
 	public void testDraw() {
-		plotArea.setSetting(Plot.KEY_BACKGROUND, Color.WHITE);
-		plotArea.setSetting(Plot.KEY_BORDER, new BasicStroke(1f));
+		plotArea.setSetting(Plot.BACKGROUND, Color.WHITE);
+		plotArea.setSetting(Plot.BORDER, new BasicStroke(1f));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();

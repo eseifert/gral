@@ -24,6 +24,7 @@ package de.erichseifert.gral.plots.lines;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.plots.DataPoint2D;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -37,13 +38,13 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public interface LineRenderer2D extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
-	static final String KEY_STROKE = "line.stroke";
+	static final Key STROKE = new Key("line.stroke");
 	/** Key for specifying the distance between the line and a point. */
-	static final String KEY_GAP = "line.gap.size";
+	static final Key GAP = new Key("line.gap.size");
 	/** Key for specifying whether the gaps should have rounded corners. */
-	static final String KEY_GAP_ROUNDED = "line.gap.rounded";
+	static final Key GAP_ROUNDED = new Key("line.gap.rounded");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the line shape. */
-	static final String KEY_COLOR = "line.color";
+	static final Key COLOR = new Key("line.color");
 
 	/**
 	 * Returns a graphical representation for the line defined by <code>points</code>.

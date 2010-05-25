@@ -28,7 +28,7 @@ import java.util.EventObject;
  * @see SettingsListener
  */
 public class SettingChangeEvent extends EventObject {
-	private final String key;
+	private final Settings.Key key;
 	private final Object valOld;
 	private final Object valNew;
 	private final boolean defaultSetting;
@@ -41,7 +41,7 @@ public class SettingChangeEvent extends EventObject {
 	 * @param valNew New value.
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
-	public SettingChangeEvent(Object source, String key, Object valOld, Object valNew, boolean defaultSetting) {
+	public SettingChangeEvent(Object source, Settings.Key key, Object valOld, Object valNew, boolean defaultSetting) {
 		super(source);
 		this.key = key;
 		this.valOld = valOld;
@@ -53,7 +53,7 @@ public class SettingChangeEvent extends EventObject {
 	 * Returns the key of the changed setting.
 	 * @return Key.
 	 */
-	public String getKey() {
+	public Settings.Key getKey() {
 		return key;
 	}
 

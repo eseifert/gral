@@ -38,6 +38,7 @@ import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -47,17 +48,17 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	/** Key for specifying the horizontal alignment within the bounding rectangle. */
-	public static final String KEY_ALIGNMENT_X = "label.alignment.x";
+	public static final Key ALIGNMENT_X = new Key("label.alignment.x");
 	/** Key for specifying the vertical alignment within the bounding rectangle. */
-	public static final String KEY_ALIGNMENT_Y = "label.alignment.y";
+	public static final Key ALIGNMENT_Y = new Key("label.alignment.y");
 	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants} value where the label will be aligned at. */
-	public static final String KEY_ANCHOR = "label.anchor";
+	public static final Key ANCHOR = new Key("label.anchor");
 	/** Key for specifying the font of this label. */
-	public static final String KEY_FONT = "label.font";
+	public static final Key FONT = new Key("label.font");
 	/** Key for specifying the rotation of this label, */
-	public static final String KEY_ROTATION = "label.rotation";
+	public static final Key ROTATION = new Key("label.rotation");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the label shape. */
-	public static final String KEY_COLOR = "label.color";
+	public static final Key COLOR = new Key("label.color");
 
 	private final Settings settings;
 	private String text;
@@ -71,12 +72,12 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		settings = new Settings(this);
 		this.text = text;
 
-		setSettingDefault(KEY_ALIGNMENT_X, 0.5);
-		setSettingDefault(KEY_ALIGNMENT_Y, 0.5);
-		setSettingDefault(KEY_ANCHOR, DrawableConstants.Location.CENTER);
-		setSettingDefault(KEY_FONT, Font.decode(null));
-		setSettingDefault(KEY_ROTATION, 0.0);
-		setSettingDefault(KEY_COLOR, Color.BLACK);
+		setSettingDefault(ALIGNMENT_X, 0.5);
+		setSettingDefault(ALIGNMENT_Y, 0.5);
+		setSettingDefault(ANCHOR, DrawableConstants.Location.CENTER);
+		setSettingDefault(FONT, Font.decode(null));
+		setSettingDefault(ROTATION, 0.0);
+		setSettingDefault(COLOR, Color.BLACK);
 	}
 
 	@Override
@@ -91,15 +92,15 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 			getY() + getHeight()/2.0
 		);
 
-		Double rotation = getSetting(KEY_ROTATION);
+		Double rotation = getSetting(ROTATION);
 		if (rotation != null && (rotation%360.0) != 0.0) {
 			txLabel.rotate(-rotation/180.0*Math.PI);
 		}
 
 		Rectangle2D textBounds = layout.getBounds();
-		double alignmentX = this.<Double>getSetting(KEY_ALIGNMENT_X);
-		double alignmentY = this.<Double>getSetting(KEY_ALIGNMENT_Y);
-		DrawableConstants.Location anchor = getSetting(KEY_ANCHOR);
+		double alignmentX = this.<Double>getSetting(ALIGNMENT_X);
+		double alignmentY = this.<Double>getSetting(ALIGNMENT_Y);
+		DrawableConstants.Location anchor = getSetting(ANCHOR);
 		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
 		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
 		txLabel.translate(
@@ -115,7 +116,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		g2d.fill(labelShape.getBounds2D());
 		//*/
 
-		Paint paint = getSetting(KEY_COLOR);
+		Paint paint = getSetting(COLOR);
 		g2d.setPaint(paint);
 		GraphicsUtils.fillPaintedShape(g2d, labelShape, paint, null);
 		g2d.setPaint(paintOld);
@@ -128,7 +129,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		if (layout != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
-			Double rotation = getSetting(KEY_ROTATION);
+			Double rotation = getSetting(ROTATION);
 			if (rotation != null && (rotation%360.0) != 0.0) {
 				shape = AffineTransform.getRotateInstance(
 					-rotation/180.0*Math.PI,
@@ -174,39 +175,39 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	 */
 	private void renewLayout() {
 		if (text != null && !text.isEmpty()) {
-			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(KEY_FONT));
+			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(FONT));
 		}
 	}
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return settings.<T>get(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.<T>set(key, value);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.<T>setDefault(key, value);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		String key = event.getKey();
-		if (KEY_FONT.equals(key)) {
+		Key key = event.getKey();
+		if (FONT.equals(key)) {
 			renewLayout();
 		}
 	}

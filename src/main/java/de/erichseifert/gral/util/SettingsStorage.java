@@ -21,6 +21,8 @@
 
 package de.erichseifert.gral.util;
 
+import de.erichseifert.gral.util.Settings.Key;
+
 /**
  * Interface providing functions to store and retrieve settings for an
  * object.
@@ -33,7 +35,7 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @return Setting.
 	 */
-	<T> T getSetting(String key);
+	<T> T getSetting(Key key);
 
 	/**
 	 * Sets the setting with the specified key to the specified value.
@@ -41,14 +43,14 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @param value Value to be set.
 	 */
-	<T> void setSetting(String key, T value);
+	<T> void setSetting(Key key, T value);
 
 	/**
 	 * Removes the setting with the specified key.
 	 * @param <T> Type of setting.
 	 * @param key Key.
 	 */
-	<T> void removeSetting(String key);
+	<T> void removeSetting(Key key);
 
 	/**
 	 * Sets a default value for the setting with the specified key.
@@ -56,12 +58,12 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @param value Value to be set.
 	 */
-	<T> void setSettingDefault(String key, T value);
+	<T> void setSettingDefault(Key key, T value);
 
 	/**
 	 * Removes the default setting with the specified key.
 	 * @param <T> Type of setting.
 	 * @param key Key.
 	 */
-	<T> void removeSettingDefault(String key);
+	<T> void removeSettingDefault(Key key);
 }

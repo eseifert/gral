@@ -37,17 +37,27 @@ import java.util.Set;
  */
 public class Settings {
 	private final Set<SettingsListener> settingsListeners;
-	private final Map<String, Object> settings;
-	private final Map<String, Object> defaults;
+	private final Map<Key, Object> settings;
+	private final Map<Key, Object> defaults;
+
+	public static final class Key {
+		private final String name;
+		public Key(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+	}
 
 	/**
 	 * Creates an empty Settings object.
 	 */
 	public Settings(SettingsListener listener) {
 		settingsListeners = new HashSet<SettingsListener>();
-		settings = new HashMap<String, Object>();
-		defaults = new HashMap<String, Object>();
-		
+		settings = new HashMap<Key, Object>();
+		defaults = new HashMap<Key, Object>();
+
 		if (listener != null) {
 			addSettingsListener(listener);
 		}
@@ -65,7 +75,7 @@ public class Settings {
 	 * Deletes all default settings.
 	 */
 	public void clearDefaults() {
-		for (String key : getDefaults().keySet()) {
+		for (Key key : getDefaults().keySet()) {
 			removeDefault(key);
 		}
 	}
@@ -74,7 +84,7 @@ public class Settings {
 	 * Deletes all settings.
 	 */
 	public void clearSettings() {
-		for (String key : getSettings().keySet()) {
+		for (Key key : getSettings().keySet()) {
 			remove(key);
 		}
 	}
@@ -85,7 +95,7 @@ public class Settings {
 	 * @param key key of the setting
 	 * @return the value of the setting
 	 */
-	public <T> T get(String key) {
+	public <T> T get(Key key) {
 		T t;
 		if (settings.containsKey(key)) {
 			t = (T)settings.get(key);
@@ -99,16 +109,16 @@ public class Settings {
 	 * Returns a map containing all default settings.
 	 * @return Map of default settings.
 	 */
-	public Map<String, Object> getDefaults() {
-		return new HashMap<String, Object>(this.defaults);
+	public Map<Key, Object> getDefaults() {
+		return new HashMap<Key, Object>(this.defaults);
 	}
 
 	/**
 	 * Returns a map containing all settings.
 	 * @return Map of settings.
 	 */
-	public Map<String, Object> getSettings() {
-		return new HashMap<String, Object>(this.settings);
+	public Map<Key, Object> getSettings() {
+		return new HashMap<Key, Object>(this.settings);
 	}
 
 	/**
@@ -124,7 +134,7 @@ public class Settings {
 	 * @param key Key of the setting.
 	 * @return <code>true</code> if the key has a default setting.
 	 */
-	public boolean hasDefault(String key) {
+	public boolean hasDefault(Key key) {
 		if (defaults.containsKey(key)) {
 			return true;
 		}
@@ -136,7 +146,7 @@ public class Settings {
 	 * @param key Key of the setting.
 	 * @return <code>true</code> if the key has a setting.
 	 */
-	public boolean hasSetting(String key) {
+	public boolean hasSetting(Key key) {
 		if (settings.containsKey(key)) {
 			return true;
 		}
@@ -148,7 +158,7 @@ public class Settings {
 	 * @param key Key to be checked.
 	 * @return <code>true</code> if the key exists.
 	 */
-	public boolean hasKey(String key) {
+	public boolean hasKey(Key key) {
 		if (hasDefault(key) || hasSetting(key)) {
 			return true;
 		}
@@ -160,8 +170,8 @@ public class Settings {
 	 * Returns an empty set if no keys are set.
 	 * @return Set of keys.
 	 */
-	public Set<String> keySet() {
-		Set<String> keys = new HashSet<String>();
+	public Set<Key> keySet() {
+		Set<Key> keys = new HashSet<Key>();
 		keys.addAll(settings.keySet());
 		keys.addAll(defaults.keySet());
 
@@ -173,7 +183,7 @@ public class Settings {
 	 * @param <T> value type
 	 * @param key key of the setting
 	 */
-	public <T> void remove(String key) {
+	public <T> void remove(Key key) {
 		Object valOld = settings.get(key);
 		settings.remove(key);
 		notifySettingChanged(key, valOld, null, false);
@@ -184,7 +194,7 @@ public class Settings {
 	 * @param <T> value type
 	 * @param key key of the setting
 	 */
-	public <T> void removeDefault(String key) {
+	public <T> void removeDefault(Key key) {
 		Object valOld = defaults.get(key);
 		defaults.remove(key);
 		notifySettingChanged(key, valOld, null, true);
@@ -204,7 +214,7 @@ public class Settings {
 	 * @param key key of the setting
 	 * @param value value of the setting
 	 */
-	public <T> void set(String key, T value) {
+	public <T> void set(Key key, T value) {
 		Object valOld = settings.get(key);
 		settings.put(key, value);
 		notifySettingChanged(key, valOld, value, false);
@@ -216,7 +226,7 @@ public class Settings {
 	 * @param key key of the setting
 	 * @param value default value of the setting
 	 */
-	public <T> void setDefault(String key, T value) {
+	public <T> void setDefault(Key key, T value) {
 		Object valOld = defaults.get(key);
 		defaults.put(key, value);
 		notifySettingChanged(key, valOld, value, true);
@@ -228,9 +238,9 @@ public class Settings {
 	 * @return Collection of values.
 	 */
 	public Collection<Object> values() {
-		Set<String> keys = keySet();
+		Set<Key> keys = keySet();
 		Collection<Object> values = new ArrayList<Object>(keys.size());
-		for (String key : keys) {
+		for (Key key : keys) {
 			values.add(get(key));
 		}
 		return values;
@@ -243,7 +253,7 @@ public class Settings {
 	 * @param valNew New value.
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
-	protected void notifySettingChanged(String key, Object valOld, Object valNew, boolean defaultSetting) {
+	protected void notifySettingChanged(Key key, Object valOld, Object valNew, boolean defaultSetting) {
 		/* FIXME: Null values for old or new values are no indicator that
 		 *	a setting or default is added or removed.
 		 */

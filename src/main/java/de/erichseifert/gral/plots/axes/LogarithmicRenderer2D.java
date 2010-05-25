@@ -82,8 +82,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	@Override
 	public List<Tick2D> getTicks(Axis axis) {
 		checkAxisBounds(axis);
-		double tickSpacing = this.<Double>getSetting(KEY_TICKS_SPACING);
-		int ticksMinorCount = this.<Integer>getSetting(KEY_TICKS_MINOR_COUNT);
+		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
+		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -123,7 +123,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			}
 		}
 		// Add custom ticks
-		Map<Double, String> labelsCustom = getSetting(KEY_TICKS_CUSTOM);
+		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
 				Tick2D tick = getTick(TickType.CUSTOM, axis, entry.getKey());

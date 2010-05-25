@@ -27,6 +27,8 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +49,7 @@ import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -61,23 +64,23 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.lang.String} instance for the title of the plot. */
-	public static final String KEY_TITLE = "plot.title";
+	public static final Key TITLE = new Key("plot.title");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot. */
-	public static final String KEY_BACKGROUND = "plot.background";
+	public static final Key BACKGROUND = new Key("plot.background");
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot. */
-	public static final String KEY_BORDER = "plot.border";
+	public static final Key BORDER = new Key("plot.border");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot. */
-	public static final String KEY_COLOR = "plot.color";
+	public static final Key COLOR = new Key("plot.color");
 	/** Key for specifying the whether antialiasing is enabled. */
-	public static final String KEY_ANTIALISING = "plot.antialiasing";
+	public static final Key ANTIALISING = new Key("plot.antialiasing");
 	/** Key for specifying whether the legend should be shown. */
-	public static final String KEY_LEGEND = "plot.legend";
+	public static final Key LEGEND = new Key("plot.legend");
 	/** Key for specifying the positioning of the legend using a {@link de.erichseifert.gral.DrawableConstants.Location} value. */
-	public static final String KEY_LEGEND_LOCATION = "plot.legend.location";
+	public static final Key LEGEND_LOCATION = new Key("plot.legend.location");
 	/** Key for specifying the width of the legend's margin. */
-	public static final String KEY_LEGEND_MARGIN = "plot.legend.margin";
+	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin");
 	/** Key for specifying the scaling behavior of the plot using a {@link ScaleMode} value. */
-	public static final String KEY_SCALING_MODE = "plot.scalingMode";
+	public static final Key SCALING_MODE = new Key("plot.scalingMode");
 
 	/** Constants for specifying the scaling behavior values. */
 	public static enum ScaleMode {
@@ -109,7 +112,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		super(new EdgeLayout(20.0, 20.0));
 
 		title = new Label("");
-		title.setSetting(Label.KEY_FONT, Font.decode(null).deriveFont(18f));
+		title.setSetting(Label.FONT, Font.decode(null).deriveFont(18f));
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
 
@@ -121,14 +124,14 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		}
 
 		settings = new Settings(this);
-		setSettingDefault(KEY_TITLE, null);
-		setSettingDefault(KEY_BACKGROUND, null);
-		setSettingDefault(KEY_BORDER, null);
-		setSettingDefault(KEY_COLOR, Color.BLACK);
-		setSettingDefault(KEY_ANTIALISING, true);
-		setSettingDefault(KEY_LEGEND, false);
-		setSettingDefault(KEY_LEGEND_LOCATION, Location.NORTH_WEST);
-		setSettingDefault(KEY_LEGEND_MARGIN, new Insets2D.Double(20.0));
+		setSettingDefault(TITLE, null);
+		setSettingDefault(BACKGROUND, null);
+		setSettingDefault(BORDER, null);
+		setSettingDefault(COLOR, Color.BLACK);
+		setSettingDefault(ANTIALISING, true);
+		setSettingDefault(LEGEND, false);
+		setSettingDefault(LEGEND_LOCATION, Location.NORTH_WEST);
+		setSettingDefault(LEGEND_MARGIN, new Insets2D.Double(20.0));
 
 		add(title, Location.NORTH);
 	}
@@ -136,16 +139,16 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				this.<Boolean>getSetting(KEY_ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				this.<Boolean>getSetting(ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
 
-		Paint bg = getSetting(KEY_BACKGROUND);
+		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
 			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
 		}
 
-		Stroke stroke = getSetting(KEY_BORDER);
+		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
-			Paint fg = getSetting(KEY_COLOR);
+			Paint fg = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
 		}
 
@@ -167,7 +170,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param g2d Graphics to be used for drawing.
 	 */
 	protected void drawLegend(Graphics2D g2d) {
-		boolean isVisible = this.<Boolean>getSetting(KEY_LEGEND);
+		boolean isVisible = this.<Boolean>getSetting(LEGEND);
 		if (!isVisible || legend == null) {
 			return;
 		}
@@ -205,6 +208,14 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public void removeAxis(String name) {
 		axes.remove(name);
 		axisDrawables.remove(name);
+	}
+
+	/**
+	 * Returns a Collection of all axes stored in this plot.
+	 * @return All axes stored in this plot.
+	 */
+	public Collection<Axis> getAxes() {
+		return axes.values();
 	}
 
 	/**
@@ -263,52 +274,56 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		}
 		this.legend = legend;
 		if (this.legend != null) {
-			Location constraints = getSetting(KEY_LEGEND_LOCATION);
+			Location constraints = getSetting(LEGEND_LOCATION);
 			legendContainer.add(legend, constraints);
 		}
 	}
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return settings.<T>get(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.<T>set(key, value);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.set(key, value);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		String key = event.getKey();
-		if (KEY_TITLE.equals(key)) {
-			String text = getSetting(KEY_TITLE);
+		Key key = event.getKey();
+		if (TITLE.equals(key)) {
+			String text = getSetting(TITLE);
 			title.setText((text != null) ? text : "");
-		} else if (KEY_LEGEND_LOCATION.equals(key)) {
-			Location constraints = getSetting(KEY_LEGEND_LOCATION);
+		} else if (LEGEND_LOCATION.equals(key)) {
+			Location constraints = getSetting(LEGEND_LOCATION);
 			if (legend != null) {
 				legendContainer.remove(legend);
 				legendContainer.add(legend, constraints);
 			}
-		} else if (KEY_LEGEND_MARGIN.equals(key)) {
-			Insets2D margin = getSetting(KEY_LEGEND_MARGIN);
+		} else if (LEGEND_MARGIN.equals(key)) {
+			Insets2D margin = getSetting(LEGEND_MARGIN);
 			legendContainer.setInsets(margin);
 		}
+	}
+
+	public List<DataSource> getData() {
+		return Collections.unmodifiableList(data);
 	}
 
 }

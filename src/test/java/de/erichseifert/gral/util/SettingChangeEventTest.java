@@ -26,12 +26,15 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.util.Settings.Key;
+
 public class SettingChangeEventTest {
 	@Test
 	public void testCreation() {
-		SettingChangeEvent e = new SettingChangeEvent(this, "test", 0.0, 1.0, true);
+		final Key KEY = new Key("test");
+		SettingChangeEvent e = new SettingChangeEvent(this, KEY, 0.0, 1.0, true);
 		assertEquals(this, e.getSource());
-		assertEquals("test", e.getKey());
+		assertEquals(KEY, e.getKey());
 		assertEquals(0.0, e.getValOld());
 		assertEquals(1.0, e.getValNew());
 		assertTrue(e.isDefaultSetting());

@@ -1,192 +1,126 @@
+/**
+ * GRAL: Vector export for Java(R) Graphics2D
+ *
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ *
+ * This file is part of GRAL.
+ *
+ * GRAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GRAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.erichseifert.gral.plots;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
-import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.MathUtils;
 
 /**
  * Class that controls the zoom of a Plot.
  */
-public class PlotZoomer implements SettingsStorage, SettingsListener {
-	/** Boolean value that specified whether zooming the x-axis is enabled or not. */
-	public static final String KEY_ZOOM_X_ENABLED = "plotzoomer.zoomxenabled";
-	/** Boolean value that specified whether zooming the y-axis is enabled or not. */
-	public static final String KEY_ZOOM_Y_ENABLED = "plotzoomer.zoomyenabled";
-
-	private final Settings settings;
+public class PlotZoomer {
+	private final Map<Axis, Double> centersOriginal;
+	private final Map<Axis, Double> rangesOriginal;
 
 	private final Plot plot;
-	private final Number minX;
-	private final Number maxX;
-	private final Number minY;
-	private final Number maxY;
-
-	private double zoomStepX;
-	private double zoomStepY;
-	private Point2D center;
-	private int zoomFactorX;
-	private int zoomFactorY;
-	private double thresholdMin;
-	private double thresholdMax;
+	private double zoom;
+	private double zoomMin;
+	private double zoomMax;
 
 	/**
 	 * Creates a new <code>PlotZoomer</code> object that is responsible for the specified plot.
 	 * @param plot Plot to be zoomed.
 	 */
 	public PlotZoomer(Plot plot) {
-		settings = new Settings(this);
-		setSettingDefault(KEY_ZOOM_X_ENABLED, true);
-		setSettingDefault(KEY_ZOOM_Y_ENABLED, true);
+		centersOriginal = new HashMap<Axis, Double>();
+		rangesOriginal = new HashMap<Axis, Double>();
 
 		this.plot = plot;
-		Axis axisX = plot.getAxis(Axis.X);
-		minX = axisX.getMin();
-		maxX = axisX.getMax();
-		Axis axisY = plot.getAxis(Axis.Y);
-		minY = axisY.getMin();
-		maxY = axisY.getMax();
+		zoom = 1.0;
+		for (Axis axis : plot.getAxes()) {
+			double rangeOriginal = axis.getRange();
+			rangesOriginal.put(axis, rangeOriginal);
+			centersOriginal.put(axis, axis.getMin().doubleValue() + 0.5*rangeOriginal);
+		}
 
-		zoomStepX = axisX.getRange() * 0.125;
-		zoomStepY = axisY.getRange() * 0.125;
-		thresholdMin = 1e-2;
-		thresholdMax = 1e2;
-		Rectangle2D plotAreaBounds = plot.getPlotArea().getBounds();
-		center = new Point2D.Double(plotAreaBounds.getCenterX(), plotAreaBounds.getCenterY());
+		zoomMin = 1e-2;
+		zoomMax = 1e+2;
 	}
 
 	/**
 	 * Sets the plot's zoom to the specified center and zooms it according to the specified values.
 	 * @param center Center of the zoom.
-	 * @param stepsX Number of steps to zoom on the x-axis.
-	 * @param stepsY Number of steps to zoom on the y-axis.
+	 * @param zoomNew Zoom level.
 	 */
-	public void zoom(Point2D center, int stepsX, int stepsY) {
-		double posRelX = center.getX() / plot.getPlotArea().getWidth();
-		double posRelY = center.getY() / plot.getPlotArea().getHeight();
-
-		int zoomDiffX = zoomFactorX + stepsX;
-		int zoomDiffY = zoomFactorY + stepsY;
-
-		if (getSetting(KEY_ZOOM_X_ENABLED)) {
-			Number minXNew = minX.doubleValue() + zoomDiffX * zoomStepX * posRelX;
-			Number maxXNew = maxX.doubleValue() - zoomDiffX * zoomStepX * (1-posRelX);
-			double rangeNew = maxXNew.doubleValue() - minXNew.doubleValue();
-			if (rangeNew < thresholdMin || rangeNew > thresholdMax) {
-				return;
-			}
-			Axis axisX = plot.getAxis(Axis.X);
-			axisX.setRange(minXNew, maxXNew);
-			zoomFactorX += stepsX;
-			zoomStepX = axisX.getRange() * 0.125;
+	public void zoomTo(Point2D center, double zoomNew) {
+		if (zoomNew <= 0.0) {
+			return;
 		}
-		if (getSetting(KEY_ZOOM_Y_ENABLED)) {
-			Number minYNew = minY.doubleValue() + zoomDiffY * zoomStepY * (1-posRelY);
-			Number maxYNew = maxY.doubleValue() - zoomDiffY * zoomStepY * posRelY;
-			double rangeNew = maxYNew.doubleValue() - minYNew.doubleValue();
-			if (rangeNew < thresholdMin || rangeNew > thresholdMax) {
-				return;
-			}
-			Axis axisY = plot.getAxis(Axis.Y);
-			axisY.setRange(minYNew, maxYNew);
-			zoomFactorY += stepsY;
-			zoomStepY = axisY.getRange() * 0.125;
-		}
+		zoom = MathUtils.limit(zoomNew, zoomMin, zoomMax);
 
-		this.center = center;
+		for (Axis axis: plot.getAxes()) {
+			double rangeCurrent = axis.getRange();
+			double centerCurrent = axis.getMin().doubleValue() + 0.5*rangeCurrent;
+
+			double rangeNew = rangesOriginal.get(axis)*zoom;
+
+			// FIXME: Don't ignore new center
+			double posRel = 0.5; //center.getX() / plot.getPlotArea().getWidth();
+			double posRelInv = 0.5; //1.0 - posRel;
+			Number axisMinNew = centerCurrent - posRel*rangeNew;
+			Number axisMaxNew = centerCurrent + posRelInv*rangeNew;
+
+			axis.setRange(axisMinNew, axisMaxNew);
+		}
 	}
 
 	/**
 	 * Resets the plot's zoom to the original value.
 	 */
 	public void reset() {
-		Axis axisX = plot.getAxis(Axis.X);
-		axisX.setRange(minX, maxX);
-		Axis axisY = plot.getAxis(Axis.Y);
-		axisY.setRange(minY, maxY);
+		zoom = 1.0;
+		for (Axis axis: plot.getAxes()) {
+			double centerOriginal = centersOriginal.get(axis);
+			double rangeOriginal = rangesOriginal.get(axis);
 
-		zoomStepX = axisX.getRange() * 0.125;
-		zoomStepY = axisY.getRange() * 0.125;
-		zoomFactorX = 0;
-		zoomFactorY = 0;
-		Rectangle2D plotAreaBounds = plot.getPlotArea().getBounds();
-		center.setLocation(plotAreaBounds.getCenterX(), plotAreaBounds.getCenterY());
+			centersOriginal.put(axis, centerOriginal);
+			rangesOriginal.put(axis, rangeOriginal);
+
+			axis.setRange(centerOriginal - 0.5*rangeOriginal, centerOriginal + 0.5*rangeOriginal);
+		}
 	}
 
-	public double getZoomStepX() {
-		return zoomStepX;
+	public double getZoom() {
+		return zoom;
 	}
 
-	public double getZoomStepY() {
-		return zoomStepY;
+	public double getZoomMin() {
+		return zoomMin;
 	}
 
-	public int getZoomFactorX() {
-		return zoomFactorX;
+	public void setZoomMin(double min) {
+		this.zoomMin = min;
 	}
 
-	public int getZoomFactorY() {
-		return zoomFactorY;
+	public double getZoomMax() {
+		return zoomMax;
 	}
 
-	public double getThresholdMin() {
-		return thresholdMin;
+	public void setZoomMax(double max) {
+		this.zoomMax = max;
 	}
 
-	public void setZoomStepX(double zoomStepX) {
-		this.zoomStepX = zoomStepX;
-	}
-
-	public void setZoomStepY(double zoomStepY) {
-		this.zoomStepY = zoomStepY;
-	}
-
-	public void setThresholdMin(double thresholdMin) {
-		this.thresholdMin = thresholdMin;
-	}
-
-	public Point2D getCenter() {
-		return center;
-	}
-
-	@Override
-	public <T> T getSetting(String key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(String key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(String key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(String key, T value) {
-		settings.set(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(String key) {
-		settings.removeDefault(key);
-	}
-
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-	}
-
-	public double getThresholdMax() {
-		return thresholdMax;
-	}
-
-	public void setThresholdMax(double thresholdMax) {
-		this.thresholdMax = thresholdMax;
-	}
 }

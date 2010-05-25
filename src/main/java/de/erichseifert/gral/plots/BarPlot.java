@@ -37,6 +37,7 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -44,12 +45,18 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public class BarPlot extends XYPlot {
 	/** Key for specifying the relative width of the bars. */
-	public static final String KEY_BAR_WIDTH = "barplot.barWidth";
+	public static final Key BAR_WIDTH = new Key("barplot.barWidth");
 
 	/**
 	 * Class that renders a bar in a bar plot.
 	 */
-	protected class BarRenderer extends AbstractPointRenderer {
+	protected static class BarRenderer extends AbstractPointRenderer {
+		private BarPlot plot;
+
+		public BarRenderer(BarPlot plot) {
+			this.plot = plot;
+		}
+
 		@Override
 		public Drawable getPoint(final Axis axisY, final AxisRenderer2D axisYRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
@@ -58,7 +65,7 @@ public class BarPlot extends XYPlot {
 				public void draw(Graphics2D g2d) {
 					// TODO: Translate?
 					Shape point = getPointPath(row);
-					Paint paint = getSetting(KEY_COLOR);
+					Paint paint = getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					/*
 					// TODO: Optionally fill all bars with a single paint:
@@ -72,7 +79,7 @@ public class BarPlot extends XYPlot {
 					*/
 					GraphicsUtils.fillPaintedShape(g2d, point, paint, paintBoundaries);
 
-					if (BarRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
+					if (BarRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
 						drawValue(g2d, point, row.get(1).doubleValue());
 					}
 				}
@@ -83,10 +90,10 @@ public class BarPlot extends XYPlot {
 		public Shape getPointPath(Row row) {
 			double valueX = row.get(0).doubleValue();
 			double valueY = row.get(1).doubleValue();
-			AxisRenderer2D axisXRenderer = BarPlot.this.getSetting(KEY_AXIS_X_RENDERER);
-			AxisRenderer2D axisYRenderer = BarPlot.this.getSetting(KEY_AXIS_Y_RENDERER);
-			Axis axisX = getAxis(Axis.X);
-			Axis axisY = getAxis(Axis.Y);
+			AxisRenderer2D axisXRenderer = plot.getSetting(BarPlot.AXIS_X_RENDERER);
+			AxisRenderer2D axisYRenderer = plot.getSetting(BarPlot.AXIS_Y_RENDERER);
+			Axis axisX = plot.getAxis(Axis.X);
+			Axis axisY = plot.getAxis(Axis.Y);
 			double axisYMin = axisY.getMin().doubleValue();
 			double axisYMax = axisY.getMax().doubleValue();
 			double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
@@ -95,7 +102,7 @@ public class BarPlot extends XYPlot {
 				return new GeneralPath();
 			}
 
-			double barWidthRel = BarPlot.this.<Double>getSetting(KEY_BAR_WIDTH);
+			double barWidthRel = plot.<Double>getSetting(BarPlot.BAR_WIDTH);
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(axisX, valueX - barWidthRel*barAlign, true, false).getX();
@@ -124,10 +131,10 @@ public class BarPlot extends XYPlot {
 	public BarPlot(DataSource... data) {
 		super(data);
 
-		getPlotArea().setSettingDefault(XYPlotArea2D.KEY_GRID_MAJOR_X, false);
-		setSettingDefault(KEY_BAR_WIDTH, 1.0);
+		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
+		setSettingDefault(BAR_WIDTH, 1.0);
 
-		PointRenderer shapeRendererDefault = new BarRenderer();
+		PointRenderer shapeRendererDefault = new BarRenderer(this);
 		for (DataSource s : data) {
 			setLineRenderer(s, null);
 			setPointRenderer(s, shapeRendererDefault);

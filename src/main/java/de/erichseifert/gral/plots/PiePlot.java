@@ -33,6 +33,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -40,21 +41,26 @@ import de.erichseifert.gral.util.GraphicsUtils;
  */
 public class PiePlot extends Plot implements DataListener {
 	/** Key for specifying the relative radius of the pie. */
-	public static final String KEY_RADIUS = "pieplot.radius";
+	public static final Key RADIUS = new Key("pieplot.radius");
 	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper} instance used for the segments. */
-	public static final String KEY_COLORS = "pieplot.colorlist";
+	public static final Key COLORS = new Key("pieplot.colorlist");
 	/** Key for specifying whether the segments should be ordered clockwise or counterclockwise. */
-	public static final String KEY_CLOCKWISE = "pieplot.clockwise";
+	public static final Key CLOCKWISE = new Key("pieplot.clockwise");
 	/** Key for specifying the starting angle of the first segment in degrees. */
-	public static final String KEY_START = "pieplot.start";
-
-	private double degreesPerValue;
-	private double[] startValues;
+	public static final Key START = new Key("pieplot.start");
 
 	/**
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
-	public class PiePlotArea2D extends PlotArea2D {
+	public static class PiePlotArea2D extends PlotArea2D implements DataListener {
+		private PiePlot plot;
+		private double degreesPerValue;
+		private double[] startValues;
+
+		public PiePlotArea2D(PiePlot plot) {
+			this.plot = plot;
+		}
+
 		@Override
 		public void draw(Graphics2D g2d) {
 			drawBackground(g2d);
@@ -71,11 +77,11 @@ public class PiePlot extends Plot implements DataListener {
 			// Paint pie
 			double w = getWidth();
 			double h = getHeight();
-			double size = Math.min(w, h) * PiePlot.this.<Double>getSetting(KEY_RADIUS);
+			double size = Math.min(w, h) * plot.<Double>getSetting(PiePlot.RADIUS);
 			g2d.translate(w/2d, h/2d);
-			startValues[0] = PiePlot.this.<Double>getSetting(KEY_START);
+			startValues[0] = plot.<Double>getSetting(PiePlot.START);
 			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
-			ColorMapper colorList = PiePlot.this.getSetting(KEY_COLORS);
+			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 			for (int i = 1; i < startValues.length;  i++) {
 				Paint paint = colorList.get(i-1/(double)startValues.length);
 				Shape shape = new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE);
@@ -83,6 +89,33 @@ public class PiePlot extends Plot implements DataListener {
 			}
 			g2d.setTransform(txOffset);
 			g2d.setTransform(txOrig);
+		}
+
+		@Override
+		public void dataChanged(DataSource data) {
+			// Calculate sum of all values
+			double colYSum = 0.0;
+			for (int i = 0; i < data.getRowCount();  i++) {
+				double val = data.get(0, i).doubleValue();
+				// Ignore negative values
+				if (val <= 0.0) {
+					continue;
+				}
+				colYSum += val;
+			}
+
+			if (plot.<Boolean>getSetting(PiePlot.CLOCKWISE)) {
+				degreesPerValue = -360.0/colYSum;
+			}
+			else {
+				degreesPerValue = 360.0/colYSum;
+			}
+
+			// Calculate starting angles
+			startValues = new double[data.getRowCount()+1];
+			for (int i = 1; i < data.getRowCount(); i++) {
+				startValues[i] = startValues[i-1] + data.get(0, i-1).doubleValue() * degreesPerValue;
+			}
 		}
 	}
 
@@ -93,41 +126,20 @@ public class PiePlot extends Plot implements DataListener {
 	public PiePlot(DataSource data) {
 		super(data);
 
-		setSettingDefault(KEY_RADIUS, 0.9);
-		setSettingDefault(KEY_COLORS, new QuasiRandomColors());
-		setSettingDefault(KEY_CLOCKWISE, true);
-		setSettingDefault(KEY_START, 0.0);
+		setSettingDefault(RADIUS, 0.9);
+		setSettingDefault(COLORS, new QuasiRandomColors());
+		setSettingDefault(CLOCKWISE, true);
+		setSettingDefault(START, 0.0);
+
+		setPlotArea(new PiePlotArea2D(this));
 
 		dataChanged(data);
 		data.addDataListener(this);
 
-		setPlotArea(new PiePlotArea2D());
 	}
 
 	@Override
 	public void dataChanged(DataSource data) {
-		// Calculate sum of all values
-		double colYSum = 0.0;
-		for (int i = 0; i < data.getRowCount();  i++) {
-			double val = data.get(0, i).doubleValue();
-			// Ignore negative values
-			if (val <= 0.0) {
-				continue;
-			}
-			colYSum += val;
-		}
-
-		if (this.<Boolean>getSetting(KEY_CLOCKWISE)) {
-			degreesPerValue = -360.0/colYSum;
-		}
-		else {
-			degreesPerValue = 360.0/colYSum;
-		}
-
-		// Calculate starting angles
-		startValues = new double[data.getRowCount()+1];
-		for (int i = 1; i < data.getRowCount(); i++) {
-			startValues[i] = startValues[i-1] + data.get(0, i-1).doubleValue() * degreesPerValue;
-		}
+		((PiePlotArea2D) getPlotArea()).dataChanged(data);
 	}
 }

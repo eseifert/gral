@@ -140,22 +140,22 @@ public class PlotTest {
 	@Test
 	public void testSettings() {
 		// Get
-		assertNull(plot.getSetting(Plot.KEY_TITLE));
+		assertNull(plot.getSetting(Plot.TITLE));
 
 		// Set
-		plot.setSetting(Plot.KEY_TITLE, "foobar");
-		assertEquals("foobar", plot.<String>getSetting(Plot.KEY_TITLE));
+		plot.setSetting(Plot.TITLE, "foobar");
+		assertEquals("foobar", plot.<String>getSetting(Plot.TITLE));
 
 		// Remove
-		plot.removeSetting(Plot.KEY_TITLE);
-		assertNull(plot.getSetting(Plot.KEY_TITLE));
+		plot.removeSetting(Plot.TITLE);
+		assertNull(plot.getSetting(Plot.TITLE));
 	}
 
 	@Test
 	public void testDraw() {
-		plot.setSetting(Plot.KEY_TITLE, "foobar");
-		plot.setSetting(Plot.KEY_BACKGROUND, Color.WHITE);
-		plot.setSetting(Plot.KEY_BORDER, new BasicStroke(1f));
+		plot.setSetting(Plot.TITLE, "foobar");
+		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
+		plot.setSetting(Plot.BORDER, new BasicStroke(1f));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();

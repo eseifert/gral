@@ -90,14 +90,14 @@ public class MemoryUsage extends JFrame {
 
 		XYPlot plot = new XYPlot(data);
 		plot.getAxis(Axis.Y).setRange(0.0, 1.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICKS_SPACING, 0.1);
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_X_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
-		plot.<AxisRenderer2D>getSetting(XYPlot.KEY_AXIS_Y_RENDERER).setSetting(AxisRenderer2D.KEY_TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 0.1);
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
+		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
 
 		plot.setPointRenderer(data, null);
 		LineRenderer2D line = new DefaultLineRenderer2D();
-		line.setSetting(LineRenderer2D.KEY_COLOR, new Color(0.9f, 0.3f, 0.2f));
+		line.setSetting(LineRenderer2D.COLOR, new Color(0.9f, 0.3f, 0.2f));
 		plot.setLineRenderer(data, line);
 
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));

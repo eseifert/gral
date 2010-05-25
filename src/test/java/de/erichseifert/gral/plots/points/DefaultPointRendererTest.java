@@ -71,13 +71,13 @@ public class DefaultPointRendererTest {
 	public void testSettings() {
 		// Get
 		PointRenderer r = new DefaultPointRenderer();
-		assertEquals(Color.BLACK, r.getSetting(PointRenderer.KEY_COLOR));
+		assertEquals(Color.BLACK, r.getSetting(PointRenderer.COLOR));
 		// Set
-		r.setSetting(PointRenderer.KEY_COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(PointRenderer.KEY_COLOR));
+		r.setSetting(PointRenderer.COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(PointRenderer.COLOR));
 		// Remove
-		r.removeSetting(PointRenderer.KEY_COLOR);
-		assertEquals(Color.BLACK, r.getSetting(PointRenderer.KEY_COLOR));
+		r.removeSetting(PointRenderer.COLOR);
+		assertEquals(Color.BLACK, r.getSetting(PointRenderer.COLOR));
 	}
 
 }

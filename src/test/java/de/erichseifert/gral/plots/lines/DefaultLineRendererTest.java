@@ -59,13 +59,13 @@ public class DefaultLineRendererTest {
 	public void testSettings() {
 		// Get
 		LineRenderer2D r = new DefaultLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
 		// Set
-		r.setSetting(LineRenderer2D.KEY_COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer2D.KEY_COLOR));
+		r.setSetting(LineRenderer2D.COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(LineRenderer2D.COLOR));
 		// Remove
-		r.removeSetting(LineRenderer2D.KEY_COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
+		r.removeSetting(LineRenderer2D.COLOR);
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
 	}
 
 }

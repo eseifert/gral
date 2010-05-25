@@ -31,41 +31,48 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.util.Settings.Key;
+
 public class SettingsTest {
+	private static final Key KEY1 = new Key("1");
+	private static final Key KEY2 = new Key("2");
+	private static final Key KEY3 = new Key("3");
+	private static final Key KEY4 = new Key("4");
+
 	private Settings settings;
 
 	@Before
 	public void setUp() {
 		settings = new Settings(null);
-		settings.set("1", "v1");
-		settings.setDefault("1", "v1Default");
-		settings.setDefault("2", "v2Default");
-		settings.set("3", "v3");
+		settings.set(KEY1, "v1");
+		settings.setDefault(KEY1, "v1Default");
+		settings.setDefault(KEY2, "v2Default");
+		settings.set(KEY3, "v3");
 	}
 
 	@Test
 	public void testGet() {
-		assertEquals("v1", settings.get("1"));
-		assertEquals("v2Default", settings.get("2"));
-		assertEquals("v3", settings.get("3"));
+		assertEquals("v1", settings.get(KEY1));
+		assertEquals("v2Default", settings.get(KEY2));
+		assertEquals("v3", settings.get(KEY3));
 	}
 
 	@Test
 	public void testGetDefaults() {
-		Map<String, Object> defaults = settings.getDefaults();
+		Map<Key, Object> defaults = settings.getDefaults();
 		assertEquals(2, defaults.size());
-		assertEquals("v1Default", defaults.get("1"));
-		assertEquals("v2Default", defaults.get("2"));
-		assertEquals(null, defaults.get("3"));
+		assertEquals("v1Default", defaults.get(KEY1));
+		assertEquals("v2Default", defaults.get(KEY2));
+		assertEquals(null, defaults.get(KEY3));
 	}
 
 	@Test
 	public void testGetSettings() {
-		Map<String, Object> settingsMap = settings.getSettings();
+		Map<Key, Object> settingsMap = settings.getSettings();
 		assertEquals(2, settingsMap.size());
-		assertEquals("v1", settingsMap.get("1"));
-		assertEquals(null, settingsMap.get("2"));
-		assertEquals("v3", settingsMap.get("3"));
+		assertEquals("v1", settingsMap.get(KEY1));
+		assertEquals(null, settingsMap.get(KEY2));
+		assertEquals("v3", settingsMap.get(KEY3));
 	}
 
 	@Test
@@ -82,67 +89,67 @@ public class SettingsTest {
 
 	@Test
 	public void testHasDefault() {
-		assertEquals(true, settings.hasDefault("1"));
-		assertEquals(true, settings.hasDefault("2"));
-		assertEquals(false, settings.hasDefault("3"));
+		assertEquals(true, settings.hasDefault(KEY1));
+		assertEquals(true, settings.hasDefault(KEY2));
+		assertEquals(false, settings.hasDefault(KEY3));
 	}
 
 	@Test
 	public void testHasSetting() {
-		assertEquals(true, settings.hasSetting("1"));
-		assertEquals(false, settings.hasSetting("2"));
-		assertEquals(true, settings.hasSetting("3"));
+		assertEquals(true, settings.hasSetting(KEY1));
+		assertEquals(false, settings.hasSetting(KEY2));
+		assertEquals(true, settings.hasSetting(KEY3));
 	}
 
 	@Test
 	public void testHasKey() {
-		assertEquals(true, settings.hasKey("1"));
-		assertEquals(true, settings.hasKey("2"));
-		assertEquals(true, settings.hasKey("3"));
-		assertEquals(false, settings.hasKey("4"));
+		assertEquals(true, settings.hasKey(KEY1));
+		assertEquals(true, settings.hasKey(KEY2));
+		assertEquals(true, settings.hasKey(KEY3));
+		assertEquals(false, settings.hasKey(KEY4));
 	}
 
 	@Test
 	public void testKeySet() {
-		Collection<String> keys = new HashSet<String>(3);
-		keys.add("1");
-		keys.add("2");
-		keys.add("3");
-		Set<String> keysToTest = settings.keySet();
+		Collection<Key> keys = new HashSet<Key>(3);
+		keys.add(KEY1);
+		keys.add(KEY2);
+		keys.add(KEY3);
+		Set<Key> keysToTest = settings.keySet();
 		assertEquals(true, keysToTest.containsAll(keys));
 		assertEquals(keys.size(), keysToTest.size());
 	}
 
 	@Test
 	public void testSet() {
-		settings.set("3", "v3_2");
-		settings.set("4", "v4");
-		assertEquals("v3_2", settings.get("3"));
-		assertEquals("v4", settings.get("4"));
+		settings.set(KEY3, "v3_2");
+		settings.set(KEY4, "v4");
+		assertEquals("v3_2", settings.get(KEY3));
+		assertEquals("v4", settings.get(KEY4));
 	}
 
 	@Test
 	public void testSetDefault() {
-		settings.setDefault("3", "v3Default");
-		settings.setDefault("4", "v4Default");
-		assertEquals("v3", settings.get("3"));
-		assertEquals("v4Default", settings.get("4"));
+		settings.setDefault(KEY3, "v3Default");
+		settings.setDefault(KEY4, "v4Default");
+		assertEquals("v3", settings.get(KEY3));
+		assertEquals("v4Default", settings.get(KEY4));
 	}
 
 	@Test
 	public void testRemove() {
-		settings.remove("3");
-		settings.remove("4");
-		assertEquals(null, settings.get("3"));
-		assertEquals(null, settings.get("4"));
+		settings.remove(KEY3);
+		settings.remove(KEY4);
+		assertEquals(null, settings.get(KEY3));
+		assertEquals(null, settings.get(KEY4));
 	}
 
 	@Test
 	public void testRemoveDefault() {
-		settings.removeDefault("2");
-		settings.removeDefault("3");
-		assertEquals(null, settings.get("2"));
-		assertEquals("v3", settings.get("3"));
+		settings.removeDefault(KEY2);
+		settings.removeDefault(KEY3);
+		assertEquals(null, settings.get(KEY2));
+		assertEquals("v3", settings.get(KEY3));
 	}
 
 	@Test

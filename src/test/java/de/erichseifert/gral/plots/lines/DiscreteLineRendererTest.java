@@ -51,7 +51,7 @@ public class DiscreteLineRendererTest {
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		for (Orientation dir : Orientation.values()) {
-			r.setSetting(DiscreteLineRenderer2D.KEY_ASCENT_DIRECTION, dir);
+			r.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, dir);
 			Drawable line = r.getLine(points);
 			assertNotNull(line);
 			line.draw(g2d);
@@ -62,13 +62,13 @@ public class DiscreteLineRendererTest {
 	public void testSettings() {
 		// Get
 		LineRenderer2D r = new DiscreteLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
 		// Set
-		r.setSetting(LineRenderer2D.KEY_COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer2D.KEY_COLOR));
+		r.setSetting(LineRenderer2D.COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(LineRenderer2D.COLOR));
 		// Remove
-		r.removeSetting(LineRenderer2D.KEY_COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.KEY_COLOR));
+		r.removeSetting(LineRenderer2D.COLOR);
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
 	}
 
 }

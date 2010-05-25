@@ -30,6 +30,7 @@ import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
+import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * Abstract class that renders an area in two-dimensional space.
@@ -48,9 +49,9 @@ public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, Settings
 	public AbstractAreaRenderer2D() {
 		this.settings = new Settings(this);
 
-		setSettingDefault(KEY_GAP, 0.0);
-		setSettingDefault(KEY_GAP_ROUNDED, false);
-		setSettingDefault(KEY_COLOR, Color.GRAY);
+		setSettingDefault(GAP, 0.0);
+		setSettingDefault(GAP_ROUNDED, false);
+		setSettingDefault(COLOR, Color.GRAY);
 	}
 
 	/**
@@ -62,35 +63,35 @@ public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, Settings
 	 */
 	protected Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {
 		// Subtract shapes of data points from the area to yield gaps.
-		double gapSize = this.<Double>getSetting(KEY_GAP);
-		boolean isGapRounded = this.<Boolean>getSetting(KEY_GAP_ROUNDED);
+		double gapSize = this.<Double>getSetting(GAP);
+		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
 		Area punched = GeometryUtils.punch(area, gapSize, isGapRounded, dataPoints);
 
 		return punched;
 	}
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return settings.<T>get(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.<T>set(key, value);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.<T>setDefault(key, value);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 

@@ -28,6 +28,7 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 
@@ -42,29 +43,29 @@ import de.erichseifert.gral.util.SettingsStorage;
  */
 public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the point. */
-	static final String KEY_SHAPE = "point";
+	static final Key SHAPE = new Key("point");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the point shape. */
-	static final String KEY_COLOR = "point.color";
+	static final Key COLOR = new Key("point.color");
 
 	/** Key for specifying whether the data value of a point is displayed or not. */
-	static final String KEY_VALUE_DISPLAYED = "point.value.displayed";
+	static final Key VALUE_DISPLAYED = new Key("point.value.displayed");
 	/** Key for specifying the {@link java.text.Format} instance to be used to format the displayed data values. */
-	static final String KEY_VALUE_FORMAT = "point.value.format";
+	static final Key VALUE_FORMAT = new Key("point.value.format");
 	/** Key for specifying the {@link java.lang.Float} value that positions the value horizontally. */
-	static final String KEY_VALUE_ALIGNMENT_X = "point.value.alignment.x";
+	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x");
 	/** Key for specifying the {@link java.lang.Float} value that positions the value vertically. */
-	static final String KEY_VALUE_ALIGNMENT_Y = "point.value.alignment.y";
+	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the value. */
-	static final String KEY_VALUE_COLOR = "point.value.paint";
+	static final Key VALUE_COLOR = new Key("point.value.paint");
 
 	/** Key for specifying whether the error value is displayed. */
-	static final String KEY_ERROR_DISPLAYED = "point.error.displayed";
+	static final Key ERROR_DISPLAYED = new Key("point.error.displayed");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the error bars. */
-	static final String KEY_ERROR_COLOR = "point.error.color";
+	static final Key ERROR_COLOR = new Key("point.error.color");
 	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the points at the end of the error bars. */
-	static final String KEY_ERROR_SHAPE = "point.error.shape";
+	static final Key ERROR_SHAPE = new Key("point.error.shape");
 	/** Key for specifying the {@link java.awt.Stroke} instance defining the error bars. */
-	static final String KEY_ERROR_STROKE = "point.error.stroke";
+	static final Key ERROR_STROKE = new Key("point.error.stroke");
 
 	/**
 	 * Returns the graphical representation to be drawn for the specified data value.

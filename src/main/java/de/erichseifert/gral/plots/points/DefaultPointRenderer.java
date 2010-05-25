@@ -43,14 +43,14 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
-				Paint paint = getSetting(KEY_COLOR);
+				Paint paint = getSetting(COLOR);
 				Shape point = getPointPath(row);
 				GraphicsUtils.fillPaintedShape(g2d, point, paint, null);
 
-				if (DefaultPointRenderer.this.<Boolean>getSetting(KEY_VALUE_DISPLAYED)) {
+				if (DefaultPointRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
 					drawValue(g2d, point, row.get(1).doubleValue());
 				}
-				if (DefaultPointRenderer.this.<Boolean>getSetting(KEY_ERROR_DISPLAYED)) {
+				if (DefaultPointRenderer.this.<Boolean>getSetting(ERROR_DISPLAYED)) {
 					int columnIndex = row.size()-1;
 					drawError(g2d, point, row.get(1).doubleValue(), row.get(columnIndex-1).doubleValue(), row.get(columnIndex).doubleValue(), axisY, axisYRenderer);
 				}
@@ -62,7 +62,7 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 
 	@Override
 	public Shape getPointPath(Row row) {
-		Shape shape = getSetting(KEY_SHAPE);
+		Shape shape = getSetting(SHAPE);
 		return shape;
 	}
 }

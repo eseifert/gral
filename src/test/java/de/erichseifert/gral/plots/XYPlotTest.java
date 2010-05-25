@@ -54,15 +54,15 @@ public class XYPlotTest {
 	@Test
 	public void testSettings() {
 		// Get
-		assertNull(plot.getSetting(Plot.KEY_BACKGROUND));
+		assertNull(plot.getSetting(Plot.BACKGROUND));
 
 		// Set
-		plot.setSetting(Plot.KEY_BACKGROUND, Color.WHITE);
-		assertEquals(Color.WHITE, plot.<String>getSetting(Plot.KEY_BACKGROUND));
+		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
+		assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
 
 		// Remove
-		plot.removeSetting(Plot.KEY_BACKGROUND);
-		assertNull(plot.getSetting(Plot.KEY_BACKGROUND));
+		plot.removeSetting(Plot.BACKGROUND);
+		assertNull(plot.getSetting(Plot.BACKGROUND));
 	}
 
 	@Test

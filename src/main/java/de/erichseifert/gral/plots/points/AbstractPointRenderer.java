@@ -41,6 +41,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -56,19 +57,19 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 	public AbstractPointRenderer() {
 		settings = new Settings(this);
 
-		setSettingDefault(KEY_SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
-		setSettingDefault(KEY_COLOR, Color.BLACK);
+		setSettingDefault(SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
+		setSettingDefault(COLOR, Color.BLACK);
 
-		setSettingDefault(KEY_VALUE_DISPLAYED, false);
-		setSettingDefault(KEY_VALUE_FORMAT, NumberFormat.getInstance());
-		setSettingDefault(KEY_VALUE_ALIGNMENT_X, 0.5);
-		setSettingDefault(KEY_VALUE_ALIGNMENT_Y, 0.5);
-		setSettingDefault(KEY_VALUE_COLOR, Color.BLACK);
+		setSettingDefault(VALUE_DISPLAYED, false);
+		setSettingDefault(VALUE_FORMAT, NumberFormat.getInstance());
+		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
+		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
+		setSettingDefault(VALUE_COLOR, Color.BLACK);
 
-		setSettingDefault(KEY_ERROR_DISPLAYED, false);
-		setSettingDefault(KEY_ERROR_COLOR, Color.BLACK);
-		setSettingDefault(KEY_ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
-		setSettingDefault(KEY_ERROR_STROKE, new BasicStroke(1f));
+		setSettingDefault(ERROR_DISPLAYED, false);
+		setSettingDefault(ERROR_COLOR, Color.BLACK);
+		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
+		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
 	}
 
 	/**
@@ -78,12 +79,12 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 	 * @param value Value to be displayed.
 	 */
 	protected void drawValue(Graphics2D g2d, Shape point, Object value) {
-		Format format = getSetting(KEY_VALUE_FORMAT);
+		Format format = getSetting(VALUE_FORMAT);
 		String text = format.format(value);
 		Label valueLabel = new Label(text);
-		valueLabel.setSetting(Label.KEY_ALIGNMENT_X, getSetting(KEY_VALUE_ALIGNMENT_X));
-		valueLabel.setSetting(Label.KEY_ALIGNMENT_Y, getSetting(KEY_VALUE_ALIGNMENT_Y));
-		valueLabel.setSetting(Label.KEY_COLOR, getSetting(KEY_VALUE_COLOR));
+		valueLabel.setSetting(Label.ALIGNMENT_X, getSetting(VALUE_ALIGNMENT_X));
+		valueLabel.setSetting(Label.ALIGNMENT_Y, getSetting(VALUE_ALIGNMENT_Y));
+		valueLabel.setSetting(Label.COLOR, getSetting(VALUE_COLOR));
 		valueLabel.setBounds(point.getBounds2D());
 		valueLabel.draw(g2d);
 	}
@@ -100,12 +101,12 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 		Line2D errorBar = new Line2D.Double(pointTop, pointBot);
 
 		// Draw the error bar
-		Paint errorPaint = getSetting(KEY_ERROR_COLOR);
-		Stroke errorStroke = getSetting(KEY_ERROR_STROKE);
+		Paint errorPaint = getSetting(ERROR_COLOR);
+		Stroke errorStroke = getSetting(ERROR_STROKE);
 		GraphicsUtils.drawPaintedShape(g2d, errorBar, errorPaint, null, errorStroke);
 
 		// Draw the shapes at the end of the error bars
-		Shape endShape = getSetting(KEY_ERROR_SHAPE);
+		Shape endShape = getSetting(ERROR_SHAPE);
 		AffineTransform txOld = g2d.getTransform();
 		g2d.translate(posX, posYTop);
 		Stroke endShapeStroke = new BasicStroke(1f);
@@ -117,27 +118,27 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 	}
 
 	@Override
-	public <T> T getSetting(String key) {
+	public <T> T getSetting(Key key) {
 		return settings.<T>get(key);
 	}
 
 	@Override
-	public <T> void setSetting(String key, T value) {
+	public <T> void setSetting(Key key, T value) {
 		settings.<T>set(key, value);
 	}
 
 	@Override
-	public <T> void removeSetting(String key) {
+	public <T> void removeSetting(Key key) {
 		settings.remove(key);
 	}
 
 	@Override
-	public <T> void setSettingDefault(String key, T value) {
+	public <T> void setSettingDefault(Key key, T value) {
 		settings.<T>setDefault(key, value);
 	}
 
 	@Override
-	public <T> void removeSettingDefault(String key) {
+	public <T> void removeSettingDefault(Key key) {
 		settings.removeDefault(key);
 	}
 

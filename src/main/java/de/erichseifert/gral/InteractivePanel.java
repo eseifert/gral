@@ -167,12 +167,12 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			addMouseWheelListener(new MouseWheelListener() {
 				@Override
 				public void mouseWheelMoved(MouseWheelEvent e) {
-					zoomer.zoom(e.getPoint(), e.getWheelRotation(), e.getWheelRotation());
+					double zoomNew = zoomer.getZoom()*Math.pow(1.25, e.getWheelRotation());
+					zoomer.zoomTo(e.getPoint(), zoomNew);
 					repaint();
 				}
 			});
-		}
-		else {
+		} else {
 			zoomer = null;
 		}
 	}

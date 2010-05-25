@@ -26,14 +26,15 @@ import de.erichseifert.gral.plots.DataPoint2D;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 public interface AreaRenderer2D extends SettingsStorage {
 	/** Key for specifying the distance between the area and a data point. */
-	static final String KEY_GAP = "area.gap.size";
+	static final Key GAP = new Key("area.gap.size");
 	/** Key for specifying whether the gaps should have rounded corners. */
-	static final String KEY_GAP_ROUNDED = "area.gap.rounded";
+	static final Key GAP_ROUNDED = new Key("area.gap.rounded");
 	/** Key for specifying the {@link java.awt.Paint} instance used to fill the area shape. */
-	static final String KEY_COLOR = "area.color";
+	static final Key COLOR = new Key("area.color");
 
 	/**
 	 * Returns the graphical representation to be drawn for the specified data points.
