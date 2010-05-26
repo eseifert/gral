@@ -53,8 +53,8 @@
                     <email2>michael.seifert[at]gmx.net</email2>
                 </properties>
                 <excludes>
-                    <exclude>COPYING</exclude>
-                    <exclude>COPYING.LESSER</exclude>
+                    <exclude>LICENSE.GPL</exclude>
+                    <exclude>LICENSE.LGPL</exclude>
                     <exclude>TODO.txt</exclude>
                     <exclude>bin/**</exclude>
                     <exclude>src/main/resources/**</exclude>
@@ -100,6 +100,25 @@
                 </execution>
             </executions>
         </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>bin</descriptorRef>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                    <descriptorRef>src</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>Assemble jar with dependencies</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
      </plugins>
   </build>
 
@@ -138,7 +157,7 @@
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.7</version>
+  		<version>4.8.1</version>
   		<scope>test</scope>
   		<optional>true</optional>
   	</dependency>
@@ -159,5 +178,4 @@
     <system>trac</system>
     <url>http://trac.erichseifert.de/gral/</url>
   </issueManagement>
-
 </project>
