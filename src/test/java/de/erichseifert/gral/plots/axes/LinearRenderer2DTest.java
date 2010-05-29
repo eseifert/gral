@@ -84,4 +84,24 @@ public class LinearRenderer2DTest {
 		assertEquals( 10.0, renderer.viewToWorld(axis,  1.5, true));
 	}
 
+	@Test
+	public void testViewToView() {
+		double[] values = {-0.5, 0.0, 0.5, 0.8, 1.0, 1.5};
+		for (double v: values) {
+			Number world = renderer.viewToWorld(axis, v, true);
+			double view = renderer.worldToView(axis, world, true);
+			assertEquals(v, view, DELTA);
+		}
+	}
+
+	@Test
+	public void testWorldToWorld() {
+		double[] values = {-0.5, 0.0, 0.5, 0.8, 1.0, 1.5};
+		for (double v: values) {
+			double view = renderer.worldToView(axis, v, true);
+			double world = renderer.viewToWorld(axis, view, true).doubleValue();
+			assertEquals(v, world, DELTA);
+		}
+	}
+
 }

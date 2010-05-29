@@ -43,6 +43,7 @@ import de.erichseifert.gral.PlotArea2D;
 import de.erichseifert.gral.DrawableConstants.Location;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
@@ -97,7 +98,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	protected final List<DataSource> data;
 
 	private final Map<String, Axis> axes;
-	private final Map<String, Drawable> axisDrawables;
+	private final Map<Axis, AxisRenderer> axisRenderers;
+	private final Map<Axis, Drawable> axisDrawables;
 
 	private final Label title;
 	private PlotArea2D plotArea;
@@ -116,9 +118,11 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
 
-		this.data = new LinkedList<DataSource>();
 		axes = new HashMap<String, Axis>();
-		axisDrawables = new HashMap<String, Drawable>();
+		axisRenderers = new HashMap<Axis, AxisRenderer>();
+		axisDrawables = new HashMap<Axis, Drawable>();
+
+		this.data = new LinkedList<DataSource>();
 		for (DataSource source : data) {
 			this.data.add(source);
 		}
@@ -187,18 +191,18 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Sets the axis with the specified name and the associated <code>Drawable</code>.
+	 * Sets the axis with the specified name and the associated <code>AxisRenderer</code>.
 	 * @param name Name of the axis.
 	 * @param axis Axis.
-	 * @param drawable Representation of the axis.
+	 * @param drawable Instance to render the axis.
 	 */
-	public void setAxis(String name, Axis axis, Drawable drawable) {
-		if (axis == null || drawable == null) {
+	public void setAxis(String name, Axis axis, AxisRenderer renderer) {
+		if (axis == null || renderer == null) {
 			removeAxis(name);
 			return;
 		}
 		axes.put(name, axis);
-		axisDrawables.put(name, drawable);
+		setAxisRenderer(axis, renderer);
 	}
 
 	/**
@@ -206,8 +210,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param name Name of the axis to be removed.
 	 */
 	public void removeAxis(String name) {
+		Axis axis = axes.get(name);
 		axes.remove(name);
-		axisDrawables.remove(name);
+		axisRenderers.remove(axis);
+		axisDrawables.remove(axis);
 	}
 
 	/**
@@ -216,6 +222,44 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 */
 	public Collection<Axis> getAxes() {
 		return axes.values();
+	}
+
+	/**
+	 * Returns the renderer for the specified axis.
+	 * @param axis Axis.
+	 * @return Instance that renders the axis.
+	 */
+	protected AxisRenderer getAxisRenderer(Axis axis) {
+		return axisRenderers.get(axis);
+	}
+
+	/**
+	 * Sets the renderer for the specified axis.
+	 * @param axis Axis to be rendered.
+	 * @param renderer Instance to render the axis.
+	 */
+	private void setAxisRenderer(Axis axis, AxisRenderer renderer) {
+		axisRenderers.put(axis, renderer);
+		Drawable comp = renderer.getRendererComponent(axis);
+		setAxisComponent(axis, comp);
+	}
+
+	/**
+	 * Returns the component that is used to draw the specified axis.
+	 * @param axis Axis.
+	 * @return Instance that draws the axis.
+	 */
+	protected Drawable getAxisComponent(Axis axis) {
+		return axisDrawables.get(axis);
+	}
+
+	/**
+	 * Sets the component that should be used for drawing the specified axis.
+	 * @param axis Axis.
+	 * @param comp Instance that draws the axis.
+	 */
+	private void setAxisComponent(Axis axis, Drawable comp) {
+		axisDrawables.put(axis, comp);
 	}
 
 	/**

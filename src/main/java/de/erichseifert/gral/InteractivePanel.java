@@ -82,6 +82,8 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
 	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
 	private final PrinterJob printerJob;
+	
+	private static final int MIN_DRAG = 0;
 
 	private final JPopupMenu menu;
 	private final JMenuItem refresh;
@@ -233,17 +235,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	}
 
 	private class MoveListener extends MouseAdapter {
-		private final Axis axisX;
-		private final Axis axisY;
-		private final AxisRenderer2D axisXRenderer;
-		private final AxisRenderer2D axisYRenderer;
+		private final XYPlot plot;
 		private Point posPrev;
 
 		public MoveListener(XYPlot plot) {
-			axisX = plot.getAxis(Axis.X);
-			axisY = plot.getAxis(Axis.Y);
-			axisXRenderer = plot.getSetting(XYPlot.AXIS_X_RENDERER);
-			axisYRenderer = plot.getSetting(XYPlot.AXIS_Y_RENDERER);
+			this.plot = plot;
 		}
 
 		@Override
@@ -253,19 +249,40 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			// Calculate distance that the current view was dragged
+			// (screen units)
 			Point pos = e.getPoint();
-			double centerXDelta =
-				axisXRenderer.viewToWorld(axisX, pos.getX(), true).doubleValue() -
-				axisXRenderer.viewToWorld(axisX, posPrev.getX(), true).doubleValue();
-			double centerYDelta =
-				axisYRenderer.viewToWorld(axisY, pos.getY(), true).doubleValue() -
-				axisYRenderer.viewToWorld(axisY, posPrev.getY(), true).doubleValue();
-			double centerXNew = navigator.getCenter(axisX).doubleValue() - centerXDelta;
-			double centerYNew = navigator.getCenter(axisY).doubleValue() + centerYDelta;
-			navigator.setCenter(axisX, centerXNew);
-			navigator.setCenter(axisY, centerYNew);
-			repaint();
+			int dx = -pos.x + posPrev.x;
+			int dy =  pos.y - posPrev.y;
 			posPrev = pos;
+
+			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
+				Axis axisX = plot.getAxis(Axis.X);
+				Axis axisY = plot.getAxis(Axis.Y);
+				AxisRenderer2D axisXRenderer =
+					plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER);
+				AxisRenderer2D axisYRenderer =
+					plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER);
+
+				// Fetch current center on screen
+				double centerX = axisXRenderer.worldToView(
+					axisX, navigator.getCenter(axisX), true);
+				double centerY = axisYRenderer.worldToView(
+					axisY, navigator.getCenter(axisY), true);
+
+				// Move center and convert it to axis coordinates
+				Number centerXNew = axisXRenderer.viewToWorld(
+					axisX, centerX + dx, true);
+				Number centerYNew = axisYRenderer.viewToWorld(
+					axisY, centerY + dy, true);
+
+				// Change axes (world units)
+				navigator.setCenter(axisX, centerXNew);
+				navigator.setCenter(axisY, centerYNew);
+
+				// Refresh display
+				repaint();
+			}
 		}
 	}
 

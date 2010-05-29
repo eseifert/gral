@@ -57,11 +57,13 @@ public class AxisTest {
 	}
 
 	private static final class AxisListenerTest implements AxisListener {
+		public Axis axis = null;
 		public Number min = null;
 		public Number max = null;
 
 		@Override
-		public void rangeChanged(Number min, Number max) {
+		public void rangeChanged(Axis axis, Number min, Number max) {
+			this.axis = axis;
 			this.min = min;
 			this.max = max;
 		}
@@ -73,11 +75,13 @@ public class AxisTest {
 
 		axis.addAxisListener(l);
 		axis.setRange(0.0, 1.0);
+		assertEquals(axis, l.axis);
 		assertEquals(0.0, l.min.doubleValue(), DELTA);
 		assertEquals(1.0, l.max.doubleValue(), DELTA);
 
 		axis.removeAxisListener(l);
 		axis.setRange(2.0, 3.0);
+		assertEquals(axis, l.axis);
 		assertEquals(0.0, l.min.doubleValue(), DELTA);
 		assertEquals(1.0, l.max.doubleValue(), DELTA);
 	}

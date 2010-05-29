@@ -85,7 +85,7 @@ public class Axis {
 	 */
 	private void fireRangeChanged(Number min, Number max) {
 		for (AxisListener listener : axisListeners) {
-			listener.rangeChanged(min, max);
+			listener.rangeChanged(this, min, max);
 		}
 	}
 

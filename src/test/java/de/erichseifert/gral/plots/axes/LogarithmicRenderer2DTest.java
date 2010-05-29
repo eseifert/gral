@@ -88,6 +88,26 @@ public class LogarithmicRenderer2DTest {
 	}
 
 	@Test
+	public void testViewToView() {
+		double[] values = {0.01, 0.10, 1.00, 5.00, 9.00, 10.00, 15.00};
+		for (double v: values) {
+			Number world = renderer.viewToWorld(axis, v, true);
+			double view = renderer.worldToView(axis, world, true);
+			assertEquals(v, view, DELTA);
+		}
+	}
+
+	@Test
+	public void testWorldToWorld() {
+		double[] values = {0.01, 0.10, 1.00, 5.00, 9.00, 10.00, 15.00};
+		for (double v: values) {
+			double view = renderer.worldToView(axis, v, true);
+			double world = renderer.viewToWorld(axis, view, true).doubleValue();
+			assertEquals(v, world, DELTA);
+		}
+	}
+
+	@Test
 	public void testTicks() {
 		Axis axis = new Axis(0.2, 10.0);
 		List<Tick2D> ticks = renderer.getTicks(axis);

@@ -37,7 +37,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
 import de.erichseifert.gral.util.Insets2D;
@@ -90,10 +90,10 @@ public class MemoryUsage extends JFrame {
 
 		XYPlot plot = new XYPlot(data);
 		plot.getAxis(Axis.Y).setRange(0.0, 1.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 0.1);
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 0.1);
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
 
 		plot.setPointRenderer(data, null);
 		LineRenderer2D line = new DefaultLineRenderer2D();

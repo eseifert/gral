@@ -37,6 +37,7 @@ import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
@@ -101,17 +102,17 @@ public class SimpleXYPlot extends JFrame {
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
-		axisRendererX.setSetting(AxisRenderer2D.LABEL, "Logarithmic axis");
+		axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic axis");
 		plot.setSetting(XYPlot.AXIS_X_RENDERER, axisRendererX);
 		// Custom tick labels
 		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
-		axisRendererX.setSetting(AxisRenderer2D.TICKS_CUSTOM, labels);
+		axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
-		axisRendererX.setSetting(AxisRenderer2D.SHAPE_STROKE, stroke);
-		((AxisRenderer2D) plot.getSetting(XYPlot.AXIS_Y_RENDERER)).setSetting(AxisRenderer2D.LABEL, "Linear axis");
+		axisRendererX.setSetting(AxisRenderer.SHAPE_STROKE, stroke);
+		((AxisRenderer2D) plot.getSetting(XYPlot.AXIS_Y_RENDERER)).setSetting(AxisRenderer.LABEL, "Linear axis");
 		// Custom stroke for the ticks
 		//axisRendererX.setSetting(AxisRenderer2D.TICK_STROKE, stroke);
 		// Swap axis direction
@@ -119,10 +120,10 @@ public class SimpleXYPlot extends JFrame {
 		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
 		// Change intersection point of Y axis
 		AxisRenderer2D axisRendererY = plot.getSetting(XYPlot.AXIS_Y_RENDERER);
-		axisRendererY.setSetting(AxisRenderer2D.INTERSECTION, 1.0);
+		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
 		// Change tick spacing
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 2.0);
-		plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 2.0);
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 2.0);
+		plot.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);

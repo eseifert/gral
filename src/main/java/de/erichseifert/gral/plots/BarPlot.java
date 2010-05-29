@@ -24,7 +24,6 @@ package de.erichseifert.gral.plots;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
@@ -36,7 +35,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Settings.Key;
 
 
@@ -90,10 +88,13 @@ public class BarPlot extends XYPlot {
 		public Shape getPointPath(Row row) {
 			double valueX = row.get(0).doubleValue();
 			double valueY = row.get(1).doubleValue();
-			AxisRenderer2D axisXRenderer = plot.getSetting(BarPlot.AXIS_X_RENDERER);
-			AxisRenderer2D axisYRenderer = plot.getSetting(BarPlot.AXIS_Y_RENDERER);
 			Axis axisX = plot.getAxis(Axis.X);
 			Axis axisY = plot.getAxis(Axis.Y);
+			AxisRenderer2D axisXRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisX);
+			AxisRenderer2D axisYRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisY);
+			double axisYOrigin = 0.0;
+
+			/*
 			double axisYMin = axisY.getMin().doubleValue();
 			double axisYMax = axisY.getMax().doubleValue();
 			double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
@@ -101,6 +102,7 @@ public class BarPlot extends XYPlot {
 			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) || (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
 				return new GeneralPath();
 			}
+			//*/
 
 			double barWidthRel = plot.<Double>getSetting(BarPlot.BAR_WIDTH);
 			double barAlign = 0.5;

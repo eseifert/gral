@@ -31,7 +31,7 @@ import javax.swing.JFrame;
 import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
 import de.erichseifert.gral.util.Insets2D;
@@ -53,8 +53,8 @@ public class StackedPlots extends JFrame {
 
 		// Upper plot
 		XYPlot plotUpper = new XYPlot(data);
-		plotUpper.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING,  5.0);
-		plotUpper.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 10.0);
+		plotUpper.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+		plotUpper.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotUpper.setPointRenderer(data, null);
 		LineRenderer2D lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setSetting(LineRenderer2D.COLOR, new Color(0.9f, 0.3f, 0.2f));
@@ -65,8 +65,8 @@ public class StackedPlots extends JFrame {
 
 		// Lower plot
 		XYPlot plotLower = new XYPlot(data);
-		plotLower.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING,  5.0);
-		plotLower.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer2D.TICKS_SPACING, 10.0);
+		plotLower.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+		plotLower.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotLower.setPointRenderer(data, null);
 		LineRenderer2D lineLower = new DefaultLineRenderer2D();
 		lineLower.setSetting(LineRenderer2D.STROKE, new BasicStroke(2f));

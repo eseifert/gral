@@ -26,34 +26,54 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisListener;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
  * Class that controls the zoom of a Plot.
  */
-public class PlotNavigator {
+public class PlotNavigator implements AxisListener {
+	private final Plot plot;
 	private final Map<Axis, NavigationInfo> infos;
 
 	private double zoomMin;
 	private double zoomMax;
 
+	/**
+	 * Utility class for storing navigational information for an axis.
+	 */
 	private static final class NavigationInfo {
+		private final Number minOriginal;
+		private final Number maxOriginal;
 		private final double centerOriginal;
 		private final double rangeOriginal;
 		private double center;
 		private double zoom;
 
-		public NavigationInfo(double center, double range) {
-			this.centerOriginal = center;
-			this.rangeOriginal = range;
-			this.center = center;
+		/**
+		 * Constructor which creates an new <code>NavigationInfo</code> instance.
+		 * @param center Center in axis units.
+		 * @param range Viewing width in axis units.
+		 */
+		public NavigationInfo(Number min, Number max) {
+			this.minOriginal = min;
+			this.maxOriginal = max;
+			this.centerOriginal = (min.doubleValue() + max.doubleValue())/2.0;
+			this.rangeOriginal = max.doubleValue() - min.doubleValue();
+			this.center = centerOriginal;
 			this.zoom = 1.0;
 		}
 
+		public Number getMinOriginal() {
+			return minOriginal;
+		}
+		public Number getMaxOriginal() {
+			return maxOriginal;
+		}
 		public double getCenterOriginal() {
 			return centerOriginal;
 		}
-
 		public double getRangeOriginal() {
 			return rangeOriginal;
 		}
@@ -78,14 +98,13 @@ public class PlotNavigator {
 	 * @param plot Plot to be zoomed.
 	 */
 	public PlotNavigator(Plot plot) {
+		this.plot = plot;
 		infos = new HashMap<Axis, NavigationInfo>();
-
 		for (Axis axis : plot.getAxes()) {
-			double rangeOriginal = axis.getRange();
-			NavigationInfo info = new NavigationInfo(axis.getMin().doubleValue() + 0.5*rangeOriginal, rangeOriginal);
+			NavigationInfo info = new NavigationInfo(
+					axis.getMin().doubleValue(), axis.getMax().doubleValue());
 			infos.put(axis, info);
 		}
-
 		zoomMin = 1e-2;
 		zoomMax = 1e+2;
 	}
@@ -93,13 +112,24 @@ public class PlotNavigator {
 	private void refresh() {
 		for (Entry<Axis, NavigationInfo> entry: infos.entrySet()) {
 			Axis axis = entry.getKey();
+			AxisRenderer renderer = plot.getAxisRenderer(axis);
 			NavigationInfo info = entry.getValue();
 
-			double rangeNew = info.getRangeOriginal()*info.getZoom();
-			Number axisMinNew = info.getCenter() - 0.5*rangeNew;
-			Number axisMaxNew = info.getCenter() + 0.5*rangeNew;
+			// Original range in screen units
+			// Most up-to-date view coordinates (axis's layout) must be used
+			double minOrig = renderer.worldToView(axis, info.getMinOriginal(), true);
+			double maxOrig = renderer.worldToView(axis, info.getMaxOriginal(), true);
+			double rangeOrig = maxOrig - minOrig;
 
-			axis.setRange(axisMinNew, axisMaxNew);
+			// New axis scale
+			double zoom = info.getZoom();
+			double range = rangeOrig*zoom;
+			double center = renderer.worldToView(axis, info.getCenter(), true);
+			Number min = renderer.viewToWorld(axis, center - 0.5*range, true);
+			Number max = renderer.viewToWorld(axis, center + 0.5*range, true);
+
+			// Change axis
+			axis.setRange(min, max);
 		}
 	}
 
@@ -180,6 +210,11 @@ public class PlotNavigator {
 	}
 	public void setZoomMax(double max) {
 		this.zoomMax = max;
+	}
+
+	@Override
+	public void rangeChanged(Axis axis, Number min, Number max) {
+		System.out.println(axis+": "+min+" "+max);
 	}
 
 }

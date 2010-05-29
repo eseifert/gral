@@ -40,7 +40,7 @@ import de.erichseifert.gral.PlotArea2D;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -123,11 +123,11 @@ public class PlotTest {
 		assertNull(plot.getAxis("a"));
 		assertNull(plot.getAxis("b"));
 		// Set
-		AxisRenderer2D renderer = new LinearRenderer2D();
+		AxisRenderer renderer = new LinearRenderer2D();
 		Axis a = new Axis(0.0, 1.0);
 		Axis b = new Axis(2.0, 3.0);
-		plot.setAxis("a", a, renderer.getRendererComponent(a));
-		plot.setAxis("b", b, renderer.getRendererComponent(b));
+		plot.setAxis("a", a, renderer);
+		plot.setAxis("b", b, renderer);
 		assertEquals(a, plot.getAxis("a"));
 		assertEquals(b, plot.getAxis("b"));
 		// Remove

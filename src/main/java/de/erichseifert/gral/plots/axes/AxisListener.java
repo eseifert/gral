@@ -27,8 +27,9 @@ package de.erichseifert.gral.plots.axes;
 public interface AxisListener {
 	/**
 	 * Notified if the range of the axis has changed.
+	 * @param axis Axis instance that has changed.
 	 * @param min New minimum value.
 	 * @param max New maximum value.
 	 */
-	void rangeChanged(Number min, Number max);
+	void rangeChanged(Axis axis, Number min, Number max);
 }
