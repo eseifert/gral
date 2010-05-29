@@ -26,14 +26,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisListener;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
  * Class that controls the zoom of a Plot.
  */
-public class PlotNavigator implements AxisListener {
+public class PlotNavigator {
 	private final Plot plot;
 	private final Map<Axis, NavigationInfo> infos;
 
@@ -210,11 +209,6 @@ public class PlotNavigator implements AxisListener {
 	}
 	public void setZoomMax(double max) {
 		this.zoomMax = max;
-	}
-
-	@Override
-	public void rangeChanged(Axis axis, Number min, Number max) {
-		System.out.println(axis+": "+min+" "+max);
 	}
 
 }
