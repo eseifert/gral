@@ -55,10 +55,10 @@ public class PlotNavigator {
 		 * @param center Center in axis units.
 		 * @param range Viewing width in axis units.
 		 */
-		public NavigationInfo(Number min, Number max) {
+		public NavigationInfo(Number min, Number max, double center) {
 			this.minOriginal = min;
 			this.maxOriginal = max;
-			this.centerOriginal = (min.doubleValue() + max.doubleValue())/2.0;
+			this.centerOriginal = center;
 			this.rangeOriginal = max.doubleValue() - min.doubleValue();
 			this.center = centerOriginal;
 			this.zoom = 1.0;
@@ -100,8 +100,12 @@ public class PlotNavigator {
 		this.plot = plot;
 		infos = new HashMap<Axis, NavigationInfo>();
 		for (Axis axis : plot.getAxes()) {
+			AxisRenderer renderer = plot.getAxisRenderer(axis);
+			double min = renderer.worldToView(axis, axis.getMin(), false);
+			double max = renderer.worldToView(axis, axis.getMax(), false);
+			Number center = renderer.viewToWorld(axis, (min + max)/2.0, false);
 			NavigationInfo info = new NavigationInfo(
-					axis.getMin().doubleValue(), axis.getMax().doubleValue());
+					axis.getMin(), axis.getMax(), center.doubleValue());
 			infos.put(axis, info);
 		}
 		zoomMin = 1e-2;
