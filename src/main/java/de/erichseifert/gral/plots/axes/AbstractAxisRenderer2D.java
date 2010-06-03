@@ -138,6 +138,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
 				}
 
+				// TODO: Use real font size
 				final double fontHeight = 10.0;
 
 				// Draw ticks

@@ -37,22 +37,17 @@ public class SimplePiePlot extends JFrame {
 	public SimplePiePlot() {
 		super("GRALTest");
 		DataTable data = new DataTable(Integer.class);
-		/*
-		data.add(1, 1);
-		data.add(2, 3);
-		data.add(3, 2);
-		data.add(4, 6);
-		data.add(5, 4);
-		data.add(6, 8);
-		data.add(7, 9);
-		data.add(8, 11);//*/
-		//*
 		Random r = new Random();
-		for (int i = 0; i < 15; i++) {
-			data.add(r.nextInt(10) + 1);
+		for (int i = 0; i < 25; i++) {
+			int val = r.nextInt(10) + 1;
+			data.add((r.nextDouble() <= 0.1) ? -val : val);
 		}
 		PiePlot plot = new PiePlot(data);
 		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
+		// Change relative size of pie
+		plot.setSetting(PiePlot.RADIUS, 0.9);
+		// Change relative size of inner region
+		plot.setSetting(PiePlot.RADIUS_INNER, 0.4);
 		// Change rotation
 		//plot.setSetting(PiePlot.CLOCKWISE, false);
 		// Custom start angle

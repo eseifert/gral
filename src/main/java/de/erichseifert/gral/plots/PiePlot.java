@@ -23,9 +23,11 @@ package de.erichseifert.gral.plots;
 
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 import de.erichseifert.gral.PlotArea2D;
 import de.erichseifert.gral.data.DataListener;
@@ -40,8 +42,10 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that displays data in a pie plot.
  */
 public class PiePlot extends Plot implements DataListener {
-	/** Key for specifying the relative radius of the pie. */
+	/** Key for specifying the radius of the pie relative to the plot area size. */
 	public static final Key RADIUS = new Key("pieplot.radius");
+	/** Key for specifying the inner radius of the pie relative to the outer radius. */
+	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner");
 	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper} instance used for the segments. */
 	public static final Key COLORS = new Key("pieplot.colorlist");
 	/** Key for specifying whether the segments should be ordered clockwise or counterclockwise. */
@@ -55,7 +59,7 @@ public class PiePlot extends Plot implements DataListener {
 	public static class PiePlotArea2D extends PlotArea2D implements DataListener {
 		private PiePlot plot;
 		private double degreesPerValue;
-		private double[] startValues;
+		private ArrayList<double[]> slices;
 
 		public PiePlotArea2D(PiePlot plot) {
 			this.plot = plot;
@@ -77,15 +81,38 @@ public class PiePlot extends Plot implements DataListener {
 			// Paint pie
 			double w = getWidth();
 			double h = getHeight();
-			double size = Math.min(w, h) * plot.<Double>getSetting(PiePlot.RADIUS);
+			if (w <= 0.0 || h <= 0.0) {
+				return;
+			}
 			g2d.translate(w/2d, h/2d);
-			startValues[0] = plot.<Double>getSetting(PiePlot.START);
-			startValues[startValues.length-1] = Math.signum(degreesPerValue) * 360.0 + startValues[0];
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
-			for (int i = 1; i < startValues.length;  i++) {
-				Paint paint = colorList.get(i-1/(double)startValues.length);
-				Shape shape = new Arc2D.Double(-size/2d, -size/2d, size, size, startValues[i-1], startValues[i]-startValues[i-1], Arc2D.PIE);
-				GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
+
+			double sizeRel = plot.<Double>getSetting(PiePlot.RADIUS);
+			double size = Math.min(w, h) * sizeRel;
+
+			double sizeRelInner = plot.<Double>getSetting(PiePlot.RADIUS_INNER);
+			double sizeInner = size * sizeRelInner;
+			Ellipse2D inner = new Ellipse2D.Double(
+					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
+			Area whole = new Area(inner);
+
+			double sliceOffset = plot.<Double>getSetting(PiePlot.START);
+			int sliceNo = 0;
+			for (double[] slice : slices) {
+				double sliceStart = sliceOffset + slice[0];
+				double sliceSpan = slice[1];
+				sliceNo++;
+				if (Double.isNaN(sliceSpan)) {
+					continue;
+				}
+
+				// Paint slice
+				Paint paint = colorList.get(sliceNo - 1.0/(double)slices.size());
+				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d, size, size,
+						sliceStart, sliceSpan, Arc2D.PIE);
+				Area doughnutSlice = new Area(pieSlice);
+				doughnutSlice.subtract(whole);
+				GraphicsUtils.fillPaintedShape(g2d, doughnutSlice, paint, null);
 			}
 			g2d.setTransform(txOffset);
 			g2d.setTransform(txOrig);
@@ -97,11 +124,8 @@ public class PiePlot extends Plot implements DataListener {
 			double colYSum = 0.0;
 			for (int i = 0; i < data.getRowCount();  i++) {
 				double val = data.get(0, i).doubleValue();
-				// Ignore negative values
-				if (val <= 0.0) {
-					continue;
-				}
-				colYSum += val;
+				// Negative values cause "empty" slices
+				colYSum += Math.abs(val);
 			}
 
 			if (plot.<Boolean>getSetting(PiePlot.CLOCKWISE)) {
@@ -112,9 +136,22 @@ public class PiePlot extends Plot implements DataListener {
 			}
 
 			// Calculate starting angles
-			startValues = new double[data.getRowCount()+1];
-			for (int i = 1; i < data.getRowCount(); i++) {
-				startValues[i] = startValues[i-1] + data.get(0, i-1).doubleValue() * degreesPerValue;
+			slices = new ArrayList<double[]>(data.getRowCount());
+			double sliceStart = 0.0;
+			for (int i = 0; i < data.getRowCount(); i++) {
+				double val = data.get(0, i).doubleValue();
+				double[] slice = new double[] { sliceStart, Double.NaN };
+				slices.add(slice);
+
+				if (Double.isNaN(val) || Double.isInfinite(val)) {
+					continue;
+				}
+
+				slice[0] = sliceStart;
+				// Negative values cause "empty" slices
+				slice[1] = (val >= 0.0) ? (val * degreesPerValue) : (Double.NaN);
+
+				sliceStart += Math.abs(val) * degreesPerValue;
 			}
 		}
 	}
@@ -126,7 +163,8 @@ public class PiePlot extends Plot implements DataListener {
 	public PiePlot(DataSource data) {
 		super(data);
 
-		setSettingDefault(RADIUS, 0.9);
+		setSettingDefault(RADIUS, 1.0);
+		setSettingDefault(RADIUS_INNER, 0.0);
 		setSettingDefault(COLORS, new QuasiRandomColors());
 		setSettingDefault(CLOCKWISE, true);
 		setSettingDefault(START, 0.0);

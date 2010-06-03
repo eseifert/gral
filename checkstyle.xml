@@ -35,7 +35,7 @@
         </module>
         <module name="NeedBraces"/>
         <module name="Regexp">
-            <property name="format" value="System\.out\.println"/>
+            <property name="format" value="System\.(out|err)\.print"/>
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
         </module>
