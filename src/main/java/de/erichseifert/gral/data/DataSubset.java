@@ -80,7 +80,7 @@ public abstract class DataSubset extends AbstractDataSource implements DataListe
 	/**
 	 * Tests whether the specified row is accepted by this DataSubset or not.
 	 * @param row Row to be tested.
-	 * @return True if the row is accepted.
+	 * @return True if the row should be kept.
 	 */
 	public abstract boolean accept(Row row);
 }

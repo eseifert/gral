@@ -1,67 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article
-  PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+  PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <book xmlns="http://docbook.org/ns/docbook">
 <info>
-	<title>GRAL Documentation</title>
-	<author><firstname>Michael</firstname><surname>Seifert</surname></author>
-	<copyright><year>2010</year><holder>Michael Seifert</holder></copyright>
+    <title>GRAL Documentation</title>
+    <author><firstname>Michael</firstname><surname>Seifert</surname></author>
+    <copyright><year>2010</year><holder>Michael Seifert</holder></copyright>
 </info>
 
 <chapter>
-	<title>Data administration</title>
-	<para>The first step, before we are able to plot anything, is to load or create data, a process which GRAL provides several ways for. The basic interface that will be used when you have to provide data is the DataSource interface. Think of it as a table with a (theoretically) arbitrary number of rows and columns. Every column has its own data type, but only Number values are allowed. The functions a DataSource provides are solely for retrieving data rows, but it also supports statistics on the contained data, as well as the capability to listen for data changes. The following sections describe the different ways for providing and manipulating data.</para>
+    <title>Data administration</title>
 
-	<sect1>
-		<title>Creating data</title>
-		<para>Assuming you have computed some values you want to plot, how can you store your data in a DataSource? You can do so through the DataTable class. DataTable is an implementation of DataSource (or AbstractDataSource to be more precise) and supports adding rows. The values must match the number of columns and their types, which both had already been specified in the constructor.</para>
+    <para>The first step, before we are able to plot anything, is to load or
+    create data, a process which GRAL provides several ways for. The basic
+    interface that will be used when you have to provide data is DataSource.
+    Think of it as a table with a (theoretically) arbitrary number of rows and
+    columns. Every column has its own data type, but only Number values are
+    allowed. The functions a DataSource provides are solely for retrieving data
+    rows, but it also supports statistics on the contained data, as well as the
+    capability to listen for data changes. The following sections describe the
+    different ways for providing and manipulating data.</para>
 
-		<example>
-			<title>Populating a DataTable</title>
-			<programlisting language="java"><![CDATA[
+    <sect1>
+        <title>Creating data</title>
+
+        <para>Assuming you have computed some values you want to plot, how can
+        you store your data in a DataSource? You can do so through the class
+        DataTable. DataTable is an implementation of DataSource (or
+        AbstractDataSource to be more precise) and supports adding rows.
+        The values must match the number of columns and their types, which both
+        had already been specified in the constructor.</para>
+
+        <example>
+            <title>Populating a DataTable</title>
+            <programlisting language="java"><![CDATA[
 // Create the table with the specified column types
 DataTable table = new DataTable(Double.class, Double.class);
 
 // Iterate your available data. In this case, data is an Iterable<Double[]>;
 for (Double[] coords : data) {
-	double x = coords[0];
-	double y = coords[1];
-	table.add(x, y);
+    double x = coords[0];
+    double y = coords[1];
+    table.add(x, y);
 }
 ]]></programlisting>
-		</example>
+        </example>
 
-		<para>You might want to have a DataTable for testing purposes only and do not want to create random values for it at each start. In this case, the DummyData class is your remedy. DummyData is a DataSource filled with a single value. As I already mentioned, this is not used very often, but suited very well for testing due to its efficiency, especially, when dealing with large tables.</para>
-		<example>
-			<title>Generating dummy data</title>
-			<programlisting language="java"><![CDATA[
+        <para>You might want to have a DataTable for testing purposes only and
+        do not want to create random values for it at each start. In this case,
+        the DummyData class is your remedy. DummyData is a DataSource filled
+        with a single value. As I already mentioned, this is not used very
+        often, but suited very well for testing due to its efficiency,
+        especially when dealing with large tables.</para>
+
+        <example>
+            <title>Generating dummy data</title>
+            <programlisting language="java"><![CDATA[
 DummyData data = new DummyData(3, 100, 42.0);
 ]]></programlisting>
-		</example>
-	</sect1>
+        </example>
+    </sect1>
 
-	<sect1>
-		<title>Sorting data</title>
+    <sect1>
+        <title>Sorting data</title>
 
-		<example>
-			<title>Sorting</title>
-			<programlisting language="java"><![CDATA[
+        <para>Often, data has to be reordered, e.g. for filtering. The sorting
+        criteria in GRAL can be handled very flexible: for example the rows of
+        a data source could be rearranged so that the first column is sorted
+        ascending and as a second criterion the second column is sorted
+        descending when values of the first column are equal.
+        GRAL uses two classes to define the sorting options: Ascending and
+        Descending. In order to create them the index of the column to be
+        sorted is required as a parameter for the constructor.</para>
+
+        <example>
+            <title>Sorting</title>
+            <programlisting language="java"><![CDATA[
 // Sort the primary column (1) ascending,
 // the secondary column (0) descending, and
 // the ternary column (2) ascending
 table.sort(new Ascending(1), new Descending(0), new Ascending(2));
 ]]></programlisting>
-		</example>
-	</sect1>
+        </example>
+    </sect1>
 
-	<sect1>
-		<title>Filtering data</title>
+    <sect1>
+        <title>Filtering data</title>
 
-		<sect2>
-			<title>Filtering columns</title>
-			<example>
-				<title>Creation of data series</title>
-				<programlisting language="java"><![CDATA[
+        <para>DataTables are not only the only data source for plots. A plot
+        also accepts filtered data. In GRAL data can be filtered either by
+        columns or by rows.</para>
+
+        <sect2>
+            <title>Filtering columns</title>
+
+            <para>The main tasks for filtering by columns are to create subsets
+            (series) of columns and to reorder columns for certain plot types.
+            Using the class DataSeries a data source with four columns
+            (A, B, C, D) could be divided into two series: one containing
+            columns (A, B) and one contaning columns (C, D). The series could
+            also overlap, for example the first series could contain the
+            columns (A, B) and the second the columns (B, C). Futhermore, data
+            series can be used to reorder columns. It is possible to map
+            columns (A, B, C, D) to (D, B, C, A) or just (D, C)</para>
+
+            <para>A DataSeries is created by passing in at least two
+            parameters: the original data source and a numer of columns,
+            which will appear in the order they are passed. Optionally there
+            a name can be passed as first argument. In plots this name is used
+            for exmaple to display captions in the plot legend.</para>
+
+            <example>
+                <title>Creation of data series</title>
+                <programlisting language="java"><![CDATA[
 // Create a new series from columns 0 and 1
 DataSeries series1 = new DataSeries("Series 1", table, 0, 1);
 // Create a new series from columns 2 and 0
@@ -69,194 +121,290 @@ DataSeries series2 = new DataSeries("Series 2", table, 2, 0);
 // Create a new series from column 1
 DataSeries series3 = new DataSeries("Series 3", table, 1);
 ]]></programlisting>
-			</example>
-		</sect2>
+            </example>
+        </sect2>
 
-		<sect2>
-			<title>Filtering rows</title>
-			<example>
-				<title>Filtering rows with DataSubSet</title>
-				<programlisting language="java"><![CDATA[
-// Leave out rows where column 1 has an even value
+        <sect2>
+            <title>Filtering rows</title>
+
+            <para>Another way of filtering is to filter data sources by rows.
+            This way a data subset which matches certain criteria can be
+            extracted. For example, this could be used to form clusters
+            which could then be plotted or processed separately.</para>
+
+            <para>In order to use the DataSubset a new class has to be created
+            which implements the method accept(Number[] row). This method
+            decides whether a certain row should be kept in the subset.</para>
+
+            <example>
+                <title>Filtering rows with DataSubset</title>
+                <programlisting language="java"><![CDATA[
+// Keep only rows where the first column has an even value
 DataSubset data = new DataSubset(table) {
-	@Override
-	public boolean accept(Number[] row) {
-		return (row[0].doubleValue() % 2.0) == 0.0;
-	}
+    @Override
+    public boolean accept(Row row) {
+        return (row.get(0).doubleValue() % 2.0) == 0.0;
+    }
 };
 ]]></programlisting>
-			</example>
-		</sect2>
-	</sect1>
+            </example>
+        </sect2>
+    </sect1>
 
-	<sect1>
-		<title>Processing data</title>
+    <sect1>
+        <title>Processing data</title>
 
-		<sect2>
-			<title>Statistics</title>
-			<example>
-				<title>Getting the maximum of a column</title>
-				<programlisting language="java"><![CDATA[
+        <para>An integral part of GRAL's pipline is preprocessing of data.
+        The simplest case would be to extract several statistics per column
+        such as minimum, maximum, arithmetic mean, or median. But GRAL also
+        covers more complex cases such as generating histograms or convolution
+        filtering of data. The latter can be used to smooth or sharpen data
+        in various ways.</para>
+
+        <sect2>
+            <title>Statistics</title>
+            <para>The most basic statistical functionality of GRAL is to query
+            various aggregated measures for columns using the class Statistics.
+            It is part of every DataSource and can be accessed with the method
+            getStatistics(column).</para>
+
+            <example>
+                <title>Getting the maximum of a column</title>
+                <programlisting language="java"><![CDATA[
 // Get the maximum for column 1
 Statistics stats = table.getStatistics();
 stats.get(Statistics.MAX, 1);
 ]]></programlisting>
-			</example>
+            </example>
 
-			<example>
-				<title>Generate an equally spaced histogram</title>
-				<programlisting language="java"><![CDATA[
+            <variablelist>
+                <title>statistical measures provided by Statistics class</title>
+                <varlistentry>
+                    <term><constant>N</constant></term>
+                    <listitem><para>The number of values in the column.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>SUM</constant></term>
+                    <listitem><para>The sum of all column values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>MIN</constant></term>
+                    <listitem><para>The smallest value of the column.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>MAX</constant></term>
+                    <listitem><para>The largest value of the column.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>MEAN</constant></term>
+                    <listitem><para>The arithmetic mean describing the average value of the column.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>MEAN_DEVIATION</constant></term>
+                    <listitem><para>The mean deviation describing the dispersion of the column's values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>MEDIAN</constant></term>
+                    <listitem><para>The median value which divides the column values in two equal halves.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>VARIANCE</constant></term>
+                    <listitem><para>The variance value describing the dispersion of the column's values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>SKEWNESS</constant></term>
+                    <listitem><para>The skewness value describing the asymmetry of the probability distribution of the column's values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>KURTOSIS</constant></term>
+                    <listitem><para>The kurtosis value describing the "peakedness" of the probability distribution of the column's values.</para></listitem>
+                </varlistentry>
+            </variablelist>
+
+            <para>Histograms are a more complex way for aggregating data. In a
+            histogram all values are assigned to specified categories. In GRAL
+            those categories are defined as value ranges. For example all
+            values from 0 to 5 would be in category A and all values from 5 to
+            10 in category B. Then, the histogram would generate two rows for
+            each column that contain the number of values in category A and B,
+            respectively.</para>
+
+            <example>
+                <title>Generate an equally spaced histogram</title>
+                <programlisting language="java"><![CDATA[
 // Use 4 equally spaced breaks
 Histogram histogram = new Histogram(table, 4);
 ]]></programlisting>
-			</example>
+            </example>
 
-			<example>
-				<title>Generate a histogram with user-defined breaks</title>
-				<programlisting language="java"><![CDATA[
+            <example>
+                <title>Generate a histogram with user-defined breaks</title>
+                <programlisting language="java"><![CDATA[
 // Use custom breaks for each column
 Number[] breaksCol1 = {1.0, 2.0, 3.0, 4.0, 5.0};
 Number[] breaksCol2 = {1.0, 3.0, 5.0, 7.0, 9.0};
-Histogram histogram = new Histogram(table, new Number[][] {breaksCol1, breaksCol2});
+Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
 ]]></programlisting>
-			</example>
-		</sect2>
+            </example>
+        </sect2>
 
-		<sect2>
-			<title>Convolution</title>
-			<example>
-				<title>Moving average</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>Convolution</title>
+            
+            <para>Often, it is necessary to change existing data by smoothing
+            it, so that noise or fine-scale structures are reduced. Another
+            frequent use case is to boost or extract exactly those fine-scale
+            structures.
+            Both cases can be handled in GRAL using the convolution operation.
+            Mathematically, convolution is the combination of two functions:
+            the data function and a kernel function. By varying th kernel
+            function various operations can be achieved: smoothing (low-pass
+            filter), deriving (high-pass filter), sharpening, moving average,
+            and much more.</para>
+
+            <para>Besides the class DataSource GRAL provides two additional
+            classes for convolution: the class Kernel defines the kernel
+            function and the class Convolution prcoesses the data source.</para>
+
+            <example>
+                <title>Moving average</title>
+                <programlisting language="java"><![CDATA[
 // Create moving average of width 3
 Kernel kernel = new Kernel(1.0, 1.0, 1.0);
 // Filter columns 0 and 1
 Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
 ]]></programlisting>
-			</example>
-		</sect2>
-	</sect1>
+            </example>
+        </sect2>
+    </sect1>
 
-	<sect1>
-		<title>Exchanging data</title>
+    <sect1>
+        <title>Exchanging data</title>
 
-		<sect2>
-			<title>Importing</title>
-			<example>
-				<title>Import example</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>Importing</title>
+
+            <example>
+                <title>Import example</title>
+                <programlisting language="java"><![CDATA[
 DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 InputStream file = new FileInputStream("foobar.csv");
 DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
 ]]></programlisting>
-			</example>
-		</sect2>
+            </example>
+        </sect2>
 
-		<sect2>
-			<title>Exporting</title>
-			<example>
-				<title>Export example</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>Exporting</title>
+
+            <example>
+                <title>Export example</title>
+                <programlisting language="java"><![CDATA[
 DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 FileOutputStream file = new FileOutputStream("foobar.csv");
 writer.write(table, file);
 ]]></programlisting>
-			</example>
-		</sect2>
-	</sect1>
+            </example>
+        </sect2>
+    </sect1>
 </chapter>
 
 <chapter>
-	<title>Displaying data</title>
+    <title>Displaying data</title>
 
-	<sect1>
-		<title>Plot types</title>
+    <sect1>
+        <title>Plot types</title>
 
-		<sect2>
-			<title>XY-Plot</title>
-			<example>
-				<title>Creating an xy-plot</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>XY-Plot</title>
+
+            <example>
+                <title>Creating an xy-plot</title>
+                <programlisting language="java"><![CDATA[
 Plot plot = new XYPlot(series1, series2);
 ]]></programlisting>
-			</example>
+            </example>
 
-			<sect3>
-				<title>Legends</title>
-				<example>
-					<title>Creating a scatter plot</title>
-					<programlisting language="java"><![CDATA[
+            <sect3>
+                <title>Legends</title>
+
+                <example>
+                    <title>Creating a scatter plot</title>
+                    <programlisting language="java"><![CDATA[
 plot.setSetting(Plot.LEGEND, true);
 plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
 plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 ]]></programlisting>
-				</example>
-			</sect3>
-		</sect2>
+                </example>
+            </sect3>
+        </sect2>
 
-		<sect2>
-			<title>Bar plot</title>
-			<example>
-				<title>Creating a bar plot</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>Bar plot</title>
+
+            <example>
+                <title>Creating a bar plot</title>
+                <programlisting language="java"><![CDATA[
 Plot plot = new BarPlot(series);
 ]]></programlisting>
-			</example>
-		</sect2>
+            </example>
+        </sect2>
 
-		<sect2>
-			<title>Pie plot</title>
-			<example>
-				<title>Creating a pie plot</title>
-				<programlisting language="java"><![CDATA[
+        <sect2>
+            <title>Pie plot</title>
+
+            <example>
+                <title>Creating a pie plot</title>
+                <programlisting language="java"><![CDATA[
 Plot plot = new PiePlot(series);
 ]]></programlisting>
-			</example>
-		</sect2>
-	</sect1>
+            </example>
+        </sect2>
+    </sect1>
 
-	<sect1>
-		<title>Customizing the plot</title>
-	</sect1>
+    <sect1>
+        <title>Customizing the plot</title>
+    </sect1>
 
-	<sect1>
-		<title>Customizing axes</title>
-	</sect1>
+    <sect1>
+        <title>Customizing axes</title>
+    </sect1>
 
-	<sect1>
-		<title>Customizing points</title>
-	</sect1>
+    <sect1>
+        <title>Customizing points</title>
+    </sect1>
 
-	<sect1>
-		<title>Customizing lines</title>
-	</sect1>
+    <sect1>
+        <title>Customizing lines</title>
+    </sect1>
 
     <sect1>
         <title>Customizing areas</title>
     </sect1>
 
-	<sect1>
-		<title>Exporting plot images</title>
-	</sect1>
+    <sect1>
+        <title>Exporting plot images</title>
+    </sect1>
 </chapter>
 
 <chapter>
-	<title>Expanding GRAL</title>
+    <title>Expanding GRAL</title>
 
-	<sect1>
-		<title>Writing a new plot type</title>
-	</sect1>
+    <sect1>
+        <title>Writing a new plot type</title>
+    </sect1>
 
-	<sect1>
-		<title>Writing a data importer</title>
-	</sect1>
+    <sect1>
+        <title>Writing a data importer</title>
+    </sect1>
 
-	<sect1>
-		<title>Writing a data exporter</title>
-	</sect1>
+    <sect1>
+        <title>Writing a data exporter</title>
+    </sect1>
 
-	<sect1>
-		<title>Writing a plot exporter</title>
-	</sect1>
+    <sect1>
+        <title>Writing a plot exporter</title>
+    </sect1>
 </chapter>
 
 <chapter>
