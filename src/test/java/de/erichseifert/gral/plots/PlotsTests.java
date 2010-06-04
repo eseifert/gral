@@ -25,6 +25,7 @@ package de.erichseifert.gral.plots;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import de.erichseifert.gral.plots.areas.AreasTests;
 import de.erichseifert.gral.plots.axes.AxesTests;
 import de.erichseifert.gral.plots.colors.ColorsTests;
 import de.erichseifert.gral.plots.lines.LinesTests;
@@ -34,6 +35,7 @@ import de.erichseifert.gral.plots.points.PointsTests;
 @Suite.SuiteClasses({
 	AxesTests.class,
 	ColorsTests.class,
+	AreasTests.class,
 	LinesTests.class,
 	PointsTests.class,
 	PlotArea2DTest.class,

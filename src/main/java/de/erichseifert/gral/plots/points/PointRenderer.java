@@ -70,8 +70,8 @@ public interface PointRenderer extends SettingsStorage {
 	/**
 	 * Returns the graphical representation to be drawn for the specified data value.
 	 * @param axis that is used to project the point.
+	 * @param axisRenderer Renderer for the axis.
 	 * @param row Data row containing the point.
-	 * @param Renderer for the axis.
 	 * @return Component that can be used to draw the point
 	 */
 	Drawable getPoint(Axis axis, AxisRenderer2D axisRenderer, Row row);

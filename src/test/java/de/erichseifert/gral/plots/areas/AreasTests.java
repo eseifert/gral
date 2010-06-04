@@ -19,20 +19,14 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.io;
-
+package de.erichseifert.gral.plots.areas;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import de.erichseifert.gral.io.data.DataTests;
-import de.erichseifert.gral.io.plots.PlotsTests;
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AbstractIoFactoryTest.class,
-	DataTests.class,
-	PlotsTests.class
+	DefaultAreaRendererTest.class
 })
-public class IoTests {
+public class AreasTests {
 }

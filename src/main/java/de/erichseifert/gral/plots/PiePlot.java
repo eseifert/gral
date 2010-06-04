@@ -57,7 +57,7 @@ public class PiePlot extends Plot implements DataListener {
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
 	public static class PiePlotArea2D extends PlotArea2D implements DataListener {
-		private PiePlot plot;
+		private final PiePlot plot;
 		private double degreesPerValue;
 		private ArrayList<double[]> slices;
 
@@ -107,11 +107,13 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Paint slice
-				Paint paint = colorList.get(sliceNo - 1.0/(double)slices.size());
+				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
 				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d, size, size,
 						sliceStart, sliceSpan, Arc2D.PIE);
 				Area doughnutSlice = new Area(pieSlice);
-				doughnutSlice.subtract(whole);
+				if (sizeRelInner > 0.0) {
+					doughnutSlice.subtract(whole);
+				}
 				GraphicsUtils.fillPaintedShape(g2d, doughnutSlice, paint, null);
 			}
 			g2d.setTransform(txOffset);

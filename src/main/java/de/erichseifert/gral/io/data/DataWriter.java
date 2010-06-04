@@ -31,9 +31,6 @@ import de.erichseifert.gral.data.DataSource;
  * Interface that provides a function to store a DataSource.
  */
 public interface DataWriter {
-	/** Use the BMP bitmap format for saving. */
-	static final String TYPE_CSV = "text/csv";
-
 	/**
 	 * Stores the specified DataSource
 	 * @param data DataSource to be stored.

@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.io.plots;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -35,7 +36,7 @@ import de.erichseifert.gral.io.AbstractIOFactory;
 public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 	private static DrawableWriterFactory instance;
 
-	private DrawableWriterFactory() {
+	private DrawableWriterFactory() throws IOException {
 		super("drawablewriters.properties");
 	}
 
@@ -45,7 +46,10 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 	 */
 	public static DrawableWriterFactory getInstance() {
 		if (instance == null) {
-			instance = new DrawableWriterFactory();
+			try {
+				instance = new DrawableWriterFactory();
+			} catch (IOException e) {
+			}
 		}
 		return instance;
 	}

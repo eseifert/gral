@@ -40,52 +40,37 @@ import java.util.Set;
 public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	protected final Map<String, Class<? extends T>> entries = new HashMap<String, Class<? extends T>>();
 
-	protected AbstractIOFactory(String propFileName) {
+	protected AbstractIOFactory(String propFileName) throws IOException {
 		// Retrieve property-files
 		Enumeration<URL> propFiles = null;
-		try {
-			propFiles = getClass().getClassLoader().getResources(propFileName);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		propFiles = getClass().getClassLoader().getResources(propFileName);
+		if (!propFiles.hasMoreElements()) {
+			throw new IOException("Property file not found for pattern: " + propFileName);
 		}
-		if (propFiles != null) {
-			Properties props = new Properties();
-			while (propFiles.hasMoreElements()) {
-				URL propURL = propFiles.nextElement();
-				InputStream stream = null;
+		Properties props = new Properties();
+		while (propFiles.hasMoreElements()) {
+			URL propURL = propFiles.nextElement();
+			InputStream stream = null;
+			try {
+				stream = propURL.openStream();
+				props.load(stream);
+			} finally {
+				if (stream != null) {
+					stream.close();
+				}
+			}
+			// Parse property files and register entries as items
+			for (Map.Entry<Object, Object> prop : props.entrySet()) {
+				String mimeType = (String) prop.getKey();
+				String className = (String) prop.getValue();
+				Class<?> clazz = null;
 				try {
-					stream = propURL.openStream();
-					props.load(stream);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				} finally {
-					if (stream != null) {
-						try {
-							stream.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
+					clazz = Class.forName(className);
+				} catch (ClassNotFoundException e) {
+					throw new IOException(e);
 				}
-				// Parse property files and register entries as items
-				for (Map.Entry<Object, Object> prop : props.entrySet()) {
-					String mimeType = (String) prop.getKey();
-					String className = (String) prop.getValue();
-					Class<?> clazz = null;
-					try {
-						clazz = Class.forName(className);
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						continue;
-					}
-					// FIXME: Missing type safety check
-					entries.put(mimeType, (Class<? extends T>) clazz);
-				}
+				// FIXME: Missing type safety check
+				entries.put(mimeType, (Class<? extends T>) clazz);
 			}
 		}
 	}

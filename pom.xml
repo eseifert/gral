@@ -150,6 +150,25 @@
                 <configLocation>${basedir}/checkstyle.xml</configLocation>
             </configuration>
         </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+                <instrumentation>
+                    <ignores>
+                        <ignore>de.erichseifert.gral.examples.*</ignore>
+                    </ignores>
+                    <excludes>
+                        <exclude>de/erichseifert/gral/examples/**/*.class</exclude>
+                    </excludes>
+                </instrumentation>
+                <formats>
+                    <format>html</format>
+                    <format>xml</format>
+                </formats>
+            </configuration>
+        </plugin>
      </plugins>
   </reporting>
 

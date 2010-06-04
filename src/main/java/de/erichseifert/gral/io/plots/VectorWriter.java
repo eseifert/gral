@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.io.AbstractWriter;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.vectorgraphics2d.EPSGraphics2D;
 import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
@@ -41,7 +41,7 @@ import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
  * <li>SVG</li>
  * </ul>
  */
-public class VectorWriter extends AbstractWriter implements DrawableWriter {
+public class VectorWriter extends IOCapabilitiesStorage implements DrawableWriter {
 	static {
 		IOCapabilities EPS_CAPABILITIES = new IOCapabilities(
 			"EPS",

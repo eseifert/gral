@@ -32,12 +32,24 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
+import de.erichseifert.gral.io.IOCapabilities;
 
 
 /**
  * Class that reads a DataSource from a TSV-file.
  */
-public class TSVReader implements DataReader {
+public class TSVReader extends IOCapabilitiesStorage implements DataReader {
+	static {
+		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
+			"CSV",
+			"Comma separated value",
+			"text/csv",
+			"csv", "txt"
+		);
+		addCapabilities(CSV_CAPABILITIES);
+	}
+
 	private final Class<? extends Number>[] types;
 	private final Map<Class<? extends Number>, Method> parseMethods;
 	private final Reader input;

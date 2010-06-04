@@ -47,7 +47,7 @@ public class TSVWriterTest {
 	public void testWriter() throws IOException {
 		OutputStream output = new ByteArrayOutputStream();
 
-		DataWriter tsv = DataWriterFactory.getInstance().get(DataWriter.TYPE_CSV);
+		DataWriter tsv = DataWriterFactory.getInstance().get("text/csv");
 		tsv.write(data, output);
 
 		assertEquals(

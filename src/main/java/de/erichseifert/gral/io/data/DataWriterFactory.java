@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.io.data;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -30,13 +31,16 @@ import de.erichseifert.gral.io.AbstractIOFactory;
 public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	private static DataWriterFactory instance;
 
-	private DataWriterFactory() {
+	private DataWriterFactory() throws IOException {
 		super("datawriters.properties");
 	}
 
 	public static DataWriterFactory getInstance() {
 		if (instance == null) {
-			instance = new DataWriterFactory();
+			try {
+				instance = new DataWriterFactory();
+			} catch (IOException e) {
+			}
 		}
 		return instance;
 	}

@@ -44,25 +44,24 @@ public class DataWriterTest {
 		data.add(4.0, 4.7, 4.5, 4.3);
 	}
 
-	public void save() {
+	public void save() throws IOException {
 		JFileChooser chooser = new JFileChooser();
 		int option = chooser.showSaveDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			try {
-				OutputStream output = new FileOutputStream(file);
-				DataWriter writer = DataWriterFactory.getInstance().get(DataWriter.TYPE_CSV);
-				writer.write(data, output);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			 OutputStream output = new FileOutputStream(file);
+			DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
+			writer.write(data, output);
 		}
 	}
 
 	public static void main(String[] args) {
 		DataWriterTest test = new DataWriterTest();
-		test.save();
+		try {
+			test.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

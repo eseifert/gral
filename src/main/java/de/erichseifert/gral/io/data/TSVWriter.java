@@ -27,19 +27,19 @@ import java.io.OutputStreamWriter;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.io.AbstractWriter;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
 
 
 /**
  * Class that writes a DataSource in a TSV-file.
  */
-public class TSVWriter extends AbstractWriter implements DataWriter {
+public class TSVWriter extends IOCapabilitiesStorage implements DataWriter {
 	static {
 		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
 			"CSV",
 			"Comma separated value",
-			TYPE_CSV,
+			"text/csv",
 			"csv", "txt"
 		);
 		addCapabilities(CSV_CAPABILITIES);

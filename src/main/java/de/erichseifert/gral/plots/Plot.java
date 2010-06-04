@@ -194,7 +194,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * Sets the axis with the specified name and the associated <code>AxisRenderer</code>.
 	 * @param name Name of the axis.
 	 * @param axis Axis.
-	 * @param drawable Instance to render the axis.
+	 * @param renderer Instance to render the axis.
 	 */
 	public void setAxis(String name, Axis axis, AxisRenderer renderer) {
 		if (axis == null || renderer == null) {

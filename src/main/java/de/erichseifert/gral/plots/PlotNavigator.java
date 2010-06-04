@@ -138,8 +138,7 @@ public class PlotNavigator {
 
 	/**
 	 * Returns the average zoom factor of all axes.
-	 * @param axis
-	 * @return
+	 * @return Average zoom factor of all axes.
 	 */
 	public double getZoom() {
 		double zoom = 0.0;
@@ -155,9 +154,8 @@ public class PlotNavigator {
 	}
 
 	/**
-	 * Sets the plot's zoom to the specified center and zooms it according to the specified values.
-	 * @param center Center of the zoom.
-	 * @param zoomNew Zoom level.
+	 * Sets the plot's zoom level to the specified value.
+	 * @param zoomNew New zoom level.
 	 */
 	public void setZoom(double zoomNew) {
 		if (zoomNew <= 0.0 || Double.isNaN(zoomNew) || Double.isInfinite(zoomNew)) {

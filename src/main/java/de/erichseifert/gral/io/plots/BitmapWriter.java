@@ -33,7 +33,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.io.AbstractWriter;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
 
 
@@ -48,7 +48,7 @@ import de.erichseifert.gral.io.IOCapabilities;
  *   <li>WBMP</li>
  * </ul>
  */
-public class BitmapWriter extends AbstractWriter implements DrawableWriter {
+public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWriter {
 	static {
 		IOCapabilities BMP_CAPABILITIES = new IOCapabilities(
 			"BMP",
