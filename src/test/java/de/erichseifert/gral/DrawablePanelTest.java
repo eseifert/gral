@@ -22,6 +22,8 @@
 package de.erichseifert.gral;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -45,6 +47,12 @@ public class DrawablePanelTest {
 	@Before
 	public void setUp() {
 		panel = new DrawablePanel(drawable);
+	}
+
+	@Test
+	public void testCreation() {
+		assertNotNull(panel);
+		assertSame(drawable, panel.getDrawable());
 	}
 
 	@Test

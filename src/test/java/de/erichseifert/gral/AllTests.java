@@ -36,6 +36,7 @@ import de.erichseifert.gral.util.UtilTests;
 	DataTests.class,
 	PlotsTests.class,
 	DrawablePanelTest.class,
+	InteractivePanelTest.class,
 	EdgeLayoutTest.class,
 	StackedLayoutTest.class,
 	IoTests.class

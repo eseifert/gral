@@ -51,8 +51,10 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 		Class<? extends DataReader> clazz = entries.get(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
-			Constructor<? extends DataReader> constructor = clazz.getDeclaredConstructor(String.class);
-			reader = constructor.newInstance(mimeType);
+			if (clazz != null) {
+				Constructor<? extends DataReader> constructor = clazz.getDeclaredConstructor(String.class);
+				reader = constructor.newInstance(mimeType);
+			}
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +76,7 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 		}
 
 		if (reader == null) {
-			throw new IllegalArgumentException("Unsupported MIME-Type: "+mimeType);
+			throw new IllegalArgumentException("Unsupported MIME type: "+mimeType);
 		}
 
 		return reader;

@@ -48,8 +48,6 @@ public class DataTableTest {
 
 	@Test
 	public void testAdd() {
-		DataTable table = new DataTable(Integer.class, Integer.class);
-		
 		// Wrong number of columns
 		try {
 			table.add(1);
@@ -62,6 +60,24 @@ public class DataTableTest {
 			table.add(1.0, 1.0);
 			fail("Expected IllegalArgumentException exception.");
 		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	@Test
+	public void testRemove() {
+		table.remove(0);
+
+		// Invalid (negative) index
+		try {
+			table.remove(-1);
+			fail("Expected IndexOutOfBoundsException exception.");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		// Invalid (positive) index
+		try {
+			table.remove(table.getRowCount());
+			fail("Expected IndexOutOfBoundsException exception.");
+		} catch (IndexOutOfBoundsException e) {
 		}
 	}
 

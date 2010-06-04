@@ -156,11 +156,8 @@
             <version>2.4</version>
             <configuration>
                 <instrumentation>
-                    <ignores>
-                        <ignore>de.erichseifert.gral.examples.*</ignore>
-                    </ignores>
                     <excludes>
-                        <exclude>de/erichseifert/gral/examples/**/*.class</exclude>
+                        <exclude>de/erichseifert/gral/examples/**/*</exclude>
                     </excludes>
                 </instrumentation>
                 <formats>

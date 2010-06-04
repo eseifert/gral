@@ -26,6 +26,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	DataReaderFactoryTest.class,
+	DataWriterFactoryTest.class,
 	TSVReaderTest.class,
 	TSVWriterTest.class
 })

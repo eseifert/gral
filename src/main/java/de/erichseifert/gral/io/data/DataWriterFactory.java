@@ -51,8 +51,10 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 		Class<? extends DataWriter> clazz = entries.get(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
-			Constructor<? extends DataWriter> constructor = clazz.getDeclaredConstructor(String.class);
-			writer = constructor.newInstance(mimeType);
+			if (clazz != null) {
+				Constructor<? extends DataWriter> constructor = clazz.getDeclaredConstructor(String.class);
+				writer = constructor.newInstance(mimeType);
+			}
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +76,7 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 		}
 
 		if (writer == null) {
-			throw new IllegalArgumentException("Unsupported MIME-Type: "+mimeType);
+			throw new IllegalArgumentException("Unsupported MIME type: "+mimeType);
 		}
 
 		return writer;

@@ -22,6 +22,8 @@
 package de.erichseifert.gral.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,6 +68,11 @@ public class DataSeriesTest {
 			assertEquals(rowTable.get(1), rowSeries.get(1));
 			assertEquals(2, rowSeries.size());
 		}
+
+		// Invalid (negative) index
+		assertNotNull(series.get(-1));
+		// Invalid (positive) index
+		assertNotNull(series.get(series.getRowCount()));
 	}
 
 	@Test
@@ -76,6 +83,11 @@ public class DataSeriesTest {
 			assertEquals(table.get(2, row), series.get(0, row));
 			assertEquals(table.get(1, row), series.get(1, row));
 		}
+
+		// Invalid (negative) index
+		assertNull(series.get(-1, -1));
+		// Invalid (positive) index
+		assertNull(series.get(series.getColumnCount(), series.getRowCount()));
 	}
 
 	@Test

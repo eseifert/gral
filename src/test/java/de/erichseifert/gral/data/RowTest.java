@@ -22,6 +22,9 @@
 package de.erichseifert.gral.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,6 +65,43 @@ public class RowTest {
 		Row row2 = new Row(null, 1);
 		assertEquals(null, row2.get(0));
 		assertEquals(null, row2.get(1));
+	}
+
+	@Test
+	public void testEquality() {
+		Row row1 = new Row(table, 1);
+		Row row2 = new Row(table, 1);
+		Row row3 = new Row(table, 2);
+
+		assertTrue(row1.equals(row2));
+
+		assertFalse(row1.equals(row3));
+		assertFalse(row1.equals(null));
+		assertFalse(row1.equals(new Object()));
+
+		// Different data source shouldn't matter
+		DataTable table1 = new DataTable(Integer.class, Integer.class);
+		table1.add(2, 3);
+		assertTrue(row1.equals(new Row(table1, 0)));
+
+		// Different column count should yield error
+		DataTable table2 = new DataTable(Integer.class, Integer.class, Integer.class);
+		table2.add(2, 3, 0);
+		assertFalse(row1.equals(new Row(table2, 0)));
+
+		// Different data types should yield error
+		DataTable table3 = new DataTable(Integer.class, Double.class);
+		table3.add(2, 3.0);
+		assertFalse(row1.equals(new Row(table3, 0)));
+	}
+
+	@Test
+	public void testToString() {
+		Row row1 = new Row(table, 1);
+		Row row2 = new Row(table, 1);
+		assertNotNull(row1.toString() != null);
+		assertFalse(row1.toString().isEmpty());
+		assertEquals(row1.toString(), row2.toString());
 	}
 
 }

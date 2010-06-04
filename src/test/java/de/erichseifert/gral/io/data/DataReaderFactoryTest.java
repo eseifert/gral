@@ -21,24 +21,30 @@
 
 package de.erichseifert.gral.io.data;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
-import de.erichseifert.gral.data.DataSource;
+import org.junit.Test;
 
+public class DataReaderFactoryTest {
+	@Test
+	public void testInstance() {
+		DataReaderFactory instance1 = DataReaderFactory.getInstance();
+		assertNotNull(instance1);
+		DataReaderFactory instance2 = DataReaderFactory.getInstance();
+		assertSame(instance1, instance2);
+	}
 
-/**
- * Interface that provides a function to retrieve a DataSource.
- */
-public interface DataReader {
-	/**
-	 * Returns a DataSource that was imported.
-	 * @param input Input to be read.
-	 * @param types Number types for the columns of the DataSource.
-	 * @return DataSource Imported data.
-	 * @throws IOException when experiencing an error during file operations.
-	 * @throws ParseException when the file format is not valid.
-	 */
-	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException;
+	@Test
+	public void testGet() {
+		DataReader r = DataReaderFactory.getInstance().get("text/csv");
+		assertNotNull(r);
+
+		try {
+			DataReaderFactory.getInstance().get("fail");
+			fail("Expected IllegalArgumentException exception.");
+		} catch (IllegalArgumentException e) {
+		}
+	}
 }

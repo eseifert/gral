@@ -144,9 +144,9 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
 			<example>
 				<title>Import example</title>
 				<programlisting language="java"><![CDATA[
-DataReader reader.read = DataReaderFactory.getInstance().get("text/csv");
-FileInputStream file = new FileInputStream("foobar.csv");
-DataSource data = reader.read(file);
+DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+InputStream file = new FileInputStream("foobar.csv");
+DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
 ]]></programlisting>
 			</example>
 		</sect2>
@@ -185,9 +185,9 @@ Plot plot = new XYPlot(series1, series2);
 				<example>
 					<title>Creating a scatter plot</title>
 					<programlisting language="java"><![CDATA[
-plot.setSetting(Plot.KEY_LEGEND, true);
-plot.setSetting(Plot.KEY_LEGEND_LOCATION, Location.SOUTH_WEST);
-plot.getLegend().setSetting(Legend.KEY_ORIENTATION, Orientation.HORIZONTAL);
+plot.setSetting(Plot.LEGEND, true);
+plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
+plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 ]]></programlisting>
 				</example>
 			</sect3>
@@ -223,12 +223,16 @@ Plot plot = new PiePlot(series);
 	</sect1>
 
 	<sect1>
-		<title>Customizing shapes</title>
+		<title>Customizing points</title>
 	</sect1>
 
 	<sect1>
 		<title>Customizing lines</title>
 	</sect1>
+
+    <sect1>
+        <title>Customizing areas</title>
+    </sect1>
 
 	<sect1>
 		<title>Exporting plot images</title>

@@ -24,9 +24,9 @@ package de.erichseifert.gral.io.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.text.ParseException;
 
 import org.junit.Test;
@@ -36,14 +36,14 @@ import de.erichseifert.gral.data.DataSource;
 public class TSVReaderTest {
 	@Test
 	public void testReader() throws IOException, ParseException {
-		Reader input = new StringReader(
+		InputStream input = new ByteArrayInputStream((
 			"0\t10.0\t20\n" +
 			"1\t11.0\t21\n" +
 			"2\t12.0\t22"
-		);
+		).getBytes());
 
-		TSVReader tsv = new TSVReader(input, Integer.class, Double.class, Double.class);
-		DataSource data = tsv.read();
+		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
+		DataSource data = tsv.read(input, Integer.class, Double.class, Double.class);
 
 		assertEquals( 0,   data.get(0, 0));
 		assertEquals( 1,   data.get(0, 1));
@@ -58,14 +58,14 @@ public class TSVReaderTest {
 
 	@Test
 	public void testIllegalNumberFormat() throws IOException {
-		Reader input = new StringReader(
+		InputStream input = new ByteArrayInputStream((
 			"0.0\t10.0\t20\n" +
 			"1\t11.0\t21\n" +
 			"2\t12.0\t22"
-		);
-		TSVReader tsv = new TSVReader(input, Integer.class, Double.class, Double.class);
+		).getBytes());
+		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
 		try {
-			tsv.read();
+			tsv.read(input, Integer.class, Double.class, Double.class);
 			fail("Expected ParseException");
 		} catch (ParseException e) {
 		}
@@ -73,14 +73,14 @@ public class TSVReaderTest {
 
 	@Test
 	public void testIllegalColumnCount() throws IOException, ParseException {
-		Reader input = new StringReader(
+		InputStream input = new ByteArrayInputStream((
 			"0\t10.0\t20\n" +
 			"1\t11.0\n" +
 			"2\t12.0\t22"
-		);
-		TSVReader tsv = new TSVReader(input, Integer.class, Double.class, Double.class);
+		).getBytes());
+		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
 		try {
-			tsv.read();
+			tsv.read(input, Integer.class, Double.class, Double.class);
 			fail("Expected IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 		}

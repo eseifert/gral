@@ -23,7 +23,8 @@ package de.erichseifert.gral.io.data;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -32,8 +33,8 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
 
 /**
@@ -50,19 +51,18 @@ public class TSVReader extends IOCapabilitiesStorage implements DataReader {
 		addCapabilities(CSV_CAPABILITIES);
 	}
 
-	private final Class<? extends Number>[] types;
-	private final Map<Class<? extends Number>, Method> parseMethods;
-	private final Reader input;
+	private final String mimeType;
 
 	/**
 	 * Creates a new TSVReader with the specified Reader and data classes.
-	 * @param input Input to be read.
-	 * @param types Number types for the columns of the DataSource.
 	 */
-	public TSVReader(Reader input, Class<? extends Number>... types) {
-		parseMethods = new HashMap<Class<? extends Number>, Method>();
-		this.input = input;
-		this.types = types;
+	public TSVReader(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	@Override
+	public DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException {
+		Map<Class<? extends Number>, Method> parseMethods = new HashMap<Class<? extends Number>, Method>();
 		for (Class<? extends Number> type : types) {
 			if (parseMethods.containsKey(type)) {
 				continue;
@@ -72,12 +72,9 @@ public class TSVReader extends IOCapabilitiesStorage implements DataReader {
 				parseMethods.put(type, parseMethod);
 			}
 		}
-	}
 
-	@Override
-	public DataSource read() throws IOException, ParseException {
 		DataTable data = new DataTable(types);
-		BufferedReader reader = new BufferedReader(input);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		String line = null;
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
 			String[] cols = line.split("\t");

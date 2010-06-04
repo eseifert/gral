@@ -29,7 +29,7 @@ import java.util.List;
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {
-	private DataSource data;
+	private final DataSource data;
 	private final List<Integer> cols;
 	private String name;
 
@@ -86,7 +86,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		try {
 			int dataCol = cols.get(col);
 			number = data.get(dataCol, row);
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			// TODO: handle exception
 		}
 		return number;

@@ -19,26 +19,33 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.io.data;
+package de.erichseifert.gral;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
-import de.erichseifert.gral.data.DataSource;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
+public class InteractivePanelTest {
+	private static Drawable drawable;
+	private InteractivePanel panel;
 
-/**
- * Interface that provides a function to retrieve a DataSource.
- */
-public interface DataReader {
-	/**
-	 * Returns a DataSource that was imported.
-	 * @param input Input to be read.
-	 * @param types Number types for the columns of the DataSource.
-	 * @return DataSource Imported data.
-	 * @throws IOException when experiencing an error during file operations.
-	 * @throws ParseException when the file format is not valid.
-	 */
-	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException;
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		drawable = new DrawableContainer();
+	}
+
+	@Before
+	public void setUp() {
+		panel = new InteractivePanel(drawable);
+	}
+
+	@Test
+	public void testCreation() {
+		assertNotNull(panel);
+		assertSame(drawable, panel.getDrawable());
+	}
+
 }
