@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.vectorgraphics2d.EPSGraphics2D;
 import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
 import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
@@ -43,29 +43,26 @@ import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
  */
 public class VectorWriter extends IOCapabilitiesStorage implements DrawableWriter {
 	static {
-		IOCapabilities EPS_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"EPS",
 			"Encapsulated PostScript",
 			TYPE_EPS,
 			"eps", "epsf", "epsi"
-		);
-		addCapabilities(EPS_CAPABILITIES);
+		));
 
-		IOCapabilities PDF_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"PDF",
 			"Portable Document Format",
 			TYPE_PDF,
 			"pdf"
-		);
-		addCapabilities(PDF_CAPABILITIES);
+		));
 
-		IOCapabilities SVG_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"SVG",
 			"Scalable Vector Graphics",
 			TYPE_SVG,
 			"svg", "svgz"
-		);
-		addCapabilities(SVG_CAPABILITIES);
+		));
 	}
 
 	private final String mimeType;

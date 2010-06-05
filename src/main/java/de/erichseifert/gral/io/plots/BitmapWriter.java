@@ -33,8 +33,8 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
 
 /**
@@ -50,48 +50,43 @@ import de.erichseifert.gral.io.IOCapabilities;
  */
 public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWriter {
 	static {
-		IOCapabilities BMP_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"BMP",
 			"Windows Bitmap",
 			TYPE_BMP,
 			"bmp", "dib"
-		);
-		addCapabilities(BMP_CAPABILITIES);
+		));
 
-		IOCapabilities GIF_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
 			TYPE_GIF,
 			"gif"
-		);
-		addCapabilities(GIF_CAPABILITIES);
+		));
 
-		IOCapabilities JPG_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
 			TYPE_JPEG,
 			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
-		);
-		addCapabilities(JPG_CAPABILITIES);
+		));
 
-		IOCapabilities PNG_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
 			TYPE_PNG,
 			"png"
-		);
-		addCapabilities(PNG_CAPABILITIES);
+		));
 
-		IOCapabilities WBMP_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
 			TYPE_WBMP,
 			"wbmp"
-		);
-		addCapabilities(WBMP_CAPABILITIES);
+		));
 	}
 
-	private String mimeType;
+	private final String mimeType;
 
 	/**
 	 * Creates a new <code>BitmapWriter</code> object with the specified MIME-Type.

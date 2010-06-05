@@ -41,13 +41,19 @@ import de.erichseifert.gral.util.Settings.Key;
  */
 public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
 	static {
-		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
+		addCapabilities(new IOCapabilities(
 			"CSV",
-			"Comma separated value",
+			"Comma separated values",
 			"text/csv",
 			"csv", "txt"
-		);
-		addCapabilities(CSV_CAPABILITIES);
+		));
+
+		addCapabilities(new IOCapabilities(
+			"TSV",
+			"Tab separated values",
+			"text/tab-separated-values",
+			"tsv", "txt"
+		));
 	}
 
 	/** Settings key that identifies the string used for separating columns. */
