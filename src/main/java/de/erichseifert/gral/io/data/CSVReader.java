@@ -35,12 +35,15 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that reads a DataSource from a TSV-file.
+ * Class that reads a DataSource from a CSV-file. By default the semicolon
+ * character will be used for separating columns.
+ * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
-public class TSVReader extends IOCapabilitiesStorage implements DataReader {
+public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 	static {
 		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
 			"CSV",
@@ -51,12 +54,20 @@ public class TSVReader extends IOCapabilitiesStorage implements DataReader {
 		addCapabilities(CSV_CAPABILITIES);
 	}
 
+	/** Settings key that identifies the regular expression string used for separating columns. */
+	public static final Key SEPARATOR = new Key("separator");
+
+	private final Map<String, Object> settings;
+	private final Map<String, Object> defaults;
 	private final String mimeType;
 
 	/**
-	 * Creates a new TSVReader with the specified Reader and data classes.
+	 * Creates a new CSVReader with the specified MIME type.
 	 */
-	public TSVReader(String mimeType) {
+	public CSVReader(String mimeType) {
+		settings = new HashMap<String, Object>();
+		defaults = new HashMap<String, Object>();
+		defaults.put("separator", ";");
 		this.mimeType = mimeType;
 	}
 
@@ -73,11 +84,12 @@ public class TSVReader extends IOCapabilitiesStorage implements DataReader {
 			}
 		}
 
+		String separatorPattern = getSetting("separator");
 		DataTable data = new DataTable(types);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		String line = null;
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
-			String[] cols = line.split("\t");
+			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
 				throw new IllegalArgumentException("Column count in file doesn't match; got "+cols.length+", but expected "+types.length+".");
 			}
@@ -123,4 +135,26 @@ public class TSVReader extends IOCapabilitiesStorage implements DataReader {
 		}
 		return parse;
 	}
+
+	/**
+	 * Returns the MIME type.
+	 * @return MIME type string.
+	 */
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	@Override
+	public <T> T getSetting(String key) {
+		if (!settings.containsKey(key)) {
+			return (T) defaults.get(key);
+		}
+		return (T) settings.get(key);
+	}
+
+	@Override
+	public <T> void setSetting(String key, T value) {
+		settings.put(key, value);
+	}
+
 }

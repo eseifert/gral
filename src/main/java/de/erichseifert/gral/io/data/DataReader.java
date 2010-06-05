@@ -41,4 +41,21 @@ public interface DataReader {
 	 * @throws ParseException when the file format is not valid.
 	 */
 	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException;
+
+	/**
+	 * Returns the setting for the specified key.
+	 * @param <T> return type
+	 * @param key key of the setting
+	 * @return the value of the setting
+	 */
+	<T> T getSetting(String key);
+
+	/**
+	 * Sets the setting for the specified key.
+	 * @param <T> value type
+	 * @param key key of the setting
+	 * @param value value of the setting
+	 */
+	<T> void setSetting(String key, T value);
+
 }

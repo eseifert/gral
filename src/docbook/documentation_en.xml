@@ -281,8 +281,15 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
     <sect1>
         <title>Exchanging data</title>
 
+        <para>GRAL allows you to interchange data values through its extensible
+        plug-in system. Arbitrary sources and sinks can be accessed, like plain
+        files, databases, or even web services. The current version of GRAL
+        already supports file formats like CSV file</para>
+
         <sect2>
             <title>Importing</title>
+
+            <para>Loading data</para>
 
             <example>
                 <title>Import example</title>
@@ -296,6 +303,8 @@ DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
 
         <sect2>
             <title>Exporting</title>
+
+            <para>Saving data</para>
 
             <example>
                 <title>Export example</title>
@@ -312,11 +321,17 @@ writer.write(table, file);
 <chapter>
     <title>Displaying data</title>
 
+    <para>This is the main purpose of GRAL.</para>
+
     <sect1>
         <title>Plot types</title>
 
+        <para>Various plot types: xy-plot, line plot, area plot, bar plot, and pie or doughnut plot.</para>
+
         <sect2>
             <title>XY-Plot</title>
+
+            <para>Most common plot type: scatterplot, bubble plot, line plot, area plot.</para>
 
             <example>
                 <title>Creating an xy-plot</title>
@@ -327,6 +342,9 @@ Plot plot = new XYPlot(series1, series2);
 
             <sect3>
                 <title>Legends</title>
+
+                <para>Explains symbols used in plot by example.
+                Multiple options for orientation and positioning.</para>
 
                 <example>
                     <title>Creating a scatter plot</title>
@@ -342,6 +360,8 @@ plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
         <sect2>
             <title>Bar plot</title>
 
+            <para>In fact specialization of xy-plot.</para>
+
             <example>
                 <title>Creating a bar plot</title>
                 <programlisting language="java"><![CDATA[
@@ -352,6 +372,9 @@ Plot plot = new BarPlot(series);
 
         <sect2>
             <title>Pie plot</title>
+
+            <para>Circle divided into sectors, which illustrate the proportions
+            of data values.</para>
 
             <example>
                 <title>Creating a pie plot</title>
@@ -364,50 +387,92 @@ Plot plot = new PiePlot(series);
 
     <sect1>
         <title>Customizing the plot</title>
+
+        <para>PlotArea, stroke types, colors, gradients, ...</para>
+
+        <para>Legend, positioning, orientation, spacing, background gradients, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing axes</title>
+
+        <para>AxisRenderer, linear/logarithmic scale, stroke types, colors, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing points</title>
+
+        <para>PointRenderer, shape, color, size, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing lines</title>
+
+        <para>LineRenderer, stroke types, colors, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing areas</title>
+
+        <para>AreaRenderer, colors, fillings, ...</para>
     </sect1>
 
     <sect1>
         <title>Exporting plot images</title>
+
+        <para>Usage similar to data import/export. Bitmap (PNG, JPEG, BMP, GIF)
+        and vector formats (SVG, PDF, EPS)</para>
+
+        <example>
+            <title>Exporting an xy-plot as a SVG vector image</title>
+            <programlisting language="java"><![CDATA[
+XYPlot plot = new XYPlot(data);
+DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/svg+xml");
+FileOutputStream file = new FileOutputStream("xy-plot.svg");
+double width = 320.0;
+double height = 240.0;
+writer.write(plot, file, width, height);
+]]></programlisting>
+        </example>
     </sect1>
 </chapter>
 
 <chapter>
-    <title>Expanding GRAL</title>
+    <title>Extending GRAL</title>
+
+    <para>GRAL can be extended in numerous ways to better suit your needs.
+    For example, you can write your own plot types, line types, axes, or data
+    exchange plugins. The following chapter shows you how to use GRAL's
+    application programming interface to tailor it for your requirements.</para>
 
     <sect1>
         <title>Writing a new plot type</title>
+
+        <para>Plot class, DataListener interface.</para>
     </sect1>
 
     <sect1>
         <title>Writing a data importer</title>
+
+        <para>DataReaderFactory and DataReader.</para>
     </sect1>
 
     <sect1>
         <title>Writing a data exporter</title>
+
+        <para>DataWriterFactory and DataWriter.</para>
     </sect1>
 
     <sect1>
         <title>Writing a plot exporter</title>
+
+        <para>DrawableWriterFactory and DrawableWriter (BitmapWriter, VectorWriter).</para>
     </sect1>
 </chapter>
 
 <chapter>
    <title>Limitations</title>
+
+    <para>Early stage of development: not very fast for large datasets and most possibly bugs.</para>
 </chapter>
 </book>

@@ -33,17 +33,40 @@ import org.junit.Test;
 
 import de.erichseifert.gral.data.DataSource;
 
-public class TSVReaderTest {
+public class CSVReaderTest {
 	@Test
 	public void testReader() throws IOException, ParseException {
 		InputStream input = new ByteArrayInputStream((
-			"0\t10.0\t20\n" +
-			"1\t11.0\t21\n" +
+			"0;10.0;20\r\n" +
+			"1;11.0;21\r\n" +
+			"2;12.0;22"
+		).getBytes());
+
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
+
+		assertEquals( 0,   data.get(0, 0));
+		assertEquals( 1,   data.get(0, 1));
+		assertEquals( 2,   data.get(0, 2));
+		assertEquals(10.0, data.get(1, 0));
+		assertEquals(11.0, data.get(1, 1));
+		assertEquals(12.0, data.get(1, 2));
+		assertEquals(20.0, data.get(2, 0));
+		assertEquals(21.0, data.get(2, 1));
+		assertEquals(22.0, data.get(2, 2));
+	}
+
+	@Test
+	public void testSeparator() throws IOException, ParseException {
+		InputStream input = new ByteArrayInputStream((
+			"0\t10.0\t20\r\n" +
+			"1\t11.0\t21\r\n" +
 			"2\t12.0\t22"
 		).getBytes());
 
-		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
-		DataSource data = tsv.read(input, Integer.class, Double.class, Double.class);
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		reader.setSetting("separator", "\t");
+		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
 
 		assertEquals( 0,   data.get(0, 0));
 		assertEquals( 1,   data.get(0, 1));
@@ -59,13 +82,13 @@ public class TSVReaderTest {
 	@Test
 	public void testIllegalNumberFormat() throws IOException {
 		InputStream input = new ByteArrayInputStream((
-			"0.0\t10.0\t20\n" +
-			"1\t11.0\t21\n" +
-			"2\t12.0\t22"
+			"0.0;10.0;20\r\n" +
+			"1;11.0;21\r\n" +
+			"2;12.0;22"
 		).getBytes());
-		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 		try {
-			tsv.read(input, Integer.class, Double.class, Double.class);
+			reader.read(input, Integer.class, Double.class, Double.class);
 			fail("Expected ParseException");
 		} catch (ParseException e) {
 		}
@@ -74,15 +97,16 @@ public class TSVReaderTest {
 	@Test
 	public void testIllegalColumnCount() throws IOException, ParseException {
 		InputStream input = new ByteArrayInputStream((
-			"0\t10.0\t20\n" +
-			"1\t11.0\n" +
-			"2\t12.0\t22"
+			"0;10.0;20\r\n" +
+			"1;11.0\r\n" +
+			"2;12.0;22"
 		).getBytes());
-		DataReader tsv = DataReaderFactory.getInstance().get("text/csv");
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 		try {
-			tsv.read(input, Integer.class, Double.class, Double.class);
+			reader.read(input, Integer.class, Double.class, Double.class);
 			fail("Expected IllegalArgumentException");
 		} catch (IllegalArgumentException e) {
 		}
 	}
+
 }

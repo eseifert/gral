@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
 
-public class TSVWriterTest {
+public class CSVWriterTest {
 	private static DataTable data;
 
 	@BeforeClass
@@ -47,13 +47,29 @@ public class TSVWriterTest {
 	public void testWriter() throws IOException {
 		OutputStream output = new ByteArrayOutputStream();
 
-		DataWriter tsv = DataWriterFactory.getInstance().get("text/csv");
-		tsv.write(data, output);
+		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
+		writer.write(data, output);
 
 		assertEquals(
-			"0.0\t10.0\t20\n" +
-			"1.0\t11.0\t21\n" +
-			"2.0\t12.0\t22\n",
+			"0.0;10.0;20\r\n" +
+			"1.0;11.0;21\r\n" +
+			"2.0;12.0;22\r\n",
+			output.toString()
+		);
+	}
+
+	@Test
+	public void testSeparator() throws IOException {
+		OutputStream output = new ByteArrayOutputStream();
+
+		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
+		writer.setSetting("separator", "\t");
+		writer.write(data, output);
+
+		assertEquals(
+			"0.0\t10.0\t20\r\n" +
+			"1.0\t11.0\t21\r\n" +
+			"2.0\t12.0\t22\r\n",
 			output.toString()
 		);
 	}

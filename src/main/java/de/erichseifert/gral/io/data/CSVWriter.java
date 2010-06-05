@@ -24,17 +24,22 @@ package de.erichseifert.gral.io.data;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.io.IOCapabilitiesStorage;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that writes a DataSource in a TSV-file.
+ * Class that writes a DataSource to a CSV file. By default the semicolon
+ * character will be used for separating columns.
+ * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
-public class TSVWriter extends IOCapabilitiesStorage implements DataWriter {
+public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
 	static {
 		IOCapabilities CSV_CAPABILITIES = new IOCapabilities(
 			"CSV",
@@ -45,35 +50,61 @@ public class TSVWriter extends IOCapabilitiesStorage implements DataWriter {
 		addCapabilities(CSV_CAPABILITIES);
 	}
 
+	/** Settings key that identifies the string used for separating columns. */
+	public static final Key SEPARATOR = new Key("separator");
+
+	private final Map<String, Object> settings;
+	private final Map<String, Object> defaults;
 	private final String mimeType;
 
 	/**
-	 * Creates a new TSVWrites object with the specified MIME-Type.
+	 * Creates a new CSVWriter object with the specified MIME-Type.
 	 * @param mimeType MIME-Type of the output file.
 	 */
-	public TSVWriter(String mimeType) {
+	public CSVWriter(String mimeType) {
+		settings = new HashMap<String, Object>();
+		defaults = new HashMap<String, Object>();
+		defaults.put("separator", ";");
 		this.mimeType = mimeType;
 	}
 
 	@Override
 	public void write(DataSource data, OutputStream output) throws IOException {
+		String separator = getSetting("separator");
 		OutputStreamWriter writer = new OutputStreamWriter(output);
 		for (Row row : data) {
 			for (int col = 0; col < row.size(); col++) {
 				if (col > 0) {
-					writer.write("\t");
+					writer.write(separator);
 				}
 				writer.write(String.valueOf(row.get(col)));
 			}
 			// FIXME: Only works on *NIX systems
-			writer.write("\n");
+			writer.write("\r\n");
 		}
 
 		writer.close();
 	}
 
+	/**
+	 * Returns the MIME type.
+	 * @return MIME type string.
+	 */
 	public String getMimeType() {
 		return mimeType;
+	}
+
+	@Override
+	public <T> T getSetting(String key) {
+		if (!settings.containsKey(key)) {
+			return (T) defaults.get(key);
+		}
+		return (T) settings.get(key);
+	}
+
+	@Override
+	public <T> void setSetting(String key, T value) {
+		settings.put(key, value);
 	}
 
 }

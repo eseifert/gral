@@ -28,8 +28,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	DataReaderFactoryTest.class,
 	DataWriterFactoryTest.class,
-	TSVReaderTest.class,
-	TSVWriterTest.class
+	CSVReaderTest.class,
+	CSVWriterTest.class
 })
 public class DataTests {
 }
