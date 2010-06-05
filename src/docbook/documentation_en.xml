@@ -5,8 +5,9 @@
 <book xmlns="http://docbook.org/ns/docbook">
 <info>
     <title>GRAL Documentation</title>
+    <author><firstname>Erich</firstname><surname>Seifert</surname></author>
     <author><firstname>Michael</firstname><surname>Seifert</surname></author>
-    <copyright><year>2010</year><holder>Michael Seifert</holder></copyright>
+    <copyright><year>2010</year><holder>Erich Seifert</holder><holder>Michael Seifert</holder></copyright>
 </info>
 
 <chapter>
@@ -14,26 +15,31 @@
 
     <para>The first step, before we are able to plot anything, is to load or
     create data, a process which GRAL provides several ways for. The basic
-    interface that will be used when you have to provide data is DataSource.
-    Think of it as a table with a (theoretically) arbitrary number of rows and
-    columns. Every column has its own data type, but only Number values are
-    allowed. The functions a DataSource provides are solely for retrieving data
-    rows, but it also supports statistics on the contained data, as well as the
-    capability to listen for data changes. The following sections describe the
-    different ways for providing and manipulating data.</para>
+    interface that will be used when you have to provide data is
+    <interfacename>DataSource</interfacename>. Think of it as a table with a
+    (theoretically) arbitrary number of rows and columns. Every column has its
+    own data type, but only<classname>Number</classname> values are allowed.
+    The functions a <interfacename>DataSource</interfacename> provides are
+    solely for retrieving data rows, but it also supports statistics on the
+    contained data, as well as the capability to listen for data changes. The
+    following sections describe the different ways for providing and
+    manipulating data.</para>
 
     <sect1>
         <title>Creating data</title>
 
         <para>Assuming you have computed some values you want to plot, how can
-        you store your data in a DataSource? You can do so through the class
-        DataTable. DataTable is an implementation of DataSource (or
-        AbstractDataSource to be more precise) and supports adding rows.
-        The values must match the number of columns and their types, which both
-        had already been specified in the constructor.</para>
+        you store your data in a <interfacename>DataSource</interfacename>? You
+        can do so through the class <classname>DataTable</classname>.
+        <classname>DataTable</classname> is an implementation of
+        <interfacename>DataSource</interfacename> (or
+        <classname>AbstractDataSource</classname> to be more precise) and
+        supports operations like adding and removing rows.
+        The values you must match the number of columns and their types, which
+        both had already been specified in the constructor.</para>
 
         <example>
-            <title>Populating a DataTable</title>
+            <title>Populating a <classname>DataTable</classname></title>
             <programlisting language="java"><![CDATA[
 // Create the table with the specified column types
 DataTable table = new DataTable(Double.class, Double.class);
@@ -47,12 +53,14 @@ for (Double[] coords : data) {
 ]]></programlisting>
         </example>
 
-        <para>You might want to have a DataTable for testing purposes only and
-        do not want to create random values for it at each start. In this case,
-        the DummyData class is your remedy. DummyData is a DataSource filled
-        with a single value. As I already mentioned, this is not used very
-        often, but suited very well for testing due to its efficiency,
-        especially when dealing with large tables.</para>
+        <para>You might want to have a <classname>DataTable</classname> for
+        testing purposes only and do not want to create random values for it at
+        each start. In this case, the class <classname>DummyData</classname> is
+        your remedy. <classname>DummyData</classname> is a
+        <interfacename>DataSource</interfacename> filled with a single value.
+        As I already mentioned, this is not used very often, but suited very
+        well for testing due to its efficiency, especially when dealing with
+        large tables.</para>
 
         <example>
             <title>Generating dummy data</title>
@@ -69,10 +77,11 @@ DummyData data = new DummyData(3, 100, 42.0);
         criteria in GRAL can be handled very flexible: for example the rows of
         a data source could be rearranged so that the first column is sorted
         ascending and as a second criterion the second column is sorted
-        descending when values of the first column are equal.
-        GRAL uses two classes to define the sorting options: Ascending and
-        Descending. In order to create them the index of the column to be
-        sorted is required as a parameter for the constructor.</para>
+        descending when values of the first column are equal. GRAL uses two
+        classes to define the sorting options: <classname>Ascending</classname>
+        and <classname>Descending</classname>. In order to create one of them
+        you must pass the index of the column that should be sorted to the
+        constructor.</para>
 
         <example>
             <title>Sorting</title>
@@ -88,28 +97,30 @@ table.sort(new Ascending(1), new Descending(0), new Ascending(2));
     <sect1>
         <title>Filtering data</title>
 
-        <para>DataTables are not only the only data source for plots. A plot
-        also accepts filtered data. In GRAL data can be filtered either by
-        columns or by rows.</para>
+        <para><classname>DataTable</classname>s are not only the only data
+        source for plots. A plot also accepts filtered data. In GRAL data can
+        be filtered either by columns or by rows.</para>
 
         <sect2>
             <title>Filtering columns</title>
 
             <para>The main tasks for filtering by columns are to create subsets
             (series) of columns and to reorder columns for certain plot types.
-            Using the class DataSeries a data source with four columns
-            (A, B, C, D) could be divided into two series: one containing
-            columns (A, B) and one contaning columns (C, D). The series could
-            also overlap, for example the first series could contain the
-            columns (A, B) and the second the columns (B, C). Futhermore, data
-            series can be used to reorder columns. It is possible to map
-            columns (A, B, C, D) to (D, B, C, A) or just (D, C)</para>
+            Using the class <classname>DataSeries</classname> a data source with
+            four columns (A, B, C, D) could be divided into two series: one
+            containing columns (A, B) and one containing columns (C, D). The
+            series could also overlap, for example the first series could
+            contain the columns (A, B) and the second the columns (B, C).
+            Furthermore, data series can be used to reorder columns. It is
+            possible to map columns (A, B, C, D) to (D, B, C, A) or just (D, C)
+            </para>
 
-            <para>A DataSeries is created by passing in at least two
-            parameters: the original data source and a numer of columns,
-            which will appear in the order they are passed. Optionally there
-            a name can be passed as first argument. In plots this name is used
-            for exmaple to display captions in the plot legend.</para>
+            <para>A <classname>DataSeries</classname> is created using at least
+            two parameters: the original data source and a number of columns,
+            which will appear in the order they are passed. Optionally a name
+            can be passed as first argument. In <classname>Plot</classname>s
+            this name is used for example to display captions in the plot
+            legend.</para>
 
             <example>
                 <title>Creation of data series</title>
@@ -132,9 +143,12 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
             extracted. For example, this could be used to form clusters
             which could then be plotted or processed separately.</para>
 
-            <para>In order to use the DataSubset a new class has to be created
-            which implements the method accept(Number[] row). This method
-            decides whether a certain row should be kept in the subset.</para>
+            <para>In order to use the <classname>DataSubset</classname> a new
+            class has to be created which implements the method
+            <methodsynopsis language="java"><methodname>accept</methodname>
+            <methodparam><type>Row</type><parameter>row</parameter></methodparam>
+            </methodsynopsis>. This method is used to decide whether a certain
+            row should be kept in the subset.</para>
 
             <example>
                 <title>Filtering rows with DataSubset</title>
@@ -154,7 +168,7 @@ DataSubset data = new DataSubset(table) {
     <sect1>
         <title>Processing data</title>
 
-        <para>An integral part of GRAL's pipline is preprocessing of data.
+        <para>An integral part of GRAL's pipeline is preprocessing of data.
         The simplest case would be to extract several statistics per column
         such as minimum, maximum, arithmetic mean, or median. But GRAL also
         covers more complex cases such as generating histograms or convolution
@@ -164,9 +178,13 @@ DataSubset data = new DataSubset(table) {
         <sect2>
             <title>Statistics</title>
             <para>The most basic statistical functionality of GRAL is to query
-            various aggregated measures for columns using the class Statistics.
-            It is part of every DataSource and can be accessed with the method
-            getStatistics(column).</para>
+            various aggregated measures for columns using the class
+            <classname>Statistics</classname>. It is part of every
+            <interfacename>DataSource</interfacename> instance and can be easily
+            accessed with the method <methodsynopsis language="java">
+            <methodname>getStatistics</methodname>
+            <methodparam><type>int</type><parameter>column</parameter></methodparam>
+            </methodsynopsis>.</para>
 
             <example>
                 <title>Getting the maximum of a column</title>
@@ -178,7 +196,7 @@ stats.get(Statistics.MAX, 1);
             </example>
 
             <variablelist>
-                <title>statistical measures provided by Statistics class</title>
+                <title>Statistical measures provided by <classname>Statistics</classname></title>
                 <varlistentry>
                     <term><constant>N</constant></term>
                     <listitem><para>The number of values in the column.</para></listitem>
@@ -222,12 +240,13 @@ stats.get(Statistics.MAX, 1);
             </variablelist>
 
             <para>Histograms are a more complex way for aggregating data. In a
-            histogram all values are assigned to specified categories. In GRAL
-            those categories are defined as value ranges. For example all
-            values from 0 to 5 would be in category A and all values from 5 to
-            10 in category B. Then, the histogram would generate two rows for
-            each column that contain the number of values in category A and B,
-            respectively.</para>
+            histogram all values are assigned to specified categories. In
+            GRAL's <classname>Histogram</classname> class categories are
+            defined as value ranges. For example all values from 0 to 5 would
+            be in category A and all values from 5 to 10 in category B.
+            Then, the histogram would generate two rows for each column that
+            contain the number of values in category A and B, respectively.
+            </para>
 
             <example>
                 <title>Generate an equally spaced histogram</title>
@@ -262,17 +281,41 @@ Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
             filter), deriving (high-pass filter), sharpening, moving average,
             and much more.</para>
 
-            <para>Besides the class DataSource GRAL provides two additional
-            classes for convolution: the class Kernel defines the kernel
-            function and the class Convolution prcoesses the data source.</para>
+            <para>Besides the class <interfacename>DataSource</interfacename> GRAL
+            provides two additional classes for convolution: the class
+            <classname>Kernel</classname> defines the kernel function and the
+            class <classname>Convolution</classname> is responsible for
+            processing the data source.</para>
 
             <example>
-                <title>Moving average</title>
+                <title>A moving average filter</title>
                 <programlisting language="java"><![CDATA[
-// Create moving average of width 3
-Kernel kernel = new Kernel(1.0, 1.0, 1.0);
-// Filter columns 0 and 1
+// Create a moving average of width 3
+Kernel kernel = new Kernel(1.0, 1.0, 1.0).normalize();
+// Filter columns 0 and 1 and omit boundary values if necessary
 Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
+]]></programlisting>
+            </example>
+
+            <example>
+                <title>A smoothing (low-pass) filter</title>
+                <programlisting language="java"><![CDATA[
+// Create a smoothing kernel with a variance of 2
+Kernel kernel = KernelUtils.getBinomial(2.0).normalize();
+// Filter column 1 and repeat boundary values if necessary
+Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
+]]></programlisting>
+            </example>
+
+            <example>
+                <title>A deriving (high-pass) filter</title>
+                <programlisting language="java"><![CDATA[
+// Create a smoothing kernel with a variance of 3
+Kernel kernel = KernelUtils.getBinomial(3.0).normalize()
+// Subtract the original values
+kernel = kernel.negate().add(new Kernel(1.0));
+// Filter column 1 and repeat boundary values if necessary
+Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
 ]]></programlisting>
             </example>
         </sect2>
@@ -284,12 +327,23 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
         <para>GRAL allows you to interchange data values through its extensible
         plug-in system. Arbitrary sources and sinks can be accessed, like plain
         files, databases, or even web services. The current version of GRAL
-        already supports file formats like CSV file</para>
+        already supports file formats like simple <acronym>CSV</acronym> files
+        (<emphasis>Comma-Separated Values</emphasis>).</para>
 
         <sect2>
             <title>Importing</title>
 
-            <para>Loading data</para>
+            <para>Loading data from a source in GRAL needs two steps: First,
+            you have to get a <interfacename>DataReader</interfacename> the
+            desired file format via its <acronym>MIME</acronym> type from an
+            instance of <classname>DataReaderFactory</classname>. Then, you
+            have to call the method <methodsynopsis language="java">
+            <methodname>read</methodname></methodsynopsis> of the reader with
+            two (or more) parameters: an <classname>InputStream</classname>
+            instance to read from and the column data types. The method
+            finally reads the data and returns a new
+            <interfacename>DataSource</interfacename> containing all values
+            that have been extracted from the source.</para>
 
             <example>
                 <title>Import example</title>
@@ -304,7 +358,14 @@ DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
         <sect2>
             <title>Exporting</title>
 
-            <para>Saving data</para>
+            <para>Saving data in GRAL is even easier than loading. First, you
+            need to get an instance of <classname>DataWriterFactory</classname>
+            and then you fetch a <interfacename>DataWriter</interfacename> for
+            the desired file format via its <acronym>MIME</acronym> type. Then,
+            you have to call the <methodsynopsis language="java">
+            <methodname>write</methodname></methodsynopsis> method with two
+            parameters: the <interfacename>DataSource</interfacename> and an
+            <classname>OutputStream</classname> instance to write to.</para>
 
             <example>
                 <title>Export example</title>
@@ -331,7 +392,8 @@ writer.write(table, file);
         <sect2>
             <title>XY-Plot</title>
 
-            <para>Most common plot type: scatterplot, bubble plot, line plot, area plot.</para>
+            <para><classname>XYPlot</classname>:
+            Most common plot type: scatterplot, bubble plot, line plot, area plot.</para>
 
             <example>
                 <title>Creating an xy-plot</title>
@@ -343,7 +405,7 @@ Plot plot = new XYPlot(series1, series2);
             <sect3>
                 <title>Legends</title>
 
-                <para>Explains symbols used in plot by example.
+                <para><classname>Legend</classname>: Explains symbols used in plot by example.
                 Multiple options for orientation and positioning.</para>
 
                 <example>
@@ -360,7 +422,7 @@ plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
         <sect2>
             <title>Bar plot</title>
 
-            <para>In fact specialization of xy-plot.</para>
+            <para><classname>BarPlot</classname> (in fact specialization of xy-plot)</para>
 
             <example>
                 <title>Creating a bar plot</title>
@@ -373,8 +435,8 @@ Plot plot = new BarPlot(series);
         <sect2>
             <title>Pie plot</title>
 
-            <para>Circle divided into sectors, which illustrate the proportions
-            of data values.</para>
+            <para><classname>PiePlot</classname>: Circle divided into sectors,
+            which illustrate the proportions of data values.</para>
 
             <example>
                 <title>Creating a pie plot</title>
@@ -388,49 +450,51 @@ Plot plot = new PiePlot(series);
     <sect1>
         <title>Customizing the plot</title>
 
-        <para>PlotArea, stroke types, colors, gradients, ...</para>
+        <para><classname>PlotArea2D</classname>, stroke types, colors, gradients, ...</para>
 
-        <para>Legend, positioning, orientation, spacing, background gradients, ...</para>
+        <para><classname>Legend</classname>, positioning, orientation, spacing, background gradients, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing axes</title>
 
-        <para>AxisRenderer, linear/logarithmic scale, stroke types, colors, ...</para>
+        <para><classname>AxisRenderer</classname>, linear/logarithmic scale, stroke types, colors, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing points</title>
 
-        <para>PointRenderer, shape, color, size, ...</para>
+        <para><classname>PointRenderer</classname>, shape, color, size, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing lines</title>
 
-        <para>LineRenderer, stroke types, colors, ...</para>
+        <para><classname>LineRenderer2D</classname>, stroke types, colors, ...</para>
     </sect1>
 
     <sect1>
         <title>Customizing areas</title>
 
-        <para>AreaRenderer, colors, fillings, ...</para>
+        <para><classname>AreaRenderer2D</classname>, colors, fillings, ...</para>
     </sect1>
 
     <sect1>
         <title>Exporting plot images</title>
 
-        <para>Usage similar to data import/export. Bitmap (PNG, JPEG, BMP, GIF)
-        and vector formats (SVG, PDF, EPS)</para>
+        <para>Usage similar to data import/export. Bitmap formats like
+        <acronym>PNG</acronym>, <acronym>JPEG</acronym>, <acronym>BMP</acronym>,
+        or <acronym>GIF</acronym> and vector formats like
+        <acronym>SVG</acronym>, <acronym>PDF</acronym>, <acronym>EPS</acronym>.
+        </para>
 
         <example>
-            <title>Exporting an xy-plot as a SVG vector image</title>
+            <title>Exporting an xy-plot as a <acronym>SVG</acronym> vector image</title>
             <programlisting language="java"><![CDATA[
 XYPlot plot = new XYPlot(data);
 DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/svg+xml");
-FileOutputStream file = new FileOutputStream("xy-plot.svg");
-double width = 320.0;
-double height = 240.0;
+FileOutputStream file = new FileOutputStream("xyplot.svg");
+double width = 320.0, height = 240.0;
 writer.write(plot, file, width, height);
 ]]></programlisting>
         </example>
@@ -442,37 +506,47 @@ writer.write(plot, file, width, height);
 
     <para>GRAL can be extended in numerous ways to better suit your needs.
     For example, you can write your own plot types, line types, axes, or data
-    exchange plugins. The following chapter shows you how to use GRAL's
+    exchange plug-ins. The following chapter shows you how to use GRAL's
     application programming interface to tailor it for your requirements.</para>
 
     <sect1>
         <title>Writing a new plot type</title>
 
-        <para>Plot class, DataListener interface.</para>
+        <para><classname>Plot</classname> class, <interfacename>DataListener</interfacename> interface.</para>
     </sect1>
 
     <sect1>
         <title>Writing a data importer</title>
 
-        <para>DataReaderFactory and DataReader.</para>
+        <para><classname>DataReaderFactory</classname> and <interfacename>DataReader</interfacename>.</para>
     </sect1>
 
     <sect1>
         <title>Writing a data exporter</title>
 
-        <para>DataWriterFactory and DataWriter.</para>
+        <para><classname>DataWriterFactory</classname> and <interfacename>DataWriter</interfacename>.</para>
     </sect1>
 
     <sect1>
         <title>Writing a plot exporter</title>
 
-        <para>DrawableWriterFactory and DrawableWriter (BitmapWriter, VectorWriter).</para>
+        <para><classname>DrawableWriterFactory</classname> and <interfacename>DrawableWriter</interfacename>
+        (<classname>BitmapWriter</classname>, <classname>VectorWriter</classname>).</para>
     </sect1>
 </chapter>
 
 <chapter>
    <title>Limitations</title>
 
-    <para>Early stage of development: not very fast for large datasets and most possibly bugs.</para>
+    <para>Due to its early stage of development there are some limitations of
+    GRAL:
+    <itemizedlist>
+        <listitem><para>Currently, only numbers are allowed in
+            <interfacename>DataSource</interfacename>s</para></listitem>
+        <listitem><para>It's not overly fast for large data sets</para></listitem>
+        <listitem><para>Despite many units it still has some bugs</para></listitem>
+    </itemizedlist>
+    </para>
 </chapter>
+
 </book>
