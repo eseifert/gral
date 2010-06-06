@@ -23,7 +23,7 @@
     following sections describe the different ways for providing and
     manipulating data.</para>
 
-    <sect1 xml:id="data_create">
+    <sect1 xml:id="data.create">
         <title>Creating data</title>
 
         <para>Assuming you have computed some values you want to plot, how can
@@ -36,7 +36,7 @@
         The values you must match the number of columns and their types, which
         both had already been specified in the constructor.</para>
 
-        <example xml:id="example_data_create_add">
+        <example xml:id="example.data.create.add">
             <title>Populating a <classname>DataTable</classname></title>
             <programlisting language="java"><![CDATA[
 // Create the table with the specified column types
@@ -60,7 +60,7 @@ for (Double[] coords : data) {
         well for testing due to its efficiency, especially when dealing with
         large tables.</para>
 
-        <example xml:id="example_data_create_dummy">
+        <example xml:id="example.data.create.dummy">
             <title>Generating dummy data</title>
             <programlisting language="java"><![CDATA[
 DummyData data = new DummyData(3, 100, 42.0);
@@ -68,7 +68,7 @@ DummyData data = new DummyData(3, 100, 42.0);
         </example>
     </sect1>
 
-    <sect1 xml:id="data_sort">
+    <sect1 xml:id="data.sort">
         <title>Sorting data</title>
 
         <para>Often, data has to be reordered, e.g. for filtering. The sorting
@@ -81,7 +81,7 @@ DummyData data = new DummyData(3, 100, 42.0);
         you must pass the index of the column that should be sorted to the
         constructor.</para>
 
-        <example xml:id="example_data_sort">
+        <example xml:id="example.data.sort">
             <title>Sorting</title>
             <programlisting language="java"><![CDATA[
 // Sort the primary column (1) ascending,
@@ -92,14 +92,14 @@ table.sort(new Ascending(1), new Descending(0), new Ascending(2));
         </example>
     </sect1>
 
-    <sect1 xml:id="data_filter">
+    <sect1 xml:id="data.filter">
         <title>Filtering data</title>
 
         <para><classname>DataTable</classname>s are not only the only data
         source for plots. A plot also accepts filtered data. In GRAL data can
         be filtered either by columns or by rows.</para>
 
-        <sect2 xml:id="data_filter_series">
+        <sect2 xml:id="data.filter.series">
             <title>Filtering columns</title>
 
             <para>The main tasks for filtering by columns are to create subsets
@@ -120,8 +120,8 @@ table.sort(new Ascending(1), new Descending(0), new Ascending(2));
             this name is used for example to display captions in the plot
             legend.</para>
 
-            <example xml:id="example_data_filter_series">
-                <title>Creation of data series</title>
+            <example xml:id="example.data.filter.series">
+                <title>Creating a data series</title>
                 <programlisting language="java"><![CDATA[
 // Create a new series from columns 0 and 1
 DataSeries series1 = new DataSeries("Series 1", table, 0, 1);
@@ -133,7 +133,7 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
             </example>
         </sect2>
 
-        <sect2 xml:id="data_filter_subset">
+        <sect2 xml:id="data.filter.subset">
             <title>Filtering rows</title>
 
             <para>Another way of filtering is to filter data sources by rows.
@@ -143,12 +143,11 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
 
             <para>In order to use the <classname>DataSubset</classname> a new
             class has to be created which implements the method
-            <methodsynopsis language="java"><methodname>accept</methodname>
-            <methodparam><type>Row</type><parameter>row</parameter></methodparam>
-            </methodsynopsis>. This method is used to decide whether a certain
+            <methodsynopsis language="java"><methodname>accept</methodname><methodparam><type>Row</type><parameter>row</parameter></methodparam></methodsynopsis>.
+            This method is used to decide whether a certain
             row should be kept in the subset.</para>
 
-            <example xml:id="example_data_filter_subset">
+            <example xml:id="example.data.filter.subset">
                 <title>Filtering rows with <classname>DataSubset</classname></title>
                 <programlisting language="java"><![CDATA[
 // Keep only rows where the first column has an even value
@@ -163,7 +162,7 @@ DataSubset data = new DataSubset(table) {
         </sect2>
     </sect1>
 
-    <sect1 xml:id="data_processing">
+    <sect1 xml:id="data.processing">
         <title>Processing data</title>
 
         <para>An integral part of GRAL's pipeline is preprocessing of data.
@@ -173,18 +172,17 @@ DataSubset data = new DataSubset(table) {
         filtering of data. The latter can be used to smooth or sharpen data
         in various ways.</para>
 
-        <sect2 xml:id="data_processing_stats">
+        <sect2 xml:id="data.processing.stats">
             <title>Statistics</title>
             <para>The most basic statistical functionality of GRAL is to query
             various aggregated measures for columns using the class
             <classname>Statistics</classname>. It is part of every
             <interfacename>DataSource</interfacename> instance and can be easily
-            accessed with the method <methodsynopsis language="java">
-            <methodname>getStatistics</methodname>
-            <methodparam><type>int</type><parameter>column</parameter></methodparam>
-            </methodsynopsis>.</para>
+            accessed with the method
+            <methodsynopsis language="java"><methodname>getStatistics</methodname><methodparam><type>int</type><parameter>column</parameter></methodparam></methodsynopsis>.
+            </para>
 
-            <example xml:id="example_data_processing_stats_max">
+            <example xml:id="example.data.processing.stats.max">
                 <title>Getting the maximum of a column</title>
                 <programlisting language="java"><![CDATA[
 // Get the maximum for column 1
@@ -246,16 +244,16 @@ stats.get(Statistics.MAX, 1);
             contain the number of values in category A and B, respectively.
             </para>
 
-            <example xml:id="example_data_processing_histogram_equal">
-                <title>Generate an equally spaced histogram</title>
+            <example xml:id="example.data.processing.histogram.equal">
+                <title>Generating an equally spaced histogram</title>
                 <programlisting language="java"><![CDATA[
 // Use 4 equally spaced breaks
 Histogram histogram = new Histogram(table, 4);
 ]]></programlisting>
             </example>
 
-            <example xml:id="example_data_processing_histogram_custom">
-                <title>Generate a histogram with user-defined breaks</title>
+            <example xml:id="example.data.processing.histogram.custom">
+                <title>Generating a histogram with user-defined breaks</title>
                 <programlisting language="java"><![CDATA[
 // Use custom breaks for each column
 Number[] breaksCol1 = {1.0, 2.0, 3.0, 4.0, 5.0};
@@ -265,7 +263,7 @@ Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
             </example>
         </sect2>
 
-        <sect2 xml:id="data_processing_convolution">
+        <sect2 xml:id="data.processing.convolution">
             <title>Convolution</title>
             
             <para>Often, it is necessary to change existing data by smoothing
@@ -283,10 +281,11 @@ Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
             GRAL provides two additional classes for convolution: the class
             <classname>Kernel</classname> defines the kernel function and the
             class <classname>Convolution</classname> is responsible for
-            processing the data source.</para>
+            processing the data source. The <classname>Convolution</classname>
+            instance can finally be used as a data source for plots.</para>
 
-            <example xml:id="example_data_processing_convolution_moving_avg">
-                <title>A moving average filter</title>
+            <example xml:id="example.data.processing.convolution.moving_avg">
+                <title>Creating a moving average filter</title>
                 <programlisting language="java"><![CDATA[
 // Create a moving average of width 3
 Kernel kernel = new Kernel(1.0, 1.0, 1.0).normalize();
@@ -295,8 +294,8 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
 ]]></programlisting>
             </example>
 
-            <example xml:id="example_data_processing_convolution_smooth">
-                <title>A smoothing (low-pass) filter</title>
+            <example xml:id="example.data.processing.convolution.smooth">
+                <title>Creating a smoothing filter</title>
                 <programlisting language="java"><![CDATA[
 // Create a smoothing kernel with a variance of 2
 Kernel kernel = KernelUtils.getBinomial(2.0).normalize();
@@ -305,8 +304,8 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
 ]]></programlisting>
             </example>
 
-            <example xml:id="example_data_processing_convolution_derive">
-                <title>A deriving (high-pass) filter</title>
+            <example xml:id="example.data.processing.convolution.derive">
+                <title>Creating a deriving filter</title>
                 <programlisting language="java"><![CDATA[
 // Create a smoothing kernel with a variance of 3
 Kernel kernel = KernelUtils.getBinomial(3.0).normalize()
@@ -319,7 +318,7 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
         </sect2>
     </sect1>
 
-    <sect1 xml:id="data_exchange">
+    <sect1 xml:id="data.exchange">
         <title>Exchanging data</title>
 
         <para>GRAL allows you to interchange data values through its extensible
@@ -328,23 +327,23 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
         already supports file formats like simple <acronym>CSV</acronym> files
         (<emphasis>Comma-Separated Values</emphasis>).</para>
 
-        <sect2 xml:id="data_exchange_import">
+        <sect2 xml:id="data.exchange.import">
             <title>Importing</title>
 
             <para>Loading data from a source in GRAL needs two steps: First,
             you have to get a <interfacename>DataReader</interfacename> the
             desired file format via its <acronym>MIME</acronym> type from an
             instance of <classname>DataReaderFactory</classname>. Then, you
-            have to call the method <methodsynopsis language="java">
-            <methodname>read</methodname></methodsynopsis> of the reader with
-            two (or more) parameters: an <classname>InputStream</classname>
-            instance to read from and the column data types. The method
-            finally reads the data and returns a new
-            <interfacename>DataSource</interfacename> containing all values
+            have to call the method
+            <methodsynopsis language="java"><methodname>read</methodname></methodsynopsis>
+            of the reader with two (or more) parameters: an
+            <classname>InputStream</classname> instance to read from and the
+            column data types. The method finally reads the data and returns a
+            new <interfacename>DataSource</interfacename> containing all values
             that have been extracted from the source.</para>
 
-            <example xml:id="example_data_exchange_import">
-                <title>Import example</title>
+            <example xml:id="example.data.exchange.import">
+                <title>Importing a <acronym>CSV</acronym> file</title>
                 <programlisting language="java"><![CDATA[
 DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 InputStream file = new FileInputStream("foobar.csv");
@@ -353,20 +352,21 @@ DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
             </example>
         </sect2>
 
-        <sect2 xml:id="data_exchange_export">
+        <sect2 xml:id="data.exchange.export">
             <title>Exporting</title>
 
             <para>Saving data in GRAL is even easier than loading. First, you
             need to get an instance of <classname>DataWriterFactory</classname>
             and then you fetch a <interfacename>DataWriter</interfacename> for
             the desired file format via its <acronym>MIME</acronym> type. Then,
-            you have to call the <methodsynopsis language="java">
-            <methodname>write</methodname></methodsynopsis> method with two
-            parameters: the <interfacename>DataSource</interfacename> and an
-            <classname>OutputStream</classname> instance to write to.</para>
+            you have to call the method
+            <methodsynopsis language="java"> <methodname>write</methodname></methodsynopsis>
+            with two parameters: a <interfacename>DataSource</interfacename>
+            and an <classname>OutputStream</classname> instance to write to.
+            </para>
 
-            <example xml:id="example_data_exchange_export">
-                <title>Export example</title>
+            <example xml:id="example.data.exchange.export">
+                <title>Exporting a <acronym>CSV</acronym> file</title>
                 <programlisting language="java"><![CDATA[
 DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 FileOutputStream file = new FileOutputStream("foobar.csv");
@@ -387,38 +387,39 @@ writer.write(table, file);
     </para>
 
     <para>The components of a plot in GRAL are:
-    <itemizedlist>
-        <listitem>
-            <para>Each plot has one or more instances of
-            <interfacename>DataSource</interfacename></para>
-        </listitem>
-        <listitem>
-            <para>The area where the actual data is plotted is called
-            <firstterm>plot area</firstterm> and the class used to display the
-            area is <classname>PlotArea2D</classname>, correspondingly.</para>
-        </listitem>
-        <listitem>
-            <para>Depending on its type a plot can have an arbitrary number of
-            axes which are created with the class <classname>Axis</classname>.
-            Each <classname>Axis</classname> is displayed by an instance of
-            <classname>AxisRenderer</classname>.</para>
-        </listitem>
-        <listitem>
-            <para>Data points on the plot area are rendered by an instance of
-            <classname>PointRenderer</classname>.</para>
-        </listitem>
-        <listitem>
-            <para>Connections between data points are rendered by an instance
-            of <classname>LineRenderer</classname></para>
-        </listitem>
-        <listitem>
-            <para>In order to fill the area below data points an instance of
-            <classname>AreaRenderer2D</classname> is used.</para>
-        </listitem>
-    </itemizedlist>
+
+        <itemizedlist>
+            <listitem>
+                <para>Each plot has one or more instances of
+                <interfacename>DataSource</interfacename></para>
+            </listitem>
+            <listitem>
+                <para>The area where the actual data is plotted is called
+                <firstterm>plot area</firstterm> and the class used to display the
+                area is <classname>PlotArea2D</classname>, correspondingly.</para>
+            </listitem>
+            <listitem>
+                <para>Depending on its type a plot can have an arbitrary number of
+                axes which are created with the class <classname>Axis</classname>.
+                Each <classname>Axis</classname> is displayed by an instance of
+                <classname>AxisRenderer</classname>.</para>
+            </listitem>
+            <listitem>
+                <para>Data points on the plot area are rendered by an instance of
+                <classname>PointRenderer</classname>.</para>
+            </listitem>
+            <listitem>
+                <para>Connections between data points are rendered by an instance
+                of <classname>LineRenderer</classname></para>
+            </listitem>
+            <listitem>
+                <para>In order to fill the area below data points an instance of
+                <classname>AreaRenderer2D</classname> is used.</para>
+            </listitem>
+        </itemizedlist>
     </para>
 
-    <sect1 xml:id="plotting_plots">
+    <sect1 xml:id="plotting.plots">
         <title>Plot types</title>
 
         <para>Currently, GRAL has three main plot types: xy-plot, bar plot, and
@@ -427,7 +428,7 @@ writer.write(table, file);
         xy-plots can be turned into line plots, or area plots and a pie chart
         can be made into a doughnut plot with just one command.</para>
 
-        <sect2 xml:id="plotting_plots_xy">
+        <sect2 xml:id="plotting.plots.xy">
             <title>XY-Plot</title>
 
             <para><classname>XYPlot</classname>:
@@ -435,14 +436,14 @@ writer.write(table, file);
             you want to create a line plot, a scatterplot, a bubble plot, or an
             area plot.</para>
 
-            <example xml:id="example_plotting_plots_xy">
+            <example xml:id="example.plotting.plots.xy">
                 <title>Creating an xy-plot</title>
                 <programlisting language="java"><![CDATA[
 Plot plot = new XYPlot(series1, series2);
 ]]></programlisting>
             </example>
 
-            <sect3 xml:id="plotting_plots_xy_legend">
+            <sect3 xml:id="plotting.plots.xy.legend">
                 <title>Legends</title>
 
                 <para>Legends explain the symbols used
@@ -452,18 +453,16 @@ Plot plot = new XYPlot(series1, series2);
                 Its options determine the positioning inside the plot as well
                 as its background color, its border, or its spacings.</para>
 
-                <example xml:id="example_plotting_plots_legend">
+                <example xml:id="example.plotting.plots.legend">
                     <title>Adding a legend to a plot</title>
                     <programlisting language="java"><![CDATA[
 plot.setSetting(Plot.LEGEND, true);
-plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
-plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 ]]></programlisting>
                 </example>
             </sect3>
         </sect2>
 
-        <sect2 xml:id="plotting_plots_bar">
+        <sect2 xml:id="plotting.plots.bar">
             <title>Bar plot</title>
 
             <para>Usually, bar plots are used to show rectangular bars with
@@ -471,7 +470,7 @@ plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
             <classname>BarPlot</classname> class which is in fact a special
             case of an xy-plot.</para>
 
-            <example xml:id="example_plotting_plots_bar">
+            <example xml:id="example.plotting.plots.bar">
                 <title>Creating a bar plot</title>
                 <programlisting language="java"><![CDATA[
 Plot plot = new BarPlot(series);
@@ -479,7 +478,7 @@ Plot plot = new BarPlot(series);
             </example>
         </sect2>
 
-        <sect2 xml:id="plotting_plots_pie">
+        <sect2 xml:id="plotting.plots.pie">
             <title>Pie plot</title>
 
             <para>Pie plots are circles divided into sectors to illustrate
@@ -487,7 +486,7 @@ Plot plot = new BarPlot(series);
             <classname>PiePlot</classname> is used to create this type of plot.
             </para>
 
-            <example xml:id="example_plotting_plots_pie">
+            <example xml:id="example.plotting.plots.pie">
                 <title>Creating a pie plot</title>
                 <programlisting language="java"><![CDATA[
 Plot plot = new PiePlot(series);
@@ -496,57 +495,183 @@ Plot plot = new PiePlot(series);
         </sect2>
     </sect1>
 
-    <sect1 xml:id="plotting_custom_plot">
-        <title>Customizing the plot</title>
+    <sect1 xml:id="plotting.custom">
+        <title>Custimization</title>
 
-        <para><classname>PlotArea2D</classname>, stroke types, colors, gradients, ...</para>
+        <para>The visual properties of most classes in GRAL can be queried and
+        changed using the methods
+        <methodsynopsis language="java"><methodname>getSetting</methodname></methodsynopsis>
+        and
+        <methodsynopsis language="java"><methodname>setSetting</methodname></methodsynopsis>.
+        This way, settings like colors, borders, margins, or positions can be
+        easily customized.</para>
 
-        <para><classname>Legend</classname>, positioning, orientation, spacing, background gradients, ...</para>
-    </sect1>
+        <sect2 xml:id="plotting.custom.plot">
+            <title>Customizing the plot</title>
 
-    <sect1 xml:id="plotting_custom_axis">
-        <title>Customizing axes</title>
+            <para><classname>Plot</classname>s provide the canvas for painting
+            all plot components (see <xref linkend="plotting"/>). It
+            controls how the background will be drawn the way the components
+            are positioned. Another important setting is the plot title.
+            <xref linkend="example.plotting.custom.plot.title"/> shows how to
+            set the title of an xy-plot.</para>
 
-        <para><classname>AxisRenderer</classname>, linear/logarithmic scale, stroke types, colors, ...</para>
-    </sect1>
+            <example xml:id="example.plotting.custom.plot.title">
+                <title>Adding a title text</title>
+                <programlisting language="java"><![CDATA[
+Plot plot = new XYPlot(data);
+plot.setSetting(XYPlot.TITLE, "My First XY Plot");
+]]></programlisting>
+            </example>
 
-    <sect1 xml:id="plotting_custom_point">
-        <title>Customizing points</title>
+            <para>In <xref linkend="example.plotting.custom.plot.bg"/> you can
+            see how a background gradient can be assigned to the whole plot.
+            </para>
 
-        <para><classname>PointRenderer</classname>, shape, color, size, ...</para>
-    </sect1>
+            <example xml:id="example.plotting.custom.plot.bg">
+                <title>Adding a background gradient</title>
+                <programlisting language="java"><![CDATA[
+Plot plot = new PiePlot(data);
+Paint gradient = new LinearGradientPaint(
+    0f,0f,                 // Coordinates of gradient start point
+    1f,0f,                 // Coordinates of gradient end point
+    new float[] {0f, 1f},  // Relative fractions
+    new Color[] {Color.GRAY, Color.WHITE}  // Gradient colors
+);
+plot.setSetting(Plot.BACKGROUND, gradient);
+]]></programlisting>
+            </example>
 
-    <sect1 xml:id="plotting_custom_line">
-        <title>Customizing lines</title>
+            <para>The <classname>PlotArea2D</classname> is the container for
+            plotting the data. It must be fetched from a plot with the method,
+            <methodsynopsis><methodname>getPlotArea</methodname></methodsynopsis>
+            as each <classname>Plot</classname> type can also have its own plot
+            area type. In <xref linkend="example.plotting.custom.plot.hide_plotarea"/>
+            you can see how to hide the plot area itself completely.</para>
 
-        <para><classname>LineRenderer2D</classname>, stroke types, colors, ...</para>
-    </sect1>
+            <example xml:id="example.plotting.custom.plot.hide_plotarea">
+                <title>Hiding the plot area</title>
+                <programlisting language="java"><![CDATA[
+PlotArea2D plotArea = plot.getPlotArea();
+plotArea.setSetting(PlotArea2D.BACKGROUND, null);
+plotArea.setSetting(PlotArea2D.BORDER, null);
+]]></programlisting>
+            </example>
 
-    <sect1 xml:id="plotting_custom_area">
-        <title>Customizing areas</title>
+            <para>Often, a legend has to added to a plot. Every plot already
+            has a <classname>Legend</classname> which just has to be turned on
+            explicitly. Then, the positioning, orientation, spacing, as well as
+            the legend background can be changed.
+            <xref linend="example.plotting.custom.plot.legend"/> shows how to
+            add a horizontal legend to the the bottom left corner of a plot.
+            </para>
 
-        <para><classname>AreaRenderer2D</classname>, colors, fillings, ...</para>
-    </sect1>
+            <example xml:id="example.plotting.custom.plot.legend">
+                <title>Adding a legend to a plot</title>
+                <programlisting language="java"><![CDATA[
+plot.setSetting(Plot.LEGEND, true);
+plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
+Legend legend = plot.getLegend();
+legend.setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
+]]></programlisting>
+            </example>
+        </sect2>
 
-    <sect1 xml:id="plotting_export">
-        <title>Exporting plot images</title>
+        <sect2 xml:id="plotting.custom.axis">
+            <title>Customizing axes</title>
 
-        <para>Usage similar to data import/export. Bitmap formats like
-        <acronym>PNG</acronym>, <acronym>JPEG</acronym>, <acronym>BMP</acronym>,
-        or <acronym>GIF</acronym> and vector formats like
-        <acronym>SVG</acronym>, <acronym>PDF</acronym>, <acronym>EPS</acronym>.
-        </para>
+            <para>Axes of a plot have reasonable defaults for displaying.
+            Sometimes however, it's necessary to add an axis title, adjust the
+            spacing of the tick marks, or change the formatting of the data
+            values along an axis. All those properties are controlled by the
+            interface <interfacename>AxisRenderer</interfacename>. Each axis in
+            a plot has its own instance and can have different settings.
+            </para>
 
-        <example xml:id="example_plotting_export">
-            <title>Exporting an xy-plot as a <acronym>SVG</acronym> vector image</title>
-            <programlisting language="java"><![CDATA[
+            <example xml:id="example.plotting.custom.axis.spacing">
+                <title>Changing the spacing of tick marks</title>
+                <programlisting language="java"><![CDATA[
+AxisRenderer axisRendererX = plot.getSetting(XYPlot.AXIS_X_RENDERER);
+axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+]]></programlisting>
+            </example>
+
+            <para>There are to implementations of
+            <interfacename>AxisRenderer</interfacename>: for axes with a linear
+            scale (the default case) <classname>LinearRenderer2D</classname> is
+            used; for axes with a logarithmic scale the class
+            <classname>LogarithmicRenderer2D</classname> is used. For an example
+            see <xref linend="example.plotting.custom.axis.logarithmic"/>.
+            </para>
+
+            <example xml:id="example.plotting.custom.axis.logarithmic">
+                <title>Adding a logarithmic axis</title>
+                <programlisting language="java"><![CDATA[
+XYPlot plot = new XYPlot(seriesLog, seriesLin);
+AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
+axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic data");
+plot.setSetting(XYPlot.AXIS_X_RENDERER, axisRendererX);
+]]></programlisting>
+            </example>
+
+            <example xml:id="example.plotting.custom.axis.value_format">
+                <title>Formatting axis values as dates</title>
+                <programlisting language="java"><![CDATA[
+AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
+Format dateFormat = DateFormat.getTimeInstance();
+axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, dateFormat);
+]]></programlisting>
+            </example>
+
+            <example xml:id="example.plotting.custom.axis.custom_ticks">
+                <title>Adding custom tick marks</title>
+                <programlisting language="java"><![CDATA[
+Map<Double, String> labels = new HashMap<Double, String>();
+labels.put(2.0, "Doubled");
+labels.put(1.5, "One and a half times");
+axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
+]]></programlisting>
+            </example>
+        </sect2>
+
+        <sect2 xml:id="plotting.custom.point">
+            <title>Customizing points</title>
+
+            <para><classname>PointRenderer</classname>, shape, color, size, ...</para>
+        </sect2>
+
+        <sect2 xml:id="plotting.custom.line">
+            <title>Customizing lines</title>
+
+            <para><classname>LineRenderer2D</classname>, stroke types, colors, ...</para>
+        </sect2>
+
+        <sect2 xml:id="plotting.custom.area">
+            <title>Customizing areas</title>
+
+            <para><classname>AreaRenderer2D</classname>, colors, fillings, ...</para>
+        </sect2>
+
+        <sect2 xml:id="plotting.export">
+            <title>Exporting plot images</title>
+
+            <para>Usage similar to data import/export. Bitmap formats like
+            <acronym>PNG</acronym>, <acronym>JPEG</acronym>, <acronym>BMP</acronym>,
+            or <acronym>GIF</acronym> and vector formats like
+            <acronym>SVG</acronym>, <acronym>PDF</acronym>, <acronym>EPS</acronym>.
+            </para>
+
+            <example xml:id="example.plotting.export">
+                <title>Exporting an <acronym>SVG</acronym> image</title>
+                <programlisting language="java"><![CDATA[
 XYPlot plot = new XYPlot(data);
 DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/svg+xml");
 FileOutputStream file = new FileOutputStream("xyplot.svg");
 double width = 320.0, height = 240.0;
 writer.write(plot, file, width, height);
 ]]></programlisting>
-        </example>
+            </example>
+        </sect2>
     </sect1>
 </chapter>
 
@@ -558,25 +683,25 @@ writer.write(plot, file, width, height);
     exchange plug-ins. The following chapter shows you how to use GRAL's
     application programming interface to tailor it for your requirements.</para>
 
-    <sect1 xml:id="extension_plot">
+    <sect1 xml:id="extension.plot">
         <title>Writing a new plot type</title>
 
         <para><classname>Plot</classname> class, <interfacename>DataListener</interfacename> interface.</para>
     </sect1>
 
-    <sect1 xml:id="extension_import_data">
+    <sect1 xml:id="extension.import.data">
         <title>Writing a data importer</title>
 
         <para><classname>DataReaderFactory</classname> and <interfacename>DataReader</interfacename>.</para>
     </sect1>
 
-    <sect1 xml:id="extension_export_data">
+    <sect1 xml:id="extension.export.data">
         <title>Writing a data exporter</title>
 
         <para><classname>DataWriterFactory</classname> and <interfacename>DataWriter</interfacename>.</para>
     </sect1>
 
-    <sect1 xml:id="extension_export_plot">
+    <sect1 xml:id="extension.export.plot">
         <title>Writing a plot exporter</title>
 
         <para><classname>DrawableWriterFactory</classname> and <interfacename>DrawableWriter</interfacename>
@@ -587,14 +712,15 @@ writer.write(plot, file, width, height);
 <chapter xml:id="limitations">
    <title>Limitations</title>
 
-    <para>Due to its early stage of development there are some limitations of
-    GRAL:
-    <itemizedlist>
-        <listitem><para>Currently, only numbers are allowed in
-            <interfacename>DataSource</interfacename>s</para></listitem>
-        <listitem><para>It's not overly fast for large data sets</para></listitem>
-        <listitem><para>Despite many units it still has some bugs</para></listitem>
-    </itemizedlist>
+    <para>Due to its early stage of development, GRAL still has several
+    limitations:
+
+        <itemizedlist>
+            <listitem><para>Currently, only numbers are allowed in
+                <interfacename>DataSource</interfacename>s</para></listitem>
+            <listitem><para>It's not overly fast for large data sets</para></listitem>
+            <listitem><para>Despite many units it still has some bugs</para></listitem>
+        </itemizedlist>
     </para>
 </chapter>
 
