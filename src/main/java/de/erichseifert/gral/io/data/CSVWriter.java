@@ -31,7 +31,6 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -55,9 +54,6 @@ public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
 			"tsv", "txt"
 		));
 	}
-
-	/** Settings key that identifies the string used for separating columns. */
-	public static final Key SEPARATOR = new Key("separator");
 
 	private final Map<String, Object> settings;
 	private final Map<String, Object> defaults;

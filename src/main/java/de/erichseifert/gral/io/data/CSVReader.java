@@ -35,7 +35,6 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -59,9 +58,6 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 			"tsv", "txt"
 		));
 	}
-
-	/** Settings key that identifies the regular expression string used for separating columns. */
-	public static final Key SEPARATOR = new Key("separator");
 
 	private final Map<String, Object> settings;
 	private final Map<String, Object> defaults;

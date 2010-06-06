@@ -175,7 +175,6 @@ public class PiePlot extends Plot implements DataListener {
 
 		dataChanged(data);
 		data.addDataListener(this);
-
 	}
 
 	@Override
