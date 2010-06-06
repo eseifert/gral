@@ -75,7 +75,7 @@ public class DrawableWriterTest {
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			try {
-				DrawableWriter writer = DrawableWriterFactory.getInstance().get(DrawableWriter.TYPE_EPS);
+				DrawableWriter writer = DrawableWriterFactory.getInstance().get("application/postscript");
 				writer.write(plot, new FileOutputStream(file), 800, 600);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

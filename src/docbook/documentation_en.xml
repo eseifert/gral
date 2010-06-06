@@ -717,7 +717,7 @@ public class MyPlot extends Plot implements DataListener {
 
         <para><classname>DataReaderFactory</classname> and <interfacename>DataReader</interfacename>.</para>
 
-        <example xml:id="example.plotting.export">
+        <example xml:id="example.plotting.import">
             <title>Creating a custom <classname>DataReader</classname></title>
             <programlisting language="java"><![CDATA[
 public class MyReader extends IOCapabilitiesStorage implements DataReader {
@@ -775,13 +775,66 @@ public class MyReader extends IOCapabilitiesStorage implements DataReader {
         <title>Writing a data exporter</title>
 
         <para><classname>DataWriterFactory</classname> and <interfacename>DataWriter</interfacename>.</para>
+
+        <example xml:id="example.plotting.export">
+            <title>Creating a custom <classname>DataWriter</classname></title>
+            <programlisting language="java"><![CDATA[
+public class MyWriter extends IOCapabilitiesStorage implements DataWriter {
+    static {
+        addCapabilities(new IOCapabilities(
+            "My Format",
+            "My custom file format",
+            "application/x-myformat",
+            "myf"
+        ));
+    }
+
+    private final Map<String, Object> settings;
+    private final Map<String, Object> defaults;
+    private final String mimeType;
+
+    public MyWriter(String mimeType) {
+        this.mimeType = mimeType;
+        settings = new HashMap<String, Object>();
+        defaults = new HashMap<String, Object>();
+        defaults.put("my setting", "foobar");
+    }
+
+    @Override
+    public void write(DataSource data, OutputStream output) throws IOException {
+        ...
+    }
+
+    /**
+     * Returns the MIME type.
+     * @return MIME type string.
+     */
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    @Override
+    public <T> T getSetting(String key) {
+        if (!settings.containsKey(key)) {
+            return (T) defaults.get(key);
+        }
+        return (T) settings.get(key);
+    }
+
+    @Override
+    public <T> void setSetting(String key, T value) {
+        settings.put(key, value);
+    }
+}
+]]></programlisting>
+        </example>
     </sect1>
 
     <sect1 xml:id="extension.export.plot">
         <title>Writing a plot exporter</title>
 
-        <para><classname>DrawableWriterFactory</classname> and <interfacename>DrawableWriter</interfacename>
-        (<classname>BitmapWriter</classname>, <classname>VectorWriter</classname>).</para>
+        <para><classname>DrawableWriterFactory</classname> and <interfacename>DrawableWriter</interfacename>.
+        Either <classname>BitmapWriter</classname> or <classname>VectorWriter</classname>.</para>
     </sect1>
 </chapter>
 

@@ -33,13 +33,14 @@ import de.erichseifert.gral.DrawableContainer;
 
 public class DrawableWriterTest {
 	private static final String[] FORMATS = new String[] {
-		DrawableWriter.TYPE_BMP,
-		DrawableWriter.TYPE_GIF,
-		DrawableWriter.TYPE_JPEG,
-		DrawableWriter.TYPE_PNG,
-		DrawableWriter.TYPE_WBMP,
-		DrawableWriter.TYPE_EPS,
-		DrawableWriter.TYPE_SVG
+		"image/bmp",
+		"image/gif",
+		"image/jpeg",
+		"image/png",
+		"image/vnd.wap.wbmp",
+		"application/pdf",
+		"application/postscript",
+		"image/svg+xml"
 	};
 
 	@Test

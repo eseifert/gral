@@ -53,40 +53,41 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 		addCapabilities(new IOCapabilities(
 			"BMP",
 			"Windows Bitmap",
-			TYPE_BMP,
+			"image/bmp",
 			"bmp", "dib"
 		));
 
 		addCapabilities(new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
-			TYPE_GIF,
+			"image/gif",
 			"gif"
 		));
 
 		addCapabilities(new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
-			TYPE_JPEG,
+			"image/jpeg",
 			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
 		));
 
 		addCapabilities(new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
-			TYPE_PNG,
+			"image/png",
 			"png"
 		));
 
 		addCapabilities(new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
-			TYPE_WBMP,
+			"image/vnd.wap.wbmp",
 			"wbmp"
 		));
 	}
 
 	private final String mimeType;
+	private int rasterFormat;
 
 	/**
 	 * Creates a new <code>BitmapWriter</code> object with the specified MIME-Type.
@@ -94,6 +95,25 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 	 */
 	protected BitmapWriter(String mimeType) {
 		this.mimeType = mimeType;
+
+		boolean isAlphaSupported = "image/png".equals(mimeType);
+		boolean isColorSupported = !"image/vnd.wap.wbmp".equals(mimeType);
+		boolean isGrayscaleSupported = !"image/vnd.wap.wbmp".equals(mimeType);
+
+		if (isColorSupported) {
+			if (isAlphaSupported) {
+				rasterFormat = BufferedImage.TYPE_INT_ARGB;
+			} else {
+				rasterFormat = BufferedImage.TYPE_INT_RGB;
+			}
+		} else {
+			if (isGrayscaleSupported) {
+				rasterFormat = BufferedImage.TYPE_BYTE_GRAY;
+			} else {
+				rasterFormat = BufferedImage.TYPE_BYTE_BINARY;
+			}
+		}
+
 		// TODO: Option to set transparency
 		// TODO: Possibility to choose a background color
 	}
@@ -105,16 +125,12 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 
 	@Override
 	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException {
-		int rasterFormat = BufferedImage.TYPE_INT_RGB;
-		if (TYPE_PNG.equals(getMimeType())) {
-			rasterFormat = BufferedImage.TYPE_INT_ARGB;
-		} else if (TYPE_WBMP.equals(getMimeType())) {
-			rasterFormat = BufferedImage.TYPE_BYTE_BINARY;
-		}
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
+
 		d.draw((Graphics2D) image.getGraphics());
-		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
+
+		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
 		while (writers.hasNext()) {
 			ImageWriter writer = writers.next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(destination);
