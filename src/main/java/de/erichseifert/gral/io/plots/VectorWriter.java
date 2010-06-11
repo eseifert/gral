@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.io.plots;
 
+import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,52 +33,63 @@ import java.util.Map;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
-import de.erichseifert.vectorgraphics2d.EPSGraphics2D;
-import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
-import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
-import de.erichseifert.vectorgraphics2d.VectorGraphics2D;
 
 /**
  * Class that stores <code>Drawable</code> instances as vector graphics.
  * Supported formats:
  * <ul>
- * <li>EPS</li>
- * <li>SVG</li>
+ *   <li>EPS</li>
+ *   <li>PDF</li>
+ *   <li>SVG</li>
  * </ul>
  */
 public class VectorWriter extends IOCapabilitiesStorage implements DrawableWriter {
-	private static Map<String, Class<? extends VectorGraphics2D>> graphics;
+	private static final Map<String, Class<?>> graphics;
+	private static final String VECTORGRAPHICS2D_PACKAGE = "de.erichseifert.vectorgraphics2d";
 
 	static {
-		graphics = new HashMap<String, Class<? extends VectorGraphics2D>>();
+		graphics = new HashMap<String, Class<?>>();
+		Class<?> cls;
 
-		addCapabilities(new IOCapabilities(
-			"EPS",
-			"Encapsulated PostScript",
-			"application/postscript",
-			"eps", "epsf", "epsi"
-		));
-		graphics.put("application/postscript", EPSGraphics2D.class);
+		try {
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".EPSGraphics2D");
+			addCapabilities(new IOCapabilities(
+				"EPS",
+				"Encapsulated PostScript",
+				"application/postscript",
+				"eps", "epsf", "epsi"
+			));
+			graphics.put("application/postscript", cls);
+		} catch (ClassNotFoundException e) {
+		}
 
-		addCapabilities(new IOCapabilities(
-			"PDF",
-			"Portable Document Format",
-			"application/pdf",
-			"pdf"
-		));
-		graphics.put("application/pdf", PDFGraphics2D.class);
+		try {
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".PDFGraphics2D");
+			addCapabilities(new IOCapabilities(
+				"PDF",
+				"Portable Document Format",
+				"application/pdf",
+				"pdf"
+			));
+			graphics.put("application/pdf", cls);
+		} catch (ClassNotFoundException e) {
+		}
 
-		addCapabilities(new IOCapabilities(
-			"SVG",
-			"Scalable Vector Graphics",
-			"image/svg+xml",
-			"svg", "svgz"
-		));
-		graphics.put("image/svg+xml", SVGGraphics2D.class);
+		try {
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".SVGGraphics2D");
+			addCapabilities(new IOCapabilities(
+				"SVG",
+				"Scalable Vector Graphics",
+				"image/svg+xml",
+				"svg", "svgz"
+			));
+			graphics.put("image/svg+xml", cls);
+		} catch (ClassNotFoundException e) {
+		}
 	}
 
 	private final String mimeType;
-	private final Class<? extends VectorGraphics2D> graphicsClass;
+	private final Class<? extends Graphics2D> graphicsClass;
 
 	/**
 	 * Creates a new <code>VectorWriter</code> object with the specified MIME-Type.
@@ -85,7 +97,12 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 	 */
 	protected VectorWriter(String mimeType) {
 		this.mimeType = mimeType;
-		graphicsClass = graphics.get(mimeType);
+		Class<? extends Graphics2D> gfxCls = null;
+		try {
+			gfxCls = (Class<? extends Graphics2D>) graphics.get(mimeType);
+		} catch (ClassCastException e) {
+		}
+		graphicsClass = gfxCls;
 		if (graphicsClass == null) {
 			throw new IllegalArgumentException("Unsupported file format: " +mimeType);
 		}
@@ -98,9 +115,9 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 
 	@Override
 	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException {
-		VectorGraphics2D g2d = null;
+		Graphics2D g2d = null;
 		try {
-			Constructor<? extends VectorGraphics2D> constructor =
+			Constructor<? extends Graphics2D> constructor =
 				graphicsClass.getConstructor(double.class, double.class, double.class, double.class);
 			g2d = constructor.newInstance(x, y, width, height);
 		} catch (SecurityException e) {

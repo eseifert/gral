@@ -211,7 +211,7 @@ public abstract class GeometryUtils {
      */
     public static Area punch(Shape shape, double gap, boolean rounded, Iterable<DataPoint2D> dataPoints) {
     	Area shapeArea = new Area(shape);
-		if (!MathUtils.almostEqual(gap, 0.0, 1e-10)) {
+		if (gap > 1e-10) {
 			int gapJoin = (rounded) ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
 			Area gapsArea = new Area();
 			for (DataPoint2D p : dataPoints) {
