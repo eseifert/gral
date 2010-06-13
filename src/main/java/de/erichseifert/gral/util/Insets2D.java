@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -92,6 +92,7 @@ public abstract class Insets2D {
 		/**
 		 * Creates a new Insets2D object with the specified insets in all
 		 * directions.
+		 * @param inset Inset value.
 		 */
 		public Double(double inset) {
 			this(inset, inset, inset, inset);
@@ -146,7 +147,9 @@ public abstract class Insets2D {
 
 		@Override
 		public String toString() {
-			return getClass().getName() + "[top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right + "]";
+			return getClass().getName() +
+				"[top=" + top + ", left=" + left +
+				", bottom=" + bottom + ", right=" + right + "]";
 		}
 
 		@Override

@@ -28,8 +28,19 @@
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="${checkstyle.javadoc.severity}" default="warning"/>
+    <module name="JavadocPackage"/>
     
     <module name="TreeWalker">
+        <module name="JavadocType">
+            <property name="scope" value="protected"/>
+        </module>
+        <module name="JavadocMethod">
+            <property name="scope" value="protected"/>
+            <property name="allowUndeclaredRTE" value="true"/>
+        </module>
+        <module name="JavadocVariable">
+            <property name="scope" value="protected"/>
+        </module>
         <module name="LineLength">
             <property name="max" value="120"/>
         </module>
@@ -39,8 +50,12 @@
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
         </module>
-        <module name="TodoComment"/>
-        <module name="UnusedImports" />
+        <module name="TodoComment">
+            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+        </module>
+        <module name="UnusedImports">
+            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+        </module>
         <module name="UpperEll"/>
     </module>
 </module>

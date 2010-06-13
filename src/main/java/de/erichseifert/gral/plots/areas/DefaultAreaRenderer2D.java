@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -34,6 +34,9 @@ import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
+/**
+ * Default implementation of the <code>AreaRenderer2D</code> interface.
+ */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer2D {
 
 	@Override

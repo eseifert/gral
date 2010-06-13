@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -119,12 +119,14 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 	}
 
 	@Override
-	public void write(Drawable d, OutputStream destination, double width, double height) throws IOException {
+	public void write(Drawable d, OutputStream destination,
+			double width, double height) throws IOException {
 		write(d, destination, 0.0, 0.0, width, height);
 	}
 
 	@Override
-	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException {
+	public void write(Drawable d, OutputStream destination,
+			double x, double y, double width, double height) throws IOException {
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 

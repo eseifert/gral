@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -65,13 +65,17 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void add(Number... values) {
 		if (types.length != values.length) {
-			throw new IllegalArgumentException("Wrong number of columns! Expected "+types.length+", got "+values.length);
+			throw new IllegalArgumentException(
+					"Wrong number of columns! Expected " + types.length +
+					", got " + values.length);
 		}
 		Number[] row = new Number[types.length];
 		for (int i = 0; i < values.length; i++) {
 			Object obj = values[i];
 			if (!(types[i].isAssignableFrom(obj.getClass()))) {
-				throw new IllegalArgumentException("Wrong column type! Expected "+types[i]+", got "+obj.getClass());
+				throw new IllegalArgumentException(
+						"Wrong column type! Expected " + types[i] + ", got " +
+						obj.getClass());
 			}
 			row[i] = values[i];
 		}
@@ -96,23 +100,17 @@ public class DataTable extends AbstractDataSource {
 		notifyDataChanged();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.data.DataSource#get(int, int)
-	 */
+	@Override
 	public Number get(int col, int row) {
 		return rows.get(row)[col];
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.data.DataSource#getRowCount()
-	 */
+	@Override
 	public int getRowCount() {
 		return rows.size();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.data.DataSource#getColumnCount()
-	 */
+	@Override
 	public int getColumnCount() {
 		return types.length;
 	}

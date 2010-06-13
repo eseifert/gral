@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -64,9 +64,11 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that displays data in an XY-Plot.
  */
 public class XYPlot extends Plot implements DataListener  {
-	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D} instance for displaying the x-axis. */
+	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D}
+	instance for displaying the x-axis. */
 	public static final Key AXIS_X_RENDERER = new Key("xyplot.axis.x.renderer");
-	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D} instance for displaying the y-axis. */
+	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D}
+	instance for displaying the y-axis. */
 	public static final Key AXIS_Y_RENDERER = new Key("xyplot.axis.y.renderer");
 
 	private double minX;
@@ -82,21 +84,27 @@ public class XYPlot extends Plot implements DataListener  {
 	 * Class that represents the drawing area of an <code>XYPlot</code>.
 	 */
 	public static class XYPlotArea2D extends PlotArea2D {
-		/** Key for specifying whether the horizontal grid lines at major ticks along the x-axis are drawn. */
+		/** Key for specifying whether the horizontal grid lines at major ticks
+		along the x-axis are drawn. */
 		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x");
-		/** Key for specifying whether the vertical grid lines at major ticks along the y-axis are drawn. */
+		/** Key for specifying whether the vertical grid lines at major ticks
+		along the y-axis are drawn. */
 		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y");
-		/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the grid lines of major ticks. */
+		/** Key for specifying the {@link java.awt.Paint} instance to be used
+		to paint the grid lines of major ticks. */
 		public static final Key GRID_MAJOR_COLOR = new Key("xyplot.grid.major.color");
 
-		/** Key for specifying whether the horizontal grid lines at minor ticks along the x-axis are drawn. */
+		/** Key for specifying whether the horizontal grid lines at minor ticks
+		along the x-axis are drawn. */
 		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x");
-		/** Key for specifying whether the vertical grid lines at minor ticks along the y-axis are drawn. */
+		/** Key for specifying whether the vertical grid lines at minor ticks
+		along the y-axis are drawn. */
 		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y");
-		/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the grid lines of minor ticks. */
+		/** Key for specifying the {@link java.awt.Paint} instance to be used
+		to paint the grid lines of minor ticks. */
 		public static final Key GRID_MINOR_COLOR = new Key("xyplot.grid.minor.color");
-		
-		private XYPlot plot;
+
+		private final XYPlot plot;
 
 		/**
 		 * Creates a new XYPlotArea2D object with default settings.
@@ -271,10 +279,16 @@ public class XYPlot extends Plot implements DataListener  {
 	 * Class that displays a legend in an <code>XYPlot</code>.
 	 */
 	public static class XYLegend extends Legend {
+		/** Source for dummy data. */
 		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 0.5);
-		
-		private XYPlot plot;
-		
+
+		private final XYPlot plot;
+
+		/**
+		 * Constructor that initializes the instance with a plot acting as data
+		 * provider.
+		 * @param plot Data provider.
+		 */
 		public XYLegend(XYPlot plot) {
 			this.plot = plot;
 		}
@@ -323,8 +337,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Creates a new <code>XYPlot</code> object with the specified <code>DataSource</code>s and
-	 * default settings.
+	 * Creates a new <code>XYPlot</code> object with the specified
+	 * <code>DataSource</code>s and default settings.
 	 * @param data Data to be displayed.
 	 */
 	public XYPlot(DataSource... data) {
@@ -486,8 +500,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Sets the <code>PointRenderer</code> for a certain <code>DataSource</code> to the
-	 * specified instance.
+	 * Sets the <code>PointRenderer</code> for a certain <code>DataSource</code>
+	 * to the specified instance.
 	 * @param s DataSource.
 	 * @param pointRenderer PointRenderer to be set.
 	 */
@@ -505,8 +519,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Sets the <code>LineRenderer2D</code> for a certain <code>DataSource</code> to the
-	 * specified value.
+	 * Sets the <code>LineRenderer2D</code> for a certain <code>DataSource</code>
+	 * to the specified value.
 	 * @param s <code>DataSource</code>.
 	 * @param lineRenderer <code>LineRenderer</code> to be set.
 	 */
@@ -515,7 +529,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the <code>AreaRenderer2D</code> for the specified <code>DataSource</code>.
+	 * Returns the <code>AreaRenderer2D</code> for the specified
+	 * <code>DataSource</code>.
 	 * @param s <code>DataSource</code>.
 	 * @return <code>AreaRenderer2D</code>.
 	 */
@@ -524,8 +539,8 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Sets the <code>AreaRenderer2D</code> for a certain <code>DataSource</code> to the
-	 * specified value.
+	 * Sets the <code>AreaRenderer2D</code> for a certain <code>DataSource</code>
+	 * to the specified value.
 	 * @param s <code>DataSource</code>.
 	 * @param areaRenderer <code>AreaRenderer2D</code> to be set.
 	 */

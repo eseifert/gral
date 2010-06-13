@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -55,20 +55,24 @@ public abstract class GeometryUtils {
 	 */
 	public static Line2D[] shapeToLines(Shape path, boolean swapped) {
 		Deque<Line2D> lines = new ArrayDeque<Line2D>();
-		PathIterator i = new FlatteningPathIterator(path.getPathIterator(null), 0.5);
+		PathIterator i =
+			new FlatteningPathIterator(path.getPathIterator(null), 0.5);
 
 		double[] coords = new double[6];
 		double[] coordsPrev = new double[6];
 		while (!i.isDone()) {
 			int segment = i.currentSegment(coords);
 
-			if (segment==PathIterator.SEG_LINETO || segment==PathIterator.SEG_CLOSE) {
+			if (segment == PathIterator.SEG_LINETO ||
+					segment == PathIterator.SEG_CLOSE) {
 				Line2D line;
 				if (!swapped) {
-					line = new Line2D.Double(coordsPrev[0], coordsPrev[1], coords[0], coords[1]);
+					line = new Line2D.Double(
+						coordsPrev[0], coordsPrev[1], coords[0], coords[1]);
 					lines.addLast(line);
 				} else {
-					line = new Line2D.Double(coords[0], coords[1], coordsPrev[0], coordsPrev[1]);
+					line = new Line2D.Double(
+						coords[0], coords[1], coordsPrev[0], coordsPrev[1]);
 					lines.addFirst(line);
 				}
 			}
@@ -78,10 +82,12 @@ public abstract class GeometryUtils {
 				if (!firstPoint.equals(lastPoint)) {
 					Line2D line;
 					if (!swapped) {
-						line = new Line2D.Double(coords[0], coords[1], firstPoint.getX(), firstPoint.getY());
+						line = new Line2D.Double(
+							coords[0], coords[1], firstPoint.getX(), firstPoint.getY());
 						lines.addLast(line);
 					} else {
-						line = new Line2D.Double(firstPoint.getX(), firstPoint.getY(), coords[0], coords[1]);
+						line = new Line2D.Double(
+							firstPoint.getX(), firstPoint.getY(), coords[0], coords[1]);
 						lines.addFirst(line);
 					}
 				}
@@ -182,14 +188,16 @@ public abstract class GeometryUtils {
      * @param miterlimit Limit for miter joining method
      * @return New shape that is expanded or shrunk by the specified amount
      */
-    public static Area grow(final Shape s, final double offset, int join, float miterlimit) {
+    public static Area grow(final Shape s, final double offset, int join,
+    		float miterlimit) {
     	Area shape = new Area(s);
 
     	if (MathUtils.almostEqual(offset, 0.0, EPSILON)) {
     		return shape;
     	}
 
-    	Stroke stroke = new BasicStroke((float)Math.abs(2.0*offset), BasicStroke.CAP_SQUARE, join, miterlimit);
+    	Stroke stroke = new BasicStroke((float)Math.abs(2.0*offset),
+    			BasicStroke.CAP_SQUARE, join, miterlimit);
     	Area strokeShape = new Area(stroke.createStrokedShape(s));
 
     	if (offset > 0.0) {

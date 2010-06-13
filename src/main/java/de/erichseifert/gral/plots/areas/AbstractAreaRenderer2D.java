@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -57,8 +57,8 @@ public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, Settings
 	/**
 	 * Returns the shape of an area from which the shapes of the specified
 	 * points are subtracted.
-	 * @param lineShape Shape of the line.
-	 * @param points Data points on the line.
+	 * @param area Shape of the area.
+	 * @param dataPoints Data points on the line.
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {

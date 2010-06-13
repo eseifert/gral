@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -27,7 +27,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import de.erichseifert.gral.io.AbstractIOFactory;
 
-
+/**
+ * A factory class that produces <code>DataReader</code> instances for a
+ * specified format. The produced readers can be used to retrieve data from
+ * an <code>InputStream</code> and to get a <code>DataSource</code> instance.
+ */
 public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 	private static DataReaderFactory instance;
 
@@ -35,6 +39,10 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 		super("datareaders.properties");
 	}
 
+	/**
+	 * Returns the instance of the factory.
+	 * @return Instance of the factory.
+	 */
 	public static DataReaderFactory getInstance() {
 		if (instance == null) {
 			try {
@@ -48,11 +56,12 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 	@Override
 	public DataReader get(String mimeType) {
 		DataReader reader = null;
-		Class<? extends DataReader> clazz = entries.get(mimeType);
+		Class<? extends DataReader> clazz = getTypeClass(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
 			if (clazz != null) {
-				Constructor<? extends DataReader> constructor = clazz.getDeclaredConstructor(String.class);
+				Constructor<? extends DataReader> constructor =
+					clazz.getDeclaredConstructor(String.class);
 				reader = constructor.newInstance(mimeType);
 			}
 		} catch (SecurityException e) {

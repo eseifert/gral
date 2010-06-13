@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -35,6 +35,7 @@ public interface AxisRenderer2D extends AxisRenderer {
 	 * @param axis Axis
 	 * @param value World coordinate value to convert
 	 * @param extrapolate Option to activate extrapolation value that are not on the axis
+	 * @param forceLinear Force linear interpolation.
 	 * @return Two-dimensional point of the value
 	 */
 	Point2D getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
@@ -45,6 +46,7 @@ public interface AxisRenderer2D extends AxisRenderer {
 	 * @param axis Axis
 	 * @param value World coordinate value to convert
 	 * @param extrapolate Option to activate extrapolation value that are not on the axis
+	 * @param forceLinear Force linear interpolation.
 	 * @return Two-dimensional normal vector at the position
 	 */
 	Point2D getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);

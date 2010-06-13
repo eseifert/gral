@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -36,7 +36,8 @@ public abstract class MathUtils {
 	 * @param a First value
 	 * @param b Second value
 	 * @param delta Precision
-	 * @return <code>true</code> if the difference of <i>a</i> and <b>b</b> is smaller or equal than <i>delta</i>, otherwise <code>false</code>
+	 * @return <code>true</code> if the difference of <i>a</i> and <b>b</b> is
+	 *         smaller or equal than <i>delta</i>, otherwise <code>false</code>
 	 */
 	public static boolean almostEqual(double a, double b, double delta) {
 		return Math.abs(a - b) <= delta;
@@ -77,7 +78,8 @@ public abstract class MathUtils {
 	 * element with the nearest element to <code>key</code>.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
-	 * @return Index of the array element whose value is nearly or exactly <code>key</code>
+	 * @return Index of the array element whose value is nearly or exactly
+	 *         <code>key</code>
 	 */
 	public static int binarySearch(double[] a, double key) {
 		int l = 0;
@@ -138,6 +140,7 @@ public abstract class MathUtils {
 	 * Clamps a value to specified limits: if <code>value</code> is greater than <code>max</code>
 	 * then <code>max</code> will be returned. If <code>value</code> is greater than <code>min</code>
 	 * then <code>min</code> will be returned.
+	 * @param <T> Data type of the Value to limit.
 	 * @param value Value to be clamped
 	 * @param min Minimum
 	 * @param max Maximum

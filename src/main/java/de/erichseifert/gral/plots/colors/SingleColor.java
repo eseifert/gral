@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -30,8 +30,8 @@ public class SingleColor implements ColorMapper {
 	private Color color;
 
 	/**
-	 * Creates a new SingleColor object with the specified color.
-	 * @param color
+	 * Creates a new instance with the specified color.
+	 * @param color Color to use.
 	 */
 	public SingleColor(Color color) {
 		this.color = color;

@@ -45,6 +45,9 @@
             <version>1.6.0</version>
             <configuration>
                 <header>src/etc/header.txt</header>
+                <mapping>
+                    <java>SLASHSTAR_STYLE</java>
+                </mapping>
                 <properties>
                     <year>${project.inceptionYear}-2010</year>
                     <owner1>Erich Seifert</owner1>
@@ -146,8 +149,9 @@
             <artifactId>maven-checkstyle-plugin</artifactId>
             <version>2.5</version>
             <configuration>
-                <includeTestSourceDirectory>true</includeTestSourceDirectory>
                 <configLocation>${basedir}/checkstyle.xml</configLocation>
+                <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                <excludes>de/erichseifert/gral/examples/**/*</excludes>
             </configuration>
         </plugin>
         <plugin>

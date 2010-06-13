@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -39,9 +39,11 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that connects DataPoints2D with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
-	/** Key for specifying an {@link de.erichseifert.gral.DrawableConstants.Orientation} instance which indicates the primary direction of the "steps". */
+	/** Key for specifying an {@link de.erichseifert.gral.DrawableConstants.Orientation}
+	instance which indicates the primary direction of the "steps". */
 	public static final Key ASCENT_DIRECTION = new Key("line.discrete.ascentDirection");
-	/** Key for specifying the percentage of the distance between two points, which indicates the "step" of a stair. */
+	/** Key for specifying the percentage of the distance between two points,
+	which indicates the "step" of a stair. */
 	public static final Key ASCENDING_POINT = new Key("line.discrete.ascendingPoint");
 
 	/**

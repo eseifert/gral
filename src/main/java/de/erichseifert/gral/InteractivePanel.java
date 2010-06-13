@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -71,7 +71,6 @@ import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 
 
-
 /**
  * A class that displays a <code>Drawable</code> instance as a rich Swing component.
  */
@@ -82,7 +81,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
 	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
 	private final PrinterJob printerJob;
-	
+
 	private static final int MIN_DRAG = 0;
 
 	private final JPopupMenu menu;
@@ -95,6 +94,10 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 	private PlotNavigator navigator;
 
+	/**
+	 * Creates a new panel instance and initializes it with a drawable component.
+	 * @param drawable drawable component.
+	 */
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
 
@@ -235,10 +238,14 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	}
 
 	private class MoveListener extends MouseAdapter {
-		private final XYPlot plot;
+		private final Plot plot;
 		private Point posPrev;
 
-		public MoveListener(XYPlot plot) {
+		/**
+		 * Creates a new listener and initializes it with a plot.
+		 * @param plot plot that should be changed.
+		 */
+		public MoveListener(Plot plot) {
 			this.plot = plot;
 		}
 
@@ -286,9 +293,16 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		}
 	}
 
+	/**
+	 * File filter that extracts files that can be read with a certain set of {@link IOCapabilities}.
+	 */
 	public final static class DrawableWriterFilter extends FileFilter {
 		private final IOCapabilities capabilities;
 
+		/**
+		 * Creates a new instance and initializes it with an {@link IOCapabilities} object.
+		 * @param capabilities writer capabilities.
+		 */
 		public DrawableWriterFilter(IOCapabilities capabilities) {
 			this.capabilities = capabilities;
 		}
@@ -312,6 +326,10 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			return String.format("%s: %s", capabilities.getFormat(), capabilities.getName());
 		}
 
+		/**
+		 * Returns the capabilities filtered by this instance.
+		 * @return writer capabilities.
+		 */
 		public IOCapabilities getWriterCapabilities() {
 			return capabilities;
 		}
@@ -326,7 +344,15 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		}
 	}
 
+	/**
+	 * A file chooser implementation that can be for export purposes.
+	 */
 	public final static class ExportChooser extends JFileChooser {
+		/**
+		 * Creates a new instance and initializes it with an array of IOCapabilities.
+		 * @param capabilities Array of objects describing the file formats
+		 * that are supported by this dialog.
+		 */
 		public ExportChooser(IOCapabilities... capabilities) {
 			setAcceptAllFileFilterUsed(false);
 			for (IOCapabilities c : capabilities) {
@@ -335,8 +361,18 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		}
 	}
 
+	/**
+	 * A dialog implementation for exporting plots. It allows the user to
+	 * specify the document dimensions.
+	 */
 	public final static class ExportDialog extends JDialog {
-		public static enum UserAction { APPROVE, CANCEL };
+		/** Type of user feedback. */
+		public static enum UserAction {
+			/** User confirmed dialog. */
+			APPROVE,
+			/** User canceled or closed dialog. */
+			CANCEL
+		};
 
 		private final Rectangle2D documentBounds;
 		private UserAction userAction;
@@ -346,6 +382,12 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		private final JFormattedTextField inputW;
 		private final JFormattedTextField inputH;
 
+		/**
+		 * Creates a new instance and initializes it with a parent and a
+		 * drawable component.
+		 * @param parent Parent component.
+		 * @param d Drawable component.
+		 */
 		public ExportDialog(Component parent, Drawable d) {
 			super(JOptionPane.getFrameForComponent(parent), true);
 			setTitle("Export options");
@@ -410,8 +452,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			setLocationRelativeTo(parent);
 		}
 
-		private static void addInputField(JFormattedTextField input, String labelText,
-				java.awt.Container cont, Object initialValue, PropertyChangeListener pcl) {
+		private static void addInputField(JFormattedTextField input,
+				String labelText, java.awt.Container cont, Object initialValue,
+				PropertyChangeListener pcl) {
 			JLabel label = new JLabel(labelText);
 			label.setHorizontalAlignment(JLabel.RIGHT);
 			cont.add(label);
@@ -422,6 +465,10 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			label.setLabelFor(input);
 		}
 
+		/**
+		 * Returns the bounds entered by the user.
+		 * @return Document bounds that should be used to export the plot
+		 */
 		public Rectangle2D getDocumentBounds() {
 			Rectangle2D bounds = new Rectangle2D.Double();
 			bounds.setFrame(documentBounds);

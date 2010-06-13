@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -64,29 +64,61 @@ public class PlotNavigator {
 			this.zoom = 1.0;
 		}
 
+		/**
+		 * Returns the original minimum value.
+		 * @return Original minimum value.
+		 */
 		public Number getMinOriginal() {
 			return minOriginal;
 		}
+		/**
+		 * Returns the original maximum value.
+		 * @return Original maximum value.
+		 */
 		public Number getMaxOriginal() {
 			return maxOriginal;
 		}
+		/**
+		 * Returns the original center value.
+		 * @return Original center value.
+		 */
 		public double getCenterOriginal() {
 			return centerOriginal;
 		}
+		/**
+		 * Returns the original data range.
+		 * @return Original data range.
+		 */
 		public double getRangeOriginal() {
 			return rangeOriginal;
 		}
 
+		/**
+		 * Returns the current center value.
+		 * @return Current center value.
+		 */
 		public double getCenter() {
 			return center;
 		}
+		/**
+		 * Sets the current center value.
+		 * @param center New center value.
+		 */
 		public void setCenter(double center) {
 			this.center = center;
 		}
 
+		/**
+		 * Returns the current zoom factor.
+		 * @return Current zoom factor.
+		 */
 		public double getZoom() {
 			return zoom;
 		}
+		/**
+		 * Sets the current zoom factor.
+		 * @param zoom New zoom factor.
+		 */
 		public void setZoom(double zoom) {
 			this.zoom = zoom;
 		}
@@ -199,16 +231,32 @@ public class PlotNavigator {
 		refresh();
 	}
 
+	/**
+	 * Returns the minimal zoom factor.
+	 * @return Minimal zoom factor.
+	 */
 	public double getZoomMin() {
 		return zoomMin;
 	}
+	/**
+	 * Sets the minimal zoom factor.
+	 * @param min New minimal zoom factor.
+	 */
 	public void setZoomMin(double min) {
 		this.zoomMin = min;
 	}
 
+	/**
+	 * Returns the minimal zoom factor.
+	 * @return Maximal zoom factor.
+	 */
 	public double getZoomMax() {
 		return zoomMax;
 	}
+	/**
+	 * Sets the maximal zoom factor.
+	 * @param max New maximal zoom factor.
+	 */
 	public void setZoomMax(double max) {
 		this.zoomMax = max;
 	}

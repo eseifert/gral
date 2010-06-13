@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -49,7 +49,7 @@ public class Kernel {
 	/**
 	 * Creates a new kernel object with the specified values and an offset
 	 * being half the size of this kernel (rounded down).
-	 * @param values
+	 * @param values Data values for the kernel.
 	 */
 	public Kernel(double... values) {
 		this(values.length/2, values);

@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -80,7 +80,8 @@ public class Median extends Filter {
 					window.remove(0);
 				}
 				int colIndexOriginal = getIndexOriginal(colIndex);
-				double v = getOriginal(colIndexOriginal, rowIndex - getOffset() + getWindowSize()).doubleValue();
+				double v = getOriginal(colIndexOriginal,
+						rowIndex - getOffset() + getWindowSize()).doubleValue();
 				window.add(v);
 				filteredRow[colIndex] = median(window);
 			}
@@ -104,10 +105,12 @@ public class Median extends Filter {
 			}
 			window.add(v);
 		}
-		int medianIndex = MathUtils.randomizedSelect(window, 0, window.size() - 1, window.size()/2);
+		int medianIndex = MathUtils.randomizedSelect(
+				window, 0, window.size() - 1, window.size()/2);
 		double median = window.get(medianIndex);
 		if ((window.size() & 1) == 0) {
-			int medianUpperIndex = MathUtils.randomizedSelect(window, 0, window.size() - 1, window.size()/2 + 1);
+			int medianUpperIndex = MathUtils.randomizedSelect(
+					window, 0, window.size() - 1, window.size()/2 + 1);
 			double medianUpper = window.get(medianUpperIndex);
 			median = (median + medianUpper)/2.0;
 		}

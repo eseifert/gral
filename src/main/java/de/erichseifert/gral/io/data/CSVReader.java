@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -65,6 +65,7 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 
 	/**
 	 * Creates a new CSVReader with the specified MIME type.
+	 * @param mimeType MIME type of the file format to be read.
 	 */
 	public CSVReader(String mimeType) {
 		settings = new HashMap<String, Object>();
@@ -74,8 +75,10 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 	}
 
 	@Override
-	public DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException {
-		Map<Class<? extends Number>, Method> parseMethods = new HashMap<Class<? extends Number>, Method>();
+	public DataSource read(InputStream input, Class<? extends Number>... types)
+			throws IOException, ParseException {
+		Map<Class<? extends Number>, Method> parseMethods =
+			new HashMap<Class<? extends Number>, Method>();
 		for (Class<? extends Number> type : types) {
 			if (parseMethods.containsKey(type)) {
 				continue;
@@ -93,7 +96,9 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
 			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
-				throw new IllegalArgumentException("Column count in file doesn't match; got "+cols.length+", but expected "+types.length+".");
+				throw new IllegalArgumentException(
+						"Column count in file doesn't match; got " + cols.length +
+						", but expected " + types.length + ".");
 			}
 			Number[] row = new Number[types.length];
 			for (int i = 0; i < types.length; i++) {
@@ -102,9 +107,14 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 					row[i] = (Number)parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
 				} catch (IllegalAccessException e) {
-					throw new RuntimeException("Couldn't access method for parsing data type "+types[i].getSimpleName()+" in column "+i);
+					throw new RuntimeException(
+							"Couldn't access method for parsing data type " +
+							types[i].getSimpleName() + " in column " + i);
 				} catch (InvocationTargetException e) {
-					throw new ParseException("Type mismatch in column "+i+": got \""+cols[i]+"\", but expected "+types[i].getSimpleName()+" value.", -1);
+					throw new ParseException(
+							"Type mismatch in column " + i + ": got \"" +
+							cols[i] + "\", but expected " +
+							types[i].getSimpleName() + " value.", -1);
 				}
 			}
 			data.add(row);
@@ -125,7 +135,8 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 				continue;
 			}
 			Class<?>[] types = m.getParameterTypes();
-			boolean hasStringParameter = (types.length == 1) && (String.class.equals(types[0]));
+			boolean hasStringParameter =
+				(types.length == 1) && String.class.equals(types[0]);
 			if (!hasStringParameter) {
 				continue;
 			}

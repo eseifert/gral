@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -47,7 +47,8 @@ public interface DrawableWriter {
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, OutputStream destination, double width, double height) throws IOException;
+	public void write(Drawable d, OutputStream destination,
+			double width, double height) throws IOException;
 
 	/**
 	 * Stores the specified <code>Drawable</code> instance.
@@ -59,5 +60,6 @@ public interface DrawableWriter {
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, OutputStream destination, double x, double y, double width, double height) throws IOException;
+	public void write(Drawable d, OutputStream destination,
+			double x, double y, double width, double height) throws IOException;
 }

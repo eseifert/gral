@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -40,11 +40,22 @@ public class Settings {
 	private final Map<Key, Object> settings;
 	private final Map<Key, Object> defaults;
 
+	/**
+	 * A settings key storing a name.
+	 */
 	public static final class Key {
 		private final String name;
+		/**
+		 * Constructor that initializes the instance with a name.
+		 * @param name Name associated with this key.
+		 */
 		public Key(String name) {
 			this.name = name;
 		}
+		/**
+		 * Returns the name associated with this key.
+		 * @return Name of the settings key.
+		 */
 		public String getName() {
 			return name;
 		}
@@ -52,6 +63,7 @@ public class Settings {
 
 	/**
 	 * Creates an empty Settings object.
+	 * @param listener Initial settings listener.
 	 */
 	public Settings(SettingsListener listener) {
 		settingsListeners = new HashSet<SettingsListener>();
@@ -65,10 +77,10 @@ public class Settings {
 
 	/**
 	 * Adds a new listener which gets notified if settings have changed.
-	 * @param settingsListener listener to be added
+	 * @param l listener to be added
 	 */
-	public void addSettingsListener(SettingsListener settingsListener) {
-		settingsListeners.add(settingsListener);
+	public void addSettingsListener(SettingsListener l) {
+		settingsListeners.add(l);
 	}
 
 	/**
@@ -202,10 +214,10 @@ public class Settings {
 
 	/**
 	 * Removes the specified listener.
-	 * @param settingsListener listener to be removed
+	 * @param l listener to be removed
 	 */
-	public void removeSettingsListener(SettingsListener settingsListener) {
-		settingsListeners.remove(settingsListener);
+	public void removeSettingsListener(SettingsListener l) {
+		settingsListeners.remove(l);
 	}
 
 	/**

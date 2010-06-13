@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -38,12 +38,16 @@ import de.erichseifert.gral.util.Settings.Key;
 /**
  * Abstract class that represents a canvas for the plot which will be drawn.
  */
-public abstract class PlotArea2D extends AbstractDrawable implements SettingsStorage, SettingsListener {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot area. */
+public abstract class PlotArea2D extends AbstractDrawable
+		implements SettingsStorage, SettingsListener {
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the background of the plot area. */
 	public static final Key BACKGROUND = new Key("plotarea.background");
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot area. */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+	paint the border of the plot area. */
 	public static final Key BORDER = new Key("plotarea.border");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot area. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	fill the border of the plot area. */
 	public static final Key COLOR = new Key("plotarea.color");
 
 	private final Settings settings;

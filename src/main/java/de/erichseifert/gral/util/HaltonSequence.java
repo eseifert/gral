@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * Class that calculates the values of the Halton sequence.
  */
 public class HaltonSequence implements Iterator<Double> {
-	private int base;
+	private final int base;
 	private long c;
 
 	/**
@@ -38,7 +38,8 @@ public class HaltonSequence implements Iterator<Double> {
 	}
 
 	/**
-	 * Creates a new HaltonSequence object with the specified base.
+	 * Creates a new instance with the specified base.
+	 * @param base Base value.
 	 */
 	public HaltonSequence(int base) {
 		this.base = base;

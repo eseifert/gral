@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -50,20 +50,25 @@ public class Statistics implements DataListener {
 	public static final String MIN = "min";
 	/** Key for specifying the maximum, i.e. the largest value. */
 	public static final String MAX = "max";
-	/** Key for specifying the total number of elements. This is the zeroth central moment: E((x - µ)^0) */
+	/** Key for specifying the total number of elements.
+	This is the zeroth central moment: E((x - µ)^0) */
 	public static final String N = "n";
-	/** Key for specifying the expected value. This is the first central moment: E((x - E(x))^1) */
+	/** Key for specifying the expected value.
+	This is the first central moment: E((x - E(x))^1) */
 	public static final String MEAN_DEVIATION = "mean deviation";
-	/** Key for specifying the variance. This is the second central moment: E((x - E(x))^2) */
+	/** Key for specifying the variance.
+	This is the second central moment: E((x - E(x))^2) */
 	public static final String VARIANCE = "variance";
-	/** Key for specifying the skewness. This is the third central moment: E((x - E(x))^3) */
+	/** Key for specifying the skewness.
+	This is the third central moment: E((x - E(x))^3) */
 	public static final String SKEWNESS = "skewness";
-	/** Key for specifying the kurtosis. This is the fourth central moment: E((x - E(x))^4) */
+	/** Key for specifying the kurtosis.
+	This is the fourth central moment: E((x - E(x))^4) */
 	public static final String KURTOSIS = "kurtosis";
 	/** Key for specifying the median (or 50% quantile). */
 	public static final String MEDIAN = "median";
 
-	private DataSource data;
+	private final DataSource data;
 	private final ArrayList<Map<String, Double>> statistics;
 
 	/**
@@ -160,9 +165,12 @@ public class Statistics implements DataListener {
 			// Variance (second moment)
 			colStats.put(VARIANCE, colStats.get(SUM2) - mean*colStats.get(SUM));
 			// Skewness (third moment)
-			colStats.put(SKEWNESS, colStats.get(SUM3) - 3.0*mean*colStats.get(SUM2) + 2.0*mean2*colStats.get(SUM));
+			colStats.put(SKEWNESS, colStats.get(SUM3) -
+					3.0*mean*colStats.get(SUM2) + 2.0*mean2*colStats.get(SUM));
 			// Kurtosis (fourth moment)
-			colStats.put(KURTOSIS, colStats.get(SUM4) - 4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) - 3.0*mean2*mean*colStats.get(SUM));
+			colStats.put(KURTOSIS, colStats.get(SUM4) -
+					4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) -
+					3.0*mean2*mean*colStats.get(SUM));
 
 			// Add a Map for each column
 			statistics.add(colStats);

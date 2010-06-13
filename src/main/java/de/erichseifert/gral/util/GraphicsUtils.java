@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -56,7 +56,8 @@ public abstract class GraphicsUtils {
 	 * @param paint Paint to be used.
 	 * @param paintBounds Optional bounds describing the painted area.
 	 */
-	public static void fillPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds) {
+	public static void fillPaintedShape(Graphics2D g2d, Shape shape,
+			Paint paint, Rectangle2D paintBounds) {
 		if (paintBounds == null) {
 			paintBounds = shape.getBounds2D();
 		}
@@ -68,7 +69,8 @@ public abstract class GraphicsUtils {
 			paintOld = g2d.getPaint();
 			g2d.setPaint(paint);
 		}
-		AffineTransform tx = AffineTransform.getScaleInstance(1.0/paintBounds.getWidth(), 1.0/paintBounds.getHeight());
+		AffineTransform tx = AffineTransform.getScaleInstance(
+				1.0/paintBounds.getWidth(), 1.0/paintBounds.getHeight());
 		tx.translate(-paintBounds.getX(), -paintBounds.getY());
 		g2d.fill(tx.createTransformedShape(shape));
 		if (paintOld != null) {
@@ -85,7 +87,8 @@ public abstract class GraphicsUtils {
 	 * @param paintBounds Optional bounds describing the painted area.
 	 * @param stroke Stroke to be used for outlines.
 	 */
-	public static void drawPaintedShape(Graphics2D g2d, Shape shape, Paint paint, Rectangle2D paintBounds, Stroke stroke) {
+	public static void drawPaintedShape(Graphics2D g2d, Shape shape,
+			Paint paint, Rectangle2D paintBounds, Stroke stroke) {
 		if (stroke == null) {
 			stroke = g2d.getStroke();
 		}

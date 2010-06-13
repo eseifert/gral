@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -44,23 +44,28 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Abstract class that serves as a basic for any legend in a plot.
+ * <p>Abstract class that serves as a basic for any legend in a plot.
  * It provides an inner Item class which is responsible for
- * displaying a specific DataSource.
- * The functionality includes:
+ * displaying a specific DataSource.</p>
+ * <p>The functionality includes:</p>
  * <ul>
- * <li>Storing and retrieving settings</li>
- * <li>Adding and removing DataSources</li>
+ *   <li>Storing and retrieving settings</li>
+ *   <li>Adding and removing DataSources</li>
  * </ul>
  */
-public abstract class Legend extends DrawableContainer implements SettingsStorage, SettingsListener {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background. */
+public abstract class Legend extends DrawableContainer
+		implements SettingsStorage, SettingsListener {
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	 paint the background. */
 	public static final Key BACKGROUND = new Key("legend.background");
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the legend. */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+	 paint the border of the legend. */
 	public static final Key BORDER = new Key("legend.border");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the legend. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	 fill the border of the legend. */
 	public static final Key COLOR = new Key("legend.color");
-	/** Key for specifying the orientation of the legend using a {@link de.erichseifert.gral.DrawableConstants.Orientation} value. */
+	/** Key for specifying the orientation of the legend using a
+	 {@link de.erichseifert.gral.DrawableConstants.Orientation} value. */
 	public static final Key ORIENTATION = new Key("legend.orientation");
 	/** Key for specifying the gap between items. */
 	public static final Key GAP = new Key("legend.gap");
@@ -174,6 +179,12 @@ public abstract class Legend extends DrawableContainer implements SettingsStorag
 		}
 	}
 
+	/**
+	 * Draws the symbol of a certain data source.
+	 * @param g2d Graphics object to draw with.
+	 * @param symbol symbol to draw.
+	 * @param data Data source.
+	 */
 	protected abstract void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data);
 
 	/**

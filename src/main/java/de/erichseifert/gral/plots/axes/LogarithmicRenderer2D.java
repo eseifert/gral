@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -58,7 +58,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		}
 		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
 		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
-		return (Math.log10(value.doubleValue()) - minLog)*getShapeLength() / (maxLog - minLog);
+		return (Math.log10(value.doubleValue()) - minLog)*getShapeLength() /
+			(maxLog - minLog);
 	}
 
 	@Override
@@ -84,7 +85,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		checkAxisBounds(axis);
 		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
-		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
+		double tickSpacingMinor = (ticksMinorCount > 0)
+			? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 
@@ -94,7 +96,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double minTickMajor = MathUtils.ceil(min, powerMin*tickSpacing);
 
 		int ticksPerPower = (int)Math.floor(BASE/tickSpacingMinor);
-		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/(powerMin*tickSpacingMinor));
+		int initialTicksMinor = (int)Math.floor((minTickMajor - min) /
+				(powerMin*tickSpacingMinor));
 
 		List<Tick2D> ticks = new LinkedList<Tick2D>();
 		Set<Double> tickPositions = new HashSet<Double>();
@@ -112,7 +115,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				} else if (tickPositionWorld > max) {
 					break;
 				}
-				TickType tickType = ((i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0) ? TickType.MAJOR : TickType.MINOR;
+				boolean isMajor = ((i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0);
+				TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
 				Tick2D tick = getTick(tickType, axis, tickPositionWorld);
 				if (tick.getPosition() != null
 						&& !tickPositions.contains(tickPositionWorld)
@@ -136,7 +140,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	private static void checkAxisBounds(Axis axis) {
 		if (axis.getMin().doubleValue() < 0.0 || axis.getMax().doubleValue() < 0.0) {
-			throw new IllegalStateException("Axis bounds must not be less than zero for a logarithmic axis renderer.");
+			throw new IllegalStateException(
+					"Axis bounds must not be less than zero for a logarithmic axis renderer.");
 		}
 	}
 

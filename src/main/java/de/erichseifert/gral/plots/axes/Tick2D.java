@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -32,7 +32,15 @@ import de.erichseifert.gral.plots.DataPoint2D;
  * Class for storing points of a plot.
  */
 public class Tick2D extends DataPoint2D {
-	public static enum TickType { MAJOR, MINOR, CUSTOM };
+	/** Type of tick mark. */
+	public static enum TickType {
+		/** Major tick mark. */
+		MAJOR,
+		/** Minor tick mark. */
+		MINOR,
+		/** User-defined tick mark. */
+		CUSTOM
+	};
 
 	private final TickType type;
 	private final Point2D normal;
@@ -41,6 +49,7 @@ public class Tick2D extends DataPoint2D {
 	/**
 	 * Creates a new <code>Tick2D</code> object with the specified position, normal,
 	 * <code>Drawable</code>, point and label.
+	 * @param type Type of the tick mark.
 	 * @param position Coordinates.
 	 * @param normal Normal.
 	 * @param drawable Representation.

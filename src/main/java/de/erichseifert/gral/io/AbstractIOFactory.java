@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -38,8 +38,14 @@ import java.util.Set;
  * @param <T> The type of objects which should be produced by this factory
  */
 public abstract class AbstractIOFactory<T> implements IOFactory<T> {
-	protected final Map<String, Class<? extends T>> entries = new HashMap<String, Class<? extends T>>();
+	private final Map<String, Class<? extends T>> entries = new HashMap<String, Class<? extends T>>();
 
+	/**
+	 * Constructor that creates a new instance and initializes it with the name
+	 * of the corresponding properties file(s).
+	 * @param propFileName File name of the properties file(s)
+	 * @throws IOException if reading the properties file(s) failed
+	 */
 	protected AbstractIOFactory(String propFileName) throws IOException {
 		// Retrieve property-files
 		Enumeration<URL> propFiles = null;
@@ -126,5 +132,14 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	@Override
 	public boolean isFormatSupported(String mimeType) {
 		return entries.containsKey(mimeType);
+	}
+
+	/**
+	 * Returns the type of factory products for a specified format.
+	 * @param type Format.
+	 * @return Class type to create new instances.
+	 */
+	protected Class<? extends T> getTypeClass(String type) {
+		return entries.get(type);
 	}
 }

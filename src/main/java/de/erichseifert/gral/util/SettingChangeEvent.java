@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -41,7 +41,8 @@ public class SettingChangeEvent extends EventObject {
 	 * @param valNew New value.
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
-	public SettingChangeEvent(Object source, Settings.Key key, Object valOld, Object valNew, boolean defaultSetting) {
+	public SettingChangeEvent(Object source, Settings.Key key,
+			Object valOld, Object valNew, boolean defaultSetting) {
 		super(source);
 		this.key = key;
 		this.valOld = valOld;

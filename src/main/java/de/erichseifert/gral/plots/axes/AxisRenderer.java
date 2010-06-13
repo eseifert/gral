@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -27,6 +27,9 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.util.SettingsStorage;
 import de.erichseifert.gral.util.Settings.Key;
 
+/**
+ * Interface for generic renderers of axes.
+ */
 public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying the intersection point of axis. */
 	static final Key INTERSECTION = new Key("axis.intersection");
@@ -101,7 +104,7 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Custom labels as a {@link java.util.Map} with a position
 	 (<code>Double</code>) as key and a label (<code>String</code>) as value. */
 	static final Key TICKS_CUSTOM = new Key("axis.ticks.custom");
-	/** Key for specifying the {@link java.lang.String} instance for the label 
+	/** Key for specifying the {@link java.lang.String} instance for the label
 	 text of the axis. */
 	static final Key LABEL = new Key("axis.label");
 	/** Key for specifying the distance from the axis to the label. The length

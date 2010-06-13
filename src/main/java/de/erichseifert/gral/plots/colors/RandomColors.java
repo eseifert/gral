@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -35,7 +35,7 @@ public class RandomColors implements ColorMapper {
 	private static final double MIN_DIST = 0.3;
 
 	private final Map<Double, Color> colorCache;
-	private Random random;
+	private final Random random;
 	//FIXME : duplicate code! See de.erichseifert.gral.plots.colors.QuasiRandomColors
 	private float[] colorVariance;
 
@@ -53,7 +53,8 @@ public class RandomColors implements ColorMapper {
 	}
 
 	/**
-	 * Creates a new RandomColors object with the specified seed.
+	 * Creates a new instances with the specified seed.
+	 * @param seed Random number seed.
 	 */
 	public RandomColors(long seed) {
 		this();

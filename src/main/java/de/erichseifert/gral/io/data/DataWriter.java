@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -35,7 +35,7 @@ public interface DataWriter {
 	 * Stores the specified DataSource
 	 * @param data DataSource to be stored.
 	 * @param output OutputStream to be written to.
-	 * @throws IOException
+	 * @throws IOException if writing the data failed
 	 */
 	void write(DataSource data, OutputStream output) throws IOException;
 

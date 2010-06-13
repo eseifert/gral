@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -37,8 +37,8 @@ public class EdgeLayout implements Layout {
 	// TODO: Add setters and getters.
 	// FIXME: Use SettingsStorage?
 	// FIXME: Extract abstract superclass as an additional layer between Layout and EdgeLayout?
-	private double hgap;
-	private double vgap;
+	private final double hgap;
+	private final double vgap;
 
 	/**
 	 * Creates an EdgeLayout with the specified distances between the components.
@@ -50,9 +50,7 @@ public class EdgeLayout implements Layout {
 		this.vgap = vgap;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.LayoutManager2D#layout(java.awt.geom.Rectangle2D, java.awt.Insets)
-	 */
+	@Override
 	public void layout(Container container) {
 		Insets2D insets = container.getInsets();
 		if (insets == null) {
@@ -154,8 +152,12 @@ public class EdgeLayout implements Layout {
 
 		layoutComponent(center,
 			xCenter, yCenter,
-			bounds.getWidth() - insets.getLeft() - widthWest - widthEast - insets.getRight() - hgapEast - hgapWest,
-			bounds.getHeight() - insets.getTop() - heightNorth - heightSouth - insets.getBottom() - vgapNorth - vgapSouth
+			bounds.getWidth() -
+				insets.getLeft() - widthWest - widthEast -
+				insets.getRight() - hgapEast - hgapWest,
+			bounds.getHeight() -
+				insets.getTop() - heightNorth - heightSouth -
+				insets.getBottom() - vgapNorth - vgapSouth
 		);
 	}
 
@@ -204,8 +206,10 @@ public class EdgeLayout implements Layout {
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
 		return new de.erichseifert.gral.util.Dimension2D.Double(
-			insets.getLeft() + widthEast + hgapEast + widthCenter + hgapWest + widthWest + insets.getRight(),
-			insets.getTop() + heightNorth + vgapNorth + heightCenter + vgapSouth + heightSouth + insets.getBottom()
+			insets.getLeft() + widthEast + hgapEast + widthCenter +
+				hgapWest + widthWest + insets.getRight(),
+			insets.getTop() + heightNorth + vgapNorth + heightCenter +
+				vgapSouth + heightSouth + insets.getBottom()
 		);
 	}
 
@@ -251,7 +255,8 @@ public class EdgeLayout implements Layout {
 	 * @param w Width.
 	 * @param h Height.
 	 */
-	private static void layoutComponent(Drawable d, double x, double y, double w, double h) {
+	private static void layoutComponent(Drawable d,
+			double x, double y, double w, double h) {
 		if (d == null) {
 			return;
 		}

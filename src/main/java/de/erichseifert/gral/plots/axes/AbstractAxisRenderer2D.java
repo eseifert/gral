@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -132,7 +132,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				// Draw axis shape
 				Paint axisPaint = AbstractAxisRenderer2D.this.getSetting(SHAPE_COLOR);
 				Stroke axisStroke = AbstractAxisRenderer2D.this.getSetting(SHAPE_STROKE);
-				boolean isShapeVisible = AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_VISIBLE);
+				boolean isShapeVisible =
+					AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_VISIBLE);
 				if (isShapeVisible) {
 					Shape shape = AbstractAxisRenderer2D.this.getSetting(SHAPE);
 					GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
@@ -142,15 +143,21 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				final double fontHeight = 10.0;
 
 				// Draw ticks
-				boolean drawTicksMajor = AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS);
-				boolean drawTicksMinor = AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS_MINOR);
+				boolean drawTicksMajor =
+					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS);
+				boolean drawTicksMinor =
+					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS_MINOR);
 				if (drawTicksMajor || drawTicksMinor) {
 					List<Tick2D> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
-					boolean isTickLabelVisible = AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS);
-					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
-					double tickLabelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_ROTATION);
-					double tickLabelDist = AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
+					boolean isTickLabelVisible =
+						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS);
+					boolean isTickLabelOutside =
+						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+					double tickLabelRotation =
+						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_ROTATION);
+					double tickLabelDist =
+						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
 					Line2D tickShape = new Line2D.Double();
 
 					for (Tick2D tick : ticks) {
@@ -162,34 +169,46 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 							continue;
 						}
 
-						double tickLength = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
-						double tickAlignment = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
-						Paint tickPaint = AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
-						Stroke tickStroke = AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_STROKE);
+						double tickLength =
+							AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
+						double tickAlignment =
+							AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+						Paint tickPaint =
+							AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
+						Stroke tickStroke =
+							AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_STROKE);
 						if (TickType.MINOR.equals(tick.getType())) {
-							tickLength = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_LENGTH)*fontHeight;
-							tickAlignment = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_ALIGNMENT);
-							tickPaint = AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_MINOR_COLOR);
-							tickStroke = AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
+							tickLength =
+								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_LENGTH)*fontHeight;
+							tickAlignment =
+								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_ALIGNMENT);
+							tickPaint =
+								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_MINOR_COLOR);
+							tickStroke =
+								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						}
 
 						double tickLengthInner = tickLength*(tickAlignment);
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 						tickShape.setLine(
-							tickPoint.getX() - tickNormal.getX()*tickLengthInner, tickPoint.getY() - tickNormal.getY()*tickLengthInner,
-							tickPoint.getX() + tickNormal.getX()*tickLengthOuter, tickPoint.getY() + tickNormal.getY()*tickLengthOuter
+							tickPoint.getX() - tickNormal.getX()*tickLengthInner,
+							tickPoint.getY() - tickNormal.getY()*tickLengthInner,
+							tickPoint.getX() + tickNormal.getX()*tickLengthOuter,
+							tickPoint.getY() + tickNormal.getY()*tickLengthOuter
 						);
 						GraphicsUtils.drawPaintedShape(g2d, tickShape, tickPaint, null, tickStroke);
 
 						// Draw label
-						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) || TickType.CUSTOM.equals(tick.getType()))) {
+						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) ||
+								TickType.CUSTOM.equals(tick.getType()))) {
 							String tickLabelText = tick.getLabel();
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
 								// TODO: Allow separate colors for ticks and tick labels?
 								tickLabel.setSetting(Label.COLOR, tickPaint);
 								double labelDist = tickLengthOuter + tickLabelDist;
-								layoutLabel(tickLabel, tickPoint, tickNormal, labelDist, isTickLabelOutside, tickLabelRotation);
+								layoutLabel(tickLabel, tickPoint, tickNormal,
+										labelDist, isTickLabelOutside, tickLabelRotation);
 								tickLabel.draw(g2d);
 							}
 						}
@@ -200,23 +219,33 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				String labelText = AbstractAxisRenderer2D.this.<String>getSetting(LABEL);
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
-					axisLabel.setSetting(Label.COLOR, AbstractAxisRenderer2D.this.<Paint>getSetting(LABEL_COLOR));
+					axisLabel.setSetting(Label.COLOR,
+							AbstractAxisRenderer2D.this.<Paint>getSetting(LABEL_COLOR));
 
 					// FIXME: use tick label height instead of constant value
-					double tickLength = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
-					double tickAlignment = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+					double tickLength =
+						AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
+					double tickAlignment =
+						AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-					double tickLabelDist = AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
+					double tickLabelDist =
+						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
 
-					double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_DISTANCE)*fontHeight;
-					double labelDist = tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
-					double labelRotation = AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_ROTATION);
-					double axisLabelPos = (axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
-					boolean isTickLabelOutside = AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+					double labelDistance =
+						AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_DISTANCE)*fontHeight;
+					double labelDist =
+						tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
+					double labelRotation =
+						AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_ROTATION);
+					double axisLabelPos =
+						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
+					boolean isTickLabelOutside =
+						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 
 					Point2D labelPos = getPosition(axis, axisLabelPos, false, true);
 					Point2D labelNormal = getNormal(axis, axisLabelPos, false, true);
-					layoutLabel(axisLabel, labelPos, labelNormal, labelDist, isTickLabelOutside, labelRotation);
+					layoutLabel(axisLabel, labelPos, labelNormal, labelDist,
+							isTickLabelOutside, labelRotation);
 
 					axisLabel.draw(g2d);
 				}
@@ -226,7 +255,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				g2d.setTransform(txOrig);
 			}
 
-			private void layoutLabel(Label label, Point2D labelPos, Point2D labelNormal, double labelDist, boolean isLabelOutside, double rotation) {
+			private void layoutLabel(Label label, Point2D labelPos, Point2D labelNormal,
+					double labelDist, boolean isLabelOutside, double rotation) {
 				Rectangle2D labelSize = label.getTextRectangle();
 				Shape marginShape = new Rectangle2D.Double(
 					0, 0,
@@ -243,14 +273,16 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				}
 				marginBounds = marginShape.getBounds2D();
 
-				double intersRayLength = marginBounds.getHeight()*marginBounds.getHeight() + marginBounds.getWidth()*marginBounds.getWidth();
+				double intersRayLength = marginBounds.getHeight()*marginBounds.getHeight() +
+					marginBounds.getWidth()*marginBounds.getWidth();
+				double intersRayDir = (isLabelOutside?-1.0:1.0)*intersRayLength;
 				List<Point2D> descriptionBoundsIntersections = GeometryUtils.intersection(
 					marginBounds,
 					new Line2D.Double(
 						marginBounds.getCenterX(),
 						marginBounds.getCenterY(),
-						marginBounds.getCenterX() + (isLabelOutside?-1.0:1.0)*labelNormal.getX()*intersRayLength,
-						marginBounds.getCenterY() + (isLabelOutside?-1.0:1.0)*labelNormal.getY()*intersRayLength
+						marginBounds.getCenterX() + intersRayDir*labelNormal.getX(),
+						marginBounds.getCenterY() + intersRayDir*labelNormal.getY()
 					)
 				);
 				if (!descriptionBoundsIntersections.isEmpty()) {
@@ -268,13 +300,19 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			public Dimension2D getPreferredSize() {
 				// FIXME: use real font height instead of fixed value
 				final double fontHeight = 10.0;
-				double tickLength = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH);
+				double tickLength =
+					AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH);
 				tickLength *= fontHeight;
-				double tickAlignment = AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
-				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-				double labelDistance = AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE);
-				double labelDist = labelDistance*fontHeight + tickLengthOuter;
-				double minSize = fontHeight + labelDist + tickLengthOuter;
+				double tickAlignment =
+					AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+				double tickLengthOuter =
+					tickLength*(1.0 - tickAlignment);
+				double labelDistance =
+					AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE);
+				double labelDist =
+					labelDistance*fontHeight + tickLengthOuter;
+				double minSize =
+					fontHeight + labelDist + tickLengthOuter;
 				return new de.erichseifert.gral.util.Dimension2D.Double(minSize, minSize);
 			}
 		};
@@ -303,7 +341,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		// Add major and minor ticks
 		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
 			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
-			TickType tickType = ((tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0) ? TickType.MAJOR : TickType.MINOR;
+			boolean isMajor = (tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0;
+			TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
 			Tick2D tick = getTick(tickType, axis, tickPositionWorld);
 			if (tick.getPosition() != null
 					&& !tickPositionsCustom.contains(tickPositionWorld)
@@ -364,7 +403,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	public Point2D getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
 		double valueView;
 		if (forceLinear) {
-			valueView = (value.doubleValue() - axis.getMin().doubleValue())/axis.getRange()*getShapeLength();
+			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /
+				axis.getRange()*getShapeLength();
 		} else {
 			valueView = worldToView(axis, value, extrapolate);
 		}
@@ -375,7 +415,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		}
 
 		segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
-		double normalOrientation = AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE) ? 1.0 : -1.0;
+		double normalOrientation =
+			AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE)
+			? 1.0 : -1.0;
 		Point2D tickNormal = new Point2D.Double(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()
@@ -396,14 +438,16 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public Point2D getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
+	public Point2D getPosition(Axis axis, Number value,
+			boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
 		}
 
 		double valueView;
 		if (forceLinear) {
-			valueView = (value.doubleValue() - axis.getMin().doubleValue())/axis.getRange()*getShapeLength();
+			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /
+				axis.getRange()*getShapeLength();
 		} else {
 			valueView = worldToView(axis, value, extrapolate);
 		}
@@ -419,9 +463,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				Line2D segment = shapeLines[segmentIndex];
 				double segmentLen = shapeSegmentLengths[segmentIndex];
 				double shapeLen = shapeLengths[segmentIndex];
+				double relLen = (valueView - shapeLen)/segmentLen;
 				return new Point2D.Double(
-					segment.getX1() + (segment.getX2() - segment.getX1())/segmentLen * (valueView - shapeLen),
-					segment.getY1() + (segment.getY2() - segment.getY1())/segmentLen * (valueView - shapeLen)
+					segment.getX1() + (segment.getX2() - segment.getX1())*relLen,
+					segment.getY1() + (segment.getY2() - segment.getY1())*relLen
 				);
 			} else {
 				if (valueView <= 0.0) {
@@ -456,7 +501,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		boolean directionSwapped =  this.<Boolean>getSetting(SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 		shapeSegmentLengths = new double[shapeLines.length];
-		shapeLengths = new double[shapeLines.length + 1];  // First length is always 0.0, last length is the total length
+		// First length is always 0.0, last length is the total length
+		shapeLengths = new double[shapeLines.length + 1];
 		shapeLineNormals = new Point2D[shapeLines.length];
 
 		if (shapeLines.length == 0) {

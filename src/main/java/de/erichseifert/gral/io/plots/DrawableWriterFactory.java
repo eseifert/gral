@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -57,7 +57,7 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 	@Override
 	public DrawableWriter get(String mimeType) {
 		DrawableWriter writer = null;
-		Class<? extends DrawableWriter> clazz = entries.get(mimeType);
+		Class<? extends DrawableWriter> clazz = getTypeClass(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
 			Constructor<? extends DrawableWriter> constructor = clazz.getDeclaredConstructor(String.class);

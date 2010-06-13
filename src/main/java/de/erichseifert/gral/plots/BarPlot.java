@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -49,14 +49,20 @@ public class BarPlot extends XYPlot {
 	 * Class that renders a bar in a bar plot.
 	 */
 	protected static class BarRenderer extends AbstractPointRenderer {
-		private BarPlot plot;
+		private final BarPlot plot;
 
+		/**
+		 * Constructor that creates a new instance and initializes it with a
+		 * plot as data provider.
+		 * @param plot Data provider.
+		 */
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
 		}
 
 		@Override
-		public Drawable getPoint(final Axis axisY, final AxisRenderer2D axisYRenderer, final Row row) {
+		public Drawable getPoint(final Axis axisY,
+				final AxisRenderer2D axisYRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
@@ -99,7 +105,8 @@ public class BarPlot extends XYPlot {
 			double axisYMax = axisY.getMax().doubleValue();
 			double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
 
-			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) || (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
+			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) ||
+			    (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
 				return new GeneralPath();
 			}
 			//*/
@@ -107,11 +114,15 @@ public class BarPlot extends XYPlot {
 			double barWidthRel = plot.<Double>getSetting(BarPlot.BAR_WIDTH);
 			double barAlign = 0.5;
 
-			double barXMin = axisXRenderer.getPosition(axisX, valueX - barWidthRel*barAlign, true, false).getX();
-			double barXMax = axisXRenderer.getPosition(axisX, valueX + barWidthRel*barAlign, true, false).getX();
+			double barXMin = axisXRenderer.getPosition(
+					axisX, valueX - barWidthRel*barAlign, true, false).getX();
+			double barXMax = axisXRenderer.getPosition(
+					axisX, valueX + barWidthRel*barAlign, true, false).getX();
 
-			double barYVal = axisYRenderer.getPosition(axisY, valueY, true, false).getY();
-			double barYOrigin = axisYRenderer.getPosition(axisY, axisYOrigin, true, false).getY();
+			double barYVal = axisYRenderer.getPosition(
+					axisY, valueY, true, false).getY();
+			double barYOrigin = axisYRenderer.getPosition(
+					axisY, axisYOrigin, true, false).getY();
 			double barYMin = Math.min(barYVal, barYOrigin);
 			double barYMax = Math.max(barYVal, barYOrigin);
 
@@ -127,7 +138,7 @@ public class BarPlot extends XYPlot {
 	}
 
 	/**
-	 * Creates a new <code>BarPlot</code> object with the specified <code>DataSource</code>s.
+	 * Creates a new instance and initializes it with the specified data sources.
 	 * @param data Data to be displayed.
 	 */
 	public BarPlot(DataSource... data) {

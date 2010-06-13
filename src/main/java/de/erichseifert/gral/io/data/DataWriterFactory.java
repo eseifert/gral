@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -27,7 +27,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import de.erichseifert.gral.io.AbstractIOFactory;
 
-
+/**
+ * A factory class that produces <code>DataWriter</code> instances for a
+ * specified format. The produced writers can be used to output a
+ * <code>DataSource</code> to a data sink.
+ */
 public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	private static DataWriterFactory instance;
 
@@ -35,6 +39,10 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 		super("datawriters.properties");
 	}
 
+	/**
+	 * Returns the instance of the factory.
+	 * @return Instance of the factory.
+	 */
 	public static DataWriterFactory getInstance() {
 		if (instance == null) {
 			try {
@@ -48,11 +56,12 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	@Override
 	public DataWriter get(String mimeType) {
 		DataWriter writer = null;
-		Class<? extends DataWriter> clazz = entries.get(mimeType);
+		Class<? extends DataWriter> clazz = getTypeClass(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
 			if (clazz != null) {
-				Constructor<? extends DataWriter> constructor = clazz.getDeclaredConstructor(String.class);
+				Constructor<? extends DataWriter> constructor =
+					clazz.getDeclaredConstructor(String.class);
 				writer = constructor.newInstance(mimeType);
 			}
 		} catch (SecurityException e) {

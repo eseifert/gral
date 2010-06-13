@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -46,7 +46,8 @@ public class PiePlot extends Plot implements DataListener {
 	public static final Key RADIUS = new Key("pieplot.radius");
 	/** Key for specifying the inner radius of the pie relative to the outer radius. */
 	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner");
-	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper} instance used for the segments. */
+	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper}
+	instance used for the segments. */
 	public static final Key COLORS = new Key("pieplot.colorlist");
 	/** Key for specifying whether the segments should be ordered clockwise or counterclockwise. */
 	public static final Key CLOCKWISE = new Key("pieplot.clockwise");
@@ -61,6 +62,11 @@ public class PiePlot extends Plot implements DataListener {
 		private double degreesPerValue;
 		private ArrayList<double[]> slices;
 
+		/**
+		 * Constructor that creates a new instance and initializes it with a
+		 * plot acting as data provider.
+		 * @param plot Data provider.
+		 */
 		public PiePlotArea2D(PiePlot plot) {
 			this.plot = plot;
 		}

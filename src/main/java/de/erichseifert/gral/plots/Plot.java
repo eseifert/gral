@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -64,23 +64,29 @@ import de.erichseifert.gral.util.Settings.Key;
  * </ul>
  */
 public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
-	/** Key for specifying the {@link java.lang.String} instance for the title of the plot. */
+	/** Key for specifying the {@link java.lang.String} instance for the title
+	of the plot. */
 	public static final Key TITLE = new Key("plot.title");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the background of the plot. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the background of the plot. */
 	public static final Key BACKGROUND = new Key("plot.background");
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to paint the border of the plot. */
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+	paint the border of the plot. */
 	public static final Key BORDER = new Key("plot.border");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to fill the border of the plot. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	fill the border of the plot. */
 	public static final Key COLOR = new Key("plot.color");
 	/** Key for specifying the whether antialiasing is enabled. */
 	public static final Key ANTIALISING = new Key("plot.antialiasing");
 	/** Key for specifying whether the legend should be shown. */
 	public static final Key LEGEND = new Key("plot.legend");
-	/** Key for specifying the positioning of the legend using a {@link de.erichseifert.gral.DrawableConstants.Location} value. */
+	/** Key for specifying the positioning of the legend using a
+	{@link de.erichseifert.gral.DrawableConstants.Location} value. */
 	public static final Key LEGEND_LOCATION = new Key("plot.legend.location");
 	/** Key for specifying the width of the legend's margin. */
 	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin");
-	/** Key for specifying the scaling behavior of the plot using a {@link ScaleMode} value. */
+	/** Key for specifying the scaling behavior of the plot using a
+	{@link ScaleMode} value. */
 	public static final Key SCALING_MODE = new Key("plot.scalingMode");
 
 	/** Constants for specifying the scaling behavior values. */
@@ -95,6 +101,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	private final Settings settings;
 
+	/** Data sources. */
 	protected final List<DataSource> data;
 
 	private final Map<String, Axis> axes;
@@ -107,7 +114,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private Legend legend;
 
 	/**
-	 * Creates a new <code>Plot</code> object with the specified <code>DataSource</code>s.
+	 * Creates a new <code>Plot</code> object with the specified
+	 * <code>DataSource</code> objects.
 	 * @param data Data to be displayed.
 	 */
 	public Plot(DataSource... data) {
@@ -143,7 +151,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				this.<Boolean>getSetting(ANTIALISING) ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+				this.<Boolean>getSetting(ANTIALISING)
+					? RenderingHints.VALUE_ANTIALIAS_ON
+					: RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
@@ -191,7 +201,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Sets the axis with the specified name and the associated <code>AxisRenderer</code>.
+	 * Sets the axis with the specified name and the associated
+	 * <code>AxisRenderer</code>.
 	 * @param name Name of the axis.
 	 * @param axis Axis.
 	 * @param renderer Instance to render the axis.
@@ -366,6 +377,10 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		}
 	}
 
+	/**
+	 * Returns a list of all data sources stored in the plot.
+	 * @return List of all data sources.
+	 */
 	public List<DataSource> getData() {
 		return Collections.unmodifiableList(data);
 	}

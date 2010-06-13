@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -21,35 +21,42 @@
 
 package de.erichseifert.gral.io;
 
-
+/**
+ * Interface for factories producing input or output classes.
+ * This is be used to create a extensible plug-in system for reading or writing.
+ * @param <T> Class of the objects produced by the factory.
+ */
 public interface IOFactory<T> {
-
 	/**
 	 * Returns an object for reading or writing the specified format.
-	 * @param mimeType Output MIME-Type.
-	 * @return Reader or writer for the specified MIME-Type.
+	 * @param mimeType MIME type.
+	 * @return Reader or writer for the specified MIME type.
 	 */
 	public abstract T get(String mimeType);
 
+	/**
+	 * Returns the capabilities for a specific format.
+	 * @param mimeType
+	 * @return
+	 */
 	public abstract IOCapabilities getCapabilities(String mimeType);
 
 	/**
-	 * Returns an array of capabilities for all supported output formats.
+	 * Returns an array of capabilities for all supported formats.
 	 * @return Supported capabilities.
 	 */
 	public abstract IOCapabilities[] getCapabilities();
 
 	/**
-	 * Returns an array of Strings containing all supported output formats.
+	 * Returns an array of Strings containing all supported formats.
 	 * @return Supported formats.
 	 */
 	public abstract String[] getSupportedFormats();
 
 	/**
-	 * Returns true if the specified MIME-Type is supported.
-	 * @param mimeType MIME-Type.
-	 * @return True if supported.
+	 * Returns whether the specified MIME type is supported.
+	 * @param mimeType MIME type.
+	 * @return <code>true</code> if supported, otherwise <code>false</code>.
 	 */
 	public abstract boolean isFormatSupported(String mimeType);
-
 }

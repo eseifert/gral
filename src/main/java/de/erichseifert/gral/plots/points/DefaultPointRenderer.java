@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -52,7 +52,10 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 				}
 				if (DefaultPointRenderer.this.<Boolean>getSetting(ERROR_DISPLAYED)) {
 					int columnIndex = row.size()-1;
-					drawError(g2d, point, row.get(1).doubleValue(), row.get(columnIndex-1).doubleValue(), row.get(columnIndex).doubleValue(), axisY, axisYRenderer);
+					drawError(g2d, point, row.get(1).doubleValue(),
+							row.get(columnIndex-1).doubleValue(),
+							row.get(columnIndex).doubleValue(),
+							axisY, axisYRenderer);
 				}
 			}
 		};

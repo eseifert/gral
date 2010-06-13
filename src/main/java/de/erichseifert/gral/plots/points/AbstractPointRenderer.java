@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -89,7 +89,18 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 		valueLabel.draw(g2d);
 	}
 
-	protected void drawError(Graphics2D g2d, Shape point, double value, double errorTop, double errorBot, Axis axis, AxisRenderer2D axisRenderer) {
+	/**
+	 * Draws an error bar.
+	 * @param g2d Graphics2D to be used for drawing.
+	 * @param point Point to draw error bar for.
+	 * @param value Value of the data point.
+	 * @param errorTop Upper value of the error bar.
+	 * @param errorBot Lower value of the error bar.
+	 * @param axis Axis.
+	 * @param axisRenderer Axis renderer.
+	 */
+	protected void drawError(Graphics2D g2d, Shape point, double value,
+			double errorTop, double errorBot, Axis axis, AxisRenderer2D axisRenderer) {
 		double posX = point.getBounds2D().getCenterX();
 		double valueTop = value + errorTop;
 		double valueBot = value - errorBot;

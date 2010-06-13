@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -51,13 +51,15 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	public static final Key ALIGNMENT_X = new Key("label.alignment.x");
 	/** Key for specifying the vertical alignment within the bounding rectangle. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y");
-	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants} value where the label will be aligned at. */
+	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants}
+	value where the label will be aligned at. */
 	public static final Key ANCHOR = new Key("label.anchor");
 	/** Key for specifying the font of this label. */
 	public static final Key FONT = new Key("label.font");
 	/** Key for specifying the rotation of this label, */
 	public static final Key ROTATION = new Key("label.rotation");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the label shape. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the label shape. */
 	public static final Key COLOR = new Key("label.color");
 
 	private final Settings settings;
@@ -104,8 +106,10 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
 		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
 		txLabel.translate(
-			-textBounds.getX() - anchorModifierX*textBounds.getWidth() - alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
-			-textBounds.getY() - anchorModifierY*textBounds.getHeight() - alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
+			-textBounds.getX() - anchorModifierX*textBounds.getWidth() -
+				alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
+			-textBounds.getY() - anchorModifierY*textBounds.getHeight() -
+				alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
 		);
 
 		Shape labelShape = layout.getOutline(txLabel);

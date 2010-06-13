@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -44,31 +44,41 @@ import de.erichseifert.gral.util.Settings.Key;
 public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the point. */
 	static final Key SHAPE = new Key("point");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the point shape. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the point shape. */
 	static final Key COLOR = new Key("point.color");
 
-	/** Key for specifying whether the data value of a point is displayed or not. */
+	/** Key for specifying whether the data value of a point is displayed or
+	not. */
 	static final Key VALUE_DISPLAYED = new Key("point.value.displayed");
-	/** Key for specifying the {@link java.text.Format} instance to be used to format the displayed data values. */
+	/** Key for specifying the {@link java.text.Format} instance to be used to
+	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format");
-	/** Key for specifying the {@link java.lang.Float} value that positions the value horizontally. */
+	/** Key for specifying the {@link java.lang.Float} value that positions the
+	value horizontally. */
 	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x");
-	/** Key for specifying the {@link java.lang.Float} value that positions the value vertically. */
+	/** Key for specifying the {@link java.lang.Float} value that positions the
+	value vertically. */
 	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the value. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the value. */
 	static final Key VALUE_COLOR = new Key("point.value.paint");
 
 	/** Key for specifying whether the error value is displayed. */
 	static final Key ERROR_DISPLAYED = new Key("point.error.displayed");
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to paint the error bars. */
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the error bars. */
 	static final Key ERROR_COLOR = new Key("point.error.color");
-	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the points at the end of the error bars. */
+	/** Key for specifying the {@link java.awt.Shape} instance defining the
+	form of the points at the end of the error bars. */
 	static final Key ERROR_SHAPE = new Key("point.error.shape");
-	/** Key for specifying the {@link java.awt.Stroke} instance defining the error bars. */
+	/** Key for specifying the {@link java.awt.Stroke} instance defining the
+	error bars. */
 	static final Key ERROR_STROKE = new Key("point.error.stroke");
 
 	/**
-	 * Returns the graphical representation to be drawn for the specified data value.
+	 * Returns the graphical representation to be drawn for the specified data
+	 * value.
 	 * @param axis that is used to project the point.
 	 * @param axisRenderer Renderer for the axis.
 	 * @param row Data row containing the point.

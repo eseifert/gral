@@ -1,4 +1,4 @@
-/**
+/*
  * GRAL: Vector export for Java(R) Graphics2D
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
@@ -46,6 +46,10 @@ public class DrawablePanel extends JPanel {
 		setOpaque(false);
 	}
 
+	/**
+	 * Returns the <code>Drawable</code> instance that is displayed by this panel.
+	 * @return <code>Drawable</code> instance
+	 */
 	public Drawable getDrawable() {
 		return drawable;
 	}
