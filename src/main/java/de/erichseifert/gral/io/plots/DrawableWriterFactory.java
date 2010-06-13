@@ -60,8 +60,11 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 		Class<? extends DrawableWriter> clazz = getTypeClass(mimeType);
 		//IOCapabilities capabilities = getCapabilities(mimeType);
 		try {
-			Constructor<? extends DrawableWriter> constructor = clazz.getDeclaredConstructor(String.class);
-			writer = constructor.newInstance(mimeType);
+			if (clazz != null) {
+				Constructor<? extends DrawableWriter> constructor =
+					clazz.getDeclaredConstructor(String.class);
+				writer = constructor.newInstance(mimeType);
+			}
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +86,7 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 		}
 
 		if (writer == null) {
-			throw new IllegalArgumentException("Unsupported MIME-Type: "+mimeType);
+			throw new IllegalArgumentException("Unsupported MIME type: " + mimeType);
 		}
 
 		return writer;

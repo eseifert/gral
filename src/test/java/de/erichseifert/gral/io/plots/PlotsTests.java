@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	DrawableWriterFactoryTest.class,
 	DrawableWriterTest.class
 })
 public class PlotsTests {

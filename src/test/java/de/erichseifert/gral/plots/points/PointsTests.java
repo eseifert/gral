@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	AbstractPointRendererTest.class,
 	DefaultPointRendererTest.class,
 	SizeablePointsRendererTest.class
 })

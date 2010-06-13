@@ -36,8 +36,8 @@ public interface IOFactory<T> {
 
 	/**
 	 * Returns the capabilities for a specific format.
-	 * @param mimeType
-	 * @return
+	 * @param mimeType MIME type of the format
+	 * @return Capabilities for the specified format.
 	 */
 	public abstract IOCapabilities getCapabilities(String mimeType);
 
