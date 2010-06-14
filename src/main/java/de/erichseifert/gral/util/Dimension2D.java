@@ -92,7 +92,7 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 		public int hashCode() {
 			long bits = java.lang.Double.doubleToLongBits(getWidth());
 			bits ^= java.lang.Double.doubleToLongBits(getHeight()) * 31;
-			return (((int) bits) ^ ((int) (bits >> 32)));
+			return ((int) bits) ^ ((int) (bits >> 32));
 		}
 	}
 }

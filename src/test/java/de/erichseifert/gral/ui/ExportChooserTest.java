@@ -19,33 +19,33 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.ui;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class InteractivePanelTest {
-	private static Drawable drawable;
-	private InteractivePanel panel;
+import de.erichseifert.gral.io.IOCapabilities;
+
+public class ExportChooserTest {
+	private static IOCapabilities[] capabilities;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		drawable = new DrawableContainer();
-	}
-
-	@Before
-	public void setUp() {
-		panel = new InteractivePanel(drawable);
+		capabilities = new IOCapabilities[] {
+				new IOCapabilities("Text", "Unformatted text", "text/plain", "txt"),
+				new IOCapabilities("HTML", "HyperText Markup Language", "text/html", "html", "htm")
+		};
 	}
 
 	@Test
 	public void testCreation() {
-		assertNotNull(panel);
-		assertSame(drawable, panel.getDrawable());
+		ExportChooser strict = new ExportChooser(true, capabilities);
+		assertEquals(capabilities.length, strict.getChoosableFileFilters().length);
+
+		ExportChooser relaxed = new ExportChooser(false, capabilities);
+		assertEquals(capabilities.length + 1, relaxed.getChoosableFileFilters().length);
 	}
 
 }

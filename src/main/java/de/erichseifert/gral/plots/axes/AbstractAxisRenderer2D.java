@@ -57,9 +57,9 @@ import de.erichseifert.gral.util.Settings.Key;
  * Abstract class that provides function for rendering 2-dimensional axes.
  * Functionality includes:
  * <ul>
- * <li>Calculating tick positions of an axis</li>
- * <li>Calculating tick normals</li>
- * <li>Administration of settings</li>
+ *   <li>Calculating tick positions of an axis</li>
+ *   <li>Calculating tick normals</li>
+ *   <li>Administration of settings</li>
  * </ul>
  */
 public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, SettingsListener {
@@ -188,7 +188,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						}
 
-						double tickLengthInner = tickLength*(tickAlignment);
+						double tickLengthInner = tickLength*tickAlignment;
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 						tickShape.setLine(
 							tickPoint.getX() - tickNormal.getX()*tickLengthInner,
@@ -363,6 +363,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		return ticks;
 	}
 
+	/**
+	 * Returns a set of all user-defined tick mark positions.
+	 * @return Set of all user-defined tick mark positions.
+	 */
 	protected Set<Double> getTickPositionsCustom() {
 		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
@@ -372,11 +376,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	/**
-	 * Returns the point of the tick (in pixel coordinates) on the
+	 * Returns the point of the tick mark (in pixel coordinates) on the
 	 * specified axis with the specified value.
-	 * @param axis Axis containing the tick.
+	 * @param type Type of tick mark.
+	 * @param axis Axis containing the tick mark.
 	 * @param tickPositionWorld Displayed value on the axis.
-	 * @return DataPoint2D of the desired tick.
+	 * @return DataPoint2D of the desired tick mark.
 	 */
 	protected Tick2D getTick(TickType type, Axis axis, double tickPositionWorld) {
 		// Calculate position of tick on axis shape

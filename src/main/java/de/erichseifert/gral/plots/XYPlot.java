@@ -107,7 +107,9 @@ public class XYPlot extends Plot implements DataListener  {
 		private final XYPlot plot;
 
 		/**
-		 * Creates a new XYPlotArea2D object with default settings.
+		 * Creates a new instance with default settings and initializes it with
+		 * a plot serving as data provider.
+		 * @param plot Data provider.
 		 */
 		public XYPlotArea2D(XYPlot plot) {
 			this.plot = plot;

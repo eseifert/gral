@@ -168,7 +168,7 @@ public abstract class Insets2D {
 			bits += java.lang.Double.doubleToLongBits(getLeft()) * 37;
 			bits += java.lang.Double.doubleToLongBits(getBottom()) * 43;
 			bits += java.lang.Double.doubleToLongBits(getRight()) * 47;
-			return (((int) bits) ^ ((int) (bits >> 32)));
+			return ((int) bits) ^ ((int) (bits >> 32));
 		}
 	}
 

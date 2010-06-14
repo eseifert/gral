@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +44,8 @@ public class Settings {
 	/**
 	 * A settings key storing a name.
 	 */
-	public static final class Key {
+	public static final class Key implements Serializable {
+		private static final long serialVersionUID = 1L;
 		private final String name;
 		/**
 		 * Constructor that initializes the instance with a name.

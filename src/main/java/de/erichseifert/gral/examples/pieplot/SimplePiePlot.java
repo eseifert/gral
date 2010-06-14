@@ -26,9 +26,9 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.PiePlot;
+import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 

@@ -29,8 +29,12 @@
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="${checkstyle.javadoc.severity}" default="warning"/>
     <module name="JavadocPackage"/>
-    
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+    </module>
+
     <module name="TreeWalker">
+        <property name="tabWidth" value="4"/>
         <module name="JavadocType">
             <property name="scope" value="protected"/>
         </module>
@@ -46,11 +50,15 @@
         </module>
         <module name="NeedBraces"/>
         <module name="Regexp">
+            <property name="severity" value="${checkstyle.javadoc.severity}" default="error"/>
             <property name="format" value="System\.(out|err)\.print"/>
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
         </module>
         <module name="TodoComment">
+            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+        </module>
+        <module name="UnnecessaryParentheses">
             <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
         </module>
         <module name="UnusedImports">

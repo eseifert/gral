@@ -116,7 +116,7 @@ public class RandomColors implements ColorMapper {
 		double dr = (a.getRed()   - b.getRed())   / 256.0;
 		double dg = (a.getGreen() - b.getGreen()) / 256.0;
 		double db = (a.getBlue()  - b.getBlue())  / 256.0;
-		double d = (2.0 + rMean)*dr*dr + (4.0)*dg*dg + (2.0 + 1.0-rMean)*db*db;
+		double d = (2.0 + rMean)*dr*dr + 4.0*dg*dg + (2.0 + 1.0-rMean)*db*db;
 		return d / 9.0;
 	}
 

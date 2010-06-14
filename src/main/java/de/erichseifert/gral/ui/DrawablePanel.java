@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -28,6 +28,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
+
+import de.erichseifert.gral.Drawable;
 
 /**
  * A class that represents an adapter between the components of this library and Swing.

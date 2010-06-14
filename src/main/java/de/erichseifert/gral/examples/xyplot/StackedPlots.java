@@ -28,12 +28,12 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 public class StackedPlots extends JFrame {

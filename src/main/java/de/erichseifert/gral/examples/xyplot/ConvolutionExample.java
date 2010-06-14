@@ -27,7 +27,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.DrawableConstants.Location;
 import de.erichseifert.gral.DrawableConstants.Orientation;
@@ -41,6 +40,7 @@ import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 

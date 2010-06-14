@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral;
+package de.erichseifert.gral.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,6 +33,9 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawableContainer;
 
 public class DrawablePanelTest {
 	private static final double DELTA = 1e-15;
@@ -51,7 +54,7 @@ public class DrawablePanelTest {
 
 	@Test
 	public void testCreation() {
-		assertNotNull(panel);
+		assertNotNull(panel.getMinimumSize());
 		assertSame(drawable, panel.getDrawable());
 	}
 

@@ -27,11 +27,11 @@ import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 
-import de.erichseifert.gral.InteractivePanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 

@@ -28,6 +28,8 @@ import java.util.EventObject;
  * @see SettingsListener
  */
 public class SettingChangeEvent extends EventObject {
+	private static final long serialVersionUID = 1L;
+
 	private final Settings.Key key;
 	private final Object valOld;
 	private final Object valNew;

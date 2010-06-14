@@ -1,0 +1,186 @@
+/*
+ * GRAL: Vector export for Java(R) Graphics2D
+ *
+ * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ *
+ * This file is part of GRAL.
+ *
+ * GRAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GRAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package de.erichseifert.gral.ui;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import de.erichseifert.gral.Drawable;
+
+/**
+ * A dialog implementation for exporting plots. It allows the user to
+ * specify the document dimensions.
+ */
+public class ExportDialog extends JDialog {
+	/** Type of user feedback. */
+	public static enum UserAction {
+		/** User confirmed dialog. */
+		APPROVE,
+		/** User canceled or closed dialog. */
+		CANCEL
+	};
+
+	private final Rectangle2D documentBounds;
+	private UserAction userAction;
+
+	private final JFormattedTextField inputX;
+	private final JFormattedTextField inputY;
+	private final JFormattedTextField inputW;
+	private final JFormattedTextField inputH;
+
+	/**
+	 * Creates a new instance and initializes it with a parent and a
+	 * drawable component.
+	 * @param parent Parent component.
+	 * @param drawable Drawable component.
+	 */
+	public ExportDialog(Component parent, Drawable drawable) {
+		super(JOptionPane.getFrameForComponent(parent), true);
+		setTitle("Export options");
+
+		documentBounds = new Rectangle2D.Double();
+		documentBounds.setFrame(drawable.getBounds());
+		userAction = UserAction.CANCEL;
+
+		JPanel cp = new JPanel(new BorderLayout());
+		cp.setBorder(new EmptyBorder(10, 10, 10, 10));
+		setContentPane(cp);
+
+		DecimalFormat formatMm = new DecimalFormat();
+		formatMm.setMinimumFractionDigits(2);
+
+		JPanel options = new JPanel(new GridLayout(4, 2, 10, 2));
+		getContentPane().add(options, BorderLayout.NORTH);
+
+		PropertyChangeListener docBoundsListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setDocumentBounds(
+					((Number)inputX.getValue()).doubleValue(),
+					((Number)inputY.getValue()).doubleValue(),
+					((Number)inputW.getValue()).doubleValue(),
+					((Number)inputH.getValue()).doubleValue());
+			}
+		};
+		inputX = new JFormattedTextField(formatMm);
+		addInputField(inputX, "Left", options, documentBounds.getX(), docBoundsListener);
+		inputY = new JFormattedTextField(formatMm);
+		addInputField(inputY, "Top", options, documentBounds.getY(), docBoundsListener);
+		inputW = new JFormattedTextField(formatMm);
+		addInputField(inputW, "Width", options, documentBounds.getWidth(), docBoundsListener);
+		inputH = new JFormattedTextField(formatMm);
+		addInputField(inputH, "Height", options, documentBounds.getHeight(), docBoundsListener);
+
+		JPanel controls = new JPanel(new FlowLayout());
+		cp.add(controls, BorderLayout.SOUTH);
+
+		JButton buttonConfirm = new JButton("OK");
+		buttonConfirm.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				userAction = UserAction.APPROVE;
+				dispose();
+			}
+		});
+		controls.add(buttonConfirm);
+
+		JButton buttonCancel = new JButton("Cancel");
+		buttonCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				userAction = UserAction.CANCEL;
+				dispose();
+			}
+		});
+		controls.add(buttonCancel);
+
+		pack();
+		setLocationRelativeTo(parent);
+	}
+
+	private static void addInputField(JFormattedTextField input,
+			String labelText, java.awt.Container cont, Object initialValue,
+			PropertyChangeListener pcl) {
+		JLabel label = new JLabel(labelText);
+		label.setHorizontalAlignment(JLabel.RIGHT);
+		cont.add(label);
+		input.setValue(initialValue);
+		input.setHorizontalAlignment(JFormattedTextField.RIGHT);
+		input.addPropertyChangeListener("value", pcl);
+		cont.add(input);
+		label.setLabelFor(input);
+	}
+
+	/**
+	 * Returns the bounds entered by the user.
+	 * @return Document bounds that should be used to export the plot
+	 */
+	public Rectangle2D getDocumentBounds() {
+		Rectangle2D bounds = new Rectangle2D.Double();
+		bounds.setFrame(documentBounds);
+		return bounds;
+	}
+
+	/**
+	 * Sets new bounds for the document.
+	 * @param x Top-left corner
+	 * @param y Bottom-right corner
+	 * @param w Width.
+	 * @param h Height.
+	 */
+	protected void setDocumentBounds(double x, double y, double w, double h)  {
+		if (documentBounds.getX() == x && documentBounds.getY() == y &&
+				documentBounds.getWidth() == w && documentBounds.getHeight() == h) {
+			return;
+		}
+		documentBounds.setFrame(x, y, w, h);
+		inputX.setValue(x);
+		inputY.setValue(y);
+		inputW.setValue(w);
+		inputH.setValue(h);
+	}
+
+	/**
+	 * Returns the last action by the user. The return value can be used to
+	 * determine whether the user approved or canceled the dialog.
+	 * @return Type of user action.
+	 */
+	public UserAction getUserAction() {
+		return userAction;
+	}
+}
