@@ -21,8 +21,10 @@
 
 package de.erichseifert.gral.plots;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
@@ -53,6 +55,8 @@ public class PiePlot extends Plot implements DataListener {
 	public static final Key CLOCKWISE = new Key("pieplot.clockwise");
 	/** Key for specifying the starting angle of the first segment in degrees. */
 	public static final Key START = new Key("pieplot.start");
+	/** Key for specifying the width of gaps between the segments. */
+	public static final Key GAP = new Key("pieplot.gap");
 
 	/**
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
@@ -93,16 +97,18 @@ public class PiePlot extends Plot implements DataListener {
 			g2d.translate(w/2d, h/2d);
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 
-			double sizeRel = plot.<Double>getSetting(PiePlot.RADIUS);
+			double sizeRel = plot.getSetting(PiePlot.RADIUS);
 			double size = Math.min(w, h) * sizeRel;
 
-			double sizeRelInner = plot.<Double>getSetting(PiePlot.RADIUS_INNER);
+			double sizeRelInner = plot.getSetting(PiePlot.RADIUS_INNER);
 			double sizeInner = size * sizeRelInner;
 			Ellipse2D inner = new Ellipse2D.Double(
 					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
 			Area whole = new Area(inner);
 
-			double sliceOffset = plot.<Double>getSetting(PiePlot.START);
+			double gap = plot.getSetting(PiePlot.GAP);
+
+			double sliceOffset = plot.getSetting(PiePlot.START);
 			int sliceNo = 0;
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];
@@ -112,14 +118,21 @@ public class PiePlot extends Plot implements DataListener {
 					continue;
 				}
 
-				// Paint slice
-				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
+				// Construct slice
 				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d, size, size,
 						sliceStart, sliceSpan, Arc2D.PIE);
 				Area doughnutSlice = new Area(pieSlice);
+				if (gap > 0.0) {
+					Stroke sliceStroke = new BasicStroke((float) gap);
+					Area sliceContour = new Area(sliceStroke.createStrokedShape(pieSlice));
+					doughnutSlice.subtract(sliceContour);
+				}
 				if (sizeRelInner > 0.0) {
 					doughnutSlice.subtract(whole);
 				}
+
+				// Paint slice
+				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
 				GraphicsUtils.fillPaintedShape(g2d, doughnutSlice, paint, null);
 			}
 			g2d.setTransform(txOffset);
@@ -136,10 +149,10 @@ public class PiePlot extends Plot implements DataListener {
 				colYSum += Math.abs(val);
 			}
 
-			if (plot.<Boolean>getSetting(PiePlot.CLOCKWISE)) {
+			boolean isClockwise = plot.getSetting(PiePlot.CLOCKWISE);
+			if (isClockwise) {
 				degreesPerValue = -360.0/colYSum;
-			}
-			else {
+			} else {
 				degreesPerValue = 360.0/colYSum;
 			}
 

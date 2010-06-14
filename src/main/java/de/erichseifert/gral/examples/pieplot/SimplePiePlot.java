@@ -38,9 +38,9 @@ public class SimplePiePlot extends JFrame {
 		super("GRALTest");
 		DataTable data = new DataTable(Integer.class);
 		Random r = new Random();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 15; i++) {
 			int val = r.nextInt(10) + 1;
-			data.add((r.nextDouble() <= 0.1) ? -val : val);
+			data.add((r.nextDouble() <= 0.15) ? -val : val);
 		}
 		PiePlot plot = new PiePlot(data);
 		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
@@ -48,6 +48,8 @@ public class SimplePiePlot extends JFrame {
 		plot.setSetting(PiePlot.RADIUS, 0.9);
 		// Change relative size of inner region
 		plot.setSetting(PiePlot.RADIUS_INNER, 0.4);
+		// Change the width of gaps between segments
+		plot.setSetting(PiePlot.GAP, 2.0);
 		// Change rotation
 		//plot.setSetting(PiePlot.CLOCKWISE, false);
 		// Custom start angle

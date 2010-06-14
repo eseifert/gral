@@ -169,6 +169,14 @@ public class PlotNavigator {
 	}
 
 	/**
+	 * Returns the plot stored in this instance.
+	 * @return Stored plot object.
+	 */
+	public Plot getPlot() {
+		return plot;
+	}
+
+	/**
 	 * Returns the average zoom factor of all axes.
 	 * @return Average zoom factor of all axes.
 	 */

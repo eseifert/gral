@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.ui;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -157,7 +158,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		});
 		menu.add(print);
 
-		addMouseListener(new PopupListener());
+		addMouseListener(new PopupListener(menu));
 
 		if (getDrawable() instanceof Plot) {
 			navigator = new PlotNavigator((Plot) getDrawable());
@@ -174,7 +175,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			if (getDrawable() instanceof XYPlot) {
 				// Register a new handler to move the map by dragging
 				// This requires that an x- and a y-axis do exist in the plot
-				MoveListener moveListener = new MoveListener((XYPlot) getDrawable());
+				NavigationMoveListener moveListener = new NavigationMoveListener(navigator);
 				addMouseListener(moveListener);
 				addMouseMotionListener(moveListener);
 			}
@@ -207,7 +208,13 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		}
 	}
 
-	private class PopupListener extends MouseAdapter {
+	private static class PopupListener extends MouseAdapter {
+		private final JPopupMenu menu;
+
+		public PopupListener(JPopupMenu menu) {
+			this.menu = menu;
+		}
+
 	    @Override
 		public void mousePressed(MouseEvent e) {
 	        showPopup(e);
@@ -225,16 +232,18 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	    }
 	}
 
-	private class MoveListener extends MouseAdapter {
+	private static class NavigationMoveListener extends MouseAdapter {
+		private final PlotNavigator navigator;
 		private final Plot plot;
 		private Point posPrev;
 
 		/**
 		 * Creates a new listener and initializes it with a plot.
-		 * @param plot plot that should be changed.
+		 * @param navigator PlotNavigator that should be adjusted.
 		 */
-		public MoveListener(Plot plot) {
-			this.plot = plot;
+		public NavigationMoveListener(PlotNavigator navigator) {
+			this.navigator = navigator;
+			this.plot = navigator.getPlot();
 		}
 
 		@Override
@@ -276,7 +285,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 				navigator.setCenter(axisY, centerYNew);
 
 				// Refresh display
-				repaint();
+				if (e.getSource() instanceof Component) {
+					((Component) e.getSource()).repaint();
+				}
 			}
 		}
 	}
