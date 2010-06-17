@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -24,6 +24,7 @@ package de.erichseifert.gral.plots.axes;
 import java.util.List;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingsStorage;
 import de.erichseifert.gral.util.Settings.Key;
 
@@ -147,8 +148,29 @@ public interface AxisRenderer extends SettingsStorage {
 	/**
 	 * Returns a list of all tick element on the axis.
 	 * @param axis Axis
-	 * @return A list of <code>Tick2D</code> instances
+	 * @return A list of <code>Tick</code> instances
 	 */
-	public abstract List<Tick2D> getTicks(Axis axis);
+	public abstract List<Tick> getTicks(Axis axis);
 
+	/**
+	 * Returns the position of the specified value on the axis.
+	 * The value is returned in view coordinates.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
+	 * @param forceLinear Force linear interpolation.
+	 * @return N-dimensional point of the value
+	 */
+	PointND getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
+
+	/**
+	 * Returns the normal vector at the position of the specified value.
+	 * The vector is normalized.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not on the axis
+	 * @param forceLinear Force linear interpolation.
+	 * @return N-dimensional normal vector at the position
+	 */
+	PointND getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
 }

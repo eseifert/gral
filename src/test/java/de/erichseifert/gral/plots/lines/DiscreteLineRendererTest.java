@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -26,7 +26,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -35,17 +34,18 @@ import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableConstants.Orientation;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
+import de.erichseifert.gral.util.PointND;
 
 public class DiscreteLineRendererTest {
 
 	@Test
 	public void testLine() {
 		// Get line
-		LineRenderer2D r = new DiscreteLineRenderer2D();
-		List<DataPoint2D> points = Arrays.asList(
-			new DataPoint2D(new Point2D.Double(0.0, 0.0), null, null),
-			new DataPoint2D(new Point2D.Double(1.0, 1.0), null, null)
+		LineRenderer r = new DiscreteLineRenderer2D();
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(new PointND(0.0, 0.0), null, null),
+			new DataPoint(new PointND(1.0, 1.0), null, null)
 		);
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
@@ -61,14 +61,14 @@ public class DiscreteLineRendererTest {
 	@Test
 	public void testSettings() {
 		// Get
-		LineRenderer2D r = new DiscreteLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
+		LineRenderer r = new DiscreteLineRenderer2D();
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
 		// Set
-		r.setSetting(LineRenderer2D.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer2D.COLOR));
+		r.setSetting(LineRenderer.COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(LineRenderer.COLOR));
 		// Remove
-		r.removeSetting(LineRenderer2D.COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer2D.COLOR));
+		r.removeSetting(LineRenderer.COLOR);
+		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
 	}
 
 }

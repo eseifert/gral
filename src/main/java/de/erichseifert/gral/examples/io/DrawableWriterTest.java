@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -34,7 +34,7 @@ import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.util.Insets2D;
 
 
@@ -56,16 +56,16 @@ public class DrawableWriterTest {
 		plot = new XYPlot(s1, s2, s3);
 		plot.setInsets(new Insets2D.Double(20, 50, 50, 20));
 
-		LineRenderer2D lr1 = new DefaultLineRenderer2D();
-		lr1.setSetting(LineRenderer2D.COLOR, Color.RED);
+		LineRenderer lr1 = new DefaultLineRenderer2D();
+		lr1.setSetting(LineRenderer.COLOR, Color.RED);
 		plot.setLineRenderer(s1, lr1);
 
-		LineRenderer2D lr2 = new DefaultLineRenderer2D();
-		lr2.setSetting(LineRenderer2D.COLOR, Color.GREEN);
+		LineRenderer lr2 = new DefaultLineRenderer2D();
+		lr2.setSetting(LineRenderer.COLOR, Color.GREEN);
 		plot.setLineRenderer(s2, lr2);
 
-		LineRenderer2D lr3 = new DefaultLineRenderer2D();
-		lr3.setSetting(LineRenderer2D.COLOR, Color.BLUE);
+		LineRenderer lr3 = new DefaultLineRenderer2D();
+		lr3.setSetting(LineRenderer.COLOR, Color.BLUE);
 		plot.setLineRenderer(s3, lr3);
 	}
 

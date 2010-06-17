@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -29,7 +29,7 @@ import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
@@ -39,7 +39,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultPointRenderer extends AbstractPointRenderer {
 
 	@Override
-	public Drawable getPoint(final Axis axisY, final AxisRenderer2D axisYRenderer, final Row row) {
+	public Drawable getPoint(final Axis axisY, final AxisRenderer axisYRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {

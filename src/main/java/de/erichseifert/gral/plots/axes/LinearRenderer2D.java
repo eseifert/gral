@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,7 +22,7 @@
 package de.erichseifert.gral.plots.axes;
 
 /**
- * Class that renders 2-dimensional axes with a linear scale.
+ * Class that renders axes with a linear scale in two dimensional space.
  */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 

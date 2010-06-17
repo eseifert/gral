@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -31,7 +31,7 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -62,7 +62,7 @@ public class BarPlot extends XYPlot {
 
 		@Override
 		public Drawable getPoint(final Axis axisY,
-				final AxisRenderer2D axisYRenderer, final Row row) {
+				final AxisRenderer axisYRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
@@ -96,8 +96,8 @@ public class BarPlot extends XYPlot {
 			double valueY = row.get(1).doubleValue();
 			Axis axisX = plot.getAxis(Axis.X);
 			Axis axisY = plot.getAxis(Axis.Y);
-			AxisRenderer2D axisXRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisX);
-			AxisRenderer2D axisYRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisY);
+			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
+			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 			double axisYOrigin = 0.0;
 
 			/*
@@ -115,21 +115,24 @@ public class BarPlot extends XYPlot {
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(
-					axisX, valueX - barWidthRel*barAlign, true, false).getX();
+					axisX, valueX - barWidthRel*barAlign, true, false)
+					.get(0).doubleValue();
 			double barXMax = axisXRenderer.getPosition(
-					axisX, valueX + barWidthRel*barAlign, true, false).getX();
+					axisX, valueX + barWidthRel*barAlign, true, false)
+					.get(0).doubleValue();
 
 			double barYVal = axisYRenderer.getPosition(
-					axisY, valueY, true, false).getY();
+					axisY, valueY, true, false).get(1).doubleValue();
 			double barYOrigin = axisYRenderer.getPosition(
-					axisY, axisYOrigin, true, false).getY();
+					axisY, axisYOrigin, true, false).get(1).doubleValue();
 			double barYMin = Math.min(barYVal, barYOrigin);
 			double barYMax = Math.max(barYVal, barYOrigin);
 
 			double barWidth = Math.abs(barXMax - barXMin);
 			double barHeight = Math.abs(barYMax - barYMin);
 
-			double barX = axisXRenderer.getPosition(axisX, valueX, true, false).getX();
+			double barX = axisXRenderer.getPosition(
+					axisX, valueX, true, false).get(0).doubleValue();
 			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
 
 			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);

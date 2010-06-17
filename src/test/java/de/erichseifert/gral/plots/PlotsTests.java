@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -38,7 +38,7 @@ import de.erichseifert.gral.plots.points.PointsTests;
 	AreasTests.class,
 	LinesTests.class,
 	PointsTests.class,
-	PlotArea2DTest.class,
+	PlotAreaTest.class,
 	LegendTest.class,
 	PlotTest.class,
 	XYPlotTest.class,

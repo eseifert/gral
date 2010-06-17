@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,21 +22,21 @@
 package de.erichseifert.gral.plots.lines;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.SettingsStorage;
 import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Interface that provides functions for rendering a line in 2-dimensional
- * space.
- * Functionality includes:
+ * <p>Interface that provides functions for rendering a line in 2-dimensional
+ * space.</p>
+ * <p>Functionality includes:<p>
  * <ul>
- * <li>Punching data points out of the line's shape</li>
- * <li>Administration of settings</li>
+ *   <li>Punching data points out of the line's shape</li>
+ *   <li>Administration of settings</li>
  * </ul>
  */
-public interface LineRenderer2D extends SettingsStorage {
+public interface LineRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to define the line shape. */
 	static final Key STROKE = new Key("line.stroke");
 	/** Key for specifying the distance between the line and a point. */
@@ -51,6 +51,6 @@ public interface LineRenderer2D extends SettingsStorage {
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */
-	Drawable getLine(Iterable<DataPoint2D> points);
+	Drawable getLine(Iterable<DataPoint> points);
 
 }

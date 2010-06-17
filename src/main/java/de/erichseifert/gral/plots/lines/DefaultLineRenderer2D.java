@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -29,7 +29,7 @@ import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
@@ -45,14 +45,14 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	}
 
 	@Override
-	public Drawable getLine(final Iterable<DataPoint2D> points) {
+	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
 				// Construct shape
 				GeneralPath line = new GeneralPath();
-				for (DataPoint2D point : points) {
-					Point2D pos = point.getPosition();
+				for (DataPoint point : points) {
+					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
 						line.moveTo(pos.getX(), pos.getY());
 					} else {
@@ -62,7 +62,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw line
 				Shape lineShape = punch(line, points);
-				Paint paint = getSetting(LineRenderer2D.COLOR);
+				Paint paint = getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};

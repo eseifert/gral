@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.erichseifert.gral.plots.axes.Tick2D.TickType;
+import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that renders 2-dimensional axes with a logarithmic scale.
+ * Class that renders axes with a logarithmic scale in two dimensional space.
  */
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
@@ -81,7 +81,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	}
 
 	@Override
-	public List<Tick2D> getTicks(Axis axis) {
+	public List<Tick> getTicks(Axis axis) {
 		checkAxisBounds(axis);
 		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
@@ -99,7 +99,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		int initialTicksMinor = (int)Math.floor((minTickMajor - min) /
 				(powerMin*tickSpacingMinor));
 
-		List<Tick2D> ticks = new LinkedList<Tick2D>();
+		List<Tick> ticks = new LinkedList<Tick>();
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
 		// Add major ticks
@@ -117,7 +117,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				}
 				boolean isMajor = (i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0;
 				TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
-				Tick2D tick = getTick(tickType, axis, tickPositionWorld);
+				Tick tick = getTick(tickType, axis, tickPositionWorld);
 				if (tick.getPosition() != null
 						&& !tickPositions.contains(tickPositionWorld)
 						&& !tickPositionsCustom.contains(tickPositionWorld)) {
@@ -130,7 +130,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
-				Tick2D tick = getTick(TickType.CUSTOM, axis, entry.getKey());
+				Tick tick = getTick(TickType.CUSTOM, axis, entry.getKey());
 				ticks.add(tick);
 			}
 		}

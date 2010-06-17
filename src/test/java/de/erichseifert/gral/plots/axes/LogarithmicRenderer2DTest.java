@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -110,7 +110,7 @@ public class LogarithmicRenderer2DTest {
 	@Test
 	public void testTicks() {
 		Axis axis = new Axis(0.2, 10.0);
-		List<Tick2D> ticks = renderer.getTicks(axis);
+		List<Tick> ticks = renderer.getTicks(axis);
 		assertEquals(36, ticks.size());  // 18 major ticks, 18 minor ticks
 	}
 

@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -39,7 +39,7 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableContainer;
 import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.PlotArea2D;
+import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.DrawableConstants.Location;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -109,7 +109,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private final Map<Axis, Drawable> axisDrawables;
 
 	private final Label title;
-	private PlotArea2D plotArea;
+	private PlotArea plotArea;
 	private final Container legendContainer;
 	private Legend legend;
 
@@ -205,15 +205,13 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * <code>AxisRenderer</code>.
 	 * @param name Name of the axis.
 	 * @param axis Axis.
-	 * @param renderer Instance to render the axis.
 	 */
-	public void setAxis(String name, Axis axis, AxisRenderer renderer) {
-		if (axis == null || renderer == null) {
+	public void setAxis(String name, Axis axis) {
+		if (axis == null) {
 			removeAxis(name);
 			return;
 		}
 		axes.put(name, axis);
-		setAxisRenderer(axis, renderer);
 	}
 
 	/**
@@ -240,8 +238,18 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param axis Axis.
 	 * @return Instance that renders the axis.
 	 */
-	protected AxisRenderer getAxisRenderer(Axis axis) {
+	public AxisRenderer getAxisRenderer(Axis axis) {
 		return axisRenderers.get(axis);
+	}
+
+	/**
+	 * Returns the renderer for the axis with the specified name.
+	 * @param axisName Axis name.
+	 * @return Instance that renders the axis.
+	 */
+	public AxisRenderer getAxisRenderer(String axisName) {
+		Axis axis = getAxis(axisName);
+		return getAxisRenderer(axis);
 	}
 
 	/**
@@ -249,10 +257,20 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param axis Axis to be rendered.
 	 * @param renderer Instance to render the axis.
 	 */
-	private void setAxisRenderer(Axis axis, AxisRenderer renderer) {
+	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
 		axisRenderers.put(axis, renderer);
 		Drawable comp = renderer.getRendererComponent(axis);
 		setAxisComponent(axis, comp);
+	}
+
+	/**
+	 * Sets the renderer for the axis with the specified name.
+	 * @param axisName Name of the axis to be rendered.
+	 * @param renderer Instance to render the axis.
+	 */
+	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
+		Axis axis = getAxis(axisName);
+		setAxisRenderer(axis, renderer);
 	}
 
 	/**
@@ -277,7 +295,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * Returns the drawing area of this plot.
 	 * @return <code>PlotArea2D</code>.
 	 */
-	public PlotArea2D getPlotArea() {
+	public PlotArea getPlotArea() {
 		return plotArea;
 	}
 
@@ -285,7 +303,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * Sets the drawing area to the specified value.
 	 * @param plotArea <code>PlotArea2D</code> to be set.
 	 */
-	protected void setPlotArea(PlotArea2D plotArea) {
+	protected void setPlotArea(PlotArea plotArea) {
 		if (this.plotArea != null) {
 			remove(this.plotArea);
 		}

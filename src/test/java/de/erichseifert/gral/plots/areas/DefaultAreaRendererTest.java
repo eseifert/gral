@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -26,7 +26,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -35,14 +34,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.util.PointND;
 
 public class DefaultAreaRendererTest {
 	private Axis axis;
-	private AxisRenderer2D axisRenderer;
+	private AxisRenderer axisRenderer;
 
 	@Before
 	public void setUp() {
@@ -53,10 +53,10 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testArea() {
 		// Get line
-		AreaRenderer2D r = new DefaultAreaRenderer2D();
-		List<DataPoint2D> points = Arrays.asList(
-			new DataPoint2D(new Point2D.Double(0.0, 0.0), null, null),
-			new DataPoint2D(new Point2D.Double(1.0, 1.0), null, null)
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(new PointND(0.0, 0.0), null, null),
+			new DataPoint(new PointND(1.0, 1.0), null, null)
 		);
 		Drawable area = r.getArea(axis, axisRenderer, points);
 		assertNotNull(area);
@@ -70,14 +70,14 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testSettings() {
 		// Get
-		AreaRenderer2D r = new DefaultAreaRenderer2D();
-		assertEquals(Color.GRAY, r.getSetting(AreaRenderer2D.COLOR));
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		assertEquals(Color.GRAY, r.getSetting(AreaRenderer.COLOR));
 		// Set
-		r.setSetting(AreaRenderer2D.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(AreaRenderer2D.COLOR));
+		r.setSetting(AreaRenderer.COLOR, Color.RED);
+		assertEquals(Color.RED, r.getSetting(AreaRenderer.COLOR));
 		// Remove
-		r.removeSetting(AreaRenderer2D.COLOR);
-		assertEquals(Color.GRAY, r.getSetting(AreaRenderer2D.COLOR));
+		r.removeSetting(AreaRenderer.COLOR);
+		assertEquals(Color.GRAY, r.getSetting(AreaRenderer.COLOR));
 	}
 
 }

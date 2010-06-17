@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,16 +22,16 @@
 package de.erichseifert.gral.plots.areas;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.SettingsStorage;
 import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * Interface for renderers that display areas in plots.
  */
-public interface AreaRenderer2D extends SettingsStorage {
+public interface AreaRenderer extends SettingsStorage {
 	/** Key for specifying the distance between the area and a data point. */
 	static final Key GAP = new Key("area.gap.size");
 	/** Key for specifying whether the gaps should have rounded corners. */
@@ -46,6 +46,6 @@ public interface AreaRenderer2D extends SettingsStorage {
 	 * @param points Points to be used for creating the area.
 	 * @return Representation of the area.
 	 */
-	Drawable getArea(Axis axis, AxisRenderer2D axisRenderer, Iterable<DataPoint2D> points);
+	Drawable getArea(Axis axis, AxisRenderer axisRenderer, Iterable<DataPoint> points);
 
 }

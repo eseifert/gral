@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -38,7 +38,7 @@ import de.erichseifert.gral.util.Settings.Key;
 /**
  * Abstract class that represents a canvas for the plot which will be drawn.
  */
-public abstract class PlotArea2D extends AbstractDrawable
+public abstract class PlotArea extends AbstractDrawable
 		implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot area. */
@@ -56,7 +56,7 @@ public abstract class PlotArea2D extends AbstractDrawable
 	 * Creates a new PlotArea2D object with default background color and
 	 * border.
 	 */
-	public PlotArea2D() {
+	public PlotArea() {
 		settings = new Settings(this);
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));

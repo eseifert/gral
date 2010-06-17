@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -30,9 +30,10 @@ import javax.swing.JFrame;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -53,11 +54,13 @@ public class StackedPlots extends JFrame {
 
 		// Upper plot
 		XYPlot plotUpper = new XYPlot(data);
-		plotUpper.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING,  5.0);
-		plotUpper.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 10.0);
+		AxisRenderer axisRendererXUpper = plotUpper.getAxisRenderer(Axis.X);
+		AxisRenderer axisRendererYUpper = plotUpper.getAxisRenderer(Axis.Y);
+		axisRendererXUpper.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+		axisRendererYUpper.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotUpper.setPointRenderer(data, null);
-		LineRenderer2D lineUpper = new DefaultLineRenderer2D();
-		lineUpper.setSetting(LineRenderer2D.COLOR, new Color(0.9f, 0.3f, 0.2f));
+		LineRenderer lineUpper = new DefaultLineRenderer2D();
+		lineUpper.setSetting(LineRenderer.COLOR, new Color(0.9f, 0.3f, 0.2f));
 		plotUpper.setLineRenderer(data, lineUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel panelUpper = new InteractivePanel(plotUpper);
@@ -65,12 +68,14 @@ public class StackedPlots extends JFrame {
 
 		// Lower plot
 		XYPlot plotLower = new XYPlot(data);
-		plotLower.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING,  5.0);
-		plotLower.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 10.0);
+		AxisRenderer axisRendererXLower = plotLower.getAxisRenderer(Axis.X);
+		AxisRenderer axisRendererYLower = plotLower.getAxisRenderer(Axis.Y);
+		axisRendererXLower.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+		axisRendererYLower.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotLower.setPointRenderer(data, null);
-		LineRenderer2D lineLower = new DefaultLineRenderer2D();
-		lineLower.setSetting(LineRenderer2D.STROKE, new BasicStroke(2f));
-		lineLower.setSetting(LineRenderer2D.COLOR, new Color(0.0f, 0.3f, 1.0f));
+		LineRenderer lineLower = new DefaultLineRenderer2D();
+		lineLower.setSetting(LineRenderer.STROKE, new BasicStroke(2f));
+		lineLower.setSetting(LineRenderer.COLOR, new Color(0.0f, 0.3f, 1.0f));
 		plotLower.setLineRenderer(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel panelLower = new InteractivePanel(plotLower);

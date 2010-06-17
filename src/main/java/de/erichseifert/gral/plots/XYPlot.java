@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -38,25 +38,24 @@ import java.util.Map;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.PlotArea2D;
+import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.plots.areas.AreaRenderer2D;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisListener;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
-import de.erichseifert.gral.plots.axes.Tick2D;
-import de.erichseifert.gral.plots.axes.Tick2D.TickType;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.axes.Tick;
+import de.erichseifert.gral.plots.axes.Tick.TickType;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.SettingChangeEvent;
+import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.Settings.Key;
 
 
@@ -64,26 +63,19 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that displays data in an XY-Plot.
  */
 public class XYPlot extends Plot implements DataListener  {
-	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D}
-	instance for displaying the x-axis. */
-	public static final Key AXIS_X_RENDERER = new Key("xyplot.axis.x.renderer");
-	/** Key for specifying the {@link de.erichseifert.gral.plots.axes.AxisRenderer2D}
-	instance for displaying the y-axis. */
-	public static final Key AXIS_Y_RENDERER = new Key("xyplot.axis.y.renderer");
-
 	private double minX;
 	private double maxX;
 	private double minY;
 	private double maxY;
 
 	private final Map<DataSource, PointRenderer> pointRenderers;
-	private final Map<DataSource, LineRenderer2D> lineRenderers;
-	private final Map<DataSource, AreaRenderer2D> areaRenderers;
+	private final Map<DataSource, LineRenderer> lineRenderers;
+	private final Map<DataSource, AreaRenderer> areaRenderers;
 
 	/**
 	 * Class that represents the drawing area of an <code>XYPlot</code>.
 	 */
-	public static class XYPlotArea2D extends PlotArea2D {
+	public static class XYPlotArea2D extends PlotArea {
 		/** Key for specifying whether the horizontal grid lines at major ticks
 		along the x-axis are drawn. */
 		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x");
@@ -124,7 +116,7 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		@Override
-		public void draw(Graphics2D g2d) {
+		public void draw(final Graphics2D g2d) {
 			drawBackground(g2d);
 			drawGrid(g2d);
 			drawBorder(g2d);
@@ -151,21 +143,21 @@ public class XYPlot extends Plot implements DataListener  {
 			// Draw gridX
 			if (isGridMajorX || isGridMinorX) {
 				Axis axisX = plot.getAxis(Axis.X);
-				AxisRenderer2D axisXRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisX);
+				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 				if (axisXRenderer != null) {
 					Shape shapeX = axisXRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
-					List<Tick2D> ticksX = axisXRenderer.getTicks(axisX);
+					List<Tick> ticksX = axisXRenderer.getTicks(axisX);
 					Line2D gridLineVert = new Line2D.Double(
 						-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
 						-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
 					);
-					for (Tick2D tick : ticksX) {
+					for (Tick tick : ticksX) {
 						if ((TickType.MAJOR.equals(tick.getType()) && !isGridMajorX) ||
 								(TickType.MINOR.equals(tick.getType()) && !isGridMinorX)) {
 							continue;
 						}
-						Point2D tickPoint = tick.getPosition();
+						Point2D tickPoint = tick.getPosition().getPoint2D();
 						if (tickPoint == null) {
 							continue;
 						}
@@ -184,21 +176,21 @@ public class XYPlot extends Plot implements DataListener  {
 			// Draw gridY
 			if (isGridMajorY || isGridMinorY) {
 				Axis axisY = plot.getAxis(Axis.Y);
-				AxisRenderer2D axisYRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisY);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 				if (axisYRenderer != null) {
 					Shape shapeY = axisYRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
-					List<Tick2D> ticksY = axisYRenderer.getTicks(axisY);
+					List<Tick> ticksY = axisYRenderer.getTicks(axisY);
 					Line2D gridLineHoriz = new Line2D.Double(
 						-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
 						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 					);
-					for (Tick2D tick : ticksY) {
+					for (Tick tick : ticksY) {
 						if ((TickType.MAJOR.equals(tick.getType()) && !isGridMajorY) ||
 								(TickType.MINOR.equals(tick.getType()) && !isGridMinorY)) {
 							continue;
 						}
-						Point2D tickPoint = tick.getPosition();
+						Point2D tickPoint = tick.getPosition().getPoint2D();
 						if (tickPoint == null) {
 							continue;
 						}
@@ -218,33 +210,33 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		@Override
-		protected void drawPlot(Graphics2D g2d) {
+		protected void drawPlot(final Graphics2D g2d) {
 			AffineTransform txOrig = g2d.getTransform();
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 
 			Axis axisX = plot.getAxis(Axis.X);
 			Axis axisY = plot.getAxis(Axis.Y);
-			AxisRenderer2D axisXRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisX);
-			AxisRenderer2D axisYRenderer = (AxisRenderer2D) plot.getAxisRenderer(axisY);
+			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
+			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 
 			// Paint points and lines
 			for (DataSource s : plot.getData()) {
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
-				LineRenderer2D lineRenderer = plot.getLineRenderer(s);
-				AreaRenderer2D areaRenderer = plot.getAreaRenderer(s);
+				LineRenderer lineRenderer = plot.getLineRenderer(s);
+				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
 
-				List<DataPoint2D> dataPoints = new LinkedList<DataPoint2D>();
+				List<DataPoint> dataPoints = new LinkedList<DataPoint>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					Point2D axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
-					Point2D axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
-					if (axisPosX==null || axisPosY==null) {
+					PointND axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+					PointND axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
+					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
-					Point2D pos = new Point2D.Double(axisPosX.getX(), axisPosY.getY());
+					PointND pos = new PointND(axisPosX.get(0).doubleValue(), axisPosY.get(1).doubleValue());
 
 					Drawable drawable = null;
 					Shape point = null;
@@ -252,7 +244,7 @@ public class XYPlot extends Plot implements DataListener  {
 						drawable = pointRenderer.getPoint(axisY, axisYRenderer, row);
 						point = pointRenderer.getPointPath(row);
 					}
-					DataPoint2D dataPoint = new DataPoint2D(pos, drawable, point);
+					DataPoint dataPoint = new DataPoint(pos, drawable, point);
 					dataPoints.add(dataPoint);
 				}
 
@@ -265,8 +257,10 @@ public class XYPlot extends Plot implements DataListener  {
 					drawable.draw(g2d);
 				}
 				if (pointRenderer != null) {
-					for (DataPoint2D point : dataPoints) {
-						g2d.translate(point.getPosition().getX(), point.getPosition().getY());
+					for (DataPoint point : dataPoints) {
+						double pointX = point.getPosition().get(0).doubleValue();
+						double pointY = point.getPosition().get(1).doubleValue();
+						g2d.translate(pointX, pointY);
 						Drawable drawable = point.getDrawable();
 						drawable.draw(g2d);
 						g2d.setTransform(txOffset);
@@ -298,23 +292,23 @@ public class XYPlot extends Plot implements DataListener  {
 		@Override
 		protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
 			PointRenderer pointRenderer = plot.getPointRenderer(data);
-			LineRenderer2D lineRenderer = plot.getLineRenderer(data);
-			AreaRenderer2D areaRenderer = plot.getAreaRenderer(data);
+			LineRenderer lineRenderer = plot.getLineRenderer(data);
+			AreaRenderer areaRenderer = plot.getAreaRenderer(data);
 
 			Row row = new Row(DUMMY_DATA, 0);
 			Rectangle2D bounds = symbol.getBounds();
 
-			DataPoint2D p1 = new DataPoint2D(
-				new Point2D.Double(bounds.getMinX(), bounds.getCenterY()), null, null
+			DataPoint p1 = new DataPoint(
+				new PointND(bounds.getMinX(), bounds.getCenterY()), null, null
 			);
-			DataPoint2D p2 = new DataPoint2D(
-				new Point2D.Double(bounds.getCenterX(), bounds.getCenterY()),
+			DataPoint p2 = new DataPoint(
+				new PointND(bounds.getCenterX(), bounds.getCenterY()),
 				null, (pointRenderer != null) ? pointRenderer.getPointPath(row) : null
 			);
-			DataPoint2D p3 = new DataPoint2D(
-				new Point2D.Double(bounds.getMaxX(), bounds.getCenterY()), null, null
+			DataPoint p3 = new DataPoint(
+				new PointND(bounds.getMaxX(), bounds.getCenterY()), null, null
 			);
-			List<DataPoint2D> dataPoints = Arrays.asList(p1, p2, p3);
+			List<DataPoint> dataPoints = Arrays.asList(p1, p2, p3);
 
 			Axis axis = new Axis(0.0, 1.0);
 			LinearRenderer2D axisRenderer = new LinearRenderer2D();
@@ -328,7 +322,7 @@ public class XYPlot extends Plot implements DataListener  {
 				lineRenderer.getLine(dataPoints).draw(g2d);
 			}
 			if (pointRenderer != null) {
-				Point2D pos = p2.getPosition();
+				Point2D pos = p2.getPosition().getPoint2D();
 				AffineTransform txOrig = g2d.getTransform();
 				g2d.translate(pos.getX(), pos.getY());
 				pointRenderer.getPoint(axis, axisRenderer, row).draw(g2d);
@@ -347,8 +341,8 @@ public class XYPlot extends Plot implements DataListener  {
 		super(data);
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
-		lineRenderers = new HashMap<DataSource, LineRenderer2D>(data.length);
-		areaRenderers = new HashMap<DataSource, AreaRenderer2D>(data.length);
+		lineRenderers = new HashMap<DataSource, LineRenderer>(data.length);
+		areaRenderers = new HashMap<DataSource, AreaRenderer>(data.length);
 
 		setPlotArea(new XYPlotArea2D(this));
 		setLegend(new XYLegend(this));
@@ -364,15 +358,13 @@ public class XYPlot extends Plot implements DataListener  {
 		// Create axes
 		Axis axisX = new Axis(minX, maxX);
 		Axis axisY = new Axis(minY, maxY);
+		setAxis(Axis.X, axisX);
+		setAxis(Axis.Y, axisY);
 
-		AxisRenderer2D axisXRenderer = new LinearRenderer2D();
-		AxisRenderer2D axisYRenderer = new LinearRenderer2D();
-
-		setAxis(Axis.X, axisX, axisXRenderer);
-		setAxis(Axis.Y, axisY, axisYRenderer);
-
-		setSettingDefault(AXIS_X_RENDERER, axisXRenderer);
-		setSettingDefault(AXIS_Y_RENDERER, axisYRenderer);
+		AxisRenderer axisXRenderer = new LinearRenderer2D();
+		AxisRenderer axisYRenderer = new LinearRenderer2D();
+		setAxisRenderer(axisX, axisXRenderer);
+		setAxisRenderer(axisY, axisYRenderer);
 
 		// Listen for changes of the axis range
 		AxisListener axisListener = new AxisListener() {
@@ -403,8 +395,8 @@ public class XYPlot extends Plot implements DataListener  {
 		Rectangle2D plotBounds = getPlotArea().getBounds();
 		Axis axisX = getAxis(Axis.X);
 		Axis axisY = getAxis(Axis.Y);
-		AxisRenderer2D axisXRenderer = (AxisRenderer2D) getAxisRenderer(axisX);
-		AxisRenderer2D axisYRenderer = (AxisRenderer2D) getAxisRenderer(axisY);
+		AxisRenderer axisXRenderer = getAxisRenderer(axisX);
+		AxisRenderer axisYRenderer = getAxisRenderer(axisY);
 		Drawable axisXComp = getAxisComponent(axisX);
 		Drawable axisYComp = getAxisComponent(axisY);
 		Dimension2D axisXSize = null;
@@ -429,7 +421,8 @@ public class XYPlot extends Plot implements DataListener  {
 		// Set bounds with new axis shapes
 		if (axisXComp != null && axisXRenderer != null) {
 			Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
-			Point2D axisXPos = axisYRenderer.getPosition(axisY, axisXIntersection, false, false);
+			Point2D axisXPos = axisYRenderer.getPosition(
+					axisY, axisXIntersection, false, false).getPoint2D();
 			axisXComp.setBounds(
 				plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
 				plotBounds.getWidth(), axisXSize.getHeight()
@@ -438,7 +431,8 @@ public class XYPlot extends Plot implements DataListener  {
 
 		if (axisYComp != null && axisYRenderer != null) {
 			Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
-			Point2D axisYPos = axisXRenderer.getPosition(axisX, axisYIntersection, false, false);
+			Point2D axisYPos = axisXRenderer.getPosition(
+					axisX, axisYIntersection, false, false).getPoint2D();
 			axisYComp.setBounds(
 				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
 				axisYSize.getWidth(), plotBounds.getHeight()
@@ -475,23 +469,6 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 	}
 
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		super.settingChanged(event);
-
-		Key key = event.getKey();
-		if (AXIS_X_RENDERER.equals(key)) {
-			AxisRenderer renderer = (AxisRenderer) event.getValNew();
-			setAxis(Axis.X, getAxis(Axis.X), renderer);
-		}
-		else if (AXIS_Y_RENDERER.equals(key)) {
-			AxisRenderer2D renderer = (AxisRenderer2D) event.getValNew();
-			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
-			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
-			setAxis(Axis.Y, getAxis(Axis.Y), renderer);
-		}
-	}
-
 	/**
 	 * Returns the <code>PointRenderer</code> for the specified <code>DataSource</code>.
 	 * @param s DataSource.
@@ -516,7 +493,7 @@ public class XYPlot extends Plot implements DataListener  {
 	 * @param s <code>DataSource</code>.
 	 * @return <code>LineRenderer2D</code>.
 	 */
-	public LineRenderer2D getLineRenderer(DataSource s) {
+	public LineRenderer getLineRenderer(DataSource s) {
 		return lineRenderers.get(s);
 	}
 
@@ -526,7 +503,7 @@ public class XYPlot extends Plot implements DataListener  {
 	 * @param s <code>DataSource</code>.
 	 * @param lineRenderer <code>LineRenderer</code> to be set.
 	 */
-	public void setLineRenderer(DataSource s, LineRenderer2D lineRenderer) {
+	public void setLineRenderer(DataSource s, LineRenderer lineRenderer) {
 		lineRenderers.put(s, lineRenderer);
 	}
 
@@ -536,7 +513,7 @@ public class XYPlot extends Plot implements DataListener  {
 	 * @param s <code>DataSource</code>.
 	 * @return <code>AreaRenderer2D</code>.
 	 */
-	public AreaRenderer2D getAreaRenderer(DataSource s) {
+	public AreaRenderer getAreaRenderer(DataSource s) {
 		return areaRenderers.get(s);
 	}
 
@@ -546,7 +523,7 @@ public class XYPlot extends Plot implements DataListener  {
 	 * @param s <code>DataSource</code>.
 	 * @param areaRenderer <code>AreaRenderer2D</code> to be set.
 	 */
-	public void setAreaRenderer(DataSource s, AreaRenderer2D areaRenderer) {
+	public void setAreaRenderer(DataSource s, AreaRenderer areaRenderer) {
 		areaRenderers.put(s, areaRenderer);
 	}
 

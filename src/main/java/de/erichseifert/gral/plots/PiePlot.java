@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -31,7 +31,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
-import de.erichseifert.gral.PlotArea2D;
+import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
@@ -61,7 +61,7 @@ public class PiePlot extends Plot implements DataListener {
 	/**
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
-	public static class PiePlotArea2D extends PlotArea2D implements DataListener {
+	public static class PiePlotArea2D extends PlotArea implements DataListener {
 		private final PiePlot plot;
 		private double degreesPerValue;
 		private ArrayList<double[]> slices;
@@ -88,6 +88,9 @@ public class PiePlot extends Plot implements DataListener {
 			g2d.translate(getX(), getY());
 			AffineTransform txOffset = g2d.getTransform();
 
+			// TODO: Use real font size
+			final double fontSize = 10.0;
+
 			// Paint pie
 			double w = getWidth();
 			double h = getHeight();
@@ -97,18 +100,18 @@ public class PiePlot extends Plot implements DataListener {
 			g2d.translate(w/2d, h/2d);
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 
-			double sizeRel = plot.getSetting(PiePlot.RADIUS);
+			double sizeRel = plot.<Double>getSetting(PiePlot.RADIUS);
 			double size = Math.min(w, h) * sizeRel;
 
-			double sizeRelInner = plot.getSetting(PiePlot.RADIUS_INNER);
+			double sizeRelInner = plot.<Double>getSetting(PiePlot.RADIUS_INNER);
 			double sizeInner = size * sizeRelInner;
 			Ellipse2D inner = new Ellipse2D.Double(
 					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
 			Area whole = new Area(inner);
 
-			double gap = plot.getSetting(PiePlot.GAP);
+			double gap = plot.<Double>getSetting(PiePlot.GAP);
 
-			double sliceOffset = plot.getSetting(PiePlot.START);
+			double sliceOffset = plot.<Double>getSetting(PiePlot.START);
 			int sliceNo = 0;
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];
@@ -123,7 +126,7 @@ public class PiePlot extends Plot implements DataListener {
 						sliceStart, sliceSpan, Arc2D.PIE);
 				Area doughnutSlice = new Area(pieSlice);
 				if (gap > 0.0) {
-					Stroke sliceStroke = new BasicStroke((float) gap);
+					Stroke sliceStroke = new BasicStroke((float) (gap*fontSize));
 					Area sliceContour = new Area(sliceStroke.createStrokedShape(pieSlice));
 					doughnutSlice.subtract(sliceContour);
 				}
@@ -149,7 +152,7 @@ public class PiePlot extends Plot implements DataListener {
 				colYSum += Math.abs(val);
 			}
 
-			boolean isClockwise = plot.getSetting(PiePlot.CLOCKWISE);
+			boolean isClockwise = plot.<Boolean>getSetting(PiePlot.CLOCKWISE);
 			if (isClockwise) {
 				degreesPerValue = -360.0/colYSum;
 			} else {
@@ -189,6 +192,7 @@ public class PiePlot extends Plot implements DataListener {
 		setSettingDefault(COLORS, new QuasiRandomColors());
 		setSettingDefault(CLOCKWISE, true);
 		setSettingDefault(START, 0.0);
+		setSettingDefault(GAP, 0.0);
 
 		setPlotArea(new PiePlotArea2D(this));
 

@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -43,10 +43,11 @@ import java.util.Set;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.plots.Label;
-import de.erichseifert.gral.plots.axes.Tick2D.TickType;
+import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
@@ -54,15 +55,16 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Abstract class that provides function for rendering 2-dimensional axes.
- * Functionality includes:
+ * <p>Abstract class that provides function for rendering axes in
+ * two-dimensional space.</p>
+ * <p>Functionality includes:</p>
  * <ul>
  *   <li>Calculating tick positions of an axis</li>
  *   <li>Calculating tick normals</li>
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, SettingsListener {
+public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsListener {
 	private final Settings settings;
 
 	private Line2D[] shapeLines;
@@ -148,7 +150,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				boolean drawTicksMinor =
 					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS_MINOR);
 				if (drawTicksMajor || drawTicksMinor) {
-					List<Tick2D> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
+					List<Tick> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
 					boolean isTickLabelVisible =
 						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS);
@@ -160,14 +162,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
 					Line2D tickShape = new Line2D.Double();
 
-					for (Tick2D tick : ticks) {
-						Point2D tickPoint = tick.getPosition();
-						Point2D tickNormal = tick.getNormal();
-
+					for (Tick tick : ticks) {
 						// Draw tick
-						if (tickPoint == null || tickNormal == null) {
+						if (tick.getPosition() == null || tick.getNormal() == null) {
 							continue;
 						}
+						Point2D tickPoint = tick.getPosition().getPoint2D();
+						Point2D tickNormal = tick.getNormal().getPoint2D();
 
 						double tickLength =
 							AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
@@ -242,8 +243,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 					boolean isTickLabelOutside =
 						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 
-					Point2D labelPos = getPosition(axis, axisLabelPos, false, true);
-					Point2D labelNormal = getNormal(axis, axisLabelPos, false, true);
+					Point2D labelPos = getPosition(axis, axisLabelPos, false, true).getPoint2D();
+					Point2D labelNormal = getNormal(axis, axisLabelPos, false, true).getPoint2D();
 					layoutLabel(axisLabel, labelPos, labelNormal, labelDist,
 							isTickLabelOutside, labelRotation);
 
@@ -321,7 +322,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public List<Tick2D> getTicks(Axis axis) {
+	public List<Tick> getTicks(Axis axis) {
 		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
@@ -334,7 +335,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		int ticksTotal = (int)Math.floor((max - min)/tickSpacingMinor);
 		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/tickSpacingMinor);
 
-		List<Tick2D> ticks = new LinkedList<Tick2D>();
+		List<Tick> ticks = new LinkedList<Tick>();
 		Set<Double> tickPositions = new HashSet<Double>();
 		Set<Double> tickPositionsCustom = getTickPositionsCustom();
 
@@ -343,7 +344,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
 			boolean isMajor = (tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0;
 			TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
-			Tick2D tick = getTick(tickType, axis, tickPositionWorld);
+			Tick tick = getTick(tickType, axis, tickPositionWorld);
 			if (tick.getPosition() != null
 					&& !tickPositionsCustom.contains(tickPositionWorld)
 					&& !tickPositions.contains(tickPositionWorld)) {
@@ -355,7 +356,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
-				Tick2D tick = getTick(TickType.CUSTOM, axis, entry.getKey());
+				Tick tick = getTick(TickType.CUSTOM, axis, entry.getKey());
 				ticks.add(tick);
 			}
 		}
@@ -381,14 +382,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	 * @param type Type of tick mark.
 	 * @param axis Axis containing the tick mark.
 	 * @param tickPositionWorld Displayed value on the axis.
-	 * @return DataPoint2D of the desired tick mark.
+	 * @return Object describing the desired tick mark.
 	 */
-	protected Tick2D getTick(TickType type, Axis axis, double tickPositionWorld) {
+	protected Tick getTick(TickType type, Axis axis, double tickPositionWorld) {
 		// Calculate position of tick on axis shape
-		Point2D tickPoint = getPosition(axis, tickPositionWorld, false, false);
+		PointND tickPoint = getPosition(axis, tickPositionWorld, false, false);
 
 		// Calculate tick normal
-		Point2D tickNormal = getNormal(axis, tickPositionWorld, false, false);
+		PointND tickNormal = getNormal(axis, tickPositionWorld, false, false);
 
 		// Retrieve tick label
 		String tickLabel;
@@ -400,12 +401,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 			tickLabel = labelFormat.format(tickPositionWorld);
 		}
 
-		Tick2D tick = new Tick2D(type, tickPoint, tickNormal, null, null, tickLabel);
+		Tick tick = new Tick(type, tickPoint, tickNormal, null, null, tickLabel);
 		return tick;
 	}
 
 	@Override
-	public Point2D getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
+	public PointND getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
 		double valueView;
 		if (forceLinear) {
 			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /
@@ -423,7 +424,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		double normalOrientation =
 			AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE)
 			? 1.0 : -1.0;
-		Point2D tickNormal = new Point2D.Double(
+		PointND tickNormal = new PointND(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()
 		);
@@ -443,7 +444,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 	}
 
 	@Override
-	public Point2D getPosition(Axis axis, Number value,
+	public PointND getPosition(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
@@ -469,15 +470,15 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 				double segmentLen = shapeSegmentLengths[segmentIndex];
 				double shapeLen = shapeLengths[segmentIndex];
 				double relLen = (valueView - shapeLen)/segmentLen;
-				return new Point2D.Double(
+				return new PointND(
 					segment.getX1() + (segment.getX2() - segment.getX1())*relLen,
 					segment.getY1() + (segment.getY2() - segment.getY1())*relLen
 				);
 			} else {
 				if (valueView <= 0.0) {
-					return shapeLines[0].getP1();
+					return new PointND(shapeLines[0].getP1());
 				} else {
-					return shapeLines[shapeLines.length - 1].getP2();
+					return new PointND(shapeLines[shapeLines.length - 1].getP2());
 				}
 			}
 		}
@@ -491,7 +492,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer2D, Settings
 		Line2D line = shapeLines[i];
 
 		double posRel = (valueView - shapeLengths[i]) / shapeSegmentLengths[i];
-		Point2D pos = new Point2D.Double(
+		PointND pos = new PointND(
 			line.getX1() + (line.getX2() - line.getX1())*posRel,
 			line.getY1() + (line.getY2() - line.getY1())*posRel
 		);

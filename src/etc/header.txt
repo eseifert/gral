@@ -1,4 +1,4 @@
-GRAL: Vector export for Java(R) Graphics2D
+GRAL: GRAphing Library for Java(R)
 
 (C) Copyright ${year} ${owner1} <${email1}>, ${owner2} <${email2}>
 

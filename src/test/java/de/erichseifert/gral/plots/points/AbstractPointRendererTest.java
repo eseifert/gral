@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -39,7 +39,7 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class AbstractPointRendererTest {
@@ -65,7 +65,7 @@ public class AbstractPointRendererTest {
 	private static final class TestPointRenderer extends AbstractPointRenderer {
 
 		@Override
-		public Drawable getPoint(final Axis axis, final AxisRenderer2D axisRenderer,
+		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
 				final Row row) {
 			return new AbstractDrawable() {
 				@Override
@@ -93,7 +93,7 @@ public class AbstractPointRendererTest {
 	@Test
 	public void testDraw() {
 		Axis axis = new Axis(0.0, 1.0);
-		AxisRenderer2D axisRenderer = new LinearRenderer2D();
+		AxisRenderer axisRenderer = new LinearRenderer2D();
 		// Get line
 		Drawable point = r.getPoint(axis, axisRenderer, row);
 		assertNotNull(point);

@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -30,13 +30,13 @@ import java.awt.geom.Point2D;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableConstants.Orientation;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that connects DataPoints2D with a stair-like line.
+ * Class that connects <code>DataPoint</code>s with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Key for specifying an {@link de.erichseifert.gral.DrawableConstants.Orientation}
@@ -55,7 +55,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	}
 
 	@Override
-	public Drawable getLine(final Iterable<DataPoint2D> points) {
+	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(Graphics2D g2d) {
@@ -64,8 +64,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Construct shape
 				GeneralPath line = new GeneralPath();
-				for (DataPoint2D point : points) {
-					Point2D pos = point.getPosition();
+				for (DataPoint point : points) {
+					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
 						line.moveTo(pos.getX(), pos.getY());
 					} else {
@@ -87,7 +87,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw path
 				Shape lineShape = punch(line, points);
-				Paint paint = getSetting(LineRenderer2D.COLOR);
+				Paint paint = getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
 			}
 		};

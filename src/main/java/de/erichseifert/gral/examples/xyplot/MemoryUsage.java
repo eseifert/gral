@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -23,13 +23,14 @@ package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
@@ -38,11 +39,11 @@ import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
-final class UpdateTask extends TimerTask {
+final class UpdateTask implements ActionListener {
 	private final DataTable data;
 	private final Plot plot;
 	private final JComponent component;
@@ -54,7 +55,7 @@ final class UpdateTask extends TimerTask {
 	}
 
 	@Override
-	public void run() {
+	public void actionPerformed(ActionEvent e) {
 		if (!component.isVisible()) {
 			return;
 		}
@@ -90,14 +91,16 @@ public class MemoryUsage extends JFrame {
 
 		XYPlot plot = new XYPlot(data);
 		plot.getAxis(Axis.Y).setRange(0.0, 1.0);
-		plot.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
-		plot.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICKS_SPACING, 0.1);
-		plot.<AxisRenderer>getSetting(XYPlot.AXIS_X_RENDERER).setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
-		plot.<AxisRenderer>getSetting(XYPlot.AXIS_Y_RENDERER).setSetting(AxisRenderer.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
+		AxisRenderer axisRendererX = plot.getAxisRenderer(Axis.X);
+		AxisRenderer axisRendererY = plot.getAxisRenderer(Axis.Y);
+		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
+		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 0.1);
+		axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
+		axisRendererY.setSetting(AxisRenderer.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
 
 		plot.setPointRenderer(data, null);
-		LineRenderer2D line = new DefaultLineRenderer2D();
-		line.setSetting(LineRenderer2D.COLOR, new Color(0.9f, 0.3f, 0.2f));
+		LineRenderer line = new DefaultLineRenderer2D();
+		line.setSetting(LineRenderer.COLOR, new Color(0.9f, 0.3f, 0.2f));
 		plot.setLineRenderer(data, line);
 
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
@@ -107,9 +110,10 @@ public class MemoryUsage extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(900, 300);
 
-		Timer updateTimer = new Timer();
 		UpdateTask updateTask = new UpdateTask(data, plot, plotPanel);
-		updateTimer.scheduleAtFixedRate(updateTask, INTERVAL, INTERVAL);
+		Timer updateTimer = new Timer(INTERVAL, updateTask);
+		updateTimer.setCoalesce(false);
+		updateTimer.start();
 	}
 
 	public static void main(String[] args) {

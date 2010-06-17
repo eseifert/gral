@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -27,7 +27,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Area;
 
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
@@ -43,7 +43,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractLineRenderer2D implements LineRenderer2D, SettingsListener {
+public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsListener {
 	private final Settings settings;
 
 	/**
@@ -65,8 +65,8 @@ public abstract class AbstractLineRenderer2D implements LineRenderer2D, Settings
 	 * @param dataPoints Data points on the line.
 	 * @return Punched shape.
 	 */
-	protected Shape punch(Shape line, Iterable<DataPoint2D> dataPoints) {
-		Stroke stroke = getSetting(LineRenderer2D.STROKE);
+	protected Shape punch(Shape line, Iterable<DataPoint> dataPoints) {
+		Stroke stroke = getSetting(LineRenderer.STROKE);
 		Shape lineShape = stroke.createStrokedShape(line);
 
 		// Subtract shapes of data points from line to yield gaps.

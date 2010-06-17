@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -163,4 +164,17 @@ public class SettingsTest {
 		assertEquals(values.size(), valuesToTest.size());
 	}
 
+	@Test
+	public void testKey() {
+		Key k1a = new Key("test1");
+		Key k1b = new Key("test1");
+		Key k2 = new Key("test2");
+
+		// Name
+		assertEquals(k1a.getName(), k1b.getName());
+		assertFalse(k2.getName().equals(k1a.getName()));
+		// Equality
+		assertFalse(k1a.equals(k1b));
+		assertFalse(k1a.equals(k2));
+	}
 }

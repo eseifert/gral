@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,16 +22,16 @@
 package de.erichseifert.gral.plots.axes;
 
 import java.awt.Shape;
-import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
+import de.erichseifert.gral.util.PointND;
 
 
 /**
- * Class for storing points of a plot.
+ * Class for storing the tick mark of an axis.
  */
-public class Tick2D extends DataPoint2D {
+public class Tick extends DataPoint {
 	/** Type of tick mark. */
 	public static enum TickType {
 		/** Major tick mark. */
@@ -43,11 +43,11 @@ public class Tick2D extends DataPoint2D {
 	};
 
 	private final TickType type;
-	private final Point2D normal;
+	private final PointND normal;
 	private final String label;
 
 	/**
-	 * Creates a new <code>Tick2D</code> object with the specified position, normal,
+	 * Creates a new instance with the specified position, normal,
 	 * <code>Drawable</code>, point and label.
 	 * @param type Type of the tick mark.
 	 * @param position Coordinates.
@@ -56,7 +56,7 @@ public class Tick2D extends DataPoint2D {
 	 * @param point Point.
 	 * @param label Description.
 	 */
-	public Tick2D(TickType type, Point2D position, Point2D normal, Drawable drawable, Shape point, String label) {
+	public Tick(TickType type, PointND position, PointND normal, Drawable drawable, Shape point, String label) {
 		super(position, drawable, point);
 		this.type = type;
 		this.normal = normal;
@@ -72,15 +72,15 @@ public class Tick2D extends DataPoint2D {
 	}
 
 	/**
-	 * Returns the normal vector of this <code>DataPoint2D</code>.
+	 * Returns the normal vector of this tick mark.
 	 * @return Normal.
 	 */
-	public Point2D getNormal() {
+	public PointND getNormal() {
 		return normal;
 	}
 
 	/**
-	 * Returns the label of this <code>DataPoint2D</code>.
+	 * Returns the label of this tick mark.
 	 * @return Label.
 	 */
 	public String getLabel() {

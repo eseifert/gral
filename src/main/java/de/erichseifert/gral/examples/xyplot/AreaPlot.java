@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -30,10 +30,10 @@ import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.areas.AreaRenderer2D;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -74,13 +74,13 @@ public class AreaPlot extends JFrame {
 		PointRenderer point = new DefaultPointRenderer();
 		point.setSetting(PointRenderer.COLOR, color);
 		plot.setPointRenderer(data, point);
-		LineRenderer2D line = new DefaultLineRenderer2D();
-		line.setSetting(LineRenderer2D.COLOR, color);
-		line.setSetting(LineRenderer2D.GAP, 3.0);
-		line.setSetting(LineRenderer2D.GAP_ROUNDED, true);
+		LineRenderer line = new DefaultLineRenderer2D();
+		line.setSetting(LineRenderer.COLOR, color);
+		line.setSetting(LineRenderer.GAP, 3.0);
+		line.setSetting(LineRenderer.GAP_ROUNDED, true);
 		plot.setLineRenderer(data, line);
-		AreaRenderer2D area = new DefaultAreaRenderer2D();
-		area.setSetting(AreaRenderer2D.COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+		AreaRenderer area = new DefaultAreaRenderer2D();
+		area.setSetting(AreaRenderer.COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
 		plot.setAreaRenderer(data, area);
 	}
 

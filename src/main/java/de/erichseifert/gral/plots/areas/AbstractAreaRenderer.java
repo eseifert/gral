@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Area;
 
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
@@ -40,13 +40,13 @@ import de.erichseifert.gral.util.Settings.Key;
  * <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, SettingsListener {
+public abstract class AbstractAreaRenderer implements AreaRenderer, SettingsListener {
 	private final Settings settings;
 
 	/**
-	 * Creates a new AbstractLineRenderer2D with default settings.
+	 * Creates a new instance with default settings.
 	 */
-	public AbstractAreaRenderer2D() {
+	public AbstractAreaRenderer() {
 		this.settings = new Settings(this);
 
 		setSettingDefault(GAP, 0.0);
@@ -61,7 +61,7 @@ public abstract class AbstractAreaRenderer2D implements AreaRenderer2D, Settings
 	 * @param dataPoints Data points on the line.
 	 * @return Punched shape.
 	 */
-	protected Shape punch(Shape area, Iterable<DataPoint2D> dataPoints) {
+	protected Shape punch(Shape area, Iterable<DataPoint> dataPoints) {
 		// Subtract shapes of data points from the area to yield gaps.
 		double gapSize = this.<Double>getSetting(GAP);
 		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);

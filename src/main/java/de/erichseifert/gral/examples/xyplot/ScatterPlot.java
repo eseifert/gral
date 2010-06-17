@@ -19,7 +19,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.examples.pieplot;
+package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.util.Random;
@@ -27,48 +27,38 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.plots.PiePlot;
+import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimplePiePlot extends JFrame {
+public class ScatterPlot extends JFrame {
+	private static final Random random = new Random();
 
-	public SimplePiePlot() {
+	public ScatterPlot() {
 		super("GRALTest");
-		DataTable data = new DataTable(Integer.class);
-		Random r = new Random();
-		for (int i = 0; i < 15; i++) {
-			int val = r.nextInt(10) + 1;
-			data.add((r.nextDouble() <= 0.15) ? -val : val);
+
+		DataTable data = new DataTable(Double.class, Double.class);
+		for (int i = 0; i <= 100000; i++) {
+			data.add(random.nextGaussian()*2.0,  random.nextGaussian()*2.0);
 		}
-		PiePlot plot = new PiePlot(data);
-		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
-		// Change relative size of pie
-		plot.setSetting(PiePlot.RADIUS, 0.9);
-		// Change relative size of inner region
-		plot.setSetting(PiePlot.RADIUS_INNER, 0.4);
-		// Change the width of gaps between segments
-		plot.setSetting(PiePlot.GAP, 0.2);
-		// Change rotation
-		//plot.setSetting(PiePlot.CLOCKWISE, false);
-		// Custom start angle
-		//plot.setSetting(PiePlot.START, 70.0);
-		// Custom colors
-		//plot.setSetting(PiePlot.COLORS, new RainbowColors());
-		// Random blue colors
-		//QuasiRandomColors colors = new QuasiRandomColors();
-		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
-		//plot.setSetting(PiePlot.COLORS, colors);
+
+		XYPlot plot = new XYPlot(data);
+
+		// Setting the title
+		plot.setSetting(XYPlot.TITLE, "A Large Scatter Plot");
+		plot.setSetting(XYPlot.ANTIALISING, false);
+
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 600);
+		setSize(600, 600);
 	}
 
 	public static void main(String[] args) {
-		SimplePiePlot test = new SimplePiePlot();
+		ScatterPlot test = new ScatterPlot();
 		test.setVisible(true);
 	}
+
 }

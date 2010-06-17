@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -22,37 +22,37 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.Shape;
-import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.util.PointND;
 
 
 /**
  * Class for storing points of a plot.
  */
-public class DataPoint2D {
-	private final Point2D position;
+public class DataPoint {
+	private final PointND position;
 	private final Drawable drawable;
 	private final Shape point;
 
 	/**
-	 * Creates a new <code>DataPoint2D</code> object with the specified position,
+	 * Creates a new <code>DataPoint</code> object with the specified position,
 	 * <code>Drawable</code>, and shape.
 	 * @param position Coordinates.
 	 * @param drawable Representation.
 	 * @param point Point.
 	 */
-	public DataPoint2D(Point2D position, Drawable drawable, Shape point) {
+	public DataPoint(PointND position, Drawable drawable, Shape point) {
 		this.position = position;
 		this.drawable = drawable;
 		this.point = point;
 	}
 
 	/**
-	 * Returns the coordinates of this <code>DataPoint2D</code>.
+	 * Returns the coordinates of this <code>DataPoint</code>.
 	 * @return Position.
 	 */
-	public Point2D getPosition() {
+	public PointND getPosition() {
 		return position;
 	}
 

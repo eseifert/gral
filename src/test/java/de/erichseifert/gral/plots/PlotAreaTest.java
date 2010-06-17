@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -33,38 +33,41 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.PlotArea2D;
+import de.erichseifert.gral.PlotArea;
 
-public class PlotArea2DTest {
-	private PlotArea2D plotArea;
-	private boolean isDrawn;
+public class PlotAreaTest {
+	private TestPlotArea2D plotArea;
+
+	private static final class TestPlotArea2D extends PlotArea {
+		public boolean isDrawn;
+
+		@Override
+		public void draw(Graphics2D g2d) {
+			drawBackground(g2d);
+			drawBorder(g2d);
+			drawPlot(g2d);
+		}
+		@Override
+		protected void drawPlot(Graphics2D g2d) {
+			isDrawn = true;
+		}
+	};
 
 	@Before
 	public void setUp() {
-		plotArea = new PlotArea2D() {
-			@Override
-			public void draw(Graphics2D g2d) {
-				drawBackground(g2d);
-				drawBorder(g2d);
-				drawPlot(g2d);
-			}
-			@Override
-			protected void drawPlot(Graphics2D g2d) {
-				isDrawn = true;
-			}
-		};
+		plotArea = new TestPlotArea2D();
 	}
 
 	@Test
 	public void testSettings() {
 		// Get
-		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea2D.BACKGROUND));
+		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea.BACKGROUND));
 		// Set
-		plotArea.setSetting(PlotArea2D.BACKGROUND, "foobar");
-		assertEquals("foobar", plotArea.<String>getSetting(PlotArea2D.BACKGROUND));
+		plotArea.setSetting(PlotArea.BACKGROUND, "foobar");
+		assertEquals("foobar", plotArea.<String>getSetting(PlotArea.BACKGROUND));
 		// Remove
-		plotArea.removeSetting(PlotArea2D.BACKGROUND);
-		assertNull(plotArea.getSetting(PlotArea2D.BACKGROUND));
+		plotArea.removeSetting(PlotArea.BACKGROUND);
+		assertNull(plotArea.getSetting(PlotArea.BACKGROUND));
 	}
 
 	@Test
@@ -76,7 +79,7 @@ public class PlotArea2DTest {
 		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		plotArea.draw(g2d);
-		assertTrue(isDrawn);
+		assertTrue(plotArea.isDrawn);
 	}
 
 }

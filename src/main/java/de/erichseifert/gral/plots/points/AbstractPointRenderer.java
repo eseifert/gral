@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -36,7 +36,7 @@ import java.text.NumberFormat;
 
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
@@ -100,13 +100,13 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 	 * @param axisRenderer Axis renderer.
 	 */
 	protected void drawError(Graphics2D g2d, Shape point, double value,
-			double errorTop, double errorBot, Axis axis, AxisRenderer2D axisRenderer) {
+			double errorTop, double errorBot, Axis axis, AxisRenderer axisRenderer) {
 		double posX = point.getBounds2D().getCenterX();
 		double valueTop = value + errorTop;
 		double valueBot = value - errorBot;
-		double posY = axisRenderer.getPosition(axis, value, true, false).getY();
-		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).getY() - posY;
-		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).getY() - posY;
+		double posY = axisRenderer.getPosition(axis, value, true, false).get(1).doubleValue();
+		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).get(1).doubleValue() - posY;
+		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).get(1).doubleValue() - posY;
 		Point2D pointTop = new Point2D.Double(posX, posYTop);
 		Point2D pointBot = new Point2D.Double(posX, posYBot);
 		Line2D errorBar = new Line2D.Double(pointTop, pointBot);

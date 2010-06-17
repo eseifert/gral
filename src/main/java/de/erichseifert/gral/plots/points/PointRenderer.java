@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -26,7 +26,7 @@ import java.awt.Shape;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.SettingsStorage;
 import de.erichseifert.gral.util.Settings.Key;
 
@@ -84,7 +84,7 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param row Data row containing the point.
 	 * @return Component that can be used to draw the point
 	 */
-	Drawable getPoint(Axis axis, AxisRenderer2D axisRenderer, Row row);
+	Drawable getPoint(Axis axis, AxisRenderer axisRenderer, Row row);
 
 	/**
 	 * Returns a <code>Shape</code> instance that can be used

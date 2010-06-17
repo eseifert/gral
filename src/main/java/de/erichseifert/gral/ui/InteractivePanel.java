@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -54,7 +54,7 @@ import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.PlotNavigator;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 
 /**
@@ -263,10 +263,8 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
 				Axis axisX = plot.getAxis(Axis.X);
 				Axis axisY = plot.getAxis(Axis.Y);
-				AxisRenderer2D axisXRenderer =
-					plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_X_RENDERER);
-				AxisRenderer2D axisYRenderer =
-					plot.<AxisRenderer2D>getSetting(XYPlot.AXIS_Y_RENDERER);
+				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 
 				// Fetch current center on screen
 				double centerX = axisXRenderer.worldToView(

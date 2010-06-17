@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -36,12 +36,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.PlotArea2D;
+import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.util.Insets2D;
 
 public class PlotTest {
@@ -61,7 +59,7 @@ public class PlotTest {
 		table.add(6, 9, 5); // 5
 		table.add(7, 8, 7); // 6
 		table.add(8, 1, 9); // 7
-		
+
 		series1 = new DataSeries("series1", table, 0, 1);
 		series2 = new DataSeries("series2", table, 1, 2);
 	}
@@ -107,7 +105,7 @@ public class PlotTest {
 
 	@Test
 	public void testPlotArea() {
-		PlotArea2D plotArea = plot.getPlotArea();
+		PlotArea plotArea = plot.getPlotArea();
 		assertNull(plotArea);
 	}
 
@@ -123,16 +121,15 @@ public class PlotTest {
 		assertNull(plot.getAxis("a"));
 		assertNull(plot.getAxis("b"));
 		// Set
-		AxisRenderer renderer = new LinearRenderer2D();
 		Axis a = new Axis(0.0, 1.0);
 		Axis b = new Axis(2.0, 3.0);
-		plot.setAxis("a", a, renderer);
-		plot.setAxis("b", b, renderer);
+		plot.setAxis("a", a);
+		plot.setAxis("b", b);
 		assertEquals(a, plot.getAxis("a"));
 		assertEquals(b, plot.getAxis("b"));
 		// Remove
 		plot.removeAxis("a");
-		plot.setAxis("b", null, null);
+		plot.setAxis("b", null);
 		assertNull(plot.getAxis("a"));
 		assertNull(plot.getAxis("b"));
 	}

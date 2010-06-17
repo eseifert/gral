@@ -1,5 +1,5 @@
 /*
- * GRAL: Vector export for Java(R) Graphics2D
+ * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2010 Erich Seifert <info[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
  *
@@ -25,22 +25,24 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.plots.DataPoint2D;
+import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer2D;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Default implementation of the <code>AreaRenderer2D</code> interface.
+ * Default two-dimensional implementation of the <code>AreaRenderer</code>
+ * interface.
  */
-public class DefaultAreaRenderer2D extends AbstractAreaRenderer2D {
+public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 
 	@Override
-	public Drawable getArea(Axis axis, AxisRenderer2D axisRenderer, Iterable<DataPoint2D> points) {
+	public Drawable getArea(Axis axis, AxisRenderer axisRenderer, Iterable<DataPoint> points) {
 		Shape path = getAreaShape(axis, axisRenderer, points);
 		final Shape area = punch(path, points);
 
@@ -53,20 +55,21 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer2D {
 		};
 	}
 
-	private Shape getAreaShape(Axis axis, AxisRenderer2D axisRenderer, Iterable<DataPoint2D> points) {
+	private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer, Iterable<DataPoint> points) {
 		double axisYMin = axis.getMin().doubleValue();
 		double axisYMax = axis.getMax().doubleValue();
 		double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
-		double posYOrigin = axisRenderer.getPosition(axis, axisYOrigin, true, false).getY();
+		double posYOrigin = axisRenderer.getPosition(axis, axisYOrigin, true, false).get(1).doubleValue();
 
 		GeneralPath path = new GeneralPath();
 
 		float x = 0f;
 		float y = 0f;
 		boolean isFirst = true;
-		for (DataPoint2D p: points) {
-			x = (float)p.getPosition().getX();
-			y = (float)p.getPosition().getY();
+		for (DataPoint p: points) {
+			Point2D pos = p.getPosition().getPoint2D();
+			x = (float)pos.getX();
+			y = (float)pos.getY();
 			if (isFirst) {
 				path.moveTo(x, (float)posYOrigin);
 				isFirst = false;
