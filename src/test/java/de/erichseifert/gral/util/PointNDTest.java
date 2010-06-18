@@ -35,21 +35,17 @@ public class PointNDTest {
 
 	@Test
 	public void testCreate() {
-		PointND p;
+		PointND<Double> p;
 
 		// Constructor with Number[]
-		p = new PointND(1, 2, 3, 4);
+		p = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
 		assertEquals(4, p.getDimensions());
-
-		// Constructor with Point2D
-		p = new PointND(new Point2D.Double(1.0, 2.0));
-		assertEquals(2, p.getDimensions());
 	}
 
 	@Test
 	public void testGet() {
-		Number[] coordinates = {1, 2, 3, 4};
-		PointND p = new PointND(coordinates);
+		Double[] coordinates = {1.0, 2.0, 3.0, 4.0};
+		PointND<Double> p = new PointND<Double>(coordinates);
 
 		for (int dim = 0; dim < coordinates.length; dim++) {
 			assertEquals(coordinates[dim], p.get(dim));
@@ -58,22 +54,22 @@ public class PointNDTest {
 
 	@Test
 	public void testSet() {
-		Number[] coordinates = {1, 2, 3, 4};
-		PointND p = new PointND(coordinates);
+		Double[] coordinates = {1.0, 2.0, 3.0, 4.0};
+		PointND<Double> p = new PointND<Double>(coordinates);
 
 		int dim = 1;
 		p.set(dim, 0.0);
 		assertFalse(coordinates[dim].equals(p.get(dim)));
-		assertEquals(0.0, p.get(dim));
+		assertEquals(0.0, p.get(dim), DELTA);
 
-		Number[] coordinatesNew = {0, 1, 3, 2};
+		Double[] coordinatesNew = {0.0, 1.0, 3.0, 2.0};
 		p.setLocation(coordinatesNew);
 		for (int d = 0; d < coordinates.length; d++) {
 			assertEquals(coordinatesNew[d], p.get(d));
 		}
 
 		try {
-			Number[] coordinatesNew2 = {0, 1};
+			Double[] coordinatesNew2 = {0.0, 1.0};
 			p.setLocation(coordinatesNew2);
 			fail("Expected IllegalArgumentException exception.");
 		} catch (IllegalArgumentException e) {
@@ -82,15 +78,15 @@ public class PointNDTest {
 
 	@Test
 	public void testToString() {
-		PointND p = new PointND(1.0, 2.0);
+		PointND<Double> p = new PointND<Double>(1.0, 2.0);
 		assertEquals("de.erichseifert.gral.util.PointND[1.0, 2.0]", p.toString());
 	}
 
 	@Test
 	public void testEquality() {
-		PointND p1 = new PointND(1.0, 2.0);
-		PointND p2 = new PointND(1.0, 2.0);
-		PointND p3 = new PointND(1.0, 2.0, 3.0);
+		PointND<Double> p1 = new PointND<Double>(1.0, 2.0);
+		PointND<Double> p2 = new PointND<Double>(1.0, 2.0);
+		PointND<Double> p3 = new PointND<Double>(1.0, 2.0, 3.0);
 		// Equals
 		assertTrue(p1.equals(p2));
 		assertFalse(p1.equals(null));
@@ -102,12 +98,12 @@ public class PointNDTest {
 
 	@Test
 	public void testPoint2D() {
-		PointND p4 = new PointND(1.0, 2.0, 3.0, 4.0);
+		PointND<Double> p4 = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
 
 		assertEquals(new Point2D.Double(1.0, 2.0), p4.getPoint2D());
 		assertEquals(new Point2D.Double(2.0, 3.0), p4.getPoint2D(1, 2));
 
-		PointND p1 = new PointND(1.0);
+		PointND<Double> p1 = new PointND<Double>(1.0);
 		try {
 			p1.getPoint2D();
 			fail("Expected ArrayIndexOutOfBoundsException exception.");

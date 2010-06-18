@@ -43,7 +43,7 @@ public class Tick extends DataPoint {
 	};
 
 	private final TickType type;
-	private final PointND normal;
+	private final PointND<Double> normal;
 	private final String label;
 
 	/**
@@ -56,7 +56,8 @@ public class Tick extends DataPoint {
 	 * @param point Point.
 	 * @param label Description.
 	 */
-	public Tick(TickType type, PointND position, PointND normal, Drawable drawable, Shape point, String label) {
+	public Tick(TickType type, PointND<Double> position, PointND<Double> normal,
+			Drawable drawable, Shape point, String label) {
 		super(position, drawable, point);
 		this.type = type;
 		this.normal = normal;
@@ -75,7 +76,7 @@ public class Tick extends DataPoint {
 	 * Returns the normal vector of this tick mark.
 	 * @return Normal.
 	 */
-	public PointND getNormal() {
+	public PointND<Double> getNormal() {
 		return normal;
 	}
 

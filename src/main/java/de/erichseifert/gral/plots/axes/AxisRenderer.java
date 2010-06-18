@@ -161,7 +161,7 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param forceLinear Force linear interpolation.
 	 * @return N-dimensional point of the value
 	 */
-	PointND getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
+	PointND<Double> getPosition(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
 
 	/**
 	 * Returns the normal vector at the position of the specified value.
@@ -172,5 +172,5 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param forceLinear Force linear interpolation.
 	 * @return N-dimensional normal vector at the position
 	 */
-	PointND getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
+	PointND<Double> getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
 }

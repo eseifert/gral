@@ -386,10 +386,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	 */
 	protected Tick getTick(TickType type, Axis axis, double tickPositionWorld) {
 		// Calculate position of tick on axis shape
-		PointND tickPoint = getPosition(axis, tickPositionWorld, false, false);
+		PointND<Double> tickPoint = getPosition(axis, tickPositionWorld, false, false);
 
 		// Calculate tick normal
-		PointND tickNormal = getNormal(axis, tickPositionWorld, false, false);
+		PointND<Double> tickNormal = getNormal(axis, tickPositionWorld, false, false);
 
 		// Retrieve tick label
 		String tickLabel;
@@ -406,7 +406,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	}
 
 	@Override
-	public PointND getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
+	public PointND<Double> getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
 		double valueView;
 		if (forceLinear) {
 			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /
@@ -424,7 +424,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		double normalOrientation =
 			AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE)
 			? 1.0 : -1.0;
-		PointND tickNormal = new PointND(
+		PointND<Double> tickNormal = new PointND<Double>(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()
 		);
@@ -444,7 +444,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	}
 
 	@Override
-	public PointND getPosition(Axis axis, Number value,
+	public PointND<Double> getPosition(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0) {
 			return null;
@@ -470,15 +470,17 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				double segmentLen = shapeSegmentLengths[segmentIndex];
 				double shapeLen = shapeLengths[segmentIndex];
 				double relLen = (valueView - shapeLen)/segmentLen;
-				return new PointND(
+				return new PointND<Double>(
 					segment.getX1() + (segment.getX2() - segment.getX1())*relLen,
 					segment.getY1() + (segment.getY2() - segment.getY1())*relLen
 				);
 			} else {
 				if (valueView <= 0.0) {
-					return new PointND(shapeLines[0].getP1());
+					Point2D p2d = shapeLines[0].getP1();
+					return new PointND<Double>(p2d.getX(), p2d.getY());
 				} else {
-					return new PointND(shapeLines[shapeLines.length - 1].getP2());
+					Point2D p2d = shapeLines[shapeLines.length - 1].getP2();
+					return new PointND<Double>(p2d.getX(), p2d.getY());
 				}
 			}
 		}
@@ -492,7 +494,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		Line2D line = shapeLines[i];
 
 		double posRel = (valueView - shapeLengths[i]) / shapeSegmentLengths[i];
-		PointND pos = new PointND(
+		PointND<Double> pos = new PointND<Double>(
 			line.getX1() + (line.getX2() - line.getX1())*posRel,
 			line.getY1() + (line.getY2() - line.getY1())*posRel
 		);

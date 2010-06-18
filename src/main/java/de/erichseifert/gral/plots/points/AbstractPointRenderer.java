@@ -104,9 +104,9 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 		double posX = point.getBounds2D().getCenterX();
 		double valueTop = value + errorTop;
 		double valueBot = value - errorBot;
-		double posY = axisRenderer.getPosition(axis, value, true, false).get(1).doubleValue();
-		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).get(1).doubleValue() - posY;
-		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).get(1).doubleValue() - posY;
+		double posY = axisRenderer.getPosition(axis, value, true, false).get(1);
+		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).get(1) - posY;
+		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).get(1) - posY;
 		Point2D pointTop = new Point2D.Double(posX, posYTop);
 		Point2D pointBot = new Point2D.Double(posX, posYBot);
 		Line2D errorBar = new Line2D.Double(pointTop, pointBot);

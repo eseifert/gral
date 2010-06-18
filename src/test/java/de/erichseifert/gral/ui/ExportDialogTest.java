@@ -56,7 +56,7 @@ public class ExportDialogTest {
 
 	@Before
 	public void setUp() {
-		dialog = new ExportDialog(null, drawable);
+		dialog = new TestExportDialog(null, drawable);
 	}
 
 	@Test

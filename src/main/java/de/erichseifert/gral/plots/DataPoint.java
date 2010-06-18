@@ -31,7 +31,7 @@ import de.erichseifert.gral.util.PointND;
  * Class for storing points of a plot.
  */
 public class DataPoint {
-	private final PointND position;
+	private final PointND<Double> position;
 	private final Drawable drawable;
 	private final Shape point;
 
@@ -42,7 +42,7 @@ public class DataPoint {
 	 * @param drawable Representation.
 	 * @param point Point.
 	 */
-	public DataPoint(PointND position, Drawable drawable, Shape point) {
+	public DataPoint(PointND<Double> position, Drawable drawable, Shape point) {
 		this.position = position;
 		this.drawable = drawable;
 		this.point = point;
@@ -52,7 +52,7 @@ public class DataPoint {
 	 * Returns the coordinates of this <code>DataPoint</code>.
 	 * @return Position.
 	 */
-	public PointND getPosition() {
+	public PointND<Double> getPosition() {
 		return position;
 	}
 

@@ -115,16 +115,14 @@ public class BarPlot extends XYPlot {
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(
-					axisX, valueX - barWidthRel*barAlign, true, false)
-					.get(0).doubleValue();
+					axisX, valueX - barWidthRel*barAlign, true, false).get(0);
 			double barXMax = axisXRenderer.getPosition(
-					axisX, valueX + barWidthRel*barAlign, true, false)
-					.get(0).doubleValue();
+					axisX, valueX + barWidthRel*barAlign, true, false).get(0);
 
 			double barYVal = axisYRenderer.getPosition(
-					axisY, valueY, true, false).get(1).doubleValue();
+					axisY, valueY, true, false).get(1);
 			double barYOrigin = axisYRenderer.getPosition(
-					axisY, axisYOrigin, true, false).get(1).doubleValue();
+					axisY, axisYOrigin, true, false).get(1);
 			double barYMin = Math.min(barYVal, barYOrigin);
 			double barYMax = Math.max(barYVal, barYOrigin);
 
@@ -132,7 +130,7 @@ public class BarPlot extends XYPlot {
 			double barHeight = Math.abs(barYMax - barYMin);
 
 			double barX = axisXRenderer.getPosition(
-					axisX, valueX, true, false).get(0).doubleValue();
+					axisX, valueX, true, false).get(0);
 			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
 
 			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);

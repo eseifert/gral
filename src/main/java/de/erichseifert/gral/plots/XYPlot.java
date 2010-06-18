@@ -231,12 +231,12 @@ public class XYPlot extends Plot implements DataListener  {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					PointND axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
-					PointND axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
+					PointND<Double> axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+					PointND<Double> axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
-					PointND pos = new PointND(axisPosX.get(0).doubleValue(), axisPosY.get(1).doubleValue());
+					PointND<Double> pos = new PointND<Double>(axisPosX.get(0), axisPosY.get(1));
 
 					Drawable drawable = null;
 					Shape point = null;
@@ -258,8 +258,8 @@ public class XYPlot extends Plot implements DataListener  {
 				}
 				if (pointRenderer != null) {
 					for (DataPoint point : dataPoints) {
-						double pointX = point.getPosition().get(0).doubleValue();
-						double pointY = point.getPosition().get(1).doubleValue();
+						double pointX = point.getPosition().get(0);
+						double pointY = point.getPosition().get(1);
 						g2d.translate(pointX, pointY);
 						Drawable drawable = point.getDrawable();
 						drawable.draw(g2d);
@@ -299,14 +299,14 @@ public class XYPlot extends Plot implements DataListener  {
 			Rectangle2D bounds = symbol.getBounds();
 
 			DataPoint p1 = new DataPoint(
-				new PointND(bounds.getMinX(), bounds.getCenterY()), null, null
+				new PointND<Double>(bounds.getMinX(), bounds.getCenterY()), null, null
 			);
 			DataPoint p2 = new DataPoint(
-				new PointND(bounds.getCenterX(), bounds.getCenterY()),
+				new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
 				null, (pointRenderer != null) ? pointRenderer.getPointPath(row) : null
 			);
 			DataPoint p3 = new DataPoint(
-				new PointND(bounds.getMaxX(), bounds.getCenterY()), null, null
+				new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()), null, null
 			);
 			List<DataPoint> dataPoints = Arrays.asList(p1, p2, p3);
 

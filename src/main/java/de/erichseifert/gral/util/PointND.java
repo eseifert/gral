@@ -26,24 +26,17 @@ import java.util.Arrays;
 
 /**
  * Class for storing n-dimensional points.
+ * @param <T> Data type of the coordinates.
  */
-public class PointND {
-	private final Number[] coordinates;
+public class PointND <T extends Number> {
+	private final T[] coordinates;
 
 	/**
 	 * Constructor that initializes the point with a list of coordinates.
 	 * @param coordinates Coordinate values.
 	 */
-	public PointND(Number... coordinates) {
+	public PointND(T... coordinates) {
 		this.coordinates = Arrays.copyOf(coordinates, coordinates.length);
-	}
-
-	/**
-	 * Constructor that initializes the point with another two-dimensional point.
-	 * @param point2d Two-dimensional point object.
-	 */
-	public PointND(Point2D point2d) {
-		this(point2d.getX(), point2d.getY());
 	}
 
 	/**
@@ -59,7 +52,7 @@ public class PointND {
 	 * @param dimension Dimension.
 	 * @return Coordinate value.
 	 */
-	public Number get(int dimension) {
+	public T get(int dimension) {
 		return coordinates[dimension];
 	}
 
@@ -68,7 +61,7 @@ public class PointND {
 	 * @param dimension Dimension.
 	 * @param coordinate New coordinate value.
 	 */
-	public void set(int dimension, Number coordinate) {
+	public void set(int dimension, T coordinate) {
 		coordinates[dimension] = coordinate;
 	}
 
@@ -76,7 +69,7 @@ public class PointND {
 	 * Sets all coordinate values at once.
 	 * @param coordinates Coordinate values.
 	 */
-	public void setLocation(Number... coordinates) {
+	public void setLocation(T... coordinates) {
 		if (getDimensions() != coordinates.length) {
 			throw new IllegalArgumentException(
 					"Wrong number of dimensions: You have to provide " +
@@ -123,15 +116,15 @@ public class PointND {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof PointND)) {
+		if (!(obj instanceof PointND<?>)) {
 			return false;
 		}
-		PointND p = (PointND) obj;
+		PointND<?> p = (PointND<?>) obj;
 		if (getDimensions() != p.getDimensions()) {
 			return false;
 		}
 		for (int dim = 0; dim < coordinates.length; dim++) {
-			if (!coordinates[dim].equals(p.coordinates[dim])) {
+			if (!get(dim).equals(p.get(dim))) {
 				return false;
 			}
 		}
@@ -141,7 +134,7 @@ public class PointND {
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
-		for (Number coordinate : coordinates) {
+		for (T coordinate : coordinates) {
 			hashCode ^= coordinate.hashCode();
 		}
 		return hashCode;

@@ -44,8 +44,8 @@ public class DiscreteLineRendererTest {
 		// Get line
 		LineRenderer r = new DiscreteLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND(0.0, 0.0), null, null),
-			new DataPoint(new PointND(1.0, 1.0), null, null)
+			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
 		);
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
