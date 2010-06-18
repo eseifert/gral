@@ -363,8 +363,8 @@ public class XYPlot extends Plot implements DataListener  {
 
 		AxisRenderer axisXRenderer = new LinearRenderer2D();
 		AxisRenderer axisYRenderer = new LinearRenderer2D();
-		setAxisRenderer(axisX, axisXRenderer);
-		setAxisRenderer(axisY, axisYRenderer);
+		setAxisRenderer(Axis.X, axisXRenderer);
+		setAxisRenderer(Axis.Y, axisYRenderer);
 
 		// Listen for changes of the axis range
 		AxisListener axisListener = new AxisListener() {
@@ -527,4 +527,12 @@ public class XYPlot extends Plot implements DataListener  {
 		areaRenderers.put(s, areaRenderer);
 	}
 
+	@Override
+	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
+		if (axis == getAxis(Axis.Y)) {
+			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
+		}
+		super.setAxisRenderer(axis, renderer);
+	}
 }
