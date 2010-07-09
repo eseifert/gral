@@ -24,13 +24,10 @@ package de.erichseifert.gral.io.data;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.io.IOCapabilities;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
 
 /**
@@ -38,7 +35,7 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
  * character will be used for separating columns.
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
-public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
+public class CSVWriter extends AbstractDataWriter {
 	static {
 		addCapabilities(new IOCapabilities(
 			"CSV",
@@ -55,19 +52,13 @@ public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
 		));
 	}
 
-	private final Map<String, Object> settings;
-	private final Map<String, Object> defaults;
-	private final String mimeType;
-
 	/**
 	 * Creates a new CSVWriter object with the specified MIME-Type.
 	 * @param mimeType MIME-Type of the output file.
 	 */
 	public CSVWriter(String mimeType) {
-		settings = new HashMap<String, Object>();
-		defaults = new HashMap<String, Object>();
-		defaults.put("separator", ";");
-		this.mimeType = mimeType;
+		super(mimeType);
+		setDefault("separator", ";");
 	}
 
 	@Override
@@ -86,27 +77,6 @@ public class CSVWriter extends IOCapabilitiesStorage implements DataWriter {
 		}
 
 		writer.close();
-	}
-
-	/**
-	 * Returns the MIME type.
-	 * @return MIME type string.
-	 */
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	@Override
-	public <T> T getSetting(String key) {
-		if (!settings.containsKey(key)) {
-			return (T) defaults.get(key);
-		}
-		return (T) settings.get(key);
-	}
-
-	@Override
-	public <T> void setSetting(String key, T value) {
-		settings.put(key, value);
 	}
 
 }

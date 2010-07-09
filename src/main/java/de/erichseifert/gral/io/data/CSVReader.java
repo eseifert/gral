@@ -34,7 +34,6 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
-import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
 
 /**
@@ -42,7 +41,7 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
  * character will be used for separating columns.
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
-public class CSVReader extends IOCapabilitiesStorage implements DataReader {
+public class CSVReader extends AbstractDataReader {
 	static {
 		addCapabilities(new IOCapabilities(
 			"CSV",
@@ -59,19 +58,13 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 		));
 	}
 
-	private final Map<String, Object> settings;
-	private final Map<String, Object> defaults;
-	private final String mimeType;
-
 	/**
 	 * Creates a new CSVReader with the specified MIME type.
 	 * @param mimeType MIME type of the file format to be read.
 	 */
 	public CSVReader(String mimeType) {
-		settings = new HashMap<String, Object>();
-		defaults = new HashMap<String, Object>();
-		defaults.put("separator", ";");
-		this.mimeType = mimeType;
+		super(mimeType);
+		setDefault("separator", ";");
 	}
 
 	@Override
@@ -147,27 +140,6 @@ public class CSVReader extends IOCapabilitiesStorage implements DataReader {
 			parse = m;
 		}
 		return parse;
-	}
-
-	/**
-	 * Returns the MIME type.
-	 * @return MIME type string.
-	 */
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	@Override
-	public <T> T getSetting(String key) {
-		if (!settings.containsKey(key)) {
-			return (T) defaults.get(key);
-		}
-		return (T) settings.get(key);
-	}
-
-	@Override
-	public <T> void setSetting(String key, T value) {
-		settings.put(key, value);
 	}
 
 }

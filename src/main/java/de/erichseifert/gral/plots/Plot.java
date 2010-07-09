@@ -37,6 +37,7 @@ import java.util.Map;
 import de.erichseifert.gral.Container;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawableContainer;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
@@ -85,19 +86,6 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public static final Key LEGEND_LOCATION = new Key("plot.legend.location");
 	/** Key for specifying the width of the legend's margin. */
 	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin");
-	/** Key for specifying the scaling behavior of the plot using a
-	{@link ScaleMode} value. */
-	public static final Key SCALING_MODE = new Key("plot.scalingMode");
-
-	/** Constants for specifying the scaling behavior values. */
-	public static enum ScaleMode {
-		/** Constant for specifying that when a plot is scaled
-		 *  the axis extremes should be preserved. */
-		PRESERVE_AXIS_BOUNDS,
-		/** Constant for specifying that when a plot is scaled
-		 *  its scale should be preserved and axes can be scaled. */
-		PRESERVE_PLOT_SCALE
-	};
 
 	private final Settings settings;
 
@@ -149,46 +137,47 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	@Override
-	public void draw(Graphics2D g2d) {
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	public void draw(DrawingContext context) {
+		Graphics2D graphics = context.getGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				this.<Boolean>getSetting(ANTIALISING)
 					? RenderingHints.VALUE_ANTIALIAS_ON
 					: RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
-			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
+			GraphicsUtils.fillPaintedShape(graphics, getBounds(), bg, null);
 		}
 
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
-			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
+			GraphicsUtils.drawPaintedShape(graphics, getBounds(), fg, null, stroke);
 		}
 
-		drawComponents(g2d);
+		drawComponents(context);
 	}
 
 	/**
 	 * Draws the plot's axes into the specified <code>Graphics2D</code> object.
-	 * @param g2d Graphics to be used for drawing.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawAxes(Graphics2D g2d) {
+	protected void drawAxes(DrawingContext context) {
 		for (Drawable d : axisDrawables.values()) {
-			d.draw(g2d);
+			d.draw(context);
 		}
 	}
 
 	/**
 	 * Draws the plot's legend into the specified <code>Graphics2D</code> object.
-	 * @param g2d Graphics to be used for drawing.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawLegend(Graphics2D g2d) {
+	protected void drawLegend(DrawingContext context) {
 		boolean isVisible = this.<Boolean>getSetting(LEGEND);
 		if (!isVisible || legend == null) {
 			return;
 		}
-		legend.draw(g2d);
+		legend.draw(context);
 	}
 
 	/**

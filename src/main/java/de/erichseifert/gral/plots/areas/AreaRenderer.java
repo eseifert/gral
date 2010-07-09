@@ -36,16 +36,19 @@ public interface AreaRenderer extends SettingsStorage {
 	static final Key GAP = new Key("area.gap.size");
 	/** Key for specifying whether the gaps should have rounded corners. */
 	static final Key GAP_ROUNDED = new Key("area.gap.rounded");
-	/** Key for specifying the {@link java.awt.Paint} instance used to fill the area shape. */
+	/** Key for specifying the {@link java.awt.Paint} instance used to fill
+	the area shape. */
 	static final Key COLOR = new Key("area.color");
 
 	/**
-	 * Returns the graphical representation to be drawn for the specified data points.
+	 * Returns the graphical representation to be drawn for the specified
+	 * data points.
 	 * @param axis Reference axis for the specified data points.
 	 * @param axisRenderer Renderer of the reference axis.
 	 * @param points Points to be used for creating the area.
 	 * @return Representation of the area.
 	 */
-	Drawable getArea(Axis axis, AxisRenderer axisRenderer, Iterable<DataPoint> points);
+	Drawable getArea(Axis axis, AxisRenderer axisRenderer,
+			Iterable<DataPoint> points);
 
 }

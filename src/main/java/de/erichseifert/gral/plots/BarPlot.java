@@ -28,6 +28,7 @@ import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -35,6 +36,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.Settings.Key;
 
 
@@ -66,14 +68,15 @@ public class BarPlot extends XYPlot {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				@Override
-				public void draw(Graphics2D g2d) {
+				public void draw(DrawingContext context) {
 					// TODO: Translate?
 					Shape point = getPointPath(row);
 					Paint paint = getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
+					Graphics2D graphics = context.getGraphics();
 					/*
 					// TODO: Optionally fill all bars with a single paint:
-					AffineTransform txOld = g2d.getTransform();
+					AffineTransform txOld = graphics.getTransform();
 					Rectangle2D shapeBounds = shape.getBounds2D();
 					Rectangle2D paintBoundaries = plotArea.getBounds();
 					paintBoundaries = new Rectangle2D.Double(
@@ -81,10 +84,10 @@ public class BarPlot extends XYPlot {
 						shapeBounds.getWidth(), paintBoundaries.getHeight()
 					);
 					*/
-					GraphicsUtils.fillPaintedShape(g2d, point, paint, paintBoundaries);
+					GraphicsUtils.fillPaintedShape(graphics, point, paint, paintBoundaries);
 
 					if (BarRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
-						drawValue(g2d, point, row.get(1).doubleValue());
+						drawValue(context, point, row.get(1).doubleValue());
 					}
 				}
 			};
@@ -107,7 +110,7 @@ public class BarPlot extends XYPlot {
 
 			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) ||
 			    (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
-				return new GeneralPath();
+				return new Path2D.Double();
 			}
 			//*/
 
@@ -115,14 +118,14 @@ public class BarPlot extends XYPlot {
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(
-					axisX, valueX - barWidthRel*barAlign, true, false).get(0);
+					axisX, valueX - barWidthRel*barAlign, true, false).get(PointND.X);
 			double barXMax = axisXRenderer.getPosition(
-					axisX, valueX + barWidthRel*barAlign, true, false).get(0);
+					axisX, valueX + barWidthRel*barAlign, true, false).get(PointND.X);
 
 			double barYVal = axisYRenderer.getPosition(
-					axisY, valueY, true, false).get(1);
+					axisY, valueY, true, false).get(PointND.Y);
 			double barYOrigin = axisYRenderer.getPosition(
-					axisY, axisYOrigin, true, false).get(1);
+					axisY, axisYOrigin, true, false).get(PointND.Y);
 			double barYMin = Math.min(barYVal, barYOrigin);
 			double barYMax = Math.max(barYVal, barYOrigin);
 
@@ -130,7 +133,7 @@ public class BarPlot extends XYPlot {
 			double barHeight = Math.abs(barYMax - barYMin);
 
 			double barX = axisXRenderer.getPosition(
-					axisX, valueX, true, false).get(0);
+					axisX, valueX, true, false).get(PointND.X);
 			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
 
 			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);

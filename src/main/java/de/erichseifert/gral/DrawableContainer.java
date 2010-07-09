@@ -20,7 +20,6 @@
  */
 
 package de.erichseifert.gral;
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
@@ -33,8 +32,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 /**
- * Implementation of Container that is a Drawable itself.
- * It takes care of the layout and the insets and stores Drawables.
+ * Implementation of Container that is a <code>Drawable</code> itself.
+ * It takes care of the layout and the insets and stores <code>Drawable</code>s.
  */
 public class DrawableContainer extends AbstractDrawable implements Container {
 	private Insets2D insets = new Insets2D.Double();
@@ -43,14 +42,15 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	private final Map<Drawable, Object> constraints;
 
 	/**
-	 * Creates a new container for Drawables without layout manager.
+	 * Creates a new container for <code>Drawable</code>s without layout manager.
 	 */
 	public DrawableContainer() {
 		this(null);
 	}
 
 	/**
-	 * Creates a new container for Drawables with the specified layout manager.
+	 * Creates a new container for <code>Drawable</code>s with the specified
+	 * layout manager.
 	 * @param layout Layout manager to be set.
 	 */
 	public DrawableContainer(Layout layout) {
@@ -60,17 +60,17 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	@Override
-	public void draw(Graphics2D g2d) {
-		drawComponents(g2d);
+	public void draw(DrawingContext context) {
+		drawComponents(context);
 	}
 
 	/**
-	 * Invokes the draw method of each Drawable.
-	 * @param g2d Graphics object used for drawing.
+	 * Invokes the draw method of each <code>Drawable</code>.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawComponents(Graphics2D g2d) {
+	protected void drawComponents(DrawingContext context) {
 		for (Drawable d : this) {
-			d.draw(g2d);
+			d.draw(context);
 		}
 	}
 

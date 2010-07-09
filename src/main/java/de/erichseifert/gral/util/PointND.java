@@ -29,6 +29,13 @@ import java.util.Arrays;
  * @param <T> Data type of the coordinates.
  */
 public class PointND <T extends Number> {
+	/** Constant for accessing x-coordinate. */
+	public static final int X = 0;
+	/** Constant for accessing y-coordinate. */
+	public static final int Y = 1;
+	/** Constant for accessing z-coordinate. */
+	public static final int Z = 2;
+
 	private final T[] coordinates;
 
 	/**
@@ -99,19 +106,12 @@ public class PointND <T extends Number> {
 	 * @return Two-dimensional point.
 	 */
 	public Point2D getPoint2D() {
-		return getPoint2D(0, 1);
+		return getPoint2D(X, Y);
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder coordStr = new StringBuilder();
-		for (int dim = 0; dim < coordinates.length; dim++) {
-			if (dim > 0) {
-				coordStr.append(", ");
-			}
-			coordStr.append(coordinates[dim]);
-		}
-		return getClass().getName()+"["+coordStr.toString()+"]";
+		return getClass().getName() + Arrays.deepToString(coordinates);
 	}
 
 	@Override

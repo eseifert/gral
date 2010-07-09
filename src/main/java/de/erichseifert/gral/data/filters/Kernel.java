@@ -21,6 +21,8 @@
 
 package de.erichseifert.gral.data.filters;
 
+import java.util.Arrays;
+
 /**
  * Class that represents an array of coefficients for a weighted filtering.
  * Functionality includes:
@@ -41,8 +43,7 @@ public class Kernel {
 	 * @param values Array of values in the kernel.
 	 */
 	public Kernel(int offset, double[] values) {
-		this.values = new double[values.length];
-		System.arraycopy(values, 0, this.values, 0, values.length);
+		this.values = Arrays.copyOf(values, values.length);
 		this.offset = offset;
 	}
 

@@ -19,44 +19,39 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.data.statistics;
-
-import de.erichseifert.gral.data.AbstractDataSource;
-import de.erichseifert.gral.data.DataListener;
-import de.erichseifert.gral.data.DataSource;
+package de.erichseifert.gral.data;
 
 /**
- * Abstract base class for histograms.
+ * Class that creates a new data source which adds a leading column containing
+ * the row number.  
  */
-public abstract class Histogram extends AbstractDataSource implements DataListener {
-	private final DataSource data;
-
-	/**
-	 * Initializes a new histograms with a data source.
-	 * @param data Data source to be analyzed.
-	 */
-	public Histogram(DataSource data) {
-		this.data = data;
-		this.data.addDataListener(this);
-	}
-
-	/**
-	 * Recalculates the histogram values.
-	 */
-	protected abstract void rebuildCells();
-
-	@Override
-	public void dataChanged(DataSource data) {
-		rebuildCells();
-		notifyDataChanged();
-	}
+public class EnumeratedData extends AbstractDataSource {
+	private DataSource original;
 	
 	/**
-	 * Returns the data source associated to this histogram.
-	 * @return Data source
+	 * Initializes a new data source with an original data source.
+	 * @param original Original data source.
 	 */
-	public DataSource getData() {
-		return data;
+	public EnumeratedData(DataSource original) {
+		this.original = original;
+	}
+
+	@Override
+	public Number get(int col, int row) {
+		if (col < 1) {
+			return row;
+		}
+		return original.get(col - 1, row);
+	}
+
+	@Override
+	public int getColumnCount() {
+		return original.getColumnCount() + 1;
+	}
+
+	@Override
+	public int getRowCount() {
+		return original.getRowCount();
 	}
 
 }

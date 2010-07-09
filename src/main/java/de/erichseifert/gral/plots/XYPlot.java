@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataListener;
@@ -116,28 +117,29 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		@Override
-		public void draw(final Graphics2D g2d) {
-			drawBackground(g2d);
-			drawGrid(g2d);
-			drawBorder(g2d);
-			drawPlot(g2d);
-			plot.drawAxes(g2d);
-			plot.drawLegend(g2d);
+		public void draw(DrawingContext context) {
+			drawBackground(context);
+			drawGrid(context);
+			drawBorder(context);
+			drawPlot(context);
+			plot.drawAxes(context);
+			plot.drawLegend(context);
 		}
 
 		/**
 		 * Draws the grid into the specified <code>Graphics2D</code> object.
-		 * @param g2d Graphics to be used for drawing.
+	 * @param context Environment used for drawing.
 		 */
-		protected void drawGrid(Graphics2D g2d) {
+		protected void drawGrid(DrawingContext context) {
+			Graphics2D graphics = context.getGraphics();
 			boolean isGridMajorX = this.<Boolean>getSetting(GRID_MAJOR_X);
 			boolean isGridMajorY = this.<Boolean>getSetting(GRID_MAJOR_Y);
 			boolean isGridMinorX = this.<Boolean>getSetting(GRID_MINOR_X);
 			boolean isGridMinorY = this.<Boolean>getSetting(GRID_MINOR_Y);
 
-			AffineTransform txOrig = g2d.getTransform();
-			g2d.translate(getX(), getY());
-			AffineTransform txOffset = g2d.getTransform();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
+			AffineTransform txOffset = graphics.getTransform();
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
@@ -166,9 +168,9 @@ public class XYPlot extends Plot implements DataListener  {
 						if (TickType.MINOR.equals(tick.getType())) {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
-						g2d.translate(tickPoint.getX(), tickPoint.getY());
-						GraphicsUtils.drawPaintedShape(g2d, gridLineVert, paint, null, null);
-						g2d.setTransform(txOffset);
+						graphics.translate(tickPoint.getX(), tickPoint.getY());
+						GraphicsUtils.drawPaintedShape(graphics, gridLineVert, paint, null, null);
+						graphics.setTransform(txOffset);
 					}
 				}
 			}
@@ -199,21 +201,22 @@ public class XYPlot extends Plot implements DataListener  {
 						if (TickType.MINOR.equals(tick.getType())) {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
-						g2d.translate(tickPoint.getX(), tickPoint.getY());
-						GraphicsUtils.drawPaintedShape(g2d, gridLineHoriz, paint, null, null);
-						g2d.setTransform(txOffset);
+						graphics.translate(tickPoint.getX(), tickPoint.getY());
+						GraphicsUtils.drawPaintedShape(graphics, gridLineHoriz, paint, null, null);
+						graphics.setTransform(txOffset);
 					}
 				}
 			}
 
-			g2d.setTransform(txOrig);
+			graphics.setTransform(txOrig);
 		}
 
 		@Override
-		protected void drawPlot(final Graphics2D g2d) {
-			AffineTransform txOrig = g2d.getTransform();
-			g2d.translate(getX(), getY());
-			AffineTransform txOffset = g2d.getTransform();
+		protected void drawPlot(DrawingContext context) {
+			Graphics2D graphics = context.getGraphics();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
+			AffineTransform txOffset = graphics.getTransform();
 
 			Axis axisX = plot.getAxis(Axis.X);
 			Axis axisY = plot.getAxis(Axis.Y);
@@ -236,7 +239,7 @@ public class XYPlot extends Plot implements DataListener  {
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
-					PointND<Double> pos = new PointND<Double>(axisPosX.get(0), axisPosY.get(1));
+					PointND<Double> pos = new PointND<Double>(axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
 
 					Drawable drawable = null;
 					Shape point = null;
@@ -250,24 +253,24 @@ public class XYPlot extends Plot implements DataListener  {
 
 				if (areaRenderer != null) {
 					Drawable drawable = areaRenderer.getArea(axisY, axisYRenderer, dataPoints);
-					drawable.draw(g2d);
+					drawable.draw(context);
 				}
 				if (lineRenderer != null) {
 					Drawable drawable = lineRenderer.getLine(dataPoints);
-					drawable.draw(g2d);
+					drawable.draw(context);
 				}
 				if (pointRenderer != null) {
 					for (DataPoint point : dataPoints) {
-						double pointX = point.getPosition().get(0);
-						double pointY = point.getPosition().get(1);
-						g2d.translate(pointX, pointY);
+						double pointX = point.getPosition().get(PointND.X);
+						double pointY = point.getPosition().get(PointND.Y);
+						graphics.translate(pointX, pointY);
 						Drawable drawable = point.getDrawable();
-						drawable.draw(g2d);
-						g2d.setTransform(txOffset);
+						drawable.draw(context);
+						graphics.setTransform(txOffset);
 					}
 				}
 			}
-			g2d.setTransform(txOrig);
+			graphics.setTransform(txOrig);
 		}
 	}
 
@@ -290,7 +293,8 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		@Override
-		protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
+		protected void drawSymbol(DrawingContext context,
+				Drawable symbol, DataSource data) {
 			PointRenderer pointRenderer = plot.getPointRenderer(data);
 			LineRenderer lineRenderer = plot.getLineRenderer(data);
 			AreaRenderer areaRenderer = plot.getAreaRenderer(data);
@@ -316,17 +320,18 @@ public class XYPlot extends Plot implements DataListener  {
 					bounds.getCenterX(), bounds.getMaxY(), bounds.getCenterX(), bounds.getMinY()));
 
 			if (areaRenderer != null) {
-				areaRenderer.getArea(axis, axisRenderer, dataPoints).draw(g2d);
+				areaRenderer.getArea(axis, axisRenderer, dataPoints).draw(context);
 			}
 			if (lineRenderer != null) {
-				lineRenderer.getLine(dataPoints).draw(g2d);
+				lineRenderer.getLine(dataPoints).draw(context);
 			}
 			if (pointRenderer != null) {
+				Graphics2D graphics = context.getGraphics();
 				Point2D pos = p2.getPosition().getPoint2D();
-				AffineTransform txOrig = g2d.getTransform();
-				g2d.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(axis, axisRenderer, row).draw(g2d);
-				g2d.setTransform(txOrig);
+				AffineTransform txOrig = graphics.getTransform();
+				graphics.translate(pos.getX(), pos.getY());
+				pointRenderer.getPoint(axis, axisRenderer, row).draw(context);
+				graphics.setTransform(txOrig);
 			}
 		}
 
@@ -489,16 +494,16 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the <code>LineRenderer2D</code> for the specified <code>DataSource</code>.
+	 * Returns the <code>LineRenderer</code> for the specified <code>DataSource</code>.
 	 * @param s <code>DataSource</code>.
-	 * @return <code>LineRenderer2D</code>.
+	 * @return <code>LineRenderer</code>.
 	 */
 	public LineRenderer getLineRenderer(DataSource s) {
 		return lineRenderers.get(s);
 	}
 
 	/**
-	 * Sets the <code>LineRenderer2D</code> for a certain <code>DataSource</code>
+	 * Sets the <code>LineRenderer</code> for a certain <code>DataSource</code>
 	 * to the specified value.
 	 * @param s <code>DataSource</code>.
 	 * @param lineRenderer <code>LineRenderer</code> to be set.
@@ -508,20 +513,20 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	/**
-	 * Returns the <code>AreaRenderer2D</code> for the specified
+	 * Returns the <code>AreaRenderer</code> for the specified
 	 * <code>DataSource</code>.
 	 * @param s <code>DataSource</code>.
-	 * @return <code>AreaRenderer2D</code>.
+	 * @return <code>AreaRenderer</code>.
 	 */
 	public AreaRenderer getAreaRenderer(DataSource s) {
 		return areaRenderers.get(s);
 	}
 
 	/**
-	 * Sets the <code>AreaRenderer2D</code> for a certain <code>DataSource</code>
+	 * Sets the <code>AreaRenderer</code> for a certain <code>DataSource</code>
 	 * to the specified value.
 	 * @param s <code>DataSource</code>.
-	 * @param areaRenderer <code>AreaRenderer2D</code> to be set.
+	 * @param areaRenderer <code>AreaRenderer</code> to be set.
 	 */
 	public void setAreaRenderer(DataSource s, AreaRenderer areaRenderer) {
 		areaRenderers.put(s, areaRenderer);

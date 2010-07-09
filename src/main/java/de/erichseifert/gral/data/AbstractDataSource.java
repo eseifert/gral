@@ -55,7 +55,7 @@ public abstract class AbstractDataSource implements DataSource {
 
 		@Override
 		public Row next() {
-			return get(row++);
+			return getRow(row++);
 		}
 
 		@Override
@@ -104,8 +104,12 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	@Override
-	public Row get(int row) {
-		return new Row(this, row);
+	public Column getColumn(int col) {
+		return new Column(this, col);
 	}
 
+	@Override
+	public Row getRow(int row) {
+		return new Row(this, row);
+	}
 }

@@ -23,7 +23,6 @@ package de.erichseifert.gral;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
@@ -95,8 +94,8 @@ public abstract class Legend extends DrawableContainer
 
 			symbol = new AbstractDrawable() {
 				@Override
-				public void draw(Graphics2D g2d) {
-					drawSymbol(g2d, this, Item.this.data);
+				public void draw(DrawingContext context) {
+					drawSymbol(context, this, Item.this.data);
 				}
 
 				@Override
@@ -148,44 +147,46 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	@Override
-	public void draw(Graphics2D g2d) {
-		drawBackground(g2d);
-		drawBorder(g2d);
-		drawComponents(g2d);
+	public void draw(DrawingContext context) {
+		drawBackground(context);
+		drawBorder(context);
+		drawComponents(context);
 	}
 
 	/**
 	 * Draws the background of this Legend with the specified Graphics2D
 	 * object.
-	 * @param g2d Graphics object to draw with.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawBackground(Graphics2D g2d) {
+	protected void drawBackground(DrawingContext context) {
 		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
-			GraphicsUtils.fillPaintedShape(g2d, getBounds(), bg, null);
+			GraphicsUtils.fillPaintedShape(context.getGraphics(), getBounds(), bg, null);
 		}
 	}
 
 	/**
 	 * Draws the border of this Legend with the specified Graphics2D
 	 * object.
-	 * @param g2d Graphics object to draw with.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawBorder(Graphics2D g2d) {
+	protected void drawBorder(DrawingContext context) {
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
-			GraphicsUtils.drawPaintedShape(g2d, getBounds(), fg, null, stroke);
+			GraphicsUtils.drawPaintedShape(context.getGraphics(), getBounds(), fg, null, stroke);
 		}
 	}
 
 	/**
 	 * Draws the symbol of a certain data source.
-	 * @param g2d Graphics object to draw with.
+	 * @param context Settings for drawing.
 	 * @param symbol symbol to draw.
 	 * @param data Data source.
 	 */
-	protected abstract void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data);
+	protected abstract void drawSymbol(
+			DrawingContext context,
+			Drawable symbol, DataSource data);
 
 	/**
 	 * Adds the specified DataSource in order to display it.
@@ -228,7 +229,7 @@ public abstract class Legend extends DrawableContainer
 
 	@Override
 	public <T> T getSetting(Key key) {
-		return (T)settings.get(key);
+		return (T) settings.get(key);
 	}
 
 	@Override

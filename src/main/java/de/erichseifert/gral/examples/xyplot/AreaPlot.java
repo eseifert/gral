@@ -32,6 +32,7 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
+import de.erichseifert.gral.plots.areas.LineAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer;
@@ -62,15 +63,15 @@ public class AreaPlot extends JFrame {
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 		getContentPane().add(new InteractivePanel(plot));
 
-		formatData(plot, data1, new Color(0.9f, 0.3f, 0.2f));
-		formatData(plot, data2, new Color(0.0f, 0.3f, 0.9f));
-		formatData(plot, data3, new Color(0.0f, 0.5f, 0.0f));
+		formatFilledArea(plot, data1, new Color(0.9f, 0.3f, 0.2f));
+		formatFilledArea(plot, data2, new Color(0.0f, 0.3f, 0.9f));
+		formatLineArea(plot, data3, new Color(0.0f, 0.5f, 0.0f));
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 	}
 
-	private static void formatData(XYPlot plot, DataSource data, Color color) {
+	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
 		PointRenderer point = new DefaultPointRenderer();
 		point.setSetting(PointRenderer.COLOR, color);
 		plot.setPointRenderer(data, point);
@@ -81,6 +82,17 @@ public class AreaPlot extends JFrame {
 		plot.setLineRenderer(data, line);
 		AreaRenderer area = new DefaultAreaRenderer2D();
 		area.setSetting(AreaRenderer.COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+		plot.setAreaRenderer(data, area);
+	}
+
+	private static void formatLineArea(XYPlot plot, DataSource data, Color color) {
+		PointRenderer point = new DefaultPointRenderer();
+		point.setSetting(PointRenderer.COLOR, color);
+		plot.setPointRenderer(data, point);
+		plot.setLineRenderer(data, null);
+		AreaRenderer area = new LineAreaRenderer2D();
+		area.setSetting(LineAreaRenderer2D.GAP, 3.0);
+		area.setSetting(LineAreaRenderer2D.COLOR, color);
 		plot.setAreaRenderer(data, area);
 	}
 

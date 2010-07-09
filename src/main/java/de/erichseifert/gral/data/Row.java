@@ -22,85 +22,30 @@
 package de.erichseifert.gral.data;
 
 
+
 /**
  * Class for storing a row of a data source.
  */
-public class Row {
-	private final DataSource source;
-	private final int row;
-
+public class Row extends DataAccessor {
 	/**
-	 * Creates a new <code>Row</code> object with the specified DataSource and row index.
-	 * @param source DataSource.
+	 * Initializes a new instances with the specified data source and row index.
+	 * @param source Data source.
 	 * @param row Row index.
 	 */
 	public Row(DataSource source, int row) {
-		this.source = source;
-		this.row = row;
+		super(source, row);
 	}
 
-	/**
-	 * Returns the DataSource containing this row.
-	 * @return DataSource containing this row.
-	 */
-	public DataSource getSource() {
-		return source;
-	}
-
-	/**
-	 * Returns the index of this row in the DataSource.
-	 * @return Row index.
-	 */
-	public int getRow() {
-		return row;
-	}
-
-	/**
-	 * Returns the value of this row for the specified column.
-	 * @param col Column index.
-	 * @return Value of the cell.
-	 */
+	@Override
 	public Number get(int col) {
 		if (getSource() == null) {
 			return null;
 		}
-		return getSource().get(col, getRow());
+		return getSource().get(col, getIndex());
 	}
 
-	/**
-	 * Returns the number of elements in this row.
-	 * @return Number of elements
-	 */
+	@Override
 	public int size() {
 		return getSource().getColumnCount();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Row)) {
-			return false;
-		}
-		Row r = (Row)obj;
-		int size = size();
-		if (r.size() != size) {
-			return false;
-		}
-		for (int col = 0; col < size; col++) {
-			if (!r.get(col).equals(get(col))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		return source.hashCode() ^ row;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("%s[source=%s,row=%d]",
-				getClass().getName(), getSource(), getRow());
 	}
 }

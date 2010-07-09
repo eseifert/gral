@@ -23,7 +23,6 @@ package de.erichseifert.gral;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 
@@ -66,35 +65,37 @@ public abstract class PlotArea extends AbstractDrawable
 	/**
 	 * Draws the background of this Legend with the specified Graphics2D
 	 * object.
-	 * @param g2d Graphics object to draw with.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawBackground(Graphics2D g2d) {
+	protected void drawBackground(DrawingContext context) {
 		// FIXME: duplicate code! See de.erichseifert.gral.Legend
 		Paint paint = getSetting(BACKGROUND);
 		if (paint != null) {
-			GraphicsUtils.fillPaintedShape(g2d, getBounds(), paint, null);
+			GraphicsUtils.fillPaintedShape(context.getGraphics(),
+					getBounds(), paint, null);
 		}
 	}
 
 	/**
 	 * Draws the border of this Legend with the specified Graphics2D
 	 * object.
-	 * @param g2d Graphics object to draw with.
+	 * @param context Environment used for drawing.
 	 */
-	protected void drawBorder(Graphics2D g2d) {
+	protected void drawBorder(DrawingContext context) {
 		// FIXME: duplicate code! See de.erichseifert.gral.Legend
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint paint = getSetting(COLOR);
-			GraphicsUtils.drawPaintedShape(g2d, getBounds(), paint, null, stroke);
+			GraphicsUtils.drawPaintedShape(context.getGraphics(),
+					getBounds(), paint, null, stroke);
 		}
 	}
 
 	/**
 	 * Draws the data using the specified Graphics2D object.
-	 * @param g2d Graphics to be drawn into.
+	 * @param context Environment used for drawing.
 	 */
-	protected abstract void drawPlot(Graphics2D g2d);
+	protected abstract void drawPlot(DrawingContext context);
 
 	@Override
 	public <T> T getSetting(Key key) {

@@ -30,6 +30,7 @@ import java.awt.geom.Dimension2D;
 import javax.swing.JPanel;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 
 /**
  * A class that represents an adapter between the components of this library and Swing.
@@ -59,7 +60,8 @@ public class DrawablePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		getDrawable().draw((Graphics2D)g);
+		Graphics2D graphics = (Graphics2D) g;
+		getDrawable().draw(new DrawingContext(graphics));
 	}
 
 	@Override

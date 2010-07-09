@@ -21,14 +21,14 @@
 
 package de.erichseifert.gral.plots.lines;
 
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 
@@ -39,7 +39,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
 	/**
-	 * Creates a new DefaultLineRenderer2D object.
+	 * Initializes a new <code>DefaultLineRenderer2D</code> instance.
 	 */
 	public DefaultLineRenderer2D() {
 	}
@@ -48,9 +48,9 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
-			public void draw(Graphics2D g2d) {
+			public void draw(DrawingContext context) {
 				// Construct shape
-				GeneralPath line = new GeneralPath();
+				Path2D line = new Path2D.Double();
 				for (DataPoint point : points) {
 					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
@@ -63,7 +63,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				// Draw line
 				Shape lineShape = punch(line, points);
 				Paint paint = getSetting(LineRenderer.COLOR);
-				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
+				GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

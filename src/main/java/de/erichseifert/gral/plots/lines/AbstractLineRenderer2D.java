@@ -36,18 +36,19 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Abstract class that renders a line in 2-dimensional space.
- * Functionality includes:
+ * <p>Abstract class that renders a line in two-dimensional space.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Punching data points out of the line's shape</li>
- * <li>Administration of settings</li>
+ *   <li>Punching data points out of the line's shape</li>
+ *   <li>Administration of settings</li>
  * </ul>
  */
 public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsListener {
 	private final Settings settings;
 
 	/**
-	 * Creates a new <code>AbstractLineRenderer2D</code> with default settings.
+	 * Initializes a new <code>AbstractLineRenderer2D</code> instance with
+	 * default settings.
 	 */
 	public AbstractLineRenderer2D() {
 		this.settings = new Settings(this);

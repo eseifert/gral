@@ -21,18 +21,18 @@
 
 package de.erichseifert.gral;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 
 /**
- * Interface providing functions for a lightweight component that can be drawn on the screen.
- * Functions include:
+ * <p>Interface providing functions for a lightweight component that can be
+ * drawn on the screen.</p>
+ * <p>Functions include:</p>
  * <ul>
- * <li>Getting and setting the bounds</li>
- * <li>Getting the preferred size</li>
- * <li>A drawing routine</li>
+ *   <li>Getting and setting the bounds</li>
+ *   <li>Getting the preferred size</li>
+ *   <li>A drawing routine</li>
  * </ul>
  */
 public interface Drawable {
@@ -78,14 +78,16 @@ public interface Drawable {
 	double getHeight();
 
 	/**
-	 * Returns the preferred size of the Drawable.
+	 * Returns the preferred size of the <code>Drawable</code>.
 	 * @return horizontal and vertical extent that wants to be reached
 	 */
 	Dimension2D getPreferredSize();
 
 	/**
-	 * Draws the Drawable with the specified Graphics2D object.
-	 * @param g2d graphics object to be provided
+	 * Draws the <code>Drawable</code> with the specified
+	 * <code>Graphics2D</code> object.
+	 * @param context Environment used for drawing
 	 */
-	void draw(Graphics2D g2d);
+	void draw(DrawingContext context);
+
 }

@@ -21,12 +21,12 @@
 
 package de.erichseifert.gral.plots.points;
 
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -42,17 +42,17 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 	public Drawable getPoint(final Axis axisY, final AxisRenderer axisYRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
-			public void draw(Graphics2D g2d) {
+			public void draw(DrawingContext context) {
 				Paint paint = getSetting(COLOR);
 				Shape point = getPointPath(row);
-				GraphicsUtils.fillPaintedShape(g2d, point, paint, null);
+				GraphicsUtils.fillPaintedShape(context.getGraphics(), point, paint, null);
 
 				if (DefaultPointRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
-					drawValue(g2d, point, row.get(1).doubleValue());
+					drawValue(context, point, row.get(1).doubleValue());
 				}
 				if (DefaultPointRenderer.this.<Boolean>getSetting(ERROR_DISPLAYED)) {
-					int columnIndex = row.size()-1;
-					drawError(g2d, point, row.get(1).doubleValue(),
+					int columnIndex = row.size() - 1;
+					drawError(context, point, row.get(1).doubleValue(),
 							row.get(columnIndex - 1).doubleValue(),
 							row.get(columnIndex).doubleValue(),
 							axisY, axisYRenderer);

@@ -21,8 +21,10 @@
 
 package de.erichseifert.gral.plots.areas;
 
+import java.awt.BasicStroke;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
@@ -35,18 +37,30 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
+import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * Default two-dimensional implementation of the <code>AreaRenderer</code>
- * interface.
+ * interface that draws lines from data points to the main axis.
  */
-public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
+public class LineAreaRenderer2D extends AbstractAreaRenderer {
+	/** Key for specifying the {@link java.awt.Stroke} instance that is used
+	draw the lines from the data points to the axis. */
+	public static final Key STROKE = new Key("linearea.stroke");
+
+	/**
+	 * Standard constructor that initializes a new instance.
+	 */
+	public LineAreaRenderer2D() {
+		setSettingDefault(STROKE, new BasicStroke(1f));
+	}
 
 	@Override
 	public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		Shape path = getAreaShape(axis, axisRenderer, points);
-		final Shape area = punch(path, points);
+		Stroke stroke = getSetting(STROKE);
+		final Shape area = punch(stroke.createStrokedShape(path), points);
 
 		return new AbstractDrawable() {
 			@Override
@@ -73,13 +87,9 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			Point2D pos = p.getPosition().getPoint2D();
 			x = pos.getX();
 			y = pos.getY();
-			if (path.getCurrentPoint() == null) {
-				path.moveTo(x, posYOrigin);
-			}
-			path.lineTo(x, y);
+			path.moveTo(x, y);
+			path.lineTo(x, posYOrigin);
 		}
-		path.lineTo(x, posYOrigin);
-		path.closePath();
 
 		return path;
 	}

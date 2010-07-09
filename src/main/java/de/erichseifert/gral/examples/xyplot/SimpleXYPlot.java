@@ -81,14 +81,14 @@ public class SimpleXYPlot extends JFrame {
 		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
 		plot.setPointRenderer(seriesLog, defaultPointRenderer);
 		// Custom point bounds
-		//plot.getPointRenderer().setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
+		//plot.getPointRenderer(seriesLog).setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
 		// Custom point coloring
 		//plot.getPointRenderer().setColor(Color.RED);
 		// Custom grid color
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_COLOR, Color.BLUE);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_COLOR, Color.BLUE);
 		// Grid disabled
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_X, false);
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_Y, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
+		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false);
 		// Custom line renderer
 		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer.COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
@@ -115,10 +115,10 @@ public class SimpleXYPlot extends JFrame {
 		axisRendererX.setSetting(AxisRenderer.SHAPE_STROKE, stroke);
 		axisRendererY.setSetting(AxisRenderer.LABEL, "Linear axis");
 		// Custom stroke for the ticks
-		//axisRendererX.setSetting(AxisRenderer2D.TICK_STROKE, stroke);
+		//axisRendererX.setSetting(AxisRenderer.TICKS_STROKE, stroke);
 		// Swap axis direction
-		//axisRendererX.setSetting(AxisRenderer2D.SHAPE_DIRECTION_SWAPPED, true);
-		//plot.setAxisYRenderer(new LogarithmicRenderer2D());
+		//axisRendererX.setSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED, true);
+		//plot.setAxisRenderer(Axis.Y, new LogarithmicRenderer2D());
 		// Change intersection point of Y axis
 		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
 		// Change tick spacing

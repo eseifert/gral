@@ -33,6 +33,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
@@ -130,7 +131,8 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 
-		d.draw((Graphics2D) image.getGraphics());
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		d.draw(context);
 
 		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
 		while (writers.hasNext()) {

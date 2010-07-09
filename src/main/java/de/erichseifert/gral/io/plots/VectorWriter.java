@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
@@ -117,11 +118,11 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 	@Override
 	public void write(Drawable d, OutputStream destination,
 			double x, double y, double width, double height) throws IOException {
-		Graphics2D g2d = null;
+		Graphics2D graphics = null;
 		try {
 			Constructor<? extends Graphics2D> constructor = graphicsClass.getConstructor(
 						double.class, double.class, double.class, double.class);
-			g2d = constructor.newInstance(x, y, width, height);
+			graphics = constructor.newInstance(x, y, width, height);
 		} catch (SecurityException e) {
 			throw new IllegalStateException(e);
 		} catch (NoSuchMethodException e) {
@@ -138,8 +139,8 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 
 		Rectangle2D boundsOld = d.getBounds();
 		d.setBounds(x, y, width, height);
-		d.draw(g2d);
-		destination.write(g2d.toString().getBytes());
+		d.draw(new DrawingContext(graphics));  // TODO: Define Vector target
+		destination.write(graphics.toString().getBytes());
 		d.setBounds(boundsOld);
 	}
 

@@ -21,14 +21,14 @@
 
 package de.erichseifert.gral.plots.lines;
 
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -47,7 +47,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	public static final Key ASCENDING_POINT = new Key("line.discrete.ascendingPoint");
 
 	/**
-	 * Creates a new DiscreteLineRenderer2D object with default settings.
+	 * Initializes a new <code>DiscreteLineRenderer2D</code> instance with
+	 * default settings.
 	 */
 	public DiscreteLineRenderer2D() {
 		setSettingDefault(ASCENT_DIRECTION, Orientation.HORIZONTAL);
@@ -58,12 +59,12 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			@Override
-			public void draw(Graphics2D g2d) {
+			public void draw(DrawingContext context) {
 				Orientation dir = getSetting(ASCENT_DIRECTION);
 				double ascendingPoint = DiscreteLineRenderer2D.this.<Double>getSetting(ASCENDING_POINT);
 
 				// Construct shape
-				GeneralPath line = new GeneralPath();
+				Path2D line = new Path2D.Double();
 				for (DataPoint point : points) {
 					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
@@ -88,7 +89,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				// Draw path
 				Shape lineShape = punch(line, points);
 				Paint paint = getSetting(LineRenderer.COLOR);
-				GraphicsUtils.fillPaintedShape(g2d, lineShape, paint, null);
+				GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

@@ -42,6 +42,7 @@ import java.util.Set;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.GeometryUtils;
@@ -73,7 +74,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	private double[] shapeLengths;
 
 	/**
-	 * Creates a new AbstractAxisRenderer2D object with default settings.
+	 * Initializes a new <code>AbstractAxisRenderer2D</code> instances with
+	 * default settings.
 	 */
 	public AbstractAxisRenderer2D() {
 		settings = new Settings(this);
@@ -120,16 +122,17 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
 			@Override
-			public void draw(Graphics2D g2d) {
+			public void draw(DrawingContext context) {
 				if (shapeLines == null || shapeLines.length == 0) {
 					return;
 				}
 
+				Graphics2D graphics = context.getGraphics();
 				// Remember old state of Graphics2D instance
-				AffineTransform txOrig = g2d.getTransform();
-				g2d.translate(getX(), getY());
-				Stroke strokeOld = g2d.getStroke();
-				Paint paintOld = g2d.getPaint();
+				AffineTransform txOrig = graphics.getTransform();
+				graphics.translate(getX(), getY());
+				Stroke strokeOld = graphics.getStroke();
+				Paint paintOld = graphics.getPaint();
 
 				// Draw axis shape
 				Paint axisPaint = AbstractAxisRenderer2D.this.getSetting(SHAPE_COLOR);
@@ -138,7 +141,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_VISIBLE);
 				if (isShapeVisible) {
 					Shape shape = AbstractAxisRenderer2D.this.getSetting(SHAPE);
-					GraphicsUtils.drawPaintedShape(g2d, shape, axisPaint, null, axisStroke);
+					GraphicsUtils.drawPaintedShape(graphics, shape, axisPaint, null, axisStroke);
 				}
 
 				// TODO: Use real font size
@@ -197,7 +200,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 							tickPoint.getX() + tickNormal.getX()*tickLengthOuter,
 							tickPoint.getY() + tickNormal.getY()*tickLengthOuter
 						);
-						GraphicsUtils.drawPaintedShape(g2d, tickShape, tickPaint, null, tickStroke);
+						GraphicsUtils.drawPaintedShape(graphics, tickShape, tickPaint, null, tickStroke);
 
 						// Draw label
 						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) ||
@@ -210,7 +213,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 								double labelDist = tickLengthOuter + tickLabelDist;
 								layoutLabel(tickLabel, tickPoint, tickNormal,
 										labelDist, isTickLabelOutside, tickLabelRotation);
-								tickLabel.draw(g2d);
+								tickLabel.draw(context);
 							}
 						}
 					}
@@ -243,17 +246,19 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					boolean isTickLabelOutside =
 						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 
-					Point2D labelPos = getPosition(axis, axisLabelPos, false, true).getPoint2D();
-					Point2D labelNormal = getNormal(axis, axisLabelPos, false, true).getPoint2D();
-					layoutLabel(axisLabel, labelPos, labelNormal, labelDist,
-							isTickLabelOutside, labelRotation);
+					PointND<Double> labelPos = getPosition(axis, axisLabelPos, false, true);
+					PointND<Double> labelNormal = getNormal(axis, axisLabelPos, false, true);
 
-					axisLabel.draw(g2d);
+					if (labelPos != null && labelNormal != null) {
+						layoutLabel(axisLabel, labelPos.getPoint2D(), labelNormal.getPoint2D(), labelDist,
+								isTickLabelOutside, labelRotation);
+						axisLabel.draw(context);
+					}
 				}
 
-				g2d.setPaint(paintOld);
-				g2d.setStroke(strokeOld);
-				g2d.setTransform(txOrig);
+				graphics.setPaint(paintOld);
+				graphics.setStroke(strokeOld);
+				graphics.setTransform(txOrig);
 			}
 
 			private void layoutLabel(Label label, Point2D labelPos, Point2D labelNormal,

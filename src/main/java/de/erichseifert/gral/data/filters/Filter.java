@@ -52,18 +52,20 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 */
 	public static enum Mode {
 		/**	Ignores missing values. */
-		MODE_OMIT,
+		OMIT,
 		/**	Treats missing values as zero. */
-		MODE_ZERO,
+		ZERO,
 		/**	Repeats the last value. */
-		MODE_REPEAT,
+		REPEAT,
 		/**	Mirrors values at the last value. */
-		MODE_MIRROR,
+		MIRROR,
 		/**	Repeats the data. */
-		MODE_CIRCULAR
+		CIRCULAR
 	};
 
-	private final DataSource original;
+	/** Original data source. */
+	protected final DataSource original;
+
 	private final int[] cols;
 	private final List<double[]> data;
 	private Mode mode;
@@ -94,15 +96,15 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @return Original value.
 	 */
 	protected Number getOriginal(int col, int row) {
-		int rowLast = getRowCount() - 1;
+		int rowLast = original.getRowCount() - 1;
 		if (row < 0 || row > rowLast) {
-			if (Mode.MODE_OMIT.equals(mode)) {
+			if (Mode.OMIT.equals(mode)) {
 				return Double.NaN;
-			} else if (Mode.MODE_ZERO.equals(mode)) {
+			} else if (Mode.ZERO.equals(mode)) {
 				return 0.0;
-			} else if (Mode.MODE_REPEAT.equals(mode)) {
+			} else if (Mode.REPEAT.equals(mode)) {
 				row = MathUtils.limit(row, 0, rowLast);
-			} else if (Mode.MODE_MIRROR.equals(mode)) {
+			} else if (Mode.MIRROR.equals(mode)) {
 				int rem = Math.abs(row) / rowLast;
 				int mod = Math.abs(row) % rowLast;
 				if ((rem & 1) == 0) {
@@ -110,7 +112,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 				} else {
 					row = rowLast - mod;
 				}
-			} else if (Mode.MODE_CIRCULAR.equals(mode)) {
+			} else if (Mode.CIRCULAR.equals(mode)) {
 				row = Math.abs(row) % (rowLast + 1);
 			}
 		}
@@ -125,20 +127,47 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	/**
-	 * Adds the specified row to this Filter.
-	 * @param row Row to be added.
+	 * Adds the specified row data to this Filter.
+	 * @param rowData Row data to be added.
 	 */
-	protected void add(double[] row) {
-		data.add(row);
+	protected void add(double[] rowData) {
+		data.add(rowData);
+	}
+
+	/**
+	 * Adds the specified row data to this Filter.
+	 * @param rowData Row to be added.
+	 */
+	protected void add(Number[] rowData) {
+		double[] doubleData = new double[rowData.length];
+		int i = 0;
+		for (Number value : rowData) {
+			doubleData[i++] = value.doubleValue();
+		}
+		data.add(doubleData);
 	}
 
 	@Override
 	public Number get(int col, int row) {
-		int colPos = getIndexFiltered(col);
+		int colPos = getIndex(col);
 		if (colPos < 0) {
 			return original.get(col, row);
 		}
 		return data.get(row)[colPos];
+	}
+
+	/**
+	 * Sets a new value for a specified cell.
+	 * @param col Column of the cell.
+	 * @param row Row of the cell.
+	 * @param value New cell value.
+	 */
+	protected void set(int col, int row, double value) {
+		int colPos = getIndex(col);
+		if (colPos < 0) {
+			throw new IllegalArgumentException("Can't set value in unfiltered column.");
+		}
+		data.get(row)[colPos] = value;
 	}
 
 	@Override
@@ -147,15 +176,26 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	/**
-	 * Returns the number of filtered columns
-	 * @return Number of filtered columns
+	 * Returns the number of filtered columns.
+	 * @return Number of filtered columns.
 	 */
 	protected int getColumnCountFiltered() {
+		if (cols.length == 0) {
+			return original.getColumnCount();
+		}
 		return cols.length;
 	}
 
 	@Override
 	public int getRowCount() {
+		return original.getRowCount();
+	}
+
+	/**
+	 * Returns the number of filtered rows.
+	 * @return Number of filtered rows.
+	 */
+	protected int getRowCountFiltered() {
 		return original.getRowCount();
 	}
 
@@ -171,6 +211,9 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @return Index of the original column
 	 */
 	protected int getIndexOriginal(int col) {
+		if (cols.length == 0) {
+			return col;
+		}
 		return cols[col];
 	}
 
@@ -179,7 +222,10 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @param col Index of the original column
 	 * @return Index of the filtered column
 	 */
-	protected int getIndexFiltered(int col) {
+	protected int getIndex(int col) {
+		if (cols.length == 0) {
+			return col;
+		}
 		return Arrays.binarySearch(cols, col);
 	}
 
@@ -189,7 +235,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @return True, if the column is filtered.
 	 */
 	protected boolean isFiltered(int col) {
-		return getIndexFiltered(col) >= 0;
+		return getIndex(col) >= 0;
 	}
 
 	/**
@@ -213,4 +259,5 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 		this.mode = mode;
 		dataChanged(this);
 	}
+
 }

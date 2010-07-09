@@ -27,19 +27,25 @@ import de.erichseifert.gral.data.statistics.Statistics;
  * Immutable view on a source for tabular data.
  */
 public interface DataSource extends Iterable<Row> {
+	/**
+	 * Returns the column with the specified index.
+	 * @param col index of the column to return
+	 * @return the specified column of the data source
+	 */
+	Column getColumn(int col);
 
 	/**
 	 * Returns the row with the specified index.
 	 * @param row index of the row to return
-	 * @return the specified row of the table
+	 * @return the specified row of the data source
 	 */
-	Row get(int row);
+	Row getRow(int row);
 
 	/**
 	 * Returns the row with the specified index.
 	 * @param col index of the column to return
 	 * @param row index of the row to return
-	 * @return the specified value of the table cell
+	 * @return the specified value of the data cell
 	 */
 	Number get(int col, int row);
 
@@ -51,14 +57,14 @@ public interface DataSource extends Iterable<Row> {
 	Statistics getStatistics();
 
 	/**
-	 * Returns the number of rows of the table.
-	 * @return number of rows in the table
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
 	 */
 	int getRowCount();
 
 	/**
-	 * Returns the number of columns of the table.
-	 * @return number of columns in the table
+	 * Returns the number of columns of the data source.
+	 * @return number of columns in the data source.
 	 */
 	int getColumnCount();
 

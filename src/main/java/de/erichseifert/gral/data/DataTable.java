@@ -20,7 +20,10 @@
  */
 
 package de.erichseifert.gral.data;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -41,15 +44,14 @@ import de.erichseifert.gral.data.comparators.DataComparator;
  */
 public class DataTable extends AbstractDataSource {
 	private final ArrayList<Number[]> rows;
-	private final Class<?>[] types;
+	private final Class<? extends Number>[] types;
 
 	/**
 	 * Creates a new DataTable object.
 	 * @param types type for each column
 	 */
 	public DataTable(Class<? extends Number>... types) {
-		this.types = new Class[types.length];
-		System.arraycopy(types, 0, this.types, 0, types.length);
+		this.types = Arrays.copyOf(types, types.length);
 		rows = new ArrayList<Number[]>();
 	}
 
@@ -105,6 +107,43 @@ public class DataTable extends AbstractDataSource {
 		return rows.get(row)[col];
 	}
 
+	/**
+	 * Creates a specified number of empty rows.
+	 * @param rows Number of rows to create.
+	 */
+	public void ensureRows(int rows) {
+		while (getRowCount() < rows) {
+			Number[] row = new Number[getColumnCount()];
+			for (int colIndex = 0; colIndex < row.length; colIndex++) {
+				Class<? extends Number> colClass = getColumnClass(colIndex);
+				try {
+					Constructor<? extends Number> c = colClass.getConstructor(String.class);
+					row[colIndex] = c.newInstance("0");
+				} catch (SecurityException e) {
+				} catch (NoSuchMethodException e) {
+				} catch (InstantiationException e) {
+				} catch (IllegalAccessException e) {
+				} catch (IllegalArgumentException e) {
+				} catch (InvocationTargetException e) {
+				}
+			}
+			add(row);
+		}
+	}
+
+	/**
+	 * Sets the value of a certain cell.
+	 * @param col Column of the cell to change.
+	 * @param row Row of the cell to change.
+	 * @param value New value to be set.
+	 * @return Old value that was replaced.
+	 */
+	public Number set(int col, int row, Number value) {
+		Number old = get(col, row);
+		rows.get(row)[col] = value;
+		return old;
+	}
+
 	@Override
 	public int getRowCount() {
 		return rows.size();
@@ -113,6 +152,15 @@ public class DataTable extends AbstractDataSource {
 	@Override
 	public int getColumnCount() {
 		return types.length;
+	}
+
+	/**
+	 * Returns the data type of the specified column.
+	 * @param col Column.
+	 * @return Data type.
+	 */
+	public Class<? extends Number> getColumnClass(int col) {
+		return this.types[col];
 	}
 
 	/**

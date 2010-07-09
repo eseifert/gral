@@ -19,44 +19,34 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.data.statistics;
+package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.data.AbstractDataSource;
-import de.erichseifert.gral.data.DataListener;
-import de.erichseifert.gral.data.DataSource;
+
 
 /**
- * Abstract base class for histograms.
+ * Class for storing a column of a data source.
  */
-public abstract class Histogram extends AbstractDataSource implements DataListener {
-	private final DataSource data;
-
+public class Column extends DataAccessor {
 	/**
-	 * Initializes a new histograms with a data source.
-	 * @param data Data source to be analyzed.
+	 * Initializes a new instance with the specified data source and column
+	 * index.
+	 * @param source Data source.
+	 * @param col Column index.
 	 */
-	public Histogram(DataSource data) {
-		this.data = data;
-		this.data.addDataListener(this);
+	public Column(DataSource source, int col) {
+		super(source, col);
 	}
-
-	/**
-	 * Recalculates the histogram values.
-	 */
-	protected abstract void rebuildCells();
 
 	@Override
-	public void dataChanged(DataSource data) {
-		rebuildCells();
-		notifyDataChanged();
-	}
-	
-	/**
-	 * Returns the data source associated to this histogram.
-	 * @return Data source
-	 */
-	public DataSource getData() {
-		return data;
+	public Number get(int row) {
+		if (getSource() == null) {
+			return null;
+		}
+		return getSource().get(getIndex(), row);
 	}
 
+	@Override
+	public int size() {
+		return getSource().getRowCount();
+	}
 }

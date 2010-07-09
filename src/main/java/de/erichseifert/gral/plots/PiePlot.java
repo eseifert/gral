@@ -31,6 +31,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
@@ -76,17 +77,18 @@ public class PiePlot extends Plot implements DataListener {
 		}
 
 		@Override
-		public void draw(Graphics2D g2d) {
-			drawBackground(g2d);
-			drawBorder(g2d);
-			drawPlot(g2d);
+		public void draw(DrawingContext configuration) {
+			drawBackground(configuration);
+			drawBorder(configuration);
+			drawPlot(configuration);
 		}
 
 		@Override
-		protected void drawPlot(Graphics2D g2d) {
-			AffineTransform txOrig = g2d.getTransform();
-			g2d.translate(getX(), getY());
-			AffineTransform txOffset = g2d.getTransform();
+		protected void drawPlot(DrawingContext context) {
+			Graphics2D graphics = context.getGraphics();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
+			AffineTransform txOffset = graphics.getTransform();
 
 			// TODO: Use real font size
 			final double fontSize = 10.0;
@@ -97,7 +99,7 @@ public class PiePlot extends Plot implements DataListener {
 			if (w <= 0.0 || h <= 0.0) {
 				return;
 			}
-			g2d.translate(w/2d, h/2d);
+			graphics.translate(w/2d, h/2d);
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 
 			double sizeRel = plot.<Double>getSetting(PiePlot.RADIUS);
@@ -136,10 +138,10 @@ public class PiePlot extends Plot implements DataListener {
 
 				// Paint slice
 				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
-				GraphicsUtils.fillPaintedShape(g2d, doughnutSlice, paint, null);
+				GraphicsUtils.fillPaintedShape(graphics, doughnutSlice, paint, null);
 			}
-			g2d.setTransform(txOffset);
-			g2d.setTransform(txOrig);
+			graphics.setTransform(txOffset);
+			graphics.setTransform(txOrig);
 		}
 
 		@Override

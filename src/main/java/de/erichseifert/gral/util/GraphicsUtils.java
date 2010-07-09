@@ -51,49 +51,49 @@ public abstract class GraphicsUtils {
 
 	/**
 	 * Fills a Shape with the specified Paint object.
-	 * @param g2d Graphics to be painted into.
+	 * @param graphics Graphics to be painted into.
 	 * @param shape Shape to be filled.
 	 * @param paint Paint to be used.
 	 * @param paintBounds Optional bounds describing the painted area.
 	 */
-	public static void fillPaintedShape(Graphics2D g2d, Shape shape,
+	public static void fillPaintedShape(Graphics2D graphics, Shape shape,
 			Paint paint, Rectangle2D paintBounds) {
 		if (paintBounds == null) {
 			paintBounds = shape.getBounds2D();
 		}
-		AffineTransform txOrig = g2d.getTransform();
-		g2d.translate(paintBounds.getX(), paintBounds.getY());
-		g2d.scale(paintBounds.getWidth(), paintBounds.getHeight());
+		AffineTransform txOrig = graphics.getTransform();
+		graphics.translate(paintBounds.getX(), paintBounds.getY());
+		graphics.scale(paintBounds.getWidth(), paintBounds.getHeight());
 		Paint paintOld = null;
 		if (paint != null) {
-			paintOld = g2d.getPaint();
-			g2d.setPaint(paint);
+			paintOld = graphics.getPaint();
+			graphics.setPaint(paint);
 		}
 		AffineTransform tx = AffineTransform.getScaleInstance(
 				1.0/paintBounds.getWidth(), 1.0/paintBounds.getHeight());
 		tx.translate(-paintBounds.getX(), -paintBounds.getY());
-		g2d.fill(tx.createTransformedShape(shape));
+		graphics.fill(tx.createTransformedShape(shape));
 		if (paintOld != null) {
-			g2d.setPaint(paintOld);
+			graphics.setPaint(paintOld);
 		}
-		g2d.setTransform(txOrig);
+		graphics.setTransform(txOrig);
 	}
 
 	/**
 	 * Draws a filled Shape with the specified Paint object.
-	 * @param g2d Graphics to be painted into.
+	 * @param graphics Graphics to be painted into.
 	 * @param shape Shape to be filled.
 	 * @param paint Paint to be used.
 	 * @param paintBounds Optional bounds describing the painted area.
 	 * @param stroke Stroke to be used for outlines.
 	 */
-	public static void drawPaintedShape(Graphics2D g2d, Shape shape,
+	public static void drawPaintedShape(Graphics2D graphics, Shape shape,
 			Paint paint, Rectangle2D paintBounds, Stroke stroke) {
 		if (stroke == null) {
-			stroke = g2d.getStroke();
+			stroke = graphics.getStroke();
 		}
 		shape = stroke.createStrokedShape(shape);
-		fillPaintedShape(g2d, shape, paint, paintBounds);
+		fillPaintedShape(graphics, shape, paint, paintBounds);
 	}
 
 }

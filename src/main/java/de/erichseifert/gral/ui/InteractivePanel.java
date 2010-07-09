@@ -47,6 +47,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
@@ -297,9 +298,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
             return Printable.NO_SUCH_PAGE;
         }
 
-		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform txOld = g2d.getTransform();
-		g2d.scale(MM_PER_PX, MM_PER_PX);
+		Graphics2D graphics = (Graphics2D) g;
+		AffineTransform txOld = graphics.getTransform();
+		graphics.scale(MM_PER_PX, MM_PER_PX);
 
 		Rectangle2D boundsOld = getDrawable().getBounds();
 		Rectangle2D pageBounds = new Rectangle2D.Double(
@@ -311,11 +312,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		getDrawable().setBounds(pageBounds);
 		// TODO: Be sure to temporarily turn off antialiasing before printing
 		try {
-			getDrawable().draw(g2d);
+			getDrawable().draw(new DrawingContext(graphics));
 		} finally {
 			getDrawable().setBounds(boundsOld);
 		}
-		g2d.setTransform(txOld);
+		graphics.setTransform(txOld);
 		return Printable.PAGE_EXISTS;
 	}
 

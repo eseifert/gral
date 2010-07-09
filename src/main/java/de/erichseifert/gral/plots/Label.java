@@ -33,6 +33,7 @@ import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.DrawableConstants;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
@@ -83,11 +84,10 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	}
 
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void draw(DrawingContext context) {
 		if (layout == null) {
 			return;
 		}
-		Paint paintOld = g2d.getPaint();
 
 		AffineTransform txLabel = AffineTransform.getTranslateInstance(
 			getX() + getWidth()/2.0,
@@ -114,16 +114,17 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 		Shape labelShape = layout.getOutline(txLabel);
 
+		Graphics2D graphics = context.getGraphics();
+		Paint paintOld = graphics.getPaint();
 		/*
 		// DEBUG:
-		g2d.setPaint(new Color(1f, 0f, 0f, 0.2f));
-		g2d.fill(labelShape.getBounds2D());
+		graphics.setPaint(new Color(1f, 0f, 0f, 0.2f));
+		graphics.fill(labelShape.getBounds2D());
 		//*/
-
 		Paint paint = getSetting(COLOR);
-		g2d.setPaint(paint);
-		GraphicsUtils.fillPaintedShape(g2d, labelShape, paint, null);
-		g2d.setPaint(paintOld);
+		graphics.setPaint(paint);
+		GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
+		graphics.setPaint(paintOld);
 
 	}
 

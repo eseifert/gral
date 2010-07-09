@@ -43,9 +43,9 @@ public abstract class DataSubset extends AbstractDataSource implements DataListe
 	}
 
 	@Override
-	public Row get(int row) {
+	public Row getRow(int row) {
 		int rowOrig = accepted.get(row);
-		return original.get(rowOrig);
+		return original.getRow(rowOrig);
 	}
 
 	@Override
