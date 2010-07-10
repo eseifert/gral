@@ -81,7 +81,7 @@ public class ImageReader extends AbstractDataReader {
 	 */
 	public ImageReader(String mimeType) {
 		super(mimeType);
-		setDefault("factor", 1.0/255.0);
+		setDefault("factor", 1.0);
 		setDefault("offset", 0.0);
 	}
 
@@ -106,11 +106,11 @@ public class ImageReader extends AbstractDataReader {
 		for (int y = 0; y < h; y++) {
 			image.getRGB(0, y, pixelData.length, 1, pixelData, 0, 0);
 			for (int x = 0; x < pixelData.length; x++) {
-				//double b = (pixelData[x] >>  0) & 0xFF;
-				//double g = (pixelData[x] >>  8) & 0xFF;
+				double a = (pixelData[x] >> 24) & 0xFF;
 				double r = (pixelData[x] >> 16) & 0xFF;
-				//double a = (pixelData[x] >> 24) & 0xFF;
-				rowData[x] = r * factor + offset;
+				double g = (pixelData[x] >>  8) & 0xFF;
+				double b = (pixelData[x] >>  0) & 0xFF;
+				rowData[x] = r*factor + offset;
 			}
 			data.add(rowData);
 		}

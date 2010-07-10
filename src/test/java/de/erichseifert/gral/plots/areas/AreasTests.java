@@ -26,7 +26,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	DefaultAreaRendererTest.class
+	DefaultAreaRendererTest.class,
+	LineAreaRendererTest.class
 })
 public class AreasTests {
 }

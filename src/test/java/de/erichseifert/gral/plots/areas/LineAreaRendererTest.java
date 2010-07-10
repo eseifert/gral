@@ -41,7 +41,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.util.PointND;
 
-public class DefaultAreaRendererTest {
+public class LineAreaRendererTest {
 	private Axis axis;
 	private AxisRenderer axisRenderer;
 
@@ -54,7 +54,7 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testArea() {
 		// Get line
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		AreaRenderer r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
 			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)

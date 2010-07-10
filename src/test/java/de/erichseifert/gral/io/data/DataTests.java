@@ -29,7 +29,9 @@ import org.junit.runners.Suite;
 	DataReaderFactoryTest.class,
 	DataWriterFactoryTest.class,
 	CSVReaderTest.class,
-	CSVWriterTest.class
+	CSVWriterTest.class,
+	ImageReaderTest.class,
+	ImageWriterTest.class
 })
 public class DataTests {
 }

@@ -22,7 +22,6 @@
 package de.erichseifert.gral.io.data;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
@@ -32,6 +31,7 @@ import javax.imageio.ImageIO;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.util.MathUtils;
 
 
 /**
@@ -81,6 +81,8 @@ public class ImageWriter extends AbstractDataWriter {
 	 */
 	public ImageWriter(String mimeType) {
 		super(mimeType);
+		setDefault("factor", 1.0);
+		setDefault("offset", 0.0);
 	}
 
 	@Override
@@ -88,23 +90,26 @@ public class ImageWriter extends AbstractDataWriter {
 		int w = data.getColumnCount();
 		int h = data.getRowCount();
 
-		int[] pixelData = new int[w * h];
+		double factor = this.<Double>getSetting("factor");
+		double offset = this.<Double>getSetting("offset");
+
+		byte[] pixelData = new byte[w*h];
 		int pos = 0;
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				double v = data.get(x, y).doubleValue() * 255.0;
-				pixelData[pos++] = (int) Math.round(v);
+				double value = data.get(x, y).doubleValue()*factor + offset;
+				byte v = (byte) Math.round(MathUtils.limit(value, 0.0, 255.0));
+				pixelData[pos++] = v;
 			}
 		}
 
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
-        WritableRaster raster = (WritableRaster) image.getData();
-		raster.setPixels(0, 0, w, h, pixelData);
+        image.getRaster().setDataElements(0, 0, w, h, pixelData);
 
         Iterator<javax.imageio.ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
         try {
         	javax.imageio.ImageWriter writer = writers.next();
-        	writer.setOutput(output);
+        	writer.setOutput(ImageIO.createImageOutputStream(output));
         	writer.write(image);
         } catch (NoSuchElementException e) {
         	throw new IOException("No writer found for MIME type " + getMimeType());
