@@ -36,6 +36,7 @@ import org.junit.Test;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -69,12 +70,12 @@ public class AbstractPointRendererTest {
 				final Row row) {
 			return new AbstractDrawable() {
 				@Override
-				public void draw(Graphics2D g2d) {
+				public void draw(DrawingContext context) {
 					Shape point = getPointPath(row);
 					Number value = row.get(0);
-					drawValue(g2d, point, value);
-					drawError(g2d, point, value.doubleValue(), 1.0, 0.0,
-							axis, axisRenderer);
+					drawValue(context, point, value);
+					drawError(context, point, value.doubleValue(),
+							1.0, 0.0, axis, axisRenderer);
 				}
 			};
 		}
@@ -100,8 +101,8 @@ public class AbstractPointRendererTest {
 
 		// Draw line
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		point.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		point.draw(context);
 		// TODO: Assert something
 	}
 

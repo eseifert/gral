@@ -46,7 +46,7 @@ public class MedianTest {
 
 	@Test
 	public void testCreation() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
 
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
@@ -54,7 +54,7 @@ public class MedianTest {
 
 	@Test
 	public void testMode() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
 
 		for (Filter.Mode mode : Filter.Mode.values()) {
 			filter.setMode(mode);
@@ -64,7 +64,7 @@ public class MedianTest {
 
 	@Test
 	public void testWindowSize() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
 		assertEquals(3, filter.getWindowSize());
 
 		filter.setWindowSize(1);
@@ -73,7 +73,7 @@ public class MedianTest {
 
 	@Test
 	public void testOffset() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.MODE_REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
 		assertEquals(1, filter.getOffset());
 
 		filter.setOffset(0);

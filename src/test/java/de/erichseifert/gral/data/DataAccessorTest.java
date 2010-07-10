@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class RowTest {
+public class DataAccessorTest {
 	private static DataTable table;
 
 	@BeforeClass
@@ -49,11 +49,23 @@ public class RowTest {
 	public void testCreation() {
 		Row row1 = new Row(table, 0);
 		assertEquals(table, row1.getSource());
-		assertEquals(0, row1.getRow());
+		assertEquals(0, row1.getIndex());
+		assertEquals(table.getColumnCount(), row1.size());
 
 		Row row2 = new Row(table, 1);
 		assertEquals(table, row2.getSource());
-		assertEquals(1, row2.getRow());
+		assertEquals(1, row2.getIndex());
+		assertEquals(table.getColumnCount(), row2.size());
+
+		Column col1 = new Column(table, 0);
+		assertEquals(table, col1.getSource());
+		assertEquals(0, col1.getIndex());
+		assertEquals(table.getRowCount(), col1.size());
+
+		Column col2 = new Column(table, 1);
+		assertEquals(table, col2.getSource());
+		assertEquals(1, col2.getIndex());
+		assertEquals(table.getRowCount(), col2.size());
 	}
 
 	@Test
@@ -65,6 +77,14 @@ public class RowTest {
 		Row row2 = new Row(null, 1);
 		assertEquals(null, row2.get(0));
 		assertEquals(null, row2.get(1));
+
+		Column col1 = new Column(table, 0);
+		assertEquals(table.get(0, 0), col1.get(0));
+		assertEquals(table.get(0, 1), col1.get(1));
+
+		Column col2 = new Column(null, 1);
+		assertEquals(null, col2.get(0));
+		assertEquals(null, col2.get(1));
 	}
 
 	@Test
@@ -93,15 +113,23 @@ public class RowTest {
 		DataTable table3 = new DataTable(Integer.class, Double.class);
 		table3.add(2, 3.0);
 		assertFalse(row1.equals(new Row(table3, 0)));
+		
+		// TODO: Test column equality
 	}
 
 	@Test
 	public void testToString() {
 		Row row1 = new Row(table, 1);
 		Row row2 = new Row(table, 1);
-		assertNotNull(row1.toString() != null);
+		assertNotNull(row1.toString());
 		assertFalse(row1.toString().isEmpty());
 		assertEquals(row1.toString(), row2.toString());
+
+		Column col1 = new Column(table, 1);
+		Column col2 = new Column(table, 1);
+		assertNotNull(col1.toString());
+		assertFalse(col1.toString().isEmpty());
+		assertEquals(col1.toString(), col2.toString());
 	}
 
 }

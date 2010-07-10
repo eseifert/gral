@@ -23,7 +23,6 @@ package de.erichseifert.gral;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
@@ -43,7 +42,7 @@ public class StackedLayoutTest {
 
 	private static final class TestDrawable extends AbstractDrawable {
 		@Override
-		public void draw(Graphics2D g2d) {
+		public void draw(DrawingContext context) {
 		}
 		@Override
 		public Dimension2D getPreferredSize() {

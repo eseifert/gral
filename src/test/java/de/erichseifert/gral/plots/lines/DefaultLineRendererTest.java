@@ -33,6 +33,7 @@ import java.util.List;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.PointND;
 
@@ -51,8 +52,8 @@ public class DefaultLineRendererTest {
 
 		// Draw line
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		line.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		line.draw(context);
 	}
 
 	@Test

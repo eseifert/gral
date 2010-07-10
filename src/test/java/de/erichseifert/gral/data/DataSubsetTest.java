@@ -75,10 +75,10 @@ public class DataSubsetTest {
 
 	@Test
 	public void testGetInt() {
-		assertEquals(table.get(1), data.get(0));
-		assertEquals(table.get(3), data.get(1));
-		assertEquals(table.get(5), data.get(2));
-		assertEquals(table.get(7), data.get(3));
+		assertEquals(table.getRow(1), data.getRow(0));
+		assertEquals(table.getRow(3), data.getRow(1));
+		assertEquals(table.getRow(5), data.getRow(2));
+		assertEquals(table.getRow(7), data.getRow(3));
 	}
 
 }

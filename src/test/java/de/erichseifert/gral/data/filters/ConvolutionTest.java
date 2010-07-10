@@ -51,7 +51,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testCreation() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
 
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
@@ -59,13 +59,13 @@ public class ConvolutionTest {
 
 	@Test
 	public void testKernel() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
 		assertEquals(kernel, filter.getKernel());
 	}
 
 	@Test
 	public void testMode() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
 
 		for (Filter.Mode mode : Filter.Mode.values()) {
 			filter.setMode(mode);
@@ -75,7 +75,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testColumns() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_ZERO, 0);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0);
 
 		assertEquals(3.0, filter.get(0, 0).doubleValue(), DELTA);
 		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);
@@ -88,7 +88,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeOmit() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
 
 		assertTrue(Double.isNaN(filter.get(0, 0).doubleValue()));
 		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);
@@ -101,7 +101,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeZero() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
 
 		assertEquals(3.0, filter.get(0, 0).doubleValue(), DELTA);
 		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);
@@ -114,7 +114,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeRepeat() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter.Mode.REPEAT, 0, 1);
 
 		assertEquals(4.0, filter.get(0, 0).doubleValue(), DELTA);
 		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);

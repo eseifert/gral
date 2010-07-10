@@ -93,7 +93,7 @@ public class DataTableTest {
 	public void testIterator() {
 		int rowNo = 0;
 		for (Row row : table) {
-			assertEquals(table.get(rowNo), row);
+			assertEquals(table.getRow(rowNo), row);
 			rowNo++;
 		}
 	}

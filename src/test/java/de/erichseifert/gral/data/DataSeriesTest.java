@@ -62,17 +62,17 @@ public class DataSeriesTest {
 		DataSeries series = new DataSeries(table, 2, 1);
 
 		for (int row = 0; row < series.getRowCount(); row++) {
-			Row rowTable = table.get(row);
-			Row rowSeries = series.get(row);
+			Row rowTable = table.getRow(row);
+			Row rowSeries = series.getRow(row);
 			assertEquals(rowTable.get(2), rowSeries.get(0));
 			assertEquals(rowTable.get(1), rowSeries.get(1));
 			assertEquals(2, rowSeries.size());
 		}
 
 		// Invalid (negative) index
-		assertNotNull(series.get(-1));
+		assertNotNull(series.getRow(-1));
 		// Invalid (positive) index
-		assertNotNull(series.get(series.getRowCount()));
+		assertNotNull(series.getRow(series.getRowCount()));
 	}
 
 	@Test

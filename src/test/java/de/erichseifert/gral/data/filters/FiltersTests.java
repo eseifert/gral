@@ -28,7 +28,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	KernelTest.class,
 	ConvolutionTest.class,
-	MedianTest.class
+	MedianTest.class,
+	ResizeTest.class
 })
 public class FiltersTests {
 }

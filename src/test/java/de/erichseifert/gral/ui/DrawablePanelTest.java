@@ -97,9 +97,9 @@ public class DrawablePanelTest {
 	@Test
 	public void testDraw() {
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		Graphics2D graphics = (Graphics2D) image.getGraphics();
 		panel.setBounds(0, 0, image.getWidth(), image.getHeight());
-		panel.paint(g2d);
+		panel.paint(graphics);
 	}
 
 }

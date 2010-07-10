@@ -34,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -63,8 +64,8 @@ public class DefaultAreaRendererTest {
 
 		// Draw area
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		area.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		area.draw(context);
 	}
 
 	@Test

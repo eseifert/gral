@@ -61,16 +61,16 @@ public class InteractivePanelTest {
 	@Test
 	public void testPrint() throws PrinterException {
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		Graphics2D graphics = (Graphics2D) image.getGraphics();
 		PageFormat page = new PageFormat();
 		int ret;
 
 		// Test valid page
-		ret = panel.print(g2d, page, 0);
+		ret = panel.print(graphics, page, 0);
 		assertEquals(Printable.PAGE_EXISTS, ret);
 
 		// Test invalid page
-		ret = panel.print(g2d, page, 1);
+		ret = panel.print(graphics, page, 1);
 		assertEquals(Printable.NO_SUCH_PAGE, ret);
 	}
 

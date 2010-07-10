@@ -34,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
@@ -46,7 +47,8 @@ public class LegendTest {
 	public void setUp() {
 		legend = new Legend() {
 			@Override
-			protected void drawSymbol(Graphics2D g2d, Drawable symbol, DataSource data) {
+			protected void drawSymbol(DrawingContext context,
+					Drawable symbol, DataSource data) {
 				isDrawn = true;
 			}
 		};
@@ -83,9 +85,9 @@ public class LegendTest {
 		legend.add(new DummyData(1, 1, 1.0));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		legend.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		legend.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		legend.draw(context);
 		assertTrue(isDrawn);
 		assertFalse(isEmpty(image, true));
 	}

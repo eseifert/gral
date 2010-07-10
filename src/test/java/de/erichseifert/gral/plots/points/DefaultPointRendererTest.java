@@ -32,6 +32,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
@@ -63,8 +64,8 @@ public class DefaultPointRendererTest {
 
 		// Draw line
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
-		point.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		point.draw(context);
 	}
 
 	@Test

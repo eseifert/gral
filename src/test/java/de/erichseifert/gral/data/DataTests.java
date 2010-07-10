@@ -35,7 +35,7 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 	DataSeriesTest.class,
 	DataSubsetTest.class,
 	DummyDataTest.class,
-	RowTest.class,
+	DataAccessorTest.class,
 	ComparatorTest.class,
 	StatisticsTests.class,
 	FiltersTests.class

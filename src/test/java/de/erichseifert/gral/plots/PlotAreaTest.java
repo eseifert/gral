@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
 
 public class PlotAreaTest {
@@ -42,13 +43,13 @@ public class PlotAreaTest {
 		public boolean isDrawn;
 
 		@Override
-		public void draw(Graphics2D g2d) {
-			drawBackground(g2d);
-			drawBorder(g2d);
-			drawPlot(g2d);
+		public void draw(DrawingContext context) {
+			drawBackground(context);
+			drawBorder(context);
+			drawPlot(context);
 		}
 		@Override
-		protected void drawPlot(Graphics2D g2d) {
+		protected void drawPlot(DrawingContext context) {
 			isDrawn = true;
 		}
 	};
@@ -76,9 +77,9 @@ public class PlotAreaTest {
 		plotArea.setSetting(Plot.BORDER, new BasicStroke(1f));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		plotArea.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		plotArea.draw(context);
 		assertTrue(plotArea.isDrawn);
 	}
 

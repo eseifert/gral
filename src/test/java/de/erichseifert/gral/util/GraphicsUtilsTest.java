@@ -51,17 +51,17 @@ public class GraphicsUtilsTest {
 	@Test
 	public void testPaintedShape() {
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		Graphics2D graphics = (Graphics2D) image.getGraphics();
 		Shape shape = new Rectangle2D.Double(10.0, 10.0, 300.0, 220.0);
 		Paint paint = Color.red;
 
-		GraphicsUtils.fillPaintedShape(g2d, shape, paint, null);
+		GraphicsUtils.fillPaintedShape(graphics, shape, paint, null);
 		Rectangle2D paintBounds = shape.getBounds2D();
-		GraphicsUtils.fillPaintedShape(g2d, shape, paint, paintBounds);
+		GraphicsUtils.fillPaintedShape(graphics, shape, paint, paintBounds);
 
-		GraphicsUtils.drawPaintedShape(g2d, shape, paint, paintBounds, null);
+		GraphicsUtils.drawPaintedShape(graphics, shape, paint, paintBounds, null);
 		BasicStroke stroke = new BasicStroke(2f);
-		GraphicsUtils.drawPaintedShape(g2d, shape, paint, paintBounds, stroke);
+		GraphicsUtils.drawPaintedShape(graphics, shape, paint, paintBounds, stroke);
 	}
 
 }

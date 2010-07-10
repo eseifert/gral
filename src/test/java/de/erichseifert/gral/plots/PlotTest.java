@@ -36,6 +36,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
@@ -68,8 +69,8 @@ public class PlotTest {
 	public void setUp() {
 		plot = new Plot(series1, series2) {
 			@Override
-			public void draw(Graphics2D g2d) {
-				super.draw(g2d);
+			public void draw(DrawingContext context) {
+				super.draw(context);
 				isDrawn = true;
 			}
 		};
@@ -155,9 +156,9 @@ public class PlotTest {
 		plot.setSetting(Plot.BORDER, new BasicStroke(1f));
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		plot.draw(g2d);
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		plot.draw(context);
 		assertTrue(isDrawn);
 	}
 

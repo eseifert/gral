@@ -33,6 +33,7 @@ import java.util.List;
 import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.PointND;
@@ -49,12 +50,12 @@ public class DiscreteLineRendererTest {
 		);
 
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		for (Orientation dir : Orientation.values()) {
 			r.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, dir);
 			Drawable line = r.getLine(points);
 			assertNotNull(line);
-			line.draw(g2d);
+			line.draw(context);
 		}
 	}
 
