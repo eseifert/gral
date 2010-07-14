@@ -26,8 +26,10 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -113,11 +115,13 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	}
 
 	@Override
-	public IOCapabilities[] getCapabilities() {
-		IOCapabilities[] caps = new IOCapabilities[entries.size()];
-		int i=0;
+	public List<IOCapabilities> getCapabilities() {
+		List<IOCapabilities> caps = new ArrayList<IOCapabilities>(entries.size());
 		for (String mimeType : entries.keySet()) {
-			caps[i++] = getCapabilities(mimeType);
+			IOCapabilities capability = getCapabilities(mimeType);
+			if (capability != null) {
+				caps.add(capability);
+			}
 		}
 		return caps;
 	}

@@ -21,6 +21,8 @@
 
 package de.erichseifert.gral.io;
 
+import java.util.List;
+
 /**
  * Interface for factories producing input or output classes.
  * This is be used to create a extensible plug-in system for reading or writing.
@@ -42,10 +44,10 @@ public interface IOFactory<T> {
 	public abstract IOCapabilities getCapabilities(String mimeType);
 
 	/**
-	 * Returns an array of capabilities for all supported formats.
+	 * Returns a list of capabilities for all supported formats.
 	 * @return Supported capabilities.
 	 */
-	public abstract IOCapabilities[] getCapabilities();
+	public abstract List<IOCapabilities> getCapabilities();
 
 	/**
 	 * Returns an array of Strings containing all supported formats.

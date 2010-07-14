@@ -23,29 +23,31 @@ package de.erichseifert.gral.ui;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.io.IOCapabilities;
 
 public class ExportChooserTest {
-	private static IOCapabilities[] capabilities;
+	private static List<IOCapabilities> capabilities;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		capabilities = new IOCapabilities[] {
-				new IOCapabilities("Text", "Unformatted text", "text/plain", "txt"),
-				new IOCapabilities("HTML", "HyperText Markup Language", "text/html", "html", "htm")
-		};
+		capabilities = new ArrayList<IOCapabilities>(2);
+		capabilities.add(new IOCapabilities("Text", "Unformatted text", "text/plain", "txt"));
+		capabilities.add(new IOCapabilities("HTML", "HyperText Markup Language", "text/html", "html", "htm"));
 	}
 
 	@Test
 	public void testCreation() {
 		ExportChooser strict = new ExportChooser(true, capabilities);
-		assertEquals(capabilities.length, strict.getChoosableFileFilters().length);
+		assertEquals(capabilities.size(), strict.getChoosableFileFilters().length);
 
 		ExportChooser relaxed = new ExportChooser(false, capabilities);
-		assertEquals(capabilities.length + 1, relaxed.getChoosableFileFilters().length);
+		assertEquals(capabilities.size() + 1, relaxed.getChoosableFileFilters().length);
 	}
 
 }

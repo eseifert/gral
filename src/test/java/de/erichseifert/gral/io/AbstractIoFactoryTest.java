@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -59,8 +60,8 @@ public class AbstractIoFactoryTest {
 		} catch (IOException e) {
 			fail("Creation of IOFactory failed: "+e);
 		}
-		IOCapabilities[] caps = f.getCapabilities();
-		assertTrue(caps.length > 0);
+		List<IOCapabilities> caps = f.getCapabilities();
+		assertTrue(caps.size() > 0);
 	}
 
 	@Test

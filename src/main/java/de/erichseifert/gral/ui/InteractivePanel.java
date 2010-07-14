@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
@@ -91,7 +92,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		printerJob = PrinterJob.getPrinterJob();
 		printerJob.setPrintable(this);
 
-		IOCapabilities[] exportFormats = DrawableWriterFactory.getInstance()
+		List<IOCapabilities> exportFormats = DrawableWriterFactory.getInstance()
 			.getCapabilities();
 		exportImageChooser = new ExportChooser(true, exportFormats);
 		exportImageChooser.setDialogTitle("Export image");
