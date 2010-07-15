@@ -49,6 +49,7 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 			try {
 				instance = new DrawableWriterFactory();
 			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		}
 		return instance;

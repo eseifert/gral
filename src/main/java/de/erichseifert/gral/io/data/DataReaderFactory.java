@@ -48,6 +48,7 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 			try {
 				instance = new DataReaderFactory();
 			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		}
 		return instance;

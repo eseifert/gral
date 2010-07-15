@@ -53,7 +53,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		Enumeration<URL> propFiles = null;
 		propFiles = getClass().getClassLoader().getResources(propFileName);
 		if (!propFiles.hasMoreElements()) {
-			throw new IOException("Property file not found for pattern: " + propFileName);
+			throw new IOException("Property file not found: " + propFileName);
 		}
 		Properties props = new Properties();
 		while (propFiles.hasMoreElements()) {

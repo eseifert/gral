@@ -48,6 +48,7 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 			try {
 				instance = new DataWriterFactory();
 			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		}
 		return instance;
