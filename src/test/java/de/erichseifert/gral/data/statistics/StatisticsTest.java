@@ -27,6 +27,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 
 public class StatisticsTest {
 	private static final double DELTA = 1e-10;
@@ -50,74 +51,131 @@ public class StatisticsTest {
 
 	@Test
 	public void testSum() {
-		assertEquals(17.0, stats.get(Statistics.SUM, 0), DELTA);
-		assertEquals(24.0, stats.get(Statistics.SUM, 1), DELTA);
-		assertEquals(44.0, stats.get(Statistics.SUM, 2), DELTA);
+		assertEquals(85.0, stats.get(Statistics.SUM), DELTA);
+		// Horizontal
+		assertEquals( 3.0, stats.get(Statistics.SUM, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals( 7.0, stats.get(Statistics.SUM, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals( 8.0, stats.get(Statistics.SUM, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(17.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(24.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(44.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testMean() {
-		assertEquals(2.125, stats.get(Statistics.MEAN, 0), DELTA);
-		assertEquals(3.000, stats.get(Statistics.MEAN, 1), DELTA);
-		assertEquals(5.500, stats.get(Statistics.MEAN, 2), DELTA);
+		assertEquals(85.0/24.0, stats.get(Statistics.MEAN), DELTA);
+		// Horizontal
+		assertEquals( 3.0/ 3.0, stats.get(Statistics.MEAN, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals( 7.0/ 3.0, stats.get(Statistics.MEAN, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals( 8.0/ 3.0, stats.get(Statistics.MEAN, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(17.0/ 8.0, stats.get(Statistics.MEAN, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(24.0/ 8.0, stats.get(Statistics.MEAN, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(44.0/ 8.0, stats.get(Statistics.MEAN, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testMin() {
-		assertEquals(0.0, stats.get(Statistics.MIN, 0), DELTA);
-		assertEquals(1.0, stats.get(Statistics.MIN, 1), DELTA);
-		assertEquals(2.0, stats.get(Statistics.MIN, 2), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MIN), DELTA);
+		// Horizontal
+		assertEquals(0.0, stats.get(Statistics.MIN, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(1.0, stats.get(Statistics.MIN, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MIN, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(0.0, stats.get(Statistics.MIN, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(1.0, stats.get(Statistics.MIN, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MIN, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testMax() {
-		assertEquals(5.0, stats.get(Statistics.MAX, 0), DELTA);
-		assertEquals(9.0, stats.get(Statistics.MAX, 1), DELTA);
-		assertEquals(9.0, stats.get(Statistics.MAX, 2), DELTA);
+		assertEquals(9.0, stats.get(Statistics.MAX), DELTA);
+		// Horizontal
+		assertEquals(2.0, stats.get(Statistics.MAX, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(3.0, stats.get(Statistics.MAX, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(4.0, stats.get(Statistics.MAX, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(5.0, stats.get(Statistics.MAX, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(9.0, stats.get(Statistics.MAX, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(9.0, stats.get(Statistics.MAX, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testN() {
-		assertEquals(8.0, stats.get(Statistics.N, 0), DELTA);
-		assertEquals(8.0, stats.get(Statistics.N, 1), DELTA);
-		assertEquals(8.0, stats.get(Statistics.N, 2), DELTA);
+		assertEquals(24.0, stats.get(Statistics.N), DELTA);
+		// Horizontal
+		assertEquals( 3.0, stats.get(Statistics.N, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals( 3.0, stats.get(Statistics.N, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals( 3.0, stats.get(Statistics.N, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals( 8.0, stats.get(Statistics.N, Orientation.VERTICAL, 0), DELTA);
+		assertEquals( 8.0, stats.get(Statistics.N, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 8.0, stats.get(Statistics.N, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testMeanDeviation() {
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, 0), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, 1), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, 2), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION), DELTA);
+		// Horizontal
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testVariance() {
-		assertEquals(18.875, stats.get(Statistics.VARIANCE, 0), DELTA);
-		assertEquals(48.000, stats.get(Statistics.VARIANCE, 1), DELTA);
-		assertEquals(42.000, stats.get(Statistics.VARIANCE, 2), DELTA);
+		assertEquals(157.95833333333337, stats.get(Statistics.VARIANCE), DELTA);
+		// Horizontal
+		assertEquals(  2.00000000000000, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals( 18.87500000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 0), DELTA);
+		assertEquals( 48.00000000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 42.00000000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testSkewness() {
-		assertEquals( 17.90625, stats.get(Statistics.SKEWNESS, 0), DELTA);
-		assertEquals(198.00000, stats.get(Statistics.SKEWNESS, 1), DELTA);
-		assertEquals(  0.00000, stats.get(Statistics.SKEWNESS, 2), DELTA);
+		assertEquals(340.5034722222222, stats.get(Statistics.SKEWNESS), DELTA);
+		// Horizontal
+		assertEquals(  0.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals( -1.7777777777777, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  1.7777777777777, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals( 17.9062500000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(198.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(  0.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testKurtosis() {
-		assertEquals( 104.275390625, stats.get(Statistics.KURTOSIS, 0), DELTA);
-		assertEquals(1332.000000000, stats.get(Statistics.KURTOSIS, 1), DELTA);
-		assertEquals( 388.500000000, stats.get(Statistics.KURTOSIS, 2), DELTA);
+		assertEquals(2723.1039496527756, stats.get(Statistics.KURTOSIS), DELTA);
+		// Horizontal
+		assertEquals(   2.0000000000000, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(   3.5555555555555, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(   3.5555555555555, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals( 104.2753906250000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(1332.0000000000000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 388.5000000000000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
 	public void testMedian() {
-		// The loop ensures effects of randomized algorithm are reduced
-		for (int i = 0; i < 10; i++) {
-			assertEquals(2.0, stats.get(Statistics.MEDIAN, 0), DELTA);
-			assertEquals(2.0, stats.get(Statistics.MEDIAN, 1), DELTA);
-			assertEquals(5.5, stats.get(Statistics.MEDIAN, 2), DELTA);
-		}
+		assertEquals(2.5, stats.get(Statistics.MEDIAN), DELTA);
+		// Horizontal
+		assertEquals(1.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(3.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(5.5, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 2), DELTA);
 	}
 }

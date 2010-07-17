@@ -46,7 +46,7 @@ public class HistogramTest {
 
 	@Test
 	public void testCreation() {
-		Histogram histogram = new Histogram1D(table, Histogram1D.Orientation.VERTICAL, 4);
+		Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL, 4);
 
 		assertEquals(table.getColumnCount(), histogram.getColumnCount());
 		assertEquals(4, histogram.getRowCount());
@@ -54,7 +54,7 @@ public class HistogramTest {
 
 	@Test
 	public void testEqualBreaks() {
-		Histogram histogram = new Histogram1D(table, Histogram1D.Orientation.VERTICAL, 4);
+		Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL, 4);
 
 		long[] expected = {
 			3L, 5L,  // 1.0-2.0, 1.0-3.0
@@ -72,7 +72,7 @@ public class HistogramTest {
 
 	@Test
 	public void testCustomBreaks() {
-		Histogram histogram = new Histogram1D(table, Histogram1D.Orientation.VERTICAL,
+		Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL,
 				new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}});
 
 		long[] expected = {
@@ -91,7 +91,7 @@ public class HistogramTest {
 
 	@Test
 	public void testGet() {
-		Histogram histogram = new Histogram1D(table, Histogram1D.Orientation.VERTICAL, 4);
+		Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL, 4);
 
 		assertEquals(3L, histogram.get(0, 0));
 		assertEquals(5L, histogram.get(1, 0));
@@ -105,7 +105,7 @@ public class HistogramTest {
 
 	@Test
 	public void testCellLimits() {
-		Histogram1D histogram = new Histogram1D(table, Histogram1D.Orientation.VERTICAL, 4);
+		Histogram1D histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL, 4);
 		Number[][] expected = new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}};
 
 		for (int colIndex = 0; colIndex < histogram.getColumnCount(); colIndex++) {

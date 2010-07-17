@@ -45,6 +45,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisListener;
@@ -467,10 +468,10 @@ public class XYPlot extends Plot implements DataListener  {
 		for (DataSource s : this.data) {
 			Statistics stats = s.getStatistics();
 			// Set the minimal and maximal value of the axes
-			minX = Math.min(minX, stats.get(Statistics.MIN, colX));
-			maxX = Math.max(maxX, stats.get(Statistics.MAX, colX));
-			minY = Math.min(minY, stats.get(Statistics.MIN, colY));
-			maxY = Math.max(maxY, stats.get(Statistics.MAX, colY));
+			minX = Math.min(minX, stats.get(Statistics.MIN, Orientation.VERTICAL, colX));
+			maxX = Math.max(maxX, stats.get(Statistics.MAX, Orientation.VERTICAL, colX));
+			minY = Math.min(minY, stats.get(Statistics.MIN, Orientation.VERTICAL, colY));
+			maxY = Math.max(maxY, stats.get(Statistics.MAX, Orientation.VERTICAL, colY));
 		}
 	}
 

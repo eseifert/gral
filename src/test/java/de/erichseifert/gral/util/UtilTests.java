@@ -35,7 +35,8 @@ import org.junit.runners.Suite;
 	GeometryUtilsTest.class,
 	GraphicsUtilsTest.class,
 	SettingsTest.class,
-	SettingChangeEventTest.class
+	SettingChangeEventTest.class,
+	SortedListTest.class
 })
 public class UtilTests {
 }

@@ -26,7 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 
 
 /**
@@ -37,16 +39,6 @@ import de.erichseifert.gral.data.DataSource;
  * <p>For ease of use the histogram is a data source itself.</p>
  */
 public class Histogram1D extends Histogram {
-	/**
-	 * Data type that describes the direction of the histogram.
-	 */
-	public static enum Orientation {
-		/** Horizontal histogram. */
-		HORIZONTAL,
-		/** Vertical histogram. */
-		VERTICAL
-	}
-	
 	private final Orientation orientation;
 
 	private final List<Number[]> breaks;
@@ -69,17 +61,21 @@ public class Histogram1D extends Histogram {
 	 * cell count.
 	 * @param data DataSource so be analyzed.
 	 * @param orientation Orientation of the histogram values.
-	 * @param cellCount Number of subdivisions for analysis.
+	 * @param breakCount Number of subdivisions for analysis.
 	 */
-	public Histogram1D(DataSource data, Orientation orientation, int cellCount) {
+	public Histogram1D(DataSource data, Orientation orientation, int breakCount) {
 		this(data, orientation);
-		Statistics stats = getData().getStatistics();
-		for (int col = 0; col < getData().getColumnCount(); col++) {
-			double min = stats.get(Statistics.MIN, col);
-			double max = stats.get(Statistics.MAX, col);
-			double delta = (max - min + Double.MIN_VALUE) / cellCount;
 
-			Number[] breaks = new Double[cellCount + 1];
+		// Create equally spaced breaks
+		int count = (orientation == Orientation.VERTICAL)
+				? getData().getColumnCount() : getData().getRowCount();
+		Statistics stats = getData().getStatistics();
+		for (int index = 0; index < count; index++) {
+			double min = stats.get(Statistics.MIN, orientation, index);
+			double max = stats.get(Statistics.MAX, orientation, index);
+			double delta = (max - min + Double.MIN_VALUE) / breakCount;
+
+			Number[] breaks = new Double[breakCount + 1];
 			for (int i = 0; i < breaks.length; i++) {
 				breaks[i] = min + i*delta;
 			}
@@ -89,14 +85,20 @@ public class Histogram1D extends Histogram {
 	}
 
 	/**
-	 * Creates a new Histogram object with the specified DataSource and
+	 * Initializes a new histogram with the specified data source and
 	 * subdivisions at the specified positions.
-	 * @param data DataSource to be analyzed.
-	 * @param orientation Orientation of the histogram values.
+	 * @param data Data source to be analyzed.
+	 * @param orientation Orientation in which the data should be sampled.
 	 * @param breaks Values of where a subdivision should occur.
 	 */
 	public Histogram1D(DataSource data, Orientation orientation, Number[]... breaks) {
 		this(data, orientation);
+		int count = (orientation == Orientation.VERTICAL)
+				? getData().getColumnCount() : getData().getRowCount();
+		if (breaks.length != count) {
+			throw new IllegalArgumentException(
+					"Invalid number of breaks: got "+breaks.length+", expected "+count+".");
+		}
 		for (Number[] brk : breaks) {
 			this.breaks.add(brk);
 		}
@@ -104,7 +106,7 @@ public class Histogram1D extends Histogram {
 	}
 
 	/**
-	 * Repopulates the cells of this Histogram.
+	 * (Re-)populates the cells of this Histogram.
 	 */
 	protected void rebuildCells() {
 		// FIXME: Very naive implementation
@@ -112,16 +114,17 @@ public class Histogram1D extends Histogram {
 		cacheMin.clear();
 		cacheMax.clear();
 
-		int rowCount = getData().getRowCount();
-		int col = 0;
-		// Iterate over histogram columns
+		// Iterate over histogram data sets
+		int breakIndex = 0;
 		for (Number[] brk : breaks) {
 			long[] cells = new long[brk.length - 1];
 			long colMin = Long.MAX_VALUE;
 			long colMax = Long.MIN_VALUE;
-			// Iterate over data rows
-			for (int row = 0; row < rowCount; row++) {
-				double val = getData().get(col, row).doubleValue();
+			DataAccessor data = (orientation == Orientation.VERTICAL)
+					? getData().getColumn(breakIndex) : getData().getRow(breakIndex);
+			// Iterate over data cells
+			for (Number value : data) {
+				double val = value.doubleValue();
 				// Iterate over histogram rows
 				for (int i = 0; i < brk.length - 1; i++) {
 					// Put the value into corresponding class
@@ -138,10 +141,18 @@ public class Histogram1D extends Histogram {
 				}
 			}
 			this.cells.add(cells);
-			cacheMin.put(col, colMin);
-			cacheMax.put(col, colMax);
-			col++;
+			cacheMin.put(breakIndex, colMin);
+			cacheMax.put(breakIndex, colMax);
+			breakIndex++;
 		}
+	}
+
+	/**
+	 * Returns the direction in which the histogram values will be accumulated.
+	 * @return Horizontal or vertical orientation.
+	 */
+	public Orientation getOrientation() {
+		return orientation;
 	}
 
 	/**
@@ -153,7 +164,7 @@ public class Histogram1D extends Histogram {
 	public Number[] getCellLimits(int col, int cell) {
 		Number[] breaks = this.breaks.get(col);
 		Number lower = breaks[cell];
-		Number upper = breaks[cell+1];
+		Number upper = breaks[cell + 1];
 		return new Number[] {lower, upper};
 	}
 
@@ -175,5 +186,4 @@ public class Histogram1D extends Histogram {
 	public int getColumnCount() {
 		return cells.size();
 	}
-
 }

@@ -26,9 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.SortedList;
 
 
 /**
@@ -36,6 +39,16 @@ import de.erichseifert.gral.util.MathUtils;
  * on a data source.
  */
 public class Statistics implements DataListener {
+	/**
+	 * Data type that describes the direction of the histogram.
+	 */
+	public static enum Orientation {
+		/** Horizontal histogram. */
+		HORIZONTAL,
+		/** Vertical histogram. */
+		VERTICAL
+	}
+
 	/** Key for specifying the sum of all values. */
 	public static final String SUM = "sum";
 	/** Key for specifying the sum of all value squares. */
@@ -69,132 +82,218 @@ public class Statistics implements DataListener {
 	public static final String MEDIAN = "median";
 
 	private final DataSource data;
-	private final ArrayList<Map<String, Double>> statistics;
+	private final Map<String, Double> statistics;
+	private final ArrayList<Map<String, Double>> statisticsCols;
+	private final ArrayList<Map<String, Double>> statisticsRows;
 
 	/**
 	 * Creates a new Statistics object with the specified DataSource.
 	 * @param data DataSource to be analyzed.
 	 */
 	public Statistics(DataSource data) {
-		statistics = new ArrayList<Map<String, Double>>();
+		statistics = new HashMap<String, Double>();
+		statisticsCols = new ArrayList<Map<String, Double>>();
+		statisticsRows = new ArrayList<Map<String, Double>>();
 
 		this.data = data;
 		dataChanged(this.data);
 		this.data.addDataListener(this);
 	}
 
+	private static Map<String, Double> initStatsMap(Map<String, Double> stats) {
+		if (stats == null) {
+			stats = new HashMap<String, Double>();
+		}
+		stats.put(N,    0.0);
+		stats.put(SUM,  0.0);
+		stats.put(SUM2, 0.0);
+		stats.put(SUM3, 0.0);
+		stats.put(SUM4, 0.0);
+		return stats;
+	}
+
+	private static void add(String key, Double value, Map<String, Double> mapAll,
+			Map<String, Double> mapCol, Map<String, Double> mapRow) {
+		mapAll.put(key, mapAll.get(key) + value);
+		mapCol.put(key, mapCol.get(key) + value);
+		mapRow.put(key, mapRow.get(key) + value);
+	}
+
+	private static void derivedStatistics(Map<String, Double> stats) {
+		// Mean
+		double mean = stats.get(SUM) / stats.get(N);
+		double mean2 = mean*mean;
+		stats.put(MEAN, mean);
+	
+		// Mean deviation (first moment) for expected uniform distribution is always 0.
+		stats.put(MEAN_DEVIATION, 0.0);
+		// Variance (second moment)
+		stats.put(VARIANCE, stats.get(SUM2) - mean*stats.get(SUM));
+		// Skewness (third moment)
+		stats.put(SKEWNESS, stats.get(SUM3) -
+				3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
+		// Kurtosis (fourth moment)
+		stats.put(KURTOSIS, stats.get(SUM4) -
+				4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2) -
+				3.0*mean2*mean*stats.get(SUM));
+	}
+
 	/**
-	 * Returns the specified information for the specified column.
+	 * Returns the specified information for the specified column or row.
 	 * @param key Requested information.
-	 * @param col Column index.
+	 * @param orientation Direction of the values the statistical is built from.
+	 * @param index Column or row index.
 	 * @return Calculated value.
 	 */
-	public double get(String key, int col) {
-		Map<String, Double> colStats = statistics.get(col);
-		if (key.equals(MEDIAN) && !colStats.containsKey(MEDIAN)) {
-			colStats.put(MEDIAN, getMedian(col));
+	public double get(String key, Orientation orientation, int index) {
+		ArrayList<Map<String, Double>> statsList = statisticsCols;
+		if ((orientation == Orientation.HORIZONTAL)) {
+			 statsList = statisticsRows;
 		}
-		return colStats.get(key);
+		Map<String, Double> stats = statsList.get(index);
+		if (key.equals(MEDIAN) && !stats.containsKey(MEDIAN)) {
+			double median = getMedian(orientation, index);
+			stats.put(MEDIAN, median);
+		}
+		return stats.get(key);
+	}
+	
+	/**
+	 * Returns the specified information for the data source.
+	 * @param key Requested information.
+	 * @return Calculated value.
+	 */
+	public double get(String key) {
+		Map<String, Double> stats = statistics;
+		if (key.equals(MEDIAN) && !stats.containsKey(MEDIAN)) {
+			double median = getMedian();
+			stats.put(MEDIAN, median);
+		}
+		return stats.get(key);
 	}
 
 	@Override
 	public void dataChanged(DataSource data) {
-		int colCount = data.getColumnCount();
-		int rowCount = data.getRowCount();
-
 		statistics.clear();
-		statistics.ensureCapacity(colCount);
 
-		// Calculate statistics
+		int colCount = data.getColumnCount();
+		statisticsCols.clear();
+		statisticsCols.ensureCapacity(colCount);
+
+		int rowCount = data.getRowCount();
+		statisticsRows.clear();
+		statisticsRows.ensureCapacity(rowCount);
+
+		// (Re-)Calculate statistics
+		Map<String, Double> statsAll = initStatsMap(statistics);
+
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
-			Map<String, Double> colStats = new HashMap<String, Double>();
-			List<Double> col = new ArrayList<Double>(rowCount);
-
-			colStats.put(N, 0.0);
-			colStats.put(SUM, 0.0);
-			colStats.put(SUM2, 0.0);
-			colStats.put(SUM3, 0.0);
-			colStats.put(SUM4, 0.0);
+			// Add a map for each column
+			Map<String, Double> statsCol;
+			if (statisticsCols.size() <= colIndex) {
+				statsCol = initStatsMap(null);
+				statisticsCols.add(statsCol);
+			} else {
+				statsCol = statisticsCols.get(colIndex);
+			}
 
 			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+				// Add a new map for each row or query the existing one
+				Map<String, Double> statsRow;
+				if (statisticsRows.size() <= rowIndex) {
+					statsRow = initStatsMap(null);
+					statisticsRows.add(statsRow);
+				} else {
+					statsRow = statisticsRows.get(rowIndex);
+				}
+
 				Number cell = data.get(colIndex, rowIndex);
 				double value = cell.doubleValue();
 				double value2 = value*value;
 
-				// Store value of column row
-				col.add(value);
-
 				// N (element count, zeroth moment)
-				colStats.put(N, colStats.get(N) + 1.0);
+				add(N, 1.0, statsAll, statsCol, statsRow);
 
 				if (Double.isNaN(value)) {
 					continue;
 				}
 
 				// Sum
-				colStats.put(SUM, colStats.get(SUM) + value);
+				add(SUM, value, statsAll, statsCol, statsRow);
 				// Sum of value squares
-				colStats.put(SUM2, colStats.get(SUM2) + value2);
+				add(SUM2, value2, statsAll, statsCol, statsRow);
 				// Sum of value cubics
-				colStats.put(SUM3, colStats.get(SUM3) + value2*value);
+				add(SUM3, value2*value, statsAll, statsCol, statsRow);
 				// Sum of value quads
-				colStats.put(SUM4, colStats.get(SUM4) + value2*value2);
+				add(SUM4, value2*value2, statsAll, statsCol, statsRow);
 
 				// Minimum
-				if (!colStats.containsKey(MIN) || value < colStats.get(MIN)) {
-					colStats.put(MIN, value);
+				if (!statsAll.containsKey(MIN) || value < statsAll.get(MIN)) {
+					statsAll.put(MIN, value);
+				}
+				if (!statsCol.containsKey(MIN) || value < statsCol.get(MIN)) {
+					statsCol.put(MIN, value);
+				}
+				if (!statsRow.containsKey(MIN) || value < statsRow.get(MIN)) {
+					statsRow.put(MIN, value);
 				}
 				// Maximum
-				if (!colStats.containsKey(MAX) || value > colStats.get(MAX)) {
-					colStats.put(MAX, value);
+				if (!statsAll.containsKey(MAX) || value > statsAll.get(MAX)) {
+					statsAll.put(MAX, value);
+				}
+				if (!statsCol.containsKey(MAX) || value > statsCol.get(MAX)) {
+					statsCol.put(MAX, value);
+				}
+				if (!statsRow.containsKey(MAX) || value > statsRow.get(MAX)) {
+					statsRow.put(MAX, value);
 				}
 			}
+		}
 
-			// Check for empty data source
-			if (rowCount == 0) {
-				continue;
-			}
-
-			// Mean
-			double mean = colStats.get(SUM) / colStats.get(N);
-			double mean2 = mean*mean;
-			colStats.put(MEAN, mean);
-
-			// Mean deviation (first moment) for expected uniform distribution is always 0.
-			colStats.put(MEAN_DEVIATION, 0.0);
-			// Variance (second moment)
-			colStats.put(VARIANCE, colStats.get(SUM2) - mean*colStats.get(SUM));
-			// Skewness (third moment)
-			colStats.put(SKEWNESS, colStats.get(SUM3) -
-					3.0*mean*colStats.get(SUM2) + 2.0*mean2*colStats.get(SUM));
-			// Kurtosis (fourth moment)
-			colStats.put(KURTOSIS, colStats.get(SUM4) -
-					4.0*mean*colStats.get(SUM3) + 6.0*mean2*colStats.get(SUM2) -
-					3.0*mean2*mean*colStats.get(SUM));
-
-			// Add a Map for each column
-			statistics.add(colStats);
+		derivedStatistics(statsAll);
+		for (Map<String, Double> statsCol : statisticsCols) {
+			derivedStatistics(statsCol);
+		}
+		for (Map<String, Double> statsRow : statisticsRows) {
+			derivedStatistics(statsRow);
 		}
 	}
 
-	private double getMedian(int colIndex) {
-		int rowCount = data.getRowCount();
-		List<Double> col = new ArrayList<Double>(rowCount);
-		for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-			Number cell = data.get(colIndex, rowIndex);
+	private double getMedian(Orientation orientation, int index) {
+		DataAccessor accessor = (orientation == Orientation.VERTICAL)
+				? data.getColumn(index)
+				: data.getRow(index);
+		List<Double> values = new SortedList<Double>(accessor.size());
+		for (Number cell : accessor) {
 			double value = cell.doubleValue();
+			if (!Double.isNaN(value)) {
+				values.add(value);
+			}
+		}
+		return getMedian(values);
+	}
+	
+	private double getMedian() {
+		int valueCount = data.getColumnCount() * data.getRowCount();
+		List<Double> values = new SortedList<Double>(valueCount);
+		for (Row row : data) {
+			for (Number cell : row) {
+				double value = cell.doubleValue();
+				if (!Double.isNaN(value)) {
+					values.add(value);
+				}
+			}
+		}
+		return getMedian(values);
+	}
 
-			// Store value of column row
-			col.add(value);
+	private static double getMedian(List<Double> values) {
+		int middle = values.size()/2;
+		double median = values.get(middle);
+		if ((values.size() & 1) == 0) {
+			double medianLower = values.get(middle - 1);
+			median = (medianLower + median)/2.0;
 		}
-		int medianIndex = MathUtils.randomizedSelect(col, 0, rowCount - 1, col.size()/2);
-		double median = col.get(medianIndex);
-		if ((rowCount & 1) == 0) {
-			double medianUpper = col.get(medianIndex + 1);
-			median = (median + medianUpper)/2.0;
-		}
-		Map<String, Double> colStats = statistics.get(colIndex);
-		colStats.put(MEDIAN, median);
 		return median;
 	}
 
