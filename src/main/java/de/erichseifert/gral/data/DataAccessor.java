@@ -120,6 +120,13 @@ public abstract class DataAccessor implements Iterable<Number> {
 		return data;
 	}
 
+	/**
+	 * Returns the specified statistical information for this data.
+	 * @param key Requested Statistical information.
+	 * @return Calculated value.
+	 */
+	public abstract double getStatistics(String key);
+
 	@Override
 	public Iterator<Number> iterator() {
 		return new Iterator<Number>() {

@@ -32,9 +32,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -68,13 +68,14 @@ final class UpdateTask implements ActionListener {
 		data.add(time, memUsedPercentage);
 		data.remove(0);
 
-		Statistics stats = data.getStatistics();
+		Column col1 = data.getColumn(0);
 		plot.getAxis(Axis.X).setRange(
-				stats.get(Statistics.MIN, Orientation.VERTICAL, 0),
-				stats.get(Statistics.MAX, Orientation.VERTICAL, 0));
+				col1.getStatistics(Statistics.MIN),
+				col1.getStatistics(Statistics.MAX));
+		//Column col2 = data.getColumn(1);
 		//plot.getAxis(Axis.Y).setRange(
-		//		stats.get(Statistics.MIN, Orientation.VERTICAL, 1),
-		//		stats.get(Statistics.MAX, Orientation.VERTICAL, 1));
+		//		col2.getStatistics(Statistics.MIN),
+		//		col2.getStatistics(Statistics.MAX));
 
 		component.repaint();
 	}

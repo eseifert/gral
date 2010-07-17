@@ -25,17 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract class that represents a view on several rows of a DataSource.
+ * Abstract class that represents a view on several rows of a data source.
  */
-public abstract class DataSubset extends AbstractDataSource implements DataListener {
+public abstract class RowSubset extends AbstractDataSource implements DataListener {
 	private final DataSource original;
 	private final List<Integer> accepted;
 
 	/**
-	 * Creates a new DataSubset object with the specified DataSource
+	 * Creates a new instance with the specified data source
 	 * @param original DataSource to be filtered.
 	 */
-	public DataSubset(DataSource original) {
+	public RowSubset(DataSource original) {
 		accepted = new ArrayList<Integer>();
 		this.original = original;
 		this.original.addDataListener(this);

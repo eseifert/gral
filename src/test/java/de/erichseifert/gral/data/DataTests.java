@@ -33,7 +33,7 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 @Suite.SuiteClasses({
 	DataTableTest.class,
 	DataSeriesTest.class,
-	DataSubsetTest.class,
+	RowSubsetTest.class,
 	DummyDataTest.class,
 	DataAccessorTest.class,
 	ComparatorTest.class,

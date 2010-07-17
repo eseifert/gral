@@ -27,10 +27,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class DataSubsetTest {
+public class RowSubsetTest {
 	private static final double DELTA = 1e-15;
 	private static DataTable table;
-	private DataSubset data;
+	private RowSubset data;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -47,7 +47,7 @@ public class DataSubsetTest {
 
 	@Before
 	public void setUp() {
-		data = new DataSubset(table) {
+		data = new RowSubset(table) {
 			@Override
 			public boolean accept(Row row) {
 				return (row.get(0).doubleValue() % 2.0) == 0.0;

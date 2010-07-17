@@ -40,12 +40,12 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
+import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisListener;
@@ -463,15 +463,14 @@ public class XYPlot extends Plot implements DataListener  {
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		final int colX = 0;
-		final int colY = 1;
+		Column colX = data.getColumn(0);
+		Column colY = data.getColumn(1);
 		for (DataSource s : this.data) {
-			Statistics stats = s.getStatistics();
 			// Set the minimal and maximal value of the axes
-			minX = Math.min(minX, stats.get(Statistics.MIN, Orientation.VERTICAL, colX));
-			maxX = Math.max(maxX, stats.get(Statistics.MAX, Orientation.VERTICAL, colX));
-			minY = Math.min(minY, stats.get(Statistics.MIN, Orientation.VERTICAL, colY));
-			maxY = Math.max(maxY, stats.get(Statistics.MAX, Orientation.VERTICAL, colY));
+			minX = Math.min(minX, colX.getStatistics(Statistics.MIN));
+			maxX = Math.max(maxX, colX.getStatistics(Statistics.MAX));
+			minY = Math.min(minY, colY.getStatistics(Statistics.MIN));
+			maxY = Math.max(maxY, colY.getStatistics(Statistics.MAX));
 		}
 	}
 
