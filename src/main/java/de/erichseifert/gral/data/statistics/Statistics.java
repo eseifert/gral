@@ -147,7 +147,7 @@ public class Statistics implements DataListener {
 	 */
 	public double get(String key, Orientation orientation, int index) {
 		ArrayList<Map<String, Double>> statsList = statisticsCols;
-		if ((orientation == Orientation.HORIZONTAL)) {
+		if (orientation == Orientation.HORIZONTAL) {
 			 statsList = statisticsRows;
 		}
 		Map<String, Double> stats = statsList.get(index);

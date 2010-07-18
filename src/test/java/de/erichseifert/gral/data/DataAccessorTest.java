@@ -29,7 +29,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.data.statistics.Statistics;
+
 public class DataAccessorTest {
+	private static final double DELTA = 1e-10;
 	private static DataTable table;
 
 	@BeforeClass
@@ -130,6 +133,21 @@ public class DataAccessorTest {
 		assertNotNull(col1.toString());
 		assertFalse(col1.toString().isEmpty());
 		assertEquals(col1.toString(), col2.toString());
+	}
+
+	@Test
+	public void testStatistics() {
+		Row row1 = new Row(table, 1);
+		assertEquals( 2.0, row1.getStatistics(Statistics.N),   DELTA);
+		assertEquals( 2.0, row1.getStatistics(Statistics.MIN), DELTA);
+		assertEquals( 3.0, row1.getStatistics(Statistics.MAX), DELTA);
+		assertEquals( 5.0, row1.getStatistics(Statistics.SUM), DELTA);
+
+		Column col1 = new Column(table, 1);
+		assertEquals( 8.0, col1.getStatistics(Statistics.N),   DELTA);
+		assertEquals( 1.0, col1.getStatistics(Statistics.MIN), DELTA);
+		assertEquals(11.0, col1.getStatistics(Statistics.MAX), DELTA);
+		assertEquals(44.0, col1.getStatistics(Statistics.SUM), DELTA);
 	}
 
 }

@@ -113,7 +113,11 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 					row = rowLast - mod;
 				}
 			} else if (Mode.CIRCULAR.equals(mode)) {
-				row = Math.abs(row) % (rowLast + 1);
+				if (row >= 0) {
+					row = row % (rowLast + 1);
+				} else {
+					row = (row + 1) % (rowLast + 1) + rowLast;
+				}
 			}
 		}
 		return original.get(col, row);
@@ -168,6 +172,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 			throw new IllegalArgumentException("Can't set value in unfiltered column.");
 		}
 		data.get(row)[colPos] = value;
+		notifyDataChanged();
 	}
 
 	@Override

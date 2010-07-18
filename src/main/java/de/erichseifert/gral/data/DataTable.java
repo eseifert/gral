@@ -140,7 +140,10 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public Number set(int col, int row, Number value) {
 		Number old = get(col, row);
-		rows.get(row)[col] = value;
+		if (!old.equals(value)) {
+			rows.get(row)[col] = value;
+			notifyDataChanged();
+		}
 		return old;
 	}
 

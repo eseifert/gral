@@ -174,6 +174,7 @@
             <configuration>
                 <instrumentation>
                     <excludes>
+                        <exclude>**/package-info.java</exclude>
                         <exclude>de/erichseifert/gral/examples/**/*</exclude>
                     </excludes>
                 </instrumentation>

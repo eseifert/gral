@@ -463,10 +463,10 @@ public class XYPlot extends Plot implements DataListener  {
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		Column colX = data.getColumn(0);
-		Column colY = data.getColumn(1);
 		for (DataSource s : this.data) {
 			// Set the minimal and maximal value of the axes
+			Column colX = s.getColumn(0);
+			Column colY = s.getColumn(1);
 			minX = Math.min(minX, colX.getStatistics(Statistics.MIN));
 			maxX = Math.max(maxX, colX.getStatistics(Statistics.MAX));
 			minY = Math.min(minY, colY.getStatistics(Statistics.MIN));

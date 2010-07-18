@@ -43,7 +43,9 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
-
+/**
+ * Example that shows how to use convultion filtering.
+ */
 public class ConvolutionExample extends JFrame {
 
 	public ConvolutionExample() {
@@ -60,7 +62,6 @@ public class ConvolutionExample extends JFrame {
 
 		final double KERNEL_VARIANCE = 5.0;
 
-		//*
 		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
 		Filter dataLowpass = new Convolution(data, kernelLowpass, Filter.Mode.REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
@@ -73,7 +74,6 @@ public class ConvolutionExample extends JFrame {
 		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
 		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter.Mode.OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
-		//*/
 
 		int kernelMovingMedianSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, kernelMovingMedianSize - 1, Filter.Mode.OMIT, 1);
@@ -86,7 +86,6 @@ public class ConvolutionExample extends JFrame {
 		lineData.setSetting(DefaultLineRenderer2D.COLOR, new Color(0f, 0f, 0f));
 		plot.setLineRenderer(ds, lineData);
 
-		//*
 		plot.setPointRenderer(dsLowpass, null);
 		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
 		lineLowpass.setSetting(DefaultLineRenderer2D.COLOR, new Color(1.0f, 0.2f, 0.0f));
@@ -101,7 +100,6 @@ public class ConvolutionExample extends JFrame {
 		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
 		lineMovingAverage.setSetting(DefaultLineRenderer2D.COLOR, new Color(0f, 0.67f, 0f));
 		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
-		//*/
 
 		plot.setPointRenderer(dsMovingMedian, null);
 		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();

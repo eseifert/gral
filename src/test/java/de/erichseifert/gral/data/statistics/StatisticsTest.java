@@ -23,7 +23,7 @@ package de.erichseifert.gral.data.statistics;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
@@ -31,11 +31,11 @@ import de.erichseifert.gral.data.statistics.Statistics.Orientation;
 
 public class StatisticsTest {
 	private static final double DELTA = 1e-10;
-	private static DataTable table;
-	private static Statistics stats;
+	private DataTable table;
+	private Statistics stats;
 
-	@BeforeClass
-	public static void setUpBeforeClass() {
+	@Before
+	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(0, 1, 2); // 0
 		table.add(1, 3, 3); // 1
@@ -178,4 +178,28 @@ public class StatisticsTest {
 		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 1), DELTA);
 		assertEquals(5.5, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 2), DELTA);
 	}
+
+	@Test
+	public void testDataUpdate() {
+		// Modify table data to cause update
+		table.add(24, -11, 42);
+		table.set(1, 1, -42);
+
+		// Check statistics
+		assertEquals( 27.0, stats.get(Statistics.N),   DELTA);
+		assertEquals(-42.0, stats.get(Statistics.MIN), DELTA);
+		assertEquals( 42.0, stats.get(Statistics.MAX), DELTA);
+		assertEquals( 95.0, stats.get(Statistics.SUM), DELTA);
+		// Horizontal
+		assertEquals(  3.0, stats.get(Statistics.N,   Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(-42.0, stats.get(Statistics.MIN, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  3.0, stats.get(Statistics.MAX, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(-38.0, stats.get(Statistics.SUM, Orientation.HORIZONTAL, 1), DELTA);
+		// Vertical
+		assertEquals(  9.0, stats.get(Statistics.N,   Orientation.VERTICAL, 1), DELTA);
+		assertEquals(-42.0, stats.get(Statistics.MIN, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(  9.0, stats.get(Statistics.MAX, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(-32.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 1), DELTA);
+	}
+
 }

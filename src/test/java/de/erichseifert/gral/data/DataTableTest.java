@@ -64,6 +64,19 @@ public class DataTableTest {
 	}
 
 	@Test
+	public void testSet() {
+		table.set(1, 2, -1);
+		assertEquals(-1, table.get(1, 2));
+
+		// Illegal column index
+		try {
+			table.set(2, 0, 1);
+			fail("Expected IndexOutOfBoundsException exception.");
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	@Test
 	public void testRemove() {
 		table.remove(0);
 
