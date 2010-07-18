@@ -90,7 +90,7 @@ public class ImageReader extends AbstractDataReader {
 	public DataSource read(InputStream input, Class<? extends Number>... types)
 			throws IOException, ParseException {
 		BufferedImage image = ImageIO.read(input);
-		
+
 		int w = image.getWidth();
 		int h = image.getHeight();
 
@@ -98,9 +98,9 @@ public class ImageReader extends AbstractDataReader {
 		Arrays.fill(colTypes, Double.class);
 		DataTable data = new DataTable(colTypes);
 
-		double factor = this.<Double>getSetting("factor");
-		double offset = this.<Double>getSetting("offset");
-		
+		double factor = this.<Number>getSetting("factor").doubleValue();
+		double offset = this.<Number>getSetting("offset").doubleValue();
+
 		int[] pixelData = new int[w];
 		Double[] rowData = new Double[w];
 		for (int y = 0; y < h; y++) {

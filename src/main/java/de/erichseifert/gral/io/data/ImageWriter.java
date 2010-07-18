@@ -90,8 +90,8 @@ public class ImageWriter extends AbstractDataWriter {
 		int w = data.getColumnCount();
 		int h = data.getRowCount();
 
-		double factor = this.<Double>getSetting("factor");
-		double offset = this.<Double>getSetting("offset");
+		double factor = this.<Number>getSetting("factor").doubleValue();
+		double offset = this.<Number>getSetting("offset").doubleValue();
 
 		byte[] pixelData = new byte[w*h];
 		int pos = 0;

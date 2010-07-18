@@ -148,10 +148,10 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
             row should be kept in the subset.</para>
 
             <example xml:id="example.data.filter.subset">
-                <title>Filtering rows with <classname>DataSubset</classname></title>
+                <title>Filtering rows with <classname>RowSubset</classname></title>
                 <programlisting language="java"><![CDATA[
 // Keep only rows where the first column has an even value
-DataSubset data = new DataSubset(table) {
+RowSubset data = new RowSubset(table) {
     @Override
     public boolean accept(Row row) {
         return (row.get(0).doubleValue() % 2.0) == 0.0;
@@ -185,53 +185,65 @@ DataSubset data = new DataSubset(table) {
             <example xml:id="example.data.processing.stats.max">
                 <title>Getting the maximum of a column</title>
                 <programlisting language="java"><![CDATA[
-// Get the maximum for column 1
-Statistics stats = table.getStatistics();
-stats.get(Statistics.MAX, 1);
+// Get the maximum for the second column
+double max = table.getColumn(1).getStatistics(Statistics.MAX);
 ]]></programlisting>
             </example>
 
             <variablelist>
-                <title>Statistical measures provided by <classname>Statistics</classname></title>
+                <title>Statistical measures provided by
+                    <classname>Statistics</classname></title>
                 <varlistentry>
                     <term><constant>N</constant></term>
-                    <listitem><para>The number of values in the column.</para></listitem>
+                    <listitem><para>The number of values in the column.
+                        </para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>SUM</constant></term>
-                    <listitem><para>The sum of all column values.</para></listitem>
+                    <listitem><para>The sum of all column values.
+                        </para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>MIN</constant></term>
-                    <listitem><para>The smallest value of the column.</para></listitem>
+                    <listitem><para>The smallest value of the column.
+                        </para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>MAX</constant></term>
-                    <listitem><para>The largest value of the column.</para></listitem>
+                    <listitem><para>The largest value of the column.
+                        </para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>MEAN</constant></term>
-                    <listitem><para>The arithmetic mean describing the average value of the column.</para></listitem>
+                    <listitem><para>The arithmetic mean describing the average
+                        value of the column.</para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>MEAN_DEVIATION</constant></term>
-                    <listitem><para>The mean deviation describing the dispersion of the column's values.</para></listitem>
+                    <listitem><para>The mean deviation describing the
+                        dispersion of the column's values.</para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>MEDIAN</constant></term>
-                    <listitem><para>The median value which divides the column values in two equal halves.</para></listitem>
+                    <listitem><para>The median value which divides the column
+                        values in two equal halves.</para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>VARIANCE</constant></term>
-                    <listitem><para>The variance value describing the dispersion of the column's values.</para></listitem>
+                    <listitem><para>The variance value describing the
+                        dispersion of the column's values.</para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>SKEWNESS</constant></term>
-                    <listitem><para>The skewness value describing the asymmetry of the probability distribution of the column's values.</para></listitem>
+                    <listitem><para>The skewness value describing the asymmetry
+                        of the probability distribution of the column's values.
+                        </para></listitem>
                 </varlistentry>
                 <varlistentry>
                     <term><constant>KURTOSIS</constant></term>
-                    <listitem><para>The kurtosis value describing the "peakedness" of the probability distribution of the column's values.</para></listitem>
+                    <listitem><para>The kurtosis value describing the
+                        "peakedness" of the probability distribution of the
+                        column's values.</para></listitem>
                 </varlistentry>
             </variablelist>
 
@@ -248,7 +260,7 @@ stats.get(Statistics.MAX, 1);
                 <title>Generating an equally spaced histogram</title>
                 <programlisting language="java"><![CDATA[
 // Use 4 equally spaced breaks
-Histogram histogram = new Histogram(table, 4);
+Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL, 4);
 ]]></programlisting>
             </example>
 
@@ -258,14 +270,15 @@ Histogram histogram = new Histogram(table, 4);
 // Use custom breaks for each column
 Number[] breaksCol1 = {1.0, 2.0, 3.0, 4.0, 5.0};
 Number[] breaksCol2 = {1.0, 3.0, 5.0, 7.0, 9.0};
-Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
+Histogram histogram = new Histogram1D(table, Statistics.Orientation.VERTICAL,
+    breaksCol1, breaksCol2);
 ]]></programlisting>
             </example>
         </sect2>
 
         <sect2 xml:id="data.processing.convolution">
             <title>Convolution</title>
-            
+
             <para>Often, it is necessary to change existing data by smoothing
             it, so that noise or fine-scale structures are reduced. Another
             frequent use case is to boost or extract exactly those fine-scale
@@ -290,7 +303,7 @@ Histogram histogram = new Histogram(table, breaksCol1, breaksCol2);
 // Create a moving average of width 3
 Kernel kernel = new Kernel(1.0, 1.0, 1.0).normalize();
 // Filter columns 0 and 1 and omit boundary values if necessary
-Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1);
+Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
 ]]></programlisting>
             </example>
 
@@ -299,8 +312,8 @@ Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_OMIT, 0, 1)
                 <programlisting language="java"><![CDATA[
 // Create a smoothing kernel with a variance of 2
 Kernel kernel = KernelUtils.getBinomial(2.0).normalize();
-// Filter column 1 and repeat boundary values if necessary
-Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
+// Filter column 1 and start over for boundary values if necessary
+Convolution filter = new Convolution(table, kernel, Filter.Mode.CIRCULAR, 1);
 ]]></programlisting>
             </example>
 
@@ -312,7 +325,7 @@ Kernel kernel = KernelUtils.getBinomial(3.0).normalize()
 // Subtract the original values
 kernel = kernel.negate().add(new Kernel(1.0));
 // Filter column 1 and repeat boundary values if necessary
-Convolution filter = new Convolution(table, kernel, Filter.Mode.MODE_REPEAT, 1);
+Convolution filter = new Convolution(table, kernel, Filter.Mode.REPEAT, 1);
 ]]></programlisting>
             </example>
         </sect2>
@@ -350,6 +363,17 @@ InputStream file = new FileInputStream("foobar.csv");
 DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
 ]]></programlisting>
             </example>
+
+           <example xml:id="example.data.exchange.import">
+                <title>Importing the values of a grayscale image</title>
+                <programlisting language="java"><![CDATA[
+DataReader reader = DataReaderFactory.getInstance().get("image/png");
+reader.setSetting("factor", 1.0/255.0);
+reader.setSetting("offset", 1);
+InputStream file = new FileInputStream("foobar.png");
+DataSource data = reader.read(file);
+]]></programlisting>
+            </example>
         </sect2>
 
         <sect2 xml:id="data.exchange.export">
@@ -370,6 +394,17 @@ DataSource data = reader.read(file, Integer.class, Double.class, Double.class);
                 <programlisting language="java"><![CDATA[
 DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 FileOutputStream file = new FileOutputStream("foobar.csv");
+writer.write(table, file);
+]]></programlisting>
+            </example>
+
+            <example xml:id="example.data.exchange.export">
+                <title>Exporting a <acronym>PNG</acronym> image</title>
+                <programlisting language="java"><![CDATA[
+DataWriter writer = DataWriterFactory.getInstance().get("image/png");
+writer.setSetting("factor",  255);
+writer.setSetting("offset", -255);
+FileOutputStream file = new FileOutputStream("foobar.png");
 writer.write(table, file);
 ]]></programlisting>
             </example>
@@ -591,7 +626,7 @@ legend.setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
             <example xml:id="example.plotting.custom.axis.spacing">
                 <title>Changing the spacing of tick marks</title>
                 <programlisting language="java"><![CDATA[
-AxisRenderer axisRendererX = plot.getSetting(XYPlot.AXIS_X_RENDERER);
+AxisRenderer axisRendererX = plot.getAxisRenderer(Axis.X);
 axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 ]]></programlisting>
             </example>
@@ -610,7 +645,7 @@ axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 XYPlot plot = new XYPlot(seriesLog, seriesLin);
 AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
 axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic data");
-plot.setSetting(XYPlot.AXIS_X_RENDERER, axisRendererX);
+plot.setAxisRenderer(Axis.X, axisRendererX);
 ]]></programlisting>
             </example>
 
@@ -643,13 +678,13 @@ axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
         <sect2 xml:id="plotting.custom.line">
             <title>Customizing lines</title>
 
-            <para><classname>LineRenderer2D</classname>, stroke types, colors, ...</para>
+            <para><classname>LineRenderer</classname>, stroke types, colors, ...</para>
         </sect2>
 
         <sect2 xml:id="plotting.custom.area">
             <title>Customizing areas</title>
 
-            <para><classname>AreaRenderer2D</classname>, colors, fillings, ...</para>
+            <para><classname>AreaRenderer</classname>, colors, fillings, ...</para>
         </sect2>
 
         <sect2 xml:id="plotting.export">
@@ -847,8 +882,8 @@ public class MyWriter extends IOCapabilitiesStorage implements DataWriter {
         <itemizedlist>
             <listitem><para>Currently, only numbers are allowed in
                 <interfacename>DataSource</interfacename>s</para></listitem>
-            <listitem><para>It's not overly fast for large data sets</para></listitem>
-            <listitem><para>Despite many units it still has some bugs</para></listitem>
+            <listitem><para>It is not very fast for larger data sets</para></listitem>
+            <listitem><para>Despite we try our best to ensure code quality it still has some bugs</para></listitem>
         </itemizedlist>
     </para>
 </chapter>
