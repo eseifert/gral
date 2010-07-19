@@ -225,7 +225,7 @@ public class XYPlot extends Plot implements DataListener  {
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 
 			// Paint points and lines
-			for (DataSource s : plot.getData()) {
+			for (DataSource s : plot.getVisibleData()) {
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
 				LineRenderer lineRenderer = plot.getLineRenderer(s);
 				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
@@ -463,7 +463,7 @@ public class XYPlot extends Plot implements DataListener  {
 		maxX = -Double.MAX_VALUE;
 		minY =  Double.MAX_VALUE;
 		maxY = -Double.MAX_VALUE;
-		for (DataSource s : this.data) {
+		for (DataSource s : getVisibleData()) {
 			// Set the minimal and maximal value of the axes
 			Column colX = s.getColumn(0);
 			Column colY = s.getColumn(1);
@@ -539,5 +539,11 @@ public class XYPlot extends Plot implements DataListener  {
 			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
 		}
 		super.setAxisRenderer(axis, renderer);
+	}
+
+	@Override
+	public void setVisible(DataSource source, boolean visible) {
+		super.setVisible(source, visible);
+		dataChanged(source);
 	}
 }

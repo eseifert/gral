@@ -30,9 +30,11 @@ import java.awt.Stroke;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.erichseifert.gral.Container;
 import de.erichseifert.gral.Drawable;
@@ -91,6 +93,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	/** Data sources. */
 	protected final List<DataSource> data;
+	private final Set<DataSource> visibleData;
 
 	private final Map<String, Axis> axes;
 	private final Map<Axis, AxisRenderer> axisRenderers;
@@ -114,6 +117,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
 
+		visibleData = new HashSet<DataSource>();
+
 		axes = new HashMap<String, Axis>();
 		axisRenderers = new HashMap<Axis, AxisRenderer>();
 		axisDrawables = new HashMap<Axis, Drawable>();
@@ -121,6 +126,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		this.data = new LinkedList<DataSource>();
 		for (DataSource source : data) {
 			this.data.add(source);
+			visibleData.add(source);
 		}
 
 		settings = new Settings(this);
@@ -392,4 +398,40 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		return Collections.unmodifiableList(data);
 	}
 
+	/**
+	 * Returns a list of all visible data sources stored in the plot.
+	 * @return List of all visible data sources.
+	 */
+	public List<DataSource> getVisibleData() {
+		List<DataSource> visible = new LinkedList<DataSource>();
+		for (DataSource s : data) {
+			if (visibleData.contains(s)) {
+				visible.add(s);
+			}
+		}
+		return visible;
+	}
+
+	/**
+	 * Returns whether the specified data source is drawn.
+	 * @param source Data source.
+	 * @return <code>true</code> if visible, <code>false</code> otherwise.
+	 */
+	public boolean isVisible(DataSource source) {
+		return visibleData.contains(source);
+	}
+
+	/**
+	 * Changes the visibility of the specified data source to the specified
+	 * value.
+	 * @param source Data source.
+	 * @param visible <code>true</code> if visible, <code>false</code> otherwise.
+	 */
+	public void setVisible(DataSource source, boolean visible) {
+		if (visible) {
+			visibleData.add(source);
+		} else {
+			visibleData.remove(source);
+		}
+	}
 }
