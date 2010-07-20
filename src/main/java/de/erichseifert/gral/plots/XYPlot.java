@@ -41,7 +41,6 @@ import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.Column;
-import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
@@ -64,7 +63,7 @@ import de.erichseifert.gral.util.Settings.Key;
 /**
  * Class that displays data in an XY-Plot.
  */
-public class XYPlot extends Plot implements DataListener  {
+public class XYPlot extends Plot  {
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -357,8 +356,6 @@ public class XYPlot extends Plot implements DataListener  {
 		for (DataSource source : data) {
 			getLegend().add(source);
 			setPointRenderer(source, pointRendererDefault);
-			source.addDataListener(this);
-			dataChanged(source);
 		}
 
 		// Create axes
@@ -425,24 +422,30 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 
 		// Set bounds with new axis shapes
-		if (axisXComp != null && axisXRenderer != null) {
-			Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
-			Point2D axisXPos = axisYRenderer.getPosition(
-					axisY, axisXIntersection, false, false).getPoint2D();
-			axisXComp.setBounds(
-				plotBounds.getMinX(), axisXPos.getY() + plotBounds.getMinY(),
-				plotBounds.getWidth(), axisXSize.getHeight()
-			);
-		}
+		if (axisXRenderer != null && axisYRenderer != null) {
+			if (axisXComp != null) {
+				Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
+				PointND<Double> axisXPos = axisYRenderer.getPosition(
+						axisY, axisXIntersection, false, false);
+				if (axisXPos != null) {
+					axisXComp.setBounds(
+						plotBounds.getMinX(), axisXPos.get(1) + plotBounds.getMinY(),
+						plotBounds.getWidth(), axisXSize.getHeight()
+					);
+				}
+			}
 
-		if (axisYComp != null && axisYRenderer != null) {
-			Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
-			Point2D axisYPos = axisXRenderer.getPosition(
-					axisX, axisYIntersection, false, false).getPoint2D();
-			axisYComp.setBounds(
-				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.getX(), plotBounds.getMinY(),
-				axisYSize.getWidth(), plotBounds.getHeight()
-			);
+			if (axisYComp != null) {
+				Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
+				PointND<Double> axisYPos = axisXRenderer.getPosition(
+						axisX, axisYIntersection, false, false);
+				if (axisYPos != null) {
+					axisYComp.setBounds(
+						plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0), plotBounds.getMinY(),
+						axisYSize.getWidth(), plotBounds.getHeight()
+					);
+				}
+			}
 		}
 	}
 
@@ -455,23 +458,6 @@ public class XYPlot extends Plot implements DataListener  {
 		}
 		Rectangle2D plotBounds = getPlotArea().getBounds();
 		getLegendContainer().setBounds(plotBounds);
-	}
-
-	@Override
-	public void dataChanged(DataSource data) {
-		minX =  Double.MAX_VALUE;
-		maxX = -Double.MAX_VALUE;
-		minY =  Double.MAX_VALUE;
-		maxY = -Double.MAX_VALUE;
-		for (DataSource s : getVisibleData()) {
-			// Set the minimal and maximal value of the axes
-			Column colX = s.getColumn(0);
-			Column colY = s.getColumn(1);
-			minX = Math.min(minX, colX.getStatistics(Statistics.MIN));
-			maxX = Math.max(maxX, colX.getStatistics(Statistics.MAX));
-			minY = Math.min(minY, colY.getStatistics(Statistics.MIN));
-			maxY = Math.max(maxY, colY.getStatistics(Statistics.MAX));
-		}
 	}
 
 	/**
@@ -542,8 +528,21 @@ public class XYPlot extends Plot implements DataListener  {
 	}
 
 	@Override
-	public void setVisible(DataSource source, boolean visible) {
-		super.setVisible(source, visible);
-		dataChanged(source);
+	public void refresh() {
+		super.refresh();
+
+		minX =  Double.MAX_VALUE;
+		maxX = -Double.MAX_VALUE;
+		minY =  Double.MAX_VALUE;
+		maxY = -Double.MAX_VALUE;
+		for (DataSource s : getVisibleData()) {
+			// Set the minimal and maximal value of the axes
+			Column colX = s.getColumn(0);
+			Column colY = s.getColumn(1);
+			minX = Math.min(minX, colX.getStatistics(Statistics.MIN));
+			maxX = Math.max(maxX, colX.getStatistics(Statistics.MAX));
+			minY = Math.min(minY, colY.getStatistics(Statistics.MIN));
+			maxY = Math.max(maxY, colY.getStatistics(Statistics.MAX));
+		}
 	}
 }

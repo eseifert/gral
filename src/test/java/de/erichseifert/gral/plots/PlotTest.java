@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -31,6 +32,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,19 +41,38 @@ import org.junit.Test;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataSeries;
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.util.Insets2D;
 
 public class PlotTest {
 	private static final double DELTA = 1e-15;
+	private static DataTable table;
 	private static DataSeries series1, series2;
-	private Plot plot;
-	private boolean isDrawn;
+	private MockPlot plot;
+
+	private static class MockPlot extends Plot  {
+		public boolean drawn;
+
+		public MockPlot(DataSource... data) {
+			super(data);
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			super.draw(context);
+			drawn = true;
+		}
+
+		public boolean isDrawn() {
+			return drawn;
+		}
+	}
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		DataTable table = new DataTable(Integer.class, Integer.class, Integer.class);
+		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0
 		table.add(2, 8, 2); // 1
 		table.add(3, 5, 6); // 2
@@ -67,13 +88,7 @@ public class PlotTest {
 
 	@Before
 	public void setUp() {
-		plot = new Plot(series1, series2) {
-			@Override
-			public void draw(DrawingContext context) {
-				super.draw(context);
-				isDrawn = true;
-			}
-		};
+		plot = new MockPlot(series1, series2);
 	}
 
 	@Test
@@ -159,7 +174,93 @@ public class PlotTest {
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
-		assertTrue(isDrawn);
+		assertTrue(plot.isDrawn());
 	}
 
+	@Test
+	public void testDataContains() {
+		// Series
+		assertTrue(plot.contains(series1));
+		assertTrue(plot.contains(series2));
+
+		// Complete data
+		List<DataSource> data = plot.getData();
+		assertEquals(2, data.size());
+		assertEquals(series1, data.get(0));
+		assertEquals(series2, data.get(1));
+	}
+
+	@Test
+	public void testDataClear() {
+		plot.clear();
+		assertEquals(0, plot.getData().size());
+	}
+
+	@Test
+	public void testDataGet() {
+		assertEquals(series1, plot.get(0));
+		assertEquals(series2, plot.get(1));
+	}
+
+	@Test
+	public void testDataRemove() {
+		int sizeBefore = 0, size = 0;
+
+		// Remove
+		sizeBefore = plot.getData().size();
+		plot.remove(series1);
+		size = plot.getData().size();
+		assertEquals(sizeBefore -1, size);
+		assertEquals(series2, plot.get(0));
+
+		// Clear
+		plot.clear();
+		assertEquals(0, plot.getData().size());
+	}
+
+	@Test
+	public void testDataAdd() {
+		int sizeBefore = 0, size = 0;
+
+		// Append
+		DataSeries series3 = new DataSeries("series3", table, 0, 2);
+		sizeBefore = plot.getData().size();
+		plot.add(series3);
+		size = plot.getData().size();
+		assertEquals(sizeBefore + 1, size);
+		assertEquals(series3, plot.get(size - 1));
+
+		// Insert
+		DataSeries series4 = new DataSeries("series4", table, 0);
+		sizeBefore = plot.getData().size();
+		plot.add(0, series4, false);
+		size = plot.getData().size();
+		assertEquals(sizeBefore + 1, size);
+		assertEquals(series4, plot.get(0));
+		assertFalse(plot.isVisible(series4));
+	}
+
+	@Test
+	public void testDataVisibility() {
+		// get
+		assertTrue(plot.isVisible(series1));
+		assertTrue(plot.isVisible(series2));
+
+		// set
+		plot.setVisible(series1, false);
+		assertFalse(plot.isVisible(series1));
+		plot.setVisible(series1, true);
+		assertTrue(plot.isVisible(series1));
+
+		// get all
+		List<DataSource> all = plot.getData();
+		List<DataSource> visible = plot.getVisibleData();
+		assertEquals(all.size(), visible.size());
+		for (int i = 0; i < all.size(); i++) {
+			assertEquals(all.get(i), all.get(i));
+		}
+		plot.setVisible(series1, false);
+		assertEquals(visible.size() - 1, plot.getVisibleData().size());
+		assertEquals(all.get(1), plot.getVisibleData().get(0));
+	}
 }

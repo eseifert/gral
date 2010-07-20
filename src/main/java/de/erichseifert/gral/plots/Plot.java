@@ -44,6 +44,7 @@ import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.DrawableConstants.Location;
+import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -66,7 +67,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * <li>Administration of settings</li>
  * </ul>
  */
-public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener {
+public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener, DataListener {
 	/** Key for specifying the {@link java.lang.String} instance for the title
 	of the plot. */
 	public static final Key TITLE = new Key("plot.title");
@@ -93,7 +94,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 	/** Data sources. */
 	protected final List<DataSource> data;
-	private final Set<DataSource> visibleData;
+	private final Set<DataSource> dataVisible;
 
 	private final Map<String, Axis> axes;
 	private final Map<Axis, AxisRenderer> axisRenderers;
@@ -105,11 +106,11 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private Legend legend;
 
 	/**
-	 * Creates a new <code>Plot</code> object with the specified
-	 * <code>DataSource</code> objects.
-	 * @param data Data to be displayed.
+	 * Initializes a new <code>Plot</code> instance with the specified data
+	 * series. The series will be visible by default.
+	 * @param series Initial data series to be displayed.
 	 */
-	public Plot(DataSource... data) {
+	public Plot(DataSource... series) {
 		super(new EdgeLayout(20.0, 20.0));
 
 		title = new Label("");
@@ -117,16 +118,15 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
 
-		visibleData = new HashSet<DataSource>();
+		dataVisible = new HashSet<DataSource>();
 
 		axes = new HashMap<String, Axis>();
 		axisRenderers = new HashMap<Axis, AxisRenderer>();
 		axisDrawables = new HashMap<Axis, Drawable>();
 
-		this.data = new LinkedList<DataSource>();
-		for (DataSource source : data) {
-			this.data.add(source);
-			visibleData.add(source);
+		data = new LinkedList<DataSource>();
+		for (DataSource source : series) {
+			add(source);
 		}
 
 		settings = new Settings(this);
@@ -391,21 +391,96 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Returns a list of all data sources stored in the plot.
-	 * @return List of all data sources.
+	 * Adds a new data series to the plot which is visible by default.
+	 * @param source Data series.
+	 */
+	public void add(DataSource source) {
+		add(source, true);
+	}
+
+	/**
+	 * Adds a new data series to the plot.
+	 * @param source Data series.
+	 * @param visible <code>true</code> if the series should be displayed, <code>false</code> otherwise.
+	 */
+	public void add(DataSource source, boolean visible) {
+		add(data.size(), source, visible);
+	}
+
+	/**
+	 * Inserts the specified data series to the plot at a specified position.
+	 * @param index Position.
+	 * @param source Data series.
+	 * @param visible <code>true</code> if the series should be displayed, <code>false</code> otherwise.
+	 */
+	public void add(int index, DataSource source, boolean visible) {
+		data.add(index, source);
+		if (visible) {
+			dataVisible.add(source);
+		}
+		source.addDataListener(this);
+		refresh();
+	}
+
+	/**
+	 * Returns whether the plot contains the specified data series.
+	 * @param source Data series.
+	 * @return <code>true</code> if the specified element is stored in the plot, otherwise <code>false</code>
+	 */
+	public boolean contains(DataSource source) {
+		return data.contains(source);
+	}
+
+	/**
+	 * Returns the data series at a specified index.
+	 * @param index Position of the data series.
+	 * @return Instance of the data series.
+	 */
+	public DataSource get(int index) {
+		return data.get(index);
+	}
+
+	/**
+	 * Deletes the specified data series from the plot.
+	 * @param source Data series.
+	 * @return <code>true</code> if the series existed, otherwise <code>false</code>.
+	 */
+	public boolean remove(DataSource source) {
+		source.removeDataListener(this);
+		dataVisible.remove(source);
+		boolean existed = data.remove(source);
+		refresh();
+		return existed;
+	}
+
+	/**
+	 * Removes all data series from this plot.
+	 */
+	public void clear() {
+		dataVisible.clear();
+		for (DataSource source : data) {
+			source.removeDataListener(this);
+		}
+		data.clear();
+		refresh();
+	}
+
+	/**
+	 * Returns a list of all data series stored in the plot.
+	 * @return List of all data series.
 	 */
 	public List<DataSource> getData() {
 		return Collections.unmodifiableList(data);
 	}
 
 	/**
-	 * Returns a list of all visible data sources stored in the plot.
-	 * @return List of all visible data sources.
+	 * Returns a list of all visible data series stored in the plot.
+	 * @return List of all visible data series.
 	 */
 	public List<DataSource> getVisibleData() {
 		List<DataSource> visible = new LinkedList<DataSource>();
 		for (DataSource s : data) {
-			if (visibleData.contains(s)) {
+			if (dataVisible.contains(s)) {
 				visible.add(s);
 			}
 		}
@@ -413,25 +488,39 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Returns whether the specified data source is drawn.
-	 * @param source Data source.
+	 * Returns whether the specified data series is drawn.
+	 * @param source Data series.
 	 * @return <code>true</code> if visible, <code>false</code> otherwise.
 	 */
 	public boolean isVisible(DataSource source) {
-		return visibleData.contains(source);
+		return dataVisible.contains(source);
 	}
 
 	/**
-	 * Changes the visibility of the specified data source to the specified
-	 * value.
-	 * @param source Data source.
-	 * @param visible <code>true</code> if visible, <code>false</code> otherwise.
+	 * Changes the visibility of the specified data series.
+	 * @param source Data series.
+	 * @param visible <code>true</code> if the series should be visible, <code>false</code> otherwise.
 	 */
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {
-			visibleData.add(source);
+			if (dataVisible.add(source)) {
+				refresh();
+			}
 		} else {
-			visibleData.remove(source);
+			if (dataVisible.remove(source)) {
+				refresh();
+			}
 		}
+	}
+
+	@Override
+	public void dataChanged(DataSource data) {
+		refresh();
+	}
+
+	/**
+	 * Causes the plot data to be be updated.
+	 */
+	public void refresh() {
 	}
 }

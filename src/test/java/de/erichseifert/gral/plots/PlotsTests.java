@@ -43,7 +43,8 @@ import de.erichseifert.gral.plots.points.PointsTests;
 	PlotTest.class,
 	XYPlotTest.class,
 	PiePlotTest.class,
-	BarPlotTest.class
+	BarPlotTest.class,
+	PlotNavigatorTest.class
 })
 public class PlotsTests {
 }
