@@ -128,6 +128,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				}
 
 				Graphics2D graphics = context.getGraphics();
+
 				// Remember old state of Graphics2D instance
 				AffineTransform txOrig = graphics.getTransform();
 				graphics.translate(getX(), getY());
@@ -173,14 +174,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 						Point2D tickPoint = tick.getPosition().getPoint2D();
 						Point2D tickNormal = tick.getNormal().getPoint2D();
 
-						double tickLength =
-							AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
-						double tickAlignment =
-							AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
-						Paint tickPaint =
-							AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
-						Stroke tickStroke =
-							AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_STROKE);
+						double tickLength;
+						double tickAlignment;
+						Paint tickPaint;
+						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.getType())) {
 							tickLength =
 								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_LENGTH)*fontHeight;
@@ -190,6 +187,15 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_MINOR_COLOR);
 							tickStroke =
 								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
+						} else {
+							tickLength =
+								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
+							tickAlignment =
+								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+							tickPaint =
+								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
+							tickStroke =
+								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_STROKE);
 						}
 
 						double tickLengthInner = tickLength*tickAlignment;
@@ -347,7 +353,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		// Add major and minor ticks
 		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
 			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
-			boolean isMajor = (tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0;
+			boolean isMajor = (tickPositions.size() - initialTicksMinor) %
+					(ticksMinorCount + 1) == 0;
 			TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
 			Tick tick = getTick(tickType, axis, tickPositionWorld);
 			if (tick.getPosition() != null
@@ -360,9 +367,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		// Add custom ticks
 		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
-			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
-				Tick tick = getTick(TickType.CUSTOM, axis, entry.getKey());
-				ticks.add(tick);
+			for (double tickPositionWorld : labelsCustom.keySet()) {
+				if (tickPositionWorld >= min && tickPositionWorld <= max) {
+					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
+					ticks.add(tick);
+				}
 			}
 		}
 

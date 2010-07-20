@@ -234,8 +234,12 @@ public class XYPlot extends Plot  {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					PointND<Double> axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
-					PointND<Double> axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
+					PointND<Double> axisPosX = null;
+					PointND<Double> axisPosY = null;
+					if (axisXRenderer != null && axisYRenderer != null) {
+						axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+						axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
+					}
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
@@ -422,29 +426,37 @@ public class XYPlot extends Plot  {
 		}
 
 		// Set bounds with new axis shapes
-		if (axisXRenderer != null && axisYRenderer != null) {
-			if (axisXComp != null) {
+		if (axisXRenderer != null && axisXComp != null) {
+			PointND<Double> axisXPos = null;
+			if (axisYRenderer != null) {
 				Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
-				PointND<Double> axisXPos = axisYRenderer.getPosition(
+				axisXPos = axisYRenderer.getPosition(
 						axisY, axisXIntersection, false, false);
-				if (axisXPos != null) {
-					axisXComp.setBounds(
-						plotBounds.getMinX(), axisXPos.get(1) + plotBounds.getMinY(),
-						plotBounds.getWidth(), axisXSize.getHeight()
-					);
-				}
 			}
+			if (axisXPos != null) {
+				axisXComp.setBounds(
+					plotBounds.getMinX(),
+					axisXPos.get(1) + plotBounds.getMinY(),
+					plotBounds.getWidth(),
+					axisXSize.getHeight()
+				);
+			}
+		}
 
-			if (axisYComp != null) {
+		if (axisYRenderer != null && axisYComp != null) {
+			PointND<Double> axisYPos = null;
+			if (axisXRenderer != null) {
 				Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
-				PointND<Double> axisYPos = axisXRenderer.getPosition(
+				axisYPos = axisXRenderer.getPosition(
 						axisX, axisYIntersection, false, false);
-				if (axisYPos != null) {
-					axisYComp.setBounds(
-						plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0), plotBounds.getMinY(),
-						axisYSize.getWidth(), plotBounds.getHeight()
-					);
-				}
+			}
+			if (axisYPos != null) {
+				axisYComp.setBounds(
+					plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0),
+					plotBounds.getMinY(),
+					axisYSize.getWidth(),
+					plotBounds.getHeight()
+				);
 			}
 		}
 	}
@@ -520,7 +532,7 @@ public class XYPlot extends Plot  {
 
 	@Override
 	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
-		if (axis == getAxis(Axis.Y)) {
+		if ((renderer != null) && (axis == getAxis(Axis.Y))) {
 			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
 		}

@@ -129,9 +129,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		// Add custom ticks
 		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
-			for (Map.Entry<Double, String> entry : labelsCustom.entrySet()) {
-				Tick tick = getTick(TickType.CUSTOM, axis, entry.getKey());
-				ticks.add(tick);
+			for (double tickPositionWorld : labelsCustom.keySet()) {
+				if (tickPositionWorld >= min && tickPositionWorld <= max) {
+					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
+					ticks.add(tick);
+				}
 			}
 		}
 

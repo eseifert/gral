@@ -170,7 +170,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 */
 	protected void drawAxes(DrawingContext context) {
 		for (Drawable d : axisDrawables.values()) {
-			d.draw(context);
+			if (d != null) {
+				d.draw(context);
+			}
 		}
 	}
 
@@ -253,8 +255,14 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param renderer Instance to render the axis.
 	 */
 	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
-		axisRenderers.put(axis, renderer);
-		Drawable comp = renderer.getRendererComponent(axis);
+		Drawable comp = null;
+		if (renderer == null) {
+			axisRenderers.remove(axis);
+			
+		} else {
+			axisRenderers.put(axis, renderer);
+			comp = renderer.getRendererComponent(axis);
+		}
 		setAxisComponent(axis, comp);
 	}
 
@@ -283,7 +291,11 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param comp Instance that draws the axis.
 	 */
 	private void setAxisComponent(Axis axis, Drawable comp) {
-		axisDrawables.put(axis, comp);
+		if (comp == null) {
+			axisDrawables.remove(axis);
+		} else {
+			axisDrawables.put(axis, comp);
+		}
 	}
 
 	/**

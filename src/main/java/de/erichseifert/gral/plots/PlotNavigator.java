@@ -133,9 +133,14 @@ public class PlotNavigator {
 		infos = new HashMap<Axis, NavigationInfo>();
 		for (Axis axis : plot.getAxes()) {
 			AxisRenderer renderer = plot.getAxisRenderer(axis);
-			double min = renderer.worldToView(axis, axis.getMin(), false);
-			double max = renderer.worldToView(axis, axis.getMax(), false);
-			Number center = renderer.viewToWorld(axis, (min + max)/2.0, false);
+			double min = 0.0;
+			double max = 0.0;
+			Number center = 0.0;
+			if (renderer != null) {
+				min = renderer.worldToView(axis, axis.getMin(), false);
+				max = renderer.worldToView(axis, axis.getMax(), false);
+				center = renderer.viewToWorld(axis, (min + max)/2.0, false);
+			}
 			NavigationInfo info = new NavigationInfo(
 					axis.getMin(), axis.getMax(), center.doubleValue());
 			infos.put(axis, info);
@@ -148,6 +153,9 @@ public class PlotNavigator {
 		for (Entry<Axis, NavigationInfo> entry: infos.entrySet()) {
 			Axis axis = entry.getKey();
 			AxisRenderer renderer = plot.getAxisRenderer(axis);
+			if (renderer == null) {
+				continue;
+			}
 			NavigationInfo info = entry.getValue();
 
 			// Original range in screen units

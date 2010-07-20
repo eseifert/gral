@@ -267,22 +267,27 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 				Axis axisY = plot.getAxis(Axis.Y);
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
-
-				// Fetch current center on screen
-				double centerX = axisXRenderer.worldToView(
-					axisX, navigator.getCenter(axisX), true);
-				double centerY = axisYRenderer.worldToView(
-					axisY, navigator.getCenter(axisY), true);
-
-				// Move center and convert it to axis coordinates
-				Number centerXNew = axisXRenderer.viewToWorld(
-					axisX, centerX + dx, true);
-				Number centerYNew = axisYRenderer.viewToWorld(
-					axisY, centerY + dy, true);
-
-				// Change axes (world units)
-				navigator.setCenter(axisX, centerXNew);
-				navigator.setCenter(axisY, centerYNew);
+				
+				if (axisXRenderer != null) {
+					// Fetch current center on screen
+					double centerX = axisXRenderer.worldToView(
+							axisX, navigator.getCenter(axisX), true);
+					// Move center and convert it to axis coordinates
+					Number centerXNew = axisXRenderer.viewToWorld(
+							axisX, centerX + dx, true);
+					// Change axis (world units)
+					navigator.setCenter(axisX, centerXNew);
+				}
+				if (axisYRenderer != null) {
+					// Fetch current center on screen
+					double centerY = axisYRenderer.worldToView(
+						axisY, navigator.getCenter(axisY), true);
+					// Move center and convert it to axis coordinates
+					Number centerYNew = axisYRenderer.viewToWorld(
+						axisY, centerY + dy, true);
+					// Change axis (world units)
+					navigator.setCenter(axisY, centerYNew);
+				}
 
 				// Refresh display
 				if (e.getSource() instanceof Component) {
