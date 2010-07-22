@@ -77,9 +77,11 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		double axisYMin = axis.getMin().doubleValue();
 		double axisYMax = axis.getMax().doubleValue();
 		double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
-		double posYOrigin = axisRenderer.getPosition(
-				axis, axisYOrigin, true, false).get(PointND.Y);
-
+		double posYOrigin = 0.0;
+		if (axisRenderer != null) {
+			posYOrigin = axisRenderer.getPosition(
+					axis, axisYOrigin, true, false).get(PointND.Y);
+		}
 		Path2D path = new Path2D.Double();
 		double x = 0.0;
 		double y = 0.0;

@@ -236,14 +236,16 @@ public class XYPlot extends Plot  {
 					Number valueY = row.get(1);
 					PointND<Double> axisPosX = null;
 					PointND<Double> axisPosY = null;
-					if (axisXRenderer != null && axisYRenderer != null) {
+					if (axisXRenderer != null) {
 						axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+					}
+					if (axisYRenderer != null) {
 						axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
 					}
-					if (axisPosX == null || axisPosY == null) {
-						continue;
-					}
-					PointND<Double> pos = new PointND<Double>(axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
+					PointND<Double> pos = new PointND<Double>(
+						(axisPosX != null) ? axisPosX.get(PointND.X) : 0.0,
+						(axisPosY != null) ? axisPosY.get(PointND.Y) : 0.0
+					);
 
 					Drawable drawable = null;
 					Shape point = null;
@@ -265,8 +267,9 @@ public class XYPlot extends Plot  {
 				}
 				if (pointRenderer != null) {
 					for (DataPoint point : dataPoints) {
-						double pointX = point.getPosition().get(PointND.X);
-						double pointY = point.getPosition().get(PointND.Y);
+						PointND<Double> pos = point.getPosition();
+						double pointX = pos.get(PointND.X);
+						double pointY = pos.get(PointND.Y);
 						graphics.translate(pointX, pointY);
 						Drawable drawable = point.getDrawable();
 						drawable.draw(context);
@@ -433,14 +436,15 @@ public class XYPlot extends Plot  {
 				axisXPos = axisYRenderer.getPosition(
 						axisY, axisXIntersection, false, false);
 			}
-			if (axisXPos != null) {
-				axisXComp.setBounds(
-					plotBounds.getMinX(),
-					axisXPos.get(1) + plotBounds.getMinY(),
-					plotBounds.getWidth(),
-					axisXSize.getHeight()
-				);
+			if (axisXPos == null) {
+				axisXPos = new PointND<Double>(0.0, 0.0);
 			}
+			axisXComp.setBounds(
+				plotBounds.getMinX(),
+				axisXPos.get(1) + plotBounds.getMinY(),
+				plotBounds.getWidth(),
+				axisXSize.getHeight()
+			);
 		}
 
 		if (axisYRenderer != null && axisYComp != null) {
@@ -450,14 +454,15 @@ public class XYPlot extends Plot  {
 				axisYPos = axisXRenderer.getPosition(
 						axisX, axisYIntersection, false, false);
 			}
-			if (axisYPos != null) {
-				axisYComp.setBounds(
-					plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0),
-					plotBounds.getMinY(),
-					axisYSize.getWidth(),
-					plotBounds.getHeight()
-				);
+			if (axisYPos == null) {
+				axisYPos = new PointND<Double>(0.0, 0.0);
 			}
+			axisYComp.setBounds(
+				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0),
+				plotBounds.getMinY(),
+				axisYSize.getWidth(),
+				plotBounds.getHeight()
+			);
 		}
 	}
 

@@ -105,6 +105,9 @@ public abstract class AbstractPointRenderer implements PointRenderer, SettingsLi
 	protected void drawError(DrawingContext context,
 			Shape point, double value, double errorTop, double errorBot,
 			Axis axis, AxisRenderer axisRenderer) {
+		if (axisRenderer == null) {
+			return;
+		}
 		double posX = point.getBounds2D().getCenterX();
 		double valueTop = value + errorTop;
 		double valueBot = value - errorBot;
