@@ -77,21 +77,21 @@ public class XYPlot extends Plot  {
 	 * Class that represents the drawing area of an <code>XYPlot</code>.
 	 */
 	public static class XYPlotArea2D extends PlotArea {
-		/** Key for specifying whether the horizontal grid lines at major ticks
-		along the x-axis are drawn. */
+		/** Key for specifying a {@link java.lang.Boolean} value which decides
+		whether the horizontal grid lines at major ticks along the x-axis are drawn. */
 		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x");
-		/** Key for specifying whether the vertical grid lines at major ticks
-		along the y-axis are drawn. */
+		/** Key for specifying a {@link java.lang.Boolean} value which decides
+		whether the vertical grid lines at major ticks along the y-axis are drawn. */
 		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y");
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of major ticks. */
 		public static final Key GRID_MAJOR_COLOR = new Key("xyplot.grid.major.color");
 
-		/** Key for specifying whether the horizontal grid lines at minor ticks
-		along the x-axis are drawn. */
+		/** Key for specifying a {@link java.lang.Boolean} value which decides
+		whether the horizontal grid lines at minor ticks along the x-axis are drawn. */
 		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x");
-		/** Key for specifying whether the vertical grid lines at minor ticks
-		along the y-axis are drawn. */
+		/** Key for specifying a {@link java.lang.Boolean} value which decides
+		whether the vertical grid lines at minor ticks along the y-axis are drawn. */
 		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y");
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of minor ticks. */
@@ -234,18 +234,19 @@ public class XYPlot extends Plot  {
 					Row row = new Row(s, i);
 					Number valueX = row.get(0);
 					Number valueY = row.get(1);
-					PointND<Double> axisPosX = null;
-					PointND<Double> axisPosY = null;
-					if (axisXRenderer != null) {
-						axisPosX = axisXRenderer.getPosition(axisX, valueX, true, false);
+					PointND<Double> axisPosX = (axisXRenderer != null)
+							? axisXRenderer.getPosition(axisX, valueX, true, false)
+							: new PointND<Double>(0.0, 0.0);
+					PointND<Double> axisPosY = (axisYRenderer != null)
+							? axisYRenderer.getPosition(axisY, valueY, true, false)
+							: new PointND<Double>(0.0, 0.0);
+							
+					if (axisPosX == null || axisPosY == null) {
+						continue;
 					}
-					if (axisYRenderer != null) {
-						axisPosY = axisYRenderer.getPosition(axisY, valueY, true, false);
-					}
+
 					PointND<Double> pos = new PointND<Double>(
-						(axisPosX != null) ? axisPosX.get(PointND.X) : 0.0,
-						(axisPosY != null) ? axisPosY.get(PointND.Y) : 0.0
-					);
+						axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
 
 					Drawable drawable = null;
 					Shape point = null;

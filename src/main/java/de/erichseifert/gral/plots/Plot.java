@@ -87,7 +87,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	/** Key for specifying the positioning of the legend using a
 	{@link de.erichseifert.gral.DrawableConstants.Location} value. */
 	public static final Key LEGEND_LOCATION = new Key("plot.legend.location");
-	/** Key for specifying the width of the legend's margin. */
+	/** Key for specifying the {@link de.erichseifert.gral.util.Insets2D} that
+	describes the legend's margin. */
 	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin");
 
 	private final Settings settings;

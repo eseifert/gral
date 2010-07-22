@@ -37,11 +37,13 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Shape} instance that defines
 	 the shape of the axis. */
 	static final Key SHAPE = new Key("axis.shape");
-	/** Key for specifying whether the shape of the axis will be drawn.
-	 This won't influence ticks or labels. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether the shape of the axis will be drawn. This doesn't influence ticks
+	 or labels. */
 	static final Key SHAPE_VISIBLE = new Key("axis.shape.visible");
-	/** Key for specifying whether normal vector is calculated using clockwise
-	 or counterclockwise rotation. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether normal vector is calculated using clockwise (<code>true</code>)
+	 or counterclockwise rotation (<code>false</code>). */
 	static final Key SHAPE_NORMAL_ORIENTATION_CLOCKWISE =
 		new Key("axis.shape.normalOrientationClockwise");
 	/** Key for specifying {@link java.awt.Paint} instance to be used to paint
@@ -50,21 +52,24 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance which define
 	 the shape of the axis. */
 	static final Key SHAPE_STROKE = new Key("axis.shape.stroke");
-	/** Key for specifying whether the axis direction will be swapped. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether the axis direction will be changed. */
 	static final Key SHAPE_DIRECTION_SWAPPED =
 		new Key("axis.shape.directionSwapped");
-	/** Key for specifying whether major ticks are drawn. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether major ticks are drawn. */
 	static final Key TICKS = new Key("axis.ticks.major");
-	/** Key for specifying the interval for major ticks. */
+	/** Key for specifying a {@link java.lang.Number} value for the interval
+	 for major ticks. */
 	static final Key TICKS_SPACING = new Key("axis.ticks.major.spacing");
-	/** Key for specifying the length of major tick strokes. The length is
-	 specified relative to font height. */
+	/** Key for specifying a {@link java.lang.Number} value for the length of
+	 major tick strokes. The length is specified relative to the font height. */
 	static final Key TICKS_LENGTH = new Key("axis.ticks.major.length");
 	/** Key for specifying the {@link java.awt.Stroke} instance which is used
 	 to draw all major ticks. */
 	static final Key TICKS_STROKE = new Key("axis.ticks.major.stroke");
-	/** Key for specifying the alignment of major ticks:
-	 0.0 means outside, 0.5 means centered, 1.0 means inside. */
+	/** Key for specifying a {@link java.lang.Number} value for the alignment
+	 of major ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	static final Key TICKS_ALIGNMENT = new Key("axis.ticks.major.alignment");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the shapes of major ticks. */
@@ -75,28 +80,33 @@ public interface AxisRenderer extends SettingsStorage {
 	 tick values to labels. */
 	static final Key TICK_LABELS_FORMAT = new Key(
 			"axis.ticks.major.labels.format");
-	/** Key for specifying the distance of labels to their ticks. The distance
-	 is specified relative to font height. */
+	/** Key for specifying a {@link java.lang.Number} value for the distance
+	 of labels to their ticks. The distance is specified relative to the font
+	 height. */
 	static final Key TICK_LABELS_DISTANCE = new Key(
 			"axis.ticks.major.labels.distance");
-	/** Key for specifying the draw labels outside of the plot. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether the tick labels are drawn outside of the plot. */
 	static final Key TICK_LABELS_OUTSIDE = new Key(
 			"axis.ticks.major.labels.outside");
-	/** Key for specifying the rotation of the tick labels in degrees. */
+	/** Key for specifying a {@link java.lang.Number} value for the rotation
+	 of the tick labels in degrees. */
 	static final Key TICK_LABELS_ROTATION = new Key(
 			"axis.ticks.major.labels.rotation");
-	/** Key for specifying whether minor ticks are drawn. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether minor ticks are drawn. */
 	static final Key TICKS_MINOR = new Key("axis.ticks.minor");
-	/** Key for specifying the count of minor ticks. */
+	/** Key for specifying an {@link java.lang.Integer} value for the count
+	 of minor ticks. */
 	static final Key TICKS_MINOR_COUNT = new Key("axis.ticks.minor.count");
-	/** Key for specifying the length of minor tick strokes. The length is
-	 specified relative to font height. */
+	/** Key for specifying a {@link java.lang.Number} value for the length
+	 of minor tick strokes. The length is specified relative to font height. */
 	static final Key TICKS_MINOR_LENGTH = new Key("axis.ticks.minor.length");
 	/** Key for specifying the {@link java.awt.Stroke} instance which is used
 	 to draw all minor ticks. */
 	static final Key TICKS_MINOR_STROKE = new Key("axis.ticks.minor.stroke");
-	/** Key for specifying the alignment of minor ticks:
-	 0.0 means outside, 0.5 means centered, 1.0 means inside. */
+	/** Key for specifying a {@link java.lang.Number} value for the alignment
+	 of minor ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	static final Key TICKS_MINOR_ALIGNMENT =
 		new Key("axis.ticks.minor.alignment");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
@@ -108,10 +118,11 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.lang.String} instance for the label
 	 text of the axis. */
 	static final Key LABEL = new Key("axis.label");
-	/** Key for specifying the distance from the axis to the label. The length
-	 is specified relative to font height. */
+	/** Key for specifying a {@link java.lang.Number} value for the distance
+	 from the axis to the label. The length is specified relative to font height. */
 	static final Key LABEL_DISTANCE = new Key("axis.label.distance");
-	/** Key for specifying the rotation of the axis label in degrees. */
+	/** Key for specifying a {@link java.lang.Number} value for the rotation of
+	 the axis label in degrees. */
 	static final Key LABEL_ROTATION = new Key("axis.label.rotation");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the axis label. */

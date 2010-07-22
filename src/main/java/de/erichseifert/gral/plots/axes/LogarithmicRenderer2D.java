@@ -83,7 +83,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	@Override
 	public List<Tick> getTicks(Axis axis) {
 		checkAxisBounds(axis);
-		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
+		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0)
 			? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
@@ -100,8 +100,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				(powerMin*tickSpacingMinor));
 
 		List<Tick> ticks = new LinkedList<Tick>();
-		Set<Double> tickPositions = new HashSet<Double>();
-		Set<Double> tickPositionsCustom = getTickPositionsCustom();
+		Set<Number> tickPositions = new HashSet<Number>();
+		Set<Number> tickPositionsCustom = getTickPositionsCustom();
 		// Add major ticks
 		int i = 0;
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
@@ -127,9 +127,10 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			}
 		}
 		// Add custom ticks
-		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
+		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
-			for (double tickPositionWorld : labelsCustom.keySet()) {
+			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
+				double tickPositionWorld = tickPositionWorldObj.doubleValue();
 				if (tickPositionWorld >= min && tickPositionWorld <= max) {
 					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
 					ticks.add(tick);

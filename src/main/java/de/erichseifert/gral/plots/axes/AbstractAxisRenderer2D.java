@@ -161,9 +161,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					boolean isTickLabelOutside =
 						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 					double tickLabelRotation =
-						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_ROTATION);
+						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_ROTATION)
+						.doubleValue();
 					double tickLabelDist =
-						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
+						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
+						.doubleValue()*fontHeight;
 					Line2D tickShape = new Line2D.Double();
 
 					for (Tick tick : ticks) {
@@ -180,18 +182,22 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.getType())) {
 							tickLength =
-								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_LENGTH)*fontHeight;
+								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_MINOR_LENGTH)
+								.doubleValue()*fontHeight;
 							tickAlignment =
-								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_MINOR_ALIGNMENT);
+								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
+								.doubleValue();
 							tickPaint =
 								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_MINOR_COLOR);
 							tickStroke =
 								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						} else {
 							tickLength =
-								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
+								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
+								.doubleValue()*fontHeight;
 							tickAlignment =
-								AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+								.doubleValue();
 							tickPaint =
 								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
 							tickStroke =
@@ -234,19 +240,24 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 					// FIXME: use tick label height instead of constant value
 					double tickLength =
-						AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH)*fontHeight;
+						AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
+						.doubleValue()*fontHeight;
 					double tickAlignment =
-						AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+						AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 					double tickLabelDist =
-						AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE)*fontHeight;
+						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
+						.doubleValue()*fontHeight;
 
 					double labelDistance =
-						AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_DISTANCE)*fontHeight;
+						AbstractAxisRenderer2D.this.<Number>getSetting(LABEL_DISTANCE)
+						.doubleValue()*fontHeight;
 					double labelDist =
 						tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
 					double labelRotation =
-						AbstractAxisRenderer2D.this.<Double>getSetting(LABEL_ROTATION);
+						AbstractAxisRenderer2D.this.<Number>getSetting(LABEL_ROTATION)
+						.doubleValue();
 					double axisLabelPos =
 						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
 					boolean isTickLabelOutside =
@@ -313,14 +324,16 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				// FIXME: use real font height instead of fixed value
 				final double fontHeight = 10.0;
 				double tickLength =
-					AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_LENGTH);
-				tickLength *= fontHeight;
+					AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
+					.doubleValue()*fontHeight;
 				double tickAlignment =
-					AbstractAxisRenderer2D.this.<Double>getSetting(TICKS_ALIGNMENT);
+					AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+					.doubleValue();
 				double tickLengthOuter =
 					tickLength*(1.0 - tickAlignment);
 				double labelDistance =
-					AbstractAxisRenderer2D.this.<Double>getSetting(TICK_LABELS_DISTANCE);
+					AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
+					.doubleValue();
 				double labelDist =
 					labelDistance*fontHeight + tickLengthOuter;
 				double minSize =
@@ -334,9 +347,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 	@Override
 	public List<Tick> getTicks(Axis axis) {
-		double tickSpacing = this.<Double>getSetting(TICKS_SPACING);
+		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
-		double tickSpacingMinor = (ticksMinorCount > 0) ? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
+		double tickSpacingMinor = (ticksMinorCount > 0)
+				? tickSpacing/(ticksMinorCount + 1)
+				: tickSpacing;
 
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -347,8 +362,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/tickSpacingMinor);
 
 		List<Tick> ticks = new LinkedList<Tick>();
-		Set<Double> tickPositions = new HashSet<Double>();
-		Set<Double> tickPositionsCustom = getTickPositionsCustom();
+		Set<Number> tickPositions = new HashSet<Number>();
+		Set<Number> tickPositionsCustom = getTickPositionsCustom();
 
 		// Add major and minor ticks
 		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
@@ -365,9 +380,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 			}
 		}
 		// Add custom ticks
-		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
+		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
-			for (double tickPositionWorld : labelsCustom.keySet()) {
+			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
+				double tickPositionWorld = tickPositionWorldObj.doubleValue();
 				if (tickPositionWorld >= min && tickPositionWorld <= max) {
 					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
 					ticks.add(tick);
@@ -382,12 +398,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	 * Returns a set of all user-defined tick mark positions.
 	 * @return Set of all user-defined tick mark positions.
 	 */
-	protected Set<Double> getTickPositionsCustom() {
-		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
+	protected Set<Number> getTickPositionsCustom() {
+		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			return labelsCustom.keySet();
 		}
-		return new HashSet<Double>();
+		return new HashSet<Number>();
 	}
 
 	/**
@@ -407,7 +423,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 		// Retrieve tick label
 		String tickLabel;
-		Map<Double, String> labelsCustom = getSetting(TICKS_CUSTOM);
+		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		} else {

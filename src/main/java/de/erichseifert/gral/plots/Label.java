@@ -48,9 +48,9 @@ import de.erichseifert.gral.util.Settings.Key;
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
-	/** Key for specifying the horizontal alignment within the bounding rectangle. */
+	/** Key for specifying the horizontal alignment within the bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X = new Key("label.alignment.x");
-	/** Key for specifying the vertical alignment within the bounding rectangle. */
+	/** Key for specifying the vertical alignment within the bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y");
 	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants}
 	value where the label will be aligned at. */
@@ -94,14 +94,14 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 			getY() + getHeight()/2.0
 		);
 
-		Double rotation = getSetting(ROTATION);
-		if (rotation != null && (rotation%360.0) != 0.0) {
+		double rotation = this.<Number>getSetting(ROTATION).doubleValue();
+		if (!Double.isNaN(rotation) && (rotation%360.0 != 0.0)) {
 			txLabel.rotate(-rotation/180.0*Math.PI);
 		}
 
 		Rectangle2D textBounds = layout.getBounds();
-		double alignmentX = this.<Double>getSetting(ALIGNMENT_X);
-		double alignmentY = this.<Double>getSetting(ALIGNMENT_Y);
+		double alignmentX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
 		DrawableConstants.Location anchor = getSetting(ANCHOR);
 		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
 		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
@@ -134,8 +134,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		if (layout != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
-			Double rotation = getSetting(ROTATION);
-			if (rotation != null && (rotation%360.0) != 0.0) {
+			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
+			if (!Double.isNaN(rotation) && (rotation%360.0 != 0.0)) {
 				shape = AffineTransform.getRotateInstance(
 					-rotation/180.0*Math.PI,
 					bounds.getCenterX(),

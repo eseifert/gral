@@ -32,9 +32,11 @@ import de.erichseifert.gral.util.Settings.Key;
  * Interface for renderers that display areas in plots.
  */
 public interface AreaRenderer extends SettingsStorage {
-	/** Key for specifying the distance between the area and a data point. */
+	/** Key for specifying a {@link java.lang.Number} value for the gap between
+	 the area and a data point. */
 	static final Key GAP = new Key("area.gap.size");
-	/** Key for specifying whether the gaps should have rounded corners. */
+	/** Key for specifying a {@link java.lang.Boolean} value that decides
+	 whether the gaps should have rounded corners. */
 	static final Key GAP_ROUNDED = new Key("area.gap.rounded");
 	/** Key for specifying the {@link java.awt.Paint} instance used to fill
 	the area shape. */

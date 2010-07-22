@@ -25,22 +25,28 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
  * Class that provides Drawables, which are sized accordingly to the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer {
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the value. */
+	static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column");
 
 	/**
 	 * Creates a new SizeablePointRenderer object.
 	 */
 	public SizeablePointRenderer() {
+		setSettingDefault(COLUMN_SIZE, 2);
 	}
 
 	@Override
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
+		int sizeColumn = this.<Number>getSetting(COLUMN_SIZE).intValue();
 		if (row.getSource().getColumnCount() >= 3) {
 			double size = row.get(2).doubleValue();
 			AffineTransform tx = AffineTransform.getScaleInstance(size, size);

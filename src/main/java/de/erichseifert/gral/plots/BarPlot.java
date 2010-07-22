@@ -44,7 +44,8 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that displays data in a bar plot.
  */
 public class BarPlot extends XYPlot {
-	/** Key for specifying the relative width of the bars. */
+	/** Key for specifying a {@link java.lang.Number} value for the relative
+	width of the bars. */
 	public static final Key BAR_WIDTH = new Key("barplot.barWidth");
 
 	/**
@@ -114,7 +115,7 @@ public class BarPlot extends XYPlot {
 			}
 			//*/
 
-			double barWidthRel = plot.<Double>getSetting(BarPlot.BAR_WIDTH);
+			double barWidthRel = plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer.getPosition(

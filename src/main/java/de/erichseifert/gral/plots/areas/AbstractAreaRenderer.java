@@ -63,7 +63,7 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, SettingsList
 	 */
 	protected Shape punch(Shape area, Iterable<DataPoint> dataPoints) {
 		// Subtract shapes of data points from the area to yield gaps.
-		double gapSize = this.<Double>getSetting(GAP);
+		double gapSize = this.<Number>getSetting(GAP).doubleValue();
 		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
 		Area punched = GeometryUtils.punch(area, gapSize, isGapRounded, dataPoints);
 

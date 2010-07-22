@@ -63,10 +63,15 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 		double axisYMin = axis.getMin().doubleValue();
 		double axisYMax = axis.getMax().doubleValue();
 		double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
-		double posYOrigin = axisRenderer.getPosition(
-				axis, axisYOrigin, true, false).get(PointND.Y);
-
+		PointND<Double> posOrigin = null;
+		if (axisRenderer != null) {
+			posOrigin = axisRenderer.getPosition(axis, axisYOrigin, true, false);
+		}
 		Path2D path = new Path2D.Double();
+		if (posOrigin == null) {
+			return path;
+		}
+		double posYOrigin = posOrigin.get(PointND.Y);
 		double x = 0.0;
 		double y = 0.0;
 		for (DataPoint p: points) {

@@ -47,16 +47,21 @@ import de.erichseifert.gral.util.Settings.Key;
 public class PiePlot extends Plot implements DataListener {
 	/** Key for specifying the radius of the pie relative to the plot area size. */
 	public static final Key RADIUS = new Key("pieplot.radius");
-	/** Key for specifying the inner radius of the pie relative to the outer radius. */
+	/** Key for specifying a {@link java.lang.Number} value for the inner
+	radius of the pie relative to the outer radius. */
 	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner");
 	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper}
 	instance used for the segments. */
 	public static final Key COLORS = new Key("pieplot.colorlist");
-	/** Key for specifying whether the segments should be ordered clockwise or counterclockwise. */
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	whether the segments should be ordered clockwise (<code>true</code>) or
+	counterclockwise (<code>false</code>). */
 	public static final Key CLOCKWISE = new Key("pieplot.clockwise");
-	/** Key for specifying the starting angle of the first segment in degrees. */
+	/** Key for specifying a {@link java.lang.Number} value for the starting
+	angle of the first segment in degrees. */
 	public static final Key START = new Key("pieplot.start");
-	/** Key for specifying the width of gaps between the segments. */
+	/** Key for specifying a {@link java.lang.Number} value for the width of
+	gaps between the segments. */
 	public static final Key GAP = new Key("pieplot.gap");
 
 	/**
@@ -102,18 +107,18 @@ public class PiePlot extends Plot implements DataListener {
 			graphics.translate(w/2d, h/2d);
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 
-			double sizeRel = plot.<Double>getSetting(PiePlot.RADIUS);
+			double sizeRel = plot.<Number>getSetting(PiePlot.RADIUS).doubleValue();
 			double size = Math.min(w, h) * sizeRel;
 
-			double sizeRelInner = plot.<Double>getSetting(PiePlot.RADIUS_INNER);
+			double sizeRelInner = plot.<Number>getSetting(PiePlot.RADIUS_INNER).doubleValue();
 			double sizeInner = size * sizeRelInner;
 			Ellipse2D inner = new Ellipse2D.Double(
 					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
 			Area whole = new Area(inner);
 
-			double gap = plot.<Double>getSetting(PiePlot.GAP);
+			double gap = plot.<Number>getSetting(PiePlot.GAP).doubleValue();
 
-			double sliceOffset = plot.<Double>getSetting(PiePlot.START);
+			double sliceOffset = plot.<Number>getSetting(PiePlot.START).doubleValue();
 			int sliceNo = 0;
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];

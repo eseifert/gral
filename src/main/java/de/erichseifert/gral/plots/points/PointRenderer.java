@@ -54,10 +54,10 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format");
-	/** Key for specifying the {@link java.lang.Float} value that positions the
+	/** Key for specifying the {@link java.lang.Number} value that positions the
 	value horizontally. */
 	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x");
-	/** Key for specifying the {@link java.lang.Float} value that positions the
+	/** Key for specifying the {@link java.lang.Number} value that positions the
 	value vertically. */
 	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y");
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
