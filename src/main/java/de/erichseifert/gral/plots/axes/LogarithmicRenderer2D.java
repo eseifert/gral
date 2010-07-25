@@ -118,8 +118,10 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				} else if (tickPositionWorld > max) {
 					break;
 				}
-				boolean isMajor = (i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0;
-				TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
+				TickType tickType = TickType.MINOR;
+				if ((i++ - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
+					tickType = TickType.MAJOR;
+				}
 				Tick tick = getTick(tickType, axis, tickPositionWorld);
 				if (tick.getPosition() != null
 						&& !tickPositions.contains(tickPositionWorld)

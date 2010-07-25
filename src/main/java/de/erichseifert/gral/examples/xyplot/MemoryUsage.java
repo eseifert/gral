@@ -71,10 +71,10 @@ final class UpdateTask implements ActionListener {
 		plot.getAxis(XYPlot.AXIS_X).setRange(
 				col1.getStatistics(Statistics.MIN),
 				col1.getStatistics(Statistics.MAX));
-		//Column col2 = data.getColumn(1);
-		//plot.getAxis(XYPlot.AXIS_Y).setRange(
-		//		col2.getStatistics(Statistics.MIN),
-		//		col2.getStatistics(Statistics.MAX));
+		Column col2 = data.getColumn(1);
+		plot.getAxis(XYPlot.AXIS_Y).setRange(
+				0.0,
+				col2.getStatistics(Statistics.MAX));
 
 		component.repaint();
 	}

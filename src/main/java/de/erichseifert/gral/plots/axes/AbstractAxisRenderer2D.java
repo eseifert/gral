@@ -362,8 +362,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		double minTickMajor = MathUtils.ceil(min, tickSpacing);
 		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
 
-		int ticksTotal = (int)Math.floor((max - min)/tickSpacingMinor);
-		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/tickSpacingMinor);
+		int ticksTotal = (int)Math.ceil((max - min)/tickSpacingMinor);
+		int initialTicksMinor = (int)((minTickMajor - min)/tickSpacingMinor);
 
 		Set<Number> tickPositions = new HashSet<Number>();
 		Set<Number> tickPositionsCustom = getTickPositionsCustom();
@@ -371,9 +371,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		// Add major and minor ticks
 		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
 			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
-			boolean isMajor = (tickPositions.size() - initialTicksMinor) %
-					(ticksMinorCount + 1) == 0;
-			TickType tickType = isMajor ? TickType.MAJOR : TickType.MINOR;
+			TickType tickType = TickType.MINOR;
+			if ((tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
+				tickType = TickType.MAJOR;
+			}
 			Tick tick = getTick(tickType, axis, tickPositionWorld);
 			if (tick.getPosition() != null
 					&& !tickPositionsCustom.contains(tickPositionWorld)
