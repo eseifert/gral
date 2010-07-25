@@ -28,6 +28,8 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,44 +37,77 @@ import org.junit.Test;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 public class XYPlotTest {
-	private XYPlot plot;
-	private boolean isDrawn;
+	private List<MockXYPlot> plots;
+
+	private class MockXYPlot extends XYPlot {
+		private boolean drawn;
+
+		public MockXYPlot(DataSource... data) {
+			super(data);
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			super.draw(context);
+			drawn = true;
+		}
+
+		public boolean isDrawn() {
+			return drawn;
+		}
+	};
 
 	@Before
 	public void setUp() {
 		DataSource data = new DummyData(2, 2, 1.0);
-		plot = new XYPlot(data) {
-			@Override
-			public void draw(DrawingContext context) {
-				super.draw(context);
-				isDrawn = true;
-			}
-		};
+
+		plots = new LinkedList<MockXYPlot>();
+		MockXYPlot plot;
+
+		// XYPlot with all options turned on
+		plot = new MockXYPlot(data);
+		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
+		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
+		plot.setSetting(XYPlot.LEGEND, true);
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.2);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_SPACING, 0.2);
+		plots.add(plot);
+
+		plot = new MockXYPlot(data);
+		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
+		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
+		plot.setSetting(XYPlot.LEGEND, false);
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.0);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_SPACING, 0.0);
+		plots.add(plot);
 	}
 
 	@Test
 	public void testSettings() {
-		// Get
-		assertNull(plot.getSetting(Plot.BACKGROUND));
-
-		// Set
-		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
-		assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
-
-		// Remove
-		plot.removeSetting(Plot.BACKGROUND);
-		assertNull(plot.getSetting(Plot.BACKGROUND));
+		for (MockXYPlot plot : plots) {
+			// Get
+			assertNull(plot.getSetting(Plot.BACKGROUND));
+			// Set
+			plot.setSetting(Plot.BACKGROUND, Color.WHITE);
+			assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
+			// Remove
+			plot.removeSetting(Plot.BACKGROUND);
+			assertNull(plot.getSetting(Plot.BACKGROUND));
+		}
 	}
 
 	@Test
 	public void testDraw() {
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-		plot.draw(context);
-		assertTrue(isDrawn);
+		for (MockXYPlot plot : plots) {
+			BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+			plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
+			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			plot.draw(context);
+			assertTrue(plot.isDrawn());
+		}
 	}
 
 }

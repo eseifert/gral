@@ -19,41 +19,14 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.erichseifert.gral.data;
-
-import de.erichseifert.gral.data.statistics.Orientation;
-
-
+package de.erichseifert.gral.data.statistics;
 
 /**
- * Class for storing a column of a data source.
+ * Data type that describes the direction of the histogram.
  */
-public class Column extends DataAccessor {
-	/**
-	 * Initializes a new instance with the specified data source and column
-	 * index.
-	 * @param source Data source.
-	 * @param col Column index.
-	 */
-	public Column(DataSource source, int col) {
-		super(source, col);
-	}
-
-	@Override
-	public Number get(int row) {
-		if (getSource() == null) {
-			return null;
-		}
-		return getSource().get(getIndex(), row);
-	}
-
-	@Override
-	public int size() {
-		return getSource().getRowCount();
-	}
-
-	@Override
-	public double getStatistics(String key) {
-		return getSource().getStatistics().get(key, Orientation.VERTICAL, getIndex());
-	}
+public enum Orientation {
+	/** Horizontal histogram. */
+	HORIZONTAL,
+	/** Vertical histogram. */
+	VERTICAL
 }

@@ -25,28 +25,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class that represents an arbitrary axis.
- * Functionality includes:
+ * <p>Class that represents an arbitrary axis.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Different ways of setting and getting the range of this axis</li>
- * <li>Administration of {@link AxisListener AxisListeners}</li>
+ *   <li>Different ways of setting and getting the range of this axis</li>
+ *   <li>Administration of {@link AxisListener AxisListeners}</li>
  * </ul>
  */
 public class Axis {
-	/** Key for specifying the x-axis */
-	public static final String X = "x";
-	/** Key for specifying the y-axis */
-	public static final String Y = "y";
-	/** Key for specifying the z-axis */
-	public static final String Z = "z";
-
 	private final Set<AxisListener> axisListeners;
 
 	private Number min;
 	private Number max;
 
 	/**
-	 * Creates an <code>Axis</code> object with the specified minimum and maximum values.
+	 * Initializes a new instance with the specified minimum and maximum values.
 	 * @param min minimum value
 	 * @param max maximum value
 	 */

@@ -34,8 +34,8 @@ import de.erichseifert.gral.data.Row;
  * The values of the scaled result are created using averaging.
  */
 public class Resize extends Filter {
-	private int cols;
-	private int rows;
+	private final int cols;
+	private final int rows;
 
 	/**
 	 * Initializes a new data source from an original data source and a
@@ -89,7 +89,7 @@ public class Resize extends Filter {
 			Class[] dataTypes = new Class[original.getColumnCount()];
 			Arrays.fill(dataTypes, Double.class);
 			DataTable avgRows = new DataTable(dataTypes);
-			avgRows.ensureRows(getRowCount());
+			fillWithEmptyRows(avgRows, getRowCount());
 
 			double step = original.getRowCount() / (double) getRowCount();
 			for (int colIndex = 0; colIndex < original.getColumnCount(); colIndex++) {
@@ -106,7 +106,7 @@ public class Resize extends Filter {
 			Class[] dataTypes = new Class[getColumnCount()];
 			Arrays.fill(dataTypes, Double.class);
 			DataTable avgCols = new DataTable(dataTypes);
-			avgCols.ensureRows(data.getRowCount());
+			fillWithEmptyRows(avgCols, data.getRowCount());
 
 			double step = original.getColumnCount() / (double) getColumnCount();
 			for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
@@ -120,8 +120,18 @@ public class Resize extends Filter {
 			data = avgCols;
 		}
 
-		for (Row row : data) {
+		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
+			Row row = data.getRow(rowIndex);
 			add(row.toArray(null));
+		}
+	}
+
+	private static void fillWithEmptyRows(DataTable data, int count) {
+		data.ensureRows(count);
+		while (data.getRowCount() < count) {
+			Double[] emptyRow = new Double[data.getColumnCount()];
+			Arrays.fill(emptyRow, 0.0);
+			data.add(emptyRow);
 		}
 	}
 

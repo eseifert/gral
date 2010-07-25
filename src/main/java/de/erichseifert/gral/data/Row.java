@@ -21,7 +21,7 @@
 
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.data.statistics.Statistics.Orientation;
+import de.erichseifert.gral.data.statistics.Orientation;
 
 
 
@@ -50,7 +50,7 @@ public class Row extends DataAccessor {
 	public int size() {
 		return getSource().getColumnCount();
 	}
-	
+
 	@Override
 	public double getStatistics(String key) {
 		return getSource().getStatistics().get(key, Orientation.HORIZONTAL, getIndex());

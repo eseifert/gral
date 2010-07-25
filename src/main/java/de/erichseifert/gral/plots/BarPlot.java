@@ -98,8 +98,8 @@ public class BarPlot extends XYPlot {
 		public Shape getPointPath(Row row) {
 			double valueX = row.get(0).doubleValue();
 			double valueY = row.get(1).doubleValue();
-			Axis axisX = plot.getAxis(Axis.X);
-			Axis axisY = plot.getAxis(Axis.Y);
+			Axis axisX = plot.getAxis(AXIS_X);
+			Axis axisY = plot.getAxis(AXIS_Y);
 			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 			double axisYOrigin = 0.0;

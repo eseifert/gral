@@ -37,7 +37,6 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
@@ -69,11 +68,11 @@ final class UpdateTask implements ActionListener {
 		data.remove(0);
 
 		Column col1 = data.getColumn(0);
-		plot.getAxis(Axis.X).setRange(
+		plot.getAxis(XYPlot.AXIS_X).setRange(
 				col1.getStatistics(Statistics.MIN),
 				col1.getStatistics(Statistics.MAX));
 		//Column col2 = data.getColumn(1);
-		//plot.getAxis(Axis.Y).setRange(
+		//plot.getAxis(XYPlot.AXIS_Y).setRange(
 		//		col2.getStatistics(Statistics.MIN),
 		//		col2.getStatistics(Statistics.MAX));
 
@@ -90,15 +89,16 @@ public class MemoryUsage extends JFrame {
 		getContentPane().setBackground(new Color(1.0f, 0.92f, 0.90f));
 
 		DataTable data = new DataTable(Long.class, Double.class);
+		data.ensureRows(BUFFER_SIZE);
 		long time = System.currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
 			data.add(time - i*INTERVAL, (i == BUFFER_SIZE - 1) ? 0.0 : Double.NaN);
 		}
 
 		XYPlot plot = new XYPlot(data);
-		plot.getAxis(Axis.Y).setRange(0.0, 1.0);
-		AxisRenderer axisRendererX = plot.getAxisRenderer(Axis.X);
-		AxisRenderer axisRendererY = plot.getAxisRenderer(Axis.Y);
+		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
+		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
+		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
 		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 0.1);
 		axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());

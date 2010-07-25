@@ -36,7 +36,6 @@ import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
@@ -102,9 +101,9 @@ public class SimpleXYPlot extends JFrame {
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
 		// Custom axis renderers
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
-		AxisRenderer axisRendererY = plot.getAxisRenderer(Axis.Y);
+		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic axis");
-		plot.setAxisRenderer(Axis.X, axisRendererX);
+		plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 		// Custom tick labels
 		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
@@ -118,7 +117,7 @@ public class SimpleXYPlot extends JFrame {
 		//axisRendererX.setSetting(AxisRenderer.TICKS_STROKE, stroke);
 		// Swap axis direction
 		//axisRendererX.setSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED, true);
-		//plot.setAxisRenderer(Axis.Y, new LogarithmicRenderer2D());
+		//plot.setAxisRenderer(XYPlot.AXIS_Y, new LogarithmicRenderer2D());
 		// Change intersection point of Y axis
 		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
 		// Change tick spacing

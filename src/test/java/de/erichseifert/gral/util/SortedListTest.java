@@ -39,7 +39,7 @@ public class SortedListTest {
 		SortedList<Double> capacity = new SortedList<Double>(20);
 		assertEquals(0, capacity.size());
 
-		List<Double> data = Arrays.asList(0.0, 2.0, 1.0); 
+		List<Double> data = Arrays.asList(0.0, 2.0, 1.0);
 		SortedList<Double> collection = new SortedList<Double>(data);
 		assertEquals(3, collection.size());
 		assertEquals(0.0, collection.get(0), DELTA);
@@ -94,7 +94,7 @@ public class SortedListTest {
 		assertEquals(2, l.indexOf(1.0));
 		assertEquals(-1, l.indexOf(-1.0));
 		assertEquals(-1, l.indexOf(null));
-		assertEquals(-1, l.indexOf("s"));
+		assertEquals(-4, l.indexOf(Double.NaN));
 	}
 
 	@Test

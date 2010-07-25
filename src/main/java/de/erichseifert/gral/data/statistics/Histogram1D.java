@@ -28,7 +28,7 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.statistics.Statistics.Orientation;
+import de.erichseifert.gral.data.statistics.Orientation;
 
 
 /**

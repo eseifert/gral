@@ -23,6 +23,7 @@ package de.erichseifert.gral.data;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import de.erichseifert.gral.data.statistics.Statistics;
@@ -45,21 +46,36 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * Iterator that returns each row of the DataSource.
 	 */
-	private class DataSourceIterator implements Iterator<Row> {
+	private class DataSourceIterator implements Iterator<Number> {
+		private int col;
 		private int row;
 
-		@Override
-		public boolean hasNext() {
-			return row < getRowCount();
+		public DataSourceIterator() {
+			col = 0;
+			row = 0;
 		}
 
 		@Override
-		public Row next() {
-			return getRow(row++);
+		public boolean hasNext() {
+			return (col < getColumnCount()) && (row < getRowCount());
+		}
+
+		@Override
+		public Number next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			Number value = get(col, row);
+			if (++col >= getColumnCount()) {
+				col = 0;
+				++row;
+			}
+			return value;
 		}
 
 		@Override
 		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 	}
 
@@ -89,7 +105,7 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	@Override
-	public Iterator<Row> iterator() {
+	public Iterator<Number> iterator() {
 		return new DataSourceIterator();
 	}
 

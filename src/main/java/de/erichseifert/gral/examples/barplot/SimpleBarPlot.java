@@ -29,7 +29,6 @@ import javax.swing.JFrame;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BarPlot;
-import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
@@ -49,8 +48,8 @@ public class SimpleBarPlot extends JFrame {
 		data.add(7,  9,  9);
 		data.add(8, 11,  1);
 		BarPlot plot = new BarPlot(data);
-		plot.getAxis(Axis.X).setRange(0.5, 8.5);
-		plot.getAxis(Axis.Y).setRange(-4.0, 11.0);
+		plot.getAxis(BarPlot.AXIS_X).setRange(0.5, 8.5);
+		plot.getAxis(BarPlot.AXIS_Y).setRange(-4.0, 11.0);
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
 		plot.setSetting(BarPlot.BAR_WIDTH, 0.75);
 		PointRenderer pointRenderer = plot.getPointRenderer(data);

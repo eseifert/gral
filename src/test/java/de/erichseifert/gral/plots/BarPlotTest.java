@@ -35,7 +35,6 @@ import org.junit.Test;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
-import de.erichseifert.gral.plots.axes.Axis;
 
 public class BarPlotTest {
 	private BarPlot plot;
@@ -69,8 +68,8 @@ public class BarPlotTest {
 
 	@Test
 	public void testDraw() {
-		plot.getAxis(Axis.X).setRange(-1.0, 3.0);
-		plot.getAxis(Axis.Y).setRange(-1.0, 2.0);
+		plot.getAxis(BarPlot.AXIS_X).setRange(-1.0, 3.0);
+		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());

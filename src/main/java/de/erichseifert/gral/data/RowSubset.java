@@ -67,12 +67,11 @@ public abstract class RowSubset extends AbstractDataSource implements DataListen
 	@Override
 	public void dataChanged(DataSource data) {
 		accepted.clear();
-		int rowIndex = 0;
-		for (Row row : original) {
+		for (int rowIndex = 0; rowIndex < original.getRowCount(); rowIndex++) {
+			Row row = original.getRow(rowIndex);
 			if (accept(row)) {
 				accepted.add(rowIndex);
 			}
-			rowIndex++;
 		}
 		notifyDataChanged();
 	}

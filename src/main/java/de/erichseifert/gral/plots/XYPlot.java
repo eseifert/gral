@@ -61,9 +61,18 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that displays data in an XY-Plot.
+ * Class that displays data in an two dimensional coordinate system.
  */
 public class XYPlot extends Plot  {
+	/** Key for specifying the x-axis of an xy-plot. */
+	public static String AXIS_X = "x";
+	/** Key for specifying the secondary x-axis of an xy-plot. */
+	public static String AXIS_X2 = "x2";
+	/** Key for specifying the y-axis of an xy-plot. */
+	public static String AXIS_Y = "y";
+	/** Key for specifying the secondary y-axis of an xy-plot. */
+	public static String AXIS_Y2 = "y2";
+
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -128,7 +137,7 @@ public class XYPlot extends Plot  {
 
 		/**
 		 * Draws the grid into the specified <code>Graphics2D</code> object.
-	 * @param context Environment used for drawing.
+		 * @param context Environment used for drawing.
 		 */
 		protected void drawGrid(DrawingContext context) {
 			Graphics2D graphics = context.getGraphics();
@@ -144,7 +153,7 @@ public class XYPlot extends Plot  {
 
 			// Draw gridX
 			if (isGridMajorX || isGridMinorX) {
-				Axis axisX = plot.getAxis(Axis.X);
+				Axis axisX = plot.getAxis(AXIS_X);
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 				if (axisXRenderer != null) {
 					Shape shapeX = axisXRenderer.getSetting(AxisRenderer.SHAPE);
@@ -177,7 +186,7 @@ public class XYPlot extends Plot  {
 
 			// Draw gridY
 			if (isGridMajorY || isGridMinorY) {
-				Axis axisY = plot.getAxis(Axis.Y);
+				Axis axisY = plot.getAxis(AXIS_Y);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 				if (axisYRenderer != null) {
 					Shape shapeY = axisYRenderer.getSetting(AxisRenderer.SHAPE);
@@ -218,8 +227,8 @@ public class XYPlot extends Plot  {
 			graphics.translate(getX(), getY());
 			AffineTransform txOffset = graphics.getTransform();
 
-			Axis axisX = plot.getAxis(Axis.X);
-			Axis axisY = plot.getAxis(Axis.Y);
+			Axis axisX = plot.getAxis(AXIS_X);
+			Axis axisY = plot.getAxis(AXIS_Y);
 			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 
@@ -240,7 +249,7 @@ public class XYPlot extends Plot  {
 					PointND<Double> axisPosY = (axisYRenderer != null)
 							? axisYRenderer.getPosition(axisY, valueY, true, false)
 							: new PointND<Double>(0.0, 0.0);
-							
+
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
@@ -346,8 +355,8 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Creates a new <code>XYPlot</code> object with the specified
-	 * <code>DataSource</code>s and default settings.
+	 * Initializes a new instance object with the specified data sources and
+	 * reasonable default settings.
 	 * @param data Data to be displayed.
 	 */
 	public XYPlot(DataSource... data) {
@@ -369,13 +378,13 @@ public class XYPlot extends Plot  {
 		// Create axes
 		Axis axisX = new Axis(minX, maxX);
 		Axis axisY = new Axis(minY, maxY);
-		setAxis(Axis.X, axisX);
-		setAxis(Axis.Y, axisY);
+		setAxis(AXIS_X, axisX);
+		setAxis(AXIS_Y, axisY);
 
 		AxisRenderer axisXRenderer = new LinearRenderer2D();
 		AxisRenderer axisYRenderer = new LinearRenderer2D();
-		setAxisRenderer(Axis.X, axisXRenderer);
-		setAxisRenderer(Axis.Y, axisYRenderer);
+		setAxisRenderer(AXIS_X, axisXRenderer);
+		setAxisRenderer(AXIS_Y, axisYRenderer);
 
 		// Listen for changes of the axis range
 		AxisListener axisListener = new AxisListener() {
@@ -404,8 +413,8 @@ public class XYPlot extends Plot  {
 		}
 
 		Rectangle2D plotBounds = getPlotArea().getBounds();
-		Axis axisX = getAxis(Axis.X);
-		Axis axisY = getAxis(Axis.Y);
+		Axis axisX = getAxis(AXIS_X);
+		Axis axisY = getAxis(AXIS_Y);
 		AxisRenderer axisXRenderer = getAxisRenderer(axisX);
 		AxisRenderer axisYRenderer = getAxisRenderer(axisY);
 		Drawable axisXComp = getAxisComponent(axisX);
@@ -538,7 +547,7 @@ public class XYPlot extends Plot  {
 
 	@Override
 	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
-		if ((renderer != null) && (axis == getAxis(Axis.Y))) {
+		if ((renderer != null) && (axis == getAxis(AXIS_Y))) {
 			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
 		}

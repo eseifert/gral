@@ -72,13 +72,14 @@ public class PlotNavigatorTest {
 		assertEquals(1e-2, nav.getZoomMin(), DELTA);
 		assertEquals(1e+2, nav.getZoomMax(), DELTA);
 		assertEquals(1.0, nav.getZoom(), DELTA);
-		Axis axisX = plot.getAxis(Axis.X);
-		Axis axisY = plot.getAxis(Axis.Y);
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
 		assertEquals(axisX.getMin().doubleValue() + 0.5*axisX.getRange(), nav.getCenter(axisX).doubleValue(), DELTA);
 		assertEquals(axisY.getMin().doubleValue() + 0.5*axisY.getRange(), nav.getCenter(axisY).doubleValue(), DELTA);
 
 		// Invalid initialization
 		try {
+			@SuppressWarnings("unused")
 			PlotNavigator navigator2 = new PlotNavigator(null);
 			fail("Expected NullPointerException.");
 		} catch (NullPointerException e) {
@@ -95,7 +96,7 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testZoom() {
-		Axis axisX = plot.getAxis(Axis.X);
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 
 		// Valid zoom
 		nav.setZoom(2.0);
@@ -116,17 +117,17 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testCenter() {
-		nav.setCenter(plot.getAxis(Axis.X), 0.0);
-		assertEquals(-4.0, plot.getAxis(Axis.X).getMin().doubleValue(), DELTA);
-		assertEquals(4.0, plot.getAxis(Axis.X).getMax().doubleValue(), DELTA);
+		nav.setCenter(plot.getAxis(XYPlot.AXIS_X), 0.0);
+		assertEquals(-4.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
+		assertEquals(4.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testReset() {
 		nav.setZoom(2.0);
-		nav.setCenter(plot.getAxis(Axis.X), 6.0);
+		nav.setCenter(plot.getAxis(XYPlot.AXIS_X), 6.0);
 		nav.reset();
-		assertEquals(1.0, plot.getAxis(Axis.X).getMin().doubleValue(), DELTA);
-		assertEquals(9.0, plot.getAxis(Axis.X).getMax().doubleValue(), DELTA);
+		assertEquals(1.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
+		assertEquals(9.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
 	}
 }

@@ -104,10 +104,14 @@ public class DataTableTest {
 
 	@Test
 	public void testIterator() {
-		int rowNo = 0;
-		for (Row row : table) {
-			assertEquals(table.getRow(rowNo), row);
-			rowNo++;
+		int i = 0;
+		int colCount = table.getColumnCount();
+		for (Number cell : table) {
+			int col = i % colCount;
+			int row = i / colCount;
+			Number expected = table.get(col, row);
+			assertEquals(expected, cell);
+			i++;
 		}
 	}
 

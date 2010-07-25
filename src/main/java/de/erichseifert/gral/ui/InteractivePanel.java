@@ -60,7 +60,9 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 
 /**
- * A class that displays a <code>Drawable</code> instance as a rich Swing component.
+ * A panel implementation that displays a <code>Drawable</code> instance as a
+ * rich Swing component. Special handling is applied to <code>XYPlot</code> instances.
+ * @see de.erichseifert.gral.plots.XYPlot
  */
 public class InteractivePanel extends DrawablePanel implements Printable {
 	private static final long serialVersionUID = 1L;
@@ -84,7 +86,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 	/**
 	 * Creates a new panel instance and initializes it with a drawable component.
-	 * @param drawable drawable component.
+	 * @param drawable Drawable component.
 	 */
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
@@ -263,11 +265,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				Axis axisX = plot.getAxis(Axis.X);
-				Axis axisY = plot.getAxis(Axis.Y);
+				Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+				Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
-				
+
 				if (axisXRenderer != null) {
 					// Fetch current center on screen
 					double centerX = axisXRenderer.worldToView(

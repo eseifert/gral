@@ -29,7 +29,6 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SortedList;
 
@@ -39,16 +38,6 @@ import de.erichseifert.gral.util.SortedList;
  * on a data source.
  */
 public class Statistics implements DataListener {
-	/**
-	 * Data type that describes the direction of the histogram.
-	 */
-	public static enum Orientation {
-		/** Horizontal histogram. */
-		HORIZONTAL,
-		/** Vertical histogram. */
-		VERTICAL
-	}
-
 	/** Key for specifying the sum of all values. */
 	public static final String SUM = "sum";
 	/** Key for specifying the sum of all value squares. */
@@ -124,7 +113,7 @@ public class Statistics implements DataListener {
 		double mean = stats.get(SUM) / stats.get(N);
 		double mean2 = mean*mean;
 		stats.put(MEAN, mean);
-	
+
 		// Mean deviation (first moment) for expected uniform distribution is always 0.
 		stats.put(MEAN_DEVIATION, 0.0);
 		// Variance (second moment)
@@ -157,7 +146,7 @@ public class Statistics implements DataListener {
 		}
 		return stats.get(key);
 	}
-	
+
 	/**
 	 * Returns the specified information for the data source.
 	 * @param key Requested information.
@@ -272,16 +261,14 @@ public class Statistics implements DataListener {
 		}
 		return getMedian(values);
 	}
-	
+
 	private double getMedian() {
 		int valueCount = data.getColumnCount() * data.getRowCount();
 		List<Double> values = new SortedList<Double>(valueCount);
-		for (Row row : data) {
-			for (Number cell : row) {
-				double value = cell.doubleValue();
-				if (!Double.isNaN(value)) {
-					values.add(value);
-				}
+		for (Number cell : data) {
+			double value = cell.doubleValue();
+			if (!Double.isNaN(value)) {
+				values.add(value);
 			}
 		}
 		return getMedian(values);

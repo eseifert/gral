@@ -20,8 +20,6 @@
  */
 
 package de.erichseifert.gral.data;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -108,27 +106,12 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/**
-	 * Creates a specified number of empty rows.
-	 * @param rows Number of rows to create.
+	 * MAkes sure that the data table is prepared to store the specified number
+	 * of rows.
+	 * @param rows Number of rows that the data table should be prepared for.
 	 */
 	public void ensureRows(int rows) {
-		while (getRowCount() < rows) {
-			Number[] row = new Number[getColumnCount()];
-			for (int colIndex = 0; colIndex < row.length; colIndex++) {
-				Class<? extends Number> colClass = getColumnClass(colIndex);
-				try {
-					Constructor<? extends Number> c = colClass.getConstructor(String.class);
-					row[colIndex] = c.newInstance("0");
-				} catch (SecurityException e) {
-				} catch (NoSuchMethodException e) {
-				} catch (InstantiationException e) {
-				} catch (IllegalAccessException e) {
-				} catch (IllegalArgumentException e) {
-				} catch (InvocationTargetException e) {
-				}
-			}
-			add(row);
-		}
+		this.rows.ensureCapacity(rows);
 	}
 
 	/**

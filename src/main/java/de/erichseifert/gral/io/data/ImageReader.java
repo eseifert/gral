@@ -97,6 +97,7 @@ public class ImageReader extends AbstractDataReader {
 		Class[] colTypes = new Class[w];
 		Arrays.fill(colTypes, Double.class);
 		DataTable data = new DataTable(colTypes);
+		data.ensureRows(h);
 
 		double factor = this.<Number>getSetting("factor").doubleValue();
 		double offset = this.<Number>getSetting("offset").doubleValue();

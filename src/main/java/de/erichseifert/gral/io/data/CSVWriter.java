@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.io.IOCapabilities;
 
 
@@ -65,15 +64,19 @@ public class CSVWriter extends AbstractDataWriter {
 	public void write(DataSource data, OutputStream output) throws IOException {
 		String separator = getSetting("separator");
 		OutputStreamWriter writer = new OutputStreamWriter(output);
-		for (Row row : data) {
-			for (int col = 0; col < row.size(); col++) {
-				if (col > 0) {
-					writer.write(separator);
-				}
-				writer.write(String.valueOf(row.get(col)));
+
+		int i = 0;
+		int colCount = data.getColumnCount();
+		for (Number cell : data) {
+			writer.write(String.valueOf(cell));
+
+			int col = i % colCount;
+			if (col < colCount - 1) {
+				writer.write(separator);
+			} else {
+				writer.write("\r\n");
 			}
-			// FIXME: Only works on *NIX systems
-			writer.write("\r\n");
+			i++;
 		}
 
 		writer.close();

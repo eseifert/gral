@@ -26,7 +26,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 /**
  * Immutable view on a source for tabular data.
  */
-public interface DataSource extends Iterable<Row> {
+public interface DataSource extends Iterable<Number> {
 	/**
 	 * Returns the column with the specified index.
 	 * @param col index of the column to return

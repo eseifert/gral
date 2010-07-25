@@ -347,7 +347,11 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 	@Override
 	public List<Tick> getTicks(Axis axis) {
+		List<Tick> ticks = new LinkedList<Tick>();
 		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+		if (tickSpacing <= 0.0) {
+			return ticks;
+		}
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0)
 				? tickSpacing/(ticksMinorCount + 1)
@@ -361,7 +365,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		int ticksTotal = (int)Math.floor((max - min)/tickSpacingMinor);
 		int initialTicksMinor = (int)Math.floor((minTickMajor - min)/tickSpacingMinor);
 
-		List<Tick> ticks = new LinkedList<Tick>();
 		Set<Number> tickPositions = new HashSet<Number>();
 		Set<Number> tickPositionsCustom = getTickPositionsCustom();
 
@@ -400,10 +403,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	 */
 	protected Set<Number> getTickPositionsCustom() {
 		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
-		if (labelsCustom != null) {
-			return labelsCustom.keySet();
+		if (labelsCustom == null) {
+			return new HashSet<Number>();
 		}
-		return new HashSet<Number>();
+		return labelsCustom.keySet();
 	}
 
 	/**
