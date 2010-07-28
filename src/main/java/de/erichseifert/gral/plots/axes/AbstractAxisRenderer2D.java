@@ -349,13 +349,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	public List<Tick> getTicks(Axis axis) {
 		List<Tick> ticks = new LinkedList<Tick>();
 		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
-		if (tickSpacing <= 0.0) {
+		if (Double.isNaN(tickSpacing) || Double.isInfinite(tickSpacing) || tickSpacing <= 0.0) {
 			return ticks;
 		}
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
-		double tickSpacingMinor = (ticksMinorCount > 0)
-				? tickSpacing/(ticksMinorCount + 1)
-				: tickSpacing;
+		double tickSpacingMinor = tickSpacing;
+		if (ticksMinorCount > 0) {
+			tickSpacingMinor = tickSpacing/(ticksMinorCount + 1);
+		}
 
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();

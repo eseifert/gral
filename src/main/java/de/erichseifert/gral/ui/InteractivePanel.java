@@ -73,6 +73,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	private final PrinterJob printerJob;
 
 	private static final int MIN_DRAG = 0;
+	private static final double ZOOM_FACTOR = 1.25;
 
 	private final JPopupMenu menu;
 	private final JMenuItem refresh;
@@ -170,7 +171,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			addMouseWheelListener(new MouseWheelListener() {
 				@Override
 				public void mouseWheelMoved(MouseWheelEvent e) {
-					double zoomNew = navigator.getZoom()*Math.pow(1.25, e.getWheelRotation());
+					double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, e.getWheelRotation());
 					navigator.setZoom(zoomNew);
 					repaint();
 				}
@@ -271,6 +272,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 
 				if (axisXRenderer != null) {
+					if (axisXRenderer.getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+						dx = -dx;
+					}
 					// Fetch current center on screen
 					double centerX = axisXRenderer.worldToView(
 							axisX, navigator.getCenter(axisX), true);
@@ -281,6 +285,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					navigator.setCenter(axisX, centerXNew);
 				}
 				if (axisYRenderer != null) {
+					if (axisYRenderer.getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+						dy = -dy;
+					}
 					// Fetch current center on screen
 					double centerY = axisYRenderer.worldToView(
 						axisY, navigator.getCenter(axisY), true);
