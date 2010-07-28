@@ -73,13 +73,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	private final PrinterJob printerJob;
 
 	private static final int MIN_DRAG = 0;
-	private static final double ZOOM_FACTOR = 1.25;
+	private static final double ZOOM_FACTOR = 0.8;
 
 	private final JPopupMenu menu;
-	private final JMenuItem refresh;
-	private final JMenuItem resetZoom;
-	private final JMenuItem exportImage;
-	private final JMenuItem print;
 
 	private final JFileChooser exportImageChooser;
 
@@ -89,6 +85,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	 * Creates a new panel instance and initializes it with a drawable component.
 	 * @param drawable Drawable component.
 	 */
+	@SuppressWarnings("serial")
 	public InteractivePanel(Drawable drawable) {
 		super(drawable);
 
@@ -102,17 +99,21 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 		menu = new JPopupMenu();
 
-		refresh = new JMenuItem(new AbstractAction("Refresh") {
+		menu.add(new JMenuItem(new AbstractAction("Zoom in") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				repaint();
+				zoom(1);
 			}
-		});
-		menu.add(refresh);
+		}));
 
-		menu.addSeparator();
+		menu.add(new JMenuItem(new AbstractAction("Zoom out") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoom(-1);
+			}
+		}));
 
-		resetZoom = new JMenuItem(new AbstractAction("Reset view") {
+		menu.add(new JMenuItem(new AbstractAction("Reset view") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
@@ -120,12 +121,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					repaint();
 				}
 			}
-		});
-		menu.add(resetZoom);
+		}));
 
 		menu.addSeparator();
 
-		exportImage = new JMenuItem(new AbstractAction("Export image...") {
+		menu.add(new JMenuItem(new AbstractAction("Export image...") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(InteractivePanel.this);
@@ -145,10 +145,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					}
 				}
 			}
-		});
-		menu.add(exportImage);
+		}));
 
-		print = new JMenuItem(new AbstractAction("Print...") {
+		menu.add(new JMenuItem(new AbstractAction("Print...") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {
@@ -160,8 +159,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					}
 				}
 			}
-		});
-		menu.add(print);
+		}));
 
 		addMouseListener(new PopupListener(menu));
 
@@ -171,9 +169,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			addMouseWheelListener(new MouseWheelListener() {
 				@Override
 				public void mouseWheelMoved(MouseWheelEvent e) {
-					double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, e.getWheelRotation());
-					navigator.setZoom(zoomNew);
-					repaint();
+					zoom(-e.getWheelRotation());
 				}
 			});
 
@@ -185,6 +181,12 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 				addMouseMotionListener(moveListener);
 			}
 		}
+	}
+
+	private void zoom(int times) {
+		double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, times);
+		navigator.setZoom(zoomNew);
+		repaint();
 	}
 
 	private void export(Drawable d, String mimeType, File f, Rectangle2D documentBounds) {
