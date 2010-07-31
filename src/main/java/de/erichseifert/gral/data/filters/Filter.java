@@ -23,7 +23,6 @@ package de.erichseifert.gral.data.filters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.DataListener;
@@ -67,7 +66,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	protected final DataSource original;
 
 	private final int[] cols;
-	private final List<double[]> data;
+	private final ArrayList<Double[]> rows;
 	private Mode mode;
 
 	/**
@@ -78,7 +77,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @param cols Column indexes to be filtered.
 	 */
 	public Filter(DataSource original, Mode mode, int... cols) {
-		this.data = new ArrayList<double[]>(cols.length);
+		this.rows = new ArrayList<Double[]>(original.getRowCount());
 		this.original = original;
 		this.mode = mode;
 		this.cols = Arrays.copyOf(cols, cols.length);
@@ -127,15 +126,15 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * Clears this Filter.
 	 */
 	protected void clear() {
-		data.clear();
+		rows.clear();
 	}
 
 	/**
 	 * Adds the specified row data to this Filter.
 	 * @param rowData Row data to be added.
 	 */
-	protected void add(double[] rowData) {
-		data.add(rowData);
+	protected void add(Double[] rowData) {
+		rows.add(rowData);
 	}
 
 	/**
@@ -143,12 +142,12 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	 * @param rowData Row to be added.
 	 */
 	protected void add(Number[] rowData) {
-		double[] doubleData = new double[rowData.length];
+		Double[] doubleData = new Double[rowData.length];
 		int i = 0;
 		for (Number value : rowData) {
 			doubleData[i++] = value.doubleValue();
 		}
-		data.add(doubleData);
+		rows.add(doubleData);
 	}
 
 	@Override
@@ -157,7 +156,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 		if (colPos < 0) {
 			return original.get(col, row);
 		}
-		return data.get(row)[colPos];
+		return rows.get(row)[colPos];
 	}
 
 	/**
@@ -171,7 +170,7 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 		if (colPos < 0) {
 			throw new IllegalArgumentException("Can't set value in unfiltered column.");
 		}
-		data.get(row)[colPos] = value;
+		rows.get(row)[colPos] = value;
 		notifyDataChanged();
 	}
 

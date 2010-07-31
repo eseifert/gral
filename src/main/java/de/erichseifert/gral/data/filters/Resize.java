@@ -127,7 +127,6 @@ public class Resize extends Filter {
 	}
 
 	private static void fillWithEmptyRows(DataTable data, int count) {
-		data.ensureRows(count);
 		while (data.getRowCount() < count) {
 			Double[] emptyRow = new Double[data.getColumnCount()];
 			Arrays.fill(emptyRow, 0.0);

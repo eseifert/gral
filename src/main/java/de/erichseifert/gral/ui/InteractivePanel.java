@@ -269,12 +269,9 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
 				Axis axisX = plot.getAxis(XYPlot.AXIS_X);
-				Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
-				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
-
 				if (axisXRenderer != null) {
-					if (axisXRenderer.getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+					if (axisXRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
 						dx = -dx;
 					}
 					// Fetch current center on screen
@@ -286,8 +283,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					// Change axis (world units)
 					navigator.setCenter(axisX, centerXNew);
 				}
+
+				Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
 				if (axisYRenderer != null) {
-					if (axisYRenderer.getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+					if (axisYRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
 						dy = -dy;
 					}
 					// Fetch current center on screen

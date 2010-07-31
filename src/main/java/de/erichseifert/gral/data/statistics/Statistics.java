@@ -144,7 +144,7 @@ public class Statistics implements DataListener {
 			double median = getMedian(orientation, index);
 			stats.put(MEDIAN, median);
 		}
-		return stats.get(key);
+		return (stats.containsKey(key)) ? stats.get(key) : Double.NaN;
 	}
 
 	/**

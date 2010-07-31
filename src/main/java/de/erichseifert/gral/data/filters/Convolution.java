@@ -59,7 +59,7 @@ public class Convolution extends Filter {
 	protected void filter() {
 		clear();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-			double[] filteredRow = new double[getColumnCountFiltered()];
+			Double[] filteredRow = new Double[getColumnCountFiltered()];
 			for (int colIndex = 0; colIndex < filteredRow.length; colIndex++) {
 				int colIndexOriginal = getIndexOriginal(colIndex);
 				filteredRow[colIndex] = convolve(colIndexOriginal, rowIndex);

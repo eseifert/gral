@@ -22,8 +22,10 @@
 package de.erichseifert.gral.data;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import de.erichseifert.gral.data.comparators.DataComparator;
 
@@ -41,8 +43,10 @@ import de.erichseifert.gral.data.comparators.DataComparator;
  * </ul>
  */
 public class DataTable extends AbstractDataSource {
-	private final ArrayList<Number[]> rows;
+	private final List<Number[]> rows;
 	private final Class<? extends Number>[] types;
+	private final int columnCount;
+	private int rowCount;
 
 	/**
 	 * Creates a new DataTable object.
@@ -50,36 +54,48 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public DataTable(Class<? extends Number>... types) {
 		this.types = Arrays.copyOf(types, types.length);
+		columnCount = types.length;
 		rows = new ArrayList<Number[]>();
 	}
 
 	/**
-	 * Adds a row with the specified values to the table.
-	 * The values are added in the order they are specified. If the
-	 * types of the table column and the value do not match, an exception
-	 * is thrown.
+	 * Adds a row with the specified <code>Number</code> values to the table.
+	 * The values are added in the order they are specified. If the types of
+	 * the table columns and the values do not match, an exception is thrown.
 	 * @param values values to be added as a row
 	 * @throws IllegalArgumentException if the type of the
-	 * table column and the type of the value that should be added
-	 * do not match
+	 * table columns and the type of the values that should be added do not match
 	 */
 	public void add(Number... values) {
-		if (types.length != values.length) {
+		add(Arrays.asList(values));
+	}
+
+	/**
+	 * Adds a row with the specified container's elements to the table.
+	 * The values are added in the order they are specified. If the types of
+	 * the table columns and the values do not match, an exception is thrown.
+	 * @param values values to be added as a row
+	 * @throws IllegalArgumentException if the type of the
+	 * table columns and the type of the values that should be added do not match
+	 */
+	public void add(Collection<? extends Number> values) {
+		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(
 					"Wrong number of columns! Expected " + types.length +
-					", got " + values.length);
+					", got " + values.size());
 		}
-		Number[] row = new Number[types.length];
-		for (int i = 0; i < values.length; i++) {
-			Object obj = values[i];
-			if (!(types[i].isAssignableFrom(obj.getClass()))) {
+		int i = 0;
+		Number[] row = new Number[values.size()];
+		for (Number value : values) {
+			if (!(types[i].isAssignableFrom(value.getClass()))) {
 				throw new IllegalArgumentException(
 						"Wrong column type! Expected " + types[i] + ", got " +
-						obj.getClass());
+						value.getClass());
 			}
-			row[i] = values[i];
+			row[i++] = value;
 		}
 		rows.add(row);
+		rowCount++;
 		notifyDataChanged();
 	}
 
@@ -89,6 +105,7 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void remove(int row) {
 		rows.remove(row);
+		rowCount--;
 		notifyDataChanged();
 	}
 
@@ -97,21 +114,13 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void clear() {
 		rows.clear();
+		rowCount = 0;
 		notifyDataChanged();
 	}
 
 	@Override
 	public Number get(int col, int row) {
 		return rows.get(row)[col];
-	}
-
-	/**
-	 * MAkes sure that the data table is prepared to store the specified number
-	 * of rows.
-	 * @param rows Number of rows that the data table should be prepared for.
-	 */
-	public void ensureRows(int rows) {
-		this.rows.ensureCapacity(rows);
 	}
 
 	/**
@@ -132,12 +141,12 @@ public class DataTable extends AbstractDataSource {
 
 	@Override
 	public int getRowCount() {
-		return rows.size();
+		return rowCount;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return types.length;
+		return columnCount;
 	}
 
 	/**
@@ -150,8 +159,8 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/**
-	 * Sorts the table with the specified DataComparators.
-	 * The values are compared in the way the comparators are specified.
+	 * Sorts the table rows with the specified DataComparators.
+	 * The row values are compared in the way the comparators are specified.
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(final DataComparator... comparators) {

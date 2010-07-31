@@ -34,6 +34,10 @@ import javax.swing.Timer;
 
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.filters.Convolution;
+import de.erichseifert.gral.data.filters.Filter;
+import de.erichseifert.gral.data.filters.Kernel;
+import de.erichseifert.gral.data.filters.KernelUtils;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
@@ -81,21 +85,25 @@ final class UpdateTask implements ActionListener {
 }
 
 public class MemoryUsage extends JFrame {
-	private static final int BUFFER_SIZE = 200;
-	private static final int INTERVAL = 100;
+	private static final int BUFFER_SIZE = 400;
+	private static final int INTERVAL = 80;
 
 	public MemoryUsage() {
 		super("GRALTest");
-		getContentPane().setBackground(new Color(1.0f, 0.92f, 0.90f));
+		getContentPane().setBackground(new Color(1.0f, 1.0f, 1.0f));
 
 		DataTable data = new DataTable(Long.class, Double.class);
-		data.ensureRows(BUFFER_SIZE);
 		long time = System.currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
-			data.add(time - i*INTERVAL, (i == BUFFER_SIZE - 1) ? 0.0 : Double.NaN);
+			data.add(time - i*INTERVAL, Double.NaN);
 		}
 
-		XYPlot plot = new XYPlot(data);
+		Kernel kernel1 = KernelUtils.getUniform(BUFFER_SIZE/8, BUFFER_SIZE/8/2, 1.0).normalize();
+		Filter average = new Convolution(data, kernel1, Filter.Mode.OMIT, 1);
+		Kernel kernel2 = KernelUtils.getBinomial(BUFFER_SIZE/8/2).normalize();
+		Filter smoothed = new Convolution(average, kernel2, Filter.Mode.REPEAT, 1);
+
+		XYPlot plot = new XYPlot(data, smoothed);
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
 		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
@@ -105,9 +113,14 @@ public class MemoryUsage extends JFrame {
 		axisRendererY.setSetting(AxisRenderer.TICK_LABELS_FORMAT, NumberFormat.getPercentInstance());
 
 		plot.setPointRenderer(data, null);
-		LineRenderer line = new DefaultLineRenderer2D();
-		line.setSetting(LineRenderer.COLOR, new Color(0.9f, 0.3f, 0.2f));
-		plot.setLineRenderer(data, line);
+		LineRenderer line1 = new DefaultLineRenderer2D();
+		line1.setSetting(LineRenderer.COLOR, new Color(1.0f, 0.0f, 0.0f, 0.3f));
+		plot.setLineRenderer(data, line1);
+
+		plot.setPointRenderer(smoothed, null);
+		LineRenderer line2 = new DefaultLineRenderer2D();
+		line2.setSetting(LineRenderer.COLOR, new Color(0.0f, 0.3f, 1.0f));
+		plot.setLineRenderer(smoothed, line2);
 
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel plotPanel = new InteractivePanel(plot);

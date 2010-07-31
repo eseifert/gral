@@ -23,9 +23,29 @@ package de.erichseifert.gral.data.comparators;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.data.DataTable;
+
 public class ComparatorTest {
+	private static DataTable data;
+	private Number[] row1;
+	private Number[] row2;
+
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		data = new DataTable(Double.class, Double.class, Double.class);
+		data.add(1.0, 2.0, 3.0);
+		data.add(2.0, 2.0, 2.0);
+	}
+
+	@Before
+	public void setUp() {
+		row1 = data.getRow(0).toArray(null);
+		row2 = data.getRow(1).toArray(null);
+	}
 
 	@Test
 	public void testColumn() {
@@ -41,9 +61,6 @@ public class ComparatorTest {
 
 	@Test
 	public void testAscending() {
-		Number[] row1 = { 1.0, 2.0, 3.0 };
-		Number[] row2 = { 2.0, 2.0, 2.0 };
-
 		DataComparator comparator1 = new Ascending(0);
 		DataComparator comparator2 = new Ascending(1);
 		DataComparator comparator3 = new Ascending(2);
@@ -59,9 +76,6 @@ public class ComparatorTest {
 
 	@Test
 	public void testDescending() {
-		Number[] row1 = { 1.0, 2.0, 3.0 };
-		Number[] row2 = { 2.0, 2.0, 2.0 };
-
 		DataComparator comparator1 = new Descending(0);
 		DataComparator comparator2 = new Descending(1);
 		DataComparator comparator3 = new Descending(2);
