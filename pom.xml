@@ -3,7 +3,7 @@
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>GRAL</artifactId>
   <name>GRAL Graphing Library</name>
-  <version>0.7</version>
+  <version>0.8</version>
   <description>A Java library for rendering graphs.</description>
   <inceptionYear>2009</inceptionYear>
 
