@@ -42,7 +42,7 @@
 // Create the table with the specified column types
 DataTable table = new DataTable(Double.class, Double.class);
 
-// Iterate your available data. In this case, data is an Iterable<Double[]>;
+// Iterate your available data. In this case, an Iterable<Double[]> or Double[][]
 for (Double[] coords : data) {
     double x = coords[0];
     double y = coords[1];
@@ -430,26 +430,27 @@ writer.write(table, file);
             </listitem>
             <listitem>
                 <para>The area where the actual data is plotted is called
-                <firstterm>plot area</firstterm> and the class used to display the
-                area is <classname>PlotArea2D</classname>, correspondingly.</para>
+                <firstterm>plot area</firstterm> and the class used to display
+                the area is <classname>PlotArea2D</classname>, correspondingly.
+                </para>
             </listitem>
             <listitem>
-                <para>Depending on its type a plot can have an arbitrary number of
-                axes which are created with the class <classname>Axis</classname>.
+                <para>Depending on its type a plot can have an arbitrary number
+                of axes which are created with the class <classname>Axis</classname>.
                 Each <classname>Axis</classname> is displayed by an instance of
-                <classname>AxisRenderer</classname>.</para>
+                <interfacename>AxisRenderer</interfacename>.</para>
             </listitem>
             <listitem>
                 <para>Data points on the plot area are rendered by an instance of
-                <classname>PointRenderer</classname>.</para>
+                <interfacename>PointRenderer</interfacename>.</para>
             </listitem>
             <listitem>
                 <para>Connections between data points are rendered by an instance
-                of <classname>LineRenderer</classname></para>
+                of <interfacename>LineRenderer</interfacename></para>
             </listitem>
             <listitem>
                 <para>In order to fill the area below data points an instance of
-                <classname>AreaRenderer2D</classname> is used.</para>
+                <interfacename>AreaRenderer</interfacename> is used.</para>
             </listitem>
         </itemizedlist>
     </para>
@@ -626,7 +627,7 @@ legend.setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
             <example xml:id="example.plotting.custom.axis.spacing">
                 <title>Changing the spacing of tick marks</title>
                 <programlisting language="java"><![CDATA[
-AxisRenderer axisRendererX = plot.getAxisRenderer(Axis.X);
+AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
 axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 ]]></programlisting>
             </example>
@@ -645,7 +646,7 @@ axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 XYPlot plot = new XYPlot(seriesLog, seriesLin);
 AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
 axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic data");
-plot.setAxisRenderer(Axis.X, axisRendererX);
+plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 ]]></programlisting>
             </example>
 
@@ -672,19 +673,180 @@ axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
         <sect2 xml:id="plotting.custom.point">
             <title>Customizing points</title>
 
-            <para><classname>PointRenderer</classname>, shape, color, size, ...</para>
+            <para>The display of data points in a plot is done by instances of
+            <interfacename>PointRenderer</interfacename>. A point renderer
+            defines the shape, the color, the size, and even the position of
+            each point. A custom renderer can be implemented using either the
+            interface <interfacename>PointRenderer</interfacename> itself or
+            using the abstract class <classname>AbstractPointRenderer</classname>
+            which is the preferred way.</para>
+
+            <para>Every point renderer has to implement two methods:
+            <methodsynopsis>
+                <type>Drawable</type><methodname>getPoint</methodname>
+                <methodparam><type>Axis</type><parameter>axis</parameter></methodparam>
+                <methodparam><type>AxisRenderer</type><parameter>axisRenderer</parameter></methodparam>
+                <methodparam><type>Row</type><parameter>row</parameter></methodparam>
+            </methodsynopsis>
+            returns a drawable component which then renders the points and
+            <methodsynopsis>
+                <type>Shape</type><methodname>getPointPath</methodname>
+                <methodparam><type>Row</type><parameter>row</parameter></methodparam>
+            </methodsynopsis>
+            which returns the vector shape of a specified data point</para>
+
+            <para>The class <classname>AbstractPointRenderer</classname>
+            implements the interface <interfacename>PointRenderer</interfacename>
+            and additionally it provides everything that's necessary to manage
+            settings and draw basic elements.</para>
+
+            <para>In <xref linkend="example.plotting.custom.point.simple"/> you
+            can see how to implement a simple renderer.</para>
+
+            <example xml:id="example.plotting.custom.point.simple">
+                <title>A custom point renderer</title>
+                <programlisting language="java"><![CDATA[
+public class SimplePointRenderer extends DefaultPointRenderer {
+    @Override
+    public Drawable getPoint(final Axis axisY, final AxisRenderer axisYRenderer, final Row row) {
+        Drawable drawable = new AbstractDrawable() {
+            @Override
+            public void draw(DrawingContext context) {
+                Paint paint = getSetting(COLOR);
+                Shape point = getPointPath(row);
+
+                // Put your custom code here ...
+
+                GraphicsUtils.fillPaintedShape(context.getGraphics(), point, paint, null);
+            }
+        };
+        return drawable;
+    }
+
+    @Override
+    public Shape getPointPath(Row row) {
+        Shape shape = getSetting(SHAPE);
+        return shape;
+    }
+}
+]]></programlisting>
+            </example>
         </sect2>
 
         <sect2 xml:id="plotting.custom.line">
             <title>Customizing lines</title>
 
-            <para><classname>LineRenderer</classname>, stroke types, colors, ...</para>
+            <para>Data points can be connected using lines. To draw these lines
+            instances of <interfacename>LineRenderer</interfacename> are used.
+            A line renderer has full control over the line shapes, the stroke
+            patterns, and the colors which will be used when drawing. Custom
+            renderers can be easily implemented using either the interface
+            <interfacename>LineRenderer</interfacename> itself or using the
+            abstract class <classname>AbstractLineRenderer2D</classname> which
+            is the preferred way for two-dimensional applications.</para>
+
+            <para>Every line renderer has to implement one method:
+            <methodsynopsis>
+                <type>Drawable</type><methodname>getLine</methodname>
+                <methodparam><type>Iterable&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+            </methodsynopsis>
+            returns a drawable component to display the lines.</para>
+
+            <para>The class <classname>AbstractLineRenderer2D</classname>
+            implements the interface <interfacename>LineRenderer</interfacename>
+            for two-dimensional data and additionally provides everything that's
+            necessary to manage settings and draw basic elements.</para>
+
+            <para>In <xref linkend="example.plotting.custom.line.simple"/> you
+            can see how to implement a simple renderer.</para>
+
+            <example xml:id="example.plotting.custom.line.simple">
+                <title>A custom line renderer</title>
+                <programlisting language="java"><![CDATA[
+public class SimpleLineRenderer2D extends AbstractLineRenderer2D {
+    @Override
+    public Drawable getLine(final Iterable<DataPoint> points) {
+        Drawable d = new AbstractDrawable() {
+            @Override
+            public void draw(DrawingContext context) {
+                Path2D line = new Path2D.Double();
+                for (DataPoint point : points) {
+                    Point2D pos = point.getPosition().getPoint2D();
+                    if (line.getCurrentPoint() == null) {
+                        line.moveTo(pos.getX(), pos.getY());
+                    } else {
+                        line.lineTo(pos.getX(), pos.getY());
+                    }
+                }
+                Shape lineShape = punch(line, points);
+                Paint paint = getSetting(LineRenderer.COLOR);
+                GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
+            }
+        };
+        return d;
+    }
+}
+]]></programlisting>
+            </example>
         </sect2>
 
         <sect2 xml:id="plotting.custom.area">
             <title>Customizing areas</title>
 
-            <para><classname>AreaRenderer</classname>, colors, fillings, ...</para>
+            <para>In order to display filled or hatched areas in plots so called
+            area renderers are used. They all derive from the interface
+            <interfacename>AreaRenderer</interfacename> and they control the
+            colors, the fillings, and also the shape of the rendered area.
+            Custom renderers can be easily implemented using either the
+            interface <interfacename>AreaRenderer</interfacename> itself or
+            using the abstract class <classname>AbstractAreaRenderer</classname>
+            which is the preferred way.</para>
+
+            <para>Every area renderer has to implement one method:
+            <methodsynopsis>
+                <type>Drawable</type><methodname>getArea</methodname>
+                <methodparam><type>Axis</type><parameter>axis</parameter></methodparam>
+                <methodparam><type>AxisRenderer</type><parameter>axisRenderer</parameter></methodparam>
+                <methodparam><type>Iterable&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+            </methodsynopsis>
+            returns a drawable component to display the area.</para>
+
+            <para>The class <classname>AbstractAreaRenderer</classname>
+            implements the interface <interfacename>AreaRenderer</interfacename>
+            and additionally it provides everything that's necessary to manage
+            settings and draw basic elements.</para>
+
+            <para>In <xref linkend="example.plotting.custom.area.simple"/> you
+            can see how to implement a simple renderer.</para>
+
+            <example xml:id="example.plotting.custom.area.simple">
+                <title>A custom area renderer</title>
+                <programlisting language="java"><![CDATA[
+public class SimpleAreaRenderer extends AbstractAreaRenderer {
+    @Override
+    public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
+            Iterable<DataPoint> points) {
+        Shape path = getAreaShape(axis, axisRenderer, points);
+        final Shape area = punch(path, points);
+
+        return new AbstractDrawable() {
+            @Override
+            public void draw(DrawingContext context) {
+                Paint paint = getSetting(COLOR);
+                GraphicsUtils.fillPaintedShape(context.getGraphics(),
+                        area, paint, area.getBounds2D());
+            }
+        };
+    }
+
+    private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer,
+            Iterable<DataPoint> points) {
+        // Code to construct the shape
+        ...
+    }
+}
+]]></programlisting>
+            </example>
         </sect2>
 
         <sect2 xml:id="plotting.export">

@@ -16,13 +16,13 @@
 
   <developers>
     <developer>
-    	<id>erich</id>
+    	<id>eseifert</id>
         <name>Erich Seifert</name>
         <email>info[at]erichseifert.de</email>
         <timezone>+1</timezone>
     </developer>
     <developer>
-    	<id>michael</id>
+    	<id>mseifert</id>
         <name>Michael Seifert</name>
         <email>michael.seifert[at]gmx.net</email>
         <timezone>+1</timezone>
@@ -37,7 +37,6 @@
     <plugins>
         <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>2.3.1</version>
             <configuration>
                 <source>1.6</source>
                 <target>1.6</target>
@@ -46,7 +45,6 @@
         <plugin>
             <groupId>com.mycila.maven-license-plugin</groupId>
             <artifactId>maven-license-plugin</artifactId>
-            <version>1.6.0</version>
             <configuration>
                 <header>src/etc/header.txt</header>
                 <mapping>
@@ -81,7 +79,6 @@
         <plugin>
         	<groupId>org.apache.maven.plugins</groupId>
         	<artifactId>maven-javadoc-plugin</artifactId>
-        	<version>2.7</version>
         	<configuration>
           		<show>private</show>
           		<nohelp>true</nohelp>
@@ -90,7 +87,6 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.5</version>
             <configuration>
                 <includeTestSourceDirectory>true</includeTestSourceDirectory>
                 <configLocation>${basedir}/checkstyle.xml</configLocation>
@@ -134,7 +130,6 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jxr-plugin</artifactId>
-            <version>2.2</version>
             <configuration>
                 <inputEncoding>UTF-8</inputEncoding>
                 <outputEncoding>UTF-8</outputEncoding>
@@ -147,12 +142,10 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
         	<artifactId>maven-surefire-report-plugin</artifactId>
-        	<version>2.5</version>
       	</plugin>
         <plugin>
         	<groupId>org.apache.maven.plugins</groupId>
         	<artifactId>maven-javadoc-plugin</artifactId>
-        	<version>2.7</version>
         	<configuration>
           		<show>public</show>
         	</configuration>
@@ -160,7 +153,6 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.5</version>
             <configuration>
                 <configLocation>${basedir}/checkstyle.xml</configLocation>
                 <includeTestSourceDirectory>false</includeTestSourceDirectory>
@@ -170,7 +162,6 @@
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.4</version>
             <configuration>
                 <instrumentation>
                     <excludes>
@@ -187,7 +178,6 @@
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>taglist-maven-plugin</artifactId>
-            <version>2.4</version>
         </plugin>
     </plugins>
   </reporting>
