@@ -2,36 +2,38 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>GRAL</artifactId>
+  <version>0.9-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>GRAL Graphing Library</name>
-  <version>0.9</version>
+
+  <name>GRAL graphing library</name>
   <description>A Java library for rendering graphs.</description>
   <inceptionYear>2009</inceptionYear>
 
   <modules>
+    <module>build-tools</module>
     <module>core</module>
     <module>examples</module>
   </modules>
 
   <licenses>
     <license>
-        <name>GNU Library or Lesser General Public License (LGPL)</name>
-        <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <name>GNU Library or Lesser General Public License (LGPL)</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
     </license>
   </licenses>
 
   <developers>
     <developer>
-    	<id>eseifert</id>
-        <name>Erich Seifert</name>
-        <email>info[at]erichseifert.de</email>
-        <timezone>+1</timezone>
+      <id>eseifert</id>
+      <name>Erich Seifert</name>
+      <email>info[at]erichseifert.de</email>
+      <timezone>+1</timezone>
     </developer>
     <developer>
-    	<id>mseifert</id>
-        <name>Michael Seifert</name>
-        <email>michael.seifert[at]gmx.net</email>
-        <timezone>+1</timezone>
+      <id>mseifert</id>
+      <name>Michael Seifert</name>
+      <email>michael.seifert[at]gmx.net</email>
+      <timezone>+1</timezone>
     </developer>
   </developers>
 
@@ -41,164 +43,167 @@
 
   <build>
     <plugins>
-        <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>1.6</source>
-                <target>1.6</target>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>com.mycila.maven-license-plugin</groupId>
-            <artifactId>maven-license-plugin</artifactId>
-            <configuration>
-                <header>src/etc/header.txt</header>
-                <mapping>
-                    <java>SLASHSTAR_STYLE</java>
-                </mapping>
-                <properties>
-                    <year>${project.inceptionYear}-2010</year>
-                    <owner1>Erich Seifert</owner1>
-                    <email1>info[at]erichseifert.de</email1>
-                    <owner2>Michael Seifert</owner2>
-                    <email2>michael.seifert[at]gmx.net</email2>
-                </properties>
-                <excludes>
-                    <exclude>LICENSE.GPL</exclude>
-                    <exclude>LICENSE.LGPL</exclude>
-                    <exclude>src/main/resources/**</exclude>
-                    <exclude>src/test/resources/**</exclude>
-                    <exclude>src/docbook/**</exclude>
-                </excludes>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>test</phase>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-                <show>private</show>
-                <nohelp>true</nohelp>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <configuration>
-                <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                <configLocation>${basedir}/checkstyle.xml</configLocation>
-                <consoleOutput>true</consoleOutput>
-                <enableRSS>false</enableRSS>
-                <enableRulesSummary>false</enableRulesSummary>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>test</phase>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-                <descriptorRefs>
-                    <descriptorRef>bin</descriptorRef>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                    <descriptorRef>src</descriptorRef>
-                </descriptorRefs>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>Assemble jar with dependencies</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-     </plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <inherited>false</inherited>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>de.erichseifert.gral</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>0.9-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <header>gral/header.txt</header>
+          <mapping>
+            <java>SLASHSTAR_STYLE</java>
+          </mapping>
+          <properties>
+            <year>${project.inceptionYear}-2010</year>
+            <owner1>Erich Seifert</owner1>
+            <email1>info[at]erichseifert.de</email1>
+            <owner2>Michael Seifert</owner2>
+            <email2>michael.seifert[at]gmx.net</email2>
+          </properties>
+          <excludes>
+            <exclude>**/main/resources/**</exclude>
+            <exclude>**/test/resources/**</exclude>
+            <exclude>**/src/docbook/**</exclude>
+            <exclude>**/LICENSE.*</exclude>
+            <exclude>**/TODO.txt</exclude>
+            <exclude>**/*.svg</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>de.erichseifert.gral</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>0.9-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <consoleOutput>true</consoleOutput>
+          <enableRSS>false</enableRSS>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+        <executions>
+           <execution>
+             <phase>test</phase>
+             <goals>
+               <goal>check</goal>
+             </goals>
+           </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>de.erichseifert.gral</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>0.9-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <descriptors>
+            <descriptor>gral/assemblies/bin.xml</descriptor>
+            <descriptor>gral/assemblies/src.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <reporting>
     <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jxr-plugin</artifactId>
-            <configuration>
-                <inputEncoding>UTF-8</inputEncoding>
-                <outputEncoding>UTF-8</outputEncoding>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-changelog-plugin</artifactId>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-      	</plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-                <show>public</show>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <configuration>
-                <configLocation>${basedir}/checkstyle.xml</configLocation>
-                <includeTestSourceDirectory>false</includeTestSourceDirectory>
-                <excludes>de/erichseifert/gral/examples/**/*</excludes>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <configuration>
-                <instrumentation>
-                    <excludes>
-                        <exclude>**/package-info.java</exclude>
-                        <exclude>de/erichseifert/gral/examples/**/*</exclude>
-                    </excludes>
-                </instrumentation>
-                <formats>
-                    <format>html</format>
-                    <format>xml</format>
-                </formats>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>taglist-maven-plugin</artifactId>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <configuration>
+          <inputEncoding>UTF-8</inputEncoding>
+          <outputEncoding>UTF-8</outputEncoding>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <show>public</show>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>gral/checkstyle.xml</configLocation>
+          <includeTestSourceDirectory>false</includeTestSourceDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <configuration>
+          <instrumentation>
+            <excludes>
+              <exclude>**/package-info.java</exclude>
+              <exclude>de/erichseifert/gral/examples/**/*</exclude>
+            </excludes>
+          </instrumentation>
+          <formats>
+            <format>html</format>
+            <format>xml</format>
+          </formats>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
     </plugins>
   </reporting>
 
   <dependencies>
     <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.1</version>
-        <scope>test</scope>
-        <optional>true</optional>
-    </dependency>
-    <dependency>
-        <groupId>de.erichseifert.vectorgraphics2d</groupId>
-        <artifactId>VectorGraphics2D</artifactId>
-        <version>0.6</version>
-        <optional>true</optional>
+      <groupId>de.erichseifert.vectorgraphics2d</groupId>
+      <artifactId>VectorGraphics2D</artifactId>
+      <version>0.6</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -207,7 +212,7 @@
     <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk</developerConnection>
     <tag>HEAD</tag>
   </scm>
-  
+
   <issueManagement>
     <system>trac</system>
     <url>http://trac.erichseifert.de/gral/</url>
