@@ -128,6 +128,9 @@ public class Axis {
 	 * @param max Maximum value.
 	 */
 	public void setRange(Number min, Number max) {
+		if (this.min.equals(min) && this.max.equals(max)) {
+			return;
+		}
 		this.min = min;
 		this.max = max;
 		fireRangeChanged(min, max);

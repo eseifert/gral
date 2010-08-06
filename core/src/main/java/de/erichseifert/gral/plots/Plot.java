@@ -58,13 +58,13 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Abstract class that displays data in a plot.
- * Functionality includes:
+ * <p>Abstract class that displays data in a plot.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Adding axes to the plot</li>
- * <li>Adding a title to the plot</li>
- * <li>Adding a legend to the plot</li>
- * <li>Administration of settings</li>
+ *   <li>Adding axes to the plot</li>
+ *   <li>Adding a title to the plot</li>
+ *   <li>Adding a legend to the plot</li>
+ *   <li>Administration of settings</li>
  * </ul>
  */
 public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener, DataListener {
@@ -98,8 +98,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	private final Set<DataSource> dataVisible;
 
 	private final Map<String, Axis> axes;
-	private final Map<Axis, AxisRenderer> axisRenderers;
-	private final Map<Axis, Drawable> axisDrawables;
+	private final Map<String, AxisRenderer> axisRenderers;
+	private final Map<String, Drawable> axisDrawables;
 
 	private final Label title;
 	private PlotArea plotArea;
@@ -122,8 +122,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		dataVisible = new HashSet<DataSource>();
 
 		axes = new HashMap<String, Axis>();
-		axisRenderers = new HashMap<Axis, AxisRenderer>();
-		axisDrawables = new HashMap<Axis, Drawable>();
+		axisRenderers = new HashMap<String, AxisRenderer>();
+		axisDrawables = new HashMap<String, Drawable>();
 
 		data = new LinkedList<DataSource>();
 		for (DataSource source : series) {
@@ -207,9 +207,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public void setAxis(String name, Axis axis) {
 		if (axis == null) {
 			removeAxis(name);
-			return;
+		} else {
+			axes.put(name, axis);
 		}
-		axes.put(name, axis);
 	}
 
 	/**
@@ -217,27 +217,17 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param name Name of the axis to be removed.
 	 */
 	public void removeAxis(String name) {
-		Axis axis = axes.get(name);
 		axes.remove(name);
-		axisRenderers.remove(axis);
-		axisDrawables.remove(axis);
+		axisRenderers.remove(name);
+		axisDrawables.remove(name);
 	}
 
 	/**
-	 * Returns a Collection of all axes stored in this plot.
-	 * @return All axes stored in this plot.
+	 * Returns a collection of all names of the axes stored in this plot.
+	 * @return The names of all axes stored in this plot.
 	 */
-	public Collection<Axis> getAxes() {
-		return axes.values();
-	}
-
-	/**
-	 * Returns the renderer for the specified axis.
-	 * @param axis Axis.
-	 * @return Instance that renders the axis.
-	 */
-	public AxisRenderer getAxisRenderer(Axis axis) {
-		return axisRenderers.get(axis);
+	public Collection<String> getAxesNames() {
+		return axes.keySet();
 	}
 
 	/**
@@ -246,25 +236,7 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @return Instance that renders the axis.
 	 */
 	public AxisRenderer getAxisRenderer(String axisName) {
-		Axis axis = getAxis(axisName);
-		return getAxisRenderer(axis);
-	}
-
-	/**
-	 * Sets the renderer for the specified axis.
-	 * @param axis Axis to be rendered.
-	 * @param renderer Instance to render the axis.
-	 */
-	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
-		Drawable comp = null;
-		if (renderer == null) {
-			axisRenderers.remove(axis);
-			
-		} else {
-			axisRenderers.put(axis, renderer);
-			comp = renderer.getRendererComponent(axis);
-		}
-		setAxisComponent(axis, comp);
+		return axisRenderers.get(axisName);
 	}
 
 	/**
@@ -273,29 +245,36 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * @param renderer Instance to render the axis.
 	 */
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
-		Axis axis = getAxis(axisName);
-		setAxisRenderer(axis, renderer);
+		Drawable comp = null;
+		if (renderer == null) {
+			axisRenderers.remove(axisName);
+		} else {
+			axisRenderers.put(axisName, renderer);
+			Axis axis = getAxis(axisName);
+			comp = renderer.getRendererComponent(axis);
+		}
+		setAxisComponent(axisName, comp);
 	}
 
 	/**
 	 * Returns the component that is used to draw the specified axis.
-	 * @param axis Axis.
+	 * @param axisName Name of the axis.
 	 * @return Instance that draws the axis.
 	 */
-	protected Drawable getAxisComponent(Axis axis) {
-		return axisDrawables.get(axis);
+	protected Drawable getAxisComponent(String axisName) {
+		return axisDrawables.get(axisName);
 	}
 
 	/**
 	 * Sets the component that should be used for drawing the specified axis.
-	 * @param axis Axis.
+	 * @param axisName Name of the axis.
 	 * @param comp Instance that draws the axis.
 	 */
-	private void setAxisComponent(Axis axis, Drawable comp) {
+	private void setAxisComponent(String axisName, Drawable comp) {
 		if (comp == null) {
-			axisDrawables.remove(axis);
+			axisDrawables.remove(axisName);
 		} else {
-			axisDrawables.put(axis, comp);
+			axisDrawables.put(axisName, comp);
 		}
 	}
 

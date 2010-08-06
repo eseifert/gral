@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
@@ -32,11 +33,11 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class ScatterPlot extends JFrame {
+public class ScatterPlot extends JPanel {
 	private static final Random random = new Random();
 
 	public ScatterPlot() {
-		super("GRALTest");
+		super(new BorderLayout());
 
 		DataTable data = new DataTable(Double.class, Double.class);
 		for (int i = 0; i <= 100000; i++) {
@@ -50,15 +51,16 @@ public class ScatterPlot extends JFrame {
 		plot.setSetting(XYPlot.ANTIALISING, false);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(600, 600);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		ScatterPlot test = new ScatterPlot();
-		test.setVisible(true);
+		ScatterPlot example = new ScatterPlot();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 
 }

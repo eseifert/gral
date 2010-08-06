@@ -100,8 +100,8 @@ public class BarPlot extends XYPlot {
 			double valueY = row.get(1).doubleValue();
 			Axis axisX = plot.getAxis(AXIS_X);
 			Axis axisY = plot.getAxis(AXIS_Y);
-			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
-			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
+			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
+			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 			double axisYOrigin = 0.0;
 
 			/*

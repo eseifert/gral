@@ -6,6 +6,7 @@
     <format>tar.bz2</format>
     <format>zip</format>
   </formats>
+  <includeBaseDirectory>true</includeBaseDirectory>
   <fileSets>
     <fileSet>
       <includes>
@@ -18,7 +19,6 @@
       <useDefaultExcludes>true</useDefaultExcludes>
     </fileSet>
   </fileSets>
-  <includeBaseDirectory>false</includeBaseDirectory>
   <moduleSets>
     <moduleSet>
       <includes>

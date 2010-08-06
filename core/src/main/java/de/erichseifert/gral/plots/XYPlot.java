@@ -153,9 +153,9 @@ public class XYPlot extends Plot  {
 
 			// Draw gridX
 			if (isGridMajorX || isGridMinorX) {
-				Axis axisX = plot.getAxis(AXIS_X);
-				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
+				AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 				if (axisXRenderer != null) {
+					Axis axisX = plot.getAxis(AXIS_X);
 					Shape shapeX = axisXRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 					List<Tick> ticksX = axisXRenderer.getTicks(axisX);
@@ -186,9 +186,9 @@ public class XYPlot extends Plot  {
 
 			// Draw gridY
 			if (isGridMajorY || isGridMinorY) {
-				Axis axisY = plot.getAxis(AXIS_Y);
-				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 				if (axisYRenderer != null) {
+					Axis axisY = plot.getAxis(AXIS_Y);
 					Shape shapeY = axisYRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 					List<Tick> ticksY = axisYRenderer.getTicks(axisY);
@@ -229,8 +229,8 @@ public class XYPlot extends Plot  {
 
 			Axis axisX = plot.getAxis(AXIS_X);
 			Axis axisY = plot.getAxis(AXIS_Y);
-			AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
-			AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
+			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
+			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 
 			// Paint points and lines
 			for (DataSource s : plot.getVisibleData()) {
@@ -413,12 +413,10 @@ public class XYPlot extends Plot  {
 		}
 
 		Rectangle2D plotBounds = getPlotArea().getBounds();
-		Axis axisX = getAxis(AXIS_X);
-		Axis axisY = getAxis(AXIS_Y);
-		AxisRenderer axisXRenderer = getAxisRenderer(axisX);
-		AxisRenderer axisYRenderer = getAxisRenderer(axisY);
-		Drawable axisXComp = getAxisComponent(axisX);
-		Drawable axisYComp = getAxisComponent(axisY);
+		AxisRenderer axisXRenderer = getAxisRenderer(AXIS_X);
+		AxisRenderer axisYRenderer = getAxisRenderer(AXIS_Y);
+		Drawable axisXComp = getAxisComponent(AXIS_X);
+		Drawable axisYComp = getAxisComponent(AXIS_Y);
 		Dimension2D axisXSize = null;
 		Dimension2D axisYSize = null;
 
@@ -442,6 +440,7 @@ public class XYPlot extends Plot  {
 		if (axisXRenderer != null && axisXComp != null) {
 			PointND<Double> axisXPos = null;
 			if (axisYRenderer != null) {
+				Axis axisY = getAxis(AXIS_Y);
 				Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
 				axisXPos = axisYRenderer.getPosition(
 						axisY, axisXIntersection, false, false);
@@ -460,6 +459,7 @@ public class XYPlot extends Plot  {
 		if (axisYRenderer != null && axisYComp != null) {
 			PointND<Double> axisYPos = null;
 			if (axisXRenderer != null) {
+				Axis axisX = getAxis(AXIS_X);
 				Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
 				axisYPos = axisXRenderer.getPosition(
 						axisX, axisYIntersection, false, false);
@@ -546,12 +546,12 @@ public class XYPlot extends Plot  {
 	}
 
 	@Override
-	public void setAxisRenderer(Axis axis, AxisRenderer renderer) {
-		if ((renderer != null) && (axis == getAxis(AXIS_Y))) {
+	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
+		if ((renderer != null) && AXIS_Y.equals(axisName)) {
 			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
 		}
-		super.setAxisRenderer(axis, renderer);
+		super.setAxisRenderer(axisName, renderer);
 	}
 
 	@Override

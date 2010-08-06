@@ -30,6 +30,7 @@ import java.text.NumberFormat;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import de.erichseifert.gral.data.Column;
@@ -84,13 +85,13 @@ final class UpdateTask implements ActionListener {
 	}
 }
 
-public class MemoryUsage extends JFrame {
+public class MemoryUsage extends JPanel {
 	private static final int BUFFER_SIZE = 400;
 	private static final int INTERVAL = 80;
 
 	public MemoryUsage() {
-		super("GRALTest");
-		getContentPane().setBackground(new Color(1.0f, 1.0f, 1.0f));
+		super(new BorderLayout());
+		setBackground(new Color(1.0f, 1.0f, 1.0f));
 
 		DataTable data = new DataTable(Long.class, Double.class);
 		long time = System.currentTimeMillis();
@@ -124,10 +125,7 @@ public class MemoryUsage extends JFrame {
 
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel plotPanel = new InteractivePanel(plot);
-		getContentPane().add(plotPanel, BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(900, 300);
+		add(plotPanel, BorderLayout.CENTER);
 
 		UpdateTask updateTask = new UpdateTask(data, plot, plotPanel);
 		Timer updateTimer = new Timer(INTERVAL, updateTask);
@@ -136,7 +134,11 @@ public class MemoryUsage extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		MemoryUsage test = new MemoryUsage();
-		test.setVisible(true);
+		MemoryUsage example = new MemoryUsage();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(900, 300);
+		frame.setVisible(true);
 	}
 }

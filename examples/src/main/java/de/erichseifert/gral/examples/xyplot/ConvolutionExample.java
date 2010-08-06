@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.DrawableConstants.Location;
@@ -46,10 +47,11 @@ import de.erichseifert.gral.util.Insets2D;
 /**
  * Example that shows how to use convultion filtering.
  */
-public class ConvolutionExample extends JFrame {
+public class ConvolutionExample extends JPanel {
 
 	public ConvolutionExample() {
-		super("GRALTest");
+		super(new BorderLayout());
+
 		DataTable data = new DataTable(Double.class, Double.class);
 		Random r = new Random();
 		for (int i = 0; i < 200; i++) {
@@ -111,15 +113,15 @@ public class ConvolutionExample extends JFrame {
 		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setMinimumSize(getContentPane().getMinimumSize());
-		setSize(900, 600);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		ConvolutionExample test = new ConvolutionExample();
-		test.setVisible(true);
+		ConvolutionExample example = new ConvolutionExample();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

@@ -52,6 +52,7 @@ import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
+import de.erichseifert.gral.plots.NavigationListener;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.PlotNavigator;
 import de.erichseifert.gral.plots.XYPlot;
@@ -64,7 +65,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
  * rich Swing component. Special handling is applied to <code>XYPlot</code> instances.
  * @see de.erichseifert.gral.plots.XYPlot
  */
-public class InteractivePanel extends DrawablePanel implements Printable {
+public class InteractivePanel extends DrawablePanel implements Printable, NavigationListener {
 	private static final long serialVersionUID = 1L;
 
 	// FIXME: Find better method to adjust resolution
@@ -268,36 +269,36 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				Axis axisX = plot.getAxis(XYPlot.AXIS_X);
-				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisX);
+				AxisRenderer axisXRenderer = plot.getAxisRenderer(XYPlot.AXIS_X);
 				if (axisXRenderer != null) {
 					if (axisXRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
 						dx = -dx;
 					}
+					Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 					// Fetch current center on screen
 					double centerX = axisXRenderer.worldToView(
-							axisX, navigator.getCenter(axisX), true);
+							axisX, navigator.getCenter(XYPlot.AXIS_X), true);
 					// Move center and convert it to axis coordinates
 					Number centerXNew = axisXRenderer.viewToWorld(
 							axisX, centerX + dx, true);
 					// Change axis (world units)
-					navigator.setCenter(axisX, centerXNew);
+					navigator.setCenter(XYPlot.AXIS_X, centerXNew);
 				}
 
-				Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
-				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisY);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(XYPlot.AXIS_Y);
 				if (axisYRenderer != null) {
 					if (axisYRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
 						dy = -dy;
 					}
+					Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
 					// Fetch current center on screen
 					double centerY = axisYRenderer.worldToView(
-						axisY, navigator.getCenter(axisY), true);
+						axisY, navigator.getCenter(XYPlot.AXIS_Y), true);
 					// Move center and convert it to axis coordinates
 					Number centerYNew = axisYRenderer.viewToWorld(
 						axisY, centerY + dy, true);
 					// Change axis (world units)
-					navigator.setCenter(axisY, centerYNew);
+					navigator.setCenter(XYPlot.AXIS_Y, centerYNew);
 				}
 
 				// Refresh display
@@ -337,4 +338,42 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		return Printable.PAGE_EXISTS;
 	}
 
+	/**
+	 * Couples the actions of the current and the specified panel. All actions
+	 * applied to this panel will be also applied to the specified panel and
+	 * vice versa.
+	 * @param panel Panel to be bound to this instance.
+	 */
+	public void connect(final InteractivePanel panel) {
+		if (panel != null && panel != this) {
+			this.navigator.addNavigationListener(panel);
+			panel.navigator.addNavigationListener(this);
+		}
+	}
+
+	/**
+	 * Decouples the actions of the current and the specified panel. All actions
+	 * will be applied separately to each panel then.
+	 * @param panel Panel to be bound to this instance.
+	 */
+	public void disconnect(InteractivePanel panel) {
+		if (panel != null && panel != this) {
+			this.navigator.removeNavigationListener(panel);
+			panel.navigator.removeNavigationListener(this);
+		}
+	}
+
+	@Override
+	public void centerChanged(PlotNavigator source, String axisId,
+			Number centerOld, Number centerNew) {
+		navigator.setCenter(axisId, centerNew);
+		repaint();
+	}
+
+	@Override
+	public void zoomChanged(PlotNavigator source, String axisId,
+			double zoomOld, double zoomNew) {
+		navigator.setZoom(zoomNew);
+		repaint();
+	}
 }

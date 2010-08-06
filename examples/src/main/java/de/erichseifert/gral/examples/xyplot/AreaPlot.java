@@ -21,10 +21,12 @@
 
 package de.erichseifert.gral.examples.xyplot;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
@@ -40,11 +42,11 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
-public class AreaPlot extends JFrame {
+public class AreaPlot extends JPanel {
 	private static Random random = new Random();
 
 	public AreaPlot() {
-		super("GRALTest");
+		super(new BorderLayout());
 
 		// Create table
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
@@ -61,14 +63,11 @@ public class AreaPlot extends JFrame {
 		XYPlot plot = new XYPlot(data1, data2, data3);
 		plot.setSetting(XYPlot.LEGEND, true);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
-		getContentPane().add(new InteractivePanel(plot));
+		add(new InteractivePanel(plot));
 
 		formatFilledArea(plot, data1, new Color(0.9f, 0.3f, 0.2f));
 		formatFilledArea(plot, data2, new Color(0.0f, 0.3f, 0.9f));
 		formatLineArea(plot, data3, new Color(0.0f, 0.5f, 0.0f));
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 600);
 	}
 
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
@@ -97,7 +96,11 @@ public class AreaPlot extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		AreaPlot test = new AreaPlot();
-		test.setVisible(true);
+		AreaPlot example = new AreaPlot();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

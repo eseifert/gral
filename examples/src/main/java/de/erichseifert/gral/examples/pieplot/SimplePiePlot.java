@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.PiePlot;
@@ -32,16 +33,18 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimplePiePlot extends JFrame {
+public class SimplePiePlot extends JPanel {
 
 	public SimplePiePlot() {
-		super("GRALTest");
+		super(new BorderLayout());
+
 		DataTable data = new DataTable(Integer.class);
 		Random r = new Random();
 		for (int i = 0; i < 15; i++) {
 			int val = r.nextInt(10) + 1;
 			data.add((r.nextDouble() <= 0.15) ? -val : val);
 		}
+
 		PiePlot plot = new PiePlot(data);
 		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
 		// Change relative size of pie
@@ -61,14 +64,15 @@ public class SimplePiePlot extends JFrame {
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.COLORS, colors);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 600);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		SimplePiePlot test = new SimplePiePlot();
-		test.setVisible(true);
+		SimplePiePlot example = new SimplePiePlot();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

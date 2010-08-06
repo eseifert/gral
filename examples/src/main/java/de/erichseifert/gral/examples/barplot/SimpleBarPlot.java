@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BarPlot;
@@ -34,10 +35,11 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimpleBarPlot extends JFrame {
+public class SimpleBarPlot extends JPanel {
 
 	public SimpleBarPlot() {
-		super("GRALTest");
+		super(new BorderLayout());
+
 		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
 		data.add(1,  1,  6);
 		data.add(2,  3,  8);
@@ -47,6 +49,7 @@ public class SimpleBarPlot extends JFrame {
 		data.add(6,  8, 18);
 		data.add(7,  9,  9);
 		data.add(8, 11,  1);
+
 		BarPlot plot = new BarPlot(data);
 		plot.getAxis(BarPlot.AXIS_X).setRange(0.5, 8.5);
 		plot.getAxis(BarPlot.AXIS_Y).setRange(-4.0, 11.0);
@@ -58,14 +61,15 @@ public class SimpleBarPlot extends JFrame {
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 600);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		SimpleBarPlot test = new SimpleBarPlot();
-		test.setVisible(true);
+		SimpleBarPlot example = new SimpleBarPlot();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

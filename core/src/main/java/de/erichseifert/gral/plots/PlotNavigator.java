@@ -22,7 +22,9 @@
 package de.erichseifert.gral.plots;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import de.erichseifert.gral.plots.axes.Axis;
@@ -34,7 +36,8 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public class PlotNavigator {
 	private final Plot plot;
-	private final Map<Axis, NavigationInfo> infos;
+	private final Map<String, NavigationInfo> infos;
+	private final Set<NavigationListener> navigationListeners;
 
 	private double zoomMin;
 	private double zoomMax;
@@ -129,13 +132,15 @@ public class PlotNavigator {
 	 * @param plot Plot to be zoomed.
 	 */
 	public PlotNavigator(Plot plot) {
+		navigationListeners = new HashSet<NavigationListener>();
 		this.plot = plot;
-		infos = new HashMap<Axis, NavigationInfo>();
-		for (Axis axis : plot.getAxes()) {
-			AxisRenderer renderer = plot.getAxisRenderer(axis);
+		infos = new HashMap<String, NavigationInfo>();
+		for (String axisName : plot.getAxesNames()) {
+			Axis axis = plot.getAxis(axisName);
 			double min = 0.0;
 			double max = 0.0;
 			Number center = 0.0;
+			AxisRenderer renderer = plot.getAxisRenderer(axisName);
 			if (renderer != null) {
 				min = renderer.worldToView(axis, axis.getMin(), false);
 				max = renderer.worldToView(axis, axis.getMax(), false);
@@ -143,19 +148,20 @@ public class PlotNavigator {
 			}
 			NavigationInfo info = new NavigationInfo(
 					axis.getMin(), axis.getMax(), center.doubleValue());
-			infos.put(axis, info);
+			infos.put(axisName, info);
 		}
 		zoomMin = 1e-2;
 		zoomMax = 1e+2;
 	}
 
 	private void refresh() {
-		for (Entry<Axis, NavigationInfo> entry: infos.entrySet()) {
-			Axis axis = entry.getKey();
-			AxisRenderer renderer = plot.getAxisRenderer(axis);
+		for (Entry<String, NavigationInfo> entry: infos.entrySet()) {
+			String axisName = entry.getKey();
+			AxisRenderer renderer = plot.getAxisRenderer(axisName);
 			if (renderer == null) {
 				continue;
 			}
+			Axis axis = getPlot().getAxis(axisName);
 			NavigationInfo info = entry.getValue();
 
 			// Original range in screen units
@@ -210,28 +216,47 @@ public class PlotNavigator {
 			return;
 		}
 		zoomNew = MathUtils.limit(zoomNew, zoomMin, zoomMax);
-		for (NavigationInfo info: infos.values()) {
+		boolean changed = false;
+		for (Map.Entry<String, NavigationInfo> entry: infos.entrySet()) {
+			String axisName = entry.getKey();
+			NavigationInfo info = entry.getValue();
+			double zoomOld = info.getZoom();
+			if (zoomOld == zoomNew) {
+				continue;
+			}
+			changed = true;
 			info.setZoom(zoomNew);
+			fireZoomChanged(axisName, zoomOld, zoomNew);
 		}
-		refresh();
+		if (changed) {
+			refresh();
+		}
 	}
 
 	/**
 	 * Returns the center point of the specified axis.
-	 * @param axis Axis.
+	 * @param axisName Name of the axis.
 	 * @return Center point in axis units.
 	 */
-	public Number getCenter(Axis axis) {
-		return infos.get(axis).getCenter();
+	public Number getCenter(String axisName) {
+		if (!infos.containsKey(axisName)) {
+			return null;
+		}
+		return infos.get(axisName).getCenter();
 	}
 
 	/**
 	 * Sets a new center point for the specified axis.
-	 * @param axis Axis.
+	 * @param axisName Name of the axis.
 	 * @param center New center point in axis units.
 	 */
-	public void setCenter(Axis axis, Number center) {
-		infos.get(axis).setCenter(center.doubleValue());
+	public void setCenter(String axisName, Number center) {
+		Number centerOld = getCenter(axisName);
+		if (centerOld.equals(center)) {
+			return;
+		}
+		infos.get(axisName).setCenter(center.doubleValue());
+		fireCenterChanged(axisName, centerOld, center);
 		refresh();
 	}
 
@@ -239,10 +264,18 @@ public class PlotNavigator {
 	 * Resets the plot's zoom to the original value.
 	 */
 	public void reset() {
-		for (NavigationInfo info: infos.values()) {
+		for (Map.Entry<String, NavigationInfo> entry: infos.entrySet()) {
+			String axisName = entry.getKey();
+			NavigationInfo info = entry.getValue();
+
 			double centerOriginal = info.getCenterOriginal();
+			double centerOld = info.getCenter();
 			info.setCenter(centerOriginal);
+			fireCenterChanged(axisName, centerOld, centerOriginal);
+
+			double zoomOld = info.getZoom();
 			info.setZoom(1.0);
+			fireZoomChanged(axisName, zoomOld, 1.0);
 		}
 		refresh();
 	}
@@ -277,4 +310,45 @@ public class PlotNavigator {
 		this.zoomMax = max;
 	}
 
+	/**
+	 * Adds the specified listener object that gets notified on changes to
+	 * navigation information like panning or zooming.
+	 * @param l Listener object
+	 */
+	public void addNavigationListener(NavigationListener l) {
+		navigationListeners.add(l);
+	}
+
+	/**
+	 * Removes the specified listener object, i.e. it doesn't get notified on
+	 * changes to navigation information like panning or zooming.
+	 * @param l Listener object
+	 */
+	public void removeNavigationListener(NavigationListener l) {
+		navigationListeners.remove(l);
+	}
+
+	/**
+	 * Notifies all navigation listeners that the center has been changed.
+	 * @param axisName Name of the axis that was changed
+	 * @param centerOld Previous center point
+	 * @param centerNew New center point
+	 */
+	protected void fireCenterChanged(String axisName, Number centerOld, Number centerNew) {
+		for (NavigationListener l : navigationListeners) {
+			l.centerChanged(this, axisName, centerOld, centerNew);
+		}
+	}
+
+	/**
+	 * Notifies all navigation listeners that the zoom level has been changed.
+	 * @param axisName Name of the axis that was changed
+	 * @param zoomOld Previous zoom level
+	 * @param zoomNew New zoom level
+	 */
+	protected void fireZoomChanged(String axisName, double zoomOld, double zoomNew) {
+		for (NavigationListener l : navigationListeners) {
+			l.zoomChanged(this, axisName, zoomOld, zoomNew);
+		}
+	}
 }

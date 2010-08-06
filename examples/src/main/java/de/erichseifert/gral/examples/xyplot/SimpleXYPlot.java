@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.DrawableConstants.Orientation;
@@ -47,12 +48,12 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimpleXYPlot extends JFrame {
+public class SimpleXYPlot extends JPanel {
 	private static final Random random = new Random();
 
 	public SimpleXYPlot() {
-		super("GRALTest");
-		getContentPane().setBackground(new Color(1.0f, 0.99f, 0.95f));
+		super(new BorderLayout());
+		setBackground(new Color(1.0f, 0.99f, 0.95f));
 
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x = 1.0; x <= 400.0; x *= 1.5) {
@@ -125,14 +126,15 @@ public class SimpleXYPlot extends JFrame {
 		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		getContentPane().add(new InteractivePanel(plot), BorderLayout.CENTER);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 600);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		SimpleXYPlot test = new SimpleXYPlot();
-		test.setVisible(true);
+		SimpleXYPlot example = new SimpleXYPlot();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

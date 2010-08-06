@@ -22,70 +22,85 @@
 package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
+import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
-public class StackedPlots extends JFrame {
+public class StackedPlots extends JPanel {
 	private static Random random = new Random();
 
 	public StackedPlots() {
-		super("GRALTest");
+		super(new GridLayout(2, 1));
 
 		DataTable data = new DataTable(Double.class, Double.class);
 		double x=0.0, y=0.0;
-		for (x=0.0; x<100.0; x+=0.1) {
-			y += random.nextGaussian();
+		for (x=0.0; x<100.0; x+=2.0) {
+			y += 10.0*random.nextGaussian();
 			data.add(x, Math.abs(y));
 		}
 
-		getContentPane().setLayout(new GridLayout(2, 1));
-
 		// Upper plot
 		XYPlot plotUpper = new XYPlot(data);
+		Color colorUpper = new Color(0.9f, 0.3f, 0.2f);
 		AxisRenderer axisRendererXUpper = plotUpper.getAxisRenderer(XYPlot.AXIS_X);
 		AxisRenderer axisRendererYUpper = plotUpper.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererXUpper.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 		axisRendererYUpper.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotUpper.setPointRenderer(data, null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
-		lineUpper.setSetting(LineRenderer.COLOR, new Color(0.9f, 0.3f, 0.2f));
+		lineUpper.setSetting(LineRenderer.COLOR, colorUpper);
 		plotUpper.setLineRenderer(data, lineUpper);
+		AreaRenderer areaUpper = new DefaultAreaRenderer2D();
+		areaUpper.setSetting(AreaRenderer.COLOR, new Color(colorUpper.getRed(), colorUpper.getGreen(), colorUpper.getBlue(), 63));
+		plotUpper.setAreaRenderer(data, areaUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel panelUpper = new InteractivePanel(plotUpper);
-		getContentPane().add(panelUpper);
+		add(panelUpper);
 
 		// Lower plot
 		XYPlot plotLower = new XYPlot(data);
+		Color colorLower = new Color(0.0f, 0.3f, 1.0f);
 		AxisRenderer axisRendererXLower = plotLower.getAxisRenderer(XYPlot.AXIS_X);
 		AxisRenderer axisRendererYLower = plotLower.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererXLower.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
 		axisRendererYLower.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
-		plotLower.setPointRenderer(data, null);
+		PointRenderer pointsLower = plotLower.getPointRenderer(data);
+		pointsLower.setSetting(PointRenderer.COLOR, colorLower);
+		pointsLower.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-3, -3, 6, 6));
 		LineRenderer lineLower = new DefaultLineRenderer2D();
 		lineLower.setSetting(LineRenderer.STROKE, new BasicStroke(2f));
-		lineLower.setSetting(LineRenderer.COLOR, new Color(0.0f, 0.3f, 1.0f));
+		lineLower.setSetting(LineRenderer.GAP, 1.0);
+		lineLower.setSetting(LineRenderer.COLOR, colorLower);
 		plotLower.setLineRenderer(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel panelLower = new InteractivePanel(plotLower);
-		getContentPane().add(panelLower);
+		add(panelLower);
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(800, 400);
+		panelUpper.connect(panelLower);
 	}
 
 	public static void main(String[] args) {
-		StackedPlots test = new StackedPlots();
-		test.setVisible(true);
+		StackedPlots example = new StackedPlots();
+		JFrame frame = new JFrame("GRALTest");
+		frame.getContentPane().add(example, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 }

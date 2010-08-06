@@ -1,0 +1,68 @@
+Building GRAL from source code
+==============================
+The source package contains all files necessary to build GRAL from scratch using
+the `Maven <http://maven.apache.org/>`__ software project management and
+comprehension tool. Like ``Makefile`` files the ``pom.xml`` files are used by
+Maven to execute certain steps for generating various distribution or
+documentation files.
+
+Building a JAR file of the library core
+---------------------------------------
+In case you just want to build the core of the library to get started execute
+the following command in the ``core`` directory::
+
+  $ mvn install
+
+This will generate a JAR archive named ``core`` in the ``target`` directory.
+This JAR file can be added to the class path of your application.
+
+Building a JAR file of the examples
+-----------------------------------
+In case you just want to build the core of the library to get started execute
+the following command in the ``examples`` directory::
+
+  $ mvn install
+
+This will generate a JAR archive for the examples in the ``target`` directory
+which can be used together with the library core to run example applications.
+
+Building the distribution archives
+----------------------------------
+In order to build package archives like the ones available for download you have
+to execute the following command in the package directory::
+
+  $ mvn clean package assembly:assembly
+
+This will create a target directory containing the following files::
+
+- ``GRAL-<version>-bin.tar.bz2``
+- ``GRAL-<version>-bin.zip``
+- ``GRAL-<version>-src.tar.bz2``
+- ``GRAL-<version>-src.zip``
+
+Building the documentation
+--------------------------
+The GRAL Maven project offers two sources for documentation:
+
+1. The standard Maven site containing a project overview and various information
+   like the JavaDocs, test results, etc. To build the HTML Maven site in the
+   ``target/site`` directory just execute::
+
+     $ mvn site
+
+2. A book-like documentation in form of a DocBook file. To build an HTML file of
+   the DocBook file in the ``target/docbook`` directory execute::
+
+     $ mvn docbook:transform
+
+Using GRAL in an IDE
+====================
+The Maven project can also be used in your favorite development environment like
+Eclipse or NetBeans. For further information look at the following descriptions
+on the Maven website:
+
+- `Maven Eclipse integration <http://maven.apache.org/netbeans-module.html>`__
+- `Maven NetBeans integration <http://maven.apache.org/eclipse-plugin.html>`__
+
+Once you have installed an appropriate Maven plug-in for your IDE you will be
+able to import the GRAL project found in this folder.

@@ -74,8 +74,8 @@ public class PlotNavigatorTest {
 		assertEquals(1.0, nav.getZoom(), DELTA);
 		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
-		assertEquals(axisX.getMin().doubleValue() + 0.5*axisX.getRange(), nav.getCenter(axisX).doubleValue(), DELTA);
-		assertEquals(axisY.getMin().doubleValue() + 0.5*axisY.getRange(), nav.getCenter(axisY).doubleValue(), DELTA);
+		assertEquals(axisX.getMin().doubleValue() + 0.5*axisX.getRange(), nav.getCenter(XYPlot.AXIS_X).doubleValue(), DELTA);
+		assertEquals(axisY.getMin().doubleValue() + 0.5*axisY.getRange(), nav.getCenter(XYPlot.AXIS_Y).doubleValue(), DELTA);
 
 		// Invalid initialization
 		try {
@@ -117,7 +117,7 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testCenter() {
-		nav.setCenter(plot.getAxis(XYPlot.AXIS_X), 0.0);
+		nav.setCenter(XYPlot.AXIS_X, 0.0);
 		assertEquals(-4.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(4.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
 	}
@@ -125,7 +125,7 @@ public class PlotNavigatorTest {
 	@Test
 	public void testReset() {
 		nav.setZoom(2.0);
-		nav.setCenter(plot.getAxis(XYPlot.AXIS_X), 6.0);
+		nav.setCenter(XYPlot.AXIS_X, 6.0);
 		nav.reset();
 		assertEquals(1.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(9.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
