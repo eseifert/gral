@@ -481,7 +481,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	@Override
 	public PointND<Double> getPosition(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
-		if (shapeLines == null || shapeLines.length == 0) {
+		if (shapeLines == null || shapeLines.length == 0 || value == null) {
 			return null;
 		}
 

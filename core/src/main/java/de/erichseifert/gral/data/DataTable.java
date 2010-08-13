@@ -87,7 +87,7 @@ public class DataTable extends AbstractDataSource {
 		int i = 0;
 		Number[] row = new Number[values.size()];
 		for (Number value : values) {
-			if (!(types[i].isAssignableFrom(value.getClass()))) {
+			if ((value != null) && !(types[i].isAssignableFrom(value.getClass()))) {
 				throw new IllegalArgumentException(
 						"Wrong column type! Expected " + types[i] + ", got " +
 						value.getClass());

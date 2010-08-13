@@ -77,12 +77,14 @@ public class Convolution extends Filter {
 	 */
 	private double convolve(int col, int row) {
 		if (kernel == null) {
-			return getOriginal(col, row).doubleValue();
+			Number original = getOriginal(col, row);
+			return (original != null) ? original.doubleValue() : Double.NaN;
 		}
 		double sum = 0.0;
 		for (int k = kernel.getMinIndex(); k <= kernel.getMaxIndex(); k++) {
 			int r = row + k;
-			double v = getOriginal(col, r).doubleValue();
+			Number original = getOriginal(col, r);
+			double v = (original != null) ? original.doubleValue() : Double.NaN;
 			if (Double.isNaN(v) || Double.isInfinite(v)) {
 				return v;
 			}

@@ -18,9 +18,19 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
+          <outputDirectory>target</outputDirectory>
           <show>private</show>
           <nohelp>true</nohelp>
         </configuration>
+        <executions>
+          <execution>
+            <id>make-javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

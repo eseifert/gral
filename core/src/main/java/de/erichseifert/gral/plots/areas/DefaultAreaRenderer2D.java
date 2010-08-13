@@ -83,8 +83,10 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			}
 			path.lineTo(x, y);
 		}
-		path.lineTo(x, posYOrigin);
-		path.closePath();
+		if (path.getCurrentPoint() != null) {
+			path.lineTo(x, posYOrigin);
+			path.closePath();
+		}
 
 		return path;
 	}

@@ -77,7 +77,7 @@
             <exclude>**/main/resources/**</exclude>
             <exclude>**/test/resources/**</exclude>
             <exclude>**/src/docbook/**</exclude>
-            <exclude>**/LICENSE.*</exclude>
+            <exclude>**/LICENSE*</exclude>
             <exclude>**/TODO.txt</exclude>
             <exclude>**/*.svg</exclude>
           </excludes>
@@ -129,6 +129,7 @@
           <descriptors>
             <descriptor>gral/assemblies/bin.xml</descriptor>
             <descriptor>gral/assemblies/src.xml</descriptor>
+            <descriptor>gral/assemblies/doc.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>

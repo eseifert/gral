@@ -197,7 +197,7 @@ public class Statistics implements DataListener {
 				}
 
 				Number cell = data.get(colIndex, rowIndex);
-				double value = cell.doubleValue();
+				double value = (cell != null) ? cell.doubleValue() : Double.NaN;
 				double value2 = value*value;
 
 				// N (element count, zeroth moment)
