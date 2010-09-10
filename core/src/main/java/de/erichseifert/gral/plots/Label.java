@@ -66,6 +66,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	private final Settings settings;
 	private String text;
 	private TextLayout layout;
+	private Shape outline;
+	private boolean valid;
 
 	/**
 	 * Creates a new <code>Label</code> object with the specified text.
@@ -85,7 +87,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 	@Override
 	public void draw(DrawingContext context) {
-		if (layout == null) {
+		if (getLayout() == null) {
 			return;
 		}
 
@@ -99,7 +101,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 			txLabel.rotate(-rotation/180.0*Math.PI);
 		}
 
-		Rectangle2D textBounds = layout.getBounds();
+		Rectangle2D textBounds = getLayout().getBounds();
 		double alignmentX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
 		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
 		DrawableConstants.Location anchor = getSetting(ANCHOR);
@@ -112,7 +114,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 				alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
 		);
 
-		Shape labelShape = layout.getOutline(txLabel);
+		Shape labelShape = txLabel.createTransformedShape(outline);
 
 		Graphics2D graphics = context.getGraphics();
 		Paint paintOld = graphics.getPaint();
@@ -125,13 +127,12 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		graphics.setPaint(paint);
 		GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
 		graphics.setPaint(paintOld);
-
 	}
 
 	@Override
 	public Dimension2D getPreferredSize() {
 		Dimension2D d = super.getPreferredSize();
-		if (layout != null) {
+		if (getLayout() != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
 			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
@@ -150,12 +151,23 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		return d;
 	}
 
+	protected TextLayout getLayout() {
+		if (!valid) {
+			if (text != null && !text.isEmpty()) {
+				layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(FONT));
+				outline = layout.getOutline(null);
+				valid = true;
+			}
+		}
+		return layout;
+	}
+
 	/**
 	 * Returns the bounding rectangle of the text.
 	 * @return Bounds.
 	 */
 	public Rectangle2D getTextRectangle() {
-		return layout.getBounds();
+		return getLayout().getBounds();
 	}
 
 	/**
@@ -172,16 +184,16 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	 */
 	public void setText(String text) {
 		this.text = text;
-		renewLayout();
+		invalidate();
 	}
 
 	/**
 	 * Revalidates the text layout.
 	 */
-	private void renewLayout() {
-		if (text != null && !text.isEmpty()) {
-			layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(FONT));
-		}
+	protected void invalidate() {
+		layout = null;
+		outline = null;
+		valid = false;
 	}
 
 	@Override
@@ -213,7 +225,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (FONT.equals(key)) {
-			renewLayout();
+			invalidate();
 		}
 	}
+
 }

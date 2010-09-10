@@ -48,6 +48,7 @@ public interface Drawable {
 	void setBounds(Rectangle2D bounds);
 	/**
 	 * Sets the bounds to the specified coordinates, width and height.
+	 * This method should be used when overriding functionality.
 	 * @param x horizontal position of the upper-left corner
 	 * @param y vertical position of the upper-left corner
 	 * @param width horizontal extent

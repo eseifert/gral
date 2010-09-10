@@ -61,6 +61,7 @@ public class SimpleBarPlot extends JPanel {
 						new float[] {0.0f, 0.5f, 1.0f},
 						new Color[] {new Color(0.5f, 0.8f, 0.0f), new Color(0.0f, 0.5f, 0.6f), new Color(0.0f, 0.2f, 0.9f)}));
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		pointRenderer.setSetting(PointRenderer.VALUE_ALIGNMENT_Y, 0.5);
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
