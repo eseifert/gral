@@ -153,7 +153,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS);
 				boolean drawTicksMinor =
 					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS_MINOR);
-				if (drawTicksMajor || drawTicksMinor) {
+				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
 					List<Tick> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
 					boolean isTickLabelVisible =
@@ -181,6 +181,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 						Paint tickPaint;
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.getType())) {
+							if (!drawTicksMinor) {
+								continue;
+							}
 							tickLength =
 								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_MINOR_LENGTH)
 								.doubleValue()*fontHeight;
@@ -192,6 +195,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 							tickStroke =
 								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						} else {
+							if (!drawTicksMajor) {
+								continue;
+							}
 							tickLength =
 								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
 								.doubleValue()*fontHeight;

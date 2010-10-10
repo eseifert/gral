@@ -34,7 +34,7 @@ import de.erichseifert.gral.util.Settings.Key;
 public class SizeablePointRenderer extends DefaultPointRenderer {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
-	static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column");
+	public static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column");
 
 	/**
 	 * Creates a new SizeablePointRenderer object.
@@ -47,10 +47,15 @@ public class SizeablePointRenderer extends DefaultPointRenderer {
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
 		int sizeColumn = this.<Number>getSetting(COLUMN_SIZE).intValue();
-		if (row.getSource().getColumnCount() >= 3) {
-			double size = row.get(2).doubleValue();
-			AffineTransform tx = AffineTransform.getScaleInstance(size, size);
-			shape = tx.createTransformedShape(shape);
+		if (sizeColumn < row.size()) {
+			double size = row.get(sizeColumn).doubleValue();
+			if (size < 0.0) {
+				return null;
+			}
+			if (size != 1.0) {
+				AffineTransform tx = AffineTransform.getScaleInstance(size, size);
+				shape = tx.createTransformedShape(shape);
+			}
 		}
 		return shape;
 	}

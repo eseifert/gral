@@ -58,6 +58,9 @@ public abstract class GraphicsUtils {
 	 */
 	public static void fillPaintedShape(Graphics2D graphics, Shape shape,
 			Paint paint, Rectangle2D paintBounds) {
+		if (shape == null) {
+			return;
+		}
 		if (paintBounds == null) {
 			paintBounds = shape.getBounds2D();
 		}
@@ -89,6 +92,9 @@ public abstract class GraphicsUtils {
 	 */
 	public static void drawPaintedShape(Graphics2D graphics, Shape shape,
 			Paint paint, Rectangle2D paintBounds, Stroke stroke) {
+		if (shape == null) {
+			return;
+		}
 		if (stroke == null) {
 			stroke = graphics.getStroke();
 		}

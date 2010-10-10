@@ -58,7 +58,15 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		this.name = name;
 		this.data = data;
 		this.data.addDataListener(this);
-		this.cols = new ArrayList<Integer>(cols.length);
+		int colCount = cols.length;
+		if (colCount == 0) {
+			colCount = data.getColumnCount();
+			cols = new int[colCount];
+			for (int i = 0; i < cols.length; i++) {
+				cols[i] = i;
+			}
+		}
+		this.cols = new ArrayList<Integer>(colCount);
 		for (int col : cols) {
 			this.cols.add(col);
 		}
