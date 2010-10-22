@@ -41,8 +41,9 @@ import de.erichseifert.gral.util.Insets2D;
 public class SpiralPlot extends JPanel {
 	public SpiralPlot() {
 		super(new BorderLayout());
-		setBackground(new Color(0.75f, 0.75f, 0.75f));
+		setBackground(new Color(0.75f, 0.75f, 0.75f));  // Set the background color of the Swing component
 
+		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class);
 		for (double alpha = 0.0, r = 0.0; r <= 10.0; alpha -= 1.0, r += 0.05) {
 			double x = r*Math.cos(alpha);
@@ -51,28 +52,37 @@ public class SpiralPlot extends JPanel {
 			data.add(x, y, z);
 		}
 
+		// Create a new data series (optional)
 		DataSeries series = new DataSeries("Spiral", data);
 
+		// Create a new xy-plot
 		XYPlot plot = new XYPlot(series);
 
+		// Format plot
+		plot.setInsets(new Insets2D.Double(40.0));  // Add a margin to the plot
+
+		// Format plot area
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.BORDER, null);        // Remove border of plot area
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false); // Disable vertical grid
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false); // Disable horizontal grid
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.CLIPPING, null);      // Disable clipping
+
+		// Format axes
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.SHAPE_VISIBLE, false);  // Disable x axis
+		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on x axis
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.SHAPE_VISIBLE, false);  // Disable y axis
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on y axis
+		plot.getAxis(XYPlot.AXIS_X).setRange(-10.0, 10.0);  // Scale x axis from -10 to 10
+		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);  // Scale y axis from -10 to 10
+
+		// Format data series
 		PointRenderer pointRenderer = new SizeablePointRenderer();
-		pointRenderer.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));
-		pointRenderer.setSetting(PointRenderer.COLOR, new Color(0f, 0f, 0.5f, 0.25f));
-		pointRenderer.setSetting(SizeablePointRenderer.COLUMN_SIZE, 2);
-		plot.setPointRenderer(series, pointRenderer);
+		pointRenderer.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
+		pointRenderer.setSetting(PointRenderer.COLOR, new Color(0f, 0f, 0.5f, 0.25f));              // color of data points
+		pointRenderer.setSetting(SizeablePointRenderer.COLUMN_SIZE, 2);                             // data column which determines the scaling of data point shapes
+		plot.setPointRenderer(series, pointRenderer);  // Assign the point renderer to the data series
 
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.BORDER, null);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false);
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.SHAPE_VISIBLE, false);
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, false);
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.SHAPE_VISIBLE, false);
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, false);
-		plot.getAxis(XYPlot.AXIS_X).setRange(-10.0, 10.0);
-		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);
-
-		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component
 	}
 
 	public static void main(String[] args) {

@@ -27,6 +27,7 @@ import java.awt.Paint;
 import java.awt.Stroke;
 
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
@@ -48,6 +49,12 @@ public abstract class PlotArea extends AbstractDrawable
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot area. */
 	public static final Key COLOR = new Key("plotarea.color");
+	/** Key for specifying an {@link de.erichseifert.gral.util.Insets2D}
+	instance that defines the clipping of the plotted data relative to
+	the plot area. Positive inset values result in clipping inside the plot
+	area, negative values result in clipping outside the plot area.
+	Specifying a <code>null</code> values will turn off clipping. */
+	public static final Key CLIPPING = new Key("plotarea.clipping");
 
 	private final Settings settings;
 
@@ -60,6 +67,7 @@ public abstract class PlotArea extends AbstractDrawable
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(COLOR, Color.BLACK);
+		setSettingDefault(CLIPPING, new Insets2D.Double(0.0));
 	}
 
 	/**
@@ -68,7 +76,7 @@ public abstract class PlotArea extends AbstractDrawable
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
-		// FIXME: duplicate code! See de.erichseifert.gral.Legend
+		// FIXME duplicate code! See de.erichseifert.gral.Legend
 		Paint paint = getSetting(BACKGROUND);
 		if (paint != null) {
 			GraphicsUtils.fillPaintedShape(context.getGraphics(),
@@ -82,7 +90,7 @@ public abstract class PlotArea extends AbstractDrawable
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {
-		// FIXME: duplicate code! See de.erichseifert.gral.Legend
+		// FIXME duplicate code! See de.erichseifert.gral.Legend
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint paint = getSetting(COLOR);

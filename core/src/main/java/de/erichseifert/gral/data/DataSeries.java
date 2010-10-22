@@ -95,7 +95,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 			int dataCol = cols.get(col);
 			number = data.get(dataCol, row);
 		} catch (IndexOutOfBoundsException e) {
-			// TODO: handle exception
+			// TODO Handle exception
 		}
 		return number;
 	}

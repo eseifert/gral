@@ -56,6 +56,7 @@ import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.Settings.Key;
 
@@ -232,6 +233,21 @@ public class XYPlot extends Plot  {
 			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 
+			// TODO Use real font size instead of fixed value
+			final double fontSize = 10.0;
+
+			Insets2D clipOffset = getSetting(CLIPPING);
+			if (clipOffset != null) {
+				// Perform clipping
+				Rectangle2D clipBounds = new Rectangle2D.Double(
+						clipOffset.getLeft()*fontSize,
+						clipOffset.getTop()*fontSize,
+						getWidth() - clipOffset.getHorizontal()*fontSize,
+						getHeight() - clipOffset.getVertical()*fontSize
+				);
+				graphics.setClip(clipBounds);
+			}
+
 			// Paint points and lines
 			for (DataSource s : plot.getVisibleData()) {
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
@@ -287,6 +303,13 @@ public class XYPlot extends Plot  {
 					}
 				}
 			}
+
+			if (clipOffset != null) {
+				// Reset clipping
+				graphics.setClip(null);
+			}
+
+			// Reset transformation (offset)
 			graphics.setTransform(txOrig);
 		}
 	}

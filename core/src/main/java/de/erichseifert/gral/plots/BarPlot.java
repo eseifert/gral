@@ -70,13 +70,13 @@ public class BarPlot extends XYPlot {
 			return new AbstractDrawable() {
 				@Override
 				public void draw(DrawingContext context) {
-					// TODO: Translate?
+					// TODO Translate?
 					Shape point = getPointPath(row);
 					Paint paint = getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 					/*
-					// TODO: Optionally fill all bars with a single paint:
+					// TODO Optionally fill all bars with a single paint:
 					AffineTransform txOld = graphics.getTransform();
 					Rectangle2D shapeBounds = shape.getBounds2D();
 					Rectangle2D paintBoundaries = plotArea.getBounds();

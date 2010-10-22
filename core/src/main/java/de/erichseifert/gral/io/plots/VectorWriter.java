@@ -140,7 +140,7 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 		Rectangle2D boundsOld = d.getBounds();
 		d.setBounds(x, y, width, height);
 		DrawingContext context = new DrawingContext(graphics);
-		// TODO: Define Vector target
+		// TODO Define Vector target
 		d.draw(context);
 		destination.write(graphics.toString().getBytes());
 		d.setBounds(boundsOld);

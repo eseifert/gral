@@ -100,7 +100,8 @@ public abstract class Legend extends DrawableContainer
 
 				@Override
 				public Dimension2D getPreferredSize() {
-					final double fontSize = 10.0;  // TODO: Use real font size
+					// TODO Use real font size instead of fixed value
+					final double fontSize = 10.0;
 					Dimension2D symbolSize = Legend.this.getSetting(SYMBOL_SIZE);
 					Dimension2D size = super.getPreferredSize();
 					size.setSize(symbolSize.getWidth()*fontSize, symbolSize.getHeight()*fontSize);
@@ -223,7 +224,7 @@ public abstract class Legend extends DrawableContainer
 	 * Invoked if data has changed.
 	 */
 	protected void notifyDataChanged() {
-		// FIXME: is this function needed?
+		// FIXME Is this function needed?
 		layout();
 	}
 

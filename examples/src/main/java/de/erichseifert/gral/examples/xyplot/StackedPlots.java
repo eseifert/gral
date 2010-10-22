@@ -48,6 +48,7 @@ public class StackedPlots extends JPanel {
 	public StackedPlots() {
 		super(new GridLayout(2, 1));
 
+		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class);
 		double x=0.0, y=0.0;
 		for (x=0.0; x<100.0; x+=2.0) {
@@ -55,7 +56,7 @@ public class StackedPlots extends JPanel {
 			data.add(x, Math.abs(y));
 		}
 
-		// Upper plot
+		// Create and format upper plot
 		XYPlot plotUpper = new XYPlot(data);
 		Color colorUpper = new Color(0.9f, 0.3f, 0.2f);
 		AxisRenderer axisRendererXUpper = plotUpper.getAxisRenderer(XYPlot.AXIS_X);
@@ -73,7 +74,7 @@ public class StackedPlots extends JPanel {
 		InteractivePanel panelUpper = new InteractivePanel(plotUpper);
 		add(panelUpper);
 
-		// Lower plot
+		// Create and format lower plot
 		XYPlot plotLower = new XYPlot(data);
 		Color colorLower = new Color(0.0f, 0.3f, 1.0f);
 		AxisRenderer axisRendererXLower = plotLower.getAxisRenderer(XYPlot.AXIS_X);
@@ -92,6 +93,7 @@ public class StackedPlots extends JPanel {
 		InteractivePanel panelLower = new InteractivePanel(plotLower);
 		add(panelLower);
 
+		// Connect the two panels, i.e. user (mouse) actions affect both plots
 		panelUpper.connect(panelLower);
 	}
 

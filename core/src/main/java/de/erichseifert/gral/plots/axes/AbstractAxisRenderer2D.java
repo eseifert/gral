@@ -127,6 +127,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					return;
 				}
 
+				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
 				Graphics2D graphics = context.getGraphics();
 
 				// Remember old state of Graphics2D instance
@@ -136,36 +137,36 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				Paint paintOld = graphics.getPaint();
 
 				// Draw axis shape
-				Paint axisPaint = AbstractAxisRenderer2D.this.getSetting(SHAPE_COLOR);
-				Stroke axisStroke = AbstractAxisRenderer2D.this.getSetting(SHAPE_STROKE);
+				Paint axisPaint = renderer.getSetting(SHAPE_COLOR);
+				Stroke axisStroke = renderer.getSetting(SHAPE_STROKE);
 				boolean isShapeVisible =
-					AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_VISIBLE);
+					renderer.<Boolean>getSetting(SHAPE_VISIBLE);
 				if (isShapeVisible) {
-					Shape shape = AbstractAxisRenderer2D.this.getSetting(SHAPE);
+					Shape shape = renderer.getSetting(SHAPE);
 					GraphicsUtils.drawPaintedShape(graphics, shape, axisPaint, null, axisStroke);
 				}
 
-				// TODO: Use real font size
-				final double fontHeight = 10.0;
+				// TODO Use real font size instead of fixed value
+				final double fontSize = 10.0;
 
 				// Draw ticks
 				boolean drawTicksMajor =
-					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS);
+					renderer.<Boolean>getSetting(TICKS);
 				boolean drawTicksMinor =
-					AbstractAxisRenderer2D.this.<Boolean>getSetting(TICKS_MINOR);
+					renderer.<Boolean>getSetting(TICKS_MINOR);
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
 					List<Tick> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
 
 					boolean isTickLabelVisible =
-						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS);
+						renderer.<Boolean>getSetting(TICK_LABELS);
 					boolean isTickLabelOutside =
-						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+						renderer.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 					double tickLabelRotation =
-						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_ROTATION)
+						renderer.<Number>getSetting(TICK_LABELS_ROTATION)
 						.doubleValue();
 					double tickLabelDist =
-						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
-						.doubleValue()*fontHeight;
+						renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
+						.doubleValue()*fontSize;
 					Line2D tickShape = new Line2D.Double();
 
 					for (Tick tick : ticks) {
@@ -181,44 +182,42 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 						Paint tickPaint;
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.getType())) {
-							if (!drawTicksMinor) {
-								continue;
-							}
 							tickLength =
-								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_MINOR_LENGTH)
-								.doubleValue()*fontHeight;
+								renderer.<Number>getSetting(TICKS_MINOR_LENGTH)
+								.doubleValue()*fontSize;
 							tickAlignment =
-								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
+								renderer.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
 								.doubleValue();
 							tickPaint =
-								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_MINOR_COLOR);
+								renderer.<Paint>getSetting(TICKS_MINOR_COLOR);
 							tickStroke =
-								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_MINOR_STROKE);
+								renderer.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						} else {
-							if (!drawTicksMajor) {
-								continue;
-							}
 							tickLength =
-								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
-								.doubleValue()*fontHeight;
+								renderer.<Number>getSetting(TICKS_LENGTH)
+								.doubleValue()*fontSize;
 							tickAlignment =
-								AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+								renderer.<Number>getSetting(TICKS_ALIGNMENT)
 								.doubleValue();
 							tickPaint =
-								AbstractAxisRenderer2D.this.<Paint>getSetting(TICKS_COLOR);
+								renderer.<Paint>getSetting(TICKS_COLOR);
 							tickStroke =
-								AbstractAxisRenderer2D.this.<Stroke>getSetting(TICKS_STROKE);
+								renderer.<Stroke>getSetting(TICKS_STROKE);
 						}
 
 						double tickLengthInner = tickLength*tickAlignment;
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-						tickShape.setLine(
-							tickPoint.getX() - tickNormal.getX()*tickLengthInner,
-							tickPoint.getY() - tickNormal.getY()*tickLengthInner,
-							tickPoint.getX() + tickNormal.getX()*tickLengthOuter,
-							tickPoint.getY() + tickNormal.getY()*tickLengthOuter
-						);
-						GraphicsUtils.drawPaintedShape(graphics, tickShape, tickPaint, null, tickStroke);
+
+						if ((drawTicksMajor && TickType.MINOR.equals(tick.getType())) ||
+								(drawTicksMinor && TickType.MINOR.equals(tick.getType()))) {
+							tickShape.setLine(
+								tickPoint.getX() - tickNormal.getX()*tickLengthInner,
+								tickPoint.getY() - tickNormal.getY()*tickLengthInner,
+								tickPoint.getX() + tickNormal.getX()*tickLengthOuter,
+								tickPoint.getY() + tickNormal.getY()*tickLengthOuter
+							);
+							GraphicsUtils.drawPaintedShape(graphics, tickShape, tickPaint, null, tickStroke);
+						}
 
 						// Draw label
 						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) ||
@@ -226,7 +225,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 							String tickLabelText = tick.getLabel();
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
-								// TODO: Allow separate colors for ticks and tick labels?
+								// TODO Allow separate colors for ticks and tick labels?
 								tickLabel.setSetting(Label.COLOR, tickPaint);
 								double labelDist = tickLengthOuter + tickLabelDist;
 								layoutLabel(tickLabel, tickPoint, tickNormal,
@@ -238,36 +237,30 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				}
 
 				// Draw axis label
-				String labelText = AbstractAxisRenderer2D.this.<String>getSetting(LABEL);
+				String labelText = renderer.<String>getSetting(LABEL);
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
 					axisLabel.setSetting(Label.COLOR,
-							AbstractAxisRenderer2D.this.<Paint>getSetting(LABEL_COLOR));
+							renderer.<Paint>getSetting(LABEL_COLOR));
 
-					// FIXME: use tick label height instead of constant value
-					double tickLength =
-						AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
-						.doubleValue()*fontHeight;
-					double tickAlignment =
-						AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+					// FIXME Use tick label height instead of constant value
+					double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
+						.doubleValue()*fontSize;
+					double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-					double tickLabelDist =
-						AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
-						.doubleValue()*fontHeight;
+					double tickLabelDist = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
+						.doubleValue()*fontSize;
 
-					double labelDistance =
-						AbstractAxisRenderer2D.this.<Number>getSetting(LABEL_DISTANCE)
-						.doubleValue()*fontHeight;
+					double labelDistance = renderer.<Number>getSetting(LABEL_DISTANCE)
+						.doubleValue()*fontSize;
 					double labelDist =
-						tickLengthOuter + tickLabelDist + fontHeight + labelDistance;
-					double labelRotation =
-						AbstractAxisRenderer2D.this.<Number>getSetting(LABEL_ROTATION)
+						tickLengthOuter + tickLabelDist + fontSize + labelDistance;
+					double labelRotation = renderer.<Number>getSetting(LABEL_ROTATION)
 						.doubleValue();
 					double axisLabelPos =
 						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
-					boolean isTickLabelOutside =
-						AbstractAxisRenderer2D.this.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+					boolean isTickLabelOutside = renderer.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 
 					PointND<Double> labelPos = getPosition(axis, axisLabelPos, false, true);
 					PointND<Double> labelNormal = getNormal(axis, axisLabelPos, false, true);
@@ -327,23 +320,18 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 			@Override
 			public Dimension2D getPreferredSize() {
-				// FIXME: use real font height instead of fixed value
-				final double fontHeight = 10.0;
-				double tickLength =
-					AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_LENGTH)
-					.doubleValue()*fontHeight;
-				double tickAlignment =
-					AbstractAxisRenderer2D.this.<Number>getSetting(TICKS_ALIGNMENT)
+				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
+				// TODO Use real font size instead of fixed value
+				final double fontSize = 10.0;
+				double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
+					.doubleValue()*fontSize;
+				double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 					.doubleValue();
-				double tickLengthOuter =
-					tickLength*(1.0 - tickAlignment);
-				double labelDistance =
-					AbstractAxisRenderer2D.this.<Number>getSetting(TICK_LABELS_DISTANCE)
+				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
+				double labelDistance = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
 					.doubleValue();
-				double labelDist =
-					labelDistance*fontHeight + tickLengthOuter;
-				double minSize =
-					fontHeight + labelDist + tickLengthOuter;
+				double labelDist = labelDistance*fontSize + tickLengthOuter;
+				double minSize = fontSize + labelDist + tickLengthOuter;
 				return new de.erichseifert.gral.util.Dimension2D.Double(minSize, minSize);
 			}
 		};
@@ -462,9 +450,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		}
 
 		segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
-		double normalOrientation =
-			AbstractAxisRenderer2D.this.<Boolean>getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE)
-			? 1.0 : -1.0;
+		boolean normalOrientationClockwise =
+			AbstractAxisRenderer2D.this.getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
+		double normalOrientation = normalOrientationClockwise ? 1.0 : -1.0;
 		PointND<Double> tickNormal = new PointND<Double>(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()

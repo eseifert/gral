@@ -116,8 +116,8 @@ public class DataAccessorTest {
 		DataTable table3 = new DataTable(Integer.class, Double.class);
 		table3.add(2, 3.0);
 		assertFalse(row1.equals(new Row(table3, 0)));
-		
-		// TODO: Test column equality
+
+		// TODO Test column equality
 	}
 
 	@Test

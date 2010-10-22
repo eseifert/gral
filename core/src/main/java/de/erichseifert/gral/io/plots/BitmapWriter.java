@@ -115,8 +115,8 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 			}
 		}
 
-		// TODO: Option to set transparency
-		// TODO: Possibility to choose a background color
+		// TODO Option to set transparency
+		// TODO Possibility to choose a background color
 	}
 
 	@Override

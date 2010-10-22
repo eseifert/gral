@@ -77,7 +77,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 				} catch (ClassNotFoundException e) {
 					throw new IOException(e);
 				}
-				// FIXME: Missing type safety check
+				// FIXME Missing type safety check
 				entries.put(mimeType, (Class<? extends T>) clazz);
 			}
 		}

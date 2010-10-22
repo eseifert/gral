@@ -42,7 +42,7 @@ public class IOCapabilities {
 		this.format = format;
 		this.name = name;
 		this.mimeType = mimeType;
-		// TODO: Check that there is at least one filename extension
+		// TODO Check that there is at least one filename extension
 		this.extensions = extensions;
 	}
 

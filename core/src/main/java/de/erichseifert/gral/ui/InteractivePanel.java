@@ -68,7 +68,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 public class InteractivePanel extends DrawablePanel implements Printable, NavigationListener {
 	private static final long serialVersionUID = 1L;
 
-	// FIXME: Find better method to adjust resolution
+	// FIXME Find better method to adjust resolution
 	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
 	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
 	private final PrinterJob printerJob;
@@ -326,9 +326,9 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 				pageFormat.getImageableWidth()/MM_PER_PX, pageFormat.getImageableHeight()/MM_PER_PX);
 
 		// Set size
-		// TODO: Keep Drawable's aspect ratio when scaling
+		// TODO Keep Drawable's aspect ratio when scaling
 		getDrawable().setBounds(pageBounds);
-		// TODO: Be sure to temporarily turn off antialiasing before printing
+		// TODO Assure to temporarily turn off antialiasing before printing
 		try {
 			getDrawable().draw(new DrawingContext(graphics));
 		} finally {

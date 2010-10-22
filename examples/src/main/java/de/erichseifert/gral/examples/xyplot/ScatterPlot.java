@@ -39,18 +39,21 @@ public class ScatterPlot extends JPanel {
 	public ScatterPlot() {
 		super(new BorderLayout());
 
+		// Generate 100,000 data points
 		DataTable data = new DataTable(Double.class, Double.class);
 		for (int i = 0; i <= 100000; i++) {
 			data.add(random.nextGaussian()*2.0,  random.nextGaussian()*2.0);
 		}
 
+		// Create a new xy-plot
 		XYPlot plot = new XYPlot(data);
 
-		// Setting the title
+		// Format plot
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		plot.setSetting(XYPlot.TITLE, "A Large Scatter Plot");
 		plot.setSetting(XYPlot.ANTIALISING, false);
 
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 

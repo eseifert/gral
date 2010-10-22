@@ -55,52 +55,36 @@ public class SimpleXYPlot extends JPanel {
 		super(new BorderLayout());
 		setBackground(new Color(1.0f, 0.99f, 0.95f));
 
+		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x = 1.0; x <= 400.0; x *= 1.5) {
 			double x2 = x/5.0;
 			data.add(-Math.sqrt(x2) + 5.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
 		}
 
+		// Create data series
 		DataSeries seriesLog = new DataSeries(data, 1, 2, 3, 3);
 		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
 
+		// Create new xy-plot
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);
-		// Custom plot area formatting
+
+		// Format plot
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		plot.setSetting(XYPlot.TITLE, "A Sample XY Plot");
+
+		// Format plot area
 		plot.getPlotArea().setSetting(PlotArea.BACKGROUND, new LinearGradientPaint(
 				0f,0f, 1f,0f, new float[] {0.00f, 0.05f},
 				new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
 		plot.getPlotArea().setSetting(PlotArea.BORDER, null);
-		// Setting the title
-		plot.setSetting(XYPlot.TITLE, "A Sample XY Plot");
-		// Custom title alignment
-		//plot.getTitle().setSetting(Label.ALIGNMENT, 0.3);
-		// Custom point renderer
-		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
-		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
-		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
-		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
-		plot.setPointRenderer(seriesLog, defaultPointRenderer);
-		// Custom point bounds
-		//plot.getPointRenderer(seriesLog).setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
-		// Custom point coloring
-		//plot.getPointRenderer().setColor(Color.RED);
-		// Custom grid color
+		// Set custom grid color
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_COLOR, Color.BLUE);
-		// Grid disabled
+		// Disable grid
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
 		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false);
-		// Custom line renderer
-		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
-		discreteRenderer.setSetting(LineRenderer.COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
-		discreteRenderer.setSetting(LineRenderer.STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
-		plot.setLineRenderer(seriesLin, discreteRenderer);
-		// Custom gaps for points
-		discreteRenderer.setSetting(LineRenderer.GAP, 2.0);
-		discreteRenderer.setSetting(LineRenderer.GAP_ROUNDED, true);
-		// Custom ascending
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, Orientation.VERTICAL);
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
-		// Custom axis renderers
+
+		// Format axes
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic axis");
@@ -125,7 +109,30 @@ public class SimpleXYPlot extends JPanel {
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		// Format rendering of data points
+		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
+		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
+		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
+		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
+		plot.setPointRenderer(seriesLog, defaultPointRenderer);
+		// Custom point bounds
+		//plot.getPointRenderer(seriesLog).setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
+		// Custom point coloring
+		//plot.getPointRenderer().setColor(Color.RED);
+
+		// Format data lines
+		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
+		discreteRenderer.setSetting(LineRenderer.COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
+		discreteRenderer.setSetting(LineRenderer.STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
+		plot.setLineRenderer(seriesLin, discreteRenderer);
+		// Custom gaps for points
+		discreteRenderer.setSetting(LineRenderer.GAP, 2.0);
+		discreteRenderer.setSetting(LineRenderer.GAP_ROUNDED, true);
+		// Custom ascending
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, Orientation.VERTICAL);
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
+
+		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 

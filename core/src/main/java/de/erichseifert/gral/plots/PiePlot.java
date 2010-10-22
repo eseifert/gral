@@ -29,6 +29,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import de.erichseifert.gral.DrawingContext;
@@ -38,6 +39,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Settings.Key;
 
 
@@ -95,8 +97,20 @@ public class PiePlot extends Plot implements DataListener {
 			graphics.translate(getX(), getY());
 			AffineTransform txOffset = graphics.getTransform();
 
-			// TODO: Use real font size
+			// TODO Use real font size instead of fixed value
 			final double fontSize = 10.0;
+
+			Insets2D clipOffset = getSetting(CLIPPING);
+			if (clipOffset != null) {
+				// Perform clipping
+				Rectangle2D clipBounds = new Rectangle2D.Double(
+						clipOffset.getLeft()*fontSize,
+						clipOffset.getTop()*fontSize,
+						getWidth() - clipOffset.getHorizontal()*fontSize,
+						getHeight() - clipOffset.getVertical()*fontSize
+				);
+				graphics.setClip(clipBounds);
+			}
 
 			// Paint pie
 			double w = getWidth();
@@ -145,6 +159,12 @@ public class PiePlot extends Plot implements DataListener {
 				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
 				GraphicsUtils.fillPaintedShape(graphics, doughnutSlice, paint, null);
 			}
+
+			if (clipOffset != null) {
+				// Reset clipping
+				graphics.setClip(null);
+			}
+
 			graphics.setTransform(txOffset);
 			graphics.setTransform(txOrig);
 		}

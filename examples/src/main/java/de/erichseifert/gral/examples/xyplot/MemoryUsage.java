@@ -158,16 +158,22 @@ public class MemoryUsage extends JPanel {
 		// Use columns 0 and 2 for JVM memory usage
 		DataSource memVmUsage = new DataSeries("Used by Java VM", data, 0, 3);
 
-		// Create new xy-plot from data series with title and legend
+		// Create new xy-plot
 		XYPlot plot = new XYPlot(memSysUsage, memVm, memVmUsage);
+
+		// Format  plot
 		plot.setInsets(new Insets2D.Double(20.0, 90.0, 40.0, 20.0));
 		plot.setSetting(Plot.TITLE, "Memory Usage");
 		plot.setSetting(Plot.LEGEND, true);
+
+		// Format legend
 		plot.getLegend().setSetting(Legend.ORIENTATION, DrawableConstants.Orientation.HORIZONTAL);
+
+		// Format plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_Y, true);
 
-		// Set scale and spacings of axes
+		// Format axes (set scale and spacings)
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
 		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);

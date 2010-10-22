@@ -48,7 +48,7 @@ public class AreaPlot extends JPanel {
 	public AreaPlot() {
 		super(new BorderLayout());
 
-		// Create table
+		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x=0.0; x<2.5*Math.PI; x+=Math.PI/15.0) {
 			double y1 = (x>=0.00*Math.PI && x<2.25*Math.PI) ? (4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian()) : Double.NaN;
@@ -56,18 +56,24 @@ public class AreaPlot extends JPanel {
 			double y3 = (x>=0.00*Math.PI && x<2.50*Math.PI) ? (2.0*Math.sin(2.0*x/2.5)       + 0.1*random.nextGaussian()) : Double.NaN;
 			data.add(x, y1, y2, y3);
 		}
+
+		// Create data series
 		DataSeries data1 = new DataSeries("red",   data, 0, 1);
 		DataSeries data2 = new DataSeries("green", data, 0, 2);
 		DataSeries data3 = new DataSeries("blue",  data, 0, 3);
 
+		// Create new xy-plot
 		XYPlot plot = new XYPlot(data1, data2, data3);
 		plot.setSetting(XYPlot.LEGEND, true);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
-		add(new InteractivePanel(plot));
 
+		// Format data series
 		formatFilledArea(plot, data1, new Color(0.9f, 0.3f, 0.2f));
 		formatFilledArea(plot, data2, new Color(0.0f, 0.3f, 0.9f));
 		formatLineArea(plot, data3, new Color(0.0f, 0.5f, 0.0f));
+
+		// Add plot to Swing component
+		add(new InteractivePanel(plot));
 	}
 
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {

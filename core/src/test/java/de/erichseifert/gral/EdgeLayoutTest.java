@@ -114,7 +114,7 @@ public class EdgeLayoutTest {
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, sw.getY(), DELTA);
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, ss.getY(), DELTA);
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, se.getY(), DELTA);
-		// TODO: Test width and height
+		// TODO Test width and height
 	}
 
 }

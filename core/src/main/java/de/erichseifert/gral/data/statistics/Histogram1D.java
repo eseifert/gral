@@ -28,7 +28,6 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.statistics.Orientation;
 
 
 /**
@@ -108,8 +107,9 @@ public class Histogram1D extends Histogram {
 	/**
 	 * (Re-)populates the cells of this Histogram.
 	 */
+	@Override
 	protected void rebuildCells() {
-		// FIXME: Very naive implementation
+		// FIXME Very naive implementation
 		cells.clear();
 		cacheMin.clear();
 		cacheMax.clear();

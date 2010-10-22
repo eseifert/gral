@@ -53,7 +53,7 @@ public class DrawableWriterFilterTest {
 
 	@Test
 	public void testAccept() {
-		// TODO: Also test positive result
+		// TODO Also test positive result
 		assertFalse(filter.accept(null));
 	}
 

@@ -96,7 +96,7 @@ public class StackedLayoutTest {
 		assertEquals(12.5, a.getY(), DELTA);
 		assertEquals(27.5, b.getY(), DELTA);
 		assertEquals(42.5, c.getY(), DELTA);
-		// TODO: Test width and height
+		// TODO Test width and height
 	}
 
 	@Test
@@ -114,7 +114,7 @@ public class StackedLayoutTest {
 		assertEquals(bounds.getMinY(), a.getY(), DELTA);
 		assertEquals(bounds.getMinY(), b.getY(), DELTA);
 		assertEquals(bounds.getMinY(), c.getY(), DELTA);
-		// TODO: Test width and height
+		// TODO Test width and height
 	}
 
 	@Test

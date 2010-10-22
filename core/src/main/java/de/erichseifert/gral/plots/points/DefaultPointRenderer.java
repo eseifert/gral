@@ -46,11 +46,12 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 				Paint paint = getSetting(COLOR);
 				Shape point = getPointPath(row);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(), point, paint, null);
+				PointRenderer renderer = DefaultPointRenderer.this;
 
-				if (DefaultPointRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
+				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
 					drawValue(context, point, row.get(1).doubleValue());
 				}
-				if (DefaultPointRenderer.this.<Boolean>getSetting(ERROR_DISPLAYED)) {
+				if (renderer.<Boolean>getSetting(ERROR_DISPLAYED)) {
 					int columnIndex = row.size() - 1;
 					drawError(context, point, row.get(1).doubleValue(),
 							row.get(columnIndex - 1).doubleValue(),

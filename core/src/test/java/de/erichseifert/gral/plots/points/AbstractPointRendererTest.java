@@ -103,7 +103,7 @@ public class AbstractPointRendererTest {
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		point.draw(context);
-		// TODO: Assert something
+		// TODO Assert something
 	}
 
 	@Test

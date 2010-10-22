@@ -52,6 +52,7 @@ public class ConvolutionExample extends JPanel {
 	public ConvolutionExample() {
 		super(new BorderLayout());
 
+		// Generate 200 data points
 		DataTable data = new DataTable(Double.class, Double.class);
 		Random r = new Random();
 		for (int i = 0; i < 200; i++) {
@@ -64,56 +65,54 @@ public class ConvolutionExample extends JPanel {
 
 		final double KERNEL_VARIANCE = 5.0;
 
+		// Create a smoothed data series from a binomial (near-gaussian) convolution filter
 		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
 		Filter dataLowpass = new Convolution(data, kernelLowpass, Filter.Mode.REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
+		// Create a derived data series from a binomial convolution filter
 		Kernel kernelHighpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
 		Filter dataHighpass = new Convolution(data, kernelHighpass, Filter.Mode.REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
+		// Create a new data series that calculates the moving average using a custom convolution kernel
 		int kernelMovingAverageSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
 		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter.Mode.OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
+		// Create a new data series that calculates the moving median
 		int kernelMovingMedianSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Filter dataMovingMedian = new Median(data, kernelMovingMedianSize, kernelMovingMedianSize - 1, Filter.Mode.OMIT, 1);
 		DataSeries dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
 
+		// Create a new xy-plot
 		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
 
-		plot.setPointRenderer(ds, null);
-		DefaultLineRenderer2D lineData = new DefaultLineRenderer2D();
-		lineData.setSetting(DefaultLineRenderer2D.COLOR, new Color(0f, 0f, 0f));
-		plot.setLineRenderer(ds, lineData);
-
-		plot.setPointRenderer(dsLowpass, null);
-		DefaultLineRenderer2D lineLowpass = new DefaultLineRenderer2D();
-		lineLowpass.setSetting(DefaultLineRenderer2D.COLOR, new Color(1.0f, 0.2f, 0.0f));
-		plot.setLineRenderer(dsLowpass, lineLowpass);
-
-		plot.setPointRenderer(dsHighpass, null);
-		DefaultLineRenderer2D lineHighpass = new DefaultLineRenderer2D();
-		lineHighpass.setSetting(DefaultLineRenderer2D.COLOR, new Color(0.2f, 0.4f, 0.8f));
-		plot.setLineRenderer(dsHighpass, lineHighpass);
-
-		plot.setPointRenderer(dsMovingAverage, null);
-		DefaultLineRenderer2D lineMovingAverage = new DefaultLineRenderer2D();
-		lineMovingAverage.setSetting(DefaultLineRenderer2D.COLOR, new Color(0f, 0.67f, 0f));
-		plot.setLineRenderer(dsMovingAverage, lineMovingAverage);
-
-		plot.setPointRenderer(dsMovingMedian, null);
-		DefaultLineRenderer2D lineMovingMedian = new DefaultLineRenderer2D();
-		lineMovingMedian.setSetting(DefaultLineRenderer2D.COLOR, new Color(0.5f, 0f, 0.5f));
-		plot.setLineRenderer(dsMovingMedian, lineMovingMedian);
-
+		// Format plot
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		plot.setSetting(Plot.LEGEND, true);
 		plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
+
+		// Format legend
 		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		// Format data series as lines of different colors
+		formatLine(plot, ds, new Color(0f, 0f, 0f));
+		formatLine(plot, dsLowpass, new Color(1.0f, 0.2f, 0.0f));
+		formatLine(plot, dsHighpass, new Color(0.2f, 0.4f, 0.8f));
+		formatLine(plot, dsMovingAverage, new Color(0f, 0.67f, 0f));
+		formatLine(plot, dsMovingMedian, new Color(0.5f, 0f, 0.5f));
+
+		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
+	}
+
+	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
+		plot.setPointRenderer(series, null);
+		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
+		line.setSetting(DefaultLineRenderer2D.COLOR, color);
+		plot.setLineRenderer(series, line);
 	}
 
 	public static void main(String[] args) {

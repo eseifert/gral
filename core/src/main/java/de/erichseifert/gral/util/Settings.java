@@ -268,7 +268,7 @@ public class Settings {
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
 	protected void notifySettingChanged(Key key, Object valOld, Object valNew, boolean defaultSetting) {
-		/* FIXME: Null values for old or new values are no indicator that
+		/* FIXME Null values for old or new values are no indicator that
 		 *	a setting or default is added or removed.
 		 */
 

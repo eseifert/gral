@@ -59,6 +59,22 @@ public abstract class Insets2D {
 	public abstract double getRight();
 
 	/**
+	 * Returns the sum of horizontal insets.
+	 * @return Horizontal insets.
+	 */
+	public double getHorizontal() {
+		return getRight() + getLeft();
+	}
+
+	/**
+	 * Returns the sum of vertical insets.
+	 * @return Vertical insets.
+	 */
+	public double getVertical() {
+		return getTop() + getBottom();
+	}
+
+	/**
 	 * Sets the insets according to the specified insets.
 	 * @param insets Insets to be set.
 	 */

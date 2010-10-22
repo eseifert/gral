@@ -38,6 +38,7 @@ public class SimplePiePlot extends JPanel {
 	public SimplePiePlot() {
 		super(new BorderLayout());
 
+		// Create data
 		DataTable data = new DataTable(Integer.class);
 		Random r = new Random();
 		for (int i = 0; i < 15; i++) {
@@ -45,7 +46,10 @@ public class SimplePiePlot extends JPanel {
 			data.add((r.nextDouble() <= 0.15) ? -val : val);
 		}
 
+		// Create new pie plot
 		PiePlot plot = new PiePlot(data);
+
+		// Format plot
 		plot.setSetting(PiePlot.TITLE, "A Sample Pie Plot");
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
@@ -64,6 +68,8 @@ public class SimplePiePlot extends JPanel {
 		//colors.setColorVariance(new float[] {0.60f, 0.00f, 0.75f, 0.25f, 0.25f, 0.75f});
 		//plot.setSetting(PiePlot.COLORS, colors);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+
+		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
