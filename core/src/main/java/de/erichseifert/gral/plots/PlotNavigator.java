@@ -55,8 +55,9 @@ public class PlotNavigator {
 
 		/**
 		 * Constructor which creates an new <code>NavigationInfo</code> instance.
+		 * @param min Minimum value in axis units.
+		 * @param max Maximum value in axis units.
 		 * @param center Center in axis units.
-		 * @param range Viewing width in axis units.
 		 */
 		public NavigationInfo(Number min, Number max, double center) {
 			this.minOriginal = min;

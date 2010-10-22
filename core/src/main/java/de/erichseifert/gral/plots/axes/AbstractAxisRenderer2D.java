@@ -450,9 +450,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 		}
 
 		segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
-		boolean normalOrientationClockwise =
+		Boolean normalOrientationClockwise =
 			AbstractAxisRenderer2D.this.getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
-		double normalOrientation = normalOrientationClockwise ? 1.0 : -1.0;
+		double normalOrientation = (normalOrientationClockwise != null &&
+				normalOrientationClockwise.booleanValue()) ? 1.0 : -1.0;
 		PointND<Double> tickNormal = new PointND<Double>(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()
