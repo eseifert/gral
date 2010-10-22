@@ -203,7 +203,7 @@
     <dependency>
       <groupId>de.erichseifert.vectorgraphics2d</groupId>
       <artifactId>VectorGraphics2D</artifactId>
-      <version>0.6</version>
+      <version>0.7-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
