@@ -35,7 +35,7 @@ import de.erichseifert.gral.data.DataSource;
 
 public class CSVReaderTest {
 	@Test
-	public void testReader() throws IOException, ParseException {
+	public void testReader() throws IOException {
 		InputStream input = new ByteArrayInputStream((
 			"0;10.0;20\r\n" +
 			"1;11.0;21\r\n" +
@@ -57,7 +57,7 @@ public class CSVReaderTest {
 	}
 
 	@Test
-	public void testSeparator() throws IOException, ParseException {
+	public void testSeparator() throws IOException {
 		InputStream input = new ByteArrayInputStream((
 			"0\t10.0\t20\r\n" +
 			"1\t11.0\t21\r\n" +
@@ -89,8 +89,8 @@ public class CSVReaderTest {
 		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 		try {
 			reader.read(input, Integer.class, Double.class, Double.class);
-			fail("Expected ParseException");
-		} catch (ParseException e) {
+			fail("Expected IOException");
+		} catch (IOException e) {
 		}
 	}
 

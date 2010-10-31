@@ -54,7 +54,8 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Returns a rounded number smaller than <code>a</code> with a defined precision.
+	 * Returns a rounded number smaller than <code>a</code> with a defined
+	 * precision.
 	 * @param a Value
 	 * @param precision Precision
 	 * @return Rounded value
@@ -64,7 +65,8 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Returns a rounded number larger than <code>a</code> with a defined precision.
+	 * Returns a rounded number larger than <code>a</code> with a defined
+	 * precision.
 	 * @param a Value
 	 * @param precision Precision
 	 * @return Rounded value
@@ -104,7 +106,8 @@ public abstract class MathUtils {
 	 * element's value is always less than or equal to <code>key</code>.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
-	 * @return Index of the array element whose value is less than or equal to <code>key</code>
+	 * @return Index of the array element whose value is less than or equal to
+	 *         <code>key</code>
 	 */
 	public static int binarySearchFloor(double[] a, double key) {
 		if (a.length == 0) {
@@ -123,7 +126,8 @@ public abstract class MathUtils {
 	 * element's value is always greater than or equal to <code>key</code>.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
-	 * @return Index of the array element whose value is greater than or equal to <code>key</code>
+	 * @return Index of the array element whose value is greater than or equal
+	 * 		   to <code>key</code>
 	 */
 	public static int binarySearchCeil(double[] a, double key) {
 		if (a.length == 0) {
@@ -137,9 +141,10 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Clamps a value to specified limits: if <code>value</code> is greater than <code>max</code>
-	 * then <code>max</code> will be returned. If <code>value</code> is greater than <code>min</code>
-	 * then <code>min</code> will be returned.
+	 * Clamps a value to specified limits: if <code>value</code> is greater than
+	 * <code>max</code> then <code>max</code> will be returned. If
+	 * <code>value</code> is greater than <code>min</code> then
+	 * <code>min</code> will be returned.
 	 * @param <T> Data type of the Value to limit.
 	 * @param value Value to be clamped
 	 * @param min Minimum
@@ -168,7 +173,8 @@ public abstract class MathUtils {
 	 * @param i Smallness rank of value to search
 	 * @return Index of the element that is the <i>i</i>th smallest in array <i>a</i>
 	 */
-	public static <T extends Comparable<T>> int randomizedSelect(List<T> a, int lower, int upper, int i) {
+	public static <T extends Comparable<T>> int randomizedSelect(List<T> a,
+			int lower, int upper, int i) {
 		if (a.isEmpty()) {
 			return -1;
 		}
@@ -197,7 +203,8 @@ public abstract class MathUtils {
 	 * @return Pivot point of the partitioned array
 	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 154
 	 */
-	private static <T extends Comparable<T>> int randomizedPartition(List<T> a, int lower, int upper) {
+	private static <T extends Comparable<T>> int randomizedPartition(List<T> a,
+			int lower, int upper) {
 		int i = lower + random.nextInt(upper - lower + 1);
 		exchange(a, upper, i);
 		return partition(a, lower, upper);
@@ -214,7 +221,8 @@ public abstract class MathUtils {
 	 * @return Pivot point of the partitioned array
 	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 146
 	 */
-	private static <T extends Comparable<T>> int partition(List<T> a, int lower, int upper) {
+	private static <T extends Comparable<T>> int partition(List<T> a,
+			int lower, int upper) {
 		T x = a.get(upper);
 		int i = lower - 1;
 		for (int j = lower; j < upper; j++) {
@@ -228,7 +236,8 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Swaps two elements at indexes <code>i1</code> and <code>i2</code> of an array in-place.
+	 * Swaps two elements at indexes <code>i1</code> and <code>i2</code> of an
+	 * array in-place.
 	 * @param <T> Data type of the array
 	 * @param a Array
 	 * @param i1 First element index
@@ -240,4 +249,21 @@ public abstract class MathUtils {
 		a.set(i1, tmp);
 	}
 
+	/**
+	 * <p>Returns the magnitude of the specified number. Example for magnitude
+	 * base 10:</p>
+	 * <table><tbody>
+	 *   <tr><td align="right">  0.05</td><td align="right">  0.01</td></tr>
+	 *   <tr><td align="right">  3.14</td><td align="right">  1.00</td></tr>
+	 *   <tr><td align="right"> 54.32</td><td align="right"> 10.00</td></tr>
+	 *   <tr><td align="right">123.45</td><td align="right">100.00</td></tr>
+	 * </tbody></table>
+	 * @param base Base.
+	 * @param n Number.
+	 * @return Magnitude.
+	 */
+	public static double magnitude(double base, double n) {
+		double logN = Math.log(n)/Math.log(base);
+		return Math.pow(base, Math.floor(logN));
+	}
 }

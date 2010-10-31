@@ -72,10 +72,12 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsLi
 
 		// Subtract shapes of data points from line to yield gaps.
 		double gapSize = this.<Number>getSetting(GAP).doubleValue();
-		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
-		Area punched = GeometryUtils.punch(lineShape, gapSize, isGapRounded, dataPoints);
-
-		return punched;
+		if (gapSize > 0.0) {
+			boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
+			Area punched = GeometryUtils.punch(lineShape, gapSize, isGapRounded, dataPoints);
+			return punched;
+		}
+		return lineShape;
 	}
 
 	@Override

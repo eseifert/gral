@@ -208,7 +208,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 						double tickLengthInner = tickLength*tickAlignment;
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 
-						if ((drawTicksMajor && TickType.MINOR.equals(tick.getType())) ||
+						if ((drawTicksMajor && TickType.MAJOR.equals(tick.getType())) ||
 								(drawTicksMinor && TickType.MINOR.equals(tick.getType()))) {
 							tickShape.setLine(
 								tickPoint.getX() - tickNormal.getX()*tickLengthInner,

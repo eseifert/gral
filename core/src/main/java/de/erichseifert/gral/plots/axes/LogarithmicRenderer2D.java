@@ -95,8 +95,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double max = axis.getMax().doubleValue();
 
 		final double BASE = 10.0;
-		double powerMin = Math.pow(BASE, Math.floor(Math.log10(min)));
-		double powerMax = Math.pow(BASE, Math.floor(Math.log10(max)));
+		double powerMin = MathUtils.magnitude(BASE, min);
+		double powerMax = MathUtils.magnitude(BASE, max);
 		double minTickMajor = MathUtils.ceil(min, powerMin*tickSpacing);
 
 		int ticksPerPower = (int)Math.floor(BASE/tickSpacingMinor);

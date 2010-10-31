@@ -23,7 +23,6 @@ package de.erichseifert.gral.io.data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 
 import de.erichseifert.gral.data.DataSource;
 
@@ -37,10 +36,10 @@ public interface DataReader {
 	 * @param input Input to be read.
 	 * @param types Number types for the columns of the DataSource.
 	 * @return DataSource Imported data.
-	 * @throws IOException when experiencing an error during file operations.
-	 * @throws ParseException when the file format is not valid.
+	 * @throws IOException when the file format is not valid or when
+	 *         experiencing an error during file operations.
 	 */
-	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException, ParseException;
+	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException;
 
 	/**
 	 * Returns the setting for the specified key.

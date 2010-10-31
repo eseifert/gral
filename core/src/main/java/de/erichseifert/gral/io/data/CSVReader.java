@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +68,7 @@ public class CSVReader extends AbstractDataReader {
 
 	@Override
 	public DataSource read(InputStream input, Class<? extends Number>... types)
-			throws IOException, ParseException {
+			throws IOException {
 		Map<Class<? extends Number>, Method> parseMethods =
 			new HashMap<Class<? extends Number>, Method>();
 		for (Class<? extends Number> type : types) {
@@ -104,10 +103,10 @@ public class CSVReader extends AbstractDataReader {
 							"Couldn't access method for parsing data type " +
 							types[i].getSimpleName() + " in column " + i);
 				} catch (InvocationTargetException e) {
-					throw new ParseException(
+					throw new IOException(
 							"Type mismatch in column " + i + ": got \"" +
 							cols[i] + "\", but expected " +
-							types[i].getSimpleName() + " value.", -1);
+							types[i].getSimpleName() + " value.");
 				}
 			}
 			data.add(row);

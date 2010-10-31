@@ -21,12 +21,12 @@
 
 package de.erichseifert.gral.io.data;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
-import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -36,41 +36,13 @@ import de.erichseifert.gral.io.IOCapabilities;
 /**
  * Class that reads a DataSource from a binary image file.
  */
-public class ImageReader extends AbstractDataReader {
+public class AudioReader extends AbstractDataReader {
 	static {
 		addCapabilities(new IOCapabilities(
-			"BMP",
-			"Windows Bitmap",
-			"image/bmp",
-			"bmp", "dib"
-		));
-
-		addCapabilities(new IOCapabilities(
-			"GIF",
-			"Graphics Interchange Format",
-			"image/gif",
-			"gif"
-		));
-
-		addCapabilities(new IOCapabilities(
-			"JPEG/JFIF",
-			"JPEG File Interchange Format",
-			"image/jpeg",
-			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
-		));
-
-		addCapabilities(new IOCapabilities(
-			"PNG",
-			"Portable Network Graphics",
-			"image/png",
-			"png"
-		));
-
-		addCapabilities(new IOCapabilities(
-			"WBMP",
-			"Wireless Application Protocol Bitmap",
-			"image/vnd.wap.wbmp",
-			"wbmp"
+			"WAV",
+			"RIFF WAVE",
+			"audio/wav",
+			"wav"
 		));
 	}
 
@@ -78,7 +50,7 @@ public class ImageReader extends AbstractDataReader {
 	 * Creates a new instance with the specified MIME type.
 	 * @param mimeType MIME type of the file format to be read.
 	 */
-	public ImageReader(String mimeType) {
+	public AudioReader(String mimeType) {
 		super(mimeType);
 		setDefault("factor", 1.0);
 		setDefault("offset", 0.0);
@@ -88,30 +60,32 @@ public class ImageReader extends AbstractDataReader {
 	@Override
 	public DataSource read(InputStream input, Class<? extends Number>... types)
 			throws IOException {
-		BufferedImage image = ImageIO.read(input);
+		AudioInputStream audio;
+		try {
+			audio = AudioSystem.getAudioInputStream(input);
+		} catch (UnsupportedAudioFileException e) {
+			throw new IOException(e);
+		}
 
-		int w = image.getWidth();
-		int h = image.getHeight();
-
-		Class[] colTypes = new Class[w];
-		Arrays.fill(colTypes, Double.class);
-		DataTable data = new DataTable(colTypes);
+		// FIXME: Should the types parameter be used?
+		DataTable data = new DataTable(Double.class);
 
 		double factor = this.<Number>getSetting("factor").doubleValue();
 		double offset = this.<Number>getSetting("offset").doubleValue();
 
-		int[] pixelData = new int[w];
-		Double[] rowData = new Double[w];
-		for (int y = 0; y < h; y++) {
-			image.getRGB(0, y, pixelData.length, 1, pixelData, 0, 0);
-			for (int x = 0; x < pixelData.length; x++) {
-				//double a = (pixelData[x] >> 24) & 0xFF;
-				double r = (pixelData[x] >> 16) & 0xFF;
-				//double g = (pixelData[x] >>  8) & 0xFF;
-				//double b = (pixelData[x] >>  0) & 0xFF;
-				rowData[x] = r*factor + offset;
+		int sampleSize = audio.getFormat().getSampleSizeInBits();
+		byte[] samples = new byte[sampleSize/8];
+
+		// see: http://www.jsresources.org/faq_audio.html#reconstruct_samples
+		while (audio.read(samples) >= 0) {
+			int b = samples[0];
+			if (samples.length == 1) {
+				b = b << 8;
+			} else if (samples.length == 2) {
+				b = (b & 0xFF) | (samples[1] << 8);
 			}
-			data.add(rowData);
+			double v = factor*b + offset;
+			data.add(v);
 		}
 
 		return data;

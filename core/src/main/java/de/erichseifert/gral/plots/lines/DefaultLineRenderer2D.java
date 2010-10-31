@@ -37,6 +37,9 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * Class that connects DataPoints2D with a straight line.
  */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
+	/** Number of line segments which will be reserved to avoid unnecessary
+	copying of array data. */
+	private static int INITIAL_LINE_CAPACITY = 10000;
 
 	/**
 	 * Initializes a new <code>DefaultLineRenderer2D</code> instance.
@@ -50,7 +53,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 			@Override
 			public void draw(DrawingContext context) {
 				// Construct shape
-				Path2D line = new Path2D.Double();
+				Path2D line = new Path2D.Double(Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
 				for (DataPoint point : points) {
 					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
