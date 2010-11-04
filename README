@@ -9,17 +9,17 @@ documentation files.
 Building a JAR file of the library core
 ---------------------------------------
 In case you just want to build the core of the library to get started execute
-the following command in the ``core`` directory::
+the following command in the ``gral-core`` directory::
 
   $ mvn install
 
-This will generate a JAR archive named ``core`` in the ``target`` directory.
+This will generate a JAR archive named ``gral-core`` in the ``target`` directory.
 This JAR file can be added to the class path of your application.
 
 Building a JAR file of the examples
 -----------------------------------
 In case you just want to build the core of the library to get started execute
-the following command in the ``examples`` directory::
+the following command in the ``gral-examples`` directory::
 
   $ mvn install
 
