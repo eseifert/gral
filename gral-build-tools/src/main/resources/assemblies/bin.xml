@@ -20,8 +20,8 @@
   <moduleSets>
     <moduleSet>
       <includes>
-        <include>de.erichseifert.gral:core</include>
-        <include>de.erichseifert.gral:examples</include>
+        <include>de.erichseifert.gral:gral-core</include>
+        <include>de.erichseifert.gral:gral-examples</include>
       </includes>
       <binaries>
         <outputDirectory>lib</outputDirectory>

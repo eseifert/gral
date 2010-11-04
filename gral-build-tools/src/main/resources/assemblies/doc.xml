@@ -19,7 +19,7 @@
   <includeBaseDirectory>true</includeBaseDirectory>
   <fileSets>
     <fileSet>
-      <directory>core/target/site</directory>
+      <directory>gral-core/target/site</directory>
       <includes>
         <include>apidocs/**</include>
       </includes>
