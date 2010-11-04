@@ -131,9 +131,10 @@
         </dependencies>
         <configuration>
           <descriptors>
-            <descriptor>bin.xml</descriptor>
-            <descriptor>src.xml</descriptor>
-            <descriptor>doc.xml</descriptor>
+            <!-- FIXME: The path to build tools shouldn't be necessary, it's defined as a dependency -->
+            <descriptor>gral-build-tools/src/main/resources/assemblies/bin.xml</descriptor>
+            <descriptor>gral-build-tools/src/main/resources/assemblies/src.xml</descriptor>
+            <descriptor>gral-build-tools/src/main/resources/assemblies/doc.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>
