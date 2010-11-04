@@ -24,9 +24,17 @@
         <include>de.erichseifert.gral:gral-examples</include>
       </includes>
       <binaries>
-        <outputDirectory>lib</outputDirectory>
+        <outputDirectory>/lib</outputDirectory>
         <unpack>false</unpack>
       </binaries>
     </moduleSet>
   </moduleSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/lib</outputDirectory>
+      <useProjectArtifact>true</useProjectArtifact>
+      <unpack>false</unpack>
+      <scope>runtime</scope>
+    </dependencySet>
+  </dependencySets>
 </assembly>
