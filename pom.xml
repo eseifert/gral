@@ -10,9 +10,9 @@
   <inceptionYear>2009</inceptionYear>
 
   <modules>
-    <module>build-tools</module>
-    <module>core</module>
-    <module>examples</module>
+    <module>gral-build-tools</module>
+    <module>gral-core</module>
+    <module>gral-examples</module>
   </modules>
 
   <licenses>
@@ -45,6 +45,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
@@ -54,15 +55,16 @@
         <inherited>false</inherited>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
+        <version>1.8.0</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
-            <artifactId>build-tools</artifactId>
+            <artifactId>gral-build-tools</artifactId>
             <version>0.9-SNAPSHOT</version>
           </dependency>
         </dependencies>
         <configuration>
-          <header>gral/header.txt</header>
+          <header>license-header.txt</header>
           <mapping>
             <java>SLASHSTAR_STYLE</java>
           </mapping>
@@ -94,10 +96,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.6</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
-            <artifactId>build-tools</artifactId>
+            <artifactId>gral-build-tools</artifactId>
             <version>0.9-SNAPSHOT</version>
           </dependency>
         </dependencies>
@@ -118,18 +121,19 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
-            <artifactId>build-tools</artifactId>
+            <artifactId>gral-build-tools</artifactId>
             <version>0.9-SNAPSHOT</version>
           </dependency>
         </dependencies>
         <configuration>
           <descriptors>
-            <descriptor>gral/assemblies/bin.xml</descriptor>
-            <descriptor>gral/assemblies/src.xml</descriptor>
-            <descriptor>gral/assemblies/doc.xml</descriptor>
+            <descriptor>bin.xml</descriptor>
+            <descriptor>src.xml</descriptor>
+            <descriptor>doc.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>
@@ -141,6 +145,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.2</version>
         <configuration>
           <inputEncoding>UTF-8</inputEncoding>
           <outputEncoding>UTF-8</outputEncoding>
@@ -150,10 +155,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.6</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
@@ -161,6 +168,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
         <configuration>
           <show>public</show>
         </configuration>
@@ -168,14 +176,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.6</version>
         <configuration>
-          <configLocation>gral/checkstyle.xml</configLocation>
+          <configLocation>checkstyle.xml</configLocation>
           <includeTestSourceDirectory>false</includeTestSourceDirectory>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.4</version>
         <configuration>
           <instrumentation>
             <excludes>
@@ -192,6 +202,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
