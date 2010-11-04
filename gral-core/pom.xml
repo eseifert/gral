@@ -7,7 +7,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>gral-core</artifactId>
   <version>0.9-SNAPSHOT</version>
 
   <name>GRAL core</name>
@@ -17,6 +17,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
         <configuration>
           <outputDirectory>target</outputDirectory>
           <show>private</show>
@@ -39,15 +40,15 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.8.2</version>
       <scope>test</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>
 
   <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk/core/</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/core/</developerConnection>
+    <connection>scm:svn:svn://erichseifert.de/gral/trunk/gral-core/</connection>
+    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-core/</developerConnection>
     <tag>HEAD</tag>
   </scm>
 </project>

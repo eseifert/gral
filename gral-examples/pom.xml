@@ -7,7 +7,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
-  <artifactId>examples</artifactId>
+  <artifactId>gral-examples</artifactId>
   <version>0.9-SNAPSHOT</version>
 
   <name>GRAL example applications</name>
@@ -15,14 +15,14 @@
   <dependencies>
     <dependency>
       <groupId>de.erichseifert.gral</groupId>
-      <artifactId>core</artifactId>
+      <artifactId>gral-core</artifactId>
       <version>0.9-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
   <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk/examples/</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/examples/</developerConnection>
+    <connection>scm:svn:svn://erichseifert.de/gral/trunk/gral-examples/</connection>
+    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-examples/</developerConnection>
     <tag>HEAD</tag>
   </scm>
 </project>
