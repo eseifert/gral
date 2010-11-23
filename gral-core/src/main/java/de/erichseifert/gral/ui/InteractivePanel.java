@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -68,6 +69,16 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 public class InteractivePanel extends DrawablePanel implements Printable, NavigationListener {
 	private static final long serialVersionUID = 1L;
 
+	/** Constants which determine the direction of zoom and pan actions. */
+	public static enum NavigationDirection {
+		/** Value for zooming and panning horizontally. */
+		HORIZONTAL,
+		/** Value for zooming and panning vertically. */
+		VERTICAL,
+		/** Value for zooming and panning in all direction. */
+		ARBITRARY
+	}
+
 	// FIXME Find better method to adjust resolution
 	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
 	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
@@ -76,11 +87,16 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 	private static final int MIN_DRAG = 0;
 	private static final double ZOOM_FACTOR = 0.8;
 
+	private boolean zoomable;
+	private boolean pannable;
+
 	private final JPopupMenu menu;
 
 	private final JFileChooser exportImageChooser;
 
 	private PlotNavigator navigator;
+	private MouseWheelListener zoomListener;
+	private NavigationMoveListener panListener;
 
 	/**
 	 * Creates a new panel instance and initializes it with a drawable component.
@@ -167,19 +183,10 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 		if (getDrawable() instanceof Plot) {
 			navigator = new PlotNavigator((Plot) getDrawable());
 			// Register a new handler to zoom the map with the mouse wheel
-			addMouseWheelListener(new MouseWheelListener() {
-				@Override
-				public void mouseWheelMoved(MouseWheelEvent e) {
-					zoom(-e.getWheelRotation());
-				}
-			});
+			setZoomable(true);
 
 			if (getDrawable() instanceof XYPlot) {
-				// Register a new handler to move the map by dragging
-				// This requires that an x- and a y-axis do exist in the plot
-				NavigationMoveListener moveListener = new NavigationMoveListener(navigator);
-				addMouseListener(moveListener);
-				addMouseMotionListener(moveListener);
+				setPannable(true);
 			}
 		}
 	}
@@ -375,5 +382,115 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 			double zoomOld, double zoomNew) {
 		navigator.setZoom(zoomNew);
 		repaint();
+	}
+
+	/**
+	 * Returns whether the plot area in the panel can be zoomed.
+	 * @return <code>true</code> if the plot can be zoomed,
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean isZoomable() {
+		return zoomable;
+	}
+
+	/**
+	 * Sets whether the plot area in the panel can be zoomed.
+	 * @param zoomable <code>true</code> if the plot should be zoomable,
+	 *                 <code>false</code> otherwise.
+	 */
+	public void setZoomable(boolean zoomable) {
+		if (!(getDrawable() instanceof Plot) || (this.zoomable == zoomable)) {
+			return;
+		}
+
+		this.zoomable = zoomable;
+
+		if (zoomListener != null) {
+			removeMouseWheelListener(zoomListener);
+			zoomListener = null;
+		}
+
+		if (zoomable) {
+			zoomListener = new MouseWheelListener() {
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					zoom(-e.getWheelRotation());
+				}
+			};
+			addMouseWheelListener(zoomListener);
+		}
+	}
+
+	/**
+	 * Returns whether the plot area in the panel can be panned.
+	 * @return <code>true</code> if the plot can be panned,
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean isPannable() {
+		return pannable;
+	}
+
+	/**
+	 * Sets whether the plot area in the panel can be panned.
+	 * @param pannable <code>true</code> if the plot should be pannable,
+	 *                 <code>false</code> otherwise.
+	 */
+	public void setPannable(boolean pannable) {
+		if (!(getDrawable() instanceof XYPlot) || (this.pannable == pannable)) {
+			return;
+		}
+
+		this.pannable = pannable;
+
+		if (panListener != null) {
+			removeMouseMotionListener(panListener);
+			removeMouseListener(panListener);
+			panListener = null;
+		}
+		if (pannable) {
+			// Register a new handler to move the map by dragging
+			// This requires that an x- and a y-axis do exist in the plot
+			panListener = new NavigationMoveListener(navigator);
+			addMouseListener(panListener);
+			addMouseMotionListener(panListener);
+		}
+	}
+
+	/**
+	 * Returns the direction in which can be navigated. <code>null</code> will
+	 * be returned if the displayed plot does not support navigation.
+	 * @return the direction in which can be navigated, or <code>null</code> if
+	 *         the displayed plot does not support navigation.
+	 */
+	public NavigationDirection getNavigateDirection() {
+		if (panListener != null) {
+			boolean isHorizontal = navigator.getAxes().contains(XYPlot.AXIS_X);
+			boolean isVertical = navigator.getAxes().contains(XYPlot.AXIS_Y);
+			if (isHorizontal && isVertical) {
+				return NavigationDirection.ARBITRARY;
+			} else if (isHorizontal) {
+				return NavigationDirection.HORIZONTAL;
+			} else {
+				return NavigationDirection.VERTICAL;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Sets the direction in which can be navigated.
+	 * @param direction The direction in which can be navigated.
+	 */
+	public void setNavigateDirection(NavigationDirection direction) {
+		if (panListener != null) {
+			if (NavigationDirection.HORIZONTAL.equals(direction)) {
+				navigator.setAxes(XYPlot.AXIS_X);
+			} else if (NavigationDirection.VERTICAL.equals(direction)) {
+				navigator.setAxes(XYPlot.AXIS_Y);
+			} else {
+				Collection<String> allAxes = navigator.getPlot().getAxesNames();
+				navigator.setAxes(allAxes);
+			}
+		}
 	}
 }

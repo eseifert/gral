@@ -80,6 +80,7 @@
             <exclude>**/test/resources/**</exclude>
             <exclude>**/src/docbook/**</exclude>
             <exclude>**/LICENSE*</exclude>
+            <exclude>**/README</exclude>
             <exclude>**/TODO.txt</exclude>
             <exclude>**/*.svg</exclude>
           </excludes>

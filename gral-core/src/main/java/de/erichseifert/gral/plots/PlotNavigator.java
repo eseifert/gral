@@ -21,11 +21,13 @@
 
 package de.erichseifert.gral.plots;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -37,6 +39,7 @@ import de.erichseifert.gral.util.MathUtils;
 public class PlotNavigator {
 	private final Plot plot;
 	private final Map<String, NavigationInfo> infos;
+	private final Set<String> axes;
 	private final Set<NavigationListener> navigationListeners;
 
 	private double zoomMin;
@@ -129,12 +132,15 @@ public class PlotNavigator {
 	}
 
 	/**
-	 * Creates a new <code>PlotZoomer</code> object that is responsible for the specified plot.
-	 * @param plot Plot to be zoomed.
+	 * Creates a new <code>PlotNavigator</code> object that is responsible for
+	 * zooming and panning all axes of the specified plot.
+	 * @param plot Plot to be zoomed and panned.
 	 */
 	public PlotNavigator(Plot plot) {
+		axes = new HashSet<String>();
 		navigationListeners = new HashSet<NavigationListener>();
 		this.plot = plot;
+		setAxes(plot.getAxesNames());
 		infos = new HashMap<String, NavigationInfo>();
 		for (String axisName : plot.getAxesNames()) {
 			Axis axis = plot.getAxis(axisName);
@@ -156,14 +162,13 @@ public class PlotNavigator {
 	}
 
 	private void refresh() {
-		for (Entry<String, NavigationInfo> entry: infos.entrySet()) {
-			String axisName = entry.getKey();
+		for (String axisName : axes) {
 			AxisRenderer renderer = plot.getAxisRenderer(axisName);
 			if (renderer == null) {
 				continue;
 			}
 			Axis axis = getPlot().getAxis(axisName);
-			NavigationInfo info = entry.getValue();
+			NavigationInfo info = infos.get(axisName);
 
 			// Original range in screen units
 			// Most up-to-date view coordinates (axis's layout) must be used
@@ -336,6 +341,9 @@ public class PlotNavigator {
 	 * @param centerNew New center point
 	 */
 	protected void fireCenterChanged(String axisName, Number centerOld, Number centerNew) {
+		if (!axes.contains(axisName)) {
+			return;
+		}
 		for (NavigationListener l : navigationListeners) {
 			l.centerChanged(this, axisName, centerOld, centerNew);
 		}
@@ -348,8 +356,36 @@ public class PlotNavigator {
 	 * @param zoomNew New zoom level
 	 */
 	protected void fireZoomChanged(String axisName, double zoomOld, double zoomNew) {
+		if (!axes.contains(axisName)) {
+			return;
+		}
 		for (NavigationListener l : navigationListeners) {
 			l.zoomChanged(this, axisName, zoomOld, zoomNew);
 		}
+	}
+
+	/**
+	 * Returns the names of all axes handled by this object.
+	 * @return Names of all axes handled by this object.
+	 */
+	public Set<String> getAxes() {
+		return Collections.unmodifiableSet(axes);
+	}
+
+	/**
+	 * Sets the names of the axes that should be handled by this object.
+	 * @param axes Names of the axes that should be handled by this object.
+	 */
+	public void setAxes(Collection<String> axes) {
+		this.axes.clear();
+		this.axes.addAll(axes);
+	}
+
+	/**
+	 * Sets the names of the axes that should be handled by this object.
+	 * @param axes Names of the axes that should be handled by this object.
+	 */
+	public void setAxes(String... axes) {
+		setAxes(Arrays.asList(axes));
 	}
 }

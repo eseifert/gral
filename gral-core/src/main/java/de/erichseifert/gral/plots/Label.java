@@ -151,6 +151,10 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		return d;
 	}
 
+	/**
+	 * Returns the <code>TextLayout</code> instance for this label.
+	 * @return <code>TextLayout</code> instance for this label.
+	 */
 	protected TextLayout getLayout() {
 		if (!valid) {
 			if (text != null && !text.isEmpty()) {
