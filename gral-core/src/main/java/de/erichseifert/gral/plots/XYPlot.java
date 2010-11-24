@@ -383,8 +383,6 @@ public class XYPlot extends Plot  {
 	 * @param data Data to be displayed.
 	 */
 	public XYPlot(DataSource... data) {
-		super(data);
-
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
 		lineRenderers = new HashMap<DataSource, LineRenderer>(data.length);
 		areaRenderers = new HashMap<DataSource, AreaRenderer>(data.length);
@@ -392,14 +390,9 @@ public class XYPlot extends Plot  {
 		setPlotArea(new XYPlotArea2D(this));
 		setLegend(new XYLegend(this));
 
-		PointRenderer pointRendererDefault = new DefaultPointRenderer();
-		LineRenderer lineRendererDefault = null;
-		AreaRenderer areaRendererDefault = null;
+		// Add data sources after the renderer lists are initialized
 		for (DataSource source : data) {
-			getLegend().add(source);
-			setPointRenderer(source, pointRendererDefault);
-			setLineRenderer(source, lineRendererDefault);
-			setAreaRenderer(source, areaRendererDefault);
+			add(source);
 		}
 
 		// Create axes

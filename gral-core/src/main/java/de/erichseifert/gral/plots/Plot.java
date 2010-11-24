@@ -407,7 +407,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 */
 	public void add(int index, DataSource source, boolean visible) {
 		data.add(index, source);
-		getLegend().add(source);
+		if (getLegend() != null) {
+			getLegend().add(source);
+		}
 		if (visible) {
 			dataVisible.add(source);
 		}
@@ -441,7 +443,9 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	public boolean remove(DataSource source) {
 		source.removeDataListener(this);
 		dataVisible.remove(source);
-		getLegend().remove(source);
+		if (getLegend() != null) {
+			getLegend().remove(source);
+		}
 		boolean existed = data.remove(source);
 		refresh();
 		return existed;
@@ -451,9 +455,12 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * Removes all data series from this plot.
 	 */
 	public void clear() {
-		dataVisible.clear();
 		for (DataSource source : data) {
 			source.removeDataListener(this);
+		}
+		dataVisible.clear();
+		if (getLegend() != null) {
+			getLegend().clear();
 		}
 		data.clear();
 		refresh();

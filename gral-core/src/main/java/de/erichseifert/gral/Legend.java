@@ -45,11 +45,11 @@ import de.erichseifert.gral.util.Settings.Key;
 /**
  * <p>Abstract class that serves as a basic for any legend in a plot.
  * It provides an inner Item class which is responsible for
- * displaying a specific DataSource.</p>
+ * displaying a specific data source.</p>
  * <p>The functionality includes:</p>
  * <ul>
  *   <li>Storing and retrieving settings</li>
- *   <li>Adding and removing DataSources</li>
+ *   <li>Adding and removing data sources</li>
  * </ul>
  */
 public abstract class Legend extends DrawableContainer
@@ -76,7 +76,7 @@ public abstract class Legend extends DrawableContainer
 	private final Map<DataSource, Drawable> components;
 
 	/**
-	 * Class that displays a specific DataSource as an item of a Legend.
+	 * Class that displays a specific data source as an item of a Legend.
 	 */
 	protected class Item extends DrawableContainer {
 		private final DataSource data;
@@ -84,8 +84,8 @@ public abstract class Legend extends DrawableContainer
 		private final Label label;
 
 		/**
-		 * Creates a new Item object with the specified DataSource and text.
-		 * @param data DataSource to be displayed.
+		 * Creates a new Item object with the specified data source and text.
+		 * @param data Data source to be displayed.
 		 * @param labelText Description text.
 		 */
 		public Item(final DataSource data, final String labelText) {
@@ -122,8 +122,8 @@ public abstract class Legend extends DrawableContainer
 		}
 
 		/**
-		 * Returns the displayed DataSource.
-		 * @return Displayed DataSource
+		 * Returns the displayed data source.
+		 * @return Displayed data source
 		 */
 		public DataSource getData() {
 			return data;
@@ -131,8 +131,8 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Creates a new Legend object with default background color, border,
-	 * orientation and gap between the Items.
+	 * Initializes a new <code>Legend</code> instance with default background
+	 * color, border, orientation and gap between the items.
 	 */
 	public Legend() {
 		components = new HashMap<DataSource, Drawable>();
@@ -155,7 +155,7 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the background of this Legend with the specified Graphics2D
+	 * Draws the background of this Legend with the specified <code>Graphics2D</code>
 	 * object.
 	 * @param context Environment used for drawing.
 	 */
@@ -167,7 +167,7 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the border of this Legend with the specified Graphics2D
+	 * Draws the border of this Legend with the specified <code>Graphics2D</code>
 	 * object.
 	 * @param context Environment used for drawing.
 	 */
@@ -190,8 +190,8 @@ public abstract class Legend extends DrawableContainer
 			Drawable symbol, DataSource data);
 
 	/**
-	 * Adds the specified DataSource in order to display it.
-	 * @param source DataSource to be added.
+	 * Adds the specified data source in order to display it.
+	 * @param source data source to be added.
 	 */
 	public void add(DataSource source) {
 		Item item = new Item(source, source.toString());
@@ -200,7 +200,7 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Returns whether the specified DataSource was added to the legend.
+	 * Returns whether the specified data source was added to the legend.
 	 * @param source Data source
 	 * @return <code>true</code> if legend contains the data source, otherwise <code>false</code>
 	 */
@@ -209,8 +209,8 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Removes the specified DataSource.
-	 * @param source DataSource to be removed.
+	 * Removes the specified data source.
+	 * @param source Data source to be removed.
 	 */
 	public void remove(DataSource source) {
 		Drawable removeItem = components.get(source);
@@ -218,6 +218,15 @@ public abstract class Legend extends DrawableContainer
 			remove(removeItem);
 		}
 		components.remove(source);
+	}
+
+	/**
+	 * Removes all data sources from the legend.
+	 */
+	public void clear() {
+		for (DataSource source : components.keySet()) {
+			remove(source);
+		}
 	}
 
 	/**
