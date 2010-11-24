@@ -393,9 +393,13 @@ public class XYPlot extends Plot  {
 		setLegend(new XYLegend(this));
 
 		PointRenderer pointRendererDefault = new DefaultPointRenderer();
+		LineRenderer lineRendererDefault = null;
+		AreaRenderer areaRendererDefault = null;
 		for (DataSource source : data) {
 			getLegend().add(source);
 			setPointRenderer(source, pointRendererDefault);
+			setLineRenderer(source, lineRendererDefault);
+			setAreaRenderer(source, areaRendererDefault);
 		}
 
 		// Create axes
@@ -575,6 +579,17 @@ public class XYPlot extends Plot  {
 			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
 		}
 		super.setAxisRenderer(axisName, renderer);
+	}
+
+	@Override
+	public void add(int index, DataSource source, boolean visible) {
+		super.add(index, source, visible);
+		PointRenderer pointRendererDefault = new DefaultPointRenderer();
+		LineRenderer lineRendererDefault = null;
+		AreaRenderer areaRendererDefault = null;
+		setPointRenderer(source, pointRendererDefault);
+		setLineRenderer(source, lineRendererDefault);
+		setAreaRenderer(source, areaRendererDefault);
 	}
 
 	@Override
