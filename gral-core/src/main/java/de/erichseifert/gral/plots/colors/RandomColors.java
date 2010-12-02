@@ -36,7 +36,7 @@ public class RandomColors implements ColorMapper {
 
 	private final Map<Double, Color> colorCache;
 	private final Random random;
-	//FIXME : duplicate code! See de.erichseifert.gral.plots.colors.QuasiRandomColors
+	//FIXME duplicate code! See de.erichseifert.gral.plots.colors.QuasiRandomColors
 	private float[] colorVariance;
 
 	/**

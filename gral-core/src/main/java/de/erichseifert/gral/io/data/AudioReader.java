@@ -67,7 +67,7 @@ public class AudioReader extends AbstractDataReader {
 			throw new IOException(e);
 		}
 
-		// FIXME: Should the types parameter be used?
+		// FIXME Should the types parameter be used?
 		DataTable data = new DataTable(Double.class);
 
 		double factor = this.<Number>getSetting("factor").doubleValue();

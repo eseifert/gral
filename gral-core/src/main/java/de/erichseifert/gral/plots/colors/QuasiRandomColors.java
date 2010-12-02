@@ -32,11 +32,11 @@ import de.erichseifert.gral.util.HaltonSequence;
  * Class that generates seemingly random colors.
  */
 public class QuasiRandomColors implements ColorMapper {
-	private HaltonSequence seqHue = new HaltonSequence(3);
-	private HaltonSequence seqSat = new HaltonSequence(5);
-	private HaltonSequence seqBrightness = new HaltonSequence(2);
+	private final HaltonSequence seqHue = new HaltonSequence(3);
+	private final HaltonSequence seqSat = new HaltonSequence(5);
+	private final HaltonSequence seqBrightness = new HaltonSequence(2);
 	private final Map<Double, Color> colorCache;
-	//FIXME : duplicate code! See de.erichseifert.gral.plots.colors.RandomColors
+	//FIXME duplicate code! See de.erichseifert.gral.plots.colors.RandomColors
 	private float[] colorVariance;
 
 	/**

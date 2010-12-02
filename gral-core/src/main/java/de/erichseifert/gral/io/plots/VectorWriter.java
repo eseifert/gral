@@ -32,6 +32,8 @@ import java.util.Map;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.DrawingContext.Quality;
+import de.erichseifert.gral.DrawingContext.Target;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
 
@@ -118,11 +120,20 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 	@Override
 	public void write(Drawable d, OutputStream destination,
 			double x, double y, double width, double height) throws IOException {
-		Graphics2D graphics = null;
 		try {
+			// Create instance of export class
 			Constructor<? extends Graphics2D> constructor = graphicsClass.getConstructor(
 						double.class, double.class, double.class, double.class);
-			graphics = constructor.newInstance(x, y, width, height);
+			Graphics2D graphics = constructor.newInstance(x, y, width, height);
+
+			// Output data
+			Rectangle2D boundsOld = d.getBounds();
+			d.setBounds(x, y, width, height);
+			DrawingContext context = new DrawingContext(graphics, Quality.QUALITY, Target.VECTOR);
+			d.draw(context);
+			byte[] data = (byte[]) graphicsClass.getMethod("getBytes").invoke(graphics);
+			destination.write(data);
+			d.setBounds(boundsOld);
 		} catch (SecurityException e) {
 			throw new IllegalStateException(e);
 		} catch (NoSuchMethodException e) {
@@ -136,14 +147,6 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 		} catch (InvocationTargetException e) {
 			throw new IllegalStateException(e);
 		}
-
-		Rectangle2D boundsOld = d.getBounds();
-		d.setBounds(x, y, width, height);
-		DrawingContext context = new DrawingContext(graphics);
-		// TODO Define Vector target
-		d.draw(context);
-		destination.write(graphics.toString().getBytes());
-		d.setBounds(boundsOld);
 	}
 
 	@Override
