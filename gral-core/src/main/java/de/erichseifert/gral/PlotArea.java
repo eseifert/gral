@@ -56,6 +56,7 @@ public abstract class PlotArea extends AbstractDrawable
 	Specifying a <code>null</code> values will turn off clipping. */
 	public static final Key CLIPPING = new Key("plotarea.clipping");
 
+	/** Settings stored as pairs (key, value). */
 	private final Settings settings;
 
 	/**

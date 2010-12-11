@@ -58,22 +58,34 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 		};
 	}
 
+	/**
+	 * Returns the shape used for rendering the area of a data points.
+	 * @param axis Axis the points are mapped on.
+	 * @param axisRenderer Renderer that is associated with the axis.
+	 * @param points Data points.
+	 * @return Area of the specified data points
+	 */
 	private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		double axisYMin = axis.getMin().doubleValue();
 		double axisYMax = axis.getMax().doubleValue();
 		double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
+
 		PointND<Double> posOrigin = null;
 		if (axisRenderer != null) {
-			posOrigin = axisRenderer.getPosition(axis, axisYOrigin, true, false);
+			posOrigin = axisRenderer.getPosition(
+					axis, axisYOrigin, true, false);
 		}
+
 		Path2D path = new Path2D.Double();
 		if (posOrigin == null) {
 			return path;
 		}
+
 		double posYOrigin = posOrigin.get(PointND.Y);
 		double x = 0.0;
 		double y = 0.0;
+
 		for (DataPoint p: points) {
 			Point2D pos = p.getPosition().getPoint2D();
 			x = pos.getX();
@@ -83,6 +95,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			}
 			path.lineTo(x, y);
 		}
+
 		if (path.getCurrentPoint() != null) {
 			path.lineTo(x, posYOrigin);
 			path.closePath();

@@ -31,6 +31,7 @@ import de.erichseifert.gral.data.DataSource;
  * </ul>
  */
 public class Convolution extends Filter {
+	/** Kernel that provides the values to convolve the data source. */
 	private final Kernel kernel;
 
 	/**

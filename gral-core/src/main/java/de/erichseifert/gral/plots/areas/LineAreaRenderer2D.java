@@ -72,6 +72,13 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		};
 	}
 
+	/**
+	 * Returns the shape used for rendering the area of a data points.
+	 * @param axis Axis the points are mapped on.
+	 * @param axisRenderer Renderer that is associated with the axis.
+	 * @param points Data points.
+	 * @return Area of the specified data points
+	 */
 	private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		double axisYMin = axis.getMin().doubleValue();
@@ -85,7 +92,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		Path2D path = new Path2D.Double();
 		double x = 0.0;
 		double y = 0.0;
-		for (DataPoint p: points) {
+		for (DataPoint p : points) {
 			Point2D pos = p.getPosition().getPoint2D();
 			x = pos.getX();
 			y = pos.getY();

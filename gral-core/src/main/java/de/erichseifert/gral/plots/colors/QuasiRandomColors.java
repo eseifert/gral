@@ -32,11 +32,16 @@ import de.erichseifert.gral.util.HaltonSequence;
  * Class that generates seemingly random colors.
  */
 public class QuasiRandomColors implements ColorMapper {
+	/** Object for mapping a plot value to a hue. */
 	private final HaltonSequence seqHue = new HaltonSequence(3);
+	/** Object for mapping a plot value to a saturation. */
 	private final HaltonSequence seqSat = new HaltonSequence(5);
+	/** Object for mapping a plot value to a brightness. */
 	private final HaltonSequence seqBrightness = new HaltonSequence(2);
+	/** Cache for colors that have already been generated. */
 	private final Map<Double, Color> colorCache;
-	//FIXME duplicate code! See de.erichseifert.gral.plots.colors.RandomColors
+	/** Variance settings for hue, saturation and brightness. */
+	//FIXME duplicate code! See RandomColors
 	private float[] colorVariance;
 
 	/**
@@ -56,9 +61,12 @@ public class QuasiRandomColors implements ColorMapper {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);
 		}
-		float hue        = colorVariance[0] + colorVariance[1]*(float)(double)seqHue.next();
-		float saturation = colorVariance[2] + colorVariance[3]*(float)(double)seqSat.next();
-		float brightness = colorVariance[4] + colorVariance[5]*(float)(double)seqBrightness.next();
+		float hue = colorVariance[0] + colorVariance[1]*
+				(float) ((double) seqHue.next());
+		float saturation = colorVariance[2] + colorVariance[3]*
+				(float) ((double) seqSat.next());
+		float brightness = colorVariance[4] + colorVariance[5]*
+				(float) ((double) seqBrightness.next());
 		Color color = Color.getHSBColor(hue, saturation, brightness);
 		colorCache.put(value, color);
 		return color;
@@ -74,7 +82,8 @@ public class QuasiRandomColors implements ColorMapper {
 
 	/**
 	 * Sets the current color variance.
-	 * @param colorVariance Range of hue, saturation and brightness a color can have.
+	 * @param colorVariance Range of hue, saturation and brightness a color
+	 *        can have.
 	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;

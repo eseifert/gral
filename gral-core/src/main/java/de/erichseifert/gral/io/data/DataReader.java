@@ -39,7 +39,8 @@ public interface DataReader {
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
 	 */
-	DataSource read(InputStream input, Class<? extends Number>... types) throws IOException;
+	DataSource read(InputStream input, Class<? extends Number>... types)
+		throws IOException;
 
 	/**
 	 * Returns the setting for the specified key.

@@ -34,7 +34,9 @@ import de.erichseifert.gral.data.Row;
  * The values of the scaled result are created using averaging.
  */
 public class Resize extends Filter {
+	/** Number of columns. */
 	private final int cols;
+	/** Number of rows. */
 	private final int rows;
 
 	/**
@@ -80,7 +82,8 @@ public class Resize extends Filter {
 	@Override
 	protected void filter() {
 		clear();
-		if (getRowCount() == original.getRowCount() && getColumnCount() == original.getColumnCount()) {
+		if ((getRowCount() == original.getRowCount())
+				&& (getColumnCount() == original.getColumnCount())) {
 			return;
 		}
 
@@ -97,7 +100,8 @@ public class Resize extends Filter {
 				for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
 					double start = rowIndex*step;
 					double end   = (rowIndex + 1)*step;
-					avgRows.set(colIndex, rowIndex, average(colData, start, end));
+					avgRows.set(colIndex, rowIndex,
+							average(colData, start, end));
 				}
 			}
 			data = avgRows;
@@ -114,7 +118,8 @@ public class Resize extends Filter {
 				for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 					double start = colIndex*step;
 					double end   = (colIndex + 1)*step;
-					avgCols.set(colIndex, rowIndex, average(rowData, start, end));
+					avgCols.set(colIndex, rowIndex,
+							average(rowData, start, end));
 				}
 			}
 			data = avgCols;
@@ -126,6 +131,11 @@ public class Resize extends Filter {
 		}
 	}
 
+	/**
+	 * Utility method that fills a data table with empty rows.
+	 * @param data Data table that should be filled.
+	 * @param count Number of rows that were added.
+	 */
 	private static void fillWithEmptyRows(DataTable data, int count) {
 		while (data.getRowCount() < count) {
 			Double[] emptyRow = new Double[data.getColumnCount()];
@@ -134,6 +144,13 @@ public class Resize extends Filter {
 		}
 	}
 
+	/**
+	 * Calculates the arithmetic mean of all values between start and end.
+	 * @param data Values.
+	 * @param start Start index.
+	 * @param end End index.
+	 * @return Arithmetic mean.
+	 */
 	private static double average(DataAccessor data, double start, double end) {
 		int startFloor = (int) Math.floor(start);
 		int startCeil  = (int) Math.ceil(start);

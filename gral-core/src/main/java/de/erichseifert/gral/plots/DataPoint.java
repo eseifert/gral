@@ -31,8 +31,11 @@ import de.erichseifert.gral.util.PointND;
  * Class for storing points of a plot.
  */
 public class DataPoint {
+	/** Position of the data point (n-dimensional). */
 	private final PointND<Double> position;
+	/** Drawable that will be used to render the data point. */
 	private final Drawable drawable;
+	/** Shape describing the data point. */
 	private final Shape point;
 
 	/**
@@ -57,7 +60,8 @@ public class DataPoint {
 	}
 
 	/**
-	 * Returns the <code>Drawable</code> which represents this <code>DataPoint2D</code>.
+	 * Returns the <code>Drawable</code> which represents this
+	 * <code>DataPoint</code>.
 	 * @return <code>Drawable</code> instance.
 	 */
 	public Drawable getDrawable() {
@@ -65,7 +69,7 @@ public class DataPoint {
 	}
 
 	/**
-	 * Returns the point of this <code>DataPoint2D</code>.
+	 * Returns the point of this <code>DataPoint</code>.
 	 * @return Point.
 	 */
 	public Shape getPoint() {

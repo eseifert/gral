@@ -29,7 +29,15 @@ import java.util.Random;
  * mathematical calculations.
  */
 public abstract class MathUtils {
-	private static final Random random = new Random();
+	/** Instance for random values. */
+	private static final Random RANDOM = new Random();
+
+	/**
+	 * Default constructor that prevents creation of class.
+	 */
+	private MathUtils() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Check whether two floating point values match with a given precision.
@@ -162,16 +170,18 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * <p>Perform a randomized search on an unsorted array <code>a</code> to find
-	 * the <i>i</i>th smallest element. The array contents are be modified during
-	 * the operation!</p>
-	 * <p>See Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 186</p>
+	 * <p>Perform a randomized search on an unsorted array <code>a</code> to
+	 * find the <i>i</i>th smallest element. The array contents are be modified
+	 * during the operation!</p>
+	 * <p>See Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * p. 186</p>
 	 * @param <T> Data type of the array
 	 * @param a Unsorted array
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @param i Smallness rank of value to search
-	 * @return Index of the element that is the <i>i</i>th smallest in array <i>a</i>
+	 * @return Index of the element that is the <i>i</i>th smallest in array
+	 * <i>a</i>
 	 */
 	public static <T extends Comparable<T>> int randomizedSelect(List<T> a,
 			int lower, int upper, int i) {
@@ -201,11 +211,12 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 154
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * p. 154
 	 */
-	private static <T extends Comparable<T>> int randomizedPartition(List<T> a,
-			int lower, int upper) {
-		int i = lower + random.nextInt(upper - lower + 1);
+	private static <T extends Comparable<T>> int randomizedPartition(
+			List<T> a, int lower, int upper) {
+		int i = lower + RANDOM.nextInt(upper - lower + 1);
 		exchange(a, upper, i);
 		return partition(a, lower, upper);
 	}
@@ -219,10 +230,11 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition. p. 146
+	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
+	 * p. 146
 	 */
-	private static <T extends Comparable<T>> int partition(List<T> a,
-			int lower, int upper) {
+	private static <T extends Comparable<T>> int partition(
+			List<T> a, int lower, int upper) {
 		T x = a.get(upper);
 		int i = lower - 1;
 		for (int j = lower; j < upper; j++) {

@@ -48,9 +48,11 @@ import de.erichseifert.gral.util.Settings.Key;
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
-	/** Key for specifying the horizontal alignment within the bounding rectangle. 0 means left, 1 means right. */
+	/** Key for specifying the horizontal alignment within the
+	bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X = new Key("label.alignment.x");
-	/** Key for specifying the vertical alignment within the bounding rectangle. 0 means top, 1 means bottom. */
+	/** Key for specifying the vertical alignment within the
+	bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y");
 	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants}
 	value where the label will be aligned at. */
@@ -63,10 +65,15 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	paint the label shape. */
 	public static final Key COLOR = new Key("label.color");
 
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
+	/** Text for this label. */
 	private String text;
+	/** Cahced text alyout. */
 	private TextLayout layout;
+	/** Cached outline of the label text. */
 	private Shape outline;
+	/** Flag describing whether cached values are still valid. */
 	private boolean valid;
 
 	/**
@@ -158,7 +165,8 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	protected TextLayout getLayout() {
 		if (!valid) {
 			if (text != null && !text.isEmpty()) {
-				layout = GraphicsUtils.getLayout(text, this.<Font>getSetting(FONT));
+				layout = GraphicsUtils.getLayout(
+						text, this.<Font>getSetting(FONT));
 				outline = layout.getOutline(null);
 				valid = true;
 			}

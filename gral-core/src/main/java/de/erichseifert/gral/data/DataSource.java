@@ -50,8 +50,8 @@ public interface DataSource extends Iterable<Number> {
 	Number get(int col, int row);
 
 	/**
-	 * Retrieves a object instance that contains various statistical information
-	 * on the current data source.
+	 * Retrieves a object instance that contains various statistical
+	 * information on the current data source.
 	 * @return statistical information
 	 */
 	Statistics getStatistics();
@@ -69,14 +69,14 @@ public interface DataSource extends Iterable<Number> {
 	int getColumnCount();
 
 	/**
-	 * Adds the specified DataListener to this DataSource.
-	 * @param dataListener listener to be added
+	 * Adds the specified <code>DataListener</code> to this data source.
+	 * @param dataListener listener to be added.
 	 */
-	public void addDataListener(DataListener dataListener);
+	void addDataListener(DataListener dataListener);
 
 	/**
-	 * Adds the specified DataListener from this DataSource.
-	 * @param dataListener listener to be removed
+	 * Removes the specified <code>DataListener</code> from this data source.
+	 * @param dataListener listener to be removed.
 	 */
-	public void removeDataListener(DataListener dataListener);
+	void removeDataListener(DataListener dataListener);
 }

@@ -42,35 +42,35 @@ public class ImageReader extends AbstractDataReader {
 			"BMP",
 			"Windows Bitmap",
 			"image/bmp",
-			"bmp", "dib"
+			new String[] {"bmp", "dib"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
 			"image/gif",
-			"gif"
+			new String[] {"gif"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
 			"image/jpeg",
-			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
+			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
 			"image/png",
-			"png"
+			new String[] {"png"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
 			"image/vnd.wap.wbmp",
-			"wbmp"
+			new String[] {"wbmp"}
 		));
 	}
 

@@ -44,6 +44,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * </ul>
  */
 public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsListener {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
 
 	/**
@@ -74,7 +75,8 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsLi
 		double gapSize = this.<Number>getSetting(GAP).doubleValue();
 		if (gapSize > 0.0) {
 			boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
-			Area punched = GeometryUtils.punch(lineShape, gapSize, isGapRounded, dataPoints);
+			Area punched = GeometryUtils.punch(
+					lineShape, gapSize, isGapRounded, dataPoints);
 			return punched;
 		}
 		return lineShape;

@@ -70,9 +70,13 @@ public class Statistics implements DataListener {
 	/** Key for specifying the median (or 50% quantile). */
 	public static final String MEDIAN = "median";
 
+	/** Data values that are used to build statistical aggregates. */
 	private final DataSource data;
+	/** Table statistics stored by key. */
 	private final Map<String, Double> statistics;
+	/** Column statistics stored by key. */
 	private final ArrayList<Map<String, Double>> statisticsCols;
+	/** Row statistics stored by key. */
 	private final ArrayList<Map<String, Double>> statisticsRows;
 
 	/**
@@ -89,6 +93,14 @@ public class Statistics implements DataListener {
 		this.data.addDataListener(this);
 	}
 
+	/**
+	 * Creates initial statistics entries in the specified <code>Map</code>.
+	 * If the passed <code>Map</code> is <code>null</code> a new one will be
+	 * created.
+	 * @param stats <code>Map</code> to initialize.
+	 * @return The initialized <code>Map</code> if it was passed, or a new
+	 *         <code>Map</code> object
+	 */
 	private static Map<String, Double> initStatsMap(Map<String, Double> stats) {
 		if (stats == null) {
 			stats = new HashMap<String, Double>();
@@ -101,6 +113,14 @@ public class Statistics implements DataListener {
 		return stats;
 	}
 
+	/**
+	 * Adds a new statistical value to multiple maps.
+	 * @param key Key identifying the statistics
+	 * @param value Statistics value.
+	 * @param mapAll Map storing table data.
+	 * @param mapCol Map storing column data.
+	 * @param mapRow Map storing row data.
+	 */
 	private static void add(String key, Double value, Map<String, Double> mapAll,
 			Map<String, Double> mapCol, Map<String, Double> mapRow) {
 		mapAll.put(key, mapAll.get(key) + value);
@@ -108,6 +128,11 @@ public class Statistics implements DataListener {
 		mapRow.put(key, mapRow.get(key) + value);
 	}
 
+	/**
+	 * Utility method that calculates statistical values that can be derived
+	 * from other statistics.
+	 * @param stats A <code>Map</code> that should store the new statistics.
+	 */
 	private static void derivedStatistics(Map<String, Double> stats) {
 		// Mean
 		double mean = stats.get(SUM) / stats.get(N);

@@ -47,7 +47,7 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 
 	/**
 	 * Constructs a list containing the elements of the specified collection.
-	 * @param c Collection whose elements are to be added. 
+	 * @param c Collection whose elements are to be added.
 	 */
 	public SortedList(Collection<? extends T> c) {
 		this(c.size());
@@ -99,7 +99,7 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 			index = Collections.binarySearch(elements, (T) o);
 		} catch (NullPointerException e) {
 		} catch (ClassCastException e) {
-		} 
+		}
 		return index;
 	}
 }

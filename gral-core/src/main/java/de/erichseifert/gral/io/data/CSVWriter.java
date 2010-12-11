@@ -40,14 +40,14 @@ public class CSVWriter extends AbstractDataWriter {
 			"CSV",
 			"Comma separated values",
 			"text/csv",
-			"csv", "txt"
+			new String[] {"csv", "txt"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"TSV",
 			"Tab separated values",
 			"text/tab-separated-values",
-			"tsv", "txt"
+			new String[] {"tsv", "txt"}
 		));
 	}
 

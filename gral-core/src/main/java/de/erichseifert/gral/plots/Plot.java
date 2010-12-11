@@ -67,7 +67,8 @@ import de.erichseifert.gral.util.Settings.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class Plot extends DrawableContainer implements SettingsStorage, SettingsListener, DataListener {
+public abstract class Plot extends DrawableContainer
+		implements SettingsStorage, SettingsListener, DataListener {
 	/** Key for specifying the {@link java.lang.String} instance for the title
 	of the plot. */
 	public static final Key TITLE = new Key("plot.title");
@@ -91,19 +92,28 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	describes the legend's margin. */
 	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin");
 
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
 
 	/** Data sources. */
-	protected final List<DataSource> data;
+	private final List<DataSource> data;
+	/** Set of all data sources that are visible (not hidden). */
 	private final Set<DataSource> dataVisible;
 
+	/** Mapping of axis names to axis objects. */
 	private final Map<String, Axis> axes;
+	/** Mapping of axis names to axis renderer objects. */
 	private final Map<String, AxisRenderer> axisRenderers;
+	/** Mapping of axis names to drawable objects. */
 	private final Map<String, Drawable> axisDrawables;
 
+	/** Title text of the plot. */
 	private final Label title;
+	/** Plot area used to render the data. */
 	private PlotArea plotArea;
+	/** Container that will store and layout the plot legend. */
 	private final Container legendContainer;
+	/** Plot legend. */
 	private Legend legend;
 
 	/**
@@ -159,7 +169,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
-			GraphicsUtils.drawPaintedShape(graphics, getBounds(), fg, null, stroke);
+			GraphicsUtils.drawPaintedShape(
+					graphics, getBounds(), fg, null, stroke);
 		}
 
 		drawComponents(context);
@@ -178,7 +189,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	}
 
 	/**
-	 * Draws the plot's legend into the specified <code>Graphics2D</code> object.
+	 * Draws the plot's legend into the specified <code>Graphics2D</code>
+	 * object.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawLegend(DrawingContext context) {
@@ -393,7 +405,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	/**
 	 * Adds a new data series to the plot.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be displayed, <code>false</code> otherwise.
+	 * @param visible <code>true</code> if the series should be displayed,
+	 *        <code>false</code> otherwise.
 	 */
 	public void add(DataSource source, boolean visible) {
 		add(data.size(), source, visible);
@@ -403,7 +416,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	 * Inserts the specified data series to the plot at a specified position.
 	 * @param index Position.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be displayed, <code>false</code> otherwise.
+	 * @param visible <code>true</code> if the series should be displayed,
+	 *        <code>false</code> otherwise.
 	 */
 	public void add(int index, DataSource source, boolean visible) {
 		data.add(index, source);
@@ -420,7 +434,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	/**
 	 * Returns whether the plot contains the specified data series.
 	 * @param source Data series.
-	 * @return <code>true</code> if the specified element is stored in the plot, otherwise <code>false</code>
+	 * @return <code>true</code> if the specified element is stored in the
+	 *         plot, otherwise <code>false</code>
 	 */
 	public boolean contains(DataSource source) {
 		return data.contains(source);
@@ -438,7 +453,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	/**
 	 * Deletes the specified data series from the plot.
 	 * @param source Data series.
-	 * @return <code>true</code> if the series existed, otherwise <code>false</code>.
+	 * @return <code>true</code> if the series existed,
+	 *         otherwise <code>false</code>.
 	 */
 	public boolean remove(DataSource source) {
 		source.removeDataListener(this);
@@ -500,7 +516,8 @@ public abstract class Plot extends DrawableContainer implements SettingsStorage,
 	/**
 	 * Changes the visibility of the specified data series.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be visible, <code>false</code> otherwise.
+	 * @param visible <code>true</code> if the series should be visible,
+	 *        <code>false</code> otherwise.
 	 */
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {

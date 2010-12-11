@@ -31,21 +31,25 @@ import de.erichseifert.gral.data.comparators.DataComparator;
 
 
 /**
- * Creates a DataTable object.
- * DataTable is the basic implementation of DataSource.
- * Implemented functionality includes:
+ * </p>Creates a table-like data source. <code>DataTable</code> is a basic writable
+ * implementation of <code>DataSource</code>.</p>
+ * <p>Its functionality includes:</p>
  * <ul>
- * <li>Adding and getting rows rows</li>
- * <li>Getting rows cells</li>
- * <li>Deleting the table</li>
- * <li>Getting row and column count</li>
- * <li>Sorting the table with a specific DataComparator</li>
+ *   <li>Adding and getting rows</li>
+ *   <li>Getting rows cells</li>
+ *   <li>Deleting all data in the table</li>
+ *   <li>Getting row and column count</li>
+ *   <li>Sorting the table with a specific <code>DataComparator</code></li>
  * </ul>
  */
 public class DataTable extends AbstractDataSource {
+	/** All values stored as rows of column arrays. */
 	private final List<Number[]> rows;
+	/** Data types that are allowed in the respective columns. */
 	private final Class<? extends Number>[] types;
+	/** Number of columns. */
 	private final int columnCount;
+	/** Number of rows. */
 	private int rowCount;
 
 	/**
@@ -61,10 +65,9 @@ public class DataTable extends AbstractDataSource {
 	/**
 	 * Adds a row with the specified <code>Number</code> values to the table.
 	 * The values are added in the order they are specified. If the types of
-	 * the table columns and the values do not match, an exception is thrown.
+	 * the table columns and the values do not match, an
+	 * <code>IllegalArgumentException</code> is thrown.
 	 * @param values values to be added as a row
-	 * @throws IllegalArgumentException if the type of the
-	 * table columns and the type of the values that should be added do not match
 	 */
 	public void add(Number... values) {
 		add(Arrays.asList(values));
@@ -73,24 +76,24 @@ public class DataTable extends AbstractDataSource {
 	/**
 	 * Adds a row with the specified container's elements to the table.
 	 * The values are added in the order they are specified. If the types of
-	 * the table columns and the values do not match, an exception is thrown.
+	 * the table columns and the values do not match, an
+	 * <code>IllegalArgumentException</code> is thrown.
 	 * @param values values to be added as a row
-	 * @throws IllegalArgumentException if the type of the
-	 * table columns and the type of the values that should be added do not match
 	 */
 	public void add(Collection<? extends Number> values) {
 		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(
-					"Wrong number of columns! Expected " + types.length +
-					", got " + values.size());
+					"Wrong number of columns! Expected " + types.length
+					+ ", got " + values.size());
 		}
 		int i = 0;
 		Number[] row = new Number[values.size()];
 		for (Number value : values) {
-			if ((value != null) && !(types[i].isAssignableFrom(value.getClass()))) {
+			if ((value != null)
+					&& !(types[i].isAssignableFrom(value.getClass()))) {
 				throw new IllegalArgumentException(
-						"Wrong column type! Expected " + types[i] + ", got " +
-						value.getClass());
+						"Wrong column type! Expected " + types[i] + ", got "
+						+ value.getClass());
 			}
 			row[i++] = value;
 		}

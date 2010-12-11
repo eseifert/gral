@@ -44,7 +44,8 @@ import de.erichseifert.gral.util.MathUtils;
  * <p>Only filtered columns are stored. Access to unfiltered columns is
  * delegated to the original data source.</p>
  */
-public abstract class Filter extends AbstractDataSource implements DataListener {
+public abstract class Filter extends AbstractDataSource
+		implements DataListener {
 	/**
 	 * Behavior when engaging the borders of a column, so that the filter
 	 * would need more data values than available.
@@ -65,8 +66,11 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	/** Original data source. */
 	protected final DataSource original;
 
+	/** Columns that should be filtered. */
 	private final int[] cols;
+	/** Data that was produced by the filter. */
 	private final ArrayList<Double[]> rows;
+	/** Mode for handling. */
 	private Mode mode;
 
 	/**
@@ -168,7 +172,8 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	protected void set(int col, int row, double value) {
 		int colPos = getIndex(col);
 		if (colPos < 0) {
-			throw new IllegalArgumentException("Can't set value in unfiltered column.");
+			throw new IllegalArgumentException(
+					"Can't set value in unfiltered column.");
 		}
 		rows.get(row)[colPos] = value;
 		notifyDataChanged();
@@ -210,7 +215,8 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	/**
-	 * Returns the index of the original column using the index of the filtered column.
+	 * Returns the index of the original column using the index of the
+	 * filtered column.
 	 * @param col Index of the filtered column
 	 * @return Index of the original column
 	 */
@@ -222,7 +228,8 @@ public abstract class Filter extends AbstractDataSource implements DataListener 
 	}
 
 	/**
-	 * Returns the index of the filtered column using the index of the original column.
+	 * Returns the index of the filtered column using the index of the
+	 * original column.
 	 * @param col Index of the original column
 	 * @return Index of the filtered column
 	 */

@@ -27,12 +27,15 @@ import java.util.List;
 /**
  * Abstract class that represents a view on several rows of a data source.
  */
-public abstract class RowSubset extends AbstractDataSource implements DataListener {
+public abstract class RowSubset extends AbstractDataSource
+		implements DataListener {
+	/** Original data source. */
 	private final DataSource original;
+	/** List of column indexes that are stored in this filtered data source. */
 	private final List<Integer> accepted;
 
 	/**
-	 * Creates a new instance with the specified data source
+	 * Creates a new instance with the specified data source.
 	 * @param original DataSource to be filtered.
 	 */
 	public RowSubset(DataSource original) {

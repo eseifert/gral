@@ -49,9 +49,16 @@ public interface DrawableConstants {
 		/** North-western location. */
 		NORTH_WEST(0.0, 0.0);
 
+		/** Horizontal alignment. */
 		private final double alignH;
+		/** Vertical alignment. */
 		private final double alignV;
 
+		/**
+		 * Constructor that initializes a new location.
+		 * @param alignH Horizontal alignment.
+		 * @param alignV Vertical alignment.
+		 */
 		Location(double alignH, double alignV) {
 			this.alignH = alignH;
 			this.alignV = alignV;

@@ -37,7 +37,8 @@ import de.erichseifert.gral.util.MathUtils;
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	/**
-	 * Creates a new renderer for logarithmic scaled axes in two-dimensional space.
+	 * Creates a new renderer for logarithmic scaled axes in two-dimensional
+	 * space.
 	 */
 	public LogarithmicRenderer2D() {
 	}
@@ -77,14 +78,16 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		}
 		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
 		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
-		return Math.pow(10.0, value*(maxLog - minLog)/getShapeLength() + minLog);
+		return Math.pow(10.0,
+				value*(maxLog - minLog)/getShapeLength() + minLog);
 	}
 
 	@Override
 	public List<Tick> getTicks(Axis axis) {
 		checkAxisBounds(axis);
 		List<Tick> ticks = new LinkedList<Tick>();
-		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+		double tickSpacing =
+			this.<Number>getSetting(TICKS_SPACING).doubleValue();
 		if (tickSpacing <= 0.0) {
 			return ticks;
 		}
@@ -112,7 +115,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			double minTick = MathUtils.ceil(power, multipliedTickSpacingMinor);
 
 			for (int pi = 0; pi < ticksPerPower; pi++) {
-				double tickPositionWorld = minTick + pi*multipliedTickSpacingMinor;
+				double tickPositionWorld =
+					minTick + pi*multipliedTickSpacingMinor;
 				if (tickPositionWorld < min) {
 					continue;
 				} else if (tickPositionWorld > max) {
@@ -137,7 +141,8 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();
 				if (tickPositionWorld >= min && tickPositionWorld <= max) {
-					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
+					Tick tick = getTick(
+							TickType.CUSTOM, axis, tickPositionWorld);
 					ticks.add(tick);
 				}
 			}
@@ -146,10 +151,16 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		return ticks;
 	}
 
+	/**
+	 * Utility method that makes sure that axis bounds comply to rules of
+	 * logarithmic axes.
+	 * @param axis Axis to be checked
+	 */
 	private static void checkAxisBounds(Axis axis) {
-		if (axis.getMin().doubleValue() < 0.0 || axis.getMax().doubleValue() < 0.0) {
+		if ((axis.getMin().doubleValue() < 0.0)
+				|| (axis.getMax().doubleValue() < 0.0)) {
 			throw new IllegalStateException(
-					"Axis bounds must not be less than zero for a logarithmic axis renderer.");
+					"Axis bounds must be greater than or equal to zero.");
 		}
 	}
 

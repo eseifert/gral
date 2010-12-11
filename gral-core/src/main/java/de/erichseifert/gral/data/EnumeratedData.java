@@ -23,11 +23,11 @@ package de.erichseifert.gral.data;
 
 /**
  * Class that creates a new data source which adds a leading column containing
- * the row number.  
+ * the row number.
  */
 public class EnumeratedData extends AbstractDataSource {
-	private DataSource original;
-	
+	private final DataSource original;
+
 	/**
 	 * Initializes a new data source with an original data source.
 	 * @param original Original data source.

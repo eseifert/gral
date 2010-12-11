@@ -24,13 +24,14 @@ package de.erichseifert.gral.data.filters;
 import java.util.Arrays;
 
 /**
- * Class that represents an array of coefficients for a weighted filtering.
- * Functionality includes:
+ * <p>Class that represents an array of coefficients for a weighted
+ * filtering.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Adding of other kernels or scalars</li>
- * <li>Multiplication with other kernels or scalars</li>
- * <li>Normalization</li>
- * <li>Negation</li>
+ *   <li>Adding of other kernels or scalars</li>
+ *   <li>Multiplication with other kernels or scalars</li>
+ *   <li>Normalization</li>
+ *   <li>Negation</li>
  * </ul>
  */
 public class Kernel {

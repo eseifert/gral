@@ -29,10 +29,13 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
 /**
  * Base implementation for classes that read data sources from input streams.
  */
-public abstract class AbstractDataReader extends IOCapabilitiesStorage implements DataReader {
-
+public abstract class AbstractDataReader extends IOCapabilitiesStorage
+		implements DataReader {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Map<String, Object> settings;
+	/** Default settings. */
 	private final Map<String, Object> defaults;
+	/** Data format as MIME type string. */
 	private final String mimeType;
 
 	/**
@@ -68,9 +71,9 @@ public abstract class AbstractDataReader extends IOCapabilitiesStorage implement
 
 	/**
 	 * Defines a default value for the setting with the specified key.
-	 * @param <T> Data type of value
-	 * @param key Setting key
-	 * @param value Default value
+	 * @param <T> Data type of value.
+	 * @param key Setting key.
+	 * @param value Default value.
 	 */
 	protected <T> void setDefault(String key, T value) {
 		defaults.put(key, value);

@@ -32,7 +32,7 @@ import de.erichseifert.gral.data.DataSource;
  */
 public interface DataWriter {
 	/**
-	 * Stores the specified DataSource
+	 * Stores the specified data source.
 	 * @param data DataSource to be stored.
 	 * @param output OutputStream to be written to.
 	 * @throws IOException if writing the data failed

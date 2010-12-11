@@ -28,7 +28,9 @@ import de.erichseifert.gral.data.DataSource;
 /**
  * Abstract base class for histograms.
  */
-public abstract class Histogram extends AbstractDataSource implements DataListener {
+public abstract class Histogram extends AbstractDataSource
+		implements DataListener {
+	/** Data source that is used to build the histogram. */
 	private final DataSource data;
 
 	/**
@@ -50,7 +52,7 @@ public abstract class Histogram extends AbstractDataSource implements DataListen
 		rebuildCells();
 		notifyDataChanged();
 	}
-	
+
 	/**
 	 * Returns the data source associated to this histogram.
 	 * @return Data source

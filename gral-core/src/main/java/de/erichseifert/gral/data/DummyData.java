@@ -23,15 +23,18 @@ package de.erichseifert.gral.data;
 
 
 /**
- * Class that represents a DataSource containing the same value in each cell.
+ * Class that represents a data source containing the same value in each cell.
  */
 public class DummyData extends AbstractDataSource {
-	private Number value;
-	private int cols;
-	private int rows;
+	/** Value that will be returned for all positions in this data source. */
+	private final Number value;
+	/** Number of columns. */
+	private final int cols;
+	/** Number of rows. */
+	private final int rows;
 
 	/**
-	 * Creates a new DummyData object with the specified number of columns
+	 * Creates a new instance with the specified number of columns
 	 * and rows, which are filled all over with the same specified value.
 	 * @param cols Number of columns.
 	 * @param rows Number of rows.

@@ -30,7 +30,8 @@ import de.erichseifert.gral.data.statistics.Orientation;
  */
 public class Row extends DataAccessor {
 	/**
-	 * Initializes a new instances with the specified data source and row index.
+	 * Initializes a new instances with the specified data source and
+	 * row index.
 	 * @param source Data source.
 	 * @param row Row index.
 	 */
@@ -53,6 +54,7 @@ public class Row extends DataAccessor {
 
 	@Override
 	public double getStatistics(String key) {
-		return getSource().getStatistics().get(key, Orientation.HORIZONTAL, getIndex());
+		return getSource().getStatistics()
+			.get(key, Orientation.HORIZONTAL, getIndex());
 	}
 }

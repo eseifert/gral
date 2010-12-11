@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +48,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
@@ -63,10 +65,13 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 /**
  * A panel implementation that displays a <code>Drawable</code> instance as a
- * rich Swing component. Special handling is applied to <code>XYPlot</code> instances.
+ * rich Swing component. Special handling is applied to <code>XYPlot</code>
+ * instances.
  * @see de.erichseifert.gral.plots.XYPlot
  */
-public class InteractivePanel extends DrawablePanel implements Printable, NavigationListener {
+public class InteractivePanel extends DrawablePanel
+		implements Printable, NavigationListener {
+	/** Version id for serialization. */
 	private static final long serialVersionUID = 1L;
 
 	/** Constants which determine the direction of zoom and pan actions. */
@@ -80,26 +85,58 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 	}
 
 	// FIXME Find better method to adjust resolution
-	private static final double MM_TO_PT = 72.0/25.4;      // mm -> pt
-	private static final double MM_PER_PX = 0.2*MM_TO_PT;  // 1px = 0.2mm
+	/** Constant that can be used to convert from millimeters to points
+	(1/72 inch). */
+	private static final double MM_TO_PT = 72.0/25.4;
+	/** Constant that defines how many millimeters a pixel will be. */
+	private static final double MM_PER_PX = 0.2*MM_TO_PT;
+	/** Job for printing the current panel. */
 	private final PrinterJob printerJob;
 
+	/** Value that is necessary before panning is triggered. */
 	private static final int MIN_DRAG = 0;
+	/** Factor that is used for zoom in and zoom out actions. */
 	private static final double ZOOM_FACTOR = 0.8;
 
+	/** Defines whether the panel can be zoomed. */
 	private boolean zoomable;
+	/** Defines whether the panel can be panned. */
 	private boolean pannable;
 
+	/** Popup menu. */
 	private final JPopupMenu menu;
 
+	/** Chooser for image export. */
 	private final JFileChooser exportImageChooser;
 
+	/** Navigator that controls the plot when zooming or panning. */
 	private PlotNavigator navigator;
-	private MouseWheelListener zoomListener;
+	/** Object to be used as listener for zooming actions. */
+	private MouseZoomListener zoomListener;
+	/** Object to be used as listener for panning actions. */
 	private NavigationMoveListener panListener;
 
 	/**
-	 * Creates a new panel instance and initializes it with a drawable component.
+	 * Listener class for zooming actions.
+	 */
+	private final class MouseZoomListener extends MouseAdapter
+			implements MouseWheelListener, Serializable {
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			zoom(-e.getWheelRotation());
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (SwingUtilities.isLeftMouseButton(e) &&
+					(e.getClickCount() == 2))  {
+				zoom(1);
+			}
+		}
+	}
+
+	/**
+	 * Creates a new panel instance and initializes it with a
+	 * drawable component.
 	 * @param drawable Drawable component.
 	 */
 	@SuppressWarnings("serial")
@@ -145,21 +182,24 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 		menu.add(new JMenuItem(new AbstractAction("Export image...") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int ret = exportImageChooser.showSaveDialog(InteractivePanel.this);
-				if (ret == JFileChooser.APPROVE_OPTION) {
-					Drawable d = getDrawable();
-					ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
-					ed.setVisible(true);
-					if (ed.getUserAction().equals(ExportDialog.UserAction.APPROVE)) {
-						File file = exportImageChooser.getSelectedFile();
-						if (exportImageChooser.getSelectedFile() == null) {
-							return;
-						}
-						DrawableWriterFilter filter =
-							(DrawableWriterFilter) exportImageChooser.getFileFilter();
-						export(d, filter.getWriterCapabilities().getMimeType(),
-							file, ed.getDocumentBounds());
+				int ret = exportImageChooser.showSaveDialog(
+						InteractivePanel.this);
+				if (ret != JFileChooser.APPROVE_OPTION) {
+					return;
+				}
+				Drawable d = getDrawable();
+				ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
+				ed.setVisible(true);
+				if (ed.getUserAction().equals(
+						ExportDialog.UserAction.APPROVE)) {
+					File file = exportImageChooser.getSelectedFile();
+					if (exportImageChooser.getSelectedFile() == null) {
+						return;
 					}
+					DrawableWriterFilter filter = (DrawableWriterFilter)
+						exportImageChooser.getFileFilter();
+					export(d, filter.getWriterCapabilities().getMimeType(),
+						file, ed.getDocumentBounds());
 				}
 			}
 		}));
@@ -191,13 +231,26 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 		}
 	}
 
-	private void zoom(int times) {
+	/**
+	 * Zooms the plot in (positive values) or out (negative values).
+	 * @param times Number of times the plot plot will be zoomed.
+	 *        Positive values zoom in, negative values zoom out.
+	 */
+	private void zoom(double times) {
 		double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, times);
 		navigator.setZoom(zoomNew);
 		repaint();
 	}
 
-	private void export(Drawable d, String mimeType, File f, Rectangle2D documentBounds) {
+	/**
+	 * Method that exports the current view to a file using a specified file type.
+	 * @param d Drawable that will be exported.
+	 * @param mimeType File format as MIME type string.
+	 * @param f File to export to.
+	 * @param documentBounds Document boundary rectangle
+	 */
+	private void export(Drawable d, String mimeType, File f,
+			Rectangle2D documentBounds) {
 		FileOutputStream destination;
 		try {
 			destination = new FileOutputStream(f);
@@ -208,7 +261,8 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 		}
 		DrawableWriter w = DrawableWriterFactory.getInstance().get(mimeType);
 		try {
-			w.write(d, destination, documentBounds.getX(), documentBounds.getY(),
+			w.write(d, destination,
+					documentBounds.getX(), documentBounds.getY(),
 					documentBounds.getWidth(), documentBounds.getHeight());
 		} catch (IOException ex) {
 			// TODO Auto-generated catch block
@@ -223,6 +277,9 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 		}
 	}
 
+	/**
+	 * Class that is responsible for showing the popup menu.
+	 */
 	private static class PopupListener extends MouseAdapter {
 		private final JPopupMenu menu;
 
@@ -247,9 +304,15 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 	    }
 	}
 
+	/**
+	 * Class that handles mouse moves for navigation.
+	 */
 	private static class NavigationMoveListener extends MouseAdapter {
+		/** Navigator that will be changed by this class. */
 		private final PlotNavigator navigator;
+		/** Plot that will be changed by this class. */
 		private final Plot plot;
+		/** Previously clicked point (or <code>null</code>). */
 		private Point posPrev;
 
 		/**
@@ -276,9 +339,12 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				AxisRenderer axisXRenderer = plot.getAxisRenderer(XYPlot.AXIS_X);
+				AxisRenderer axisXRenderer =
+					plot.getAxisRenderer(XYPlot.AXIS_X);
 				if (axisXRenderer != null) {
-					if (axisXRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+					boolean swapped = axisXRenderer.<Boolean>getSetting(
+							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
+					if (swapped) {
 						dx = -dx;
 					}
 					Axis axisX = plot.getAxis(XYPlot.AXIS_X);
@@ -292,9 +358,12 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 					navigator.setCenter(XYPlot.AXIS_X, centerXNew);
 				}
 
-				AxisRenderer axisYRenderer = plot.getAxisRenderer(XYPlot.AXIS_Y);
+				AxisRenderer axisYRenderer =
+					plot.getAxisRenderer(XYPlot.AXIS_Y);
 				if (axisYRenderer != null) {
-					if (axisYRenderer.<Boolean>getSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED)) {
+					boolean swapped = axisYRenderer.<Boolean>getSetting(
+							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
+					if (swapped) {
 						dy = -dy;
 					}
 					Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
@@ -329,13 +398,16 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 
 		Rectangle2D boundsOld = getDrawable().getBounds();
 		Rectangle2D pageBounds = new Rectangle2D.Double(
-				pageFormat.getImageableX()/MM_PER_PX, pageFormat.getImageableY()/MM_PER_PX,
-				pageFormat.getImageableWidth()/MM_PER_PX, pageFormat.getImageableHeight()/MM_PER_PX);
+			pageFormat.getImageableX()/MM_PER_PX,
+			pageFormat.getImageableY()/MM_PER_PX,
+			pageFormat.getImageableWidth()/MM_PER_PX,
+			pageFormat.getImageableHeight()/MM_PER_PX
+		);
 
 		// Set size
 		// TODO Keep Drawable's aspect ratio when scaling
 		getDrawable().setBounds(pageBounds);
-		// TODO Assure to temporarily turn off antialiasing before printing
+		// TODO Assure to temporarily turn off anti-aliasing before printing
 		try {
 			getDrawable().draw(new DrawingContext(graphics));
 		} finally {
@@ -407,16 +479,13 @@ public class InteractivePanel extends DrawablePanel implements Printable, Naviga
 
 		if (zoomListener != null) {
 			removeMouseWheelListener(zoomListener);
+			removeMouseListener(zoomListener);
 			zoomListener = null;
 		}
 
 		if (zoomable) {
-			zoomListener = new MouseWheelListener() {
-				@Override
-				public void mouseWheelMoved(MouseWheelEvent e) {
-					zoom(-e.getWheelRotation());
-				}
-			};
+			zoomListener = new MouseZoomListener();
+			addMouseListener(zoomListener);
 			addMouseWheelListener(zoomListener);
 		}
 	}

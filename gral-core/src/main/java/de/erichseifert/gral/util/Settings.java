@@ -144,7 +144,8 @@ public class Settings {
 	}
 
 	/**
-	 * Returns <code>true</code> if there is a default setting for the specified key.
+	 * Returns <code>true</code> if there is a default setting for the
+	 * specified key.
 	 * @param key Key of the setting.
 	 * @return <code>true</code> if the key has a default setting.
 	 */
@@ -267,12 +268,12 @@ public class Settings {
 	 * @param valNew New value.
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
-	protected void notifySettingChanged(Key key, Object valOld, Object valNew, boolean defaultSetting) {
-		/* FIXME Null values for old or new values are no indicator that
-		 *	a setting or default is added or removed.
-		 */
-
-		SettingChangeEvent event = new SettingChangeEvent(this, key, valOld, valNew, defaultSetting);
+	protected void notifySettingChanged(Key key, Object valOld, Object valNew,
+			boolean defaultSetting) {
+		// FIXME Null values for old or new values are no reliable indicator
+		// that a setting or default was added or removed.
+		SettingChangeEvent event = new SettingChangeEvent(this, key, valOld, valNew,
+				defaultSetting);
 		for (SettingsListener listener : settingsListeners) {
 			listener.settingChanged(event);
 		}

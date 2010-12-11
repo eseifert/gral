@@ -27,7 +27,9 @@ import java.util.Iterator;
  * Class that calculates the values of the Halton sequence.
  */
 public class HaltonSequence implements Iterator<Double> {
+	/** Base. */
 	private final int base;
+	/** Current count. */
 	private long c;
 
 	/**

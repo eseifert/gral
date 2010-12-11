@@ -32,7 +32,8 @@ import de.erichseifert.gral.io.IOCapabilities;
  */
 public class ExportChooser extends JFileChooser {
 	/**
-	 * Creates a new instance and initializes it with an array of IOCapabilities.
+	 * Creates a new instance and initializes it with an array of
+	 * {@link de.erichseifert.gral.io.IOCapabilities}.
 	 * @param strict Determines whether this dialog allows only the file formats
 	 *               specified in <code>capabilities</code>.
 	 * @param capabilities List of objects describing the file formats that

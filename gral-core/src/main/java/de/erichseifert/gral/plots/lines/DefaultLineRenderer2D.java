@@ -39,7 +39,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	/** Number of line segments which will be reserved to avoid unnecessary
 	copying of array data. */
-	private static int INITIAL_LINE_CAPACITY = 10000;
+	private static final int INITIAL_LINE_CAPACITY = 10000;
 
 	/**
 	 * Initializes a new <code>DefaultLineRenderer2D</code> instance.
@@ -53,7 +53,8 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 			@Override
 			public void draw(DrawingContext context) {
 				// Construct shape
-				Path2D line = new Path2D.Double(Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
+				Path2D line = new Path2D.Double(
+						Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
 				for (DataPoint point : points) {
 					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
@@ -66,7 +67,8 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				// Draw line
 				Shape lineShape = punch(line, points);
 				Paint paint = getSetting(LineRenderer.COLOR);
-				GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
+				GraphicsUtils.fillPaintedShape(
+						context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

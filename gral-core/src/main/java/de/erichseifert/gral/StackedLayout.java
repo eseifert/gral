@@ -32,8 +32,11 @@ import de.erichseifert.gral.util.Insets2D;
  * lying upon another.
  */
 public class StackedLayout implements Layout {
+	/** Orientation in which elements should be layouted. */
 	private final Orientation orientation;
+	/** Spacing of components. */
 	private final Dimension2D gap;
+	/** Alignment of smaller components. */
 	private final double alignment;
 
 	/**
@@ -93,7 +96,8 @@ public class StackedLayout implements Layout {
 		width += insets.getRight();
 		height += insets.getBottom();
 
-		Dimension2D bounds = new de.erichseifert.gral.util.Dimension2D.Double(width, height);
+		Dimension2D bounds =
+			new de.erichseifert.gral.util.Dimension2D.Double(width, height);
 		return bounds;
 	}
 
@@ -132,7 +136,8 @@ public class StackedLayout implements Layout {
 	}
 
 	/**
-	 * Returns whether the components will be laid out horizontally or vertically.
+	 * Returns whether the components will be laid out horizontally or
+	 * vertically.
 	 * @return Orientation constant
 	 */
 	public Orientation getOrientation() {
@@ -145,7 +150,8 @@ public class StackedLayout implements Layout {
 	 * @return Horizontal and vertical gaps
 	 */
 	public Dimension2D getGap() {
-		Dimension2D gap = new de.erichseifert.gral.util.Dimension2D.Double();
+		Dimension2D gap =
+			new de.erichseifert.gral.util.Dimension2D.Double();
 		gap.setSize(this.gap);
 		return gap;
 	}

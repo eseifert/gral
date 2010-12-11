@@ -42,10 +42,17 @@ import de.erichseifert.gral.plots.DataPoint;
  * concerning geometry.
  */
 public abstract class GeometryUtils {
-	/** Precision */
+	/** Precision. */
 	public static final double EPSILON = 1e-5;
-	/** Precision squared */
+	/** Precision squared. */
 	public static final double EPSILON_SQ = EPSILON*EPSILON;
+
+	/**
+	 * Default constructor that prevents creation of class.
+	 */
+	protected GeometryUtils() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns the line fragments of the specified Shape.
@@ -76,7 +83,7 @@ public abstract class GeometryUtils {
 					lines.addFirst(line);
 				}
 			}
-			if (segment==PathIterator.SEG_CLOSE && !lines.isEmpty()) {
+			if (segment == PathIterator.SEG_CLOSE && !lines.isEmpty()) {
 				Point2D firstPoint = lines.getFirst().getP1();
 				Point2D lastPoint = lines.getLast().getP2();
 				if (!firstPoint.equals(lastPoint)) {
@@ -134,27 +141,27 @@ public abstract class GeometryUtils {
      */
     public static Point2D intersection(final Line2D l1, final Line2D l2) {
     	Point2D p0 = l1.getP1();
-		Point2D d0 = new Point2D.Double(l1.getX2()-p0.getX(), l1.getY2()-p0.getY());
+		Point2D d0 = new Point2D.Double(l1.getX2() - p0.getX(), l1.getY2() - p0.getY());
 		Point2D p1 = l2.getP1();
-		Point2D d1 = new Point2D.Double(l2.getX2()-p1.getX(), l2.getY2()-p1.getY());
+		Point2D d1 = new Point2D.Double(l2.getX2() - p1.getX(), l2.getY2() - p1.getY());
 
-		Point2D e = new Point2D.Double(p1.getX()-p0.getX(), p1.getY()-p0.getY());
+		Point2D e = new Point2D.Double(p1.getX() - p0.getX(), p1.getY() - p0.getY());
 		double kross = d0.getX()*d1.getY() - d0.getY()*d1.getX();
-		double sqrKross = kross * kross;
+		double sqrKross = kross*kross;
 		double sqrLen0 = d0.distanceSq(0.0, 0.0);
 		double sqrLen1 = d1.distanceSq(0.0, 0.0);
 
 		if (sqrKross > EPSILON_SQ * sqrLen0 * sqrLen1) {
-			double s = (e.getX()*d1.getY() - e.getY()*d1.getX()) / kross;
+			double s = (e.getX()*d1.getY() - e.getY()*d1.getX())/kross;
 			if (s < 0d || s > 1d) {
 				return null;
 			}
-			double t = (e.getX()*d0.getY() - e.getY()*d0.getX()) / kross;
+			double t = (e.getX()*d0.getY() - e.getY()*d0.getX())/kross;
 			if (t < 0d || t > 1d) {
 				return null;
 			}
 			return new Point2D.Double(
-				p0.getX() + s * d0.getX(), p0.getY() + s * d0.getY()
+				p0.getX() + s*d0.getX(), p0.getY() + s*d0.getY()
 			);
 		}
 
@@ -217,7 +224,8 @@ public abstract class GeometryUtils {
      * @param dataPoints Collection of data points
      * @return Shape with punched holes
      */
-    public static Area punch(Shape shape, double gap, boolean rounded, Iterable<DataPoint> dataPoints) {
+    public static Area punch(Shape shape, double gap, boolean rounded,
+    		Iterable<DataPoint> dataPoints) {
     	Area shapeArea = new Area(shape);
 		if (gap > 1e-10) {
 			int gapJoin = rounded ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
@@ -228,8 +236,10 @@ public abstract class GeometryUtils {
 					continue;
 				}
 				Point2D pos = p.getPosition().getPoint2D();
-				AffineTransform tx = AffineTransform.getTranslateInstance(pos.getX(), pos.getY());
-				Area gapArea = GeometryUtils.grow(tx.createTransformedShape(point), gap, gapJoin, 10f);
+				AffineTransform tx = AffineTransform.getTranslateInstance(
+						pos.getX(), pos.getY());
+				Area gapArea = GeometryUtils.grow(
+						tx.createTransformedShape(point), gap, gapJoin, 10f);
 				gapsArea.add(gapArea);
 			}
 			shapeArea.subtract(gapsArea);

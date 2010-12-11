@@ -65,12 +65,18 @@ import de.erichseifert.gral.util.Settings.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsListener {
+public abstract class AbstractAxisRenderer2D
+		implements AxisRenderer, SettingsListener {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
 
+	/** Line segments approximating the shape of the axis. */
 	private Line2D[] shapeLines;
+	/** Normals of the line segments approximating the axis. */
 	private Point2D[] shapeLineNormals;
+	/** Lengths of the line segments approximating the axis. */
 	private double[] shapeSegmentLengths;
+	/** Length of the the axis up to a certain approximating line segment. */
 	private double[] shapeLengths;
 
 	/**
@@ -82,7 +88,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 		setSettingDefault(INTERSECTION, 0.0);
 
-		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);  // Must be set before SHAPE
+		// The direction must defined as swapped before SHAPE is constructed.
+		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 		setSettingDefault(SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 		setSettingDefault(SHAPE_VISIBLE, true);
 		setSettingDefault(SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
@@ -143,7 +150,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 					renderer.<Boolean>getSetting(SHAPE_VISIBLE);
 				if (isShapeVisible) {
 					Shape shape = renderer.getSetting(SHAPE);
-					GraphicsUtils.drawPaintedShape(graphics, shape, axisPaint, null, axisStroke);
+					GraphicsUtils.drawPaintedShape(
+							graphics, shape, axisPaint, null, axisStroke);
 				}
 
 				// TODO Use real font size instead of fixed value
@@ -155,7 +163,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 				boolean drawTicksMinor =
 					renderer.<Boolean>getSetting(TICKS_MINOR);
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
-					List<Tick> ticks = getTicks(axis);  // Calculate tick positions (in pixel coordinates)
+					// Calculate tick positions (in pixel coordinates)
+					List<Tick> ticks = getTicks(axis);
 
 					boolean isTickLabelVisible =
 						renderer.<Boolean>getSetting(TICK_LABELS);
@@ -171,7 +180,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 
 					for (Tick tick : ticks) {
 						// Draw tick
-						if (tick.getPosition() == null || tick.getNormal() == null) {
+						if ((tick.getPosition() == null)
+								|| (tick.getNormal() == null)) {
 							continue;
 						}
 						Point2D tickPoint = tick.getPosition().getPoint2D();
@@ -384,7 +394,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();
 				if (tickPositionWorld >= min && tickPositionWorld <= max) {
-					Tick tick = getTick(TickType.CUSTOM, axis, tickPositionWorld);
+					Tick tick = getTick(
+							TickType.CUSTOM, axis, tickPositionWorld);
 					ticks.add(tick);
 				}
 			}
@@ -449,9 +460,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 			return null;
 		}
 
-		segmentIndex = MathUtils.limit(segmentIndex, 0, shapeLineNormals.length - 1);
-		Boolean normalOrientationClockwise =
-			AbstractAxisRenderer2D.this.getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
+		segmentIndex = MathUtils.limit(
+				segmentIndex, 0, shapeLineNormals.length - 1);
+		Boolean normalOrientationClockwise = AbstractAxisRenderer2D.this
+			.getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
 		double normalOrientation = (normalOrientationClockwise != null &&
 				normalOrientationClockwise.booleanValue()) ? 1.0 : -1.0;
 		PointND<Double> tickNormal = new PointND<Double>(
@@ -536,7 +548,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 	 * @param shape Shape to be evaluated.
 	 */
 	protected void evaluateShape(Shape shape) {
-		boolean directionSwapped =  this.<Boolean>getSetting(SHAPE_DIRECTION_SWAPPED);
+		boolean directionSwapped =
+			this.<Boolean>getSetting(SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 		shapeSegmentLengths = new double[shapeLines.length];
 		// First length is always 0.0, last length is the total length
@@ -555,7 +568,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, SettingsLi
 			shapeSegmentLengths[i] = segmentLength;
 			shapeLengths[i + 1] = shapeLengths[i] + segmentLength;
 
-			// Calculate normalized vector perpendicular to current axis shape segment
+			// Calculate a normalized vector perpendicular to the current
+			// axis shape segment
 			shapeLineNormals[i] = new Point2D.Double(
 				 (line.getY2() - line.getY1()) / segmentLength,
 				-(line.getX2() - line.getX1()) / segmentLength

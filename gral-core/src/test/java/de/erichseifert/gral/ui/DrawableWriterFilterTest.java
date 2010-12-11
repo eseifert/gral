@@ -37,7 +37,7 @@ public class DrawableWriterFilterTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		capabilities = new IOCapabilities("Text", "Unformatted text", "text/plain", "txt");
+		capabilities = new IOCapabilities("Text", "Unformatted text", "text/plain", new String[] {"txt"});
 	}
 
 	@Before

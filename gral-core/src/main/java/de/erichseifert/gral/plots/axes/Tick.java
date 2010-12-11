@@ -42,8 +42,11 @@ public class Tick extends DataPoint {
 		CUSTOM
 	};
 
+	/** The type of tick mark (major/minor/custom). */
 	private final TickType type;
+	/** The normal of the tick mark. */
 	private final PointND<Double> normal;
+	/** Label text associated with this tick mark. */
 	private final String label;
 
 	/**

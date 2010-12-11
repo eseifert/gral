@@ -28,11 +28,13 @@ import java.util.Iterator;
  * columns or rows.
  */
 public abstract class DataAccessor implements Iterable<Number> {
+	/** Data source that provides the values that should be accessed. */
 	private final DataSource source;
+	/** Index of current column or row. */
 	private final int index;
 
 	/**
-	 * Initializes a new instance with the specified data source and a acess index
+	 * Initializes a new instance with the specified data source and an access
 	 * index.
 	 * @param source Data source.
 	 * @param index Column index.
@@ -112,7 +114,8 @@ public abstract class DataAccessor implements Iterable<Number> {
 		}
 		if (data.length != size()) {
 			throw new IllegalArgumentException(
-				"Array of size "+data.length+" does not match "+size()+" elements.");
+				"Array of size " + data.length + " does not match " + size()
+				+ " elements.");
 		}
 		for (int i = 0; i < data.length; i++) {
 			data[i] = get(i);
@@ -131,18 +134,18 @@ public abstract class DataAccessor implements Iterable<Number> {
 	public Iterator<Number> iterator() {
 		return new Iterator<Number>() {
 			private int i;
-	
+
 			@Override
 			public boolean hasNext() {
 				return i < size();
 			}
-	
+
 			@Override
 			public Number next() {
 				Number value = get(i++);
 				return value;
 			}
-	
+
 			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();

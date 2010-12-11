@@ -34,31 +34,31 @@ public interface IOFactory<T> {
 	 * @param mimeType MIME type.
 	 * @return Reader or writer for the specified MIME type.
 	 */
-	public abstract T get(String mimeType);
+	T get(String mimeType);
 
 	/**
 	 * Returns the capabilities for a specific format.
 	 * @param mimeType MIME type of the format
 	 * @return Capabilities for the specified format.
 	 */
-	public abstract IOCapabilities getCapabilities(String mimeType);
+	IOCapabilities getCapabilities(String mimeType);
 
 	/**
 	 * Returns a list of capabilities for all supported formats.
 	 * @return Supported capabilities.
 	 */
-	public abstract List<IOCapabilities> getCapabilities();
+	List<IOCapabilities> getCapabilities();
 
 	/**
 	 * Returns an array of Strings containing all supported formats.
 	 * @return Supported formats.
 	 */
-	public abstract String[] getSupportedFormats();
+	String[] getSupportedFormats();
 
 	/**
 	 * Returns whether the specified MIME type is supported.
 	 * @param mimeType MIME type.
 	 * @return <code>true</code> if supported, otherwise <code>false</code>.
 	 */
-	public abstract boolean isFormatSupported(String mimeType);
+	boolean isFormatSupported(String mimeType);
 }

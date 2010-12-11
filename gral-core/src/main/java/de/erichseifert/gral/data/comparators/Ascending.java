@@ -22,10 +22,12 @@
 package de.erichseifert.gral.data.comparators;
 
 /**
- * Class that represents a DataComparator sorting a specific column in
- * ascending order.
+ * Class that represents a <code>DataComparator</code> sorting a specific
+ * column in ascending order.
  */
 public class Ascending extends DataComparator {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a new Ascending object sorting according to the specified

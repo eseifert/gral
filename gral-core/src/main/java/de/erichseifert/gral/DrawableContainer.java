@@ -36,13 +36,19 @@ import de.erichseifert.gral.util.Insets2D;
  * It takes care of the layout and the insets and stores <code>Drawable</code>s.
  */
 public class DrawableContainer extends AbstractDrawable implements Container {
-	private Insets2D insets = new Insets2D.Double();
+	/** Empty margins that should be preserved around the contents of this
+	    container. */
+	private final Insets2D insets = new Insets2D.Double();
+	/** Object that manages the layout of all container components. */
 	private Layout layout;
+	/** Elements stored in this container. */
 	private final List<Drawable> components;
+	/** Supplemental information for components, like layout constraints. */
 	private final Map<Drawable, Object> constraints;
 
 	/**
-	 * Creates a new container for <code>Drawable</code>s without layout manager.
+	 * Creates a new container for <code>Drawable</code>s without layout
+	 * manager.
 	 */
 	public DrawableContainer() {
 		this(null);

@@ -34,7 +34,8 @@ public interface NavigationListener {
 	 * @param centerOld Previous value of axis center
 	 * @param centerNew New value of axis center
 	 */
-	void centerChanged(PlotNavigator source, String axisName, Number centerOld, Number centerNew);
+	void centerChanged(PlotNavigator source, String axisName,
+			Number centerOld, Number centerNew);
 
 	/**
 	 * A method that gets called when the zoom level of an axis in the
@@ -44,5 +45,6 @@ public interface NavigationListener {
 	 * @param zoomOld Previous zoom level of the axis
 	 * @param zoomNew New zoom level of the axis
 	 */
-	void zoomChanged(PlotNavigator source, String axisName, double zoomOld, double zoomNew);
+	void zoomChanged(PlotNavigator source, String axisName,
+			double zoomOld, double zoomNew);
 }

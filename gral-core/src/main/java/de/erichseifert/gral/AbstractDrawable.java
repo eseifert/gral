@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
  * @see Drawable
  */
 public abstract class AbstractDrawable implements Drawable {
+	/** Boundaries of the drawalbe object. */
 	private final Rectangle2D bounds;
 
 	/**
@@ -70,7 +71,8 @@ public abstract class AbstractDrawable implements Drawable {
 
 	@Override
 	public void setBounds(Rectangle2D bounds) {
-		setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+		setBounds(bounds.getX(), bounds.getY(),
+				bounds.getWidth(), bounds.getHeight());
 	}
 
 	@Override

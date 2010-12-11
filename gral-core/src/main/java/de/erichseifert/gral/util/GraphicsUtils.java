@@ -36,7 +36,15 @@ import java.awt.geom.Rectangle2D;
  * For example, this includes font handling.
  */
 public abstract class GraphicsUtils {
+	/** Default font render context. */
 	private static final FontRenderContext frc = new FontRenderContext(null, true, true);
+
+	/**
+	 * Default constructor that prevents creation of class.
+	 */
+	protected GraphicsUtils() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns the layout for the specified text with the specified font.

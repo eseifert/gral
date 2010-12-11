@@ -22,23 +22,29 @@
 package de.erichseifert.gral.io;
 
 /**
- * Class that stores information on a {@link de.erichseifert.gral.io.plots.DrawableWriter}.
+ * Class that stores information on a
+ * {@link de.erichseifert.gral.io.plots.DrawableWriter}.
  */
 public class IOCapabilities {
+	/** Short format name. */
 	private final String format;
+	/** Long format name. */
 	private final String name;
+	/** MIME type of format. */
 	private final String mimeType;
+	/** File extensions commonly used for this format. */
 	private final String[] extensions;
 
 	/**
-	 * Creates a new <code>IOCapabilities</code> object with the specified format,
-	 * name, MIME-Type and filename extensions.
+	 * Creates a new <code>IOCapabilities</code> object with the specified
+	 * format, name, MIME-Type and filename extensions.
 	 * @param format Format.
 	 * @param name Name.
 	 * @param mimeType MIME-Type
 	 * @param extensions Extensions.
 	 */
-	public IOCapabilities(String format, String name, String mimeType, String... extensions) {
+	public IOCapabilities(String format, String name, String mimeType,
+			String[] extensions) {
 		this.format = format;
 		this.name = name;
 		this.mimeType = mimeType;

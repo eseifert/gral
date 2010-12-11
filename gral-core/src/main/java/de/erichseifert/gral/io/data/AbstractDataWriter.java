@@ -29,10 +29,13 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
 /**
  * Base implementation for classes that write data sources to output streams.
  */
-public abstract class AbstractDataWriter extends IOCapabilitiesStorage implements DataWriter {
-
+public abstract class AbstractDataWriter extends IOCapabilitiesStorage
+		implements DataWriter {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Map<String, Object> settings;
+	/** Default settings. */
 	private final Map<String, Object> defaults;
+	/** Data format as MIME type string. */
 	private final String mimeType;
 
 	/**

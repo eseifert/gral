@@ -79,8 +79,7 @@ public class PlotNavigatorTest {
 
 		// Invalid initialization
 		try {
-			@SuppressWarnings("unused")
-			PlotNavigator navigator2 = new PlotNavigator(null);
+			new PlotNavigator(null);
 			fail("Expected NullPointerException.");
 		} catch (NullPointerException e) {
 		}

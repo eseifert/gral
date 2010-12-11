@@ -43,12 +43,15 @@ public class Median extends Filter {
 	 * Creates a new Median object with the specified DataSource, window
 	 * size, offset, Mode, and columns.
 	 * @param original DataSource to be filtered.
-	 * @param windowSize Number of rows to be used for the calculation of the median.
-	 * @param offset Offset from the current filtered value to the last value of the window.
+	 * @param windowSize Number of rows to be used for the calculation of the
+	 *        median.
+	 * @param offset Offset from the current filtered value to the last value
+	 *        of the window.
 	 * @param mode Mode of filtering.
 	 * @param cols Column indexes.
 	 */
-	public Median(DataSource original, int windowSize, int offset, Mode mode, int... cols) {
+	public Median(DataSource original, int windowSize, int offset,
+			Mode mode, int... cols) {
 		super(original, mode, cols);
 		this.windowSize = windowSize;
 		this.offset = offset;
@@ -61,14 +64,16 @@ public class Median extends Filter {
 		if (getWindowSize() <= 0) {
 			return;
 		}
-		List<List<Double>> colWindows = new ArrayList<List<Double>>(getColumnCount());
+		List<List<Double>> colWindows =
+			new ArrayList<List<Double>>(getColumnCount());
 		for (int colIndex = 0; colIndex < getColumnCountFiltered(); colIndex++) {
 			int colIndexOriginal = getIndexOriginal(colIndex);
 			List<Double> window = new ArrayList<Double>(getWindowSize());
 			colWindows.add(window);
 			// Prefill window
 			for (int rowIndex = getOffset() - getWindowSize(); rowIndex < 0; rowIndex++) {
-				double v = getOriginal(colIndexOriginal, rowIndex).doubleValue();
+				double v = getOriginal(colIndexOriginal, rowIndex)
+					.doubleValue();
 				window.add(v);
 			}
 		}

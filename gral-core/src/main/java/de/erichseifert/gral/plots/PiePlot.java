@@ -47,13 +47,15 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that displays data in a pie plot.
  */
 public class PiePlot extends Plot implements DataListener {
-	/** Key for specifying the radius of the pie relative to the plot area size. */
+	/** Key for specifying the radius of the pie relative to the
+	plot area size. */
 	public static final Key RADIUS = new Key("pieplot.radius");
 	/** Key for specifying a {@link java.lang.Number} value for the inner
 	radius of the pie relative to the outer radius. */
 	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner");
-	/** Key for specifying the {@link de.erichseifert.gral.plots.colors.ColorMapper}
-	instance used for the segments. */
+	/** Key for specifying an instance of
+	{@link de.erichseifert.gral.plots.colors.ColorMapper} used for coloring
+	the segments. */
 	public static final Key COLORS = new Key("pieplot.colorlist");
 	/** Key for specifying a {@link java.lang.Boolean} value which decides
 	whether the segments should be ordered clockwise (<code>true</code>) or
@@ -70,8 +72,11 @@ public class PiePlot extends Plot implements DataListener {
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
 	public static class PiePlotArea2D extends PlotArea implements DataListener {
+		/** Pie plot that this renderer is associated to. */
 		private final PiePlot plot;
+		/** Factor that stores the degrees per data value. */
 		private double degreesPerValue;
+		/** Interval boundaries of the pie slices. */
 		private ArrayList<double[]> slices;
 
 		/**
@@ -121,10 +126,12 @@ public class PiePlot extends Plot implements DataListener {
 			graphics.translate(w/2d, h/2d);
 			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
 
-			double sizeRel = plot.<Number>getSetting(PiePlot.RADIUS).doubleValue();
+			double sizeRel = plot.<Number>getSetting(PiePlot.RADIUS)
+				.doubleValue();
 			double size = Math.min(w, h) * sizeRel;
 
-			double sizeRelInner = plot.<Number>getSetting(PiePlot.RADIUS_INNER).doubleValue();
+			double sizeRelInner = plot.<Number>getSetting(PiePlot.RADIUS_INNER)
+				.doubleValue();
 			double sizeInner = size * sizeRelInner;
 			Ellipse2D inner = new Ellipse2D.Double(
 					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
@@ -132,7 +139,8 @@ public class PiePlot extends Plot implements DataListener {
 
 			double gap = plot.<Number>getSetting(PiePlot.GAP).doubleValue();
 
-			double sliceOffset = plot.<Number>getSetting(PiePlot.START).doubleValue();
+			double sliceOffset = plot.<Number>getSetting(PiePlot.START)
+				.doubleValue();
 			int sliceNo = 0;
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];
@@ -143,12 +151,14 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Construct slice
-				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d, size, size,
-						sliceStart, sliceSpan, Arc2D.PIE);
+				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d,
+						size, size, sliceStart, sliceSpan, Arc2D.PIE);
 				Area doughnutSlice = new Area(pieSlice);
 				if (gap > 0.0) {
-					Stroke sliceStroke = new BasicStroke((float) (gap*fontSize));
-					Area sliceContour = new Area(sliceStroke.createStrokedShape(pieSlice));
+					Stroke sliceStroke =
+						new BasicStroke((float) (gap*fontSize));
+					Area sliceContour =
+						new Area(sliceStroke.createStrokedShape(pieSlice));
 					doughnutSlice.subtract(sliceContour);
 				}
 				if (sizeRelInner > 0.0) {
@@ -157,7 +167,8 @@ public class PiePlot extends Plot implements DataListener {
 
 				// Paint slice
 				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
-				GraphicsUtils.fillPaintedShape(graphics, doughnutSlice, paint, null);
+				GraphicsUtils.fillPaintedShape(
+						graphics, doughnutSlice, paint, null);
 			}
 
 			if (clipOffset != null) {
@@ -208,7 +219,8 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	/**
-	 * Creates a new <code>PiePlot</code> object with the specified <code>DataSource</code>.
+	 * Creates a new <code>PiePlot</code> object with the specified
+	 * data source.
 	 * @param data Data to be displayed.
 	 */
 	public PiePlot(DataSource data) {

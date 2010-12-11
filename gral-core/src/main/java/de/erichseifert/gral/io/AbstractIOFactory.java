@@ -35,7 +35,8 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Abstract implementation of <code>IOFactory</code> which provides basic functionality.
+ * Abstract implementation of <code>IOFactory</code> which provides basic
+ * functionality.
  *
  * @param <T> The type of objects which should be produced by this factory
  */
@@ -88,7 +89,8 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		Class<? extends T> clazz = entries.get(mimeType);
 		try {
 			Method capabilitiesGetter = clazz.getMethod("getCapabilities");
-			Set<IOCapabilities> capabilities = (Set<IOCapabilities>) capabilitiesGetter.invoke(clazz);
+			Set<IOCapabilities> capabilities =
+				(Set<IOCapabilities>) capabilitiesGetter.invoke(clazz);
 			for (IOCapabilities c : capabilities) {
 				if (c.getMimeType().equals(mimeType)) {
 					return c;

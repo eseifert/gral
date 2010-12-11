@@ -28,13 +28,17 @@ import javax.swing.filechooser.FileFilter;
 import de.erichseifert.gral.io.IOCapabilities;
 
 /**
- * File filter that extracts files that can be read with a certain set of {@link IOCapabilities}.
+ * File filter that extracts files that can be read with a certain set of
+ * {@link de.erichseifert.gral.io.IOCapabilities}.
  */
 public class DrawableWriterFilter extends FileFilter {
+	/** Capabilities that describe the data formats that can be processed by
+	this filter. */
 	private final IOCapabilities capabilities;
 
 	/**
-	 * Creates a new instance and initializes it with an {@link IOCapabilities} object.
+	 * Creates a new instance and initializes it with an
+	 * {@link de.erichseifert.gral.io.IOCapabilities} object.
 	 * @param capabilities writer capabilities.
 	 */
 	public DrawableWriterFilter(IOCapabilities capabilities) {
@@ -60,7 +64,8 @@ public class DrawableWriterFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return String.format("%s: %s", capabilities.getFormat(), capabilities.getName());
+		return String.format("%s: %s", capabilities.getFormat(),
+				capabilities.getName());
 	}
 
 	/**

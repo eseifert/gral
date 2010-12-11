@@ -34,13 +34,13 @@ import de.erichseifert.gral.util.Settings.Key;
 public interface AreaRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Number} value for the gap between
 	 the area and a data point. */
-	static final Key GAP = new Key("area.gap.size");
+	Key GAP = new Key("area.gap.size");
 	/** Key for specifying a {@link java.lang.Boolean} value that decides
 	 whether the gaps should have rounded corners. */
-	static final Key GAP_ROUNDED = new Key("area.gap.rounded");
+	Key GAP_ROUNDED = new Key("area.gap.rounded");
 	/** Key for specifying the {@link java.awt.Paint} instance used to fill
 	the area shape. */
-	static final Key COLOR = new Key("area.color");
+	Key COLOR = new Key("area.color");
 
 	/**
 	 * Returns the graphical representation to be drawn for the specified

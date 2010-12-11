@@ -49,49 +49,53 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
  *   <li>WBMP</li>
  * </ul>
  */
-public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWriter {
+public class BitmapWriter extends IOCapabilitiesStorage
+		implements DrawableWriter {
 	static {
 		addCapabilities(new IOCapabilities(
 			"BMP",
 			"Windows Bitmap",
 			"image/bmp",
-			"bmp", "dib"
+			new String[] {"bmp", "dib"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
 			"image/gif",
-			"gif"
+			new String[] {"gif"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
 			"image/jpeg",
-			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
+			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
 			"image/png",
-			"png"
+			new String[] {"png"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
 			"image/vnd.wap.wbmp",
-			"wbmp"
+			new String[] {"wbmp"}
 		));
 	}
 
+	/** Data format as MIME type string. */
 	private final String mimeType;
+	/** Bitmap raster format. */
 	private int rasterFormat;
 
 	/**
-	 * Creates a new <code>BitmapWriter</code> object with the specified MIME-Type.
+	 * Creates a new <code>BitmapWriter</code> object with the specified
+	 * MIME-Type.
 	 * @param mimeType Output MIME-Type.
 	 */
 	protected BitmapWriter(String mimeType) {
@@ -131,13 +135,16 @@ public class BitmapWriter extends IOCapabilitiesStorage implements DrawableWrite
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		DrawingContext context =
+			new DrawingContext((Graphics2D) image.getGraphics());
 		d.draw(context);
 
-		Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
+		Iterator<ImageWriter> writers =
+			ImageIO.getImageWritersByMIMEType(mimeType);
 		while (writers.hasNext()) {
 			ImageWriter writer = writers.next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(destination);
+			ImageOutputStream ios =
+				ImageIO.createImageOutputStream(destination);
 			writer.setOutput(ios);
 			Rectangle2D boundsOld = d.getBounds();
 			d.setBounds(x, y, width, height);

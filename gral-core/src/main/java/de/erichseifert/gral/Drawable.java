@@ -58,12 +58,14 @@ public interface Drawable {
 
 	/**
 	 * Returns the x-position of the bounds.
-	 * @return horizontal position of the upper-left corner of the bounding rectangle
+	 * @return horizontal position of the upper-left corner of the bounding
+	 * rectangle
 	 */
 	double getX();
 	/**
 	 * Returns the y-position of the bounds.
-	 * @return vertical position of the upper-left corner of the bounding rectangle
+	 * @return vertical position of the upper-left corner of the bounding
+	 * rectangle
 	 */
 	double getY();
 

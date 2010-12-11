@@ -32,9 +32,14 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * specified format. The produced writers can be used to output a
  * <code>DataSource</code> to a data sink.
  */
-public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
+public final class DataWriterFactory extends AbstractIOFactory<DataWriter> {
+	/** Singleton instance. */
 	private static DataWriterFactory instance;
 
+	/**
+	 * Constructor that initializes the factory.
+	 * @throws IOException if the properties file could not be found.
+	 */
 	private DataWriterFactory() throws IOException {
 		super("datawriters.properties");
 	}
@@ -86,7 +91,8 @@ public class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 		}
 
 		if (writer == null) {
-			throw new IllegalArgumentException("Unsupported MIME type: "+mimeType);
+			throw new IllegalArgumentException(
+					"Unsupported MIME type: " + mimeType);
 		}
 
 		return writer;

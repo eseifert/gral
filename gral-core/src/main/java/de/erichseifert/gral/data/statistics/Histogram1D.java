@@ -38,12 +38,17 @@ import de.erichseifert.gral.data.DataSource;
  * <p>For ease of use the histogram is a data source itself.</p>
  */
 public class Histogram1D extends Histogram {
+	/** Direction in which all values will be aggregated. */
 	private final Orientation orientation;
 
+	/** Intervals that will be used for aggregation. */
 	private final List<Number[]> breaks;
+	/** Bin cells that store all aggregation counts. */
 	private final List<long[]> cells;
 
+	/** Minimum values for cells. */
 	private final Map<Integer, Long> cacheMin;
+	/** Maximum values for cells. */
 	private final Map<Integer, Long> cacheMax;
 
 	private Histogram1D(DataSource data, Orientation orientation) {
@@ -62,7 +67,8 @@ public class Histogram1D extends Histogram {
 	 * @param orientation Orientation of the histogram values.
 	 * @param breakCount Number of subdivisions for analysis.
 	 */
-	public Histogram1D(DataSource data, Orientation orientation, int breakCount) {
+	public Histogram1D(DataSource data, Orientation orientation,
+			int breakCount) {
 		this(data, orientation);
 
 		// Create equally spaced breaks
@@ -90,13 +96,15 @@ public class Histogram1D extends Histogram {
 	 * @param orientation Orientation in which the data should be sampled.
 	 * @param breaks Values of where a subdivision should occur.
 	 */
-	public Histogram1D(DataSource data, Orientation orientation, Number[]... breaks) {
+	public Histogram1D(DataSource data, Orientation orientation,
+			Number[]... breaks) {
 		this(data, orientation);
 		int count = (orientation == Orientation.VERTICAL)
 				? getData().getColumnCount() : getData().getRowCount();
 		if (breaks.length != count) {
 			throw new IllegalArgumentException(
-					"Invalid number of breaks: got "+breaks.length+", expected "+count+".");
+					"Invalid number of breaks: got " + breaks.length
+					+ ", expected " + count + ".");
 		}
 		for (Number[] brk : breaks) {
 			this.breaks.add(brk);
@@ -128,7 +136,8 @@ public class Histogram1D extends Histogram {
 				// Iterate over histogram rows
 				for (int i = 0; i < brk.length - 1; i++) {
 					// Put the value into corresponding class
-					if (val >= brk[i].doubleValue() && val < brk[i + 1].doubleValue()) {
+					if ((val >= brk[i].doubleValue())
+							&& (val < brk[i + 1].doubleValue())) {
 						cells[i]++;
 						if (cells[i] > colMax) {
 							colMax = cells[i];

@@ -36,6 +36,7 @@ public class PointND <T extends Number> {
 	/** Constant for accessing z-coordinate. */
 	public static final int Z = 2;
 
+	/** Coordinates along the axes that describe this point. */
 	private final T[] coordinates;
 
 	/**
@@ -98,7 +99,8 @@ public class PointND <T extends Number> {
 					"Can't create two-dimensional point from " +
 					getDimensions() + "D data.");
 		}
-		return new Point2D.Double(get(dimX).doubleValue(), get(dimY).doubleValue());
+		return new Point2D.Double(
+				get(dimX).doubleValue(), get(dimY).doubleValue());
 	}
 
 	/**

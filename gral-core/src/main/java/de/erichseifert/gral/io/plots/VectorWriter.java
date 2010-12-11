@@ -46,56 +46,64 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
  *   <li>SVG</li>
  * </ul>
  */
-public class VectorWriter extends IOCapabilitiesStorage implements DrawableWriter {
+public class VectorWriter extends IOCapabilitiesStorage
+		implements DrawableWriter {
+	/** Mapping of MIME type string to <code>Graphics2D</code>
+	implementation. */
 	private static final Map<String, Class<?>> graphics;
-	private static final String VECTORGRAPHICS2D_PACKAGE = "de.erichseifert.vectorgraphics2d";
+	/** Java package that contains the VecorGraphics2D package. */
+	private static final String VECTORGRAPHICS2D_PACKAGE =
+		"de.erichseifert.vectorgraphics2d";
 
 	static {
 		graphics = new HashMap<String, Class<?>>();
 		Class<?> cls;
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".EPSGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".EPSGraphics2D");
 			addCapabilities(new IOCapabilities(
 				"EPS",
 				"Encapsulated PostScript",
 				"application/postscript",
-				"eps", "epsf", "epsi"
+				new String[] {"eps", "epsf", "epsi"}
 			));
 			graphics.put("application/postscript", cls);
 		} catch (ClassNotFoundException e) {
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".PDFGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".PDFGraphics2D");
 			addCapabilities(new IOCapabilities(
 				"PDF",
 				"Portable Document Format",
 				"application/pdf",
-				"pdf"
+				new String[] {"pdf"}
 			));
 			graphics.put("application/pdf", cls);
 		} catch (ClassNotFoundException e) {
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE+".SVGGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".SVGGraphics2D");
 			addCapabilities(new IOCapabilities(
 				"SVG",
 				"Scalable Vector Graphics",
 				"image/svg+xml",
-				"svg", "svgz"
+				new String[] {"svg", "svgz"}
 			));
 			graphics.put("image/svg+xml", cls);
 		} catch (ClassNotFoundException e) {
 		}
 	}
 
+	/** Current data format as MIME type string. */
 	private final String mimeType;
+	/** Current <code>Graphics2D</code> implementation used for rendering. */
 	private final Class<? extends Graphics2D> graphicsClass;
 
 	/**
-	 * Creates a new <code>VectorWriter</code> object with the specified MIME-Type.
+	 * Creates a new <code>VectorWriter</code> object with the specified
+	 * MIME-Type.
 	 * @param mimeType Output MIME-Type.
 	 */
 	protected VectorWriter(String mimeType) {
@@ -107,7 +115,8 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 		}
 		graphicsClass = gfxCls;
 		if (graphicsClass == null) {
-			throw new IllegalArgumentException("Unsupported file format: " +mimeType);
+			throw new IllegalArgumentException(
+					"Unsupported file format: " + mimeType);
 		}
 	}
 
@@ -122,16 +131,19 @@ public class VectorWriter extends IOCapabilitiesStorage implements DrawableWrite
 			double x, double y, double width, double height) throws IOException {
 		try {
 			// Create instance of export class
-			Constructor<? extends Graphics2D> constructor = graphicsClass.getConstructor(
+			Constructor<? extends Graphics2D> constructor =
+				graphicsClass.getConstructor(
 						double.class, double.class, double.class, double.class);
-			Graphics2D graphics = constructor.newInstance(x, y, width, height);
+			Graphics2D g = constructor.newInstance(x, y, width, height);
 
 			// Output data
 			Rectangle2D boundsOld = d.getBounds();
 			d.setBounds(x, y, width, height);
-			DrawingContext context = new DrawingContext(graphics, Quality.QUALITY, Target.VECTOR);
+			DrawingContext context =
+				new DrawingContext(g, Quality.QUALITY, Target.VECTOR);
 			d.draw(context);
-			byte[] data = (byte[]) graphicsClass.getMethod("getBytes").invoke(graphics);
+			byte[] data = (byte[]) graphicsClass.getMethod("getBytes")
+				.invoke(g);
 			destination.write(data);
 			d.setBounds(boundsOld);
 		} catch (SecurityException e) {

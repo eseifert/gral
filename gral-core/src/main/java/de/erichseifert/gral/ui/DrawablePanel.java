@@ -33,11 +33,14 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 
 /**
- * A class that represents an adapter between the components of this library and Swing.
- * It displays a single <code>Drawable</code> in a <code>JPanel</code>.
+ * A class that represents an adapter between the components of this library
+ * and Swing. It displays a single <code>Drawable</code> in a
+ * <code>JPanel</code>.
  */
 public class DrawablePanel extends JPanel {
+	/** Unique id for serialization. */
 	private static final long serialVersionUID = 1L;
+	/** Drawable that should be displayed. */
 	private final Drawable drawable;
 
 	/**
@@ -50,7 +53,8 @@ public class DrawablePanel extends JPanel {
 	}
 
 	/**
-	 * Returns the <code>Drawable</code> instance that is displayed by this panel.
+	 * Returns the <code>Drawable</code> instance that is displayed by this
+	 * panel.
 	 * @return <code>Drawable</code> instance
 	 */
 	public Drawable getDrawable() {

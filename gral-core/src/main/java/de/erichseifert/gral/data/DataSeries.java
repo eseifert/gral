@@ -25,19 +25,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that represents a view on several columns of a DataSource.
+ * Class that represents a view on several columns of a
+ * <code>DataSource</code>.
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {
+	/** Data source that provides the columns for this data series. */
 	private final DataSource data;
+	/** Columns that should be mapped to the series. */
 	private final List<Integer> cols;
+	/** NAme of the data series. */
 	private String name;
 
 	/**
-	 * Constructor without name.
-	 * The first column will be column 0, the second column 1 and so on,
+	 * Constructor without name. The first column will be column
+	 * <code>0</code>, the second column <code>1</code> and so on,
 	 * whereas the value of the specified columns is the column number
-	 * in the DataSource.
+	 * in the data source.
 	 * @param data Data source
 	 * @param cols Column numbers
 	 */
@@ -46,10 +50,10 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	}
 
 	/**
-	 * Constructor.
-	 * The first column will be column 0, the second column 1 and so on,
-	 * whereas the value of the specified columns is the column number
-	 * in the DataSource.
+	 * Constructor that initializes a named data series. The first column will
+	 * be column <code>0</code>, the second column <code>1</code> and so on,
+	 * whereas the value of the specified columns is the column number in the
+	 * data source.
 	 * @param name Descriptive name
 	 * @param data Data source
 	 * @param cols Column numbers

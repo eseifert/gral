@@ -52,6 +52,7 @@ public class BarPlot extends XYPlot {
 	 * Class that renders a bar in a bar plot.
 	 */
 	protected static class BarRenderer extends AbstractPointRenderer {
+		/** Bar plot this renderer is associated to. */
 		private final BarPlot plot;
 
 		/**
@@ -85,7 +86,8 @@ public class BarPlot extends XYPlot {
 						shapeBounds.getWidth(), paintBoundaries.getHeight()
 					);
 					*/
-					GraphicsUtils.fillPaintedShape(graphics, point, paint, paintBoundaries);
+					GraphicsUtils.fillPaintedShape(
+							graphics, point, paint, paintBoundaries);
 
 					if (BarRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
 						drawValue(context, point, row.get(1).doubleValue());
@@ -115,13 +117,16 @@ public class BarPlot extends XYPlot {
 			}
 			//*/
 
-			double barWidthRel = plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();
+			double barWidthRel =
+				plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();
 			double barAlign = 0.5;
 
-			double barXMin = axisXRenderer.getPosition(
-					axisX, valueX - barWidthRel*barAlign, true, false).get(PointND.X);
-			double barXMax = axisXRenderer.getPosition(
-					axisX, valueX + barWidthRel*barAlign, true, false).get(PointND.X);
+			double barXMin = axisXRenderer
+				.getPosition(axisX, valueX - barWidthRel*barAlign, true, false)
+				.get(PointND.X);
+			double barXMax = axisXRenderer
+				.getPosition(axisX, valueX + barWidthRel*barAlign, true, false)
+				.get(PointND.X);
 
 			double barYVal = axisYRenderer.getPosition(
 					axisY, valueY, true, false).get(PointND.Y);
@@ -137,13 +142,15 @@ public class BarPlot extends XYPlot {
 					axisX, valueX, true, false).get(PointND.X);
 			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
 
-			Shape shape = new Rectangle2D.Double(barXMin - barX, barY, barWidth, barHeight);
+			Shape shape = new Rectangle2D.Double(
+					barXMin - barX, barY, barWidth, barHeight);
 			return shape;
 		}
 	}
 
 	/**
-	 * Creates a new instance and initializes it with the specified data sources.
+	 * Creates a new instance and initializes it with the specified
+	 * data sources.
 	 * @param data Data to be displayed.
 	 */
 	public BarPlot(DataSource... data) {

@@ -46,14 +46,14 @@ public class CSVReader extends AbstractDataReader {
 			"CSV",
 			"Comma separated values",
 			"text/csv",
-			"csv", "txt"
+			new String[] {"csv", "txt"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"TSV",
 			"Tab separated values",
 			"text/tab-separated-values",
-			"tsv", "txt"
+			new String[] {"tsv", "txt"}
 		));
 	}
 
@@ -83,30 +83,32 @@ public class CSVReader extends AbstractDataReader {
 
 		String separatorPattern = getSetting("separator");
 		DataTable data = new DataTable(types);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		BufferedReader reader =
+			new BufferedReader(new InputStreamReader(input));
 		String line = null;
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
 			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
 				throw new IllegalArgumentException(
-						"Column count in file doesn't match; got " + cols.length +
-						", but expected " + types.length + ".");
+						"Column count in file doesn't match; got "
+						+ cols.length + ", but expected " + types.length + ".");
 			}
 			Number[] row = new Number[types.length];
 			for (int i = 0; i < types.length; i++) {
 				Method parseMethod = parseMethods.get(types[i]);
 				try {
-					row[i] = (Number)parseMethod.invoke(null, cols[i]);
+					row[i] = (Number) parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
+					// TODO Handle exception
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(
-							"Couldn't access method for parsing data type " +
-							types[i].getSimpleName() + " in column " + i);
+							"Couldn't access method for parsing data type "
+							+ types[i].getSimpleName() + " in column " + i);
 				} catch (InvocationTargetException e) {
 					throw new IOException(
-							"Type mismatch in column " + i + ": got \"" +
-							cols[i] + "\", but expected " +
-							types[i].getSimpleName() + " value.");
+							"Type mismatch in column " + i + ": got \""
+							+ cols[i] + "\", but expected "
+							+ types[i].getSimpleName() + " value.");
 				}
 			}
 			data.add(row);

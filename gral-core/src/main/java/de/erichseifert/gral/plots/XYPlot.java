@@ -74,13 +74,20 @@ public class XYPlot extends Plot  {
 	/** Key for specifying the secondary y-axis of an xy-plot. */
 	public static String AXIS_Y2 = "y2";
 
+	/** Minimum value in x direction. */
 	private double minX;
+	/** Maximum value in x direction. */
 	private double maxX;
+	/** Minimum value in y direction. */
 	private double minY;
+	/** Maximum value in y direction. */
 	private double maxY;
 
+	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
+	/** Mapping from data source to line renderer. */
 	private final Map<DataSource, LineRenderer> lineRenderers;
+	/** Mapping from data source to area renderer. */
 	private final Map<DataSource, AreaRenderer> areaRenderers;
 
 	/**
@@ -88,25 +95,28 @@ public class XYPlot extends Plot  {
 	 */
 	public static class XYPlotArea2D extends PlotArea {
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether the horizontal grid lines at major ticks along the x-axis are drawn. */
+		whether horizontal grid lines at major ticks along x-axis are drawn. */
 		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x");
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether the vertical grid lines at major ticks along the y-axis are drawn. */
+		whether vertical grid lines at major ticks along y-axis are drawn. */
 		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y");
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of major ticks. */
-		public static final Key GRID_MAJOR_COLOR = new Key("xyplot.grid.major.color");
+		public static final Key GRID_MAJOR_COLOR =
+			new Key("xyplot.grid.major.color");
 
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether the horizontal grid lines at minor ticks along the x-axis are drawn. */
+		whether horizontal grid lines at minor ticks along x-axis are drawn. */
 		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x");
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether the vertical grid lines at minor ticks along the y-axis are drawn. */
+		whether  vertical grid lines at minor ticks along y-axis are drawn. */
 		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y");
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of minor ticks. */
-		public static final Key GRID_MINOR_COLOR = new Key("xyplot.grid.minor.color");
+		public static final Key GRID_MINOR_COLOR =
+			new Key("xyplot.grid.minor.color");
 
+		/** x-y plot this plot area is associated to. */
 		private final XYPlot plot;
 
 		/**
@@ -119,11 +129,13 @@ public class XYPlot extends Plot  {
 
 			setSettingDefault(GRID_MAJOR_X, true);
 			setSettingDefault(GRID_MAJOR_Y, true);
-			setSettingDefault(GRID_MAJOR_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.1f));
+			setSettingDefault(GRID_MAJOR_COLOR,
+					new Color(0.0f, 0.0f, 0.0f, 0.1f));
 
 			setSettingDefault(GRID_MINOR_X, false);
 			setSettingDefault(GRID_MINOR_Y, false);
-			setSettingDefault(GRID_MINOR_COLOR, new Color(0.0f, 0.0f, 0.0f, 0.05f));
+			setSettingDefault(GRID_MINOR_COLOR,
+					new Color(0.0f, 0.0f, 0.0f, 0.05f));
 		}
 
 		@Override
@@ -179,7 +191,8 @@ public class XYPlot extends Plot  {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
-						GraphicsUtils.drawPaintedShape(graphics, gridLineVert, paint, null, null);
+						GraphicsUtils.drawPaintedShape(
+								graphics, gridLineVert, paint, null, null);
 						graphics.setTransform(txOffset);
 					}
 				}
@@ -212,7 +225,8 @@ public class XYPlot extends Plot  {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
-						GraphicsUtils.drawPaintedShape(graphics, gridLineHoriz, paint, null, null);
+						GraphicsUtils.drawPaintedShape(
+								graphics, gridLineHoriz, paint, null, null);
 						graphics.setTransform(txOffset);
 					}
 				}
@@ -276,7 +290,8 @@ public class XYPlot extends Plot  {
 					Drawable drawable = null;
 					Shape point = null;
 					if (pointRenderer != null) {
-						drawable = pointRenderer.getPoint(axisY, axisYRenderer, row);
+						drawable = pointRenderer.getPoint(
+								axisY, axisYRenderer, row);
 						point = pointRenderer.getPointPath(row);
 					}
 					DataPoint dataPoint = new DataPoint(pos, drawable, point);
@@ -284,7 +299,8 @@ public class XYPlot extends Plot  {
 				}
 
 				if (areaRenderer != null) {
-					Drawable drawable = areaRenderer.getArea(axisY, axisYRenderer, dataPoints);
+					Drawable drawable = areaRenderer.getArea(
+							axisY, axisYRenderer, dataPoints);
 					drawable.draw(context);
 				}
 				if (lineRenderer != null) {
@@ -319,7 +335,7 @@ public class XYPlot extends Plot  {
 	 */
 	public static class XYLegend extends Legend {
 		/** Source for dummy data. */
-		protected final DataSource DUMMY_DATA = new DummyData(1, 1, 0.5);
+		private final DataSource DUMMY_DATA = new DummyData(1, 1, 0.5);
 
 		private final XYPlot plot;
 
@@ -461,7 +477,8 @@ public class XYPlot extends Plot  {
 			PointND<Double> axisXPos = null;
 			if (axisYRenderer != null) {
 				Axis axisY = getAxis(AXIS_Y);
-				Double axisXIntersection = axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
+				Double axisXIntersection =
+					axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
 				axisXPos = axisYRenderer.getPosition(
 						axisY, axisXIntersection, false, false);
 			}
@@ -480,7 +497,8 @@ public class XYPlot extends Plot  {
 			PointND<Double> axisYPos = null;
 			if (axisXRenderer != null) {
 				Axis axisX = getAxis(AXIS_X);
-				Double axisYIntersection = axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
+				Double axisYIntersection =
+					axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
 				axisYPos = axisXRenderer.getPosition(
 						axisX, axisYIntersection, false, false);
 			}
@@ -508,8 +526,9 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Returns the <code>PointRenderer</code> for the specified <code>DataSource</code>.
-	 * @param s DataSource.
+	 * Returns the <code>PointRenderer</code> for the specified
+	 * data source.
+	 * @param s data source.
 	 * @return PointRenderer.
 	 */
 	public PointRenderer getPointRenderer(DataSource s) {
@@ -517,9 +536,9 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Sets the <code>PointRenderer</code> for a certain <code>DataSource</code>
+	 * Sets the <code>PointRenderer</code> for a certain data source
 	 * to the specified instance.
-	 * @param s DataSource.
+	 * @param s data source.
 	 * @param pointRenderer PointRenderer to be set.
 	 */
 	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
@@ -527,8 +546,8 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Returns the <code>LineRenderer</code> for the specified <code>DataSource</code>.
-	 * @param s <code>DataSource</code>.
+	 * Returns the <code>LineRenderer</code> for the specified data source.
+	 * @param s data source.
 	 * @return <code>LineRenderer</code>.
 	 */
 	public LineRenderer getLineRenderer(DataSource s) {
@@ -536,7 +555,7 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Sets the <code>LineRenderer</code> for a certain <code>DataSource</code>
+	 * Sets the <code>LineRenderer</code> for a certain data source
 	 * to the specified value.
 	 * @param s <code>DataSource</code>.
 	 * @param lineRenderer <code>LineRenderer</code> to be set.
@@ -546,8 +565,7 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Returns the <code>AreaRenderer</code> for the specified
-	 * <code>DataSource</code>.
+	 * Returns the <code>AreaRenderer</code> for the specified data source.
 	 * @param s <code>DataSource</code>.
 	 * @return <code>AreaRenderer</code>.
 	 */

@@ -26,6 +26,8 @@ package de.erichseifert.gral.data.comparators;
  * descending order.
  */
 public class Descending extends DataComparator {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a new Descending object sorting according to the specified

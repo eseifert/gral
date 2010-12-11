@@ -87,15 +87,20 @@ public abstract class Insets2D {
 	 * @param bottom Bottom insets.
 	 * @param right Right insets.
 	 */
-	public abstract void setInsets(double top, double left, double bottom, double right);
+	public abstract void setInsets(double top, double left,
+			double bottom, double right);
 
 	/**
 	 * Class that stores insets as double values.
 	 */
 	public static class Double extends Insets2D {
+		/** Top. */
 		private double top;
+		/** Left. */
 		private double left;
+		/** Bottom. */
 		private double bottom;
+		/** Right. */
 		private double right;
 
 		/**
@@ -150,11 +155,13 @@ public abstract class Insets2D {
 			if (insets == null) {
 				return;
 			}
-			setInsets(insets.getTop(), insets.getLeft(), insets.getBottom(), insets.getRight());
+			setInsets(insets.getTop(), insets.getLeft(),
+					insets.getBottom(), insets.getRight());
 		}
 
 		@Override
-		public void setInsets(double top, double left, double bottom, double right) {
+		public void setInsets(double top, double left,
+				double bottom, double right) {
 			this.top = top;
 			this.left = left;
 			this.bottom = bottom;
@@ -174,8 +181,10 @@ public abstract class Insets2D {
 				return false;
 			}
 			Insets2D insets = (Insets2D) obj;
-			return (getTop() == insets.getTop()) && (getLeft() == insets.getLeft()) &&
-				(getBottom() == insets.getBottom()) && (getRight() == insets.getRight());
+			return (getTop() == insets.getTop())
+				&& (getLeft() == insets.getLeft())
+				&& (getBottom() == insets.getBottom())
+				&& (getRight() == insets.getRight());
 		}
 
 		@Override

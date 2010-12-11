@@ -38,7 +38,9 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 	 * Class that stores double values.
 	 */
 	public static class Double extends Dimension2D {
+		/** Horizontal extension. */
 		private double width;
+		/** Vertical extension. */
 		private double height;
 
 		/**
@@ -76,7 +78,8 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 
 		@Override
 		public String toString() {
-			return getClass().getName() + "[width=" + width + ", height=" + height + "]";
+			return getClass().getName() +
+				"[width=" + width + ", height=" + height + "]";
 		}
 
 		@Override
@@ -85,7 +88,8 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 				return false;
 			}
 			java.awt.geom.Dimension2D dim = (java.awt.geom.Dimension2D) obj;
-			return (getWidth() == dim.getWidth()) && (getHeight() == dim.getHeight());
+			return (getWidth() == dim.getWidth()) &&
+				(getHeight() == dim.getHeight());
 		}
 
 		@Override

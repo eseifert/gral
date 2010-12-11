@@ -71,16 +71,21 @@ public abstract class Legend extends DrawableContainer
 	/** Key for specifying the gap between items. */
 	public static final Key SYMBOL_SIZE = new Key("legend.symbol.size");
 
+	/** Settings stored as pairs (key, value). */
 	private final Settings settings;
 
+	/** Mapping of data sources to drawable components. */
 	private final Map<DataSource, Drawable> components;
 
 	/**
 	 * Class that displays a specific data source as an item of a Legend.
 	 */
 	protected class Item extends DrawableContainer {
+		/** Data source that is related to this item. */
 		private final DataSource data;
+		/** Symbol that should be drawn. */
 		private final Drawable symbol;
+		/** Label string that should be drawn. */
 		private final Label label;
 
 		/**
@@ -102,9 +107,11 @@ public abstract class Legend extends DrawableContainer
 				public Dimension2D getPreferredSize() {
 					// TODO Use real font size instead of fixed value
 					final double fontSize = 10.0;
-					Dimension2D symbolSize = Legend.this.getSetting(SYMBOL_SIZE);
+					Dimension2D symbolSize =
+						Legend.this.getSetting(SYMBOL_SIZE);
 					Dimension2D size = super.getPreferredSize();
-					size.setSize(symbolSize.getWidth()*fontSize, symbolSize.getHeight()*fontSize);
+					size.setSize(symbolSize.getWidth()*fontSize,
+							symbolSize.getHeight()*fontSize);
 					return size;
 				}
 			};

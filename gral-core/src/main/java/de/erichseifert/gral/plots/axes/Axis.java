@@ -33,9 +33,12 @@ import java.util.Set;
  * </ul>
  */
 public class Axis {
+	/** Objects that will be notified when axis settings are changing. */
 	private final Set<AxisListener> axisListeners;
 
+	/** Minimal value on axis. */
 	private Number min;
+	/** Maximal value on axis. */
 	private Number max;
 
 	/**

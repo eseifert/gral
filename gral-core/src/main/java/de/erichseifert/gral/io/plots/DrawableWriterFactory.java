@@ -33,9 +33,14 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * different file formats.
  * @see DrawableWriter
  */
-public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
+public final class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
+	/** Singleton instance. */
 	private static DrawableWriterFactory instance;
 
+	/**
+	 * Constructor that initializes the factory.
+	 * @throws IOException if the properties file could not be found.
+	 */
 	private DrawableWriterFactory() throws IOException {
 		super("drawablewriters.properties");
 	}
@@ -87,7 +92,8 @@ public class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {
 		}
 
 		if (writer == null) {
-			throw new IllegalArgumentException("Unsupported MIME type: " + mimeType);
+			throw new IllegalArgumentException(
+					"Unsupported MIME type: " + mimeType);
 		}
 
 		return writer;

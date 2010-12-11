@@ -37,27 +37,38 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that controls the zoom of a Plot.
  */
 public class PlotNavigator {
+	/** Plot that will be navigated. */
 	private final Plot plot;
+	/** Mapping of axis name to informations on center and zoom. */
 	private final Map<String, NavigationInfo> infos;
+	/** Axes affected by navigation. */
 	private final Set<String> axes;
+	/** Object that will be notified on navigation actions. */
 	private final Set<NavigationListener> navigationListeners;
 
+	/** Minimum allowed zoom level. */
 	private double zoomMin;
+	/** Maximum allowed zoom level. */
 	private double zoomMax;
 
 	/**
 	 * Utility class for storing navigational information for an axis.
 	 */
 	private static final class NavigationInfo {
+		/** Minimum value of the original axis. */
 		private final Number minOriginal;
+		/** Maximum value of the original axis. */
 		private final Number maxOriginal;
+		/** Center value of the original axis. */
 		private final double centerOriginal;
-		private final double rangeOriginal;
+		/** Current center value. */
 		private double center;
+		/** Current zoom level. */
 		private double zoom;
 
 		/**
-		 * Constructor which creates an new <code>NavigationInfo</code> instance.
+		 * Constructor which initializes a new <code>NavigationInfo</code>
+		 * instance.
 		 * @param min Minimum value in axis units.
 		 * @param max Maximum value in axis units.
 		 * @param center Center in axis units.
@@ -66,7 +77,6 @@ public class PlotNavigator {
 			this.minOriginal = min;
 			this.maxOriginal = max;
 			this.centerOriginal = center;
-			this.rangeOriginal = max.doubleValue() - min.doubleValue();
 			this.center = centerOriginal;
 			this.zoom = 1.0;
 		}
@@ -91,13 +101,6 @@ public class PlotNavigator {
 		 */
 		public double getCenterOriginal() {
 			return centerOriginal;
-		}
-		/**
-		 * Returns the original data range.
-		 * @return Original data range.
-		 */
-		public double getRangeOriginal() {
-			return rangeOriginal;
 		}
 
 		/**
@@ -161,6 +164,9 @@ public class PlotNavigator {
 		zoomMax = 1e+2;
 	}
 
+	/**
+	 * Refreshes the values of all axis to reflect navigation actions.
+	 */
 	private void refresh() {
 		for (String axisName : axes) {
 			AxisRenderer renderer = plot.getAxisRenderer(axisName);
@@ -172,8 +178,10 @@ public class PlotNavigator {
 
 			// Original range in screen units
 			// Most up-to-date view coordinates (axis's layout) must be used
-			double minOrig = renderer.worldToView(axis, info.getMinOriginal(), true);
-			double maxOrig = renderer.worldToView(axis, info.getMaxOriginal(), true);
+			double minOrig = renderer.worldToView(
+					axis, info.getMinOriginal(), true);
+			double maxOrig = renderer.worldToView(
+					axis, info.getMaxOriginal(), true);
 			double rangeOrig = maxOrig - minOrig;
 
 			// New axis scale
@@ -218,7 +226,8 @@ public class PlotNavigator {
 	 * @param zoomNew New zoom level.
 	 */
 	public void setZoom(double zoomNew) {
-		if (zoomNew <= 0.0 || Double.isNaN(zoomNew) || Double.isInfinite(zoomNew)) {
+		if ((zoomNew <= 0.0) || Double.isNaN(zoomNew)
+				|| Double.isInfinite(zoomNew)) {
 			return;
 		}
 		zoomNew = MathUtils.limit(zoomNew, zoomMin, zoomMax);
@@ -340,7 +349,8 @@ public class PlotNavigator {
 	 * @param centerOld Previous center point
 	 * @param centerNew New center point
 	 */
-	protected void fireCenterChanged(String axisName, Number centerOld, Number centerNew) {
+	protected void fireCenterChanged(String axisName,
+			Number centerOld, Number centerNew) {
 		if (!axes.contains(axisName)) {
 			return;
 		}
@@ -355,7 +365,8 @@ public class PlotNavigator {
 	 * @param zoomOld Previous zoom level
 	 * @param zoomNew New zoom level
 	 */
-	protected void fireZoomChanged(String axisName, double zoomOld, double zoomNew) {
+	protected void fireZoomChanged(String axisName,
+			double zoomOld, double zoomNew) {
 		if (!axes.contains(axisName)) {
 			return;
 		}

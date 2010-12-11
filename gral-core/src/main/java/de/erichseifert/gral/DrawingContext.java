@@ -49,8 +49,11 @@ public class DrawingContext {
 		VECTOR
 	}
 
+	/** Graphics instance used for drawing. */
 	private final Graphics2D graphics;
+	/** Quality level used for drawing. */
 	private final Quality quality;
+	/** Target media. */
 	private final Target target;
 
 	/**

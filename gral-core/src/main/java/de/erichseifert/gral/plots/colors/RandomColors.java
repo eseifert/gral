@@ -31,12 +31,18 @@ import java.util.Random;
  * Class that generates pseudo-random colors.
  */
 public class RandomColors implements ColorMapper {
+	/** Number of comparisons that will be done before accepting two similar
+	random values. */
 	private static final int NUM_COMPARISONS = 4;
+	/** Minimal distance the causes a random values to be to re-generated. */
 	private static final double MIN_DIST = 0.3;
 
+	/** Cache for colors that have already been generated. */
 	private final Map<Double, Color> colorCache;
+	/** Object for generating random values. */
 	private final Random random;
-	//FIXME duplicate code! See de.erichseifert.gral.plots.colors.QuasiRandomColors
+	/** Variance settings for hue, saturation and brightness. */
+	//FIXME duplicate code! See QuasiRandomColors
 	private float[] colorVariance;
 
 	/**
@@ -130,7 +136,8 @@ public class RandomColors implements ColorMapper {
 
 	/**
 	 * Sets the current color variance.
-	 * @param colorVariance Range of hue, saturation and brightness a color can have.
+	 * @param colorVariance Range of hue, saturation and brightness a color
+	 *        can have.
 	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;

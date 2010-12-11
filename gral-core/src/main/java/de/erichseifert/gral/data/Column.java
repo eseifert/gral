@@ -54,6 +54,7 @@ public class Column extends DataAccessor {
 
 	@Override
 	public double getStatistics(String key) {
-		return getSource().getStatistics().get(key, Orientation.VERTICAL, getIndex());
+		return getSource().getStatistics()
+			.get(key, Orientation.VERTICAL, getIndex());
 	}
 }

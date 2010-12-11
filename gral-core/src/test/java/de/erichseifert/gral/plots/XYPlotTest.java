@@ -42,7 +42,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 public class XYPlotTest {
 	private List<MockXYPlot> plots;
 
-	private class MockXYPlot extends XYPlot {
+	private static class MockXYPlot extends XYPlot {
 		private boolean drawn;
 
 		public MockXYPlot(DataSource... data) {

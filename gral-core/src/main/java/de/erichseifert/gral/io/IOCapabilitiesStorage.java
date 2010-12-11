@@ -29,10 +29,12 @@ import java.util.Set;
  * Abstract class that implements the basic functions of a writer.
  */
 public abstract class IOCapabilitiesStorage {
-	private static final Set<IOCapabilities> capabilities = new HashSet<IOCapabilities>();
+	/** Set of all registered capabilities. */
+	private static final Set<IOCapabilities> capabilities
+		= new HashSet<IOCapabilities>();
 
 	/**
-	 * Creates a new AbstractWriter object.
+	 * Initializes a new storage instance.
 	 */
 	protected IOCapabilitiesStorage() {
 	}
@@ -49,7 +51,7 @@ public abstract class IOCapabilitiesStorage {
 	 * Adds the specified IOCapabilities to the Set of supported formats.
 	 * @param capabilities IOCapabilities to be added.
 	 */
-	protected final static void addCapabilities(IOCapabilities capabilities) {
+	protected static final void addCapabilities(IOCapabilities capabilities) {
 		IOCapabilitiesStorage.capabilities.add(capabilities);
 	}
 }

@@ -55,12 +55,18 @@ public class ExportDialog extends JDialog {
 		CANCEL
 	};
 
+	/** Bounding rectangle for document. */
 	private final Rectangle2D documentBounds;
+	/** Action that was used to close this dialog. */
 	private UserAction userAction;
 
+	/** Input component for horizontal document offset. */
 	private final JFormattedTextField inputX;
+	/** Input component for vertical document offset. */
 	private final JFormattedTextField inputY;
+	/** Input component for document width. */
 	private final JFormattedTextField inputW;
+	/** Input component for document height. */
 	private final JFormattedTextField inputH;
 
 	/**
@@ -87,24 +93,29 @@ public class ExportDialog extends JDialog {
 		JPanel options = new JPanel(new GridLayout(4, 2, 10, 2));
 		getContentPane().add(options, BorderLayout.NORTH);
 
-		PropertyChangeListener docBoundsListener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				setDocumentBounds(
-					((Number)inputX.getValue()).doubleValue(),
-					((Number)inputY.getValue()).doubleValue(),
-					((Number)inputW.getValue()).doubleValue(),
-					((Number)inputH.getValue()).doubleValue());
-			}
-		};
+		PropertyChangeListener docBoundsListener =
+			new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					setDocumentBounds(
+						((Number) inputX.getValue()).doubleValue(),
+						((Number) inputY.getValue()).doubleValue(),
+						((Number) inputW.getValue()).doubleValue(),
+						((Number) inputH.getValue()).doubleValue());
+				}
+			};
 		inputX = new JFormattedTextField(formatMm);
-		addInputField(inputX, "Left", options, documentBounds.getX(), docBoundsListener);
+		addInputField(inputX, "Left", options, documentBounds.getX(),
+				docBoundsListener);
 		inputY = new JFormattedTextField(formatMm);
-		addInputField(inputY, "Top", options, documentBounds.getY(), docBoundsListener);
+		addInputField(inputY, "Top", options, documentBounds.getY(),
+				docBoundsListener);
 		inputW = new JFormattedTextField(formatMm);
-		addInputField(inputW, "Width", options, documentBounds.getWidth(), docBoundsListener);
+		addInputField(inputW, "Width", options, documentBounds.getWidth(),
+				docBoundsListener);
 		inputH = new JFormattedTextField(formatMm);
-		addInputField(inputH, "Height", options, documentBounds.getHeight(), docBoundsListener);
+		addInputField(inputH, "Height", options, documentBounds.getHeight(),
+				docBoundsListener);
 
 		JPanel controls = new JPanel(new FlowLayout());
 		cp.add(controls, BorderLayout.SOUTH);
@@ -133,6 +144,16 @@ public class ExportDialog extends JDialog {
 		setLocationRelativeTo(parent);
 	}
 
+	/**
+	 * Utility method that adds a new label and a new input field to the
+	 * dialog.
+	 * @param input Input field.
+	 * @param labelText Text for label.
+	 * @param cont Container.
+	 * @param initialValue Initial value for the input field.
+	 * @param pcl Property change listener that should be associated with the
+	 *        input field.
+	 */
 	private static void addInputField(JFormattedTextField input,
 			String labelText, java.awt.Container cont, Object initialValue,
 			PropertyChangeListener pcl) {
@@ -164,8 +185,10 @@ public class ExportDialog extends JDialog {
 	 * @param h Height.
 	 */
 	protected void setDocumentBounds(double x, double y, double w, double h)  {
-		if (documentBounds.getX() == x && documentBounds.getY() == y &&
-				documentBounds.getWidth() == w && documentBounds.getHeight() == h) {
+		if ((documentBounds.getX() == x)
+				&& (documentBounds.getY() == y)
+				&& (documentBounds.getWidth() == w)
+				&& (documentBounds.getHeight() == h)) {
 			return;
 		}
 		documentBounds.setFrame(x, y, w, h);

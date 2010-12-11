@@ -32,9 +32,14 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * specified format. The produced readers can be used to retrieve data from
  * an <code>InputStream</code> and to get a <code>DataSource</code> instance.
  */
-public class DataReaderFactory extends AbstractIOFactory<DataReader> {
+public final class DataReaderFactory extends AbstractIOFactory<DataReader> {
+	/** Singleton instance. */
 	private static DataReaderFactory instance;
 
+	/**
+	 * Constructor that initializes the factory.
+	 * @throws IOException if the properties file could not be found.
+	 */
 	private DataReaderFactory() throws IOException {
 		super("datareaders.properties");
 	}
@@ -86,7 +91,8 @@ public class DataReaderFactory extends AbstractIOFactory<DataReader> {
 		}
 
 		if (reader == null) {
-			throw new IllegalArgumentException("Unsupported MIME type: "+mimeType);
+			throw new IllegalArgumentException(
+					"Unsupported MIME type: " + mimeType);
 		}
 
 		return reader;

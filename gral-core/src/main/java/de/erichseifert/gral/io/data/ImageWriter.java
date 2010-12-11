@@ -43,35 +43,35 @@ public class ImageWriter extends AbstractDataWriter {
 			"BMP",
 			"Windows Bitmap",
 			"image/bmp",
-			"bmp", "dib"
+			new String[] {"bmp", "dib"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"GIF",
 			"Graphics Interchange Format",
 			"image/gif",
-			"gif"
+			new String[] {"gif"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"JPEG/JFIF",
 			"JPEG File Interchange Format",
 			"image/jpeg",
-			"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"
+			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"PNG",
 			"Portable Network Graphics",
 			"image/png",
-			"png"
+			new String[] {"png"}
 		));
 
 		addCapabilities(new IOCapabilities(
 			"WBMP",
 			"Wireless Application Protocol Bitmap",
 			"image/vnd.wap.wbmp",
-			"wbmp"
+			new String[] {"wbmp"}
 		));
 	}
 
@@ -103,16 +103,19 @@ public class ImageWriter extends AbstractDataWriter {
 			}
 		}
 
-        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage image =
+        	new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
         image.getRaster().setDataElements(0, 0, w, h, pixelData);
 
-        Iterator<javax.imageio.ImageWriter> writers = ImageIO.getImageWritersByMIMEType(getMimeType());
+        Iterator<javax.imageio.ImageWriter> writers =
+        	ImageIO.getImageWritersByMIMEType(getMimeType());
         try {
         	javax.imageio.ImageWriter writer = writers.next();
         	writer.setOutput(ImageIO.createImageOutputStream(output));
         	writer.write(image);
         } catch (NoSuchElementException e) {
-        	throw new IOException("No writer found for MIME type " + getMimeType());
+        	throw new IOException(
+        			"No writer found for MIME type " + getMimeType());
         }
 	}
 

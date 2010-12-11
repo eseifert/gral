@@ -39,12 +39,15 @@ import de.erichseifert.gral.util.Settings.Key;
  * Class that connects <code>DataPoint</code>s with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
-	/** Key for specifying an {@link de.erichseifert.gral.DrawableConstants.Orientation}
-	instance which indicates the primary direction of the "steps". */
-	public static final Key ASCENT_DIRECTION = new Key("line.discrete.ascentDirection");
+	/** Key for specifying an instance of
+	{@link de.erichseifert.gral.DrawableConstants.Orientation} which indicates
+	the primary direction of the "steps". */
+	public static final Key ASCENT_DIRECTION =
+		new Key("line.discrete.ascentDirection");
 	/** Key for specifying a {@link java.lang.Number} value for the relative
 	distance between two points, i.e. the "step" of a stair. */
-	public static final Key ASCENDING_POINT = new Key("line.discrete.ascendingPoint");
+	public static final Key ASCENDING_POINT =
+		new Key("line.discrete.ascendingPoint");
 
 	/**
 	 * Initializes a new <code>DiscreteLineRenderer2D</code> instance with
@@ -90,7 +93,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 				// Draw path
 				Shape lineShape = punch(line, points);
 				Paint paint = getSetting(LineRenderer.COLOR);
-				GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
+				GraphicsUtils.fillPaintedShape(
+						context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

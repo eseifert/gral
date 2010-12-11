@@ -33,14 +33,16 @@ import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.Settings.Key;
 
 /**
- * Abstract class that renders an area in two-dimensional space.
- * Functionality includes:
+ * <p>Abstract class that renders an area in two-dimensional space.</p>
+ * <p>Functionality includes:</p>
  * <ul>
- * <li>Punching data points out of the area's shape</li>
- * <li>Administration of settings</li>
+ *   <li>Punching data points out of the area's shape</li>
+ *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAreaRenderer implements AreaRenderer, SettingsListener {
+public abstract class AbstractAreaRenderer
+		implements AreaRenderer, SettingsListener {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
 
 	/**
@@ -65,7 +67,8 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, SettingsList
 		// Subtract shapes of data points from the area to yield gaps.
 		double gapSize = this.<Number>getSetting(GAP).doubleValue();
 		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
-		Area punched = GeometryUtils.punch(area, gapSize, isGapRounded, dataPoints);
+		Area punched = GeometryUtils.punch(
+				area, gapSize, isGapRounded, dataPoints);
 
 		return punched;
 	}

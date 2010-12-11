@@ -31,13 +31,15 @@ import de.erichseifert.gral.util.Insets2D;
  */
 public interface Container extends Iterable<Drawable> {
 	/**
-	 * Return the space that this DrawableContainer must leave at each of its edges.
+	 * Returns the space that this container must preserve at each of its
+	 * edges.
 	 * @return The insets of this DrawableContainer
 	 */
 	Insets2D getInsets();
 
 	/**
-	 * Sets the space that this DrawableContainer must leave at each of its edges.
+	 * Sets the space that this container must preserve at each of its
+	 * edges.
 	 * @param insets Insets to be set.
 	 */
 	void setInsets(Insets2D insets);

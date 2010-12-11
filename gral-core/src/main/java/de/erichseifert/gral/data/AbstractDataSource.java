@@ -47,9 +47,15 @@ public abstract class AbstractDataSource implements DataSource {
 	 * Iterator that returns each row of the DataSource.
 	 */
 	private class DataSourceIterator implements Iterator<Number> {
+		/** Index of current column. */
 		private int col;
+		/** Index of current row. */
 		private int row;
 
+		/**
+		 * Initializes a new iterator instance that starts at
+		 * <code>(0, 0)</code>.
+		 */
 		public DataSourceIterator() {
 			col = 0;
 			row = 0;
@@ -110,8 +116,8 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Notifies all registered DataListeners that the data of this DataSource has
-	 * changed.
+	 * Notifies all registered DataListeners that the data of this DataSource
+	 * has changed.
 	 */
 	protected void notifyDataChanged() {
 		for (DataListener dataListener : dataListeners) {

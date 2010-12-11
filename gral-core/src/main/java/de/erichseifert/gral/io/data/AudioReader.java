@@ -42,7 +42,7 @@ public class AudioReader extends AbstractDataReader {
 			"WAV",
 			"RIFF WAVE",
 			"audio/wav",
-			"wav"
+			new String[] {"wav"}
 		));
 	}
 
