@@ -73,7 +73,7 @@ public class Insets2DTest {
 		assertEquals(insets2.getLeft(), insets.getLeft(), DELTA);
 		assertEquals(insets2.getBottom(), insets.getBottom(), DELTA);
 		assertEquals(insets2.getRight(), insets.getRight(), DELTA);
-		
+
 		// setSize(double, double, double, double)
 		insets.setInsets(5.0, 6.0, 7.0, 8.0);
 		assertEquals(5.0, insets.getTop(), DELTA);
@@ -85,7 +85,7 @@ public class Insets2DTest {
 	@Test
 	public void testToString() {
 		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
-		assertEquals("de.erichseifert.gral.util.Insets2D$Double[top=1.0, left=2.0, bottom=3.0, right=4.0]", insets.toString());
+		assertEquals("de.erichseifert.gral.util.Insets2D$Double[top=1.000000, left=2.000000, bottom=3.000000, right=4.000000]", insets.toString());
 	}
 
 	@Test

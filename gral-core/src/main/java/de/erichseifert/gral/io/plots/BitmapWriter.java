@@ -36,6 +36,7 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
+import de.erichseifert.gral.util.Messages;
 
 
 /**
@@ -53,38 +54,38 @@ public class BitmapWriter extends IOCapabilitiesStorage
 		implements DrawableWriter {
 	static {
 		addCapabilities(new IOCapabilities(
-			"BMP",
-			"Windows Bitmap",
-			"image/bmp",
-			new String[] {"bmp", "dib"}
+			"BMP", //$NON-NLS-1$
+			Messages.getString("ImageIO.bmpDescription"), //$NON-NLS-1$
+			"image/bmp", //$NON-NLS-1$
+			new String[] {"bmp", "dib"} //$NON-NLS-1$ //$NON-NLS-2$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"GIF",
-			"Graphics Interchange Format",
-			"image/gif",
-			new String[] {"gif"}
+			"GIF", //$NON-NLS-1$
+			Messages.getString("ImageIO.gifDescription"), //$NON-NLS-1$
+			"image/gif", //$NON-NLS-1$
+			new String[] {"gif"} //$NON-NLS-1$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"JPEG/JFIF",
-			"JPEG File Interchange Format",
-			"image/jpeg",
-			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"}
+			"JPEG/JFIF", //$NON-NLS-1$
+			Messages.getString("ImageIO.jpegDescription"), //$NON-NLS-1$
+			"image/jpeg", //$NON-NLS-1$
+			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"PNG",
-			"Portable Network Graphics",
-			"image/png",
-			new String[] {"png"}
+			"PNG", //$NON-NLS-1$
+			Messages.getString("ImageIO.pngDescription"), //$NON-NLS-1$
+			"image/png", //$NON-NLS-1$
+			new String[] {"png"} //$NON-NLS-1$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"WBMP",
-			"Wireless Application Protocol Bitmap",
-			"image/vnd.wap.wbmp",
-			new String[] {"wbmp"}
+			"WBMP", //$NON-NLS-1$
+			Messages.getString("ImageIO.wbmpDescription"), //$NON-NLS-1$
+			"image/vnd.wap.wbmp", //$NON-NLS-1$
+			new String[] {"wbmp"} //$NON-NLS-1$
 		));
 	}
 
@@ -101,9 +102,9 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	protected BitmapWriter(String mimeType) {
 		this.mimeType = mimeType;
 
-		boolean isAlphaSupported = "image/png".equals(mimeType);
-		boolean isColorSupported = !"image/vnd.wap.wbmp".equals(mimeType);
-		boolean isGrayscaleSupported = !"image/vnd.wap.wbmp".equals(mimeType);
+		boolean isAlphaSupported = "image/png".equals(mimeType); //$NON-NLS-1$
+		boolean isColorSupported = !"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
+		boolean isGrayscaleSupported = !"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
 
 		if (isColorSupported) {
 			if (isAlphaSupported) {

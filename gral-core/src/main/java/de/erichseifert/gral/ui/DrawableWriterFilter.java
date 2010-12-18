@@ -22,10 +22,12 @@
 package de.erichseifert.gral.ui;
 
 import java.io.File;
+import java.text.MessageFormat;
 
 import javax.swing.filechooser.FileFilter;
 
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.util.Messages;
 
 /**
  * File filter that extracts files that can be read with a certain set of
@@ -64,8 +66,8 @@ public class DrawableWriterFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return String.format("%s: %s", capabilities.getFormat(),
-				capabilities.getName());
+		return MessageFormat.format(Messages.getString("IO.formatDescription"), //$NON-NLS-1$
+				capabilities.getFormat(), capabilities.getName());
 	}
 
 	/**
@@ -80,7 +82,7 @@ public class DrawableWriterFilter extends FileFilter {
 		String name = f.getName();
 		int lastDot = name.lastIndexOf('.');
 		if ((lastDot <= 0) || (lastDot == name.length() - 1)) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		return name.substring(lastDot + 1);
 	}

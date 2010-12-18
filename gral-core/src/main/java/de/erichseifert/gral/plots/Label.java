@@ -50,20 +50,20 @@ import de.erichseifert.gral.util.Settings.Key;
 public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
 	/** Key for specifying the horizontal alignment within the
 	bounding rectangle. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X = new Key("label.alignment.x");
+	public static final Key ALIGNMENT_X = new Key("label.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying the vertical alignment within the
 	bounding rectangle. 0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y = new Key("label.alignment.y");
+	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants}
 	value where the label will be aligned at. */
-	public static final Key ANCHOR = new Key("label.anchor");
+	public static final Key ANCHOR = new Key("label.anchor"); //$NON-NLS-1$
 	/** Key for specifying the font of this label. */
-	public static final Key FONT = new Key("label.font");
+	public static final Key FONT = new Key("label.font"); //$NON-NLS-1$
 	/** Key for specifying the rotation of this label, */
-	public static final Key ROTATION = new Key("label.rotation");
+	public static final Key ROTATION = new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */
-	public static final Key COLOR = new Key("label.color");
+	public static final Key COLOR = new Key("label.color"); //$NON-NLS-1$
 
 	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
@@ -115,10 +115,10 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
 		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
 		txLabel.translate(
-			-textBounds.getX() - anchorModifierX*textBounds.getWidth() -
-				alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
-			-textBounds.getY() - anchorModifierY*textBounds.getHeight() -
-				alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
+			-textBounds.getX() - anchorModifierX*textBounds.getWidth()
+				- alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
+			-textBounds.getY() - anchorModifierY*textBounds.getHeight()
+				- alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
 		);
 
 		Shape labelShape = txLabel.createTransformedShape(outline);

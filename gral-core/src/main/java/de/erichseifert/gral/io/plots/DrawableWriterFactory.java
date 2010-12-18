@@ -24,6 +24,7 @@ package de.erichseifert.gral.io.plots;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 
 import de.erichseifert.gral.io.AbstractIOFactory;
 
@@ -42,7 +43,7 @@ public final class DrawableWriterFactory extends AbstractIOFactory<DrawableWrite
 	 * @throws IOException if the properties file could not be found.
 	 */
 	private DrawableWriterFactory() throws IOException {
-		super("drawablewriters.properties");
+		super("drawablewriters.properties"); //$NON-NLS-1$
 	}
 
 	/**
@@ -92,8 +93,8 @@ public final class DrawableWriterFactory extends AbstractIOFactory<DrawableWrite
 		}
 
 		if (writer == null) {
-			throw new IllegalArgumentException(
-					"Unsupported MIME type: " + mimeType);
+			throw new IllegalArgumentException(MessageFormat.format(
+					"Unsupported MIME type: {0}", mimeType)); //$NON-NLS-1$
 		}
 
 		return writer;

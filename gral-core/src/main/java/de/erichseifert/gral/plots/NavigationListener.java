@@ -24,6 +24,8 @@ package de.erichseifert.gral.plots;
 /**
  * An interface for classes that want to be notified on navigation changes like
  * panning or zooming.
+ *
+ * @see PlotNavigator
  */
 public interface NavigationListener {
 	/**

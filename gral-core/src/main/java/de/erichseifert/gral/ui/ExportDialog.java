@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.util.Messages;
 
 /**
  * A dialog implementation for exporting plots. It allows the user to
@@ -77,7 +78,7 @@ public class ExportDialog extends JDialog {
 	 */
 	public ExportDialog(Component parent, Drawable drawable) {
 		super(JOptionPane.getFrameForComponent(parent), true);
-		setTitle("Export options");
+		setTitle(Messages.getString("ExportDialog.exportOptionsTitle")); //$NON-NLS-1$
 
 		documentBounds = new Rectangle2D.Double();
 		documentBounds.setFrame(drawable.getBounds());
@@ -105,22 +106,22 @@ public class ExportDialog extends JDialog {
 				}
 			};
 		inputX = new JFormattedTextField(formatMm);
-		addInputField(inputX, "Left", options, documentBounds.getX(),
+		addInputField(inputX, Messages.getString("ExportDialog.left"), options, documentBounds.getX(), //$NON-NLS-1$
 				docBoundsListener);
 		inputY = new JFormattedTextField(formatMm);
-		addInputField(inputY, "Top", options, documentBounds.getY(),
+		addInputField(inputY, Messages.getString("ExportDialog.top"), options, documentBounds.getY(), //$NON-NLS-1$
 				docBoundsListener);
 		inputW = new JFormattedTextField(formatMm);
-		addInputField(inputW, "Width", options, documentBounds.getWidth(),
+		addInputField(inputW, Messages.getString("ExportDialog.width"), options, documentBounds.getWidth(), //$NON-NLS-1$
 				docBoundsListener);
 		inputH = new JFormattedTextField(formatMm);
-		addInputField(inputH, "Height", options, documentBounds.getHeight(),
+		addInputField(inputH, Messages.getString("ExportDialog.height"), options, documentBounds.getHeight(), //$NON-NLS-1$
 				docBoundsListener);
 
 		JPanel controls = new JPanel(new FlowLayout());
 		cp.add(controls, BorderLayout.SOUTH);
 
-		JButton buttonConfirm = new JButton("OK");
+		JButton buttonConfirm = new JButton(Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
 		buttonConfirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -130,7 +131,7 @@ public class ExportDialog extends JDialog {
 		});
 		controls.add(buttonConfirm);
 
-		JButton buttonCancel = new JButton("Cancel");
+		JButton buttonCancel = new JButton(Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -162,7 +163,7 @@ public class ExportDialog extends JDialog {
 		cont.add(label);
 		input.setValue(initialValue);
 		input.setHorizontalAlignment(JFormattedTextField.RIGHT);
-		input.addPropertyChangeListener("value", pcl);
+		input.addPropertyChangeListener("value", pcl); //$NON-NLS-1$
 		cont.add(input);
 		label.setLabelFor(input);
 	}

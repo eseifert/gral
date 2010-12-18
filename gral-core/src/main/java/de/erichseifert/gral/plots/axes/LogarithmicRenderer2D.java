@@ -160,7 +160,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		if ((axis.getMin().doubleValue() < 0.0)
 				|| (axis.getMax().doubleValue() < 0.0)) {
 			throw new IllegalStateException(
-					"Axis bounds must be greater than or equal to zero.");
+					"Axis bounds must be greater than or equal to zero."); //$NON-NLS-1$
 		}
 	}
 

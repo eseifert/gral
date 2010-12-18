@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -54,7 +55,8 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		Enumeration<URL> propFiles = null;
 		propFiles = getClass().getClassLoader().getResources(propFileName);
 		if (!propFiles.hasMoreElements()) {
-			throw new IOException("Property file not found: " + propFileName);
+			throw new IOException(MessageFormat.format(
+					"Property file not found: {0}", propFileName)); //$NON-NLS-1$
 		}
 		Properties props = new Properties();
 		while (propFiles.hasMoreElements()) {
@@ -88,7 +90,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	public IOCapabilities getCapabilities(String mimeType) {
 		Class<? extends T> clazz = entries.get(mimeType);
 		try {
-			Method capabilitiesGetter = clazz.getMethod("getCapabilities");
+			Method capabilitiesGetter = clazz.getMethod("getCapabilities"); //$NON-NLS-1$
 			Set<IOCapabilities> capabilities =
 				(Set<IOCapabilities>) capabilitiesGetter.invoke(clazz);
 			for (IOCapabilities c : capabilities) {

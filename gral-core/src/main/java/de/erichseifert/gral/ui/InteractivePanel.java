@@ -47,6 +47,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
@@ -61,6 +62,7 @@ import de.erichseifert.gral.plots.PlotNavigator;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.util.Messages;
 
 
 /**
@@ -105,6 +107,16 @@ public class InteractivePanel extends DrawablePanel
 
 	/** Popup menu. */
 	private final JPopupMenu menu;
+	/** Menu item for zooming in. */
+	private final JMenuItem zoomIn;
+	/** Menu item for zooming out. */
+	private final JMenuItem zoomOut;
+	/** Menu item for restoring original view. */
+	private final JMenuItem resetView;
+	/** Menu item for exporting the current view as image. */
+	private final JMenuItem exportImage;
+	/** Menu item for printing the current view. */
+	private final JMenuItem print;
 
 	/** Chooser for image export. */
 	private final JFileChooser exportImageChooser;
@@ -149,25 +161,27 @@ public class InteractivePanel extends DrawablePanel
 		List<IOCapabilities> exportFormats = DrawableWriterFactory.getInstance()
 			.getCapabilities();
 		exportImageChooser = new ExportChooser(true, exportFormats);
-		exportImageChooser.setDialogTitle("Export image");
+		exportImageChooser.setDialogTitle(Messages.getString("InteractivePanel.exportImageTitle")); //$NON-NLS-1$
 
 		menu = new JPopupMenu();
 
-		menu.add(new JMenuItem(new AbstractAction("Zoom in") {
+		zoomIn = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(1);
 			}
-		}));
+		});
+		menu.add(zoomIn);
 
-		menu.add(new JMenuItem(new AbstractAction("Zoom out") {
+		zoomOut = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(-1);
 			}
-		}));
+		});
+		menu.add(zoomOut);
 
-		menu.add(new JMenuItem(new AbstractAction("Reset view") {
+		resetView = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.resetView")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
@@ -175,36 +189,56 @@ public class InteractivePanel extends DrawablePanel
 					repaint();
 				}
 			}
-		}));
+		});
+		menu.add(resetView);
 
 		menu.addSeparator();
 
-		menu.add(new JMenuItem(new AbstractAction("Export image...") {
+		exportImage = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.exportImage")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
 						InteractivePanel.this);
+				// If the user aborted we can stop
 				if (ret != JFileChooser.APPROVE_OPTION) {
 					return;
 				}
+				// If the user didn't select a file we can stop
+				File file = exportImageChooser.getSelectedFile();
+				if (file == null) {
+					return;
+				}
+				// If the selected an existing file we ask for permission
+				// to overwrite it
+				else if (file.exists()) {
+					int retOverwrite = JOptionPane.showConfirmDialog(
+						InteractivePanel.this,
+						Messages.getString("InteractivePanel.exportExistsWarning"), //$NON-NLS-1$
+						Messages.getString("InteractivePanel.warning"), //$NON-NLS-1$
+						JOptionPane.YES_NO_OPTION
+					);
+					if (retOverwrite == JOptionPane.NO_OPTION) {
+						return;
+					}
+				}
+
+				// Export current view to the selected file
 				Drawable d = getDrawable();
 				ExportDialog ed = new ExportDialog(InteractivePanel.this, d);
 				ed.setVisible(true);
-				if (ed.getUserAction().equals(
+				if (!ed.getUserAction().equals(
 						ExportDialog.UserAction.APPROVE)) {
-					File file = exportImageChooser.getSelectedFile();
-					if (exportImageChooser.getSelectedFile() == null) {
-						return;
-					}
-					DrawableWriterFilter filter = (DrawableWriterFilter)
-						exportImageChooser.getFileFilter();
-					export(d, filter.getWriterCapabilities().getMimeType(),
-						file, ed.getDocumentBounds());
+					return;
 				}
+				DrawableWriterFilter filter = (DrawableWriterFilter)
+					exportImageChooser.getFileFilter();
+				export(d, filter.getWriterCapabilities().getMimeType(),
+					file, ed.getDocumentBounds());
 			}
-		}));
+		});
+		menu.add(exportImage);
 
-		menu.add(new JMenuItem(new AbstractAction("Print...") {
+		print = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.print")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {
@@ -216,7 +250,8 @@ public class InteractivePanel extends DrawablePanel
 					}
 				}
 			}
-		}));
+		});
+		menu.add(print);
 
 		addMouseListener(new PopupListener(menu));
 
@@ -237,6 +272,9 @@ public class InteractivePanel extends DrawablePanel
 	 *        Positive values zoom in, negative values zoom out.
 	 */
 	private void zoom(double times) {
+		if (!isZoomable()) {
+			return;
+		}
 		double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, times);
 		navigator.setZoom(zoomNew);
 		repaint();
@@ -488,6 +526,10 @@ public class InteractivePanel extends DrawablePanel
 			addMouseListener(zoomListener);
 			addMouseWheelListener(zoomListener);
 		}
+
+		zoomIn.setEnabled(isZoomable());
+		zoomOut.setEnabled(isZoomable());
+		resetView.setEnabled(isZoomable() && isPannable());
 	}
 
 	/**
@@ -523,6 +565,8 @@ public class InteractivePanel extends DrawablePanel
 			addMouseListener(panListener);
 			addMouseMotionListener(panListener);
 		}
+
+		resetView.setEnabled(isZoomable() && isPannable());
 	}
 
 	/**

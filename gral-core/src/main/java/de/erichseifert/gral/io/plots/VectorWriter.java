@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import de.erichseifert.gral.DrawingContext.Quality;
 import de.erichseifert.gral.DrawingContext.Target;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
+import de.erichseifert.gral.util.Messages;
 
 /**
  * Class that stores <code>Drawable</code> instances as vector graphics.
@@ -53,45 +55,45 @@ public class VectorWriter extends IOCapabilitiesStorage
 	private static final Map<String, Class<?>> graphics;
 	/** Java package that contains the VecorGraphics2D package. */
 	private static final String VECTORGRAPHICS2D_PACKAGE =
-		"de.erichseifert.vectorgraphics2d";
+		"de.erichseifert.vectorgraphics2d"; //$NON-NLS-1$
 
 	static {
 		graphics = new HashMap<String, Class<?>>();
 		Class<?> cls;
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".EPSGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".EPSGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
-				"EPS",
-				"Encapsulated PostScript",
-				"application/postscript",
-				new String[] {"eps", "epsf", "epsi"}
+				"EPS", //$NON-NLS-1$
+				Messages.getString("ImageIO.epsDescription"), //$NON-NLS-1$
+				"application/postscript", //$NON-NLS-1$
+				new String[] {"eps", "epsf", "epsi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			));
-			graphics.put("application/postscript", cls);
+			graphics.put("application/postscript", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".PDFGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".PDFGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
-				"PDF",
-				"Portable Document Format",
-				"application/pdf",
-				new String[] {"pdf"}
+				"PDF", //$NON-NLS-1$
+				Messages.getString("ImageIO.pdfDescription"), //$NON-NLS-1$
+				"application/pdf", //$NON-NLS-1$
+				new String[] {"pdf"} //$NON-NLS-1$
 			));
-			graphics.put("application/pdf", cls);
+			graphics.put("application/pdf", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".SVGGraphics2D");
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".SVGGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
-				"SVG",
-				"Scalable Vector Graphics",
-				"image/svg+xml",
-				new String[] {"svg", "svgz"}
+				"SVG", //$NON-NLS-1$
+				Messages.getString("ImageIO.svgDescription"), //$NON-NLS-1$
+				"image/svg+xml", //$NON-NLS-1$
+				new String[] {"svg", "svgz"} //$NON-NLS-1$ //$NON-NLS-2$
 			));
-			graphics.put("image/svg+xml", cls);
+			graphics.put("image/svg+xml", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
 		}
 	}
@@ -115,8 +117,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 		}
 		graphicsClass = gfxCls;
 		if (graphicsClass == null) {
-			throw new IllegalArgumentException(
-					"Unsupported file format: " + mimeType);
+			throw new IllegalArgumentException(MessageFormat.format(
+					"Unsupported file format: {0}", mimeType)); //$NON-NLS-1$
 		}
 	}
 
@@ -142,7 +144,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			DrawingContext context =
 				new DrawingContext(g, Quality.QUALITY, Target.VECTOR);
 			d.draw(context);
-			byte[] data = (byte[]) graphicsClass.getMethod("getBytes")
+			byte[] data = (byte[]) graphicsClass.getMethod("getBytes") //$NON-NLS-1$
 				.invoke(g);
 			destination.write(data);
 			d.setBounds(boundsOld);

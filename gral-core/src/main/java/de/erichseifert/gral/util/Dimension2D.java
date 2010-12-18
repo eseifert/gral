@@ -21,6 +21,8 @@
 
 package de.erichseifert.gral.util;
 
+import java.util.Locale;
+
 /**
  * Class that stores the horizontal and vertical extent of an object.
  * <p>Please use this instead of java.awt.geom.Dimension2D, as the java class
@@ -78,8 +80,9 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 
 		@Override
 		public String toString() {
-			return getClass().getName() +
-				"[width=" + width + ", height=" + height + "]";
+			return String.format(Locale.US,
+					"%s[width=%f, height=%f]", //$NON-NLS-1$
+					getClass().getName(), width, height);
 		}
 
 		@Override

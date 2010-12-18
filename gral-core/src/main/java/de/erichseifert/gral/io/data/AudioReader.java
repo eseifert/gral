@@ -31,6 +31,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.util.Messages;
 
 
 /**
@@ -39,10 +40,10 @@ import de.erichseifert.gral.io.IOCapabilities;
 public class AudioReader extends AbstractDataReader {
 	static {
 		addCapabilities(new IOCapabilities(
-			"WAV",
-			"RIFF WAVE",
-			"audio/wav",
-			new String[] {"wav"}
+			"WAV", //$NON-NLS-1$
+			Messages.getString("DataIO.wavDescription"), //$NON-NLS-1$
+			"audio/wav", //$NON-NLS-1$
+			new String[] {"wav"} //$NON-NLS-1$
 		));
 	}
 
@@ -52,8 +53,8 @@ public class AudioReader extends AbstractDataReader {
 	 */
 	public AudioReader(String mimeType) {
 		super(mimeType);
-		setDefault("factor", 1.0);
-		setDefault("offset", 0.0);
+		setDefault("factor", 1.0); //$NON-NLS-1$
+		setDefault("offset", 0.0); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,8 +71,8 @@ public class AudioReader extends AbstractDataReader {
 		// FIXME Should the types parameter be used?
 		DataTable data = new DataTable(Double.class);
 
-		double factor = this.<Number>getSetting("factor").doubleValue();
-		double offset = this.<Number>getSetting("offset").doubleValue();
+		double factor = this.<Number>getSetting("factor").doubleValue(); //$NON-NLS-1$
+		double offset = this.<Number>getSetting("offset").doubleValue(); //$NON-NLS-1$
 
 		int sampleSize = audio.getFormat().getSampleSizeInBits();
 		byte[] samples = new byte[sampleSize/8];

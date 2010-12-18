@@ -29,12 +29,13 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that provides Drawables, which are sized accordingly to the data.
+ * Class that provides <code>Drawable</code>s, which are sized accordingly to
+ * the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
-	public static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column");
+	public static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column"); //$NON-NLS-1$
 
 	/**
 	 * Creates a new SizeablePointRenderer object.

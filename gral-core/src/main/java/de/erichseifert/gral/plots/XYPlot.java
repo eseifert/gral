@@ -62,17 +62,27 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that displays data in an two dimensional coordinate system.
+ * <p>Class that displays data in an two dimensional coordinate system
+ * (x-y plot). It also serves as a base class for many other plot types.</p>
+ * <p>To create a new <code>XYPlot</code> simply create a new instance
+ * using one or more data sources. Example:</p>
+ * <pre>
+ * DataTable data = new DataTable(Integer.class, Integer.class);
+ * data.add( 1, 2);
+ * data.add(-5, 0);
+ *
+ * XYPlot plot = new XYPlot(data);
+ * </pre>
  */
 public class XYPlot extends Plot  {
 	/** Key for specifying the x-axis of an xy-plot. */
-	public static String AXIS_X = "x";
+	public static String AXIS_X = "x"; //$NON-NLS-1$
 	/** Key for specifying the secondary x-axis of an xy-plot. */
-	public static String AXIS_X2 = "x2";
+	public static String AXIS_X2 = "x2"; //$NON-NLS-1$
 	/** Key for specifying the y-axis of an xy-plot. */
-	public static String AXIS_Y = "y";
+	public static String AXIS_Y = "y"; //$NON-NLS-1$
 	/** Key for specifying the secondary y-axis of an xy-plot. */
-	public static String AXIS_Y2 = "y2";
+	public static String AXIS_Y2 = "y2"; //$NON-NLS-1$
 
 	/** Minimum value in x direction. */
 	private double minX;
@@ -96,25 +106,25 @@ public class XYPlot extends Plot  {
 	public static class XYPlotArea2D extends PlotArea {
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether horizontal grid lines at major ticks along x-axis are drawn. */
-		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x");
+		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether vertical grid lines at major ticks along y-axis are drawn. */
-		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y");
+		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of major ticks. */
 		public static final Key GRID_MAJOR_COLOR =
-			new Key("xyplot.grid.major.color");
+			new Key("xyplot.grid.major.color"); //$NON-NLS-1$
 
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether horizontal grid lines at minor ticks along x-axis are drawn. */
-		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x");
+		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether  vertical grid lines at minor ticks along y-axis are drawn. */
-		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y");
+		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of minor ticks. */
 		public static final Key GRID_MINOR_COLOR =
-			new Key("xyplot.grid.minor.color");
+			new Key("xyplot.grid.minor.color"); //$NON-NLS-1$
 
 		/** x-y plot this plot area is associated to. */
 		private final XYPlot plot;
@@ -478,7 +488,8 @@ public class XYPlot extends Plot  {
 			if (axisYRenderer != null) {
 				Axis axisY = getAxis(AXIS_Y);
 				Double axisXIntersection =
-					axisXRenderer.getSetting(AxisRenderer.INTERSECTION);
+					axisXRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
+					.doubleValue();
 				axisXPos = axisYRenderer.getPosition(
 						axisY, axisXIntersection, false, false);
 			}
@@ -498,7 +509,8 @@ public class XYPlot extends Plot  {
 			if (axisXRenderer != null) {
 				Axis axisX = getAxis(AXIS_X);
 				Double axisYIntersection =
-					axisYRenderer.getSetting(AxisRenderer.INTERSECTION);
+					axisYRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
+					.doubleValue();
 				axisYPos = axisXRenderer.getPosition(
 						axisX, axisYIntersection, false, false);
 			}

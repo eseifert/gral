@@ -46,7 +46,7 @@ import de.erichseifert.gral.util.Settings.Key;
 public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	/** Key for specifying the {@link java.awt.Stroke} instance that is used
 	draw the lines from the data points to the axis. */
-	public static final Key STROKE = new Key("linearea.stroke");
+	public static final Key STROKE = new Key("linearea.stroke"); //$NON-NLS-1$
 
 	/**
 	 * Standard constructor that initializes a new instance.

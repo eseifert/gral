@@ -41,12 +41,23 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that displays data in a bar plot.
+ * <p>Class that displays data in a bar plot.</p>
+ * <p>To create a new <code>BarPlot</code> simply create a new instance
+ * using one or more data sources. Example:</p>
+ * <pre>
+ * DataTable data = new DataTable(Integer.class, Double.class);
+ * data.add(2010, -5.00);
+ * data.add(2011,  3.25);
+ * data.add(2012, -0.50);
+ * data.add(2012,  4.00);
+ *
+ * BarPlot plot = new BarPlot(data);
+ * </pre>
  */
 public class BarPlot extends XYPlot {
 	/** Key for specifying a {@link java.lang.Number} value for the relative
 	width of the bars. */
-	public static final Key BAR_WIDTH = new Key("barplot.barWidth");
+	public static final Key BAR_WIDTH = new Key("barplot.barWidth"); //$NON-NLS-1$
 
 	/**
 	 * Class that renders a bar in a bar plot.

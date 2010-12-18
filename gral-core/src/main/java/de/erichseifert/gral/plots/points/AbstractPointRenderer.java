@@ -49,7 +49,9 @@ import de.erichseifert.gral.util.Settings.Key;
 /**
  * Abstract class implementing functions for the administration of settings.
  */
-public abstract class AbstractPointRenderer implements PointRenderer, SettingsListener {
+public abstract class AbstractPointRenderer
+		implements PointRenderer, SettingsListener {
+	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
 
 	/**

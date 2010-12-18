@@ -44,29 +44,40 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * Class that displays data in a pie plot.
+ * <p>Class that displays data as segments of a pie plot. Empty segments are
+ * displayed for negative values.</p>
+ * <p>To create a new <code>PiePlot</code> simply create a new instance
+ * using one or more data sources. Example:</p>
+ * <pre>
+ * DataTable data = new DataTable(Integer.class, Double.class);
+ * data.add(2005, -23.50);
+ * data.add(2006, 100.00);
+ * data.add(2007,  60.25);
+ *
+ * PiePlot plot = new PiePlot(data);
+ * </pre>
  */
 public class PiePlot extends Plot implements DataListener {
 	/** Key for specifying the radius of the pie relative to the
 	plot area size. */
-	public static final Key RADIUS = new Key("pieplot.radius");
+	public static final Key RADIUS = new Key("pieplot.radius"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the inner
 	radius of the pie relative to the outer radius. */
-	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner");
+	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner"); //$NON-NLS-1$
 	/** Key for specifying an instance of
 	{@link de.erichseifert.gral.plots.colors.ColorMapper} used for coloring
 	the segments. */
-	public static final Key COLORS = new Key("pieplot.colorlist");
+	public static final Key COLORS = new Key("pieplot.colorlist"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Boolean} value which decides
 	whether the segments should be ordered clockwise (<code>true</code>) or
 	counterclockwise (<code>false</code>). */
-	public static final Key CLOCKWISE = new Key("pieplot.clockwise");
+	public static final Key CLOCKWISE = new Key("pieplot.clockwise"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the starting
 	angle of the first segment in degrees. */
-	public static final Key START = new Key("pieplot.start");
+	public static final Key START = new Key("pieplot.start"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the width of
 	gaps between the segments. */
-	public static final Key GAP = new Key("pieplot.gap");
+	public static final Key GAP = new Key("pieplot.gap"); //$NON-NLS-1$
 
 	/**
 	 * Class that represents the drawing area of a <code>PiePlot</code>.

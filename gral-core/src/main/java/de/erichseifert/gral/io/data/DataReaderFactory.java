@@ -24,6 +24,7 @@ package de.erichseifert.gral.io.data;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 
 import de.erichseifert.gral.io.AbstractIOFactory;
 
@@ -41,7 +42,7 @@ public final class DataReaderFactory extends AbstractIOFactory<DataReader> {
 	 * @throws IOException if the properties file could not be found.
 	 */
 	private DataReaderFactory() throws IOException {
-		super("datareaders.properties");
+		super("datareaders.properties"); //$NON-NLS-1$
 	}
 
 	/**
@@ -91,8 +92,8 @@ public final class DataReaderFactory extends AbstractIOFactory<DataReader> {
 		}
 
 		if (reader == null) {
-			throw new IllegalArgumentException(
-					"Unsupported MIME type: " + mimeType);
+			throw new IllegalArgumentException(MessageFormat.format(
+					"Unsupported MIME type: {0}", mimeType)); //$NON-NLS-1$
 		}
 
 		return reader;

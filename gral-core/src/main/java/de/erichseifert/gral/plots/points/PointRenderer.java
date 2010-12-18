@@ -33,48 +33,48 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * An interface providing functions for rendering points in a diagram.
- * It defines methods for:
+ * <p>An interface providing functions for rendering points in a plot.
+ * It defines methods for:</p>
  * <ul>
- * <li>Retrieving the point of a certain cell in a DataTable</li>
- * <li>Getting and setting the points color</li>
- * <li>Getting and setting the bounds of the points</li>
+ *   <li>Retrieving the point of a certain cell in a DataTable</li>
+ *   <li>Getting and setting the points color</li>
+ *   <li>Getting and setting the bounds of the points</li>
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the point. */
-	static final Key SHAPE = new Key("point");
+	static final Key SHAPE = new Key("point"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the point shape. */
-	static final Key COLOR = new Key("point.color");
+	static final Key COLOR = new Key("point.color"); //$NON-NLS-1$
 
 	/** Key for specifying whether the data value of a point is displayed or
 	not. */
-	static final Key VALUE_DISPLAYED = new Key("point.value.displayed");
+	static final Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
-	static final Key VALUE_FORMAT = new Key("point.value.format");
+	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.lang.Number} value that positions the
 	value horizontally. */
-	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x");
+	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.lang.Number} value that positions the
 	value vertically. */
-	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y");
+	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
-	static final Key VALUE_COLOR = new Key("point.value.paint");
+	static final Key VALUE_COLOR = new Key("point.value.paint"); //$NON-NLS-1$
 
 	/** Key for specifying whether the error value is displayed. */
-	static final Key ERROR_DISPLAYED = new Key("point.error.displayed");
+	static final Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
-	static final Key ERROR_COLOR = new Key("point.error.color");
+	static final Key ERROR_COLOR = new Key("point.error.color"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Shape} instance defining the
 	form of the points at the end of the error bars. */
-	static final Key ERROR_SHAPE = new Key("point.error.shape");
+	static final Key ERROR_SHAPE = new Key("point.error.shape"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance defining the
 	error bars. */
-	static final Key ERROR_STROKE = new Key("point.error.stroke");
+	static final Key ERROR_STROKE = new Key("point.error.stroke"); //$NON-NLS-1$
 
 	/**
 	 * Returns the graphical representation to be drawn for the specified data

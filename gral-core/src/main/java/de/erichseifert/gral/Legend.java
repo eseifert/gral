@@ -44,7 +44,7 @@ import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * <p>Abstract class that serves as a basic for any legend in a plot.
- * It provides an inner Item class which is responsible for
+ * It provides an inner <code>Item</code> class which is responsible for
  * displaying a specific data source.</p>
  * <p>The functionality includes:</p>
  * <ul>
@@ -56,20 +56,20 @@ public abstract class Legend extends DrawableContainer
 		implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the background. */
-	public static final Key BACKGROUND = new Key("legend.background");
+	public static final Key BACKGROUND = new Key("legend.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	 paint the border of the legend. */
-	public static final Key BORDER = new Key("legend.border");
+	public static final Key BORDER = new Key("legend.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 fill the border of the legend. */
-	public static final Key COLOR = new Key("legend.color");
+	public static final Key COLOR = new Key("legend.color"); //$NON-NLS-1$
 	/** Key for specifying the orientation of the legend using a
 	 {@link de.erichseifert.gral.DrawableConstants.Orientation} value. */
-	public static final Key ORIENTATION = new Key("legend.orientation");
+	public static final Key ORIENTATION = new Key("legend.orientation"); //$NON-NLS-1$
 	/** Key for specifying the gap between items. */
-	public static final Key GAP = new Key("legend.gap");
+	public static final Key GAP = new Key("legend.gap"); //$NON-NLS-1$
 	/** Key for specifying the gap between items. */
-	public static final Key SYMBOL_SIZE = new Key("legend.symbol.size");
+	public static final Key SYMBOL_SIZE = new Key("legend.symbol.size"); //$NON-NLS-1$
 
 	/** Settings stored as pairs (key, value). */
 	private final Settings settings;

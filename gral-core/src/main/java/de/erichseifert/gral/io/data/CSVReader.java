@@ -27,12 +27,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.util.Messages;
 
 
 /**
@@ -43,17 +45,17 @@ import de.erichseifert.gral.io.IOCapabilities;
 public class CSVReader extends AbstractDataReader {
 	static {
 		addCapabilities(new IOCapabilities(
-			"CSV",
-			"Comma separated values",
-			"text/csv",
-			new String[] {"csv", "txt"}
+			"CSV", //$NON-NLS-1$
+			Messages.getString("DataIO.csvDescription"), //$NON-NLS-1$
+			"text/csv", //$NON-NLS-1$
+			new String[] {"csv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"TSV",
-			"Tab separated values",
-			"text/tab-separated-values",
-			new String[] {"tsv", "txt"}
+			"TSV", //$NON-NLS-1$
+			Messages.getString("DataIO.tsvDescription"), //$NON-NLS-1$
+			"text/tab-separated-values", //$NON-NLS-1$
+			new String[] {"tsv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
 		));
 	}
 
@@ -63,7 +65,7 @@ public class CSVReader extends AbstractDataReader {
 	 */
 	public CSVReader(String mimeType) {
 		super(mimeType);
-		setDefault("separator", ";");
+		setDefault("separator", ";"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class CSVReader extends AbstractDataReader {
 			}
 		}
 
-		String separatorPattern = getSetting("separator");
+		String separatorPattern = getSetting("separator"); //$NON-NLS-1$
 		DataTable data = new DataTable(types);
 		BufferedReader reader =
 			new BufferedReader(new InputStreamReader(input));
@@ -89,9 +91,9 @@ public class CSVReader extends AbstractDataReader {
 		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
 			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
-				throw new IllegalArgumentException(
-						"Column count in file doesn't match; got "
-						+ cols.length + ", but expected " + types.length + ".");
+				throw new IllegalArgumentException(MessageFormat.format(
+						"Column count in file doesn't match; got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
+						cols.length, types.length));
 			}
 			Number[] row = new Number[types.length];
 			for (int i = 0; i < types.length; i++) {
@@ -101,14 +103,13 @@ public class CSVReader extends AbstractDataReader {
 				} catch (IllegalArgumentException e) {
 					// TODO Handle exception
 				} catch (IllegalAccessException e) {
-					throw new RuntimeException(
-							"Couldn't access method for parsing data type "
-							+ types[i].getSimpleName() + " in column " + i);
+					throw new RuntimeException(MessageFormat.format(
+							"Couldn't access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
+							types[i].getSimpleName(), i));
 				} catch (InvocationTargetException e) {
-					throw new IOException(
-							"Type mismatch in column " + i + ": got \""
-							+ cols[i] + "\", but expected "
-							+ types[i].getSimpleName() + " value.");
+					throw new IOException(MessageFormat.format(
+							"Type mismatch in column {0,number,integer}: got \"{1}\", but expected \"{2}\" value.", //$NON-NLS-1$
+							i, cols[i], types[i].getSimpleName()));
 				}
 			}
 			data.add(row);
@@ -124,7 +125,7 @@ public class CSVReader extends AbstractDataReader {
 	private static Method getParseMethod(Class<?> c) {
 		Method parse = null;
 		for (Method m : c.getMethods()) {
-			boolean isStatic = m.toString().indexOf("static") >= 0;
+			boolean isStatic = m.toString().indexOf("static") >= 0; //$NON-NLS-1$
 			if (!isStatic) {
 				continue;
 			}
@@ -134,7 +135,7 @@ public class CSVReader extends AbstractDataReader {
 			if (!hasStringParameter) {
 				continue;
 			}
-			boolean parseName = m.getName().startsWith("parse");
+			boolean parseName = m.getName().startsWith("parse"); //$NON-NLS-1$
 			if (!parseName) {
 				continue;
 			}

@@ -34,7 +34,9 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that controls the zoom of a Plot.
+ * Class that controls the zoom and panning of a plot. Zooming and panning of
+ * an arbitrary number of axes is supported. This can be used for interactive
+ * changes to the axes of plot.
  */
 public class PlotNavigator {
 	/** Plot that will be navigated. */

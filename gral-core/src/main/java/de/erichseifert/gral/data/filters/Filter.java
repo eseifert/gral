@@ -173,7 +173,7 @@ public abstract class Filter extends AbstractDataSource
 		int colPos = getIndex(col);
 		if (colPos < 0) {
 			throw new IllegalArgumentException(
-					"Can't set value in unfiltered column.");
+					"Can't set value in unfiltered column."); //$NON-NLS-1$
 		}
 		rows.get(row)[colPos] = value;
 		notifyDataChanged();

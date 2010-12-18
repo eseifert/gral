@@ -154,12 +154,12 @@ public class EdgeLayout implements Layout {
 
 		layoutComponent(center,
 			xCenter, yCenter,
-			bounds.getWidth() -
-				insets.getLeft() - widthWest - widthEast -
-				insets.getRight() - hgapEast - hgapWest,
-			bounds.getHeight() -
-				insets.getTop() - heightNorth - heightSouth -
-				insets.getBottom() - vgapNorth - vgapSouth
+				bounds.getWidth()
+					- insets.getLeft() - widthWest - widthEast
+					- insets.getRight() - hgapEast - hgapWest,
+				bounds.getHeight()
+					- insets.getTop() - heightNorth - heightSouth
+					- insets.getBottom() - vgapNorth - vgapSouth
 		);
 	}
 

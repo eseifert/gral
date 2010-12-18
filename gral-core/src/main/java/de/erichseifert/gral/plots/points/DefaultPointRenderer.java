@@ -34,7 +34,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that creates Drawables for a row of data.
+ * Class that creates <code>Drawable</code>s for a row of data.
  */
 public class DefaultPointRenderer extends AbstractPointRenderer {
 

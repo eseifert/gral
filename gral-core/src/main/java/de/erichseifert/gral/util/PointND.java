@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import java.awt.geom.Point2D;
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 /**
@@ -79,10 +80,9 @@ public class PointND <T extends Number> {
 	 */
 	public void setLocation(T... coordinates) {
 		if (getDimensions() != coordinates.length) {
-			throw new IllegalArgumentException(
-					"Wrong number of dimensions: You have to provide " +
-					getDimensions() + " values for this point (" +
-					coordinates.length + " given)");
+			throw new IllegalArgumentException(MessageFormat.format(
+				"Wrong number of dimensions: You have to provide {0,number,integer} values for this point ({1,number,integer} given).", //$NON-NLS-1$
+				getDimensions(), coordinates.length));
 		}
 		System.arraycopy(coordinates, 0, this.coordinates, 0, getDimensions());
 	}
@@ -96,8 +96,8 @@ public class PointND <T extends Number> {
 	public Point2D getPoint2D(int dimX, int dimY) {
 		if (getDimensions() < 2) {
 			throw new ArrayIndexOutOfBoundsException(
-					"Can't create two-dimensional point from " +
-					getDimensions() + "D data.");
+					"Can't create two-dimensional point from " + //$NON-NLS-1$
+					getDimensions() + "D data."); //$NON-NLS-1$
 		}
 		return new Point2D.Double(
 				get(dimX).doubleValue(), get(dimY).doubleValue());

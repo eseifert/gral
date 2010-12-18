@@ -21,6 +21,7 @@
 
 package de.erichseifert.gral.data.statistics;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,9 +103,9 @@ public class Histogram1D extends Histogram {
 		int count = (orientation == Orientation.VERTICAL)
 				? getData().getColumnCount() : getData().getRowCount();
 		if (breaks.length != count) {
-			throw new IllegalArgumentException(
-					"Invalid number of breaks: got " + breaks.length
-					+ ", expected " + count + ".");
+			throw new IllegalArgumentException(MessageFormat.format(
+				"Invalid number of breaks: got {0,number,integer}, expected {1,number,integer}.", //$NON-NLS-1$
+				breaks.length, count));
 		}
 		for (Number[] brk : breaks) {
 			this.breaks.add(brk);

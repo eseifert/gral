@@ -27,19 +27,37 @@ package de.erichseifert.gral.data;
  */
 public class EnumeratedData extends AbstractDataSource {
 	private final DataSource original;
+	private final double offset;
+	private final double steps;
 
 	/**
-	 * Initializes a new data source with an original data source.
+	 * Initializes a new data source based on an original data source which
+	 * will contain an additional column which enumerates all rows. The
+	 * enumeration will start at a specified offset and will have a specified
+	 * step size.
+	 * @param original Original data source.
+	 * @param offset Offset of enumeration
+	 * @param steps Scaling of enumeration
+	 */
+	public EnumeratedData(DataSource original, double offset, double steps) {
+		this.original = original;
+		this.offset = offset;
+		this.steps = steps;
+	}
+
+	/**
+	 * Initializes a new data source based on an original data source which
+	 * will contain an additional column which enumerates all rows.
 	 * @param original Original data source.
 	 */
 	public EnumeratedData(DataSource original) {
-		this.original = original;
+		this(original, 0, 1);
 	}
 
 	@Override
 	public Number get(int col, int row) {
 		if (col < 1) {
-			return row;
+			return row*steps + offset;
 		}
 		return original.get(col - 1, row);
 	}

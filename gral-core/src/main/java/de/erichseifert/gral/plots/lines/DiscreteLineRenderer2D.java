@@ -43,11 +43,11 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	{@link de.erichseifert.gral.DrawableConstants.Orientation} which indicates
 	the primary direction of the "steps". */
 	public static final Key ASCENT_DIRECTION =
-		new Key("line.discrete.ascentDirection");
+		new Key("line.discrete.ascentDirection"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the relative
 	distance between two points, i.e. the "step" of a stair. */
 	public static final Key ASCENDING_POINT =
-		new Key("line.discrete.ascendingPoint");
+		new Key("line.discrete.ascendingPoint"); //$NON-NLS-1$
 
 	/**
 	 * Initializes a new <code>DiscreteLineRenderer2D</code> instance with

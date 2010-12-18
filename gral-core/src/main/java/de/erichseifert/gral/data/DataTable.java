@@ -20,6 +20,7 @@
  */
 
 package de.erichseifert.gral.data;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -82,18 +83,18 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void add(Collection<? extends Number> values) {
 		if (values.size() != getColumnCount()) {
-			throw new IllegalArgumentException(
-					"Wrong number of columns! Expected " + types.length
-					+ ", got " + values.size());
+			throw new IllegalArgumentException(MessageFormat.format(
+					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
+					types.length, values.size()));
 		}
 		int i = 0;
 		Number[] row = new Number[values.size()];
 		for (Number value : values) {
 			if ((value != null)
 					&& !(types[i].isAssignableFrom(value.getClass()))) {
-				throw new IllegalArgumentException(
-						"Wrong column type! Expected " + types[i] + ", got "
-						+ value.getClass());
+				throw new IllegalArgumentException(MessageFormat.format(
+						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
+						types[i], value.getClass()));
 			}
 			row[i++] = value;
 		}

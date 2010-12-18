@@ -39,36 +39,36 @@ import de.erichseifert.gral.util.SortedList;
  */
 public class Statistics implements DataListener {
 	/** Key for specifying the sum of all values. */
-	public static final String SUM = "sum";
+	public static final String SUM = "sum"; //$NON-NLS-1$
 	/** Key for specifying the sum of all value squares. */
-	public static final String SUM2 = "sum2";
+	public static final String SUM2 = "sum2"; //$NON-NLS-1$
 	/** Key for specifying the sum of all value cubics. */
-	public static final String SUM3 = "sum3";
+	public static final String SUM3 = "sum3"; //$NON-NLS-1$
 	/** Key for specifying the sum of all value quads. */
-	public static final String SUM4 = "sum4";
+	public static final String SUM4 = "sum4"; //$NON-NLS-1$
 	/** Key for specifying the arithmetic mean of all values. */
-	public static final String MEAN = "mean";
+	public static final String MEAN = "mean"; //$NON-NLS-1$
 	/** Key for specifying the minimum, i.e. the smallest value. */
-	public static final String MIN = "min";
+	public static final String MIN = "min"; //$NON-NLS-1$
 	/** Key for specifying the maximum, i.e. the largest value. */
-	public static final String MAX = "max";
+	public static final String MAX = "max"; //$NON-NLS-1$
 	/** Key for specifying the total number of elements.
 	This is the zeroth central moment: E((x - µ)^0) */
-	public static final String N = "n";
+	public static final String N = "n"; //$NON-NLS-1$
 	/** Key for specifying the expected value.
 	This is the first central moment: E((x - E(x))^1) */
-	public static final String MEAN_DEVIATION = "mean deviation";
+	public static final String MEAN_DEVIATION = "mean deviation"; //$NON-NLS-1$
 	/** Key for specifying the variance.
 	This is the second central moment: E((x - E(x))^2) */
-	public static final String VARIANCE = "variance";
+	public static final String VARIANCE = "variance"; //$NON-NLS-1$
 	/** Key for specifying the skewness.
 	This is the third central moment: E((x - E(x))^3) */
-	public static final String SKEWNESS = "skewness";
+	public static final String SKEWNESS = "skewness"; //$NON-NLS-1$
 	/** Key for specifying the kurtosis.
 	This is the fourth central moment: E((x - E(x))^4) */
-	public static final String KURTOSIS = "kurtosis";
+	public static final String KURTOSIS = "kurtosis"; //$NON-NLS-1$
 	/** Key for specifying the median (or 50% quantile). */
-	public static final String MEDIAN = "median";
+	public static final String MEDIAN = "median"; //$NON-NLS-1$
 
 	/** Data values that are used to build statistical aggregates. */
 	private final DataSource data;
@@ -144,12 +144,12 @@ public class Statistics implements DataListener {
 		// Variance (second moment)
 		stats.put(VARIANCE, stats.get(SUM2) - mean*stats.get(SUM));
 		// Skewness (third moment)
-		stats.put(SKEWNESS, stats.get(SUM3) -
-				3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
+		stats.put(SKEWNESS, stats.get(SUM3)
+				- 3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
 		// Kurtosis (fourth moment)
-		stats.put(KURTOSIS, stats.get(SUM4) -
-				4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2) -
-				3.0*mean2*mean*stats.get(SUM));
+		stats.put(KURTOSIS, stats.get(SUM4)
+				- 4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2)
+				- 3.0*mean2*mean*stats.get(SUM));
 	}
 
 	/**

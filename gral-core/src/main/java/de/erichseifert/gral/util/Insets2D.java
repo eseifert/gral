@@ -21,6 +21,8 @@
 
 package de.erichseifert.gral.util;
 
+import java.util.Locale;
+
 /**
  * Abstract class that stores insets for all four directions.
  * <p>Please use this instead of java.awt.Insets, as the java class does not
@@ -170,9 +172,9 @@ public abstract class Insets2D {
 
 		@Override
 		public String toString() {
-			return getClass().getName() +
-				"[top=" + top + ", left=" + left +
-				", bottom=" + bottom + ", right=" + right + "]";
+			return String.format(Locale.US,
+				"%s[top=%f, left=%f, bottom=%f, right=%f]", //$NON-NLS-1$
+				getClass().getName(), top, left, bottom, right);
 		}
 
 		@Override

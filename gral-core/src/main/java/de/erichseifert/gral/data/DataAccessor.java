@@ -21,7 +21,9 @@
 
 package de.erichseifert.gral.data;
 
+import java.text.MessageFormat;
 import java.util.Iterator;
+import java.util.Locale;
 
 /**
  * Abstract base for classes that access a substructure of a data source, e.g.
@@ -98,7 +100,8 @@ public abstract class DataAccessor implements Iterable<Number> {
 
 	@Override
 	public String toString() {
-		return String.format("%s[source=%s,index=%d]",
+		return String.format(Locale.US,
+				"%s[source=%s,index=%d]", //$NON-NLS-1$
 				getClass().getName(), getSource(), getIndex());
 	}
 
@@ -113,9 +116,9 @@ public abstract class DataAccessor implements Iterable<Number> {
 			data = new Number[size()];
 		}
 		if (data.length != size()) {
-			throw new IllegalArgumentException(
-				"Array of size " + data.length + " does not match " + size()
-				+ " elements.");
+			throw new IllegalArgumentException(MessageFormat.format(
+				"Array of size {0,number,integer} does not match {1,number,integer} elements.", //$NON-NLS-1$
+				data.length, size()));
 		}
 		for (int i = 0; i < data.length; i++) {
 			data[i] = get(i);

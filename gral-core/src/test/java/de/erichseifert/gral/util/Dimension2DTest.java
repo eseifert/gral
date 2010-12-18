@@ -66,7 +66,7 @@ public class Dimension2DTest {
 	@Test
 	public void testToString() {
 		Dimension2D dim = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
-		assertEquals("de.erichseifert.gral.util.Dimension2D$Double[width=1.0, height=2.0]", dim.toString());
+		assertEquals("de.erichseifert.gral.util.Dimension2D$Double[width=1.000000, height=2.000000]", dim.toString());
 	}
 
 	@Test

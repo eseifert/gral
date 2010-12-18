@@ -27,6 +27,7 @@ import java.io.OutputStreamWriter;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.util.Messages;
 
 
 /**
@@ -37,17 +38,17 @@ import de.erichseifert.gral.io.IOCapabilities;
 public class CSVWriter extends AbstractDataWriter {
 	static {
 		addCapabilities(new IOCapabilities(
-			"CSV",
-			"Comma separated values",
-			"text/csv",
-			new String[] {"csv", "txt"}
+			"CSV", //$NON-NLS-1$
+			Messages.getString("DataIO.csvDescription"), //$NON-NLS-1$
+			"text/csv", //$NON-NLS-1$
+			new String[] {"csv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
 		));
 
 		addCapabilities(new IOCapabilities(
-			"TSV",
-			"Tab separated values",
-			"text/tab-separated-values",
-			new String[] {"tsv", "txt"}
+			"TSV", //$NON-NLS-1$
+			Messages.getString("DataIO.tsvDescription"), //$NON-NLS-1$
+			"text/tab-separated-values", //$NON-NLS-1$
+			new String[] {"tsv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
 		));
 	}
 
@@ -57,12 +58,12 @@ public class CSVWriter extends AbstractDataWriter {
 	 */
 	public CSVWriter(String mimeType) {
 		super(mimeType);
-		setDefault("separator", ";");
+		setDefault("separator", ";"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
 	public void write(DataSource data, OutputStream output) throws IOException {
-		String separator = getSetting("separator");
+		String separator = getSetting("separator"); //$NON-NLS-1$
 		OutputStreamWriter writer = new OutputStreamWriter(output);
 
 		int i = 0;
@@ -74,7 +75,7 @@ public class CSVWriter extends AbstractDataWriter {
 			if (col < colCount - 1) {
 				writer.write(separator);
 			} else {
-				writer.write("\r\n");
+				writer.write("\r\n"); //$NON-NLS-1$
 			}
 			i++;
 		}
