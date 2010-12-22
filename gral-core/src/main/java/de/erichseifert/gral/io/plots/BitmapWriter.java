@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.io.plots;
 
 import java.awt.Graphics2D;
@@ -71,7 +71,8 @@ public class BitmapWriter extends IOCapabilitiesStorage
 			"JPEG/JFIF", //$NON-NLS-1$
 			Messages.getString("ImageIO.jpegDescription"), //$NON-NLS-1$
 			"image/jpeg", //$NON-NLS-1$
-			new String[] {"jpg", "jpeg", "jpe", "jif", "jfif", "jfi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+			new String[] {"jpg", "jpeg", "jpe", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"jif", "jfif", "jfi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 
 		addCapabilities(new IOCapabilities(

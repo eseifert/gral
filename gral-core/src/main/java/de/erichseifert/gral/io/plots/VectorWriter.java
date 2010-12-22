@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.io.plots;
 
 import java.awt.Graphics2D;
@@ -71,6 +71,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			));
 			graphics.put("application/postscript", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
+			cls = null;
 		}
 
 		try {
@@ -83,6 +84,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			));
 			graphics.put("application/pdf", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
+			cls = null;
 		}
 
 		try {
@@ -95,6 +97,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			));
 			graphics.put("image/svg+xml", cls); //$NON-NLS-1$
 		} catch (ClassNotFoundException e) {
+			cls = null;
 		}
 	}
 
@@ -114,11 +117,12 @@ public class VectorWriter extends IOCapabilitiesStorage
 		try {
 			gfxCls = (Class<? extends Graphics2D>) graphics.get(mimeType);
 		} catch (ClassCastException e) {
+			gfxCls = null;
 		}
 		graphicsClass = gfxCls;
 		if (graphicsClass == null) {
 			throw new IllegalArgumentException(MessageFormat.format(
-					"Unsupported file format: {0}", mimeType)); //$NON-NLS-1$
+				"Unsupported file format: {0}", mimeType)); //$NON-NLS-1$
 		}
 	}
 

@@ -3,7 +3,8 @@
 
     GRAL: GRAphing Library for Java(R)
 
-    (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+    (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+    Michael Seifert <michael.seifert[at]gmx.net>
 
     This file is part of GRAL.
 
@@ -27,10 +28,10 @@
     "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
-    <property name="severity" value="${checkstyle.javadoc.severity}" default="warning"/>
+    <property name="severity" value="${checkstyle.severity}" default="warning"/>
     <module name="JavadocPackage"/>
     <module name="NewlineAtEndOfFile">
-        <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+        <property name="severity" value="info"/>
     </module>
 
     <module name="TreeWalker">
@@ -46,23 +47,27 @@
             <property name="scope" value="protected"/>
         </module>
         <module name="LineLength">
-            <property name="max" value="120"/>
+            <property name="severity" value="info"/>
+            <property name="max" value="80"/>
+        </module>
+        <module name="LineLength">
+            <property name="max" value="100"/>
         </module>
         <module name="NeedBraces"/>
         <module name="Regexp">
-            <property name="severity" value="${checkstyle.javadoc.severity}" default="error"/>
+            <property name="severity" value="error"/>
             <property name="format" value="System\.(out|err)\.print"/>
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
         </module>
         <module name="TodoComment">
-            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+            <property name="severity" value="info"/>
         </module>
         <module name="UnnecessaryParentheses">
-            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+            <property name="severity" value="info"/>
         </module>
         <module name="UnusedImports">
-            <property name="severity" value="${checkstyle.javadoc.severity}" default="info"/>
+            <property name="severity" value="info"/>
         </module>
         <module name="UpperEll"/>
     </module>

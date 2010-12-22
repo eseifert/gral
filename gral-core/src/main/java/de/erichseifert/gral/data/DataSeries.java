@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.data;
 
 import java.util.ArrayList;
@@ -94,14 +94,12 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 
 	@Override
 	public Number get(int col, int row) {
-		Number number = null;
 		try {
 			int dataCol = cols.get(col);
-			number = data.get(dataCol, row);
+			return data.get(dataCol, row);
 		} catch (IndexOutOfBoundsException e) {
-			// TODO Handle exception
+			return null;
 		}
-		return number;
 	}
 
 	@Override

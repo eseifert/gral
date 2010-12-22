@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.plots.axes;
 
 import java.awt.BasicStroke;
@@ -226,7 +226,8 @@ public abstract class AbstractAxisRenderer2D
 								tickPoint.getX() + tickNormal.getX()*tickLengthOuter,
 								tickPoint.getY() + tickNormal.getY()*tickLengthOuter
 							);
-							GraphicsUtils.drawPaintedShape(graphics, tickShape, tickPaint, null, tickStroke);
+							GraphicsUtils.drawPaintedShape(
+									graphics, tickShape, tickPaint, null, tickStroke);
 						}
 
 						// Draw label
@@ -276,7 +277,8 @@ public abstract class AbstractAxisRenderer2D
 					PointND<Double> labelNormal = getNormal(axis, axisLabelPos, false, true);
 
 					if (labelPos != null && labelNormal != null) {
-						layoutLabel(axisLabel, labelPos.getPoint2D(), labelNormal.getPoint2D(), labelDist,
+						layoutLabel(axisLabel, labelPos.getPoint2D(),
+								labelNormal.getPoint2D(), labelDist,
 								isTickLabelOutside, labelRotation);
 						axisLabel.draw(context);
 					}
@@ -446,7 +448,8 @@ public abstract class AbstractAxisRenderer2D
 	}
 
 	@Override
-	public PointND<Double> getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear) {
+	public PointND<Double> getNormal(Axis axis, Number value,
+			boolean extrapolate, boolean forceLinear) {
 		double valueView;
 		if (forceLinear) {
 			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /

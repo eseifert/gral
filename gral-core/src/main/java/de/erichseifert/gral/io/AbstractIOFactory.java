@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.io;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ import java.util.Set;
  * @param <T> The type of objects which should be produced by this factory
  */
 public abstract class AbstractIOFactory<T> implements IOFactory<T> {
-	private final Map<String, Class<? extends T>> entries = new HashMap<String, Class<? extends T>>();
+	private final Map<String, Class<? extends T>> entries;
 
 	/**
 	 * Constructor that creates a new instance and initializes it with the name
@@ -51,6 +51,8 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 * @throws IOException if reading the properties file(s) failed
 	 */
 	protected AbstractIOFactory(String propFileName) throws IOException {
+		entries = new HashMap<String, Class<? extends T>>();
+
 		// Retrieve property-files
 		Enumeration<URL> propFiles = null;
 		propFiles = getClass().getClassLoader().getResources(propFileName);

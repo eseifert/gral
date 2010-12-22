@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.ui;
 
 import java.awt.BorderLayout;
@@ -106,22 +106,23 @@ public class ExportDialog extends JDialog {
 				}
 			};
 		inputX = new JFormattedTextField(formatMm);
-		addInputField(inputX, Messages.getString("ExportDialog.left"), options, documentBounds.getX(), //$NON-NLS-1$
-				docBoundsListener);
+		addInputField(inputX, Messages.getString("ExportDialog.left"), //$NON-NLS-1$
+				options, documentBounds.getX(), docBoundsListener);
 		inputY = new JFormattedTextField(formatMm);
-		addInputField(inputY, Messages.getString("ExportDialog.top"), options, documentBounds.getY(), //$NON-NLS-1$
-				docBoundsListener);
+		addInputField(inputY, Messages.getString("ExportDialog.top"), //$NON-NLS-1$
+				options, documentBounds.getY(), docBoundsListener);
 		inputW = new JFormattedTextField(formatMm);
-		addInputField(inputW, Messages.getString("ExportDialog.width"), options, documentBounds.getWidth(), //$NON-NLS-1$
-				docBoundsListener);
+		addInputField(inputW, Messages.getString("ExportDialog.width"), //$NON-NLS-1$
+				options, documentBounds.getWidth(), docBoundsListener);
 		inputH = new JFormattedTextField(formatMm);
-		addInputField(inputH, Messages.getString("ExportDialog.height"), options, documentBounds.getHeight(), //$NON-NLS-1$
-				docBoundsListener);
+		addInputField(inputH, Messages.getString("ExportDialog.height"), //$NON-NLS-1$
+				options, documentBounds.getHeight(), docBoundsListener);
 
 		JPanel controls = new JPanel(new FlowLayout());
 		cp.add(controls, BorderLayout.SOUTH);
 
-		JButton buttonConfirm = new JButton(Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
+		JButton buttonConfirm = new JButton(
+				Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
 		buttonConfirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -131,7 +132,8 @@ public class ExportDialog extends JDialog {
 		});
 		controls.add(buttonConfirm);
 
-		JButton buttonCancel = new JButton(Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
+		JButton buttonCancel = new JButton(
+				Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

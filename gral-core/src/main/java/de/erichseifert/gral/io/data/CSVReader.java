@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.io.data;
 
 import java.io.BufferedReader;
@@ -92,8 +92,8 @@ public class CSVReader extends AbstractDataReader {
 			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
 				throw new IllegalArgumentException(MessageFormat.format(
-						"Column count in file doesn't match; got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
-						cols.length, types.length));
+					"Column count in file doesn't match: got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
+					cols.length, types.length));
 			}
 			Number[] row = new Number[types.length];
 			for (int i = 0; i < types.length; i++) {
@@ -101,15 +101,17 @@ public class CSVReader extends AbstractDataReader {
 				try {
 					row[i] = (Number) parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
-					// TODO Handle exception
+					throw new RuntimeException(MessageFormat.format(
+						"Couldn't invoke method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
+						types[i].getSimpleName(), i));
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(MessageFormat.format(
-							"Couldn't access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
-							types[i].getSimpleName(), i));
+						"Couldn't access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
+						types[i].getSimpleName(), i));
 				} catch (InvocationTargetException e) {
 					throw new IOException(MessageFormat.format(
-							"Type mismatch in column {0,number,integer}: got \"{1}\", but expected \"{2}\" value.", //$NON-NLS-1$
-							i, cols[i], types[i].getSimpleName()));
+						"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected \"{3}\" value.", //$NON-NLS-1$
+						i, lineNo, cols[i], types[i].getSimpleName()));
 				}
 			}
 			data.add(row);

@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.plots;
 
 import java.awt.Color;
@@ -163,13 +163,11 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	 * @return <code>TextLayout</code> instance for this label.
 	 */
 	protected TextLayout getLayout() {
-		if (!valid) {
-			if (text != null && !text.isEmpty()) {
-				layout = GraphicsUtils.getLayout(
-						text, this.<Font>getSetting(FONT));
-				outline = layout.getOutline(null);
-				valid = true;
-			}
+		if (!valid && text != null && !text.isEmpty()) {
+			layout = GraphicsUtils.getLayout(
+					text, this.<Font>getSetting(FONT));
+			outline = layout.getOutline(null);
+			valid = true;
 		}
 		return layout;
 	}

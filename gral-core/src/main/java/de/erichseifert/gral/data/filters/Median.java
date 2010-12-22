@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.data.filters;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * <p>Class that calculates the median of a data sequence</p>.
+ * <p>Class that calculates the median of a data sequence.</p>
  * <ul>
  *   <li>Setting and getting offset</li>
  *   <li>Setting and getting window size</li>

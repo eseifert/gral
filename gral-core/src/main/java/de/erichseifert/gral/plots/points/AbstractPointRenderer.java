@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.plots.points;
 
 import java.awt.BasicStroke;
@@ -114,8 +114,10 @@ public abstract class AbstractPointRenderer
 		double valueTop = value + errorTop;
 		double valueBot = value - errorBot;
 		double posY = axisRenderer.getPosition(axis, value, true, false).get(PointND.Y);
-		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false).get(PointND.Y) - posY;
-		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false).get(PointND.Y) - posY;
+		double posYTop = axisRenderer.getPosition(axis, valueTop, true, false)
+			.get(PointND.Y) - posY;
+		double posYBot = axisRenderer.getPosition(axis, valueBot, true, false)
+			.get(PointND.Y) - posY;
 		Point2D pointTop = new Point2D.Double(posX, posYTop);
 		Point2D pointBot = new Point2D.Double(posX, posYBot);
 		Line2D errorBar = new Line2D.Double(pointTop, pointBot);

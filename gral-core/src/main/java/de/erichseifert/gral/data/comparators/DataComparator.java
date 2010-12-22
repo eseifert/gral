@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.data.comparators;
 
 import java.io.Serializable;
@@ -28,6 +28,7 @@ import java.util.Comparator;
  * Abstract implementation of a <code>Comparator</code> for
  * <code>Number[]</code> arrays. This class allows to specify the position of
  * the arrays that should be compared.
+ * @see de.erichseifert.gral.data.DataTable#sort(DataComparator...)
  */
 public abstract class DataComparator implements Comparator<Number[]>, Serializable {
 	/** Version id for serialization. */

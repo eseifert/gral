@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.util;
 
 import java.awt.geom.Point2D;
@@ -81,7 +81,7 @@ public class PointND <T extends Number> {
 	public void setLocation(T... coordinates) {
 		if (getDimensions() != coordinates.length) {
 			throw new IllegalArgumentException(MessageFormat.format(
-				"Wrong number of dimensions: You have to provide {0,number,integer} values for this point ({1,number,integer} given).", //$NON-NLS-1$
+				"Wrong number of dimensions: Expected {0,number,integer} values, got {1,number,integer}.", //$NON-NLS-1$
 				getDimensions(), coordinates.length));
 		}
 		System.arraycopy(coordinates, 0, this.coordinates, 0, getDimensions());

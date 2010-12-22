@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.ui;
 
 import java.awt.Component;
@@ -161,11 +161,13 @@ public class InteractivePanel extends DrawablePanel
 		List<IOCapabilities> exportFormats = DrawableWriterFactory.getInstance()
 			.getCapabilities();
 		exportImageChooser = new ExportChooser(true, exportFormats);
-		exportImageChooser.setDialogTitle(Messages.getString("InteractivePanel.exportImageTitle")); //$NON-NLS-1$
+		exportImageChooser.setDialogTitle(Messages.getString(
+				"InteractivePanel.exportImageTitle")); //$NON-NLS-1$
 
 		menu = new JPopupMenu();
 
-		zoomIn = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.zoomIn")) { //$NON-NLS-1$
+		zoomIn = new JMenuItem(new AbstractAction(Messages.getString(
+				"InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(1);
@@ -173,7 +175,8 @@ public class InteractivePanel extends DrawablePanel
 		});
 		menu.add(zoomIn);
 
-		zoomOut = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.zoomOut")) { //$NON-NLS-1$
+		zoomOut = new JMenuItem(new AbstractAction(Messages.getString(
+				"InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(-1);
@@ -181,7 +184,8 @@ public class InteractivePanel extends DrawablePanel
 		});
 		menu.add(zoomOut);
 
-		resetView = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.resetView")) { //$NON-NLS-1$
+		resetView = new JMenuItem(new AbstractAction(Messages.getString(
+				"InteractivePanel.resetView")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
@@ -194,7 +198,8 @@ public class InteractivePanel extends DrawablePanel
 
 		menu.addSeparator();
 
-		exportImage = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.exportImage")) { //$NON-NLS-1$
+		exportImage = new JMenuItem(new AbstractAction(Messages.getString(
+				"InteractivePanel.exportImage")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
@@ -238,7 +243,8 @@ public class InteractivePanel extends DrawablePanel
 		});
 		menu.add(exportImage);
 
-		print = new JMenuItem(new AbstractAction(Messages.getString("InteractivePanel.print")) { //$NON-NLS-1$
+		print = new JMenuItem(new AbstractAction(Messages.getString(
+				"InteractivePanel.print")) { //$NON-NLS-1$
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {

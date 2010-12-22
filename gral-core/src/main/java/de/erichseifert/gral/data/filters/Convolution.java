@@ -1,7 +1,8 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2010 Erich Seifert <dev[at]richseifert.de>, Michael Seifert <michael.seifert[at]gmx.net>
+ * (C) Copyright 2009-2010 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
  *
@@ -18,16 +19,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package de.erichseifert.gral.data.filters;
 
 import de.erichseifert.gral.data.DataSource;
 
 /**
- * <p>Class that applies a convolution filter with the use of a kernel.</p>
+ * <p>Class that applies a specified kernel to a data source to convolve it.</p>
  * <p>Functionality includes:</p>
  * <ul>
- *   <li>Getting and setting the Kernel used for convolution</li>
+ *   <li>Getting and setting the <code>Kernel</code> used for convolution</li>
  * </ul>
  */
 public class Convolution extends Filter {
@@ -35,7 +35,7 @@ public class Convolution extends Filter {
 	private final Kernel kernel;
 
 	/**
-	 * Creates a new Convolution object with the specified DataSource,
+	 * Creates a new <code>Convolution</code> object with the specified DataSource,
 	 * Kernel, Mode and columns.
 	 * @param original DataSource to be filtered.
 	 * @param kernel Kernel to be used.
@@ -49,7 +49,7 @@ public class Convolution extends Filter {
 	}
 
 	/**
-	 * Returns the Kernel.
+	 * Returns the kernel.
 	 * @return Kernel used for convolution.
 	 */
 	public Kernel getKernel() {
