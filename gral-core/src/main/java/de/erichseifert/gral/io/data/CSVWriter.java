@@ -31,8 +31,18 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that writes a DataSource to a CSV file. By default the semicolon
- * character will be used for separating columns.
+ * <p>Class that writes all values of a <code>DataSource</code> to a character
+ * separated file. The file then stores the values separated by a certain
+ * delimiter character. The delimiter is chosen based on the file type but can
+ * also be set manually. By default the comma character will be used as a
+ * delimiter for separating columns. Lines end with a carriage return and a
+ * line feed character.</p>
+ * <p><code>CSVWriter</code>s instances should be obtained by the
+ * {@link DataWriterFeactory} rather than being created manually:</p>
+ * <pre>
+ * DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
+ * writer.write(data, outputFile);
+ * </pre>
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
 public class CSVWriter extends AbstractDataWriter {
@@ -48,17 +58,23 @@ public class CSVWriter extends AbstractDataWriter {
 			"TSV", //$NON-NLS-1$
 			Messages.getString("DataIO.tsvDescription"), //$NON-NLS-1$
 			"text/tab-separated-values", //$NON-NLS-1$
-			new String[] {"tsv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
+			new String[] {"tsv", "tab", "txt"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 	}
 
 	/**
-	 * Creates a new CSVWriter object with the specified MIME-Type.
+	 * Creates a new instance with the specified MIME-Type. The delimiter is
+	 * set depending on the MIME type parameter. By default a comma is used as
+	 * a delimiter.
 	 * @param mimeType MIME-Type of the output file.
 	 */
 	public CSVWriter(String mimeType) {
 		super(mimeType);
-		setDefault("separator", ";"); //$NON-NLS-1$ //$NON-NLS-2$
+		if ("text/tab-separated-values".equals(mimeType)) {
+			setDefault("separator", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			setDefault("separator", ","); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 	}
 
 	@Override

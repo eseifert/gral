@@ -45,17 +45,28 @@ public class CSVWriterTest {
 
 	@Test
 	public void testWriter() throws IOException {
-		OutputStream output = new ByteArrayOutputStream();
+		String[] formats = {
+			"text/csv",
+			"text/tab-separated-values"
+		};
 
-		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
-		writer.write(data, output);
+		String[] expected = {
+			"0.0,10.0,20\r\n" +
+			"1.0,11.0,21\r\n" +
+			"2.0,12.0,22\r\n",
 
-		assertEquals(
-			"0.0;10.0;20\r\n" +
-			"1.0;11.0;21\r\n" +
-			"2.0;12.0;22\r\n",
-			output.toString()
-		);
+			"0.0\t10.0\t20\r\n" +
+			"1.0\t11.0\t21\r\n" +
+			"2.0\t12.0\t22\r\n",
+		};
+
+		for (int i = 0; i < formats.length; i++) {
+			DataWriter writer = DataWriterFactory.getInstance().get(formats[i]);
+			OutputStream output = new ByteArrayOutputStream();
+			writer.write(data, output);
+
+			assertEquals(expected[i], output.toString());
+		}
 	}
 
 	@Test
@@ -63,13 +74,13 @@ public class CSVWriterTest {
 		OutputStream output = new ByteArrayOutputStream();
 
 		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
-		writer.setSetting("separator", "\t");
+		writer.setSetting("separator", ";");
 		writer.write(data, output);
 
 		assertEquals(
-			"0.0\t10.0\t20\r\n" +
-			"1.0\t11.0\t21\r\n" +
-			"2.0\t12.0\t22\r\n",
+			"0.0;10.0;20\r\n" +
+			"1.0;11.0;21\r\n" +
+			"2.0;12.0;22\r\n",
 			output.toString()
 		);
 	}

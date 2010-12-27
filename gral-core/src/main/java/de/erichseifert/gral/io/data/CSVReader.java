@@ -38,8 +38,16 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that reads a DataSource from a CSV-file. By default the semicolon
- * character will be used for separating columns.
+ * <p>Class that creates a <code>DataSource</code> from file contents which are
+ * separated by a certain delimiter character. The delimiter is chosen based on
+ * the file type but can also be set manually. By default the comma character
+ * will be used as a delimiter for separating columns.</p>
+ * <p><code>CSVReader</code>s instances should be obtained by the
+ * {@link DataReaderFeactory} rather than being created manually:</p>
+ * <pre>
+ * DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+ * reader.read(inputFile, Integer.class, Double.class, Double.class);
+ * </pre>
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
 public class CSVReader extends AbstractDataReader {
@@ -55,17 +63,23 @@ public class CSVReader extends AbstractDataReader {
 			"TSV", //$NON-NLS-1$
 			Messages.getString("DataIO.tsvDescription"), //$NON-NLS-1$
 			"text/tab-separated-values", //$NON-NLS-1$
-			new String[] {"tsv", "txt"} //$NON-NLS-1$ //$NON-NLS-2$
+			new String[] {"tsv", "tab", "txt"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 	}
 
 	/**
-	 * Creates a new CSVReader with the specified MIME type.
+	 * Creates a new instance with the specified MIME type. The delimiter is
+	 * set depending on the MIME type parameter. By default a comma is used as
+	 * a delimiter.
 	 * @param mimeType MIME type of the file format to be read.
 	 */
 	public CSVReader(String mimeType) {
 		super(mimeType);
-		setDefault("separator", ";"); //$NON-NLS-1$ //$NON-NLS-2$
+		if ("text/tab-separated-values".equals(mimeType)) {
+			setDefault("separator", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			setDefault("separator", ","); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 	}
 
 	@Override
@@ -92,7 +106,7 @@ public class CSVReader extends AbstractDataReader {
 			String[] cols = line.split(separatorPattern);
 			if (cols.length < types.length) {
 				throw new IllegalArgumentException(MessageFormat.format(
-					"Column count in file doesn't match: got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
+					"Column count in file does not match: got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
 					cols.length, types.length));
 			}
 			Number[] row = new Number[types.length];
@@ -102,15 +116,15 @@ public class CSVReader extends AbstractDataReader {
 					row[i] = (Number) parseMethod.invoke(null, cols[i]);
 				} catch (IllegalArgumentException e) {
 					throw new RuntimeException(MessageFormat.format(
-						"Couldn't invoke method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
+						"Could not invoke method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
 						types[i].getSimpleName(), i));
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(MessageFormat.format(
-						"Couldn't access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
+						"Could not access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
 						types[i].getSimpleName(), i));
 				} catch (InvocationTargetException e) {
 					throw new IOException(MessageFormat.format(
-						"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected \"{3}\" value.", //$NON-NLS-1$
+						"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected {3} value.", //$NON-NLS-1$
 						i, lineNo, cols[i], types[i].getSimpleName()));
 				}
 			}
