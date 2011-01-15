@@ -54,7 +54,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	/** Key for specifying the vertical alignment within the
 	bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.DrawableConstants}
+	/** Key for specifying the {@link de.erichseifert.gral.Location}
 	value where the label will be aligned at. */
 	public static final Key ANCHOR = new Key("label.anchor"); //$NON-NLS-1$
 	/** Key for specifying the font of this label. */

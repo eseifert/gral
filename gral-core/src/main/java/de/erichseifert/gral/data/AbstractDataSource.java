@@ -115,8 +115,7 @@ public abstract class AbstractDataSource implements DataSource {
 
 	/**
 	 * Notifies all registered listeners that data values have changed.
-	 * @param source Data source that has changed.
-	 * @param events Event objects describing all value that have changed.
+	 * @param events Event objects describing all values that have changed.
 	 */
 	protected void notifyDataChanged(DataChangeEvent... events) {
 		for (DataListener dataListener : dataListeners) {

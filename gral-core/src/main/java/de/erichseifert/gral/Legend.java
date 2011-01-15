@@ -242,7 +242,8 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Invoked if data has changed.
+	 * Notify all listeners that data has changed.
+	 * @param events Event objects describing the values that have changed.
 	 */
 	protected void notifyDataChanged(DataChangeEvent... events) {
 		// FIXME Is this function needed?

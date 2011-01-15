@@ -169,7 +169,7 @@ public abstract class Filter extends AbstractDataSource
 	 * @param col Column of the cell.
 	 * @param row Row of the cell.
 	 * @param value New cell value.
-	 * @returns
+	 * @return The previous value before it has been changed.
 	 */
 	protected Number set(int col, int row, double value) {
 		int colPos = getIndex(col);

@@ -36,8 +36,8 @@ import de.erichseifert.gral.data.comparators.DataComparator;
  * functionality of <code>DataSource</code> it allows for adding and deleting
  * rows. Additionally, all data in the table can be deleted.</p>
  * <p>The data in the table can be sorted row-wise with the method
- * <code>sort(DataComparator...)</code>. This way it is possible sort column 1
- * ascending and column 3 descending.</p>
+ * <code>sort(DataComparator...)</code>. For example, this way column 1 could
+ * be sorted ascending and column 3 descending.</p>
  *
  * @see DataSource
  */
