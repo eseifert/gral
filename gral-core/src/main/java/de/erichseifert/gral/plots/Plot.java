@@ -44,7 +44,7 @@ import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.PlotArea;
-import de.erichseifert.gral.data.DataChangedEvent;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -541,7 +541,7 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	@Override
-	public void dataChanged(DataSource data, DataChangedEvent... events) {
+	public void dataChanged(DataSource data, DataChangeEvent... events) {
 		refresh();
 	}
 

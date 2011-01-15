@@ -87,7 +87,7 @@ public class DataTable extends AbstractDataSource {
 		}
 		int i = 0;
 		Number[] row = new Number[values.size()];
-		DataChangedEvent[] events = new DataChangedEvent[row.length];
+		DataChangeEvent[] events = new DataChangeEvent[row.length];
 		for (Number value : values) {
 			if ((value != null)
 					&& !(types[i].isAssignableFrom(value.getClass()))) {
@@ -96,7 +96,7 @@ public class DataTable extends AbstractDataSource {
 						types[i], value.getClass()));
 			}
 			row[i] = value;
-			events[i] = new DataChangedEvent(this, i, rowCount + 1, null, value);
+			events[i] = new DataChangeEvent(this, i, rowCount + 1, null, value);
 			i++;
 		}
 		rows.add(row);
@@ -110,9 +110,9 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void remove(int row) {
 		Row r = new Row(this, row);
-		DataChangedEvent[] events = new DataChangedEvent[columnCount];
+		DataChangeEvent[] events = new DataChangeEvent[columnCount];
 		for (int col = 0; col < events.length; col++) {
-			events[col] = new DataChangedEvent(this, col, row, r.get(col), null);
+			events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
 		}
 		rows.remove(row);
 		rowCount--;
@@ -144,7 +144,7 @@ public class DataTable extends AbstractDataSource {
 		Number old = get(col, row);
 		if (!old.equals(value)) {
 			rows.get(row)[col] = value;
-			notifyDataChanged(new DataChangedEvent(this, col, row, old, value));
+			notifyDataChanged(new DataChangeEvent(this, col, row, old, value));
 		}
 		return old;
 	}

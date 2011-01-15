@@ -29,7 +29,7 @@ import java.awt.geom.Dimension2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.erichseifert.gral.data.DataChangedEvent;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -243,7 +243,7 @@ public abstract class Legend extends DrawableContainer
 	/**
 	 * Invoked if data has changed.
 	 */
-	protected void notifyDataChanged(DataChangedEvent... events) {
+	protected void notifyDataChanged(DataChangeEvent... events) {
 		// FIXME Is this function needed?
 		layout();
 	}

@@ -68,7 +68,7 @@ public abstract class RowSubset extends AbstractDataSource
 	}
 
 	@Override
-	public void dataChanged(DataSource source, DataChangedEvent... events) {
+	public void dataChanged(DataSource source, DataChangeEvent... events) {
 		accepted.clear();
 		for (int rowIndex = 0; rowIndex < original.getRowCount(); rowIndex++) {
 			Row row = original.getRow(rowIndex);

@@ -33,5 +33,5 @@ public interface DataListener {
 	 * @param events Optional event object describing the data values that
 	 *        have changed
 	 */
-	void dataChanged(DataSource source, DataChangedEvent... events);
+	void dataChanged(DataSource source, DataChangeEvent... events);
 }

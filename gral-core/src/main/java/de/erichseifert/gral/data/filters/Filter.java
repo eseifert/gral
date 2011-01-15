@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.erichseifert.gral.data.AbstractDataSource;
-import de.erichseifert.gral.data.DataChangedEvent;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.MathUtils;
@@ -179,7 +179,7 @@ public abstract class Filter extends AbstractDataSource
 		}
 		Number old = rows.get(row)[colPos];
 		rows.get(row)[colPos] = value;
-		notifyDataChanged(new DataChangedEvent(this, col, row, old, value));
+		notifyDataChanged(new DataChangeEvent(this, col, row, old, value));
 		return old;
 	}
 
@@ -213,7 +213,7 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	@Override
-	public void dataChanged(DataSource source, DataChangedEvent... events) {
+	public void dataChanged(DataSource source, DataChangeEvent... events) {
 		filter();
 		notifyDataChanged(events);
 	}

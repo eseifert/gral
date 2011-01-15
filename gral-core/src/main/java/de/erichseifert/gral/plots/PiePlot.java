@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
-import de.erichseifert.gral.data.DataChangedEvent;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
@@ -200,7 +200,7 @@ public class PiePlot extends Plot implements DataListener {
 		}
 
 		@Override
-		public void dataChanged(DataSource data, DataChangedEvent... events) {
+		public void dataChanged(DataSource data, DataChangeEvent... events) {
 			// Calculate sum of all values
 			double colYSum = 0.0;
 			for (int i = 0; i < data.getRowCount();  i++) {
@@ -262,7 +262,7 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	@Override
-	public void dataChanged(DataSource data, DataChangedEvent... events) {
+	public void dataChanged(DataSource data, DataChangeEvent... events) {
 		((PiePlotArea2D) getPlotArea()).dataChanged(data, events);
 	}
 }
