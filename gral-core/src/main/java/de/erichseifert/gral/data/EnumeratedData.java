@@ -22,12 +22,24 @@
 package de.erichseifert.gral.data;
 
 /**
- * Class that creates a new data source which adds a leading column containing
- * the row number.
+ * <p>Class that creates a new data source which adds a leading column
+ * containing the row number.</p>
+ *
+ * <p>Example which creates a two column data source from a one column
+ * histogram:</p>
+ * <pre>
+ * DataSource hist = new Histogram1D(data, Orientation.HORIZONTAL, 10);
+ * DataSource hist2d = new EnumeratedData(hist);
+ * </pre>
+ *
+ * @see DataSource
  */
 public class EnumeratedData extends AbstractDataSource {
+	/** Data source which will be used as base for enumeration. */
 	private final DataSource original;
+	/** Value to start counting from. */
 	private final double offset;
+	/** Width of enumeration steps. */
 	private final double steps;
 
 	/**

@@ -24,6 +24,7 @@ package de.erichseifert.gral.data;
 
 /**
  * Class that represents a data source containing the same value in each cell.
+ * It can be used for test purposes or for efficiently creating constant data.
  */
 public class DummyData extends AbstractDataSource {
 	/** Value that will be returned for all positions in this data source. */

@@ -26,7 +26,15 @@ import de.erichseifert.gral.data.statistics.Orientation;
 
 
 /**
- * Class for storing a row of a data source.
+ * <p>Class for easily accessing a row of a data source.</p>
+ *
+ * <p>Example:</p>
+ * <pre>
+ * Row row = new Row(data, 2);
+ * Number value = row.get(3);
+ * </pre>
+ *
+ * @see DataSource
  */
 public class Row extends DataAccessor {
 	/**

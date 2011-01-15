@@ -25,7 +25,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract class that represents a view on several rows of a data source.
+ * <p>Abstract class that represents a view on several rows of a data source.
+ * Implementations must implement the method <code>accept(Row)</code> which
+ * decides whether a specific row should be contained in this filtered data
+ * source.</p>
+ *
+ * <p>Example that keeps only every second row:</p>
+ * <pre>
+ * DataSource filtered = new RowSubset() {
+ *     @Override
+ *     public boolean accept(Row row) {
+ *         return row.getIndex()%2 == 0;
+ *     }
+ * };
+ * </pre>
  */
 public abstract class RowSubset extends AbstractDataSource
 		implements DataListener {

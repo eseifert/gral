@@ -22,7 +22,7 @@
 package de.erichseifert.gral.data;
 
 /**
- * Interface to listen for changes in data sources.
+ * Interface that can be implemented to listen for changes in data sources.
  * @see DataSource
  */
 public interface DataListener {

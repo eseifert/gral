@@ -24,7 +24,8 @@ package de.erichseifert.gral.data;
 import java.util.EventObject;
 
 /**
- * Class that stores information on a change of a specific data value in a data source.
+ * Class that stores information on a change of a specific data value in a
+ * data source.
  * @see DataListener
  * @see DataSource
  */
@@ -50,7 +51,8 @@ public class DataChangeEvent extends EventObject {
 	 * @param valOld Old value
 	 * @param valNew New value
 	 */
-	public DataChangeEvent(DataSource source, int col, int row, Number valOld, Number valNew) {
+	public DataChangeEvent(DataSource source, int col, int row,
+			Number valOld, Number valNew) {
 		super(source);
 		this.col = col;
 		this.row = row;
@@ -58,18 +60,34 @@ public class DataChangeEvent extends EventObject {
 		this.valNew = valNew;
 	}
 
+	/**
+	 * Returns the column index of the value that was changed.
+	 * @return Column index of the changed value.
+	 */
 	public int getCol() {
 		return col;
 	}
 
+	/**
+	 * Returns the row index of the value that was changed.
+	 * @return Row index of the changed value.
+	 */
 	public int getRow() {
 		return row;
 	}
 
+	/**
+	 * Returns the old value before it has changed.
+	 * @return Value before the change.
+	 */
 	public Number getOld() {
 		return valOld;
 	}
 
+	/**
+	 * Returns the new value after the change has been applied.
+	 * @return Value after the change.
+	 */
 	public Number getNew() {
 		return valNew;
 	}
