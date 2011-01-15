@@ -29,7 +29,7 @@ import java.awt.geom.Point2D;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.DrawableConstants.Orientation;
+import de.erichseifert.gral.Orientation;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Settings.Key;
@@ -40,7 +40,7 @@ import de.erichseifert.gral.util.Settings.Key;
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Key for specifying an instance of
-	{@link de.erichseifert.gral.DrawableConstants.Orientation} which indicates
+	{@link de.erichseifert.gral.Orientation} which indicates
 	the primary direction of the "steps". */
 	public static final Key ASCENT_DIRECTION =
 		new Key("line.discrete.ascentDirection"); //$NON-NLS-1$

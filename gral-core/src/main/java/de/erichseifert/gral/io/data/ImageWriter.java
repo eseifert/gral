@@ -59,7 +59,8 @@ public class ImageWriter extends AbstractDataWriter {
 			"JPEG/JFIF", //$NON-NLS-1$
 			Messages.getString("ImageIO.jpegDescription"), //$NON-NLS-1$
 			"image/jpeg", //$NON-NLS-1$
-			new String[] {"jpg", "jpeg", "jpe", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new String[] {
+				"jpg", "jpeg", "jpe", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				"jif", "jfif", "jfi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 

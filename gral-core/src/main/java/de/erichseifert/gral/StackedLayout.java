@@ -23,16 +23,15 @@ package de.erichseifert.gral;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.DrawableConstants.Orientation;
 import de.erichseifert.gral.util.Insets2D;
 
 
 /**
  * Class that represents a layout manager which arranges its components
- * lying upon another.
+ * as horizontal or vertical stacks.
  */
 public class StackedLayout implements Layout {
-	/** Orientation in which elements should be layouted. */
+	/** Orientation in which elements should be laid out. */
 	private final Orientation orientation;
 	/** Spacing of components. */
 	private final Dimension2D gap;

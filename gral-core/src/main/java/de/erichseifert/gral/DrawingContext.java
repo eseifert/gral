@@ -24,7 +24,9 @@ package de.erichseifert.gral;
 import java.awt.Graphics2D;
 
 /**
- * Class that encapsulates an object for drawing and context information.
+ * Class that stores an object for drawing and additional context information
+ * that may be necessary to determine how to draw the object. This includes
+ * information on drawing quality and the target media (screen, paper, etc.).
  */
 public class DrawingContext {
 	/**

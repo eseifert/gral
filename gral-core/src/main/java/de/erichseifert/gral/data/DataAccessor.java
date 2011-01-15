@@ -26,8 +26,10 @@ import java.util.Iterator;
 import java.util.Locale;
 
 /**
- * Abstract base for classes that access a substructure of a data source, e.g.
- * columns or rows.
+ * Abstract base for reading substructures of a data source, i.e. columns or
+ * rows. <code>DataAccessor</code>s are iterable and provide utility methods
+ * for statistics and array conversion.
+ * @see DataSource
  */
 public abstract class DataAccessor implements Iterable<Number> {
 	/** Data source that provides the values that should be accessed. */

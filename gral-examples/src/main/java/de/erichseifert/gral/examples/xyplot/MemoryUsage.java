@@ -38,8 +38,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import de.erichseifert.gral.DrawableConstants;
 import de.erichseifert.gral.Legend;
+import de.erichseifert.gral.Orientation;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
@@ -167,7 +167,7 @@ public class MemoryUsage extends JPanel {
 		plot.setSetting(Plot.LEGEND, true);
 
 		// Format legend
-		plot.getLegend().setSetting(Legend.ORIENTATION, DrawableConstants.Orientation.HORIZONTAL);
+		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 
 		// Format plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);

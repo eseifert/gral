@@ -106,10 +106,12 @@ public class XYPlot extends Plot  {
 	public static class XYPlotArea2D extends PlotArea {
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether horizontal grid lines at major ticks along x-axis are drawn. */
-		public static final Key GRID_MAJOR_X = new Key("xyplot.grid.major.x"); //$NON-NLS-1$
+		public static final Key GRID_MAJOR_X =
+			new Key("xyplot.grid.major.x"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether vertical grid lines at major ticks along y-axis are drawn. */
-		public static final Key GRID_MAJOR_Y = new Key("xyplot.grid.major.y"); //$NON-NLS-1$
+		public static final Key GRID_MAJOR_Y =
+			new Key("xyplot.grid.major.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of major ticks. */
 		public static final Key GRID_MAJOR_COLOR =
@@ -117,10 +119,12 @@ public class XYPlot extends Plot  {
 
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether horizontal grid lines at minor ticks along x-axis are drawn. */
-		public static final Key GRID_MINOR_X = new Key("xyplot.grid.minor.x"); //$NON-NLS-1$
+		public static final Key GRID_MINOR_X =
+			new Key("xyplot.grid.minor.x"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
 		whether  vertical grid lines at minor ticks along y-axis are drawn. */
-		public static final Key GRID_MINOR_Y = new Key("xyplot.grid.minor.y"); //$NON-NLS-1$
+		public static final Key GRID_MINOR_Y =
+			new Key("xyplot.grid.minor.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the grid lines of minor ticks. */
 		public static final Key GRID_MINOR_COLOR =
@@ -179,12 +183,15 @@ public class XYPlot extends Plot  {
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 				if (axisXRenderer != null) {
 					Axis axisX = plot.getAxis(AXIS_X);
-					Shape shapeX = axisXRenderer.getSetting(AxisRenderer.SHAPE);
+					Shape shapeX =
+						axisXRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 					List<Tick> ticksX = axisXRenderer.getTicks(axisX);
 					Line2D gridLineVert = new Line2D.Double(
-						-shapeBoundsX.getMinX(), -shapeBoundsX.getMinY(),
-						-shapeBoundsX.getMinX(), bounds.getHeight() - shapeBoundsX.getMinY()
+						-shapeBoundsX.getMinX(),
+						-shapeBoundsX.getMinY(),
+						-shapeBoundsX.getMinX(),
+						bounds.getHeight() - shapeBoundsX.getMinY()
 					);
 					for (Tick tick : ticksX) {
 						if ((TickType.MAJOR.equals(tick.getType()) && !isGridMajorX) ||
@@ -221,8 +228,12 @@ public class XYPlot extends Plot  {
 						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 					);
 					for (Tick tick : ticksY) {
-						if ((TickType.MAJOR.equals(tick.getType()) && !isGridMajorY) ||
-								(TickType.MINOR.equals(tick.getType()) && !isGridMinorY)) {
+						boolean isMajorTick =
+							TickType.MAJOR.equals(tick.getType());
+						boolean isMinorTick =
+							TickType.MINOR.equals(tick.getType());
+						if ((isMajorTick && !isGridMajorY) ||
+								(isMinorTick && !isGridMinorY)) {
 							continue;
 						}
 						Point2D tickPoint = tick.getPosition().getPoint2D();
@@ -383,7 +394,8 @@ public class XYPlot extends Plot  {
 			Axis axis = new Axis(0.0, 1.0);
 			LinearRenderer2D axisRenderer = new LinearRenderer2D();
 			axisRenderer.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
-					bounds.getCenterX(), bounds.getMaxY(), bounds.getCenterX(), bounds.getMinY()));
+					bounds.getCenterX(), bounds.getMaxY(),
+					bounds.getCenterX(), bounds.getMinY()));
 
 			if (areaRenderer != null) {
 				areaRenderer.getArea(axis, axisRenderer, dataPoints).draw(context);

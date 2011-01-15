@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.erichseifert.gral.data.AbstractDataSource;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.MathUtils;
@@ -168,15 +169,18 @@ public abstract class Filter extends AbstractDataSource
 	 * @param col Column of the cell.
 	 * @param row Row of the cell.
 	 * @param value New cell value.
+	 * @returns
 	 */
-	protected void set(int col, int row, double value) {
+	protected Number set(int col, int row, double value) {
 		int colPos = getIndex(col);
 		if (colPos < 0) {
 			throw new IllegalArgumentException(
 					"Can't set value in unfiltered column."); //$NON-NLS-1$
 		}
+		Number old = rows.get(row)[colPos];
 		rows.get(row)[colPos] = value;
-		notifyDataChanged();
+		notifyDataChanged(new DataChangedEvent(this, col, row, old, value));
+		return old;
 	}
 
 	@Override
@@ -209,9 +213,9 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	@Override
-	public void dataChanged(DataSource data) {
+	public void dataChanged(DataSource source, DataChangedEvent... events) {
 		filter();
-		notifyDataChanged();
+		notifyDataChanged(events);
 	}
 
 	/**

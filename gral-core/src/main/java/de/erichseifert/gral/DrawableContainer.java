@@ -32,8 +32,13 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 /**
- * Implementation of Container that is a <code>Drawable</code> itself.
- * It takes care of the layout and the insets and stores <code>Drawable</code>s.
+ * Implementation of <code>Container</code> that is a <code>Drawable</code>
+ * itself and stores instances of <code>Drawable</code> as components.
+ * It takes care of laying out, managing insets for and painting the
+ * components.
+ *
+ * @see Drawable
+ * @see Container
  */
 public class DrawableContainer extends AbstractDrawable implements Container {
 	/** Empty margins that should be preserved around the contents of this

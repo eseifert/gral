@@ -42,8 +42,9 @@ import de.erichseifert.gral.DrawableContainer;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.PlotArea;
-import de.erichseifert.gral.DrawableConstants.Location;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -71,26 +72,34 @@ public abstract class Plot extends DrawableContainer
 		implements SettingsStorage, SettingsListener, DataListener {
 	/** Key for specifying the {@link java.lang.String} instance for the title
 	of the plot. */
-	public static final Key TITLE = new Key("plot.title"); //$NON-NLS-1$
+	public static final Key TITLE =
+		new Key("plot.title"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot. */
-	public static final Key BACKGROUND = new Key("plot.background"); //$NON-NLS-1$
+	public static final Key BACKGROUND =
+		new Key("plot.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	paint the border of the plot. */
-	public static final Key BORDER = new Key("plot.border"); //$NON-NLS-1$
+	public static final Key BORDER =
+		new Key("plot.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot. */
-	public static final Key COLOR = new Key("plot.color"); //$NON-NLS-1$
+	public static final Key COLOR =
+		new Key("plot.color"); //$NON-NLS-1$
 	/** Key for specifying the whether antialiasing is enabled. */
-	public static final Key ANTIALISING = new Key("plot.antialiasing"); //$NON-NLS-1$
+	public static final Key ANTIALISING =
+		new Key("plot.antialiasing"); //$NON-NLS-1$
 	/** Key for specifying whether the legend should be shown. */
-	public static final Key LEGEND = new Key("plot.legend"); //$NON-NLS-1$
+	public static final Key LEGEND =
+		new Key("plot.legend"); //$NON-NLS-1$
 	/** Key for specifying the positioning of the legend using a
-	{@link de.erichseifert.gral.DrawableConstants.Location} value. */
-	public static final Key LEGEND_LOCATION = new Key("plot.legend.location"); //$NON-NLS-1$
+	{@link de.erichseifert.gral.Location} value. */
+	public static final Key LEGEND_LOCATION =
+		new Key("plot.legend.location"); //$NON-NLS-1$
 	/** Key for specifying the {@link de.erichseifert.gral.util.Insets2D} that
 	describes the legend's margin. */
-	public static final Key LEGEND_MARGIN = new Key("plot.legend.margin"); //$NON-NLS-1$
+	public static final Key LEGEND_MARGIN =
+		new Key("plot.legend.margin"); //$NON-NLS-1$
 
 	/** Settings stored as pairs <code>(key, value)</code>. */
 	private final Settings settings;
@@ -532,7 +541,7 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	@Override
-	public void dataChanged(DataSource data) {
+	public void dataChanged(DataSource data, DataChangedEvent... events) {
 		refresh();
 	}
 

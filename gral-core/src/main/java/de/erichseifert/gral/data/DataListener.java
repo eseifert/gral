@@ -22,14 +22,16 @@
 package de.erichseifert.gral.data;
 
 /**
- * Interface providing functions to listen to data changes of data sources.
+ * Interface to listen for changes in data sources.
  * @see DataSource
  */
 public interface DataListener {
 	/**
 	 * Method that is invoked by objects that provide support for
 	 * <code>DataListener</code>s.
-	 * @param data data that has changed
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have changed
 	 */
-	void dataChanged(DataSource data);
+	void dataChanged(DataSource source, DataChangedEvent... events);
 }

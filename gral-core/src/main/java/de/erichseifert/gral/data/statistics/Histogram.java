@@ -22,6 +22,7 @@
 package de.erichseifert.gral.data.statistics;
 
 import de.erichseifert.gral.data.AbstractDataSource;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 
@@ -48,9 +49,9 @@ public abstract class Histogram extends AbstractDataSource
 	protected abstract void rebuildCells();
 
 	@Override
-	public void dataChanged(DataSource data) {
+	public void dataChanged(DataSource data, DataChangedEvent... events) {
 		rebuildCells();
-		notifyDataChanged();
+		notifyDataChanged(events);
 	}
 
 	/**

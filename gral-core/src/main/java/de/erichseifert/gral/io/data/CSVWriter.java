@@ -58,7 +58,8 @@ public class CSVWriter extends AbstractDataWriter {
 			"TSV", //$NON-NLS-1$
 			Messages.getString("DataIO.tsvDescription"), //$NON-NLS-1$
 			"text/tab-separated-values", //$NON-NLS-1$
-			new String[] {"tsv", "tab", "txt"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new String[] {
+				"tsv", "tab", "txt"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 	}
 

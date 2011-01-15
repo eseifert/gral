@@ -58,7 +58,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		propFiles = getClass().getClassLoader().getResources(propFileName);
 		if (!propFiles.hasMoreElements()) {
 			throw new IOException(MessageFormat.format(
-					"Property file not found: {0}", propFileName)); //$NON-NLS-1$
+				"Property file not found: {0}", propFileName)); //$NON-NLS-1$
 		}
 		Properties props = new Properties();
 		while (propFiles.hasMoreElements()) {
@@ -92,7 +92,8 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	public IOCapabilities getCapabilities(String mimeType) {
 		Class<? extends T> clazz = entries.get(mimeType);
 		try {
-			Method capabilitiesGetter = clazz.getMethod("getCapabilities"); //$NON-NLS-1$
+			Method capabilitiesGetter =
+				clazz.getMethod("getCapabilities"); //$NON-NLS-1$
 			Set<IOCapabilities> capabilities =
 				(Set<IOCapabilities>) capabilitiesGetter.invoke(clazz);
 			for (IOCapabilities c : capabilities) {
@@ -122,7 +123,8 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 
 	@Override
 	public List<IOCapabilities> getCapabilities() {
-		List<IOCapabilities> caps = new ArrayList<IOCapabilities>(entries.size());
+		List<IOCapabilities> caps =
+			new ArrayList<IOCapabilities>(entries.size());
 		for (String mimeType : entries.keySet()) {
 			IOCapabilities capability = getCapabilities(mimeType);
 			if (capability != null) {

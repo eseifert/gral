@@ -62,7 +62,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 		Class<?> cls;
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".EPSGraphics2D"); //$NON-NLS-1$
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE
+					+ ".EPSGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
 				"EPS", //$NON-NLS-1$
 				Messages.getString("ImageIO.epsDescription"), //$NON-NLS-1$
@@ -75,7 +76,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".PDFGraphics2D"); //$NON-NLS-1$
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE
+					+ ".PDFGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
 				"PDF", //$NON-NLS-1$
 				Messages.getString("ImageIO.pdfDescription"), //$NON-NLS-1$
@@ -88,7 +90,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 		}
 
 		try {
-			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".SVGGraphics2D"); //$NON-NLS-1$
+			cls = Class.forName(VECTORGRAPHICS2D_PACKAGE
+					+ ".SVGGraphics2D"); //$NON-NLS-1$
 			addCapabilities(new IOCapabilities(
 				"SVG", //$NON-NLS-1$
 				Messages.getString("ImageIO.svgDescription"), //$NON-NLS-1$
@@ -134,12 +137,13 @@ public class VectorWriter extends IOCapabilitiesStorage
 
 	@Override
 	public void write(Drawable d, OutputStream destination,
-			double x, double y, double width, double height) throws IOException {
+			double x, double y, double width, double height)
+			throws IOException {
 		try {
 			// Create instance of export class
 			Constructor<? extends Graphics2D> constructor =
 				graphicsClass.getConstructor(
-						double.class, double.class, double.class, double.class);
+					double.class, double.class, double.class, double.class);
 			Graphics2D g = constructor.newInstance(x, y, width, height);
 
 			// Output data
@@ -148,8 +152,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 			DrawingContext context =
 				new DrawingContext(g, Quality.QUALITY, Target.VECTOR);
 			d.draw(context);
-			byte[] data = (byte[]) graphicsClass.getMethod("getBytes") //$NON-NLS-1$
-				.invoke(g);
+			byte[] data = (byte[]) graphicsClass.getMethod(
+				"getBytes").invoke(g); //$NON-NLS-1$
 			destination.write(data);
 			d.setBounds(boundsOld);
 		} catch (SecurityException e) {

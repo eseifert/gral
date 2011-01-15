@@ -30,17 +30,15 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 
 /**
- * Abstract implementation of DataSource.
- * This class provides:
- * <ul>
- * <li>the administration of DataListeners</li>
- * <li>the administration of the Statistics capabilities</li>
- * <li>capability of notification of DataListeners</li>
- * <li>a basic iterator</li>
- * </ul>
+ * Abstract implementation of the <code>DataSource</code> interface.
+ * This class provides access to statistical information,
+ * administration and notification of listeners and supports
+ * iteration of data values.
  */
 public abstract class AbstractDataSource implements DataSource {
+	/** Set of objects that will be notified of changes to the data values. */
 	private final Set<DataListener> dataListeners;
+	/** Statistical description of the data values. */
 	private Statistics statistics;
 
 	/**
@@ -116,12 +114,13 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Notifies all registered DataListeners that the data of this DataSource
-	 * has changed.
+	 * Notifies all registered listeners that data values have changed.
+	 * @param source Data source that has changed.
+	 * @param events Event objects describing all value that have changed.
 	 */
-	protected void notifyDataChanged() {
+	protected void notifyDataChanged(DataChangedEvent... events) {
 		for (DataListener dataListener : dataListeners) {
-			dataListener.dataChanged(this);
+			dataListener.dataChanged(this, events);
 		}
 	}
 

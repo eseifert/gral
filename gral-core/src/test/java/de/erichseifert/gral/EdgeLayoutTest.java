@@ -29,7 +29,6 @@ import java.awt.geom.Rectangle2D;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.DrawableConstants.Location;
 
 public class EdgeLayoutTest {
 	private static final double DELTA = 1e-15;

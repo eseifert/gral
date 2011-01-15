@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.data.DataAccessor;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.MathUtils;
@@ -187,7 +188,7 @@ public class Statistics implements DataListener {
 	}
 
 	@Override
-	public void dataChanged(DataSource data) {
+	public void dataChanged(DataSource source, DataChangedEvent... events) {
 		statistics.clear();
 
 		int colCount = data.getColumnCount();

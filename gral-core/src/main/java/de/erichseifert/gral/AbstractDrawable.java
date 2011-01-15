@@ -26,10 +26,9 @@ import java.awt.geom.Rectangle2D;
 
 
 /**
- * Abstract implementation of the Drawable interface.
- * Implemented functionality includes getting and setting the bounding
- * rectangle in different ways.
- * @see Drawable
+ * Abstract implementation of the {@link Drawable} interface.
+ * This class implements common functionality like the different ways for
+ * getting and setting the bounding rectangle of the drawable object.
  */
 public abstract class AbstractDrawable implements Drawable {
 	/** Boundaries of the drawalbe object. */

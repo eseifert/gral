@@ -26,7 +26,16 @@ import de.erichseifert.gral.data.statistics.Orientation;
 
 
 /**
- * Class for storing a column of a data source.
+ * <p>Class for accessing a specific column of a data source. The data of the
+ * column can be accessed using the <code>get(int)</code> method.</p>
+ *
+ * <p>Example for accessing value at column 2, row 3 of a data source:</p>
+ * <pre>
+ * Column col = new Column(dataSource, 2);
+ * Number v = col.get(3);
+ * </pre>
+ *
+ * @see DataSource
  */
 public class Column extends DataAccessor {
 	/**

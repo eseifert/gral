@@ -40,16 +40,16 @@ public abstract class IOCapabilitiesStorage {
 	}
 
 	/**
-	 * Returns a Set with IOCapabilities for all supported formats.
-	 * @return IOCapabilities.
+	 * Returns a <code>Set</code> with capabilities for all supported formats.
+	 * @return Capabilities.
 	 */
 	public static Set<IOCapabilities> getCapabilities() {
 		return Collections.unmodifiableSet(capabilities);
 	}
 
 	/**
-	 * Adds the specified IOCapabilities to the Set of supported formats.
-	 * @param capabilities IOCapabilities to be added.
+	 * Adds the specified capabilities to the Set of supported formats.
+	 * @param capabilities Capabilities to be added.
 	 */
 	protected static final void addCapabilities(IOCapabilities capabilities) {
 		IOCapabilitiesStorage.capabilities.add(capabilities);

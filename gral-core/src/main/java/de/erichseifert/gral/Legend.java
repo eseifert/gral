@@ -29,8 +29,7 @@ import java.awt.geom.Dimension2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.erichseifert.gral.DrawableConstants.Location;
-import de.erichseifert.gral.DrawableConstants.Orientation;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -43,33 +42,38 @@ import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
- * <p>Abstract class that serves as a basic for any legend in a plot.
- * It provides an inner <code>Item</code> class which is responsible for
- * displaying a specific data source.</p>
- * <p>The functionality includes:</p>
- * <ul>
- *   <li>Storing and retrieving settings</li>
- *   <li>Adding and removing data sources</li>
- * </ul>
+ * <p>Abstract class that serves as a base for legends in plots.
+ * It stores a list of of items of type <code>Item</code> which are used to
+ * display a symbol and label for each (visible) data source.</p>
+ * <p>Like other elements legends can be styled using various settings. The
+ * settings are used to control to control how the legend, and its items
+ * are displayed. The actual rendering of symbols has to be implemented by
+ * derived classes.</p>
  */
 public abstract class Legend extends DrawableContainer
 		implements SettingsStorage, SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the background. */
-	public static final Key BACKGROUND = new Key("legend.background"); //$NON-NLS-1$
+	public static final Key BACKGROUND =
+		new Key("legend.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	 paint the border of the legend. */
-	public static final Key BORDER = new Key("legend.border"); //$NON-NLS-1$
+	public static final Key BORDER =
+		new Key("legend.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 fill the border of the legend. */
-	public static final Key COLOR = new Key("legend.color"); //$NON-NLS-1$
+	public static final Key COLOR =
+		new Key("legend.color"); //$NON-NLS-1$
 	/** Key for specifying the orientation of the legend using a
-	 {@link de.erichseifert.gral.DrawableConstants.Orientation} value. */
-	public static final Key ORIENTATION = new Key("legend.orientation"); //$NON-NLS-1$
+	 {@link de.erichseifert.gral.Orientation} value. */
+	public static final Key ORIENTATION =
+		new Key("legend.orientation"); //$NON-NLS-1$
 	/** Key for specifying the gap between items. */
-	public static final Key GAP = new Key("legend.gap"); //$NON-NLS-1$
+	public static final Key GAP =
+		new Key("legend.gap"); //$NON-NLS-1$
 	/** Key for specifying the gap between items. */
-	public static final Key SYMBOL_SIZE = new Key("legend.symbol.size"); //$NON-NLS-1$
+	public static final Key SYMBOL_SIZE =
+		new Key("legend.symbol.size"); //$NON-NLS-1$
 
 	/** Settings stored as pairs (key, value). */
 	private final Settings settings;
@@ -239,7 +243,7 @@ public abstract class Legend extends DrawableContainer
 	/**
 	 * Invoked if data has changed.
 	 */
-	protected void notifyDataChanged() {
+	protected void notifyDataChanged(DataChangedEvent... events) {
 		// FIXME Is this function needed?
 		layout();
 	}

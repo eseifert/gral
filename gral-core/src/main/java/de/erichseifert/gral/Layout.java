@@ -25,21 +25,22 @@ import java.awt.geom.Dimension2D;
 
 /**
  * Interface that provides basic functions for arranging a layout.
- * Functionality includes the arrangement of the layout itself and
- * returning the preferred size of a container.
+ * Functionality includes the arrangement of components and returning the
+ * preferred size of a specified container using this layout.
  */
 public interface Layout {
 
 	/**
-	 * Arranges the components of this Container according to this Layout.
+	 * Arranges the components of the specified container according to this
+	 * layout.
 	 * @param container Container to be laid out.
 	 */
 	void layout(Container container);
 
 	/**
-	 * Returns the preferred size of the specified Container using this Layout.
+	 * Returns the preferred size of the specified container using this layout.
 	 * @param container Container whose preferred size is to be returned.
-	 * @return Preferred extent of the specified Container.
+	 * @return Preferred extent of the specified container.
 	 */
 	Dimension2D getPreferredSize(Container container);
 }

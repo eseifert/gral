@@ -71,8 +71,10 @@ public class AudioReader extends AbstractDataReader {
 		// FIXME Should the types parameter be used?
 		DataTable data = new DataTable(Double.class);
 
-		double factor = this.<Number>getSetting("factor").doubleValue(); //$NON-NLS-1$
-		double offset = this.<Number>getSetting("offset").doubleValue(); //$NON-NLS-1$
+		double factor = this.<Number>getSetting("factor") //$NON-NLS-1$
+			.doubleValue();
+		double offset = this.<Number>getSetting("offset") //$NON-NLS-1$
+			.doubleValue();
 
 		int sampleSize = audio.getFormat().getSampleSizeInBits();
 		byte[] samples = new byte[sampleSize/8];

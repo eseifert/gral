@@ -113,8 +113,8 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	}
 
 	@Override
-	public void dataChanged(DataSource data) {
-		notifyDataChanged();
+	public void dataChanged(DataSource source, DataChangedEvent... events) {
+		notifyDataChanged(events);
 	}
 
 	@Override

@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
+import de.erichseifert.gral.data.DataChangedEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
@@ -60,29 +61,36 @@ import de.erichseifert.gral.util.Settings.Key;
 public class PiePlot extends Plot implements DataListener {
 	/** Key for specifying the radius of the pie relative to the
 	plot area size. */
-	public static final Key RADIUS = new Key("pieplot.radius"); //$NON-NLS-1$
+	public static final Key RADIUS =
+		new Key("pieplot.radius"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the inner
 	radius of the pie relative to the outer radius. */
-	public static final Key RADIUS_INNER = new Key("pieplot.radius.inner"); //$NON-NLS-1$
+	public static final Key RADIUS_INNER =
+		new Key("pieplot.radius.inner"); //$NON-NLS-1$
 	/** Key for specifying an instance of
 	{@link de.erichseifert.gral.plots.colors.ColorMapper} used for coloring
 	the segments. */
-	public static final Key COLORS = new Key("pieplot.colorlist"); //$NON-NLS-1$
+	public static final Key COLORS =
+		new Key("pieplot.colorlist"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Boolean} value which decides
 	whether the segments should be ordered clockwise (<code>true</code>) or
 	counterclockwise (<code>false</code>). */
-	public static final Key CLOCKWISE = new Key("pieplot.clockwise"); //$NON-NLS-1$
+	public static final Key CLOCKWISE =
+		new Key("pieplot.clockwise"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the starting
 	angle of the first segment in degrees. */
-	public static final Key START = new Key("pieplot.start"); //$NON-NLS-1$
+	public static final Key START =
+		new Key("pieplot.start"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the width of
 	gaps between the segments. */
-	public static final Key GAP = new Key("pieplot.gap"); //$NON-NLS-1$
+	public static final Key GAP =
+		new Key("pieplot.gap"); //$NON-NLS-1$
 
 	/**
 	 * Class that represents the drawing area of a <code>PiePlot</code>.
 	 */
-	public static class PiePlotArea2D extends PlotArea implements DataListener {
+	public static class PiePlotArea2D extends PlotArea
+			implements DataListener {
 		/** Pie plot that this renderer is associated to. */
 		private final PiePlot plot;
 		/** Factor that stores the degrees per data value. */
@@ -192,7 +200,7 @@ public class PiePlot extends Plot implements DataListener {
 		}
 
 		@Override
-		public void dataChanged(DataSource data) {
+		public void dataChanged(DataSource data, DataChangedEvent... events) {
 			// Calculate sum of all values
 			double colYSum = 0.0;
 			for (int i = 0; i < data.getRowCount();  i++) {
@@ -222,7 +230,10 @@ public class PiePlot extends Plot implements DataListener {
 
 				slice[0] = sliceStart;
 				// Negative values cause "empty" slices
-				slice[1] = (val >= 0.0) ? (val * degreesPerValue) : (Double.NaN);
+				slice[1] = Double.NaN;
+				if (val >= 0.0) {
+					slice[1] = val * degreesPerValue;
+				}
 
 				sliceStart += Math.abs(val) * degreesPerValue;
 			}
@@ -251,7 +262,7 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	@Override
-	public void dataChanged(DataSource data) {
-		((PiePlotArea2D) getPlotArea()).dataChanged(data);
+	public void dataChanged(DataSource data, DataChangedEvent... events) {
+		((PiePlotArea2D) getPlotArea()).dataChanged(data, events);
 	}
 }

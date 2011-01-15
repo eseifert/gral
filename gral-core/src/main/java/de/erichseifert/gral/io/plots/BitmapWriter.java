@@ -71,7 +71,8 @@ public class BitmapWriter extends IOCapabilitiesStorage
 			"JPEG/JFIF", //$NON-NLS-1$
 			Messages.getString("ImageIO.jpegDescription"), //$NON-NLS-1$
 			"image/jpeg", //$NON-NLS-1$
-			new String[] {"jpg", "jpeg", "jpe", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new String[] {
+				"jpg", "jpeg", "jpe", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				"jif", "jfif", "jfi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		));
 
@@ -103,9 +104,12 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	protected BitmapWriter(String mimeType) {
 		this.mimeType = mimeType;
 
-		boolean isAlphaSupported = "image/png".equals(mimeType); //$NON-NLS-1$
-		boolean isColorSupported = !"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
-		boolean isGrayscaleSupported = !"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
+		boolean isAlphaSupported =
+			"image/png".equals(mimeType); //$NON-NLS-1$
+		boolean isColorSupported =
+			!"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
+		boolean isGrayscaleSupported =
+			!"image/vnd.wap.wbmp".equals(mimeType); //$NON-NLS-1$
 
 		if (isColorSupported) {
 			if (isAlphaSupported) {
@@ -133,7 +137,8 @@ public class BitmapWriter extends IOCapabilitiesStorage
 
 	@Override
 	public void write(Drawable d, OutputStream destination,
-			double x, double y, double width, double height) throws IOException {
+			double x, double y, double width, double height)
+			throws IOException {
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 

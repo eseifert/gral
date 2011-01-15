@@ -27,7 +27,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 /**
- * An interface that provides functions to store and layout Drawables.
+ * An interface that provides functions to build a group of multiple components
+ * of {@link Drawable}. It is also responsible for managing layout of its
+ * components using a {@link Layout} and layout constraints for each component.
  */
 public interface Container extends Iterable<Drawable> {
 	/**

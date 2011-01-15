@@ -32,16 +32,14 @@ import de.erichseifert.gral.data.comparators.DataComparator;
 
 
 /**
- * </p>Creates a table-like data source. <code>DataTable</code> is a basic writable
- * implementation of <code>DataSource</code>.</p>
- * <p>Its functionality includes:</p>
- * <ul>
- *   <li>Adding and getting rows</li>
- *   <li>Getting rows cells</li>
- *   <li>Deleting all data in the table</li>
- *   <li>Getting row and column count</li>
- *   <li>Sorting the table with a specific <code>DataComparator</code></li>
- * </ul>
+ * <p>A writable implementation of a data source. Additionally to the standard
+ * functionality of <code>DataSource</code> it allows for adding and deleting
+ * rows. Additionally, all data in the table can be deleted.</p>
+ * <p>The data in the table can be sorted row-wise with the method
+ * <code>sort(DataComparator...)</code>. This way it is possible sort column 1
+ * ascending and column 3 descending.</p>
+ *
+ * @see DataSource
  */
 public class DataTable extends AbstractDataSource {
 	/** All values stored as rows of column arrays. */
@@ -89,6 +87,7 @@ public class DataTable extends AbstractDataSource {
 		}
 		int i = 0;
 		Number[] row = new Number[values.size()];
+		DataChangedEvent[] events = new DataChangedEvent[row.length];
 		for (Number value : values) {
 			if ((value != null)
 					&& !(types[i].isAssignableFrom(value.getClass()))) {
@@ -96,11 +95,13 @@ public class DataTable extends AbstractDataSource {
 						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
 						types[i], value.getClass()));
 			}
-			row[i++] = value;
+			row[i] = value;
+			events[i] = new DataChangedEvent(this, i, rowCount + 1, null, value);
+			i++;
 		}
 		rows.add(row);
 		rowCount++;
-		notifyDataChanged();
+		notifyDataChanged(events);
 	}
 
 	/**
@@ -108,9 +109,14 @@ public class DataTable extends AbstractDataSource {
 	 * @param row Index of the row to remove
 	 */
 	public void remove(int row) {
+		Row r = new Row(this, row);
+		DataChangedEvent[] events = new DataChangedEvent[columnCount];
+		for (int col = 0; col < events.length; col++) {
+			events[col] = new DataChangedEvent(this, col, row, r.get(col), null);
+		}
 		rows.remove(row);
 		rowCount--;
-		notifyDataChanged();
+		notifyDataChanged(events);
 	}
 
 	/**
@@ -138,7 +144,7 @@ public class DataTable extends AbstractDataSource {
 		Number old = get(col, row);
 		if (!old.equals(value)) {
 			rows.get(row)[col] = value;
-			notifyDataChanged();
+			notifyDataChanged(new DataChangedEvent(this, col, row, old, value));
 		}
 		return old;
 	}

@@ -21,17 +21,17 @@
  */
 package de.erichseifert.gral;
 
+import java.awt.BorderLayout;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.DrawableConstants.Location;
 import de.erichseifert.gral.util.Insets2D;
 
 
 /**
- * Implementation of Layout that arranges a Container's components according to a certain grid.
- * This is similar to java's BorderLayout, but also allows components to
- * be placed in each of the corners.
+ * Implementation of Layout that arranges a {@link Container}'s components
+ * according to a certain grid. This is similar to Java's {@link BorderLayout},
+ * but also allows components to be placed in each of the corners.
  */
 public class EdgeLayout implements Layout {
 	// TODO Add setters and getters.

@@ -32,8 +32,8 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
-import de.erichseifert.gral.DrawableConstants;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
@@ -86,7 +86,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 
 		setSettingDefault(ALIGNMENT_X, 0.5);
 		setSettingDefault(ALIGNMENT_Y, 0.5);
-		setSettingDefault(ANCHOR, DrawableConstants.Location.CENTER);
+		setSettingDefault(ANCHOR, Location.CENTER);
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ROTATION, 0.0);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -111,7 +111,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		Rectangle2D textBounds = getLayout().getBounds();
 		double alignmentX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
 		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
-		DrawableConstants.Location anchor = getSetting(ANCHOR);
+		Location anchor = getSetting(ANCHOR);
 		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
 		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
 		txLabel.translate(

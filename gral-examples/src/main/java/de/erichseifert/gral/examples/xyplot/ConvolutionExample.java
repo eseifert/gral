@@ -29,8 +29,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.DrawableConstants.Location;
-import de.erichseifert.gral.DrawableConstants.Orientation;
+import de.erichseifert.gral.Location;
+import de.erichseifert.gral.Orientation;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.filters.Convolution;

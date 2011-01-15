@@ -26,14 +26,10 @@ import java.awt.geom.Rectangle2D;
 
 
 /**
- * <p>Interface providing functions for a lightweight component that can be
- * drawn on the screen.</p>
- * <p>Functions include:</p>
- * <ul>
- *   <li>Getting and setting the bounds</li>
- *   <li>Getting the preferred size</li>
- *   <li>A drawing routine</li>
- * </ul>
+ * Interface providing functions for a lightweight component that can be drawn
+ * on the screen. Functions include management of the bounding rectangle,
+ * returning a preferred size for layout operations, or drawing using a
+ * specified context.
  */
 public interface Drawable {
 	/**
