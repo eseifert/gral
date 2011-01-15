@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.data.statistics;
+package de.erichseifert.gral.util;
+
 
 /**
- * Data type that describes the direction of the histogram.
+ * Enumeration type to describe the orientation of a arbitrary elements.
  */
 public enum Orientation {
-	/** Horizontal histogram. */
+	/** Horizontal orientation. */
 	HORIZONTAL,
-	/** Vertical histogram. */
+	/** Vertical orientation. */
 	VERTICAL
 }

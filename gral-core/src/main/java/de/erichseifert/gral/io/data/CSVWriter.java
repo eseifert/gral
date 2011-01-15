@@ -38,10 +38,11 @@ import de.erichseifert.gral.util.Messages;
  * delimiter for separating columns. Lines end with a carriage return and a
  * line feed character.</p>
  * <p><code>CSVWriter</code>s instances should be obtained by the
- * {@link DataWriterFeactory} rather than being created manually:</p>
+ * {@link DataWriterFactory} rather than being created manually:</p>
  * <pre>
- * DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
- * writer.write(data, outputFile);
+ * DataWriterFactory factory = DataWriterFactory.getInstance();
+ * DataWriter writer = factory.get("text/csv");
+ * writer.write(data, new FileOutputStream(filename));
  * </pre>
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */

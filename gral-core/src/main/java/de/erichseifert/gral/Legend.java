@@ -34,6 +34,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
@@ -65,7 +66,7 @@ public abstract class Legend extends DrawableContainer
 	public static final Key COLOR =
 		new Key("legend.color"); //$NON-NLS-1$
 	/** Key for specifying the orientation of the legend using a
-	 {@link de.erichseifert.gral.Orientation} value. */
+	 {@link de.erichseifert.gral.util.Orientation} value. */
 	public static final Key ORIENTATION =
 		new Key("legend.orientation"); //$NON-NLS-1$
 	/** Key for specifying the gap between items. */

@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.data.statistics.Orientation;
+import de.erichseifert.gral.util.Orientation;
 
 
 

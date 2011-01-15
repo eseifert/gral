@@ -43,12 +43,14 @@ import de.erichseifert.gral.util.Messages;
  * Class that stores <code>Drawable</code> instances as bitmap graphics.
  * Supported formats:
  * <ul>
- *   <li>BMP</li>
- *   <li>GIF</li>
- *   <li>JPEG</li>
- *   <li>PNG</li>
- *   <li>WBMP</li>
+ *   <li>Windows Bitmap (BMP)</li>
+ *   <li>Graphics Interchange Format (GIF)</li>
+ *   <li>JPEG File Interchange Format (JPEG)</li>
+ *   <li>Portable Network Graphics (PNG)</li>
+ *   <li>Wireless Application Protocol Bitmap (WBMP)</li>
  * </ul>
+ * <p>This class shouldn't be used directly but using the
+ * {@link DrawableWriterFactory}.</p>
  */
 public class BitmapWriter extends IOCapabilitiesStorage
 		implements DrawableWriter {

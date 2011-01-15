@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.statistics.Orientation;
+import de.erichseifert.gral.util.Orientation;
 
 public class StatisticsTest {
 	private static final double DELTA = 1e-10;

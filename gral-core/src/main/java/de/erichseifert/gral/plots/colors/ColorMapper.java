@@ -23,7 +23,8 @@ package de.erichseifert.gral.plots.colors;
 import java.awt.Color;
 
 /**
- * Interface the provides a function to retrieve Colors.
+ * Interface that provides a function to retrieve Colors. This can be used to
+ * generate colors for various elements in a plot, e.g. lines, areas, etc.
  */
 public interface ColorMapper {
 	/**

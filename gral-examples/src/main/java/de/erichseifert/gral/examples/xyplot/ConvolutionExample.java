@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.Location;
-import de.erichseifert.gral.Orientation;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.filters.Convolution;
@@ -43,6 +42,7 @@ import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Orientation;
 
 /**
  * Example that shows how to use convultion filtering.

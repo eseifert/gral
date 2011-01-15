@@ -29,9 +29,15 @@ import java.text.MessageFormat;
 import de.erichseifert.gral.io.AbstractIOFactory;
 
 /**
- * A factory class that produces <code>DataWriter</code> instances for a
+ * <p>A factory class that produces <code>DataWriter</code> instances for a
  * specified format. The produced writers can be used to output a
- * <code>DataSource</code> to a data sink.
+ * <code>DataSource</code> to a data sink.</p>
+ * <p>Example usage:</p>
+ * <pre>
+ * DataWriterFactory factory = DataWriterFactory.getInstance();
+ * DataWriter writer = factory.get("image/png");
+ * writer.write(data);
+ * </pre>
  */
 public final class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	/** Singleton instance. */

@@ -29,6 +29,8 @@ import java.awt.geom.Rectangle2D;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.util.Orientation;
+
 
 public class StackedLayoutTest {
 	private static final double DELTA = 1e-15;

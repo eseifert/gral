@@ -35,7 +35,8 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that reads a DataSource from a binary image file.
+ * Class that reads a data source from a binary image file. This class
+ * shouldn't be used directly but using the {@link DataReaderFactory}.
  */
 public class ImageReader extends AbstractDataReader {
 	static {

@@ -34,7 +34,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that connects DataPoints2D with a straight line.
+ * Class that connects two dimensional data points with a straight line.
  */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	/** Number of line segments which will be reserved to avoid unnecessary

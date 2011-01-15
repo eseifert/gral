@@ -37,7 +37,8 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that writes a DataSource to a binary image file.
+ * Class that writes a data source to a binary image file. This class
+ * shouldn't be used directly but using the {@link DataWriterFactory}.
  */
 public class ImageWriter extends AbstractDataWriter {
 	static {

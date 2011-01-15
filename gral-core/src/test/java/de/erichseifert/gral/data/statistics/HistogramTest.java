@@ -27,6 +27,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.util.Orientation;
 
 public class HistogramTest {
 	private static DataTable table;

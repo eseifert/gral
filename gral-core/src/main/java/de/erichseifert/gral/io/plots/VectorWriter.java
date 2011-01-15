@@ -40,13 +40,18 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.util.Messages;
 
 /**
- * Class that stores <code>Drawable</code> instances as vector graphics.
- * Supported formats:
+ * <p>Class that stores <code>Drawable</code> instances as vector graphics.
+ * This implementation requires the <i>VectorGraphics2D</i> library to provide
+ * support for the following file formats:</p>
  * <ul>
- *   <li>EPS</li>
- *   <li>PDF</li>
- *   <li>SVG</li>
+ *   <li>Encapsulated PostScript (EPS)</li>
+ *   <li>Portable Document Format (PDF)</li>
+ *   <li>Scalable Vector Graphics (SVG)</li>
  * </ul>
+ *
+ * <p>If the <i>VectorGraphics2D</i> library isn't available the file formats
+ * aren't registered in the plug-in system. This class shouldn't be used directly
+ * but using the {@link DrawableWriterFactory}.</p>
  */
 public class VectorWriter extends IOCapabilitiesStorage
 		implements DrawableWriter {

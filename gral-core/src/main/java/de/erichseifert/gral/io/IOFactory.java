@@ -24,8 +24,9 @@ package de.erichseifert.gral.io;
 import java.util.List;
 
 /**
- * Interface for factories producing input or output classes. This is be used
- * to create a extensible plug-in system for reading or writing.
+ * Interface for factories producing input (reader) or output (writer) classes.
+ * This is be used to create a extensible plug-in system for reading or writing
+ * data.
  * @param <T> Class of the objects produced by the factory.
  */
 public interface IOFactory<T> {

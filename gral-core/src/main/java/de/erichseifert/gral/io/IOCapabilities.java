@@ -22,8 +22,11 @@
 package de.erichseifert.gral.io;
 
 /**
- * Class that stores information on a
- * {@link de.erichseifert.gral.io.plots.DrawableWriter}.
+ * Class that stores information on a <i>reader</i> or <i>writer</i>
+ * implementation.
+ * @see de.erichseifert.gral.io.data.DataReader
+ * @see de.erichseifert.gral.io.data.DataWriter
+ * @see de.erichseifert.gral.io.plots.DrawableWriter
  */
 public class IOCapabilities {
 	/** Short format name. */

@@ -43,10 +43,11 @@ import de.erichseifert.gral.util.Messages;
  * the file type but can also be set manually. By default the comma character
  * will be used as a delimiter for separating columns.</p>
  * <p><code>CSVReader</code>s instances should be obtained by the
- * {@link DataReaderFeactory} rather than being created manually:</p>
+ * {@link DataReaderFactory} rather than being created manually:</p>
  * <pre>
- * DataReader reader = DataReaderFactory.getInstance().get("text/csv");
- * reader.read(inputFile, Integer.class, Double.class, Double.class);
+ * DataReaderFactory factory = DataReaderFactory.getInstance();
+ * DataReader reader = factory.get("text/csv");
+ * reader.read(new FileInputStream(filename), Integer.class, Double.class);
  * </pre>
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */

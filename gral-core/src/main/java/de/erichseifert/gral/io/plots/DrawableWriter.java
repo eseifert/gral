@@ -31,6 +31,7 @@ import de.erichseifert.gral.Drawable;
  * Interface providing functions for rendering <code>Drawable</code>
  * instances and writing them to an output stream. As an example: a plot
  * can be saved into a bitmap file.
+ * @see DrawableWriterFactory
  */
 public interface DrawableWriter {
 	/**

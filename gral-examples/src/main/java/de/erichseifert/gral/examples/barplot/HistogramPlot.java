@@ -32,7 +32,6 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.data.statistics.Histogram1D;
-import de.erichseifert.gral.data.statistics.Orientation;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -40,6 +39,7 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.Orientation;
 
 
 public class HistogramPlot extends JPanel {

@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.Orientation;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
@@ -54,6 +53,7 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Orientation;
 
 final class UpdateTask implements ActionListener {
 	private final DataTable data;

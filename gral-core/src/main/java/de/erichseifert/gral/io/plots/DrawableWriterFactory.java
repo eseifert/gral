@@ -30,8 +30,16 @@ import de.erichseifert.gral.io.AbstractIOFactory;
 
 
 /**
- * Class that provides <code>DrawableWriter</code> implementations for
- * different file formats.
+ * <p>Class that provides <code>DrawableWriter</code> implementations for
+ * different file formats.</p>
+ *
+ * <p>Example Usage:</p>
+ * <pre>
+ * DrawableWriterFactory factory = DrawableWriterFactory.getInstance();
+ * DrawableWriter writer = factory.get("application/pdf");
+ * writer.write(plot, new FileOutputStream(filename));
+ * </pre>
+ *
  * @see DrawableWriter
  */
 public final class DrawableWriterFactory extends AbstractIOFactory<DrawableWriter> {

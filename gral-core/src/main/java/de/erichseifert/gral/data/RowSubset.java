@@ -33,7 +33,6 @@ import java.util.List;
  * <p>Example that keeps only every second row:</p>
  * <pre>
  * DataSource filtered = new RowSubset() {
- *     @Override
  *     public boolean accept(Row row) {
  *         return row.getIndex()%2 == 0;
  *     }

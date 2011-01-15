@@ -28,7 +28,7 @@ import de.erichseifert.gral.data.DataSource;
 
 
 /**
- * Interface that provides a function to retrieve a DataSource.
+ * Interface that provides a function to retrieve a data source.
  */
 public interface DataReader {
 	/**

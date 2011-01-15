@@ -31,7 +31,7 @@ import java.awt.geom.Rectangle2D;
  * getting and setting the bounding rectangle of the drawable object.
  */
 public abstract class AbstractDrawable implements Drawable {
-	/** Boundaries of the drawalbe object. */
+	/** Boundaries of the drawable object. */
 	private final Rectangle2D bounds;
 
 	/**

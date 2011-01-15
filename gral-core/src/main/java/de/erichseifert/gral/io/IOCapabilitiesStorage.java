@@ -26,7 +26,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Abstract class that implements the basic functions of a writer.
+ * Abstract class that provides the basic functions to store capabilities of
+ * a reader or a writer implementation.
  */
 public abstract class IOCapabilitiesStorage {
 	/** Set of all registered capabilities. */

@@ -28,7 +28,7 @@ import de.erichseifert.gral.data.DataSource;
 
 
 /**
- * Interface that provides a function to store a DataSource.
+ * Interface that provides a function to store a data source.
  */
 public interface DataWriter {
 	/**
