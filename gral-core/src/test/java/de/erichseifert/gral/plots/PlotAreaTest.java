@@ -22,7 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.BasicStroke;
@@ -68,7 +68,7 @@ public class PlotAreaTest {
 		assertEquals("foobar", plotArea.<String>getSetting(PlotArea.BACKGROUND));
 		// Remove
 		plotArea.removeSetting(PlotArea.BACKGROUND);
-		assertNull(plotArea.getSetting(PlotArea.BACKGROUND));
+		assertNotNull(plotArea.getSetting(PlotArea.BACKGROUND));
 	}
 
 	@Test

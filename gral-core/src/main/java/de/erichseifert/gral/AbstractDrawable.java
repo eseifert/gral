@@ -24,13 +24,16 @@ package de.erichseifert.gral;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+import de.erichseifert.gral.util.BasicSettingsStorage;
+
 
 /**
  * Abstract implementation of the {@link Drawable} interface.
  * This class implements common functionality like the different ways for
  * getting and setting the bounding rectangle of the drawable object.
  */
-public abstract class AbstractDrawable implements Drawable {
+public abstract class AbstractDrawable extends BasicSettingsStorage
+		implements Drawable {
 	/** Boundaries of the drawable object. */
 	private final Rectangle2D bounds;
 
@@ -83,5 +86,4 @@ public abstract class AbstractDrawable implements Drawable {
 	public Dimension2D getPreferredSize() {
 		return new de.erichseifert.gral.util.Dimension2D.Double();
 	}
-
 }

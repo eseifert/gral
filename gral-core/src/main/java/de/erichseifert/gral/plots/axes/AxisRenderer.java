@@ -26,7 +26,6 @@ import java.util.List;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingsStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * Interface for generic renderers of axes.

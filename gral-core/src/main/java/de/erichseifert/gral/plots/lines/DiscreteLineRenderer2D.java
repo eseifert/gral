@@ -32,7 +32,6 @@ import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Orientation;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -63,9 +62,10 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		Drawable d = new AbstractDrawable() {
 			@Override
 			public void draw(DrawingContext context) {
-				Orientation dir = getSetting(ASCENT_DIRECTION);
+				Orientation dir = DiscreteLineRenderer2D.this
+					.getSetting(ASCENT_DIRECTION);
 				double ascendingPoint = DiscreteLineRenderer2D.this
-						.<Number>getSetting(ASCENDING_POINT).doubleValue();
+					.<Number>getSetting(ASCENDING_POINT).doubleValue();
 
 				// Construct shape
 				Path2D line = new Path2D.Double();
@@ -92,9 +92,10 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw path
 				Shape lineShape = punch(line, points);
-				Paint paint = getSetting(LineRenderer.COLOR);
+				Paint paint = DiscreteLineRenderer2D.this
+					.getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(
-						context.getGraphics(), lineShape, paint, null);
+					context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

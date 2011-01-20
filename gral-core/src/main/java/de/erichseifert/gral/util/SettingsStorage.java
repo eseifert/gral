@@ -21,13 +21,45 @@
  */
 package de.erichseifert.gral.util;
 
-import de.erichseifert.gral.util.Settings.Key;
+import java.io.Serializable;
+
 
 /**
  * Interface providing functions to store and retrieve settings for an
  * object.
  */
 public interface SettingsStorage {
+	/**
+	 * A settings key storing a name.
+	 */
+	public static final class Key implements Serializable {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1L;
+		/** Path-like formatted name to identify the setting. */
+		private final String name;
+
+		/**
+		 * Constructor that initializes the instance with a name.
+		 * @param name Name associated with this key.
+		 */
+		public Key(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * Returns the name associated with this key.
+		 * @return Name of the settings key.
+		 */
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
+
 	/**
 	 * Returns the setting with the specified key.
 	 * If no setting is available, the default setting will be returned.

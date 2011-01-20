@@ -58,7 +58,6 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**

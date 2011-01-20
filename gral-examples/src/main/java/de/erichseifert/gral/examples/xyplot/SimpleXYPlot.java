@@ -49,6 +49,9 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class SimpleXYPlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
 	public SimpleXYPlot() {

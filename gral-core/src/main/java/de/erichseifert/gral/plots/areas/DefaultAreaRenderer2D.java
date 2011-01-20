@@ -51,7 +51,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 		return new AbstractDrawable() {
 			@Override
 			public void draw(DrawingContext context) {
-				Paint paint = getSetting(COLOR);
+				Paint paint = DefaultAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),
 						area, paint, area.getBounds2D());
 			}

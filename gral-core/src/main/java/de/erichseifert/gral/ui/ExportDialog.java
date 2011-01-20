@@ -48,6 +48,9 @@ import de.erichseifert.gral.util.Messages;
  * specify the document dimensions.
  */
 public class ExportDialog extends JDialog {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+
 	/** Type of user feedback. */
 	public static enum UserAction {
 		/** User confirmed dialog. */

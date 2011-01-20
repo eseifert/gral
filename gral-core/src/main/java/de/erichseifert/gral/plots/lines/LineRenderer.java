@@ -24,7 +24,6 @@ package de.erichseifert.gral.plots.lines;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.SettingsStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -58,5 +57,4 @@ public interface LineRenderer extends SettingsStorage {
 	 * @return Representation of the line.
 	 */
 	Drawable getLine(Iterable<DataPoint> points);
-
 }

@@ -37,7 +37,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * Default two-dimensional implementation of the <code>AreaRenderer</code>
@@ -65,7 +64,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		return new AbstractDrawable() {
 			@Override
 			public void draw(DrawingContext context) {
-				Paint paint = getSetting(COLOR);
+				Paint paint = LineAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),
 						area, paint, area.getBounds2D());
 			}

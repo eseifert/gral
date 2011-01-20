@@ -133,6 +133,8 @@ public class InteractivePanel extends DrawablePanel
 	 */
 	private final class MouseZoomListener extends MouseAdapter
 			implements MouseWheelListener, Serializable {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1L;
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			zoom(-e.getWheelRotation());

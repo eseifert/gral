@@ -34,6 +34,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class ScatterPlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
 	public ScatterPlot() {

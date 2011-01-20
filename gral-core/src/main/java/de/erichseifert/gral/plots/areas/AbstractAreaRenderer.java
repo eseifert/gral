@@ -26,11 +26,10 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 
 import de.erichseifert.gral.plots.DataPoint;
+import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.Settings.Key;
 
 /**
  * <p>Abstract class that renders an area in two-dimensional space.</p>
@@ -40,16 +39,13 @@ import de.erichseifert.gral.util.Settings.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAreaRenderer
+public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		implements AreaRenderer, SettingsListener {
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
-
 	/**
-	 * Creates a new instance with default settings.
+	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAreaRenderer() {
-		this.settings = new Settings(this);
+		addSettingsListener(this);
 
 		setSettingDefault(GAP, 0.0);
 		setSettingDefault(GAP_ROUNDED, false);
@@ -74,32 +70,6 @@ public abstract class AbstractAreaRenderer
 	}
 
 	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.<T>setDefault(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
-	}
-
-	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
-
 }

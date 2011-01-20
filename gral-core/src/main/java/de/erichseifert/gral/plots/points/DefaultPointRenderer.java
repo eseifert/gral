@@ -39,13 +39,15 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class DefaultPointRenderer extends AbstractPointRenderer {
 
 	@Override
-	public Drawable getPoint(final Axis axisY, final AxisRenderer axisYRenderer, final Row row) {
+	public Drawable getPoint(final Axis axisY,
+			final AxisRenderer axisYRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			@Override
 			public void draw(DrawingContext context) {
-				Paint paint = getSetting(COLOR);
+				Paint paint = DefaultPointRenderer.this.getSetting(COLOR);
 				Shape point = getPointPath(row);
-				GraphicsUtils.fillPaintedShape(context.getGraphics(), point, paint, null);
+				GraphicsUtils.fillPaintedShape(
+					context.getGraphics(), point, paint, null);
 				PointRenderer renderer = DefaultPointRenderer.this;
 
 				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {

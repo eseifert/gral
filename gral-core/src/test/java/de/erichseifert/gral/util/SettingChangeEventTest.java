@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.util.Settings.Key;
+import de.erichseifert.gral.util.SettingsStorage.Key;
 
 public class SettingChangeEventTest {
 	@Test

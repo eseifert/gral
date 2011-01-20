@@ -34,6 +34,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimplePiePlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	public SimplePiePlot() {
 		super(new BorderLayout());

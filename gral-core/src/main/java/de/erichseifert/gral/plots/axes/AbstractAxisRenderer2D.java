@@ -45,14 +45,13 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
+import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -65,11 +64,8 @@ import de.erichseifert.gral.util.Settings.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAxisRenderer2D
+public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		implements AxisRenderer, SettingsListener {
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
-
 	/** Line segments approximating the shape of the axis. */
 	private Line2D[] shapeLines;
 	/** Normals of the line segments approximating the axis. */
@@ -84,7 +80,7 @@ public abstract class AbstractAxisRenderer2D
 	 * default settings.
 	 */
 	public AbstractAxisRenderer2D() {
-		settings = new Settings(this);
+		addSettingsListener(this);
 
 		setSettingDefault(INTERSECTION, 0.0);
 
@@ -578,31 +574,6 @@ public abstract class AbstractAxisRenderer2D
 				-(line.getX2() - line.getX1()) / segmentLength
 			);
 		}
-	}
-
-	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.<T>setDefault(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
 	}
 
 	@Override

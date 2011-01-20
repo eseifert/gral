@@ -23,6 +23,8 @@ package de.erichseifert.gral.util;
 
 import java.util.EventObject;
 
+import de.erichseifert.gral.util.SettingsStorage.Key;
+
 /**
  * Class for handling event data of settings.
  * @see SettingsListener
@@ -30,7 +32,7 @@ import java.util.EventObject;
 public class SettingChangeEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
 
-	private final Settings.Key key;
+	private final Key key;
 	private final Object valOld;
 	private final Object valNew;
 	private final boolean defaultSetting;
@@ -43,7 +45,7 @@ public class SettingChangeEvent extends EventObject {
 	 * @param valNew New value.
 	 * @param defaultSetting <code>true</code> if a default setting has changed.
 	 */
-	public SettingChangeEvent(Object source, Settings.Key key,
+	public SettingChangeEvent(Object source, Key key,
 			Object valOld, Object valNew, boolean defaultSetting) {
 		super(source);
 		this.key = key;
@@ -56,7 +58,7 @@ public class SettingChangeEvent extends EventObject {
 	 * Returns the key of the changed setting.
 	 * @return Key.
 	 */
-	public Settings.Key getKey() {
+	public Key getKey() {
 		return key;
 	}
 

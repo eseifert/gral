@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral;
 
-import java.awt.BorderLayout;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
@@ -30,8 +29,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 /**
  * Implementation of Layout that arranges a {@link Container}'s components
- * according to a certain grid. This is similar to Java's {@link BorderLayout},
- * but also allows components to be placed in each of the corners.
+ * according to a certain grid. This is similar to Java's
+ * {@link java.awt.BorderLayout}, but also allows components to be placed in
+ * each of the corners.
  */
 public class EdgeLayout implements Layout {
 	// TODO Add setters and getters.
@@ -43,7 +43,8 @@ public class EdgeLayout implements Layout {
 	private final double vgap;
 
 	/**
-	 * Creates an EdgeLayout with the specified distances between the components.
+	 * Initializes a layout manager object with the specified distances between the
+	 * components.
 	 * @param hgap Horizontal gap.
 	 * @param vgap Vertical gap.
 	 */
@@ -66,7 +67,7 @@ public class EdgeLayout implements Layout {
 		         north = null, northEast = null, east = null, southEast = null,
 		         south = null, southWest = null, west = null, northWest = null;
 		for (Drawable d: container) {
-			Location constraints = (Location)container.getConstraints(d);
+			Location constraints = (Location) container.getConstraints(d);
 			if (Location.CENTER.equals(constraints)) {
 				center = d;
 			} else if (Location.NORTH.equals(constraints)) {
@@ -94,10 +95,10 @@ public class EdgeLayout implements Layout {
 		double heightNorth  = getMaxHeight(northWest, north,  northEast);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double hgapEast  = (widthWest>0.0 && center!=null) ? hgap : 0.0;
-		double hgapWest  = (widthEast>0.0 && center!=null) ? hgap : 0.0;
-		double vgapNorth = (heightNorth>0.0 && center!=null) ? vgap : 0.0;
-		double vgapSouth = (heightSouth>0.0 && center!=null) ? vgap : 0.0;
+		double hgapEast  = (widthWest > 0.0 && center != null) ? hgap : 0.0;
+		double hgapWest  = (widthEast > 0.0 && center != null) ? hgap : 0.0;
+		double vgapNorth = (heightNorth > 0.0 && center != null) ? vgap : 0.0;
+		double vgapSouth = (heightSouth > 0.0 && center != null) ? vgap : 0.0;
 
 		double xWest   = bounds.getMinX() + insets.getLeft();
 		double xCenter = xWest + widthWest + hgapEast;
@@ -200,10 +201,10 @@ public class EdgeLayout implements Layout {
 		double heightCenter = getMaxHeight(west,      center, east);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double hgapEast  = (widthWest>0.0 && center!=null) ? hgap : 0.0;
-		double hgapWest  = (widthEast>0.0 && center!=null) ? hgap : 0.0;
-		double vgapNorth = (heightNorth>0.0 && center!=null) ? vgap : 0.0;
-		double vgapSouth = (heightSouth>0.0 && center!=null) ? vgap : 0.0;
+		double hgapEast  = (widthWest > 0.0 && center != null) ? hgap : 0.0;
+		double hgapWest  = (widthEast > 0.0 && center != null) ? hgap : 0.0;
+		double vgapNorth = (heightNorth > 0.0 && center != null) ? vgap : 0.0;
+		double vgapSouth = (heightSouth > 0.0 && center != null) ? vgap : 0.0;
 
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();

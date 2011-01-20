@@ -712,7 +712,7 @@ public class SimplePointRenderer extends DefaultPointRenderer {
         Drawable drawable = new AbstractDrawable() {
             @Override
             public void draw(DrawingContext context) {
-                Paint paint = getSetting(COLOR);
+                Paint paint = SimplePointRenderer.this.getSetting(COLOR);
                 Shape point = getPointPath(row);
 
                 // Put your custom code here ...
@@ -779,7 +779,7 @@ public class SimpleLineRenderer2D extends AbstractLineRenderer2D {
                     }
                 }
                 Shape lineShape = punch(line, points);
-                Paint paint = getSetting(LineRenderer.COLOR);
+                Paint paint = SimpleLineRenderer2D.this.getSetting(LineRenderer.COLOR);
                 GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
             }
         };
@@ -832,7 +832,7 @@ public class SimpleAreaRenderer extends AbstractAreaRenderer {
         return new AbstractDrawable() {
             @Override
             public void draw(DrawingContext context) {
-                Paint paint = getSetting(COLOR);
+                Paint paint = SimpleAreaRenderer.this.getSetting(COLOR);
                 GraphicsUtils.fillPaintedShape(context.getGraphics(),
                         area, paint, area.getBounds2D());
             }

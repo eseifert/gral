@@ -29,10 +29,7 @@ import java.awt.Stroke;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.SettingsStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -41,7 +38,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * Derived classes have to implement how the actual drawing is done.
  */
 public abstract class PlotArea extends AbstractDrawable
-		implements SettingsStorage, SettingsListener {
+		implements SettingsListener {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot area. */
 	public static final Key BACKGROUND =
@@ -62,15 +59,12 @@ public abstract class PlotArea extends AbstractDrawable
 	public static final Key CLIPPING =
 		new Key("plotarea.clipping"); //$NON-NLS-1$
 
-	/** Settings stored as pairs (key, value). */
-	private final Settings settings;
-
 	/**
-	 * Creates a new PlotArea2D object with default background color and
-	 * border.
+	 * Creates a new <code>PlotArea2D</code> object with default
+	 * background color and border.
 	 */
 	public PlotArea() {
-		settings = new Settings(this);
+		addSettingsListener(this);
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(COLOR, Color.BLACK);
@@ -111,31 +105,6 @@ public abstract class PlotArea extends AbstractDrawable
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
-
-	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.set(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
-	}
 
 	@Override
 	public void settingChanged(SettingChangeEvent event) {

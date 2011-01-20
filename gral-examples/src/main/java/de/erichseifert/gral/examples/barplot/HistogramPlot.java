@@ -43,6 +43,8 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class HistogramPlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	public HistogramPlot() {
 		super(new BorderLayout());

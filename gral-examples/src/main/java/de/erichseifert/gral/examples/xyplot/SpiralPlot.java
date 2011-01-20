@@ -39,6 +39,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SpiralPlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+
 	public SpiralPlot() {
 		super(new BorderLayout());
 		setBackground(new Color(0.75f, 0.75f, 0.75f));  // Set the background color of the Swing component

@@ -36,6 +36,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimpleBarPlot extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	public SimpleBarPlot() {
 		super(new BorderLayout());

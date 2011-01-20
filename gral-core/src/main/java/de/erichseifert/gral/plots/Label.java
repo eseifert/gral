@@ -36,10 +36,7 @@ import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.SettingsStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -47,7 +44,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * A Label is able to manage its settings and to set and get the
  * displayed text, as well as calculating its bounds.
  */
-public class Label extends AbstractDrawable implements SettingsStorage, SettingsListener {
+public class Label extends AbstractDrawable implements SettingsListener {
 	/** Key for specifying the horizontal alignment within the
 	bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X = new Key("label.alignment.x"); //$NON-NLS-1$
@@ -65,11 +62,9 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	paint the label shape. */
 	public static final Key COLOR = new Key("label.color"); //$NON-NLS-1$
 
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
 	/** Text for this label. */
 	private String text;
-	/** Cahced text alyout. */
+	/** Cached text layout. */
 	private TextLayout layout;
 	/** Cached outline of the label text. */
 	private Shape outline;
@@ -81,7 +76,7 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 	 * @param text Text to be displayed.
 	 */
 	public Label(String text) {
-		settings = new Settings(this);
+		addSettingsListener(this);
 		this.text = text;
 
 		setSettingDefault(ALIGNMENT_X, 0.5);
@@ -204,31 +199,6 @@ public class Label extends AbstractDrawable implements SettingsStorage, Settings
 		layout = null;
 		outline = null;
 		valid = false;
-	}
-
-	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.<T>setDefault(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
 	}
 
 	@Override

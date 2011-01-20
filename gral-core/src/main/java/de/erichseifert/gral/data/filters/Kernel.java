@@ -24,8 +24,8 @@ package de.erichseifert.gral.data.filters;
 import java.util.Arrays;
 
 /**
- * <p>Class that represents an array of coefficients for a weighted
- * filtering.</p>
+ * <p>Class that represents an one dimensional array of coefficients for a
+ * weighted filtering.</p>
  * <p>Functionality includes:</p>
  * <ul>
  *   <li>Adding of other kernels or scalars</li>

@@ -43,6 +43,9 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 public class StackedPlots extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
 	public StackedPlots() {

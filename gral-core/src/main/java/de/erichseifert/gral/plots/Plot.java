@@ -52,10 +52,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.SettingsStorage;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -69,7 +66,7 @@ import de.erichseifert.gral.util.Settings.Key;
  * </ul>
  */
 public abstract class Plot extends DrawableContainer
-		implements SettingsStorage, SettingsListener, DataListener {
+		implements DataListener, SettingsListener {
 	/** Key for specifying the {@link java.lang.String} instance for the title
 	of the plot. */
 	public static final Key TITLE =
@@ -100,9 +97,6 @@ public abstract class Plot extends DrawableContainer
 	describes the legend's margin. */
 	public static final Key LEGEND_MARGIN =
 		new Key("plot.legend.margin"); //$NON-NLS-1$
-
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
 
 	/** Data sources. */
 	private final List<DataSource> data;
@@ -149,7 +143,7 @@ public abstract class Plot extends DrawableContainer
 			add(source);
 		}
 
-		settings = new Settings(this);
+		addSettingsListener(this);
 		setSettingDefault(TITLE, null);
 		setSettingDefault(BACKGROUND, null);
 		setSettingDefault(BORDER, null);
@@ -358,31 +352,6 @@ public abstract class Plot extends DrawableContainer
 			Location constraints = getSetting(LEGEND_LOCATION);
 			legendContainer.add(legend, constraints);
 		}
-	}
-
-	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.set(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
 	}
 
 	@Override

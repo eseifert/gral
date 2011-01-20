@@ -48,6 +48,8 @@ import de.erichseifert.gral.util.Orientation;
  * Example that shows how to use convultion filtering.
  */
 public class ConvolutionExample extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
 
 	public ConvolutionExample() {
 		super(new BorderLayout());

@@ -38,28 +38,24 @@ import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
  * Abstract class implementing functions for the administration of settings.
  */
-public abstract class AbstractPointRenderer
+public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		implements PointRenderer, SettingsListener {
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
-
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.
 	 */
 	public AbstractPointRenderer() {
-		settings = new Settings(this);
+		addSettingsListener(this);
 
 		setSettingDefault(SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
 		setSettingDefault(COLOR, Color.BLACK);
@@ -138,31 +134,6 @@ public abstract class AbstractPointRenderer
 		graphics.translate(posX, posYBot);
 		GraphicsUtils.drawPaintedShape(graphics, endShape, errorPaint, null, endShapeStroke);
 		graphics.setTransform(txOld);
-	}
-
-	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.<T>setDefault(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
 	}
 
 	@Override

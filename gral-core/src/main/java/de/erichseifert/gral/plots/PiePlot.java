@@ -41,7 +41,6 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**

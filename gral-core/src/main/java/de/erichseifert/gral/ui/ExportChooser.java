@@ -31,6 +31,9 @@ import de.erichseifert.gral.io.IOCapabilities;
  * A file chooser implementation that can be for export purposes.
  */
 public class ExportChooser extends JFileChooser {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Creates a new instance and initializes it with an array of
 	 * {@link de.erichseifert.gral.io.IOCapabilities}.

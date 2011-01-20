@@ -37,7 +37,6 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -84,7 +83,7 @@ public class BarPlot extends XYPlot {
 				public void draw(DrawingContext context) {
 					// TODO Translate?
 					Shape point = getPointPath(row);
-					Paint paint = getSetting(COLOR);
+					Paint paint = BarRenderer.this.getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 					/*

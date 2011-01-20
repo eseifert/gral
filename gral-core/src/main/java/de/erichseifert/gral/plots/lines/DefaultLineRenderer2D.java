@@ -54,7 +54,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 			public void draw(DrawingContext context) {
 				// Construct shape
 				Path2D line = new Path2D.Double(
-						Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
+					Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
 				for (DataPoint point : points) {
 					Point2D pos = point.getPosition().getPoint2D();
 					if (line.getCurrentPoint() == null) {
@@ -66,9 +66,10 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
 				// Draw line
 				Shape lineShape = punch(line, points);
-				Paint paint = getSetting(LineRenderer.COLOR);
+				Paint paint = DefaultLineRenderer2D.this
+					.getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(
-						context.getGraphics(), lineShape, paint, null);
+					context.getGraphics(), lineShape, paint, null);
 			}
 		};
 		return d;

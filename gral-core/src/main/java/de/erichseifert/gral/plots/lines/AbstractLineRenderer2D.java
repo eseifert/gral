@@ -28,11 +28,10 @@ import java.awt.Stroke;
 import java.awt.geom.Area;
 
 import de.erichseifert.gral.plots.DataPoint;
+import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.Settings;
 import de.erichseifert.gral.util.SettingsListener;
-import de.erichseifert.gral.util.Settings.Key;
 
 
 /**
@@ -43,16 +42,14 @@ import de.erichseifert.gral.util.Settings.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsListener {
-	/** Settings stored as pairs <code>(key, value)</code>. */
-	private final Settings settings;
-
+public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
+		implements LineRenderer, SettingsListener {
 	/**
 	 * Initializes a new <code>AbstractLineRenderer2D</code> instance with
 	 * default settings.
 	 */
 	public AbstractLineRenderer2D() {
-		this.settings = new Settings(this);
+		addSettingsListener(this);
 
 		setSettingDefault(STROKE, new BasicStroke(1.5f));
 		setSettingDefault(GAP, 0.0);
@@ -83,32 +80,6 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, SettingsLi
 	}
 
 	@Override
-	public <T> T getSetting(Key key) {
-		return settings.<T>get(key);
-	}
-
-	@Override
-	public <T> void setSetting(Key key, T value) {
-		settings.<T>set(key, value);
-	}
-
-	@Override
-	public <T> void removeSetting(Key key) {
-		settings.remove(key);
-	}
-
-	@Override
-	public <T> void setSettingDefault(Key key, T value) {
-		settings.<T>setDefault(key, value);
-	}
-
-	@Override
-	public <T> void removeSettingDefault(Key key) {
-		settings.removeDefault(key);
-	}
-
-	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
-
 }

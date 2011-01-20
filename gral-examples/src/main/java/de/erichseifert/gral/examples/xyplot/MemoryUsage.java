@@ -138,7 +138,11 @@ final class UpdateTask implements ActionListener {
 }
 
 public class MemoryUsage extends JPanel {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+	/** Size of the data buffer in no. of element. */
 	private static final int BUFFER_SIZE = 400;
+	/** Update interval in milliseconds */
 	private static final int INTERVAL = 100;
 
 	public MemoryUsage() {
