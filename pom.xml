@@ -70,7 +70,7 @@
             <java>SLASHSTAR_STYLE</java>
           </mapping>
           <properties>
-            <year>${project.inceptionYear}-2010</year>
+            <year>${project.inceptionYear}-2011</year>
             <owner1>Erich Seifert</owner1>
             <email1>dev[at]erichseifert.de</email1>
             <owner2>Michael Seifert</owner2>
