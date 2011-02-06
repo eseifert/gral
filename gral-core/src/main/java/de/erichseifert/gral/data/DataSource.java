@@ -35,6 +35,12 @@ public interface DataSource extends Iterable<Number> {
 	Column getColumn(int col);
 
 	/**
+	 * Returns the data types of all columns.
+	 * @return The data types of all column in the data source
+	 */
+	Class<? extends Number>[] getColumnTypes();
+
+	/**
 	 * Returns the row with the specified index.
 	 * @param row index of the row to return
 	 * @return the specified row of the data source

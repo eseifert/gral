@@ -47,6 +47,33 @@ public class DataTableTest {
 	}
 
 	@Test
+	public void testCreate() {
+		// Constructor with types
+		DataTable table1 = new DataTable(Integer.class, Double.class, Long.class, Float.class);
+		table1.add(-10, 1.0, 1L, 10f);
+		table1.add(-20, 2.0, 2L, 20f);
+		table1.add(-30, 3.0, 3L, 30f);
+		assertEquals(4, table1.getColumnCount());
+		assertEquals(Integer.class, table1.getColumnTypes()[0]);
+		assertEquals(Double.class, table1.getColumnTypes()[1]);
+		assertEquals(Long.class, table1.getColumnTypes()[2]);
+		assertEquals(Float.class, table1.getColumnTypes()[3]);
+		assertEquals(3, table1.getRowCount());
+
+		// Copy constructor
+		DataTable table2 = new DataTable(table1);
+		assertEquals(table1.getColumnCount(), table2.getColumnCount());
+		assertEquals(table1.getColumnTypes()[0], table2.getColumnTypes()[0]);
+		assertEquals(table1.getColumnTypes()[1], table2.getColumnTypes()[1]);
+		assertEquals(table1.getColumnTypes()[2], table2.getColumnTypes()[2]);
+		assertEquals(table1.getColumnTypes()[3], table2.getColumnTypes()[3]);
+		assertEquals(table1.getRowCount(), table2.getRowCount());
+		assertEquals(table1.getRow(0), table2.getRow(0));
+		assertEquals(table1.getRow(1), table2.getRow(1));
+		assertEquals(table1.getRow(2), table2.getRow(2));
+	}
+
+	@Test
 	public void testAdd() {
 		// Wrong number of columns
 		try {

@@ -44,21 +44,24 @@ import de.erichseifert.gral.data.comparators.DataComparator;
 public class DataTable extends AbstractDataSource {
 	/** All values stored as rows of column arrays. */
 	private final List<Number[]> rows;
-	/** Data types that are allowed in the respective columns. */
-	private final Class<? extends Number>[] types;
-	/** Number of columns. */
-	private final int columnCount;
 	/** Number of rows. */
 	private int rowCount;
 
 	/**
-	 * Creates a new DataTable object.
+	 * Initializes a new instance with the specified number of columns and
+	 * column types.
 	 * @param types type for each column
 	 */
 	public DataTable(Class<? extends Number>... types) {
-		this.types = Arrays.copyOf(types, types.length);
-		columnCount = types.length;
+		super(types);
 		rows = new ArrayList<Number[]>();
+	}
+
+	public DataTable(DataSource source) {
+		this(source.getColumnTypes());
+		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
+			add(source.getRow(rowIndex));
+		}
 	}
 
 	/**
@@ -83,11 +86,12 @@ public class DataTable extends AbstractDataSource {
 		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(MessageFormat.format(
 					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
-					types.length, values.size()));
+					getColumnCount(), values.size()));
 		}
 		int i = 0;
 		Number[] row = new Number[values.size()];
 		DataChangeEvent[] events = new DataChangeEvent[row.length];
+		Class<? extends Number>[] types = getColumnTypes();
 		for (Number value : values) {
 			if ((value != null)
 					&& !(types[i].isAssignableFrom(value.getClass()))) {
@@ -105,12 +109,27 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/**
+	 * Adds the specified row to the table.
+	 * The values are added in the order they are specified. If the types of
+	 * the table columns and the values do not match, an
+	 * <code>IllegalArgumentException</code> is thrown.
+	 * @param row Row to be added
+	 */
+	public void add(Row row) {
+		List<Number> values = new ArrayList<Number>(row.size());
+		for (Number value : row) {
+			values.add(value);
+		}
+		add(values);
+	}
+
+	/**
 	 * Removes a specified row from the table.
 	 * @param row Index of the row to remove
 	 */
 	public void remove(int row) {
 		Row r = new Row(this, row);
-		DataChangeEvent[] events = new DataChangeEvent[columnCount];
+		DataChangeEvent[] events = new DataChangeEvent[getColumnCount()];
 		for (int col = 0; col < events.length; col++) {
 			events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
 		}
@@ -152,20 +171,6 @@ public class DataTable extends AbstractDataSource {
 	@Override
 	public int getRowCount() {
 		return rowCount;
-	}
-
-	@Override
-	public int getColumnCount() {
-		return columnCount;
-	}
-
-	/**
-	 * Returns the data type of the specified column.
-	 * @param col Column.
-	 * @return Data type.
-	 */
-	public Class<? extends Number> getColumnClass(int col) {
-		return this.types[col];
 	}
 
 	/**

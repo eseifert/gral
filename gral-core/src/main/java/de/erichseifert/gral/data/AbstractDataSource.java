@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -36,6 +37,10 @@ import de.erichseifert.gral.data.statistics.Statistics;
  * iteration of data values.
  */
 public abstract class AbstractDataSource implements DataSource {
+	/** Number of columns. */
+	private final int columnCount;
+	/** Data types that are allowed in the respective columns. */
+	private final Class<? extends Number>[] types;
 	/** Set of objects that will be notified of changes to the data values. */
 	private final Set<DataListener> dataListeners;
 	/** Statistical description of the data values. */
@@ -84,9 +89,13 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Creates a new AbstractDataSource object.
+	 * Initializes a new instance with the specified number of columns and
+	 * column types.
+	 * @param types type for each column
 	 */
-	public AbstractDataSource() {
+	public AbstractDataSource(Class<? extends Number>... types) {
+		this.types = Arrays.copyOf(types, types.length);
+		columnCount = types.length;
 		dataListeners = new HashSet<DataListener>();
 	}
 
@@ -126,6 +135,17 @@ public abstract class AbstractDataSource implements DataSource {
 	@Override
 	public Column getColumn(int col) {
 		return new Column(this, col);
+	}
+
+	@Override
+	public int getColumnCount() {
+		return columnCount;
+	}
+
+	@Override
+	public Class<? extends Number>[] getColumnTypes() {
+		Class<? extends Number>[] types = Arrays.copyOf(this.types, this.types.length);
+		return types;
 	}
 
 	@Override
