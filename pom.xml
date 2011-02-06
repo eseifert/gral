@@ -107,6 +107,7 @@
           </dependency>
         </dependencies>
         <configuration>
+          <configLocation>checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <consoleOutput>true</consoleOutput>
           <enableRSS>false</enableRSS>
