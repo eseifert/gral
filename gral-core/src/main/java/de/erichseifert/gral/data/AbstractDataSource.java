@@ -38,9 +38,9 @@ import de.erichseifert.gral.data.statistics.Statistics;
  */
 public abstract class AbstractDataSource implements DataSource {
 	/** Number of columns. */
-	private final int columnCount;
+	private int columnCount;
 	/** Data types that are allowed in the respective columns. */
-	private final Class<? extends Number>[] types;
+	private Class<? extends Number>[] types;
 	/** Set of objects that will be notified of changes to the data values. */
 	private final Set<DataListener> dataListeners;
 	/** Statistical description of the data values. */
@@ -94,8 +94,7 @@ public abstract class AbstractDataSource implements DataSource {
 	 * @param types type for each column
 	 */
 	public AbstractDataSource(Class<? extends Number>... types) {
-		this.types = Arrays.copyOf(types, types.length);
-		columnCount = types.length;
+		setColumnTypes(types);
 		dataListeners = new HashSet<DataListener>();
 	}
 
@@ -142,10 +141,21 @@ public abstract class AbstractDataSource implements DataSource {
 		return columnCount;
 	}
 
+
 	@Override
 	public Class<? extends Number>[] getColumnTypes() {
 		Class<? extends Number>[] types = Arrays.copyOf(this.types, this.types.length);
 		return types;
+	}
+
+	/**
+	 * Sets the data types of all columns. This also changes the  number of
+	 * columns.
+	 * @param types Data types.
+	 */
+	private void setColumnTypes(Class<? extends Number>... types) {
+		this.types = Arrays.copyOf(types, types.length);
+		columnCount = types.length;
 	}
 
 	@Override
