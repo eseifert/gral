@@ -403,6 +403,24 @@ public class InteractivePanel extends DrawablePanel
 					// Change axis (world units)
 					navigator.setCenter(XYPlot.AXIS_X, centerXNew);
 				}
+				AxisRenderer axisX2Renderer =
+					plot.getAxisRenderer(XYPlot.AXIS_X2);
+				if (axisX2Renderer != null) {
+					boolean swapped = axisX2Renderer.<Boolean>getSetting(
+							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
+					if (swapped) {
+						dx = -dx;
+					}
+					Axis axisX2 = plot.getAxis(XYPlot.AXIS_X2);
+					// Fetch current center on screen
+					double centerX2 = axisX2Renderer.worldToView(
+							axisX2, navigator.getCenter(XYPlot.AXIS_X2), true);
+					// Move center and convert it to axis coordinates
+					Number centerX2New = axisX2Renderer.viewToWorld(
+							axisX2, centerX2 + dx, true);
+					// Change axis (world units)
+					navigator.setCenter(XYPlot.AXIS_X2, centerX2New);
+				}
 
 				AxisRenderer axisYRenderer =
 					plot.getAxisRenderer(XYPlot.AXIS_Y);
@@ -421,6 +439,24 @@ public class InteractivePanel extends DrawablePanel
 						axisY, centerY + dy, true);
 					// Change axis (world units)
 					navigator.setCenter(XYPlot.AXIS_Y, centerYNew);
+				}
+				AxisRenderer axisY2Renderer =
+					plot.getAxisRenderer(XYPlot.AXIS_Y2);
+				if (axisY2Renderer != null) {
+					boolean swapped = axisY2Renderer.<Boolean>getSetting(
+							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
+					if (swapped) {
+						dy = -dy;
+					}
+					Axis axisY2 = plot.getAxis(XYPlot.AXIS_Y2);
+					// Fetch current center on screen
+					double centerY2 = axisY2Renderer.worldToView(
+						axisY2, navigator.getCenter(XYPlot.AXIS_Y2), true);
+					// Move center and convert it to axis coordinates
+					Number centerY2New = axisY2Renderer.viewToWorld(
+						axisY2, centerY2 + dy, true);
+					// Change axis (world units)
+					navigator.setCenter(XYPlot.AXIS_Y2, centerY2New);
 				}
 
 				// Refresh display

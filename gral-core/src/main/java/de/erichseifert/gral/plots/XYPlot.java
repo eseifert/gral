@@ -671,7 +671,7 @@ public class XYPlot extends Plot  {
 	@Override
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
 		if (renderer != null) {
-			if (AXIS_Y.equals(axisName) || AXIS_X2.equals(axisName)) {
+			if (AXIS_X2.equals(axisName) || AXIS_Y.equals(axisName)) {
 				renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
 			}
 			if (AXIS_Y.equals(axisName)) {
