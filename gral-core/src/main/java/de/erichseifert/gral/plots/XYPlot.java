@@ -463,6 +463,7 @@ public class XYPlot extends Plot  {
 
 	/**
 	 * Calculates the bounds of the axes.
+	 * FIXME: Clean up code and do more efficient checks (loop?)
 	 */
 	protected void layoutAxes() {
 		if (getPlotArea() == null) {
@@ -471,11 +472,17 @@ public class XYPlot extends Plot  {
 
 		Rectangle2D plotBounds = getPlotArea().getBounds();
 		AxisRenderer axisXRenderer = getAxisRenderer(AXIS_X);
+		AxisRenderer axisX2Renderer = getAxisRenderer(AXIS_X2);
 		AxisRenderer axisYRenderer = getAxisRenderer(AXIS_Y);
+		AxisRenderer axisY2Renderer = getAxisRenderer(AXIS_Y2);
 		Drawable axisXComp = getAxisComponent(AXIS_X);
+		Drawable axisX2Comp = getAxisComponent(AXIS_X2);
 		Drawable axisYComp = getAxisComponent(AXIS_Y);
+		Drawable axisY2Comp = getAxisComponent(AXIS_Y2);
 		Dimension2D axisXSize = null;
+		Dimension2D axisX2Size = null;
 		Dimension2D axisYSize = null;
+		Dimension2D axisY2Size = null;
 
 		// Set the new shapes first to allow for correct positioning
 		if (axisXComp != null && axisXRenderer != null) {
@@ -485,11 +492,25 @@ public class XYPlot extends Plot  {
 				plotBounds.getWidth(), 0.0
 			));
 		}
+		if (axisX2Comp != null && axisX2Renderer != null) {
+			axisX2Size = axisX2Comp.getPreferredSize();
+			axisX2Renderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
+				0.0, 0.0,
+				plotBounds.getWidth(), 0.0
+			));
+		}
 		if (axisYComp != null && axisYRenderer != null) {
 			axisYSize = axisYComp.getPreferredSize();
 			axisYRenderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
 				axisYSize.getWidth(), plotBounds.getHeight(),
 				axisYSize.getWidth(), 0.0
+			));
+		}
+		if (axisY2Comp != null && axisY2Renderer != null) {
+			axisY2Size = axisY2Comp.getPreferredSize();
+			axisY2Renderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
+				axisY2Size.getWidth(), plotBounds.getHeight(),
+				axisY2Size.getWidth(), 0.0
 			));
 		}
 
@@ -502,7 +523,7 @@ public class XYPlot extends Plot  {
 					axisXRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
 					.doubleValue();
 				axisXPos = axisYRenderer.getPosition(
-						axisY, axisXIntersection, false, false);
+					axisY, axisXIntersection, false, false);
 			}
 			if (axisXPos == null) {
 				axisXPos = new PointND<Double>(0.0, 0.0);
@@ -514,6 +535,27 @@ public class XYPlot extends Plot  {
 				axisXSize.getHeight()
 			);
 		}
+		// Set bounds with new axis shapes
+		if (axisX2Renderer != null && axisX2Comp != null) {
+			PointND<Double> axisX2Pos = null;
+			if (axisYRenderer != null) {
+				Axis axisY = getAxis(AXIS_Y);
+				Double axisX2Intersection =
+					axisX2Renderer.<Number>getSetting(AxisRenderer.INTERSECTION)
+					.doubleValue();
+				axisX2Pos = axisYRenderer.getPosition(
+					axisY, axisX2Intersection, false, false);
+			}
+			if (axisX2Pos == null) {
+				axisX2Pos = new PointND<Double>(0.0, 0.0);
+			}
+			axisX2Comp.setBounds(
+				plotBounds.getMinX(),
+				axisX2Pos.get(1) + plotBounds.getMinY(),
+				plotBounds.getWidth(),
+				axisX2Size.getHeight()
+			);
+		}
 
 		if (axisYRenderer != null && axisYComp != null) {
 			PointND<Double> axisYPos = null;
@@ -523,7 +565,7 @@ public class XYPlot extends Plot  {
 					axisYRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
 					.doubleValue();
 				axisYPos = axisXRenderer.getPosition(
-						axisX, axisYIntersection, false, false);
+					axisX, axisYIntersection, false, false);
 			}
 			if (axisYPos == null) {
 				axisYPos = new PointND<Double>(0.0, 0.0);
@@ -532,6 +574,26 @@ public class XYPlot extends Plot  {
 				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0),
 				plotBounds.getMinY(),
 				axisYSize.getWidth(),
+				plotBounds.getHeight()
+			);
+		}
+		if (axisY2Renderer != null && axisY2Comp != null) {
+			PointND<Double> axisY2Pos = null;
+			if (axisXRenderer != null) {
+				Axis axisX = getAxis(AXIS_X);
+				Double axisY2Intersection =
+					axisY2Renderer.<Number>getSetting(AxisRenderer.INTERSECTION)
+					.doubleValue();
+				axisY2Pos = axisXRenderer.getPosition(
+					axisX, axisY2Intersection, false, false);
+			}
+			if (axisY2Pos == null) {
+				axisY2Pos = new PointND<Double>(0.0, 0.0);
+			}
+			axisY2Comp.setBounds(
+				plotBounds.getMinX() - axisY2Size.getWidth() + axisY2Pos.get(0),
+				plotBounds.getMinY(),
+				axisY2Size.getWidth(),
 				plotBounds.getHeight()
 			);
 		}
@@ -608,9 +670,13 @@ public class XYPlot extends Plot  {
 
 	@Override
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
-		if ((renderer != null) && AXIS_Y.equals(axisName)) {
-			renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
-			renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
+		if (renderer != null) {
+			if (AXIS_Y.equals(axisName) || AXIS_X2.equals(axisName)) {
+				renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+			}
+			if (AXIS_Y.equals(axisName)) {
+				renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);
+			}
 		}
 		super.setAxisRenderer(axisName, renderer);
 	}
