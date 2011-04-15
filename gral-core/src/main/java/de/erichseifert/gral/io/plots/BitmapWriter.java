@@ -146,7 +146,6 @@ public class BitmapWriter extends IOCapabilitiesStorage
 
 		DrawingContext context =
 			new DrawingContext((Graphics2D) image.getGraphics());
-		d.draw(context);
 
 		Iterator<ImageWriter> writers =
 			ImageIO.getImageWritersByMIMEType(mimeType);
@@ -158,6 +157,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 			Rectangle2D boundsOld = d.getBounds();
 			d.setBounds(x, y, width, height);
 			try {
+				d.draw(context);
 				writer.write(image);
 			} finally {
 				d.setBounds(boundsOld);
