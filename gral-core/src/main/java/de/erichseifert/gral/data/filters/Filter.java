@@ -90,7 +90,7 @@ public abstract class Filter extends AbstractDataSource
 		Arrays.sort(this.cols);
 
 		this.original.addDataListener(this);
-		dataChanged(this.original);
+		dataUpdated(this.original);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public abstract class Filter extends AbstractDataSource
 		}
 		Number old = rows.get(row)[colPos];
 		rows.get(row)[colPos] = value;
-		notifyDataChanged(new DataChangeEvent(this, col, row, old, value));
+		notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
 		return old;
 	}
 
@@ -213,9 +213,21 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	@Override
-	public void dataChanged(DataSource source, DataChangeEvent... events) {
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		filter();
-		notifyDataChanged(events);
+		notifyDataUpdated(events);
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		filter();
+		notifyDataUpdated(events);
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		filter();
+		notifyDataUpdated(events);
 	}
 
 	/**
@@ -272,7 +284,7 @@ public abstract class Filter extends AbstractDataSource
 	 */
 	public void setMode(Mode mode) {
 		this.mode = mode;
-		dataChanged(this);
+		dataUpdated(this);
 	}
 
 }

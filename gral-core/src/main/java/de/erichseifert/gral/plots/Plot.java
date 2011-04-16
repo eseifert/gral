@@ -616,7 +616,17 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	@Override
-	public void dataChanged(DataSource data, DataChangeEvent... events) {
+	public void dataAdded(DataSource data, DataChangeEvent... events) {
+		refresh();
+	}
+
+	@Override
+	public void dataUpdated(DataSource data, DataChangeEvent... events) {
+		refresh();
+	}
+
+	@Override
+	public void dataRemoved(DataSource data, DataChangeEvent... events) {
 		refresh();
 	}
 

@@ -88,7 +88,7 @@ public class Histogram1D extends Histogram {
 			}
 			this.breaks.add(breaks);
 		}
-		dataChanged(getData());
+		dataUpdated(getData());
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class Histogram1D extends Histogram {
 		for (Number[] brk : breaks) {
 			this.breaks.add(brk);
 		}
-		dataChanged(getData());
+		dataUpdated(getData());
 	}
 
 	/**

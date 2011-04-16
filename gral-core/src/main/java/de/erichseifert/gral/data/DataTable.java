@@ -110,7 +110,7 @@ public class DataTable extends AbstractDataSource {
 		}
 		rows.add(row);
 		rowCount++;
-		notifyDataChanged(events);
+		notifyDataUpdated(events);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class DataTable extends AbstractDataSource {
 		}
 		rows.remove(row);
 		rowCount--;
-		notifyDataChanged(events);
+		notifyDataUpdated(events);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class DataTable extends AbstractDataSource {
 	public void clear() {
 		rows.clear();
 		rowCount = 0;
-		notifyDataChanged();
+		notifyDataUpdated();
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class DataTable extends AbstractDataSource {
 		Number old = get(col, row);
 		if (!old.equals(value)) {
 			rows.get(row)[col] = value;
-			notifyDataChanged(new DataChangeEvent(this, col, row, old, value));
+			notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
 		}
 		return old;
 	}

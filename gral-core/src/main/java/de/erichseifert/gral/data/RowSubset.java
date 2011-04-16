@@ -54,7 +54,7 @@ public abstract class RowSubset extends AbstractDataSource
 		accepted = new ArrayList<Integer>();
 		this.original = original;
 		this.original.addDataListener(this);
-		dataChanged(this.original);
+		dataUpdated(this.original);
 	}
 
 	@Override
@@ -80,7 +80,24 @@ public abstract class RowSubset extends AbstractDataSource
 	}
 
 	@Override
-	public void dataChanged(DataSource source, DataChangeEvent... events) {
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		update();
+		notifyDataAdded(events);
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		update();
+		notifyDataUpdated(events);
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		update();
+		notifyDataRemoved(events);
+	}
+
+	private void update() {
 		accepted.clear();
 		for (int rowIndex = 0; rowIndex < original.getRowCount(); rowIndex++) {
 			Row row = original.getRow(rowIndex);
@@ -88,7 +105,6 @@ public abstract class RowSubset extends AbstractDataSource
 				accepted.add(rowIndex);
 			}
 		}
-		notifyDataChanged(events);
 	}
 
 	/**

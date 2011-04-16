@@ -136,7 +136,7 @@ public class Median extends Filter {
 	 */
 	public void setWindowSize(int windowSize) {
 		this.windowSize = windowSize;
-		dataChanged(this);
+		dataUpdated(this);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class Median extends Filter {
 	 */
 	public void setOffset(int offset) {
 		this.offset = offset;
-		dataChanged(this);
+		dataUpdated(this);
 	}
 
 }

@@ -122,12 +122,32 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
+	 * Notifies all registered listeners that data values have been added.
+	 * @param events Event objects describing all values that have been added.
+	 */
+	protected void notifyDataAdded(DataChangeEvent... events) {
+		for (DataListener dataListener : dataListeners) {
+			dataListener.dataAdded(this, events);
+		}
+	}
+
+	/**
+	 * Notifies all registered listeners that data values have been removed.
+	 * @param events Event objects describing all values that have been removed.
+	 */
+	protected void notifyDataRemoved(DataChangeEvent... events) {
+		for (DataListener dataListener : dataListeners) {
+			dataListener.dataRemoved(this, events);
+		}
+	}
+
+	/**
 	 * Notifies all registered listeners that data values have changed.
 	 * @param events Event objects describing all values that have changed.
 	 */
-	protected void notifyDataChanged(DataChangeEvent... events) {
+	protected void notifyDataUpdated(DataChangeEvent... events) {
 		for (DataListener dataListener : dataListeners) {
-			dataListener.dataChanged(this, events);
+			dataListener.dataUpdated(this, events);
 		}
 	}
 

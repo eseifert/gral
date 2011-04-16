@@ -27,11 +27,32 @@ package de.erichseifert.gral.data;
  */
 public interface DataListener {
 	/**
-	 * Method that is invoked by objects that provide support for
-	 * <code>DataListener</code>s.
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
-	 *        have changed
+	 *        have been added
 	 */
-	void dataChanged(DataSource source, DataChangeEvent... events);
+	void dataAdded(DataSource source, DataChangeEvent... events);
+
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	void dataUpdated(DataSource source, DataChangeEvent... events);
+
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	void dataRemoved(DataSource source, DataChangeEvent... events);
 }

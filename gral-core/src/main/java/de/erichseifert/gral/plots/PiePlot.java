@@ -199,7 +199,21 @@ public class PiePlot extends Plot implements DataListener {
 		}
 
 		@Override
-		public void dataChanged(DataSource data, DataChangeEvent... events) {
+		public void dataAdded(DataSource data, DataChangeEvent... events) {
+			update(data);
+		}
+
+		@Override
+		public void dataUpdated(DataSource data, DataChangeEvent... events) {
+			update(data);
+		}
+
+		@Override
+		public void dataRemoved(DataSource data, DataChangeEvent... events) {
+			update(data);
+		}
+
+		private void update(DataSource data) {
 			// Calculate sum of all values
 			double colYSum = 0.0;
 			for (int i = 0; i < data.getRowCount();  i++) {
@@ -256,12 +270,22 @@ public class PiePlot extends Plot implements DataListener {
 
 		setPlotArea(new PiePlotArea2D(this));
 
-		dataChanged(data);
+		dataUpdated(data);
 		data.addDataListener(this);
 	}
 
 	@Override
-	public void dataChanged(DataSource data, DataChangeEvent... events) {
-		((PiePlotArea2D) getPlotArea()).dataChanged(data, events);
+	public void dataAdded(DataSource data, DataChangeEvent... events) {
+		((PiePlotArea2D) getPlotArea()).dataAdded(data, events);
+	}
+
+	@Override
+	public void dataUpdated(DataSource data, DataChangeEvent... events) {
+		((PiePlotArea2D) getPlotArea()).dataUpdated(data, events);
+	}
+
+	@Override
+	public void dataRemoved(DataSource data, DataChangeEvent... events) {
+		((PiePlotArea2D) getPlotArea()).dataRemoved(data, events);
 	}
 }

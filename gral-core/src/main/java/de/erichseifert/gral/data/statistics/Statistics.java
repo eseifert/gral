@@ -91,7 +91,7 @@ public class Statistics implements DataListener {
 		statisticsRows = new ArrayList<Map<String, Double>>();
 
 		this.data = data;
-		dataChanged(this.data);
+		dataUpdated(this.data);
 		this.data.addDataListener(this);
 	}
 
@@ -188,8 +188,7 @@ public class Statistics implements DataListener {
 		return stats.get(key);
 	}
 
-	@Override
-	public void dataChanged(DataSource source, DataChangeEvent... events) {
+	private void update(DataSource data) {
 		statistics.clear();
 
 		int colCount = data.getColumnCount();
@@ -273,6 +272,21 @@ public class Statistics implements DataListener {
 		for (Map<String, Double> statsRow : statisticsRows) {
 			derivedStatistics(statsRow);
 		}
+	}
+
+	@Override
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		update(source);
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		update(source);
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		update(source);
 	}
 
 	private double getMedian(Orientation orientation, int index) {

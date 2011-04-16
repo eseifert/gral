@@ -49,9 +49,21 @@ public abstract class Histogram extends AbstractDataSource
 	protected abstract void rebuildCells();
 
 	@Override
-	public void dataChanged(DataSource data, DataChangeEvent... events) {
+	public void dataAdded(DataSource data, DataChangeEvent... events) {
 		rebuildCells();
-		notifyDataChanged(events);
+		notifyDataAdded(events);
+	}
+
+	@Override
+	public void dataUpdated(DataSource data, DataChangeEvent... events) {
+		rebuildCells();
+		notifyDataUpdated(events);
+	}
+
+	@Override
+	public void dataRemoved(DataSource data, DataChangeEvent... events) {
+		rebuildCells();
+		notifyDataRemoved(events);
 	}
 
 	/**
