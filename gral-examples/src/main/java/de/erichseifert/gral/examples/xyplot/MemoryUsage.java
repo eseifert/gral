@@ -209,6 +209,8 @@ public class MemoryUsage extends JPanel {
 
 		// Add plot to frame
 		InteractivePanel plotPanel = new InteractivePanel(plot);
+		plotPanel.setPannable(false);
+		plotPanel.setZoomable(false);
 		add(plotPanel, BorderLayout.CENTER);
 
 		// Start watching memory
