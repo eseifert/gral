@@ -551,19 +551,29 @@ public abstract class Plot extends DrawableContainer
 	 * Returns the minimum value of the axis specified by
 	 * <code>axisName</code>.
 	 * @param axisName Name of the axis.
-	 * @return Minimum value.
+	 * @return Minimum value for the specified axis, or <code>0.0</code> if no
+	 *         minimum value can be determined.
 	 */
 	protected Double getAxisMin(String axisName) {
-		return axisMin.get(axisName);
+		Double min = axisMin.get(axisName);
+		if (min == null) {
+			return 0.0;
+		}
+		return min;
 	}
 	/**
 	 * Returns the maximum value of the axis specified by
 	 * <code>axisName</code>.
 	 * @param axisName Name of the axis.
-	 * @return Maximum value.
+	 * @return Maximum value for the specified axis, or <code>0.0</code> if no
+	 *         maximum value can be determined.
 	 */
 	protected Double getAxisMax(String axisName) {
-		return axisMax.get(axisName);
+		Double max = axisMax.get(axisName);
+		if (max == null) {
+			return 0.0;
+		}
+		return max;
 	}
 
 	/**
