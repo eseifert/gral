@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import de.erichseifert.gral.Container;
 import de.erichseifert.gral.Drawable;
@@ -44,15 +45,18 @@ import de.erichseifert.gral.EdgeLayout;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.PlotArea;
+import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
+import de.erichseifert.gral.util.Tuple;
 
 
 /**
@@ -110,6 +114,13 @@ public abstract class Plot extends DrawableContainer
 	/** Mapping of axis names to drawable objects. */
 	private final Map<String, Drawable> axisDrawables;
 
+	/** Mapping of data source columns to axes. **/
+	private final Map<Tuple, String> mapping;
+	/** Minimum values of axes. **/
+	private final Map<String, Double> axisMin;
+	/** Maximum values of axes. **/
+	private final Map<String, Double> axisMax;
+
 	/** Title text of the plot. */
 	private final Label title;
 	/** Plot area used to render the data. */
@@ -137,6 +148,10 @@ public abstract class Plot extends DrawableContainer
 		axes = new HashMap<String, Axis>();
 		axisRenderers = new HashMap<String, AxisRenderer>();
 		axisDrawables = new HashMap<String, Drawable>();
+
+		mapping = new HashMap<Tuple, String>();
+		axisMin = new HashMap<String, Double>();
+		axisMax = new HashMap<String, Double>();
 
 		data = new LinkedList<DataSource>();
 		for (DataSource source : series) {
@@ -461,6 +476,97 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
+	 * Returns the mapping of a data source column to an axis name. If no
+	 * mapping exists <code>null</code> will be returned.
+	 * @param source Data source.
+	 * @param col Column index.
+	 * @return Axis name or <code>null</code> if no mapping exists.
+	 */
+	private String getMapping(DataSource source, int col) {
+		if (!contains(source)) {
+			return null;
+		}
+		Tuple mapKey = new Tuple(source, col);
+		String axisName = mapping.get(mapKey);
+		return axisName;
+	}
+
+	/**
+	 * Sets the mapping of a data source column to a axis name.
+	 * @param source Data source.
+	 * @param col Column index.
+	 * @param axisName Axis name.
+	 * @throws IllegalArgumentException if data source or column don't exist.
+	 */
+	private void setMapping(DataSource source, int col, String axisName) {
+		if (!contains(source)) {
+			throw new IllegalArgumentException(
+					"Data source does not exist in plot.");
+		}
+		if (col < 0 || col >= source.getColumnCount()) {
+			throw new IllegalArgumentException(
+					"Column does not exist in data source.");
+		}
+		Tuple mapKey = new Tuple(source, col);
+		mapping.put(mapKey, axisName);
+	}
+
+	/**
+	 * Returns the mapping of data source columns to axis names. The elements
+	 * of returned array equal the column indexes, i.e. the first element (axis
+	 * name) matches the first column of <code>source</code>. If no mapping
+	 * exists <code>null</code> will be stored in the array.
+	 * @param source Data source.
+	 * @return Array containing axis names in the order of the columns,
+	 *         or <code>null</code> if no mapping exists for the column.
+	 */
+	public String[] getMapping(DataSource source) {
+		String[] mapping = new String[source.getColumnCount()];
+		for (int col = 0; col < mapping.length; col++) {
+			mapping[col] = getMapping(source, col);
+		}
+		return mapping;
+	}
+
+	/**
+	 * Sets the mapping of data source columns to axis names. The column index
+	 * is taken from the order of the axis names, i.e. the first column of
+	 * <code>source</code> will be mapped to first element of
+	 * <code>axisNames</code>. Axis names with value <code>null</code> will be
+	 * ignored.
+	 * @param source Data source.
+	 * @param axisNames Sequence of axis names in the order of the columns.
+	 */
+	public void setMapping(DataSource source, String... axisNames) {
+		for (int col = 0; col < axisNames.length; col++) {
+			String axisName = axisNames[col];
+			if (axisName != null) {
+				setMapping(source, col, axisName);
+			}
+		}
+		refresh();
+	}
+
+	/**
+	 * Returns the minimum value of the axis specified by
+	 * <code>axisName</code>.
+	 * @param axisName Name of the axis.
+	 * @return Minimum value.
+	 */
+	protected Double getAxisMin(String axisName) {
+		return axisMin.get(axisName);
+	}
+	/**
+	 * Returns the maximum value of the axis specified by
+	 * <code>axisName</code>.
+	 * @param axisName Name of the axis.
+	 * @return Maximum value.
+	 */
+	protected Double getAxisMax(String axisName) {
+		return axisMax.get(axisName);
+	}
+
+	/**
 	 * Returns a list of all data series stored in the plot.
 	 * @return List of all data series.
 	 */
@@ -518,5 +624,25 @@ public abstract class Plot extends DrawableContainer
 	 * Causes the plot data to be be updated.
 	 */
 	public void refresh() {
+		axisMin.clear();
+		axisMax.clear();
+		for (Entry<Tuple, String> entry : mapping.entrySet()) {
+			Tuple mapKey = entry.getKey();
+			DataSource s = (DataSource) mapKey.get(0);
+			Column col = s.getColumn((Integer) mapKey.get(1));
+			String axisName = entry.getValue();
+
+			Double min = axisMin.get(axisName);
+			Double max = axisMax.get(axisName);
+			if (min == null || max == null) {
+				min = col.getStatistics(Statistics.MIN);
+				max = col.getStatistics(Statistics.MAX);
+			} else {
+				min = Math.min(min, col.getStatistics(Statistics.MIN));
+				max = Math.max(max, col.getStatistics(Statistics.MAX));
+			}
+			axisMin.put(axisName, min);
+			axisMax.put(axisName, max);
+		}
 	}
 }

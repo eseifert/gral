@@ -40,11 +40,9 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.PlotArea;
-import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisListener;
@@ -82,15 +80,6 @@ public class XYPlot extends Plot  {
 	public static String AXIS_Y = "y"; //$NON-NLS-1$
 	/** Key for specifying the secondary y-axis of an xy-plot. */
 	public static String AXIS_Y2 = "y2"; //$NON-NLS-1$
-
-	/** Minimum value in x direction. */
-	private double minX;
-	/** Maximum value in x direction. */
-	private double maxX;
-	/** Minimum value in y direction. */
-	private double minY;
-	/** Maximum value in y direction. */
-	private double maxY;
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
@@ -208,7 +197,7 @@ public class XYPlot extends Plot  {
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
 						GraphicsUtils.drawPaintedShape(
-								graphics, gridLineVert, paint, null, null);
+							graphics, gridLineVert, paint, null, null);
 						graphics.setTransform(txOffset);
 					}
 				}
@@ -246,7 +235,7 @@ public class XYPlot extends Plot  {
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
 						GraphicsUtils.drawPaintedShape(
-								graphics, gridLineHoriz, paint, null, null);
+							graphics, gridLineHoriz, paint, null, null);
 						graphics.setTransform(txOffset);
 					}
 				}
@@ -262,11 +251,6 @@ public class XYPlot extends Plot  {
 			graphics.translate(getX(), getY());
 			AffineTransform txOffset = graphics.getTransform();
 
-			Axis axisX = plot.getAxis(AXIS_X);
-			Axis axisY = plot.getAxis(AXIS_Y);
-			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
-			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
-
 			// TODO Use real font size instead of fixed value
 			final double fontSize = 10.0;
 
@@ -274,10 +258,10 @@ public class XYPlot extends Plot  {
 			if (clipOffset != null) {
 				// Perform clipping
 				Rectangle2D clipBounds = new Rectangle2D.Double(
-						clipOffset.getLeft()*fontSize,
-						clipOffset.getTop()*fontSize,
-						getWidth() - clipOffset.getHorizontal()*fontSize,
-						getHeight() - clipOffset.getVertical()*fontSize
+					clipOffset.getLeft()*fontSize,
+					clipOffset.getTop()*fontSize,
+					getWidth() - clipOffset.getHorizontal()*fontSize,
+					getHeight() - clipOffset.getVertical()*fontSize
 				);
 				graphics.setClip(clipBounds);
 			}
@@ -287,6 +271,12 @@ public class XYPlot extends Plot  {
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
 				LineRenderer lineRenderer = plot.getLineRenderer(s);
 				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
+
+				String[] axisNames = plot.getMapping(s);
+				Axis axisX = plot.getAxis(axisNames[0]);
+				Axis axisY = plot.getAxis(axisNames[1]);
+				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisNames[0]);
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisNames[1]);
 
 				List<DataPoint> dataPoints = new LinkedList<DataPoint>();
 				for (int i = 0; i < s.getRowCount(); i++) {
@@ -427,17 +417,19 @@ public class XYPlot extends Plot  {
 		setPlotArea(new XYPlotArea2D(this));
 		setLegend(new XYLegend(this));
 
-		// Add data sources after the renderer lists are initialized
+		// Handle data sources after the renderer lists are initialized
 		for (DataSource source : data) {
 			add(source);
+			setMapping(source, AXIS_X, AXIS_Y);
 		}
 
-		// Create axes
-		Axis axisX = new Axis(minX, maxX);
-		Axis axisY = new Axis(minY, maxY);
+		// Create x axis and y axis by default
+		Axis axisX = new Axis(getAxisMin(AXIS_X), getAxisMax(AXIS_X));
+		Axis axisY = new Axis(getAxisMin(AXIS_Y), getAxisMax(AXIS_Y));
 		setAxis(AXIS_X, axisX);
 		setAxis(AXIS_Y, axisY);
 
+		// Create renderers for x and y axes by default
 		AxisRenderer axisXRenderer = new LinearRenderer2D();
 		AxisRenderer axisYRenderer = new LinearRenderer2D();
 		setAxisRenderer(AXIS_X, axisXRenderer);
@@ -692,22 +684,4 @@ public class XYPlot extends Plot  {
 		setAreaRenderer(source, areaRendererDefault);
 	}
 
-	@Override
-	public void refresh() {
-		super.refresh();
-
-		minX =  Double.MAX_VALUE;
-		maxX = -Double.MAX_VALUE;
-		minY =  Double.MAX_VALUE;
-		maxY = -Double.MAX_VALUE;
-		for (DataSource s : getVisibleData()) {
-			// Set the minimal and maximal value of the axes
-			Column colX = s.getColumn(0);
-			Column colY = s.getColumn(1);
-			minX = Math.min(minX, colX.getStatistics(Statistics.MIN));
-			maxX = Math.max(maxX, colX.getStatistics(Statistics.MAX));
-			minY = Math.min(minY, colY.getStatistics(Statistics.MIN));
-			maxY = Math.max(maxY, colY.getStatistics(Statistics.MAX));
-		}
-	}
 }

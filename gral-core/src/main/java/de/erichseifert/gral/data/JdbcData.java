@@ -32,8 +32,6 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Arrays;
 
-import de.erichseifert.gral.data.AbstractDataSource;
-
 /**
  * Data source for database tables accessed through a JDBC connection.
  */
@@ -60,9 +58,9 @@ public class JdbcData extends AbstractDataSource {
 	 * Initializes a new instance to query the data from a specified table
 	 * using a specified JDBC connection. It is assumed the table columns
 	 * are constant during the connection.
-	 * @param conn JDBC connection object.
+	 * @param connection JDBC connection object.
 	 * @param table Properly quoted name of the table.
-	 * @param buffering Turns on buffering of JDBC queries.
+	 * @param buffered Turns on buffering of JDBC queries.
 	 */
 	public JdbcData(Connection connection, String table, boolean buffered) {
 		this.connection = connection;
@@ -80,7 +78,7 @@ public class JdbcData extends AbstractDataSource {
 	/**
 	 * Initializes a new buffered instance to query the data from a specified
 	 * table using a specified JDBC connection.
-	 * @param conn JDBC connection object.
+	 * @param connection JDBC connection object.
 	 * @param table Properly quoted name of the table.
 	 */
 	public JdbcData(Connection connection, String table) {
@@ -115,8 +113,9 @@ public class JdbcData extends AbstractDataSource {
 
 	@Override
 	public int getColumnCount() {
-		if (types != null)
+		if (types != null) {
 			return types.length;
+		}
 		return 0;
 	}
 

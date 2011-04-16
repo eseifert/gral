@@ -57,6 +57,11 @@ public class DataTable extends AbstractDataSource {
 		rows = new ArrayList<Number[]>();
 	}
 
+	/**
+	 * Initializes a new instance with the column types, and data of another
+	 * data source.
+	 * @param source Data source to clone.
+	 */
 	public DataTable(DataSource source) {
 		this(source.getColumnTypes());
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
