@@ -420,7 +420,6 @@ public class XYPlot extends Plot  {
 		// Handle data sources after the renderer lists are initialized
 		for (DataSource source : data) {
 			add(source);
-			setMapping(source, AXIS_X, AXIS_Y);
 		}
 
 		// Create x axis and y axis by default
@@ -682,6 +681,7 @@ public class XYPlot extends Plot  {
 		setPointRenderer(source, pointRendererDefault);
 		setLineRenderer(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
+		setMapping(source, AXIS_X, AXIS_Y);
 	}
 
 }
