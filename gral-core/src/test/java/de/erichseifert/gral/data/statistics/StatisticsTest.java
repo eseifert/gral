@@ -179,6 +179,7 @@ public class StatisticsTest {
 		assertEquals(5.5, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 2), DELTA);
 	}
 
+	// FIXME: Change test to cause invocation of dataUpdate only
 	@Test
 	public void testDataUpdate() {
 		// Modify table data to cause update
@@ -202,4 +203,5 @@ public class StatisticsTest {
 		assertEquals(-32.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 1), DELTA);
 	}
 
+	// TODO: Add tests for dataAdded and dataRemoved
 }

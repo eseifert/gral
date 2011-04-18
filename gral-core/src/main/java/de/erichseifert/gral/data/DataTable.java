@@ -105,12 +105,12 @@ public class DataTable extends AbstractDataSource {
 						types[i], value.getClass()));
 			}
 			row[i] = value;
-			events[i] = new DataChangeEvent(this, i, rowCount + 1, null, value);
+			events[i] = new DataChangeEvent(this, i, rowCount, null, value);
 			i++;
 		}
 		rows.add(row);
 		rowCount++;
-		notifyDataUpdated(events);
+		notifyDataAdded(events);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class DataTable extends AbstractDataSource {
 		}
 		rows.remove(row);
 		rowCount--;
-		notifyDataUpdated(events);
+		notifyDataRemoved(events);
 	}
 
 	/**
@@ -149,7 +149,8 @@ public class DataTable extends AbstractDataSource {
 	public void clear() {
 		rows.clear();
 		rowCount = 0;
-		notifyDataUpdated();
+		// FIXME: Give arguments to the following method invocation
+		notifyDataRemoved();
 	}
 
 	@Override
