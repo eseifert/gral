@@ -94,7 +94,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 
 		setSettingDefault(TICKS, true);
-		setSettingDefault(TICKS_SPACING, 1.0);
+		setSettingDefault(TICKS_SPACING, 0.0);
+		setSettingDefault(TICKS_AUTO_SPACING, false);
 		setSettingDefault(TICKS_LENGTH, 1.0);
 		setSettingDefault(TICKS_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_ALIGNMENT, 0.5);
@@ -349,69 +350,105 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 	@Override
 	public List<Tick> getTicks(Axis axis) {
+		double min = axis.getMin().doubleValue();
+		double max = axis.getMax().doubleValue();
+
 		List<Tick> ticks = new LinkedList<Tick>();
-		double tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
-		if (Double.isNaN(tickSpacing) || Double.isInfinite(tickSpacing) || tickSpacing <= 0.0) {
-			return ticks;
+		Set<Number> tickPositions = new HashSet<Number>();
+
+		createTicksCustom(ticks, axis, min, max, tickPositions);
+
+		boolean isAutoSpacing = this.<Boolean>getSetting(TICKS_AUTO_SPACING);
+		// If the spacing is invalid, use auto spacing
+		if (!isAutoSpacing) {
+			Number tickSpacing = this.<Number>getSetting(TICKS_SPACING);
+			if (tickSpacing == null) {
+				isAutoSpacing = true;
+			} else {
+				double tickSpacingValue = tickSpacing.doubleValue();
+				if (tickSpacingValue <= 0.0 || Double.isNaN(tickSpacingValue) ||
+						Double.isInfinite(tickSpacingValue)) {
+					isAutoSpacing = true;
+				}
+			}
 		}
+
+		createTicks(ticks, axis, min, max, tickPositions, isAutoSpacing);
+
+		return ticks;
+	}
+
+	/**
+	 * Adds minor and major ticks to a list of ticks.
+	 * @param ticks
+	 * @param axis
+	 * @param min
+	 * @param max
+	 * @param tickPositions
+	 * @param isAutoSpacing
+	 */
+	protected void createTicks(List<Tick> ticks, Axis axis,
+			double min, double max, Set<Number> tickPositions,
+			boolean isAutoSpacing) {
+		double tickSpacing = 1.0;
+		if (isAutoSpacing) {
+			tickSpacing = MathUtils.magnitude(10.0, max - min);
+		} else {
+			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+		}
+
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = tickSpacing;
 		if (ticksMinorCount > 0) {
 			tickSpacingMinor = tickSpacing/(ticksMinorCount + 1);
 		}
 
-		double min = axis.getMin().doubleValue();
-		double max = axis.getMax().doubleValue();
 		double minTickMajor = MathUtils.ceil(min, tickSpacing);
 		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
 
-		int ticksTotal = (int)Math.ceil((max - min)/tickSpacingMinor);
-		int initialTicksMinor = (int)((minTickMajor - min)/tickSpacingMinor);
-
-		Set<Number> tickPositions = new HashSet<Number>();
-		Set<Number> tickPositionsCustom = getTickPositionsCustom();
+		int ticksTotal = (int) Math.ceil((max - min)/tickSpacingMinor);
+		int initialTicksMinor = (int) ((minTickMajor - min)/tickSpacingMinor);
 
 		// Add major and minor ticks
-		for (int i = 0; i < ticksTotal; i++) {  // Use integer to avoid rounding errors
-			double tickPositionWorld = minTickMinor + i*tickSpacingMinor;
+		// (Use integer to avoid rounding errors)
+		for (int tickCur = 0; tickCur < ticksTotal; tickCur++) {
+			double tickPositionWorld = minTickMinor + tickCur*tickSpacingMinor;
 			TickType tickType = TickType.MINOR;
-			if ((tickPositions.size() - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
+			if ((tickCur - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
 				tickType = TickType.MAJOR;
 			}
 			Tick tick = getTick(tickType, axis, tickPositionWorld);
 			if (tick.getPosition() != null
-					&& !tickPositionsCustom.contains(tickPositionWorld)
 					&& !tickPositions.contains(tickPositionWorld)) {
 				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
 			}
 		}
-		// Add custom ticks
+	}
+
+	/**
+	 * Adds custom ticks to a list of ticks.
+	 * @param ticks
+	 * @param axis
+	 * @param min
+	 * @param max
+	 * @param tickPositions
+	 */
+	protected void createTicksCustom(List<Tick> ticks, Axis axis,
+			double min, double max, Set<Number> tickPositions) {
 		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();
-				if (tickPositionWorld >= min && tickPositionWorld <= max) {
-					Tick tick = getTick(
-							TickType.CUSTOM, axis, tickPositionWorld);
-					ticks.add(tick);
+				if (tickPositionWorld < min || tickPositionWorld > max) {
+					continue;
 				}
+				Tick tick = getTick(
+					TickType.CUSTOM, axis, tickPositionWorld);
+				ticks.add(tick);
+				tickPositions.add(tickPositionWorld);
 			}
 		}
-
-		return ticks;
-	}
-
-	/**
-	 * Returns a set of all user-defined tick mark positions.
-	 * @return Set of all user-defined tick mark positions.
-	 */
-	protected Set<Number> getTickPositionsCustom() {
-		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
-		if (labelsCustom == null) {
-			return new HashSet<Number>();
-		}
-		return labelsCustom.keySet();
 	}
 
 	/**

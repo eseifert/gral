@@ -26,7 +26,7 @@ import java.util.Arrays;
 /**
  * Immutable class for storing n-dimensional tuples.
  */
-public class Tuple{
+public class Tuple {
 	/** Elements of the tuple. **/
 	private final Object[] elements;
 

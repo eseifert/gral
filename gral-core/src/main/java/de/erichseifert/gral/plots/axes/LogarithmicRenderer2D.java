@@ -21,11 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.MathUtils;
@@ -85,29 +81,34 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	@Override
 	public List<Tick> getTicks(Axis axis) {
 		checkAxisBounds(axis);
-		List<Tick> ticks = new LinkedList<Tick>();
-		double tickSpacing =
-			this.<Number>getSetting(TICKS_SPACING).doubleValue();
-		if (tickSpacing <= 0.0) {
-			return ticks;
+		return super.getTicks(axis);
+	}
+
+	@Override
+	protected void createTicks(java.util.List<Tick> ticks, Axis axis,
+			double min, double max, java.util.Set<Number> tickPositions,
+			boolean isAutoSpacing) {
+		double tickSpacing = 1.0;
+		if (isAutoSpacing) {
+			// TODO: Automatic scaling
+			tickSpacing = 1.0;
+		} else {
+			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
 		}
+
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = (ticksMinorCount > 0)
 			? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
-		double min = axis.getMin().doubleValue();
-		double max = axis.getMax().doubleValue();
 
 		final double BASE = 10.0;
 		double powerMin = MathUtils.magnitude(BASE, min);
 		double powerMax = MathUtils.magnitude(BASE, max);
 		double minTickMajor = MathUtils.ceil(min, powerMin*tickSpacing);
 
-		int ticksPerPower = (int)Math.floor(BASE/tickSpacingMinor);
-		int initialTicksMinor = (int)Math.floor((minTickMajor - min) /
+		int ticksPerPower = (int) Math.floor(BASE/tickSpacingMinor);
+		int initialTicksMinor = (int) Math.floor((minTickMajor - min) /
 				(powerMin*tickSpacingMinor));
 
-		Set<Number> tickPositions = new HashSet<Number>();
-		Set<Number> tickPositionsCustom = getTickPositionsCustom();
 		// Add major ticks
 		int i = 0;
 		for (double power = powerMin; power <= powerMax; power *= BASE) {
@@ -128,27 +129,12 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 				}
 				Tick tick = getTick(tickType, axis, tickPositionWorld);
 				if (tick.getPosition() != null
-						&& !tickPositions.contains(tickPositionWorld)
-						&& !tickPositionsCustom.contains(tickPositionWorld)) {
+						&& !tickPositions.contains(tickPositionWorld)) {
 					ticks.add(tick);
 					tickPositions.add(tickPositionWorld);
 				}
 			}
 		}
-		// Add custom ticks
-		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
-		if (labelsCustom != null) {
-			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
-				double tickPositionWorld = tickPositionWorldObj.doubleValue();
-				if (tickPositionWorld >= min && tickPositionWorld <= max) {
-					Tick tick = getTick(
-							TickType.CUSTOM, axis, tickPositionWorld);
-					ticks.add(tick);
-				}
-			}
-		}
-
-		return ticks;
 	}
 
 	/**

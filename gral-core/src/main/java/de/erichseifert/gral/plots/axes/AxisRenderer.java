@@ -61,6 +61,9 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Number} value for the interval
 	 for major ticks. */
 	Key TICKS_SPACING = new Key("axis.ticks.major.spacing"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	 whether the interval for major and minor ticks is chosen automatically. */
+	Key TICKS_AUTO_SPACING = new Key("axis.ticks.autoSpacing"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the length of
 	 major tick strokes. The length is specified relative to the font height. */
 	Key TICKS_LENGTH = new Key("axis.ticks.major.length"); //$NON-NLS-1$
