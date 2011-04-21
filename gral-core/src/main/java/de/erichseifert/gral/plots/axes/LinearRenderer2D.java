@@ -21,6 +21,12 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.util.List;
+import java.util.Set;
+
+import de.erichseifert.gral.plots.axes.Tick.TickType;
+import de.erichseifert.gral.util.MathUtils;
+
 /**
  * Class that renders axes with a linear scale in two dimensional space.
  */
@@ -61,5 +67,53 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 			}
 		}
 		return value/getShapeLength()*(max - min) + min;
+	}
+
+	@Override
+	protected void createTicks(List<Tick> ticks, Axis axis, double min,
+			double max, Set<Number> tickPositions, boolean isAutoSpacing) {
+		double tickSpacing = 1.0;
+		if (isAutoSpacing) {
+			// TODO: Use number of screen units to decide whether to subdivide
+			double range = max - min;
+			double magnitude = MathUtils.magnitude(10.0, range/5.0);
+			tickSpacing = magnitude;
+			if (range/tickSpacing > 5.0) {
+				tickSpacing = 2.0 * magnitude;
+			}
+			if (range/tickSpacing > 5.0) {
+				tickSpacing = 5.0 * magnitude;
+			}
+		} else {
+			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+		}
+
+		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
+		double tickSpacingMinor = tickSpacing;
+		if (ticksMinorCount > 0) {
+			tickSpacingMinor = tickSpacing/(ticksMinorCount + 1);
+		}
+
+		double minTickMajor = MathUtils.ceil(min, tickSpacing);
+		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
+
+		int ticksTotal = (int) Math.ceil((max - min)/tickSpacingMinor);
+		int initialTicksMinor = (int) ((minTickMajor - min)/tickSpacingMinor);
+
+		// Add major and minor ticks
+		// (Use integer to avoid rounding errors)
+		for (int tickCur = 0; tickCur < ticksTotal; tickCur++) {
+			double tickPositionWorld = minTickMinor + tickCur*tickSpacingMinor;
+			TickType tickType = TickType.MINOR;
+			if ((tickCur - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
+				tickType = TickType.MAJOR;
+			}
+			Tick tick = getTick(tickType, axis, tickPositionWorld);
+			if (tick.getPosition() != null
+					&& !tickPositions.contains(tickPositionWorld)) {
+				ticks.add(tick);
+				tickPositions.add(tickPositionWorld);
+			}
+		}
 	}
 }

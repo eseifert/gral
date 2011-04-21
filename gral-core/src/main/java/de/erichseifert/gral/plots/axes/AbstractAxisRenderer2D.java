@@ -380,59 +380,24 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 	/**
 	 * Adds minor and major ticks to a list of ticks.
-	 * @param ticks
-	 * @param axis
-	 * @param min
-	 * @param max
-	 * @param tickPositions
-	 * @param isAutoSpacing
+	 * @param ticks List of ticks
+	 * @param axis Axis
+	 * @param min Minimum value of axis
+	 * @param max Maximum value of axis
+	 * @param tickPositions Set of tick positions
+	 * @param isAutoSpacing Use automatic scaling
 	 */
-	protected void createTicks(List<Tick> ticks, Axis axis,
+	protected abstract void createTicks(List<Tick> ticks, Axis axis,
 			double min, double max, Set<Number> tickPositions,
-			boolean isAutoSpacing) {
-		double tickSpacing = 1.0;
-		if (isAutoSpacing) {
-			tickSpacing = MathUtils.magnitude(10.0, max - min);
-		} else {
-			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
-		}
-
-		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
-		double tickSpacingMinor = tickSpacing;
-		if (ticksMinorCount > 0) {
-			tickSpacingMinor = tickSpacing/(ticksMinorCount + 1);
-		}
-
-		double minTickMajor = MathUtils.ceil(min, tickSpacing);
-		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
-
-		int ticksTotal = (int) Math.ceil((max - min)/tickSpacingMinor);
-		int initialTicksMinor = (int) ((minTickMajor - min)/tickSpacingMinor);
-
-		// Add major and minor ticks
-		// (Use integer to avoid rounding errors)
-		for (int tickCur = 0; tickCur < ticksTotal; tickCur++) {
-			double tickPositionWorld = minTickMinor + tickCur*tickSpacingMinor;
-			TickType tickType = TickType.MINOR;
-			if ((tickCur - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
-				tickType = TickType.MAJOR;
-			}
-			Tick tick = getTick(tickType, axis, tickPositionWorld);
-			if (tick.getPosition() != null
-					&& !tickPositions.contains(tickPositionWorld)) {
-				ticks.add(tick);
-				tickPositions.add(tickPositionWorld);
-			}
-		}
-	}
+			boolean isAutoSpacing);
 
 	/**
 	 * Adds custom ticks to a list of ticks.
-	 * @param ticks
-	 * @param axis
-	 * @param min
-	 * @param max
-	 * @param tickPositions
+	 * @param ticks List of ticks
+	 * @param axis Axis
+	 * @param min Minimum value of axis
+	 * @param max Maximum value of axis
+	 * @param tickPositions Set of tick positions
 	 */
 	protected void createTicksCustom(List<Tick> ticks, Axis axis,
 			double min, double max, Set<Number> tickPositions) {

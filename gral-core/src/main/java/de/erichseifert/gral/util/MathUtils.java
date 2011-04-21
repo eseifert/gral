@@ -265,6 +265,7 @@ public abstract class MathUtils {
 	 * <p>Returns the magnitude of the specified number. Example for magnitude
 	 * base 10:</p>
 	 * <table><tbody>
+	 *   <tr><td align="right"> -0.05</td><td align="right"> -0.01</td></tr>
 	 *   <tr><td align="right">  0.05</td><td align="right">  0.01</td></tr>
 	 *   <tr><td align="right">  3.14</td><td align="right">  1.00</td></tr>
 	 *   <tr><td align="right"> 54.32</td><td align="right"> 10.00</td></tr>
@@ -275,7 +276,7 @@ public abstract class MathUtils {
 	 * @return Magnitude.
 	 */
 	public static double magnitude(double base, double n) {
-		double logN = Math.log(n)/Math.log(base);
-		return Math.pow(base, Math.floor(logN));
+		double logN = Math.log(Math.abs(n))/Math.log(base);
+		return Math.signum(n) * Math.pow(base, Math.floor(logN));
 	}
 }

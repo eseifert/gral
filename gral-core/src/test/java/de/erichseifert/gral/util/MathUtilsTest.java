@@ -132,4 +132,12 @@ public class MathUtilsTest {
 		assertEquals(-1, MathUtils.randomizedSelect(b, 0, a.size() - 1, 1));
 	}
 
+	@Test
+	public void testMagnitude() {
+		assertEquals( -0.01, MathUtils.magnitude(10.0,  -0.05), DELTA);
+		assertEquals(  0.01, MathUtils.magnitude(10.0,   0.05), DELTA);
+		assertEquals(  1.00, MathUtils.magnitude(10.0,   3.14), DELTA);
+		assertEquals( 10.00, MathUtils.magnitude(10.0,  54.32), DELTA);
+		assertEquals(100.00, MathUtils.magnitude(10.0, 123.45), DELTA);
+	}
 }
