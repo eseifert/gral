@@ -110,7 +110,7 @@ public class SimpleXYPlot extends JPanel {
 		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
 		// Change tick spacing
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
-		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
+		//axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 
 		// Format rendering of data points
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();

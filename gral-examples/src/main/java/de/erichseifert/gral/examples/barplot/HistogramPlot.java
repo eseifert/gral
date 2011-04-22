@@ -80,7 +80,6 @@ public class HistogramPlot extends JPanel {
 		plot.getAxis(BarPlot.AXIS_Y).setRange(0.0,
 				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX), 25.0));
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
-		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_SPACING, 25.0);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_MINOR, false);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, -4.4);
 

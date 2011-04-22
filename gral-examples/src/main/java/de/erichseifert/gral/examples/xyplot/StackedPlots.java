@@ -35,7 +35,6 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
@@ -62,10 +61,6 @@ public class StackedPlots extends JPanel {
 		// Create and format upper plot
 		XYPlot plotUpper = new XYPlot(data);
 		Color colorUpper = new Color(0.9f, 0.3f, 0.2f);
-		AxisRenderer axisRendererXUpper = plotUpper.getAxisRenderer(XYPlot.AXIS_X);
-		AxisRenderer axisRendererYUpper = plotUpper.getAxisRenderer(XYPlot.AXIS_Y);
-		axisRendererXUpper.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
-		axisRendererYUpper.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		plotUpper.setPointRenderer(data, null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setSetting(LineRenderer.COLOR, colorUpper);
@@ -80,10 +75,6 @@ public class StackedPlots extends JPanel {
 		// Create and format lower plot
 		XYPlot plotLower = new XYPlot(data);
 		Color colorLower = new Color(0.0f, 0.3f, 1.0f);
-		AxisRenderer axisRendererXLower = plotLower.getAxisRenderer(XYPlot.AXIS_X);
-		AxisRenderer axisRendererYLower = plotLower.getAxisRenderer(XYPlot.AXIS_Y);
-		axisRendererXLower.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
-		axisRendererYLower.setSetting(AxisRenderer.TICKS_SPACING, 10.0);
 		PointRenderer pointsLower = plotLower.getPointRenderer(data);
 		pointsLower.setSetting(PointRenderer.COLOR, colorLower);
 		pointsLower.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-3, -3, 6, 6));

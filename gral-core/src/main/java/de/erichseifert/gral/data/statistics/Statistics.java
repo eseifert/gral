@@ -26,11 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.SortedList;
 
@@ -82,47 +80,76 @@ public class Statistics implements DataListener {
 	private final ArrayList<Map<String, Double>> statisticsByRow;
 
 	/**
-	 * Creates a new Statistics object with the specified DataSource.
-	 * @param data DataSource to be analyzed.
+	 * Initializes a new object with the specified data source.
+	 * @param data Data source to be analyzed.
 	 */
 	public Statistics(DataSource data) {
 		statistics = new HashMap<String, Double>();
-		statisticsByCol = new ArrayList<Map<String, Double>>();
-		statisticsByRow = new ArrayList<Map<String, Double>>();
+
+		statisticsByCol = new ArrayList<Map<String, Double>>(data.getColumnCount());
+		for (int col = 0; col < data.getColumnCount(); col++) {
+			statisticsByCol.add(new HashMap<String, Double>());
+		}
+
+		statisticsByRow = new ArrayList<Map<String, Double>>(data.getRowCount());
+		for (int row = 0; row < data.getRowCount(); row++) {
+			statisticsByRow.add(new HashMap<String, Double>());
+		}
 
 		this.data = data;
-		rebuild(this.data);
 		this.data.addDataListener(this);
 	}
 
 	/**
-	 * Creates initial statistics entries in the specified <code>Map</code>.
-	 * If the passed <code>Map</code> is <code>null</code> a new one will be
-	 * created.
-	 * @param stats <code>Map</code> to initialize.
-	 * @return The initialized <code>Map</code> if it was passed, or a new
-	 *         <code>Map</code> object
+	 * Utility method that calculates basic statistics like element count, sum,
+	 * or mean.
+	 * @param data Data values used to calculate statistics
+	 * @param stats A <code>Map</code> that should store the new statistics.
 	 */
-	private static Map<String, Double> initStatsMap(Map<String, Double> stats) {
-		if (stats == null) {
-			stats = new HashMap<String, Double>();
+	private void createBasicStats(Iterable<Number> data, Map<String, Double> stats) {
+		stats.put(N, 0.0);
+		stats.put(SUM, 0.0);
+		stats.put(SUM2, 0.0);
+		stats.put(SUM3, 0.0);
+		stats.put(SUM4, 0.0);
+
+		for (Number v : data) {
+			double val = Double.NaN;
+			if (v != null) {
+				val = v.doubleValue();
+			}
+			if (Double.isNaN(val)) {
+				continue;
+			}
+
+			if (!stats.containsKey(MIN) || val < stats.get(MIN)) {
+				stats.put(MIN, val);
+			}
+			if (!stats.containsKey(MAX) || val > stats.get(MAX)) {
+				stats.put(MAX, val);
+			}
+
+			double val2 = val*val;
+			stats.put(N, stats.get(N) + 1.0);
+			stats.put(SUM, stats.get(SUM) + val);
+			stats.put(SUM2, stats.get(SUM2) + val2);
+			stats.put(SUM3, stats.get(SUM3) + val2*val);
+			stats.put(SUM4, stats.get(SUM4) + val2*val2);
 		}
-		stats.put(N,    0.0);
-		stats.put(SUM,  0.0);
-		stats.put(SUM2,  0.0);
-		stats.put(SUM3,  0.0);
-		stats.put(SUM4,  0.0);
-		return stats;
 	}
 
-	// FIXME: Split the method up
 	/**
 	 * Utility method that calculates statistical values that can be derived
 	 * from other statistics.
+	 * @param data Data values used to calculate statistics
 	 * @param stats A <code>Map</code> that should store the new statistics.
 	 */
-	private static void derivedStatistics(Map<String, Double> stats) {
-		double mean = getMean(stats);
+	private void createDerivedStats(Iterable<Number> data, Map<String, Double> stats) {
+		// Calculate mean
+		double mean = get(data, stats, SUM) / get(data, stats, N);
+		stats.put(MEAN, mean);
+
+		// Calculate statistical moments
 		double mean2 = mean*mean;
 		// Mean deviation (first moment) for expected uniform distribution is always 0.
 		stats.put(MEAN_DEVIATION, 0.0);
@@ -130,242 +157,153 @@ public class Statistics implements DataListener {
 		stats.put(VARIANCE, stats.get(SUM2) - mean*stats.get(SUM));
 		// Skewness (third moment)
 		stats.put(SKEWNESS, stats.get(SUM3)
-				- 3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
+			- 3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
 		// Kurtosis (fourth moment)
 		stats.put(KURTOSIS, stats.get(SUM4)
-				- 4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2)
-				- 3.0*mean2*mean*stats.get(SUM));
-	}
-
-	private static double getMean(Map<String, Double> stats) {
-		return stats.get(SUM) / stats.get(N);
+			- 4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2)
+			- 3.0*mean2*mean*stats.get(SUM));
 	}
 
 	/**
-	 * Returns the specified information for the specified column or row.
-	 * @param key Requested information.
-	 * @param orientation Direction of the values the statistical is built from.
-	 * @param index Column or row index.
-	 * @return Calculated value.
+	 * Utility method that calculates the median (or 50% quantile) for the
+	 * given data values and stores the result in <code>stats</code>.
+	 * @param data Data values.
+	 * @param stats <code>Map</code> for storing result
 	 */
-	public double get(String key, Orientation orientation, int index) {
-		ArrayList<Map<String, Double>> statsList = statisticsByCol;
-		if (orientation == Orientation.HORIZONTAL) {
-			 statsList = statisticsByRow;
-		}
-		Map<String, Double> stats = statsList.get(index);
-		if (key.equals(MEDIAN) && !stats.containsKey(MEDIAN)) {
-			double median = getMedian(orientation, index);
-			stats.put(MEDIAN, median);
-		}
-		else {
-			return get(stats, key);
-		}
-		return (stats.containsKey(key)) ? stats.get(key) : Double.NaN;
-	}
-
-	private double get(Map<String, Double> stats, String key) {
-		if (!stats.containsKey(key)) {
-			if (MEDIAN.equals(key)) {
-				double median = getMedian();
-				stats.put(MEDIAN, median);
-			}
-			else if (MEAN.equals(key)) {
-				double mean = getMean(stats);
-				stats.put(MEAN, mean);
-			}
-			else if (MEAN_DEVIATION.equals(key)) {
-				derivedStatistics(stats);
-			}
-			else if (VARIANCE.equals(key)) {
-				derivedStatistics(stats);
-			}
-			else if (SKEWNESS.equals(key)) {
-				derivedStatistics(stats);
-			}
-			else if (KURTOSIS.equals(key)) {
-				derivedStatistics(stats);
-			}
-		}
-
-		return stats.get(key);
-	}
-
-	/**
-	 * Returns the specified information for the data source.
-	 * @param key Requested information.
-	 * @return Calculated value.
-	 */
-	public double get(String key) {
-		return get(statistics, key);
-	}
-
-	private void rebuild(DataSource data) {
-		statistics.clear();
-
-		int colCount = data.getColumnCount();
-		statisticsByCol.clear();
-		statisticsByCol.ensureCapacity(colCount);
-
-		int rowCount = data.getRowCount();
-		statisticsByRow.clear();
-		statisticsByRow.ensureCapacity(rowCount);
-
-		// (Re-)Calculate statistics
-		Map<String, Double> statsAll = initStatsMap(statistics);
-
-		for (int colIndex = 0; colIndex < colCount; colIndex++) {
-			// Add a map for each column
-			Map<String, Double> statsCol;
-			if (statisticsByCol.size() <= colIndex) {
-				statsCol = initStatsMap(null);
-				statisticsByCol.add(statsCol);
-			} else {
-				statsCol = statisticsByCol.get(colIndex);
-			}
-
-			for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-				// Add a new map for each row or query the existing one
-				Map<String, Double> statsRow;
-				if (statisticsByRow.size() <= rowIndex) {
-					statsRow = initStatsMap(null);
-					statisticsByRow.add(statsRow);
-				} else {
-					statsRow = statisticsByRow.get(rowIndex);
-				}
-
-				Number cell = data.get(colIndex, rowIndex);
-				double value = (cell != null) ? cell.doubleValue() : Double.NaN;
-
-				updateIncremental(value, statsAll, statsCol, statsRow);
-			}
-		}
-	}
-
-	@Override
-	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		for (DataChangeEvent event : events) {
-			double val = event.getNew().doubleValue();
-			int col = event.getCol();
-			if (statisticsByCol.size() <= col) {
-				statisticsByCol.add(initStatsMap(null));
-			}
-			int row = event.getRow();
-			if (statisticsByRow.size() <= row) {
-				statisticsByRow.add(initStatsMap(null));
-			}
-			updateIncremental(val, statisticsByCol.get(col), statisticsByRow.get(row), statistics);
-		}
-	}
-
-	private static void updateIncremental(double val, Map<String, Double>... stats) {
-		for (Map<String, Double> s : stats) {
-			// N (element count, zeroth moment)
-			s.put(N, s.get(N) + 1.0);
-
-			if (Double.isNaN(val)) {
-				continue;
-			}
-
-			// Min
-			if (!s.containsKey(MIN) || val < s.get(MIN)) {
-				s.put(MIN, val);
-			}
-			// Max
-			if (!s.containsKey(MAX) || val > s.get(MAX)) {
-				s.put(MAX, val);
-			}
-			// Sums
-			double val2 = val * val;
-			s.put(SUM, s.get(SUM) + val);
-			s.put(SUM2, s.get(SUM2) + val2);
-			s.put(SUM3, s.get(SUM3) + val2*val);
-			s.put(SUM4, s.get(SUM4) + val2*val2);
-		}
-	}
-
-	@Override
-	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		dataAdded(source, events);
-		dataRemoved(source, events);
-	}
-
-	@Override
-	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		for (DataChangeEvent event : events) {
-			double val = event.getOld().doubleValue();
-
-			// Update column
-			int index = event.getCol();
-			if (isRebuildNeeded(statisticsByCol.get(index), val)) {
-				rebuild(data);
-				break;
-			}
-
-			// Update row
-			index = event.getRow();
-			if (isRebuildNeeded(statisticsByRow.get(index), val)) {
-				rebuild(data);
-				break;
-			}
-
-			// Updating the table is not necessary
-		}
-	}
-
-	private static boolean isRebuildNeeded(Map<String, Double> statistics, double val) {
-		if (val == statistics.get(MIN) || val == statistics.get(MAX)) {
-			return true;
-		}
-		return false;
-	}
-
-	private double getMedian(Orientation orientation, int index) {
-		DataAccessor accessor = (orientation == Orientation.VERTICAL)
-				? data.getColumn(index)
-				: data.getRow(index);
-		List<Double> values = new SortedList<Double>(accessor.size());
-		for (Number cell : accessor) {
-			double value = cell.doubleValue();
-			if (!Double.isNaN(value)) {
-				values.add(value);
-			}
-		}
-		return getMedian(values);
-	}
-
-	private double getMedian() {
-		int valueCount = data.getColumnCount() * data.getRowCount();
-		List<Double> values = new SortedList<Double>(valueCount);
+	private void createMedian(Iterable<Number> data, Map<String, Double> stats) {
+		// Create sorted list of data
+		List<Double> values = new SortedList<Double>();
 		for (Number cell : data) {
 			double value = cell.doubleValue();
 			if (!Double.isNaN(value)) {
 				values.add(value);
 			}
 		}
-		return getMedian(values);
-	}
 
-	private static double getMedian(List<Double> values) {
+		// Calculate median
 		int middle = values.size()/2;
 		double median = values.get(middle);
 		if ((values.size() & 1) == 0) {
 			double medianLower = values.get(middle - 1);
 			median = (medianLower + median)/2.0;
 		}
-		return median;
+		stats.put(MEDIAN, median);
 	}
 
 	/**
-	 * Returns the specified percentile of the specified list of values.
-	 * @param <T> Type of values.
-	 * @param col Column index.
-	 * @param percentile Value of percentile.
-	 * @return Item representing the percentile.
+	 * Returns the specified information for the whole data source.
+	 * @param key Requested information.
+	 * @return The value for the specified key as  value, or <i>NaN</i>
+	 *         if the specified statistical value does not exist
 	 */
-	protected static <T extends Comparable<T>> T getPercentile(List<T> col, double percentile) {
-		int i = (int)(percentile*col.size());
-		int index = MathUtils.randomizedSelect(col, 0, col.size() - 1, i);
-		return col.get(index);
+	public double get(String key) {
+		return get(data, statistics, key);
+	}
+
+	/**
+	 * Returns the specified information for the offset index in the specified
+	 * direction.
+	 * @param key Requested information.
+	 * @param orientation Direction of the values the statistical is built from.
+	 * @param index Column or row index.
+	 * @return The value for the specified key as  value, or <i>NaN</i>
+	 *         if the specified statistical value does not exist
+	 */
+	public double get(String key, Orientation orientation, int index) {
+		Map<String, Double> stats = null;
+		Iterable<Number> statsData = null;
+		if (orientation == Orientation.VERTICAL) {
+			stats = statisticsByCol.get(index);
+			statsData = data.getColumn(index);
+		} else {
+			stats = statisticsByRow.get(index);
+			statsData = data.getRow(index);
+		}
+		return get(statsData, stats, key);
+	}
+
+	/**
+	 * Returns the specified information for the specified column or row.
+	 * If the specified statistical value does not exist <i>NaN</i>
+	 * is returned
+	 * @param data Data values.
+	 * @param stats <code>Map</code> with statistics.
+	 * @param key Requested information.
+	 * @return The value for the specified key as  value, or <i>NaN</i>
+	 *         if the specified statistical value does not exist
+	 */
+	private double get(Iterable<Number> data, Map<String, Double> stats, String key) {
+		if (!stats.containsKey(key)) {
+			if (
+					(N.equals(key) && !stats.containsKey(N)) ||
+					(MIN.equals(key) && !stats.containsKey(MIN)) ||
+					(MAX.equals(key) && !stats.containsKey(MAX)) ||
+					(SUM.equals(key) && !stats.containsKey(SUM)) ||
+					(SUM2.equals(key) && !stats.containsKey(SUM2)) ||
+					(SUM3.equals(key) && !stats.containsKey(SUM3)) ||
+					(SUM4.equals(key) && !stats.containsKey(SUM4))) {
+				createBasicStats(data, stats);
+			} else if (
+					(MEAN.equals(key) && !stats.containsKey(MEAN)) ||
+					(MEAN_DEVIATION.equals(key) && !stats.containsKey(MEAN_DEVIATION)) ||
+					(VARIANCE.equals(key) && !stats.containsKey(VARIANCE)) ||
+					(SKEWNESS.equals(key) && !stats.containsKey(SKEWNESS)) ||
+					(KURTOSIS.equals(key) && !stats.containsKey(KURTOSIS))) {
+				createDerivedStats(data, stats);
+			} if (MEDIAN.equals(key) && !stats.containsKey(MEDIAN)) {
+				createMedian(data, stats);
+			}
+		}
+
+		Double v = stats.get(key);
+		return (v != null) ? v : Double.NaN;
+	}
+
+	@Override
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		for (DataChangeEvent event : events) {
+			int col = event.getCol();
+			int row = event.getRow();
+
+			// Create new empty entry for column and row statistics
+			if (col >= statisticsByCol.size()) {
+				statisticsByCol.add(new HashMap<String, Double>());
+			}
+			if (row >= statisticsByRow.size()) {
+				statisticsByRow.add(new HashMap<String, Double>());
+			}
+
+			// Mark statistics as invalid
+			invalidate(col, row);
+		}
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		for (DataChangeEvent event : events) {
+			// Mark statistics as invalid
+			invalidate(event.getCol(), event.getRow());
+		}
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		for (DataChangeEvent event : events) {
+			// Mark statistics as invalid
+			invalidate(event.getCol(), event.getRow());
+
+			// TODO: Remove obsolete maps of deleted columns and rows
+		}
+	}
+
+	/**
+	 * Invalidates statistics information for a certain data cell.
+	 * @param col Column index of the cell.
+	 * @param row Row index of the cell.
+	 */
+	protected void invalidate(int col, int row) {
+		statistics.clear();
+		statisticsByCol.get(col).clear();
+		statisticsByRow.get(row).clear();
 	}
 }

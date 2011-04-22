@@ -183,7 +183,6 @@ public class MemoryUsage extends JPanel {
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
 		axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
-		axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 500);
 		axisRendererY.setSetting(AxisRenderer.TICKS_MINOR_COUNT, 4);
 		axisRendererY.setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat("0 MiB"));
 
