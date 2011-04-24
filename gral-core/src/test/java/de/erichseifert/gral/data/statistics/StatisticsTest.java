@@ -168,16 +168,42 @@ public class StatisticsTest {
 	}
 
 	@Test
-	public void testMedian() {
-		assertEquals(2.5, stats.get(Statistics.MEDIAN), DELTA);
+	public void testQuartiles() {
+		// Quartile 1
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_1), DELTA);
 		// Horizontal
-		assertEquals(1.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals(3.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(0.50, stats.get(Statistics.QUARTILE_1, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_1, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_1, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 0), DELTA);
-		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 1), DELTA);
-		assertEquals(5.5, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 2), DELTA);
+		assertEquals(1.00, stats.get(Statistics.QUARTILE_1, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(1.75, stats.get(Statistics.QUARTILE_1, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(3.75, stats.get(Statistics.QUARTILE_1, Orientation.VERTICAL, 2), DELTA);
+
+		// Quartile 2
+		assertEquals(2.50, stats.get(Statistics.QUARTILE_2), DELTA);
+		// Horizontal
+		assertEquals(1.00, stats.get(Statistics.QUARTILE_2, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(3.00, stats.get(Statistics.QUARTILE_2, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_2, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_2, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(2.00, stats.get(Statistics.QUARTILE_2, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(5.50, stats.get(Statistics.QUARTILE_2, Orientation.VERTICAL, 2), DELTA);
+
+		// Quartile 3
+		assertEquals(5.00, stats.get(Statistics.QUARTILE_3), DELTA);
+		// Horizontal
+		assertEquals(1.50, stats.get(Statistics.QUARTILE_3, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(3.00, stats.get(Statistics.QUARTILE_3, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(3.00, stats.get(Statistics.QUARTILE_3, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals(2.50, stats.get(Statistics.QUARTILE_3, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(3.25, stats.get(Statistics.QUARTILE_3, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(7.25, stats.get(Statistics.QUARTILE_3, Orientation.VERTICAL, 2), DELTA);
+
+		// Median == Quartile 2
+		assertEquals(stats.get(Statistics.MEDIAN), stats.get(Statistics.QUARTILE_2), DELTA);
 	}
 
 	@Test
@@ -185,7 +211,7 @@ public class StatisticsTest {
 		assertTrue(Double.isNaN(stats.get("foobar")));
 	}
 
-	// FIXME: Change test to cause invocation of dataUpdate only
+	// FIXME Change test to cause invocation of dataUpdate only
 	@Test
 	public void testDataUpdate() {
 		// Modify table data to cause update
@@ -209,5 +235,5 @@ public class StatisticsTest {
 		assertEquals(-32.0, stats.get(Statistics.SUM, Orientation.VERTICAL, 1), DELTA);
 	}
 
-	// TODO: Add tests for dataAdded and dataRemoved
+	// TODO Add tests for dataAdded and dataRemoved
 }

@@ -90,7 +90,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			boolean isAutoSpacing) {
 		double tickSpacing = 1.0;
 		if (isAutoSpacing) {
-			// TODO: Automatic scaling
+			// TODO Automatic scaling for logarithmic axes
 			tickSpacing = 1.0;
 		} else {
 			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();

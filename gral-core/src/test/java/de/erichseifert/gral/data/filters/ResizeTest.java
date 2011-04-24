@@ -31,7 +31,7 @@ import de.erichseifert.gral.data.DataTable;
 
 public class ResizeTest {
 	private static final double DELTA = 1e-15;
-	
+
 	private static DataTable dataEmpty;
 	private static DataTable dataHorizontal;
 	private static DataTable dataVertical;
@@ -78,7 +78,7 @@ public class ResizeTest {
 			data.get(0, 2).doubleValue(), data.get(1, 2).doubleValue(), data.get(2, 2).doubleValue(),
 		});
 	}
-	
+
 	@Test
 	public void testIdentity() {
 		assertIdentity(dataEmpty);

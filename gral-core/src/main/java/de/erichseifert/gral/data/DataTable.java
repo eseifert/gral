@@ -149,7 +149,7 @@ public class DataTable extends AbstractDataSource {
 	public void clear() {
 		rows.clear();
 		rowCount = 0;
-		// FIXME: Give arguments to the following method invocation
+		// FIXME Give arguments to the following method invocation
 		notifyDataRemoved();
 	}
 

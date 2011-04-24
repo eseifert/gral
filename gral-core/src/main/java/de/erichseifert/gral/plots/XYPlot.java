@@ -454,7 +454,7 @@ public class XYPlot extends Plot  {
 
 	/**
 	 * Calculates the bounds of the axes.
-	 * FIXME: Clean up code and do more efficient checks (loop?)
+	 * FIXME Clean up code and do more efficient checks (loop?)
 	 */
 	protected void layoutAxes() {
 		if (getPlotArea() == null) {

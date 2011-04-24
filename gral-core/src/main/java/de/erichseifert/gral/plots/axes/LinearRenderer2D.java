@@ -75,7 +75,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 		double tickSpacing = 1.0;
 		int ticksMinorCount = 3;
 		if (isAutoSpacing) {
-			// TODO: Use number of screen units to decide whether to subdivide
+			// TODO Use number of screen units to decide whether to subdivide
 			double range = max - min;
 			// 1-steppings (0.1, 1, 10)
 			tickSpacing = MathUtils.magnitude(10.0, range/4.0);

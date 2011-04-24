@@ -84,8 +84,8 @@ public class LabelPointRenderer extends DefaultPointRenderer {
 				text, this.<Font>getSetting(FONT));
 		Shape shape = layout.getOutline(null);
 
-		double alignX = getSetting(ALIGNMENT_X);
-		double alignY = getSetting(ALIGNMENT_Y);
+		double alignX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
 		Rectangle2D bounds = shape.getBounds2D();
 		AffineTransform tx = AffineTransform.getTranslateInstance(
 			-alignX*bounds.getWidth(), alignY*bounds.getHeight());

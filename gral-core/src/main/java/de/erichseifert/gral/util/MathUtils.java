@@ -279,4 +279,39 @@ public abstract class MathUtils {
 		double logN = Math.log(Math.abs(n))/Math.log(base);
 		return Math.signum(n) * Math.pow(base, Math.floor(logN));
 	}
+
+	/**
+	 * Utility method used to calculate arbitrary quantiles from a list of
+	 * values. Currently only one method is implemented: the default method
+	 * that is used by R (method 7).
+	 * @see http://en.wikipedia.org/wiki/Quantile#Estimating_the_quantiles_of_a_population
+	 * @see http://svn.r-project.org/R/trunk/src/library/stats/R/quantile.R
+	 * @see http://stackoverflow.com/questions/95007/explain-the-quantile-function-in-r
+	 * @param values Data values.
+	 * @param q Quantile in range [0, 1]
+	 * @return Quantile value
+	 */
+	public static double getQuantile(List<Double> values, double q) {
+		// R type 7 parameters
+		double a = 1.0, b = -1.0, c = 0.0, d = 1.0;
+		// Number of samples
+		int n = values.size();
+
+		double x = a + (n + b) * q - 1.0;
+		double xInt = (int) x;
+		double xFrac = x - xInt;
+
+		if (xInt < 0) {
+			return values.get(0);
+		} else if (xInt >= n) {
+			return values.get(n - 1);
+		}
+
+		int i = (int) xInt;
+		if (xFrac == 0) {
+			return values.get(i);
+		}
+		return values.get(i) + (values.get(i + 1) - values.get(i))*(c + d*xFrac);
+	}
+
 }

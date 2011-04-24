@@ -29,6 +29,7 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.SortedList;
 
@@ -38,6 +39,10 @@ import de.erichseifert.gral.util.SortedList;
  * on a data source.
  */
 public class Statistics implements DataListener {
+	/** Key for specifying the total number of elements.
+	This is the zeroth central moment: E((x - µ)^0) */
+	public static final String N = "n"; //$NON-NLS-1$
+
 	/** Key for specifying the sum of all values. */
 	public static final String SUM = "sum"; //$NON-NLS-1$
 	/** Key for specifying the sum of all value squares. */
@@ -46,15 +51,14 @@ public class Statistics implements DataListener {
 	public static final String SUM3 = "sum3"; //$NON-NLS-1$
 	/** Key for specifying the sum of all value quads. */
 	public static final String SUM4 = "sum4"; //$NON-NLS-1$
-	/** Key for specifying the arithmetic mean of all values. */
-	public static final String MEAN = "mean"; //$NON-NLS-1$
+
 	/** Key for specifying the minimum, i.e. the smallest value. */
 	public static final String MIN = "min"; //$NON-NLS-1$
 	/** Key for specifying the maximum, i.e. the largest value. */
 	public static final String MAX = "max"; //$NON-NLS-1$
-	/** Key for specifying the total number of elements.
-	This is the zeroth central moment: E((x - µ)^0) */
-	public static final String N = "n"; //$NON-NLS-1$
+
+	/** Key for specifying the arithmetic mean of all values. */
+	public static final String MEAN = "mean"; //$NON-NLS-1$
 	/** Key for specifying the expected value.
 	This is the first central moment: E((x - E(x))^1) */
 	public static final String MEAN_DEVIATION = "mean deviation"; //$NON-NLS-1$
@@ -67,8 +71,15 @@ public class Statistics implements DataListener {
 	/** Key for specifying the kurtosis.
 	This is the fourth central moment: E((x - E(x))^4) */
 	public static final String KURTOSIS = "kurtosis"; //$NON-NLS-1$
+
 	/** Key for specifying the median (or 50% quantile). */
-	public static final String MEDIAN = "median"; //$NON-NLS-1$
+	public static final String MEDIAN = "quantile50"; //$NON-NLS-1$
+	/** Key for specifying the 1st quartile (or 25th quantile). */
+	public static final String QUARTILE_1 = "quantile25"; //$NON-NLS-1$
+	/** Key for specifying the 2nd quartile (or 50th quantile). */
+	public static final String QUARTILE_2 = "quantile50"; //$NON-NLS-1$
+	/** Key for specifying the 3rd quartile (or 75th quantile). */
+	public static final String QUARTILE_3 = "quantile75"; //$NON-NLS-1$
 
 	/** Data values that are used to build statistical aggregates. */
 	private final DataSource data;
@@ -165,12 +176,11 @@ public class Statistics implements DataListener {
 	}
 
 	/**
-	 * Utility method that calculates the median (or 50% quantile) for the
-	 * given data values and stores the result in <code>stats</code>.
-	 * @param data Data values.
+	 * Utility method that calculates quantiles for the given data values and
+	 * stores the result in <code>stats</code>.
 	 * @param stats <code>Map</code> for storing result
 	 */
-	private void createMedian(Iterable<Number> data, Map<String, Double> stats) {
+	private void createDistributionStats(Iterable<Number> data, Map<String, Double> stats) {
 		// Create sorted list of data
 		List<Double> values = new SortedList<Double>();
 		for (Number cell : data) {
@@ -180,14 +190,10 @@ public class Statistics implements DataListener {
 			}
 		}
 
-		// Calculate median
-		int middle = values.size()/2;
-		double median = values.get(middle);
-		if ((values.size() & 1) == 0) {
-			double medianLower = values.get(middle - 1);
-			median = (medianLower + median)/2.0;
-		}
-		stats.put(MEDIAN, median);
+		stats.put(QUARTILE_1, MathUtils.getQuantile(values, 0.25));
+		stats.put(QUARTILE_2, MathUtils.getQuantile(values, 0.50));
+		stats.put(QUARTILE_3, MathUtils.getQuantile(values, 0.75));
+		stats.put(MEDIAN, stats.get(QUARTILE_2));
 	}
 
 	/**
@@ -250,8 +256,12 @@ public class Statistics implements DataListener {
 					(SKEWNESS.equals(key) && !stats.containsKey(SKEWNESS)) ||
 					(KURTOSIS.equals(key) && !stats.containsKey(KURTOSIS))) {
 				createDerivedStats(data, stats);
-			} if (MEDIAN.equals(key) && !stats.containsKey(MEDIAN)) {
-				createMedian(data, stats);
+			} if (
+					(MEDIAN.equals(key) && !stats.containsKey(MEDIAN)) ||
+					(QUARTILE_1.equals(key) && !stats.containsKey(QUARTILE_1)) ||
+					(QUARTILE_2.equals(key) && !stats.containsKey(QUARTILE_2)) ||
+					(QUARTILE_3.equals(key) && !stats.containsKey(QUARTILE_3))) {
+				createDistributionStats(data, stats);
 			}
 		}
 
@@ -292,7 +302,7 @@ public class Statistics implements DataListener {
 			// Mark statistics as invalid
 			invalidate(event.getCol(), event.getRow());
 
-			// TODO: Remove obsolete maps of deleted columns and rows
+			// TODO Remove obsolete maps of deleted columns and rows
 		}
 	}
 
