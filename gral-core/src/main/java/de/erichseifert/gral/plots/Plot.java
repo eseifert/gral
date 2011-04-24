@@ -75,6 +75,10 @@ public abstract class Plot extends DrawableContainer
 	of the plot. */
 	public static final Key TITLE =
 		new Key("plot.title"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Font} instance that is used to
+	display the title of the plot. */
+	public static final Key TITLE_FONT =
+		new Key("plot.title.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot. */
 	public static final Key BACKGROUND =
@@ -138,7 +142,7 @@ public abstract class Plot extends DrawableContainer
 	public Plot(DataSource... series) {
 		super(new EdgeLayout(20.0, 20.0));
 
-		title = new Label(""); //$NON-NLS-1$
+		title = new Label(); //$NON-NLS-1$
 		title.setSetting(Label.FONT, Font.decode(null).deriveFont(18f));
 
 		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
@@ -160,6 +164,7 @@ public abstract class Plot extends DrawableContainer
 
 		addSettingsListener(this);
 		setSettingDefault(TITLE, null);
+		setSettingDefault(TITLE_FONT, Font.decode(null).deriveFont(18f));
 		setSettingDefault(BACKGROUND, null);
 		setSettingDefault(BORDER, null);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -374,7 +379,16 @@ public abstract class Plot extends DrawableContainer
 		Key key = event.getKey();
 		if (TITLE.equals(key)) {
 			String text = getSetting(TITLE);
-			title.setText((text != null) ? text : ""); //$NON-NLS-1$
+			if (text == null) {
+				text = "";
+			}
+			title.setText(text); //$NON-NLS-1$
+		} else if (TITLE_FONT.equals(key)) {
+			Font font = getSetting(TITLE_FONT);
+			if (font == null) {
+				font = Font.decode(null).deriveFont(18f);
+			}
+			title.setSetting(Label.FONT, font);
 		} else if (LEGEND_LOCATION.equals(key)) {
 			Location constraints = getSetting(LEGEND_LOCATION);
 			if (legend != null) {

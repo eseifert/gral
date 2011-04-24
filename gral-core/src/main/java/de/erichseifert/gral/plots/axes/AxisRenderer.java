@@ -73,9 +73,12 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Number} value for the alignment
 	 of major ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	Key TICKS_ALIGNMENT = new Key("axis.ticks.major.alignment"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Font} instance to be used to
+	 display the text of major ticks. */
+	Key TICKS_FONT = new Key("axis.ticks.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the shapes of major ticks. */
-	Key TICKS_COLOR = new Key("label.color"); //$NON-NLS-1$
+	Key TICKS_COLOR = new Key("axis.ticks.color"); //$NON-NLS-1$
 	/** Key for specifying whether tick labels are drawn. */
 	Key TICK_LABELS = new Key("axis.ticks.major.labels"); //$NON-NLS-1$
 	/** Key for specifying the {java.text.Format} instance which converts the
@@ -127,6 +130,9 @@ public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Number} value for the rotation of
 	 the axis label in degrees. */
 	Key LABEL_ROTATION = new Key("axis.label.rotation"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Font} instance to be used to
+	 display the axis label text. */
+	Key LABEL_FONT = new Key("axis.label.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the axis label. */
 	Key LABEL_COLOR = new Key("axis.label.color"); //$NON-NLS-1$

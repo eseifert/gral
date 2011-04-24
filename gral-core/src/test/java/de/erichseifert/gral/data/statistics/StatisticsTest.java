@@ -22,6 +22,7 @@
 package de.erichseifert.gral.data.statistics;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -177,6 +178,11 @@ public class StatisticsTest {
 		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 0), DELTA);
 		assertEquals(2.0, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 1), DELTA);
 		assertEquals(5.5, stats.get(Statistics.MEDIAN, Orientation.VERTICAL, 2), DELTA);
+	}
+
+	@Test
+	public void testNonExistant() {
+		assertTrue(Double.isNaN(stats.get("foobar")));
 	}
 
 	// FIXME: Change test to cause invocation of dataUpdate only

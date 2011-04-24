@@ -81,8 +81,8 @@ public class SpiralPlot extends JPanel {
 		// Format data series
 		PointRenderer pointRenderer = new SizeablePointRenderer();
 		pointRenderer.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
-		pointRenderer.setSetting(PointRenderer.COLOR, new Color(0f, 0f, 0.5f, 0.25f));              // color of data points
-		pointRenderer.setSetting(SizeablePointRenderer.COLUMN_SIZE, 2);                             // data column which determines the scaling of data point shapes
+		pointRenderer.setSetting(PointRenderer.COLOR, new Color(0f, 0f, 0.5f, 0.25f));  // color of data points
+		pointRenderer.setSetting(SizeablePointRenderer.COLUMN, 2);  // data column which determines the scaling of data point shapes
 		plot.setPointRenderer(series, pointRenderer);  // Assign the point renderer to the data series
 
 		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component

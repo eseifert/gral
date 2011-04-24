@@ -73,6 +73,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 	protected void createTicks(List<Tick> ticks, Axis axis, double min,
 			double max, Set<Number> tickPositions, boolean isAutoSpacing) {
 		double tickSpacing = 1.0;
+		int ticksMinorCount = 3;
 		if (isAutoSpacing) {
 			// TODO: Use number of screen units to decide whether to subdivide
 			double range = max - min;
@@ -81,16 +82,18 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 			// 2-steppings (0.2, 2, 20)
 			if (range/tickSpacing > 8.0) {
 				tickSpacing *= 2.0;
+				ticksMinorCount = 1;
 			}
 			// 5-steppings (0.5, 5, 50)
 			if (range/tickSpacing > 8.0) {
 				tickSpacing *= 2.5;
+				ticksMinorCount = 4;
 			}
 		} else {
 			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+			ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		}
 
-		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
 		double tickSpacingMinor = tickSpacing;
 		if (ticksMinorCount > 0) {
 			tickSpacingMinor = tickSpacing/(ticksMinorCount + 1);

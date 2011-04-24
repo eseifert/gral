@@ -72,6 +72,13 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	private boolean valid;
 
 	/**
+	 * Creates a new empty <code>Label</code> object.
+	 */
+	public Label() {
+		this("");
+	}
+
+	/**
 	 * Creates a new <code>Label</code> object with the specified text.
 	 * @param text Text to be displayed.
 	 */

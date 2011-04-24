@@ -23,6 +23,7 @@ package de.erichseifert.gral;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
@@ -58,6 +59,10 @@ public abstract class Legend extends DrawableContainer
 	 paint the border of the legend. */
 	public static final Key BORDER =
 		new Key("legend.border"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Font} instance to be used to
+	 display the legend labels. */
+	public static final Key FONT =
+		new Key("legend.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 fill the border of the legend. */
 	public static final Key COLOR =
@@ -104,8 +109,8 @@ public abstract class Legend extends DrawableContainer
 
 				@Override
 				public Dimension2D getPreferredSize() {
-					// TODO Use real font size instead of fixed value
-					final double fontSize = 10.0;
+					double fontSize =
+						Legend.this.<Font>getSetting(FONT).getSize2D();
 					Dimension2D symbolSize =
 						Legend.this.getSetting(SYMBOL_SIZE);
 					Dimension2D size = super.getPreferredSize();
@@ -115,6 +120,7 @@ public abstract class Legend extends DrawableContainer
 				}
 			};
 			label = new Label(labelText);
+			label.setSetting(Label.FONT, Legend.this.<Font>getSetting(FONT));
 			label.setSetting(Label.ALIGNMENT_X, 0.0);
 			label.setSetting(Label.ALIGNMENT_Y, 0.5);
 
@@ -147,6 +153,7 @@ public abstract class Legend extends DrawableContainer
 		addSettingsListener(this);
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));
+		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(20.0, 5.0));
@@ -252,6 +259,14 @@ public abstract class Legend extends DrawableContainer
 			Dimension2D gap = getSetting(GAP);
 			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
+		} else if (FONT.equals(key)) {
+			for (Drawable item : components.values()) {
+				if (!(item instanceof Item)) {
+					continue;
+				}
+				((Item) item).label.setSetting(Label.FONT,
+						Legend.this.<Font>getSetting(FONT));
+			}
 		}
 	}
 

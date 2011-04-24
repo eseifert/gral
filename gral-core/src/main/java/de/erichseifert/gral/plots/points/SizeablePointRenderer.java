@@ -32,30 +32,31 @@ import de.erichseifert.gral.data.Row;
  * the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the value. */
-	public static final Key COLUMN_SIZE = new Key("sizeablePoint.size.column"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.lang.Integer} which specifies the
+	index of the column that is used for point sizes. */
+	public static final Key COLUMN = new Key("sizeablePoint.column"); //$NON-NLS-1$
 
 	/**
-	 * Creates a new SizeablePointRenderer object.
+	 * Initializes a new object.
 	 */
 	public SizeablePointRenderer() {
-		setSettingDefault(COLUMN_SIZE, 2);
+		setSettingDefault(COLUMN, 2);
 	}
 
 	@Override
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
-		int sizeColumn = this.<Number>getSetting(COLUMN_SIZE).intValue();
-		if (sizeColumn < row.size()) {
-			double size = row.get(sizeColumn).doubleValue();
-			if (size < 0.0) {
-				return null;
-			}
-			if (size != 1.0) {
-				AffineTransform tx = AffineTransform.getScaleInstance(size, size);
-				shape = tx.createTransformedShape(shape);
-			}
+		int sizeColumn = this.<Number>getSetting(COLUMN).intValue();
+		if (sizeColumn >= row.size()) {
+			return shape;
+		}
+		double size = row.get(sizeColumn).doubleValue();
+		if (size < 0.0 || Double.isNaN(size) || Double.isInfinite(size)) {
+			return null;
+		}
+		if (size != 1.0) {
+			AffineTransform tx = AffineTransform.getScaleInstance(size, size);
+			shape = tx.createTransformedShape(shape);
 		}
 		return shape;
 	}

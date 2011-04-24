@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots.axes;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -99,6 +100,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(TICKS_LENGTH, 1.0);
 		setSettingDefault(TICKS_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_ALIGNMENT, 0.5);
+		setSettingDefault(TICKS_FONT, Font.decode(null));
 		setSettingDefault(TICKS_COLOR, Color.BLACK);
 
 		setSettingDefault(TICK_LABELS, true);
@@ -119,6 +121,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(LABEL, null);
 		setSettingDefault(LABEL_DISTANCE, 1.0);
 		setSettingDefault(LABEL_ROTATION, 0.0);
+		setSettingDefault(LABEL_FONT, Font.decode(null));
 		setSettingDefault(LABEL_COLOR, Color.BLACK);
 	}
 
@@ -151,8 +154,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							graphics, shape, axisPaint, null, axisStroke);
 				}
 
-				// TODO Use real font size instead of fixed value
-				final double fontSize = 10.0;
+				double fontSize =
+					renderer.<Font>getSetting(TICKS_FONT).getSize2D();
 
 				// Draw ticks
 				boolean drawTicksMajor =
@@ -233,6 +236,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							String tickLabelText = tick.getLabel();
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
+								tickLabel.setSetting(Label.FONT,
+										renderer.<Font>getSetting(TICKS_FONT));
 								// TODO Allow separate colors for ticks and tick labels?
 								tickLabel.setSetting(Label.COLOR, tickPaint);
 								double labelDist = tickLengthOuter + tickLabelDist;
@@ -248,6 +253,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				String labelText = renderer.<String>getSetting(LABEL);
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
+					axisLabel.setSetting(Label.FONT,
+							renderer.<Font>getSetting(LABEL_FONT));
 					axisLabel.setSetting(Label.COLOR,
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
@@ -330,8 +337,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			@Override
 			public Dimension2D getPreferredSize() {
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
-				// TODO Use real font size instead of fixed value
-				final double fontSize = 10.0;
+				double fontSize = renderer.<Font>getSetting(TICKS_FONT).getSize2D();
 				double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
 					.doubleValue()*fontSize;
 				double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
