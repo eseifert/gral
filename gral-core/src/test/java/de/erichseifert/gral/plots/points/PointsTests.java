@@ -28,7 +28,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	AbstractPointRendererTest.class,
 	DefaultPointRendererTest.class,
-	SizeablePointsRendererTest.class
+	SizeablePointsRendererTest.class,
+	LabelPointsRendererTest.class
 })
 public class PointsTests {
 }

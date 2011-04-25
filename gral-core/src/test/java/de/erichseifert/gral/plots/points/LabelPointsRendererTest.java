@@ -21,12 +21,9 @@
  */
 package de.erichseifert.gral.plots.points;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,9 +31,8 @@ import org.junit.Test;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
-public class SizeablePointsRendererTest {
+public class LabelPointsRendererTest {
 	private static DataTable table;
-	private static Shape shape;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -44,32 +40,13 @@ public class SizeablePointsRendererTest {
 		table.add(1, 3,  1); // 0
 		table.add(2, 1,  2); // 1
 		table.add(3, 2, -1); // 2
-
-		shape = new Rectangle2D.Double(-5.0, -5.0, 10.0, 10.0);
 	}
 
 	@Test
 	public void testPointPath() {
-		// Unsized shape
-		PointRenderer unsized = new SizeablePointRenderer();
-		unsized.setSetting(PointRenderer.SHAPE, shape);
-		Shape unsizedExpected = shape;
-		Shape unsizedPath = unsized.getPointPath(new Row(table, 0));
-		assertEquals(unsizedExpected.getBounds2D(), unsizedPath.getBounds2D());
-
-		// Unsized shape
-		PointRenderer sized = new SizeablePointRenderer();
-		sized.setSetting(PointRenderer.SHAPE, shape);
-		Shape sizedExpected = AffineTransform.getScaleInstance(2.0, 2.0)
-				.createTransformedShape(shape);
-		Shape sizedPath = sized.getPointPath(new Row(table, 1));
-		assertEquals(sizedExpected.getBounds2D(), sizedPath.getBounds2D());
-
-		// Invalid size
-		PointRenderer invalid = new SizeablePointRenderer();
-		invalid.setSetting(PointRenderer.SHAPE, shape);
-		Shape invalidPath = invalid.getPointPath(new Row(table, 2));
-		assertNull(invalidPath);
+		PointRenderer labelRenderer = new LabelPointRenderer();
+		Shape path = labelRenderer.getPointPath(new Row(table, 0));
+		assertNotNull(path);
 	}
 
 }
