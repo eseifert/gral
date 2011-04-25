@@ -72,7 +72,7 @@ public class CSVWriter extends AbstractDataWriter {
 	 */
 	public CSVWriter(String mimeType) {
 		super(mimeType);
-		if ("text/tab-separated-values".equals(mimeType)) {
+		if ("text/tab-separated-values".equals(mimeType)) { //$NON-NLS-1$
 			setDefault("separator", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			setDefault("separator", ","); //$NON-NLS-1$ //$NON-NLS-2$

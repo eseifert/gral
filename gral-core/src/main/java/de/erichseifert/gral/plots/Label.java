@@ -75,7 +75,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 * Creates a new empty <code>Label</code> object.
 	 */
 	public Label() {
-		this("");
+		this(""); //$NON-NLS-1$
 	}
 
 	/**

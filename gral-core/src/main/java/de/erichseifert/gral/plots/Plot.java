@@ -380,9 +380,9 @@ public abstract class Plot extends DrawableContainer
 		if (TITLE.equals(key)) {
 			String text = getSetting(TITLE);
 			if (text == null) {
-				text = "";
+				text = ""; //$NON-NLS-1$
 			}
-			title.setText(text); //$NON-NLS-1$
+			title.setText(text);
 		} else if (TITLE_FONT.equals(key)) {
 			Font font = getSetting(TITLE_FONT);
 			if (font == null) {
@@ -506,26 +506,6 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
-	 * Sets the mapping of a data source column to a axis name.
-	 * @param source Data source.
-	 * @param col Column index.
-	 * @param axisName Axis name.
-	 * @throws IllegalArgumentException if data source or column don't exist.
-	 */
-	private void setMapping(DataSource source, int col, String axisName) {
-		if (!contains(source)) {
-			throw new IllegalArgumentException(
-					"Data source does not exist in plot.");
-		}
-		if (col < 0 || col >= source.getColumnCount()) {
-			throw new IllegalArgumentException(
-					"Column does not exist in data source.");
-		}
-		Tuple mapKey = new Tuple(source, col);
-		mapping.put(mapKey, axisName);
-	}
-
-	/**
 	 * Returns the mapping of data source columns to axis names. The elements
 	 * of returned array equal the column indexes, i.e. the first element (axis
 	 * name) matches the first column of <code>source</code>. If no mapping
@@ -552,10 +532,20 @@ public abstract class Plot extends DrawableContainer
 	 * @param axisNames Sequence of axis names in the order of the columns.
 	 */
 	public void setMapping(DataSource source, String... axisNames) {
+		if (!contains(source)) {
+			throw new IllegalArgumentException(
+					"Data source does not exist in plot."); //$NON-NLS-1$
+		}
+		if (axisNames.length > source.getColumnCount()) {
+			throw new IllegalArgumentException(String.format(
+					"Data source only has %d column, %d values given.", //$NON-NLS-1$
+					source.getColumnCount(), axisNames.length));
+		}
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
 			if (axisName != null) {
-				setMapping(source, col, axisName);
+				Tuple mapKey = new Tuple(source, col);
+				mapping.put(mapKey, axisName);
 			}
 		}
 		refresh();

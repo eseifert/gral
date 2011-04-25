@@ -46,15 +46,23 @@ public class DataSeriesTest {
 
 	@Test
 	public void testCreation() {
-		DataSeries series1 = new DataSeries(table, 2, 1);
-		assertEquals(2, series1.getColumnCount());
-		assertEquals(table.getRowCount(), series1.getRowCount());
-		assertEquals(null, series1.getName());
+		// without name
+		DataSeries unnamed = new DataSeries(table, 2, 1);
+		assertEquals(2, unnamed.getColumnCount());
+		assertEquals(table.getRowCount(), unnamed.getRowCount());
+		assertEquals(null, unnamed.getName());
 
-		DataSeries series2 = new DataSeries("name", table, 2, 1);
-		assertEquals(2, series2.getColumnCount());
-		assertEquals(table.getRowCount(), series2.getRowCount());
-		assertEquals("name", series2.getName());
+		// with name
+		DataSeries named = new DataSeries("foo", table, 2, 1);
+		assertEquals(2, named.getColumnCount());
+		assertEquals(table.getRowCount(), named.getRowCount());
+		assertEquals("foo", named.getName());
+
+		// without columns
+		DataSeries allCols = new DataSeries("bar", table);
+		assertEquals(table.getColumnCount(), allCols.getColumnCount());
+		assertEquals(table.getRowCount(), allCols.getRowCount());
+		assertEquals("bar", allCols.getName());
 	}
 
 	@Test

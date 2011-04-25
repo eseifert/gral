@@ -91,7 +91,7 @@ public class JdbcData extends AbstractDataSource {
 				ResultSet result = bufferedQuery;
 				if (!isBuffered() || result == null) {
 					PreparedStatement stmt = connection.prepareStatement(
-							"SELECT * FROM " + table + "",
+							"SELECT * FROM " + table + "", //$NON-NLS-1$ //$NON-NLS-2$
 							ResultSet.TYPE_SCROLL_SENSITIVE,
 							ResultSet.CONCUR_READ_ONLY);
 					result = stmt.executeQuery();
@@ -130,11 +130,13 @@ public class JdbcData extends AbstractDataSource {
 		if (!isBuffered() || rowCount < 0) {
 			try {
 				PreparedStatement stmt = connection.prepareStatement(
-						"SELECT COUNT(*) FROM " + table,
+						"SELECT COUNT(*) FROM " + table, //$NON-NLS-1$
 						ResultSet.TYPE_SCROLL_SENSITIVE,
 						ResultSet.CONCUR_READ_ONLY);
 				ResultSet result = stmt.executeQuery();
-				result.first();
+				if (!result.first()) {
+					return 0;
+				}
 				rowCount = result.getInt(1);
 				bufferedRowCount = rowCount;
 				result.close();
@@ -155,7 +157,7 @@ public class JdbcData extends AbstractDataSource {
 	private Class<? extends Number>[] getJdbcColumnTypes()
 			throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement(
-				"SELECT * FROM " + table + " WHERE 1 = 0");
+				"SELECT * FROM " + table + " WHERE 1 = 0"); //$NON-NLS-1$ //$NON-NLS-2$
 		ResultSetMetaData metadata = stmt.getMetaData();
 		int colCount = metadata.getColumnCount();
 		Class<?>[] types = new Class<?>[colCount];
