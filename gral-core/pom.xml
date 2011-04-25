@@ -20,7 +20,7 @@
         <version>2.7</version>
         <configuration>
           <outputDirectory>target</outputDirectory>
-          <show>private</show>
+          <show>public</show>
           <nohelp>true</nohelp>
         </configuration>
         <executions>

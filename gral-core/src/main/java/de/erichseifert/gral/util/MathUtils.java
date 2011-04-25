@@ -281,17 +281,21 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Utility method used to calculate arbitrary quantiles from a list of
-	 * values. Currently only one method is implemented: the default method
-	 * that is used by R (method 7).
-	 * @see http://en.wikipedia.org/wiki/Quantile#Estimating_the_quantiles_of_a_population
-	 * @see http://svn.r-project.org/R/trunk/src/library/stats/R/quantile.R
-	 * @see http://stackoverflow.com/questions/95007/explain-the-quantile-function-in-r
+	 * <p>Utility method used to calculate arbitrary quantiles from a sorted
+	 * list of values. Currently only one method is implemented: the default
+	 * method that is used by R (method 7). The list must be sorted.</p>
+	 * <p>For more information see:</p>
+	 * <ul>
+	 *   <li><a href="http://adorio-research.org/wordpress/?p=125">Statistics: computing quantiles with Python</a></li>
+	 *   <li><a href="http://en.wikipedia.org/wiki/Quantile#Estimating_the_quantiles_of_a_population">Wikipedia article on quantile calculation</a></li>
+	 *   <li><a href="http://svn.r-project.org/R/trunk/src/library/stats/R/quantile.R">Source code of quantile calculation in R language</a></li>
+	 *   <li><a href="http://stackoverflow.com/questions/95007/explain-the-quantile-function-in-r">Stackoverflow thread on quantile calculation in R</a></li>
+	 * </ul>
 	 * @param values Data values.
 	 * @param q Quantile in range [0, 1]
 	 * @return Quantile value
 	 */
-	public static double getQuantile(List<Double> values, double q) {
+	public static double quantile(List<Double> values, double q) {
 		// R type 7 parameters
 		double a = 1.0, b = -1.0, c = 0.0, d = 1.0;
 		// Number of samples

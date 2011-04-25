@@ -179,6 +179,7 @@ public class Statistics implements DataListener {
 	 * Utility method that calculates quantiles for the given data values and
 	 * stores the result in <code>stats</code>.
 	 * @param stats <code>Map</code> for storing result
+	 * @see de.erichseifert.gral.util.MathUtils.quantile(List<Double>,double)
 	 */
 	private void createDistributionStats(Iterable<Number> data, Map<String, Double> stats) {
 		// Create sorted list of data
@@ -190,9 +191,9 @@ public class Statistics implements DataListener {
 			}
 		}
 
-		stats.put(QUARTILE_1, MathUtils.getQuantile(values, 0.25));
-		stats.put(QUARTILE_2, MathUtils.getQuantile(values, 0.50));
-		stats.put(QUARTILE_3, MathUtils.getQuantile(values, 0.75));
+		stats.put(QUARTILE_1, MathUtils.quantile(values, 0.25));
+		stats.put(QUARTILE_2, MathUtils.quantile(values, 0.50));
+		stats.put(QUARTILE_3, MathUtils.quantile(values, 0.75));
 		stats.put(MEDIAN, stats.get(QUARTILE_2));
 	}
 

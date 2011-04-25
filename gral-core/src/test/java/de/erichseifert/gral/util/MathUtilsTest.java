@@ -32,7 +32,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class MathUtilsTest {
-	public static final double DELTA = 1e-15;
+	public static final double DELTA = 1e-14;
 
 	@Test
 	public void testAlmostEqual() {
@@ -140,4 +140,23 @@ public class MathUtilsTest {
 		assertEquals( 10.00, MathUtils.magnitude(10.0,  54.32), DELTA);
 		assertEquals(100.00, MathUtils.magnitude(10.0, 123.45), DELTA);
 	}
+
+	@Test
+	public void testQuantile() {
+		List<Double> values = Arrays.<Double>asList(
+				11.4, 17.3, 21.3, 25.9, 40.1, 50.5, 60.0, 70.0, 75.0);
+
+		assertEquals(11.40, MathUtils.quantile(values, 0.0), DELTA);
+		assertEquals(16.12, MathUtils.quantile(values, 0.1), DELTA);
+		assertEquals(19.70, MathUtils.quantile(values, 0.2), DELTA);
+		assertEquals(23.14, MathUtils.quantile(values, 0.3), DELTA);
+		assertEquals(28.74, MathUtils.quantile(values, 0.4), DELTA);
+		assertEquals(40.10, MathUtils.quantile(values, 0.5), DELTA);
+		assertEquals(48.42, MathUtils.quantile(values, 0.6), DELTA);
+		assertEquals(56.20, MathUtils.quantile(values, 0.7), DELTA);
+		assertEquals(64.00, MathUtils.quantile(values, 0.8), DELTA);
+		assertEquals(71.00, MathUtils.quantile(values, 0.9), DELTA);
+		assertEquals(75.00, MathUtils.quantile(values, 1.0), DELTA);
+	}
+
 }
