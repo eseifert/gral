@@ -63,7 +63,8 @@ import de.erichseifert.gral.util.PointND;
 public class BoxPlot extends XYPlot {
 	/** Key for specifying a {@link java.lang.Number} value for the relative
 	width of the box. */
-	public static final Key BOX_WIDTH = new Key("boxplot.box.width"); //$NON-NLS-1$
+	public static final Key BOX_WIDTH =
+		new Key("boxplot.box.width"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the box. */
 	public static final Key BOX_BACKGROUND =
@@ -86,7 +87,16 @@ public class BoxPlot extends XYPlot {
 		new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the relative
 	width of the minimum and maximum bars. */
-	public static final Key BAR_WIDTH = new Key("boxplot.box.width"); //$NON-NLS-1$
+	public static final Key BAR_WIDTH =
+		new Key("boxplot.bar.width"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	paint the lines of the median bar. */
+	public static final Key BAR_MEDIAN_COLOR =
+		new Key("boxplot.bar.median.color"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+	paint the lines of the median bar. */
+	public static final Key BAR_MEDIAN_STROKE =
+		new Key("boxplot.bar.median.stroke"); //$NON-NLS-1$
 
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
@@ -111,13 +121,12 @@ public class BoxPlot extends XYPlot {
 			return new AbstractDrawable() {
 				@Override
 				public void draw(DrawingContext context) {
-					Graphics2D graphics = context.getGraphics();
-
 					Axis axisX = plot.getAxis(AXIS_X);
 					Axis axisY = plot.getAxis(AXIS_Y);
 					AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 					AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 
+					// Get values from data
 					double valueX    = row.get(0).doubleValue();
 					double valueYMin = row.get(2).doubleValue();
 					double valueYQ1  = row.get(3).doubleValue();
@@ -125,10 +134,11 @@ public class BoxPlot extends XYPlot {
 					double valueYQ3  = row.get(4).doubleValue();
 					double valueYMax = row.get(5).doubleValue();
 
+					// Calculate positions in screen units
 					double boxWidthRel =
 						plot.<Number>getSetting(BoxPlot.BOX_WIDTH).doubleValue();
 					double boxAlign = 0.5;
-
+					// Box X
 					double boxXMin = axisXRenderer
 						.getPosition(axisX, valueX - boxWidthRel*boxAlign, true, false)
 						.get(PointND.X);
@@ -137,7 +147,7 @@ public class BoxPlot extends XYPlot {
 					double boxXMax = axisXRenderer
 						.getPosition(axisX, valueX + boxWidthRel*boxAlign, true, false)
 						.get(PointND.X);
-
+					// Box Y
 					double boxYMin = axisYRenderer.getPosition(
 							axisY, valueYMin, true, false).get(PointND.Y);
 					double boxYQ1 = axisYRenderer.getPosition(
@@ -149,7 +159,7 @@ public class BoxPlot extends XYPlot {
 					double boxYMax = axisYRenderer.getPosition(
 							axisY, valueYMax, true, false).get(PointND.Y);
 					double boxWidth = Math.abs(boxXMax - boxXMin);
-
+					// Bars
 					double barWidthRel =
 						plot.<Number>getSetting(BoxPlot.BAR_WIDTH).doubleValue();
 					double barXMin = boxXMin + (1.0 - barWidthRel)*boxWidth/2.0;
@@ -181,26 +191,35 @@ public class BoxPlot extends XYPlot {
 						boxXMax - boxX, 0.0
 					);
 
-					// Painting shapes
+					// Paint shapes
+					Graphics2D graphics = context.getGraphics();
 					Paint paintBox = plot.getSetting(BOX_BACKGROUND);
 					Paint paintStrokeBox = plot.getSetting(BOX_COLOR);
 					Stroke strokeBox = plot.getSetting(BOX_BORDER);
 					Paint paintWhisker = plot.getSetting(WHISKER_COLOR);
 					Stroke strokeWhisker = plot.getSetting(WHISKER_STROKE);
-
+					Paint paintBarMedian = plot.getSetting(BAR_MEDIAN_COLOR);
+					Stroke strokeBarMedian = plot.getSetting(BAR_MEDIAN_STROKE);
+					// Fill box
 					GraphicsUtils.fillPaintedShape(graphics, box, paintBox, box.getBounds2D());
+					// Save current graphics state
 					Paint paintOld = graphics.getPaint();
 					Stroke strokeOld = graphics.getStroke();
+					// Draw whiskers
 					graphics.setPaint(paintWhisker);
 					graphics.setStroke(strokeWhisker);
 					graphics.draw(whiskerMax);
 					graphics.draw(whiskerMin);
+					// Draw box and bars
 					graphics.setPaint(paintStrokeBox);
 					graphics.setStroke(strokeBox);
 					graphics.draw(box);
 					graphics.draw(barMax);
 					graphics.draw(barMin);
+					graphics.setPaint(paintBarMedian);
+					graphics.setStroke(strokeBarMedian);
 					graphics.draw(barMedian);
+					// Restore previous graphics state
 					graphics.setStroke(strokeOld);
 					graphics.setPaint(paintOld);
 				}
@@ -225,14 +244,18 @@ public class BoxPlot extends XYPlot {
 		setSettingDefault(WHISKER_COLOR, Color.BLACK);
 		setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
 		setSettingDefault(BAR_WIDTH, 0.75);
+		setSettingDefault(BAR_MEDIAN_COLOR, Color.BLACK);
+		setSettingDefault(BAR_MEDIAN_STROKE, new BasicStroke(
+			2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS, false);
-		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION, -Double.MAX_VALUE);
+		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
+			-Double.MAX_VALUE);
 
 		// Generate data source with statistical values for each column
 		DataTable stats = new DataTable(Integer.class, Double.class,
-				Double.class, Double.class, Double.class, Double.class);
+			Double.class, Double.class, Double.class, Double.class);
 		for (int c = 0; c < data.getColumnCount(); c++) {
 			Column col = data.getColumn(c);
 			stats.add(
