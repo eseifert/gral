@@ -271,10 +271,10 @@ public class BoxPlot extends XYPlot {
 		// Set generated data series
 		add(stats);
 		getAxis(AXIS_X).setRange(-0.5, data.getColumnCount() - 0.5);
-		getAxis(AXIS_Y).setRange(
-			1.2*stats.getColumn(2).getStatistics(Statistics.MIN),
-			1.2*stats.getColumn(5).getStatistics(Statistics.MAX)
-		);
+		double yMin = stats.getColumn(2).getStatistics(Statistics.MIN);
+		double yMax = stats.getColumn(5).getStatistics(Statistics.MAX);
+		double ySpacing = 0.025*(yMax - yMin);
+		getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
 
 		// Adjust rendering
 		PointRenderer pointRenderer = new BoxWhiskerRenderer(this);
