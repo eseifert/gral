@@ -249,7 +249,10 @@ public class BoxPlot extends XYPlot {
 			2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
-		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS, false);
+		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 1.0);
+		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
+		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.INTERSECTION,
+				-Double.MAX_VALUE);
 		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
 			-Double.MAX_VALUE);
 
@@ -259,7 +262,7 @@ public class BoxPlot extends XYPlot {
 		for (int c = 0; c < data.getColumnCount(); c++) {
 			Column col = data.getColumn(c);
 			stats.add(
-				c,
+				c + 1,
 				col.getStatistics(Statistics.MEDIAN),
 				col.getStatistics(Statistics.MIN),
 				col.getStatistics(Statistics.QUARTILE_1),
@@ -270,10 +273,10 @@ public class BoxPlot extends XYPlot {
 
 		// Set generated data series
 		add(stats);
-		getAxis(AXIS_X).setRange(-0.5, data.getColumnCount() - 0.5);
+		getAxis(AXIS_X).setRange(0.5, data.getColumnCount() + 0.5);
 		double yMin = stats.getColumn(2).getStatistics(Statistics.MIN);
 		double yMax = stats.getColumn(5).getStatistics(Statistics.MAX);
-		double ySpacing = 0.025*(yMax - yMin);
+		double ySpacing = 0.05*(yMax - yMin);
 		getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
 
 		// Adjust rendering

@@ -71,7 +71,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override
 	protected void createTicks(List<Tick> ticks, Axis axis, double min,
-			double max, Set<Number> tickPositions, boolean isAutoSpacing) {
+			double max, Set<Double> tickPositions, boolean isAutoSpacing) {
 		double tickSpacing = 1.0;
 		int ticksMinorCount = 3;
 		if (isAutoSpacing) {
@@ -109,13 +109,15 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 		// (Use integer to avoid rounding errors)
 		for (int tickCur = 0; tickCur < ticksTotal; tickCur++) {
 			double tickPositionWorld = minTickMinor + tickCur*tickSpacingMinor;
+			if (tickPositions.contains(tickPositionWorld)) {
+				continue;
+			}
 			TickType tickType = TickType.MINOR;
 			if ((tickCur - initialTicksMinor) % (ticksMinorCount + 1) == 0) {
 				tickType = TickType.MAJOR;
 			}
 			Tick tick = getTick(tickType, axis, tickPositionWorld);
-			if (tick.getPosition() != null
-					&& !tickPositions.contains(tickPositionWorld)) {
+			if (tick.getPosition() != null) {
 				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
 			}

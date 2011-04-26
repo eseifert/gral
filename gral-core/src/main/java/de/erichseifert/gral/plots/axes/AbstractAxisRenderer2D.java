@@ -218,8 +218,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						double tickLengthInner = tickLength*tickAlignment;
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 
-						if ((drawTicksMajor && TickType.MAJOR.equals(tick.getType())) ||
-								(drawTicksMinor && TickType.MINOR.equals(tick.getType()))) {
+						if ((drawTicksMajor && (TickType.MAJOR.equals(tick.getType())) ||
+								TickType.CUSTOM.equals(tick.getType())) || (drawTicksMinor &&
+								TickType.MINOR.equals(tick.getType()))) {
 							tickShape.setLine(
 								tickPoint.getX() - tickNormal.getX()*tickLengthInner,
 								tickPoint.getY() - tickNormal.getY()*tickLengthInner,
@@ -360,7 +361,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		double max = axis.getMax().doubleValue();
 
 		List<Tick> ticks = new LinkedList<Tick>();
-		Set<Number> tickPositions = new HashSet<Number>();
+		Set<Double> tickPositions = new HashSet<Double>();
 
 		createTicksCustom(ticks, axis, min, max, tickPositions);
 
@@ -394,7 +395,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @param isAutoSpacing Use automatic scaling
 	 */
 	protected abstract void createTicks(List<Tick> ticks, Axis axis,
-			double min, double max, Set<Number> tickPositions,
+			double min, double max, Set<Double> tickPositions,
 			boolean isAutoSpacing);
 
 	/**
@@ -406,8 +407,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @param tickPositions Set of tick positions
 	 */
 	protected void createTicksCustom(List<Tick> ticks, Axis axis,
-			double min, double max, Set<Number> tickPositions) {
-		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
+			double min, double max, Set<Double> tickPositions) {
+		Map<? extends Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
 		if (labelsCustom != null) {
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();

@@ -95,7 +95,7 @@ table.sort(new Ascending(1), new Descending(0), new Ascending(2));
     <sect1 xml:id="data.filter">
         <title>Filtering data</title>
 
-        <para><classname>DataTable</classname>s are not only the only data
+        <para><classname>DataTable</classname>s are not the only data
         source for plots. A plot also accepts filtered data. In GRAL data can
         be filtered either by columns or by rows.</para>
 
@@ -244,6 +244,22 @@ double max = table.getColumn(1).getStatistics(Statistics.MAX);
                     <listitem><para>The kurtosis value describing the
                         "peakedness" of the probability distribution of the
                         column's values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>QUARTILE_1</constant></term>
+                    <listitem><para>The value that delimits the lower 25% of
+                    all data values.</para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>QUARTILE_2</constant></term>
+                    <listitem><para>The value that delimits 50% of
+                    all data values. This is the same as the median value.
+                    </para></listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term><constant>QUARTILE_3</constant></term>
+                    <listitem><para>The value that delimits the upper 25% of
+                    all data values.</para></listitem>
                 </varlistentry>
             </variablelist>
 

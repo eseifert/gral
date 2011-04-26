@@ -22,15 +22,18 @@
 package de.erichseifert.gral.examples.boxplot;
 
 import java.awt.BorderLayout;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BoxPlot;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.ui.InteractivePanel.NavigationDirection;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.vectorgraphics2d.DataUtils;
 
 
 public class SimpleBoxPlot extends JPanel {
@@ -39,23 +42,30 @@ public class SimpleBoxPlot extends JPanel {
 
 	public SimpleBoxPlot() {
 		super(new BorderLayout());
+		Random random = new Random();
 
 		// Create example data
 		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
-		data.add(1,  1,  6);
-		data.add(2,  3,  8);
-		data.add(3, -2,  2);
-		data.add(4,  6,  6);
-		data.add(5, -4,  8);
-		data.add(6,  8, 18);
-		data.add(7,  9,  9);
-		data.add(8, 11,  1);
+		for (int i = 0; i < 50; i++) {
+			int x = (int) Math.round(5.0*random.nextGaussian());
+			int y = (int) Math.round(5.0*random.nextGaussian());
+			int z = (int) Math.round(5.0*random.nextGaussian());
+			data.add(x, y, z);
+		}
 
 		// Create new box-and-whisker plot
 		BoxPlot plot = new BoxPlot(data);
 
 		// Format plot
-		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 20.0));
+
+		// Format axes
+		plot.getAxisRenderer(BoxPlot.AXIS_X).setSetting(
+			AxisRenderer.TICKS_CUSTOM, DataUtils.map(
+					new Double[] {1.0, 2.0, 3.0},
+					new String[] {"Column 1", "Column 2", "Column 3"}
+			)
+		);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

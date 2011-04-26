@@ -86,7 +86,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 
 	@Override
 	protected void createTicks(java.util.List<Tick> ticks, Axis axis,
-			double min, double max, java.util.Set<Number> tickPositions,
+			double min, double max, java.util.Set<Double> tickPositions,
 			boolean isAutoSpacing) {
 		double tickSpacing = 1.0;
 		if (isAutoSpacing) {
