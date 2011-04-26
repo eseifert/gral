@@ -46,8 +46,8 @@ import de.erichseifert.gral.util.Insets2D;
 /**
  * <p>Class that displays data as segments of a pie plot. Empty segments are
  * displayed for negative values.</p>
- * <p>To create a new <code>PiePlot</code> simply create a new instance
- * using one or more data sources. Example:</p>
+ * <p>To create a new <code>PiePlot</code> simply create a new instance using
+ * a data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Integer.class, Double.class);
  * data.add(2005, -23.50);
@@ -254,8 +254,7 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	/**
-	 * Creates a new <code>PiePlot</code> object with the specified
-	 * data source.
+	 * Initializes a new pie plot with the specified data source.
 	 * @param data Data to be displayed.
 	 */
 	public PiePlot(DataSource data) {
@@ -276,16 +275,16 @@ public class PiePlot extends Plot implements DataListener {
 
 	@Override
 	public void dataAdded(DataSource data, DataChangeEvent... events) {
-		((PiePlotArea2D) getPlotArea()).dataAdded(data, events);
+		((DataListener) getPlotArea()).dataAdded(data, events);
 	}
 
 	@Override
 	public void dataUpdated(DataSource data, DataChangeEvent... events) {
-		((PiePlotArea2D) getPlotArea()).dataUpdated(data, events);
+		((DataListener) getPlotArea()).dataUpdated(data, events);
 	}
 
 	@Override
 	public void dataRemoved(DataSource data, DataChangeEvent... events) {
-		((PiePlotArea2D) getPlotArea()).dataRemoved(data, events);
+		((DataListener) getPlotArea()).dataRemoved(data, events);
 	}
 }

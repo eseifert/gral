@@ -169,10 +169,10 @@ public class BarPlot extends XYPlot {
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		setSettingDefault(BAR_WIDTH, 1.0);
 
-		PointRenderer shapeRendererDefault = new BarRenderer(this);
+		PointRenderer pointRenderer = new BarRenderer(this);
 		for (DataSource s : data) {
 			setLineRenderer(s, null);
-			setPointRenderer(s, shapeRendererDefault);
+			setPointRenderer(s, pointRenderer);
 		}
 	}
 
