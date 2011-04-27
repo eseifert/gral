@@ -34,7 +34,9 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that connects <code>DataPoint</code>s with a smooth line.
+ * <p>Class that connects <code>DataPoint</code>s with a smooth line.</p>
+ * <p>See <a href="http://www.antigrain.com/research/bezier_interpolation/">Interpolation
+ * with Bezier Curves</a> for more information.</p>
  */
 public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	/** Key for specifying a {@link java.lang.Number} value for the smoothness
@@ -133,11 +135,11 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		if (p0 == null) {
 			p0 = p1;
 		}
-        if (p3 == null) {
-        	p3 = p2;
-        }
+		if (p3 == null) {
+			p3 = p2;
+		}
 
-        Point2D c1 = new Point2D.Double(
+		Point2D c1 = new Point2D.Double(
 			(p0.getX() + p1.getX()) / 2.0,
 			(p0.getY() + p1.getY()) / 2.0);
 		Point2D c2 = new Point2D.Double(
