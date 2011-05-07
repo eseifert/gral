@@ -22,8 +22,8 @@
 package de.erichseifert.gral.data;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -64,12 +64,21 @@ public abstract class AbstractDataSource implements DataSource {
 			row = 0;
 		}
 
-		@Override
+	    /**
+	     * Returns <code>true</code> if the iteration has more elements.
+	     * (In other words, returns <code>true</code> if <code>next</code>
+	     * would return an element rather than throwing an exception.)
+	     * @return <code>true</code> if the iterator has more elements.
+	     */
 		public boolean hasNext() {
 			return (col < getColumnCount()) && (row < getRowCount());
 		}
 
-		@Override
+	    /**
+	     * Returns the next element in the iteration.
+	     * @return the next element in the iteration.
+	     * @exception NoSuchElementException iteration has no more elements.
+	     */
 		public Number next() {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
@@ -82,7 +91,10 @@ public abstract class AbstractDataSource implements DataSource {
 			return value;
 		}
 
-		@Override
+	    /**
+	     * <code>remove</code> method to fulfill <code>Iterator</code>
+	     * interface.
+	     */
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
@@ -95,10 +107,14 @@ public abstract class AbstractDataSource implements DataSource {
 	 */
 	public AbstractDataSource(Class<? extends Number>... types) {
 		setColumnTypes(types);
-		dataListeners = new HashSet<DataListener>();
+		dataListeners = new LinkedHashSet<DataListener>();
 	}
 
-	@Override
+	/**
+	 * Retrieves a object instance that contains various statistical
+	 * information on the current data source.
+	 * @return statistical information
+	 */
 	public Statistics getStatistics() {
 		if (statistics == null) {
 			statistics = new Statistics(this);
@@ -106,17 +122,27 @@ public abstract class AbstractDataSource implements DataSource {
 		return statistics;
 	}
 
-	@Override
+	/**
+	 * Adds the specified <code>DataListener</code> to this data source.
+	 * @param dataListener listener to be added.
+	 */
 	public void addDataListener(DataListener dataListener) {
 		dataListeners.add(dataListener);
 	}
 
-	@Override
+	/**
+	 * Removes the specified <code>DataListener</code> from this data source.
+	 * @param dataListener listener to be removed.
+	 */
 	public void removeDataListener(DataListener dataListener) {
 		dataListeners.remove(dataListener);
 	}
 
-	@Override
+    /**
+     * Returns an iterator over a set of elements of type T.
+     *
+     * @return an Iterator.
+     */
 	public Iterator<Number> iterator() {
 		return new DataSourceIterator();
 	}
@@ -151,18 +177,28 @@ public abstract class AbstractDataSource implements DataSource {
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the column with the specified index.
+	 * @param col index of the column to return
+	 * @return the specified column of the data source
+	 */
 	public Column getColumn(int col) {
 		return new Column(this, col);
 	}
 
-	@Override
+	/**
+	 * Returns the number of columns of the data source.
+	 * @return number of columns in the data source.
+	 */
 	public int getColumnCount() {
 		return columnCount;
 	}
 
 
-	@Override
+	/**
+	 * Returns the data types of all columns.
+	 * @return The data types of all column in the data source
+	 */
 	public Class<? extends Number>[] getColumnTypes() {
 		Class<? extends Number>[] types = Arrays.copyOf(this.types, this.types.length);
 		return types;
@@ -173,12 +209,16 @@ public abstract class AbstractDataSource implements DataSource {
 	 * columns.
 	 * @param types Data types.
 	 */
-	private void setColumnTypes(Class<? extends Number>... types) {
+	protected void setColumnTypes(Class<? extends Number>... types) {
 		this.types = Arrays.copyOf(types, types.length);
 		columnCount = types.length;
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param row index of the row to return
+	 * @return the specified row of the data source
+	 */
 	public Row getRow(int row) {
 		return new Row(this, row);
 	}

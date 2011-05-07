@@ -69,7 +69,6 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		return punched;
 	}
 
-	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
 }

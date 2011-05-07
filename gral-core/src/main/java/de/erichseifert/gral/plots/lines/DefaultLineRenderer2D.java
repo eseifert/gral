@@ -47,10 +47,8 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	public DefaultLineRenderer2D() {
 	}
 
-	@Override
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				// Construct shape
 				Path2D line = new Path2D.Double(

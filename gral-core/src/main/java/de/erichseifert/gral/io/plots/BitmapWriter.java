@@ -131,13 +131,29 @@ public class BitmapWriter extends IOCapabilitiesStorage
 		// TODO Possibility to choose a background color
 	}
 
-	@Override
+	/**
+	 * Stores the specified <code>Drawable</code> instance.
+	 * @param d <code>Drawable</code> to be written.
+	 * @param destination Stream to write to
+	 * @param width Width of the image.
+	 * @param height Height of the image.
+	 * @throws IOException if writing to stream fails
+	 */
 	public void write(Drawable d, OutputStream destination,
 			double width, double height) throws IOException {
 		write(d, destination, 0.0, 0.0, width, height);
 	}
 
-	@Override
+	/**
+	 * Stores the specified <code>Drawable</code> instance.
+	 * @param d <code>Drawable</code> to be written.
+	 * @param destination Stream to write to
+	 * @param x Horizontal position.
+	 * @param y Vertical position.
+	 * @param width Width of the image.
+	 * @param height Height of the image.
+	 * @throws IOException if writing to stream fails
+	 */
 	public void write(Drawable d, OutputStream destination,
 			double x, double y, double width, double height)
 			throws IOException {
@@ -167,7 +183,10 @@ public class BitmapWriter extends IOCapabilitiesStorage
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the output format of this writer.
+	 * @return String representing the MIME-Type.
+	 */
 	public String getMimeType() {
 		return this.mimeType;
 	}

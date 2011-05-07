@@ -61,7 +61,6 @@ public class AxisTest {
 		public Number min = null;
 		public Number max = null;
 
-		@Override
 		public void rangeChanged(Axis axis, Number min, Number max) {
 			this.axis = axis;
 			this.min = min;

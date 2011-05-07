@@ -48,20 +48,41 @@ public abstract class Histogram extends AbstractDataSource
 	 */
 	protected abstract void rebuildCells();
 
-	@Override
-	public void dataAdded(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		rebuildCells();
 		notifyDataAdded(events);
 	}
 
-	@Override
-	public void dataUpdated(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		rebuildCells();
 		notifyDataUpdated(events);
 	}
 
-	@Override
-	public void dataRemoved(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		rebuildCells();
 		notifyDataRemoved(events);
 	}

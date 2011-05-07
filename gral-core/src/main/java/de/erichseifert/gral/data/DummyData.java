@@ -47,7 +47,12 @@ public class DummyData extends AbstractDataSource {
 		this.value = value;
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		return value;
 	}
@@ -57,7 +62,10 @@ public class DummyData extends AbstractDataSource {
 		return cols;
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return rows;
 	}

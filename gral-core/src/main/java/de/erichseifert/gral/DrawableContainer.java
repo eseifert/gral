@@ -70,7 +70,11 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		this.layout = layout;
 	}
 
-	@Override
+	/**
+	 * Draws the <code>Drawable</code> with the specified
+	 * <code>Graphics2D</code> object.
+	 * @param context Environment used for drawing
+	 */
 	public void draw(DrawingContext context) {
 		drawComponents(context);
 	}
@@ -85,38 +89,60 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		}
 	}
 
-	@Override
+	/**
+	 * Adds a new component to this container.
+	 * @param drawable Component
+	 */
 	public void add(Drawable drawable) {
 		add(drawable, null);
 	}
 
-	@Override
+	/**
+	 * Adds a new component to this container.
+	 * @param drawable Component
+	 * @param constraints Additional information (e.g. for layout)
+	 */
 	public void add(Drawable drawable, Object constraints) {
 		components.add(drawable);
 		this.constraints.put(drawable, constraints);
 		layout();
 	}
 
-	@Override
+	/**
+	 * Return additional information on component
+	 * @param drawable Component
+	 * @return Information object or <code>null</code>
+	 */
+	public Object getConstraints(Drawable drawable) {
+		return constraints.get(drawable);
+	}
+
+	/**
+	 * Removes a component from this container.
+	 * @param drawable Component
+	 */
 	public void remove(Drawable drawable) {
 		components.remove(drawable);
 		constraints.remove(drawable);
 		layout();
 	}
 
-	@Override
-	public Object getConstraints(Drawable drawable) {
-		return constraints.get(drawable);
-	}
-
-	@Override
+	/**
+	 * Returns the space that this container must preserve at each of its
+	 * edges.
+	 * @return The insets of this DrawableContainer
+	 */
 	public Insets2D getInsets() {
 		Insets2D insets = new Insets2D.Double();
 		insets.setInsets(this.insets);
 		return insets;
 	}
 
-	@Override
+	/**
+	 * Sets the space that this container must preserve at each of its
+	 * edges.
+	 * @param insets Insets to be set.
+	 */
 	public void setInsets(Insets2D insets) {
 		if (insets == this.insets) {
 			return;
@@ -125,12 +151,18 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		layout();
 	}
 
-	@Override
+	/**
+	 * Returns the layout associated with this container.
+	 * @return Layout manager
+	 */
 	public Layout getLayout() {
 		return layout;
 	}
 
-	@Override
+	/**
+	 * Sets the layout associated with this container.
+	 * @param layout Layout to be set.
+	 */
 	public void setLayout(Layout layout) {
 		this.layout = layout;
 		layout();
@@ -145,12 +177,19 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		}
 	}
 
-	@Override
+    /**
+     * Returns an iterator over the container's elements.
+     *
+     * @return an Iterator.
+     */
 	public Iterator<Drawable> iterator() {
 		return components.iterator();
 	}
 
-	@Override
+	/**
+	 * Returns the number of components that are stored in this container.
+	 * @return total number of components
+	 */
 	public int size() {
 		return components.size();
 	}

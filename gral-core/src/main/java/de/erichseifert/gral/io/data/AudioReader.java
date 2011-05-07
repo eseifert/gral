@@ -58,8 +58,15 @@ public class AudioReader extends AbstractDataReader {
 		setDefault("offset", 0.0); //$NON-NLS-1$
 	}
 
+	/**
+	 * Returns a DataSource that was imported.
+	 * @param input Input to be read.
+	 * @param types Number types for the columns of the DataSource.
+	 * @return DataSource Imported data.
+	 * @throws IOException when the file format is not valid or when
+	 *         experiencing an error during file operations.
+	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public DataSource read(InputStream input, Class<? extends Number>... types)
 			throws IOException {
 		AudioInputStream audio;

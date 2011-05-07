@@ -38,7 +38,6 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 	public LinearRenderer2D() {
 	}
 
-	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -54,7 +53,6 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 		return (val - min)/(max - min)*getShapeLength();
 	}
 
-	@Override
 	public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();

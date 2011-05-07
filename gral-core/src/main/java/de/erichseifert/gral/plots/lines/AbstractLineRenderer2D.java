@@ -79,7 +79,6 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		return lineShape;
 	}
 
-	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
 }

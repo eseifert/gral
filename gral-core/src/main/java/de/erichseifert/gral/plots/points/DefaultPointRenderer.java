@@ -38,11 +38,9 @@ import de.erichseifert.gral.util.GraphicsUtils;
  */
 public class DefaultPointRenderer extends AbstractPointRenderer {
 
-	@Override
 	public Drawable getPoint(final Axis axisY,
 			final AxisRenderer axisYRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				Paint paint = DefaultPointRenderer.this.getSetting(COLOR);
 				Shape point = getPointPath(row);
@@ -66,7 +64,6 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 		return drawable;
 	}
 
-	@Override
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
 		return shape;

@@ -52,10 +52,8 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		setSettingDefault(SMOOTHNESS, 1.0);
 	}
 
-	@Override
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				double smoothness = SmoothLineRenderer2D.this.
 					<Number>getSetting(SMOOTHNESS).doubleValue();

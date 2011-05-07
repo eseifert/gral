@@ -125,10 +125,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(LABEL_COLOR, Color.BLACK);
 	}
 
-	@Override
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				if (shapeLines == null || shapeLines.length == 0) {
 					return;
@@ -355,7 +353,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return component;
 	}
 
-	@Override
 	public List<Tick> getTicks(Axis axis) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -452,7 +449,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return tick;
 	}
 
-	@Override
 	public PointND<Double> getNormal(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		double valueView;
@@ -493,7 +489,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return shapeLengths[shapeLengths.length - 1];
 	}
 
-	@Override
 	public PointND<Double> getPosition(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0 || value == null) {
@@ -585,7 +580,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		}
 	}
 
-	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (SHAPE.equals(key)) {

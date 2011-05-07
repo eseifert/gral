@@ -53,7 +53,11 @@ public class EdgeLayout implements Layout {
 		this.vgap = vgap;
 	}
 
-	@Override
+	/**
+	 * Arranges the components of the specified container according to this
+	 * layout.
+	 * @param container Container to be laid out.
+	 */
 	public void layout(Container container) {
 		Insets2D insets = container.getInsets();
 		if (insets == null) {
@@ -164,7 +168,11 @@ public class EdgeLayout implements Layout {
 		);
 	}
 
-	@Override
+	/**
+	 * Returns the preferred size of the specified container using this layout.
+	 * @param container Container whose preferred size is to be returned.
+	 * @return Preferred extent of the specified container.
+	 */
 	public Dimension2D getPreferredSize(Container container) {
 		// Fetch components
 		Drawable north = null, northEast = null, east = null, southEast = null,

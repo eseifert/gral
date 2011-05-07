@@ -24,37 +24,17 @@ package de.erichseifert.gral.plots.colors;
 import java.awt.Color;
 
 /**
- * Class that represents a ColorMapper with a single color.
+ * Class that generates shades of gray for values between 0.0 and 1.0.
  */
-public class SingleColor implements ColorMapper {
-	private Color color;
+public class Grayscale implements ColorMapper {
 
 	/**
-	 * Creates a new instance with the specified color.
-	 * @param color Color to use.
+	 * Creates a new instance.
 	 */
-	public SingleColor(Color color) {
-		this.color = color;
+	public Grayscale() {
 	}
 
 	public Color get(double value) {
-		return color;
+		return Color.getHSBColor(0f, 0f, (float) value);
 	}
-
-	/**
-	 * Returns the color of this ColorMapper.
-	 * @return Color.
-	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * Sets the color of this ColorMapper.
-	 * @param color Color to be set.
-	 */
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 }

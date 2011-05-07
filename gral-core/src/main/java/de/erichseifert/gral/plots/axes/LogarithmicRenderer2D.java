@@ -39,7 +39,6 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	public LogarithmicRenderer2D() {
 	}
 
-	@Override
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();
@@ -59,7 +58,6 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			(maxLog - minLog);
 	}
 
-	@Override
 	public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
 		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();

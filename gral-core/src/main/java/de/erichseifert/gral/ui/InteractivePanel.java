@@ -170,7 +170,6 @@ public class InteractivePanel extends DrawablePanel
 
 		zoomIn = new JMenuItem(new AbstractAction(Messages.getString(
 				"InteractivePanel.zoomIn")) { //$NON-NLS-1$
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(1);
 			}
@@ -179,7 +178,6 @@ public class InteractivePanel extends DrawablePanel
 
 		zoomOut = new JMenuItem(new AbstractAction(Messages.getString(
 				"InteractivePanel.zoomOut")) { //$NON-NLS-1$
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(-1);
 			}
@@ -188,7 +186,6 @@ public class InteractivePanel extends DrawablePanel
 
 		resetView = new JMenuItem(new AbstractAction(Messages.getString(
 				"InteractivePanel.resetView")) { //$NON-NLS-1$
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
 					navigator.reset();
@@ -202,7 +199,6 @@ public class InteractivePanel extends DrawablePanel
 
 		exportImage = new JMenuItem(new AbstractAction(Messages.getString(
 				"InteractivePanel.exportImage")) { //$NON-NLS-1$
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
 						InteractivePanel.this);
@@ -247,7 +243,6 @@ public class InteractivePanel extends DrawablePanel
 
 		print = new JMenuItem(new AbstractAction(Messages.getString(
 				"InteractivePanel.print")) { //$NON-NLS-1$
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {
 					try {
@@ -264,7 +259,8 @@ public class InteractivePanel extends DrawablePanel
 		addMouseListener(new PopupListener(menu));
 
 		if (getDrawable() instanceof Plot) {
-			navigator = new PlotNavigator((Plot) getDrawable());
+			Plot plot = (Plot) getDrawable();
+			navigator = new PlotNavigator(plot);
 			// Register a new handler to zoom the map with the mouse wheel
 			setZoomable(true);
 
@@ -467,7 +463,6 @@ public class InteractivePanel extends DrawablePanel
 		}
 	}
 
-	@Override
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 			throws PrinterException {
 		if (pageIndex > 0) {
@@ -524,14 +519,12 @@ public class InteractivePanel extends DrawablePanel
 		}
 	}
 
-	@Override
 	public void centerChanged(PlotNavigator source, String axisId,
 			Number centerOld, Number centerNew) {
 		navigator.setCenter(axisId, centerNew);
 		repaint();
 	}
 
-	@Override
 	public void zoomChanged(PlotNavigator source, String axisId,
 			double zoomOld, double zoomNew) {
 		navigator.setZoom(zoomNew);
@@ -648,6 +641,15 @@ public class InteractivePanel extends DrawablePanel
 				Collection<String> allAxes = navigator.getPlot().getAxesNames();
 				navigator.setAxes(allAxes);
 			}
+		}
+	}
+
+	/**
+	 * Sets the current position and zoom level as default values.
+	 */
+	public void setDefaultState() {
+		if (navigator != null) {
+			navigator.setDefaultState();
 		}
 	}
 }

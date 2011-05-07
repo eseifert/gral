@@ -50,11 +50,24 @@ public class DataTable extends AbstractDataSource {
 	/**
 	 * Initializes a new instance with the specified number of columns and
 	 * column types.
-	 * @param types type for each column
+	 * @param types Type for each column
 	 */
 	public DataTable(Class<? extends Number>... types) {
 		super(types);
 		rows = new ArrayList<Number[]>();
+	}
+
+	/**
+	 * Initializes a new instance with the specified number of columns and
+	 * a single column type.
+	 * @param cols Number of columns
+	 * @param type Data type for all columns
+	 */
+	public DataTable(int cols, Class<? extends Number> type) {
+		this();
+		Class<?>[] types = new Class<?>[cols];
+		Arrays.fill(types, type);
+		setColumnTypes((Class<? extends Number>[]) types);
 	}
 
 	/**
@@ -153,7 +166,12 @@ public class DataTable extends AbstractDataSource {
 		notifyDataRemoved();
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		return rows.get(row)[col];
 	}
@@ -174,7 +192,10 @@ public class DataTable extends AbstractDataSource {
 		return old;
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return rowCount;
 	}
@@ -186,7 +207,6 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void sort(final DataComparator... comparators) {
 		Collections.sort(rows, new Comparator<Number[]>() {
-			@Override
 			public int compare(Number[] o1, Number[] o2) {
 				for (DataComparator comp : comparators) {
 					int result = comp.compare(o1, o2);

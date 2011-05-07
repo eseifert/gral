@@ -179,12 +179,20 @@ public class Histogram1D extends Histogram {
 		return new Number[] {lower, upper};
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		return cells.get(col)[row];
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		int rowCount = 0;
 		for (long[] cells : this.cells) {

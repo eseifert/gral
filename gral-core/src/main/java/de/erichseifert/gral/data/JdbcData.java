@@ -85,30 +85,35 @@ public class JdbcData extends AbstractDataSource {
 		this(connection, table, true);
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
-			try {
-				ResultSet result = bufferedQuery;
-				if (!isBuffered() || result == null) {
-					PreparedStatement stmt = connection.prepareStatement(
-							"SELECT * FROM " + table + "", //$NON-NLS-1$ //$NON-NLS-2$
-							ResultSet.TYPE_SCROLL_SENSITIVE,
-							ResultSet.CONCUR_READ_ONLY);
-					result = stmt.executeQuery();
+		try {
+			ResultSet result = bufferedQuery;
+			if (!isBuffered() || result == null) {
+				PreparedStatement stmt = connection.prepareStatement(
+						"SELECT * FROM " + table + "", //$NON-NLS-1$ //$NON-NLS-2$
+						ResultSet.TYPE_SCROLL_SENSITIVE,
+						ResultSet.CONCUR_READ_ONLY);
+				result = stmt.executeQuery();
 
-					if (isBuffered()) {
-						bufferedQuery = result;
-					}
+				if (isBuffered()) {
+					bufferedQuery = result;
 				}
-				if (!isBuffered() || row != bufferedQueryRow) {
-					result.absolute(row + 1);
-					bufferedQueryRow = row;
-				}
-				return jdbcToJavaValue(result, col);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return null;
 			}
+			if (!isBuffered() || row != bufferedQueryRow) {
+				result.absolute(row + 1);
+				bufferedQueryRow = row;
+			}
+			return jdbcToJavaValue(result, col);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -124,7 +129,10 @@ public class JdbcData extends AbstractDataSource {
 		return Arrays.copyOf(types, types.length);
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		int rowCount = bufferedRowCount;
 		if (!isBuffered() || rowCount < 0) {

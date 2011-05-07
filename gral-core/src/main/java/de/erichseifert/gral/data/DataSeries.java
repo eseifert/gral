@@ -92,7 +92,12 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		this.name = name;
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		try {
 			int dataCol = cols.get(col);
@@ -107,22 +112,46 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		return cols.size();
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return data.getRowCount();
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		notifyDataAdded(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		notifyDataUpdated(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		notifyDataRemoved(events);
 	}

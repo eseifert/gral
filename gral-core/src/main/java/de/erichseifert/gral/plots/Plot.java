@@ -374,7 +374,10 @@ public abstract class Plot extends DrawableContainer
 		}
 	}
 
-	@Override
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (TITLE.equals(key)) {
@@ -629,18 +632,39 @@ public abstract class Plot extends DrawableContainer
 		}
 	}
 
-	@Override
-	public void dataAdded(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		refresh();
 	}
 
-	@Override
-	public void dataUpdated(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		refresh();
 	}
 
-	@Override
-	public void dataRemoved(DataSource data, DataChangeEvent... events) {
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		refresh();
 	}
 

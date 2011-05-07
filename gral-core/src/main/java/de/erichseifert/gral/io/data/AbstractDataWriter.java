@@ -56,7 +56,12 @@ public abstract class AbstractDataWriter extends IOCapabilitiesStorage
 		return mimeType;
 	}
 
-	@Override
+	/**
+	 * Returns the setting for the specified key.
+	 * @param <T> return type
+	 * @param key key of the setting
+	 * @return the value of the setting
+	 */
 	public <T> T getSetting(String key) {
 		if (!settings.containsKey(key)) {
 			return (T) defaults.get(key);
@@ -64,7 +69,12 @@ public abstract class AbstractDataWriter extends IOCapabilitiesStorage
 		return (T) settings.get(key);
 	}
 
-	@Override
+	/**
+	 * Sets the setting for the specified key.
+	 * @param <T> value type
+	 * @param key key of the setting
+	 * @param value value of the setting
+	 */
 	public <T> void setSetting(String key, T value) {
 		settings.put(key, value);
 	}

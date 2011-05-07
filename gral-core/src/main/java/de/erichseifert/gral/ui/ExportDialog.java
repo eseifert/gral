@@ -99,7 +99,6 @@ public class ExportDialog extends JDialog {
 
 		PropertyChangeListener docBoundsListener =
 			new PropertyChangeListener() {
-				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					setDocumentBounds(
 						((Number) inputX.getValue()).doubleValue(),
@@ -127,7 +126,6 @@ public class ExportDialog extends JDialog {
 		JButton buttonConfirm = new JButton(
 				Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
 		buttonConfirm.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				userAction = UserAction.APPROVE;
 				dispose();
@@ -138,7 +136,6 @@ public class ExportDialog extends JDialog {
 		JButton buttonCancel = new JButton(
 				Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
 		buttonCancel.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				userAction = UserAction.CANCEL;
 				dispose();

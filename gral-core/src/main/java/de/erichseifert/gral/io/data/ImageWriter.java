@@ -90,7 +90,12 @@ public class ImageWriter extends AbstractDataWriter {
 		setDefault("offset", 0.0); //$NON-NLS-1$
 	}
 
-	@Override
+	/**
+	 * Stores the specified data source.
+	 * @param data DataSource to be stored.
+	 * @param output OutputStream to be written to.
+	 * @throws IOException if writing the data failed
+	 */
 	public void write(DataSource data, OutputStream output) throws IOException {
 		int w = data.getColumnCount();
 		int h = data.getRowCount();

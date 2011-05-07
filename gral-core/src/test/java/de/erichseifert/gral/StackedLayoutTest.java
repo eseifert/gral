@@ -42,7 +42,6 @@ public class StackedLayoutTest {
 	private Drawable a, b, c;
 
 	private static final class TestDrawable extends AbstractDrawable {
-		@Override
 		public void draw(DrawingContext context) {
 		}
 		@Override

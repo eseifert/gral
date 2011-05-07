@@ -63,7 +63,12 @@ public abstract class RowSubset extends AbstractDataSource
 		return original.getRow(rowOrig);
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		int rowOrig = accepted.get(row);
 		return original.get(col, rowOrig);
@@ -74,29 +79,56 @@ public abstract class RowSubset extends AbstractDataSource
 		return original.getColumnCount();
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return accepted.size();
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		update();
 		notifyDataAdded(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		update();
 		notifyDataUpdated(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		update();
 		notifyDataRemoved(events);
 	}
 
+	/**
+	 * Updates the list of accepted rows.
+	 */
 	private void update() {
 		accepted.clear();
 		for (int rowIndex = 0; rowIndex < original.getRowCount(); rowIndex++) {

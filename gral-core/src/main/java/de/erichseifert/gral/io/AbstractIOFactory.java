@@ -88,7 +88,11 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the capabilities for a specific format.
+	 * @param mimeType MIME type of the format
+	 * @return Capabilities for the specified format.
+	 */
 	public IOCapabilities getCapabilities(String mimeType) {
 		Class<? extends T> clazz = entries.get(mimeType);
 		try {
@@ -121,7 +125,10 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		return null;
 	}
 
-	@Override
+	/**
+	 * Returns a list of capabilities for all supported formats.
+	 * @return Supported capabilities.
+	 */
 	public List<IOCapabilities> getCapabilities() {
 		List<IOCapabilities> caps =
 			new ArrayList<IOCapabilities>(entries.size());
@@ -134,14 +141,21 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		return caps;
 	}
 
-	@Override
+	/**
+	 * Returns an array of Strings containing all supported formats.
+	 * @return Supported formats.
+	 */
 	public String[] getSupportedFormats() {
 		String[] formats = new String[entries.size()];
 		entries.keySet().toArray(formats);
 		return formats;
 	}
 
-	@Override
+	/**
+	 * Returns whether the specified MIME type is supported.
+	 * @param mimeType MIME type.
+	 * @return <code>true</code> if supported, otherwise <code>false</code>.
+	 */
 	public boolean isFormatSupported(String mimeType) {
 		return entries.containsKey(mimeType);
 	}
@@ -153,5 +167,15 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 */
 	protected Class<? extends T> getTypeClass(String type) {
 		return entries.get(type);
+	}
+
+	/**
+	 * Returns an object for reading or writing the specified format.
+	 * @param mimeType MIME type.
+	 * @return Reader or writer for the specified MIME type.
+	 */
+	public T get(String mimeType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

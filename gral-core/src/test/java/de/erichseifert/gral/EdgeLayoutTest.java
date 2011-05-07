@@ -42,7 +42,6 @@ public class EdgeLayoutTest {
 	private Drawable nn, nw, ww, sw, ss, se, ee, ne, ce;
 
 	private static final class TestDrawable extends AbstractDrawable {
-		@Override
 		public void draw(DrawingContext context) {
 		}
 		@Override

@@ -64,12 +64,9 @@ public class AbstractPointRendererTest {
 	}
 
 	private static final class TestPointRenderer extends AbstractPointRenderer {
-
-		@Override
 		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
 				final Row row) {
 			return new AbstractDrawable() {
-				@Override
 				public void draw(DrawingContext context) {
 					Shape point = getPointPath(row);
 					Number value = row.get(0);
@@ -80,7 +77,6 @@ public class AbstractPointRendererTest {
 			};
 		}
 
-		@Override
 		public Shape getPointPath(Row row) {
 			return new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
 		}

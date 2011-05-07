@@ -33,7 +33,7 @@ import java.awt.geom.Rectangle2D;
  */
 public interface Drawable {
 	/**
-	 * Returns the bounds of this Drawable.
+	 * Returns the bounds of this <code>Drawable</code>.
 	 * @return a bounding rectangle
 	 */
 	Rectangle2D getBounds();

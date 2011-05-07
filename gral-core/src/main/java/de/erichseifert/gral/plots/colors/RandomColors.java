@@ -67,7 +67,6 @@ public class RandomColors implements ColorMapper {
 		random.setSeed(seed);
 	}
 
-	@Override
 	public Color get(double value) {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);

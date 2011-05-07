@@ -42,7 +42,6 @@ public class PlotAreaTest {
 	private static final class TestPlotArea2D extends PlotArea {
 		public boolean isDrawn;
 
-		@Override
 		public void draw(DrawingContext context) {
 			drawBackground(context);
 			drawBorder(context);

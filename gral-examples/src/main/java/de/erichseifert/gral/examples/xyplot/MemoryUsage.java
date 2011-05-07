@@ -83,12 +83,11 @@ final class UpdateTask implements ActionListener {
 		}
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (!component.isVisible()) {
 			return;
 		}
-		long time = System.currentTimeMillis();
+		double time = System.currentTimeMillis();
 
 		// Physical system memory
 		long memSysTotal = 0L;
@@ -149,8 +148,8 @@ public class MemoryUsage extends JPanel {
 		super(new BorderLayout());
 		setBackground(new Color(1.0f, 1.0f, 1.0f));
 
-		DataTable data = new DataTable(Long.class, Long.class, Long.class, Long.class);
-		long time = System.currentTimeMillis();
+		DataTable data = new DataTable(Double.class, Long.class, Long.class, Long.class);
+		double time = System.currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
 			data.add(time - i*INTERVAL, null, null, null);
 		}

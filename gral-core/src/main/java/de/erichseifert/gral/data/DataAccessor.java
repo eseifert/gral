@@ -135,23 +135,23 @@ public abstract class DataAccessor implements Iterable<Number> {
 	 */
 	public abstract double getStatistics(String key);
 
-	@Override
+    /**
+     * Returns an iterator over the elements of this object.
+     * @return an iterator.
+     */
 	public Iterator<Number> iterator() {
 		return new Iterator<Number>() {
 			private int i;
 
-			@Override
 			public boolean hasNext() {
 				return i < size();
 			}
 
-			@Override
 			public Number next() {
 				Number value = get(i++);
 				return value;
 			}
 
-			@Override
 			public void remove() {
 				throw new UnsupportedOperationException();
 			}

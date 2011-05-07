@@ -102,7 +102,6 @@ public abstract class Legend extends DrawableContainer
 			this.data = data;
 
 			symbol = new AbstractDrawable() {
-				@Override
 				public void draw(DrawingContext context) {
 					drawSymbol(context, this, Item.this.data);
 				}
@@ -251,7 +250,10 @@ public abstract class Legend extends DrawableContainer
 		layout();
 	}
 
-	@Override
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (ORIENTATION.equals(key) || GAP.equals(key)) {

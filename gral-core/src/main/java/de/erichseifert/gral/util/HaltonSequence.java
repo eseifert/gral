@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Class that calculates the values of the Halton sequence.
@@ -47,12 +48,21 @@ public class HaltonSequence implements Iterator<Double> {
 		this.base = base;
 	}
 
-	@Override
+    /**
+     * Returns whether the iteration has more elements. This means it returns
+     * <code>true</code> if <code>next</code> would return an element rather
+     * than throwing an exception.
+     * @return <code>true</code> if the iterator has more elements.
+     */
 	public boolean hasNext() {
 		return true;
 	}
 
-	@Override
+    /**
+     * Returns the next element in the iteration.
+     * @return the next element in the iteration.
+     * @exception NoSuchElementException iteration has no more elements.
+     */
 	public Double next() {
 		long i, digit;
 		double h, step;
@@ -75,7 +85,6 @@ public class HaltonSequence implements Iterator<Double> {
 		return h;
 	}
 
-	@Override
 	public void remove() {
 	}
 

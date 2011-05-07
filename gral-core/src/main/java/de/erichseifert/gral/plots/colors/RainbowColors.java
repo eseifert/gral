@@ -34,7 +34,6 @@ public class RainbowColors implements ColorMapper {
 	public RainbowColors() {
 	}
 
-	@Override
 	public Color get(double value) {
 		return Color.getHSBColor((float) value, 1f, 1f);
 	}

@@ -39,7 +39,20 @@ public class Ascending extends DataComparator {
 		super(col);
 	}
 
-	@Override
+	/**
+	 * <p>Compares two numbers for order and returns a corresponding integer:</p>
+	 * <ul>
+	 *   <li>–1 means <code>o1</code> is smaller than <code>o2</code></li>
+	 *   <li>0 means <code>o1</code> is equal to <code>o2</code></li>
+	 *   <li>1 means <code>o1</code> is larger than <code>o2</code></li>
+	 * </ul>
+	 * @param o1 First value
+	 * @param o2 Second value
+	 * @return An integer number describing order:
+	 *         –1 if <code>o1</code> is smaller than <code>o2</code>,
+	 *         0 if <code>o1</code> is equal to <code>o2</code>,
+	 *         1 if <code>o1</code> is larger than <code>o2</code>,
+	 */
 	public int compare(Number[] o1, Number[] o2) {
 		if (o1 == o2) {
 			return 0;

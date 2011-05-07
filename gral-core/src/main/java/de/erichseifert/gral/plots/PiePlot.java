@@ -106,11 +106,15 @@ public class PiePlot extends Plot implements DataListener {
 			this.plot = plot;
 		}
 
-		@Override
-		public void draw(DrawingContext configuration) {
-			drawBackground(configuration);
-			drawBorder(configuration);
-			drawPlot(configuration);
+		/**
+		 * Draws the <code>Drawable</code> with the specified
+		 * <code>Graphics2D</code> object.
+		 * @param context Environment used for drawing
+		 */
+		public void draw(DrawingContext context) {
+			drawBackground(context);
+			drawBorder(context);
+			drawPlot(context);
 		}
 
 		@Override
@@ -198,21 +202,46 @@ public class PiePlot extends Plot implements DataListener {
 			graphics.setTransform(txOrig);
 		}
 
-		@Override
-		public void dataAdded(DataSource data, DataChangeEvent... events) {
-			update(data);
+		/**
+		 * Method that is invoked when data has been added.
+		 * This method is invoked by objects that provide support for
+		 * <code>DataListener</code>s and should not be called manually.
+		 * @param source Data source that has changed
+		 * @param events Optional event object describing the data values that
+		 *        have been added
+		 */
+		public void dataAdded(DataSource source, DataChangeEvent... events) {
+			update(source);
 		}
 
-		@Override
-		public void dataUpdated(DataSource data, DataChangeEvent... events) {
-			update(data);
+		/**
+		 * Method that is invoked when data has been updated.
+		 * This method is invoked by objects that provide support for
+		 * <code>DataListener</code>s and should not be called manually.
+		 * @param source Data source that has changed
+		 * @param events Optional event object describing the data values that
+		 *        have been added
+		 */
+		public void dataUpdated(DataSource source, DataChangeEvent... events) {
+			update(source);
 		}
 
-		@Override
-		public void dataRemoved(DataSource data, DataChangeEvent... events) {
-			update(data);
+		/**
+		 * Method that is invoked when data has been added.
+		 * This method is invoked by objects that provide support for
+		 * <code>DataListener</code>s and should not be called manually.
+		 * @param source Data source that has changed
+		 * @param events Optional event object describing the data values that
+		 *        have been added
+		 */
+		public void dataRemoved(DataSource source, DataChangeEvent... events) {
+			update(source);
 		}
 
+		/**
+		 * Updates the data that is necessary to render the pie slices.
+		 * @param data Data source which has changed
+		 */
 		private void update(DataSource data) {
 			// Calculate sum of all values
 			double colYSum = 0.0;

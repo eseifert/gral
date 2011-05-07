@@ -106,7 +106,10 @@ public abstract class PlotArea extends AbstractDrawable
 	 */
 	protected abstract void drawPlot(DrawingContext context);
 
-	@Override
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 	}
 }

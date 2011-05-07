@@ -140,7 +140,11 @@ public class XYPlot extends Plot  {
 					new Color(0.0f, 0.0f, 0.0f, 0.05f));
 		}
 
-		@Override
+		/**
+		 * Draws the <code>Drawable</code> with the specified
+		 * <code>Graphics2D</code> object.
+		 * @param context Environment used for drawing
+		 */
 		public void draw(DrawingContext context) {
 			drawBackground(context);
 			drawGrid(context);
@@ -423,9 +427,15 @@ public class XYPlot extends Plot  {
 		}
 
 		// Create x axis and y axis by default
-		Axis axisX = new Axis(getAxisMin(AXIS_X), getAxisMax(AXIS_X));
-		Axis axisY = new Axis(getAxisMin(AXIS_Y), getAxisMax(AXIS_Y));
+		double xMin = getAxisMin(AXIS_X);
+		double xMax = getAxisMax(AXIS_X);
+		double xMargin = 0.0*(xMax - xMin);
+		Axis axisX = new Axis(xMin - xMargin, xMax + xMargin);
 		setAxis(AXIS_X, axisX);
+		double yMin = getAxisMin(AXIS_Y);
+		double yMax = getAxisMax(AXIS_Y);
+		double yMargin = 0.0*(yMax - yMin);
+		Axis axisY = new Axis(yMin - yMargin, yMax + yMargin);
 		setAxis(AXIS_Y, axisY);
 
 		// Create renderers for x and y axes by default
@@ -436,7 +446,6 @@ public class XYPlot extends Plot  {
 
 		// Listen for changes of the axis range
 		AxisListener axisListener = new AxisListener() {
-			@Override
 			public void rangeChanged(Axis axis, Number min, Number max) {
 				layoutAxes();
 			}

@@ -147,21 +147,7 @@ public class PlotNavigator {
 		this.plot = plot;
 		setAxes(plot.getAxesNames());
 		infos = new HashMap<String, NavigationInfo>();
-		for (String axisName : plot.getAxesNames()) {
-			Axis axis = plot.getAxis(axisName);
-			double min = 0.0;
-			double max = 0.0;
-			Number center = 0.0;
-			AxisRenderer renderer = plot.getAxisRenderer(axisName);
-			if (renderer != null) {
-				min = renderer.worldToView(axis, axis.getMin(), false);
-				max = renderer.worldToView(axis, axis.getMax(), false);
-				center = renderer.viewToWorld(axis, (min + max)/2.0, false);
-			}
-			NavigationInfo info = new NavigationInfo(
-					axis.getMin(), axis.getMax(), center.doubleValue());
-			infos.put(axisName, info);
-		}
+		setDefaultState();
 		zoomMin = 1e-2;
 		zoomMax = 1e+2;
 	}
@@ -278,7 +264,32 @@ public class PlotNavigator {
 	}
 
 	/**
-	 * Resets the plot's zoom to the original value.
+	 * Sets the current state as the default state of the plot.
+	 * Resetting the navigator will then return to the default state.
+	 */
+	public void setDefaultState() {
+		infos.clear();
+		for (String axisName : plot.getAxesNames()) {
+			Axis axis = plot.getAxis(axisName);
+			double min = 0.0;
+			double max = 0.0;
+			Number center = 0.0;
+			AxisRenderer renderer = plot.getAxisRenderer(axisName);
+			if (renderer != null) {
+				min = renderer.worldToView(axis, axis.getMin(), false);
+				max = renderer.worldToView(axis, axis.getMax(), false);
+				if (!Double.isNaN(min) && !Double.isNaN(max)) {
+					center = renderer.viewToWorld(axis, (min + max)/2.0, false);
+				}
+			}
+			NavigationInfo info = new NavigationInfo(
+					axis.getMin(), axis.getMax(), center.doubleValue());
+			infos.put(axisName, info);
+		}
+	}
+
+	/**
+	 * Sets the plot's position and zoom level to the default state.
 	 */
 	public void reset() {
 		for (Map.Entry<String, NavigationInfo> entry: infos.entrySet()) {

@@ -84,7 +84,14 @@ public class CSVReader extends AbstractDataReader {
 		}
 	}
 
-	@Override
+	/**
+	 * Returns a DataSource that was imported.
+	 * @param input Input to be read.
+	 * @param types Number types for the columns of the DataSource.
+	 * @return DataSource Imported data.
+	 * @throws IOException when the file format is not valid or when
+	 *         experiencing an error during file operations.
+	 */
 	public DataSource read(InputStream input, Class<? extends Number>... types)
 			throws IOException {
 		Map<Class<? extends Number>, Method> parseMethods =

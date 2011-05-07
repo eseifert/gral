@@ -94,7 +94,11 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		setSettingDefault(COLOR, Color.BLACK);
 	}
 
-	@Override
+	/**
+	 * Draws the <code>Drawable</code> with the specified
+	 * <code>Graphics2D</code> object.
+	 * @param context Environment used for drawing
+	 */
 	public void draw(DrawingContext context) {
 		if (getLayout() == null) {
 			return;
@@ -208,7 +212,10 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		valid = false;
 	}
 
-	@Override
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (FONT.equals(key)) {

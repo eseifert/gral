@@ -66,7 +66,12 @@ public class EnumeratedData extends AbstractDataSource {
 		this(original, 0, 1);
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		if (col < 1) {
 			return row*steps + offset;
@@ -79,7 +84,10 @@ public class EnumeratedData extends AbstractDataSource {
 		return original.getColumnCount() + 1;
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return original.getRowCount();
 	}

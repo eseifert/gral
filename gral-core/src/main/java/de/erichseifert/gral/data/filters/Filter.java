@@ -155,7 +155,12 @@ public abstract class Filter extends AbstractDataSource
 		rows.add(doubleData);
 	}
 
-	@Override
+	/**
+	 * Returns the row with the specified index.
+	 * @param col index of the column to return
+	 * @param row index of the row to return
+	 * @return the specified value of the data cell
+	 */
 	public Number get(int col, int row) {
 		int colPos = getIndex(col);
 		if (colPos < 0) {
@@ -199,7 +204,10 @@ public abstract class Filter extends AbstractDataSource
 		return cols.length;
 	}
 
-	@Override
+	/**
+	 * Returns the number of rows of the data source.
+	 * @return number of rows in the data source.
+	 */
 	public int getRowCount() {
 		return original.getRowCount();
 	}
@@ -212,19 +220,40 @@ public abstract class Filter extends AbstractDataSource
 		return original.getRowCount();
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		filter();
 		notifyDataUpdated(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		filter();
 		notifyDataUpdated(events);
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		filter();
 		notifyDataUpdated(events);

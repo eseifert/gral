@@ -54,7 +54,6 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		setSettingDefault(STROKE, new BasicStroke(1f));
 	}
 
-	@Override
 	public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		Shape path = getAreaShape(axis, axisRenderer, points);
@@ -62,7 +61,6 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		final Shape area = punch(stroke.createStrokedShape(path), points);
 
 		return new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				Paint paint = LineAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),

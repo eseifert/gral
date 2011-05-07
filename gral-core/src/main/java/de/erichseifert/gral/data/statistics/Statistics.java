@@ -270,7 +270,14 @@ public class Statistics implements DataListener {
 		return (v != null) ? v : Double.NaN;
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		for (DataChangeEvent event : events) {
 			int col = event.getCol();
@@ -289,7 +296,14 @@ public class Statistics implements DataListener {
 		}
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		for (DataChangeEvent event : events) {
 			// Mark statistics as invalid
@@ -297,7 +311,14 @@ public class Statistics implements DataListener {
 		}
 	}
 
-	@Override
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * <code>DataListener</code>s and should not be called manually.
+	 * @param source Data source that has changed
+	 * @param events Optional event object describing the data values that
+	 *        have been added
+	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		for (DataChangeEvent event : events) {
 			// Mark statistics as invalid

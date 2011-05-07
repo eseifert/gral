@@ -34,6 +34,8 @@ import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.Column;
+import de.erichseifert.gral.data.DataChangeEvent;
+import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -114,12 +116,18 @@ public class BoxPlot extends XYPlot {
 			this.plot = plot;
 		}
 
-		@Override
-		public Drawable getPoint(final Axis axisY,
-				final AxisRenderer axisYRenderer, final Row row) {
+		/**
+		 * Returns the graphical representation to be drawn for the specified data
+		 * value.
+		 * @param axis that is used to project the point.
+		 * @param axisRenderer Renderer for the axis.
+		 * @param row Data row containing the point.
+		 * @return Component that can be used to draw the point
+		 */
+		public Drawable getPoint(final Axis axis,
+				final AxisRenderer axisRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
-				@Override
 				public void draw(DrawingContext context) {
 					Axis axisX = plot.getAxis(AXIS_X);
 					Axis axisY = plot.getAxis(AXIS_Y);
@@ -226,7 +234,12 @@ public class BoxPlot extends XYPlot {
 			};
 		}
 
-		@Override
+		/**
+		 * Returns a <code>Shape</code> instance that can be used
+		 * for further calculations.
+		 * @param row Data row containing the point.
+		 * @return Outline that describes the point's shape.
+		 */
 		public Shape getPointPath(Row row) {
 			return null;
 		}
@@ -270,9 +283,9 @@ public class BoxPlot extends XYPlot {
 				col.getStatistics(Statistics.MAX)
 			);
 		}
-
-		// Set generated data series
 		add(stats);
+
+		// Adjust axes to generated data series
 		getAxis(AXIS_X).setRange(0.5, data.getColumnCount() + 0.5);
 		double yMin = stats.getColumn(2).getStatistics(Statistics.MIN);
 		double yMax = stats.getColumn(5).getStatistics(Statistics.MAX);
@@ -283,6 +296,44 @@ public class BoxPlot extends XYPlot {
 		PointRenderer pointRenderer = new BoxWhiskerRenderer(this);
 		setLineRenderer(stats, null);
 		setPointRenderer(stats, pointRenderer);
+
+		// Update boxes on changes to the original data source
+		data.addDataListener(new StatsUpdater(stats));
 	}
+
+	/**
+	 * Utility class that updates statistics when original data source changes.
+	 */
+	private static final class StatsUpdater implements DataListener {
+		private final DataTable stats;
+
+		public StatsUpdater(DataTable stats) {
+			this.stats = stats;
+		}
+
+		private void update(DataSource data) {
+			for (int c = 0; c < data.getColumnCount(); c++) {
+				Column col = data.getColumn(c);
+				stats.set(0, c, c + 1);
+				stats.set(1, c, col.getStatistics(Statistics.MEDIAN));
+				stats.set(2, c, col.getStatistics(Statistics.MIN));
+				stats.set(3, c, col.getStatistics(Statistics.QUARTILE_1));
+				stats.set(4, c, col.getStatistics(Statistics.QUARTILE_3));
+				stats.set(5, c, col.getStatistics(Statistics.MAX));
+			}
+		}
+
+		public void dataUpdated(DataSource source, DataChangeEvent... events) {
+			update(source);
+		}
+
+		public void dataRemoved(DataSource source, DataChangeEvent... events) {
+			update(source);
+		}
+
+		public void dataAdded(DataSource source, DataChangeEvent... events) {
+			update(source);
+		}
+	};
 
 }

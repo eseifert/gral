@@ -61,7 +61,13 @@ public class BasicSettingsStorage implements SettingsStorage {
 		return false;
 	}
 
-	@Override
+	/**
+	 * Returns the setting with the specified key.
+	 * If no setting is available, the default setting will be returned.
+	 * @param <T> Type of setting.
+	 * @param key Key.
+	 * @return Setting.
+	 */
 	public <T> T getSetting(Key key) {
 		if (settings.containsKey(key)) {
 			return (T) settings.get(key);
@@ -69,14 +75,23 @@ public class BasicSettingsStorage implements SettingsStorage {
 		return (T) defaults.get(key);
 	}
 
-	@Override
+	/**
+	 * Sets the setting with the specified key to the specified value.
+	 * @param <T> Type of setting.
+	 * @param key Key.
+	 * @param value Value to be set.
+	 */
 	public <T> void setSetting(Key key, T value) {
 		Object valueOld = settings.get(key);
 		settings.put(key, value);
 		notifySettingChanged(key, valueOld, value, false);
 	}
 
-	@Override
+	/**
+	 * Removes the setting with the specified key.
+	 * @param <T> Type of setting.
+	 * @param key Key.
+	 */
 	public <T> void removeSetting(Key key) {
 		Object valueOld = settings.get(key);
 		settings.remove(key);
@@ -94,7 +109,12 @@ public class BasicSettingsStorage implements SettingsStorage {
 		return defaults.containsKey(key);
 	}
 
-	@Override
+	/**
+	 * Sets a default value for the setting with the specified key.
+	 * @param <T> Type of setting.
+	 * @param key Key.
+	 * @param value Value to be set.
+	 */
 	public <T> void setSettingDefault(Key key, T value) {
 		Object valueOld = defaults.get(key);
 		defaults.put(key, value);

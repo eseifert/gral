@@ -63,7 +63,49 @@ public class StackedLayout implements Layout {
 		this.alignment = 0.5;
 	}
 
-	@Override
+	/**
+	 * Arranges the components of the specified container according to this
+	 * layout.
+	 * @param container Container to be laid out.
+	 */
+	public void layout(Container container) {
+		Dimension2D size = getPreferredSize(container);
+		Rectangle2D bounds = container.getBounds();
+		Insets2D insets = container.getInsets();
+
+		double x = bounds.getMinX() + insets.getLeft();
+		double y = bounds.getMinY() + insets.getTop();
+		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
+		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
+		int count = 0;
+		if (Orientation.HORIZONTAL.equals(orientation)) {
+			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
+			for (Drawable component : container) {
+				if (count++ > 0) {
+					x += gap.getWidth();
+				}
+				Dimension2D compBounds = component.getPreferredSize();
+				component.setBounds(x, y, compBounds.getWidth(), height);
+				x += compBounds.getWidth();
+			}
+		} else if (Orientation.VERTICAL.equals(orientation)) {
+			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
+			for (Drawable component : container) {
+				if (count++ > 0) {
+					y += gap.getHeight();
+				}
+				Dimension2D compBounds = component.getPreferredSize();
+				component.setBounds(x, y, width, compBounds.getHeight());
+				y += compBounds.getHeight();
+			}
+		}
+	}
+
+	/**
+	 * Returns the preferred size of the specified container using this layout.
+	 * @param container Container whose preferred size is to be returned.
+	 * @return Preferred extent of the specified container.
+	 */
 	public Dimension2D getPreferredSize(Container container) {
 		Insets2D insets = container.getInsets();
 
@@ -99,40 +141,6 @@ public class StackedLayout implements Layout {
 		Dimension2D bounds =
 			new de.erichseifert.gral.util.Dimension2D.Double(width, height);
 		return bounds;
-	}
-
-	@Override
-	public void layout(Container container) {
-		Dimension2D size = getPreferredSize(container);
-		Rectangle2D bounds = container.getBounds();
-		Insets2D insets = container.getInsets();
-
-		double x = bounds.getMinX() + insets.getLeft();
-		double y = bounds.getMinY() + insets.getTop();
-		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
-		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
-		int count = 0;
-		if (Orientation.HORIZONTAL.equals(orientation)) {
-			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
-			for (Drawable component : container) {
-				if (count++ > 0) {
-					x += gap.getWidth();
-				}
-				Dimension2D compBounds = component.getPreferredSize();
-				component.setBounds(x, y, compBounds.getWidth(), height);
-				x += compBounds.getWidth();
-			}
-		} else if (Orientation.VERTICAL.equals(orientation)) {
-			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
-			for (Drawable component : container) {
-				if (count++ > 0) {
-					y += gap.getHeight();
-				}
-				Dimension2D compBounds = component.getPreferredSize();
-				component.setBounds(x, y, width, compBounds.getHeight());
-				y += compBounds.getHeight();
-			}
-		}
 	}
 
 	/**

@@ -12,6 +12,40 @@
 
   <name>GRAL example applications</name>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.pyx4me</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>proguard</goal></goals>
+          </execution>
+        </executions>
+        <configuration>
+          <proguardInclude>src/etc/proguard.conf</proguardInclude>
+          <options>
+            <option>-target ${compileSource}</option>
+          </options>
+          <libs>
+            <lib>${java.home}/lib/rt.jar</lib>
+          </libs>
+          <skip>true</skip>
+          <proguardVersion>4.4</proguardVersion>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard</artifactId>
+            <version>4.4</version>
+            <scope>runtime</scope>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>de.erichseifert.gral</groupId>

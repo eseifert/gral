@@ -42,14 +42,12 @@ import de.erichseifert.gral.util.PointND;
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 
-	@Override
 	public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		Shape path = getAreaShape(axis, axisRenderer, points);
 		final Shape area = punch(path, points);
 
 		return new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				Paint paint = DefaultAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),

@@ -57,10 +57,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		setSettingDefault(ASCENDING_POINT, 0.5);
 	}
 
-	@Override
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
-			@Override
 			public void draw(DrawingContext context) {
 				Orientation dir = DiscreteLineRenderer2D.this
 					.getSetting(ASCENT_DIRECTION);
