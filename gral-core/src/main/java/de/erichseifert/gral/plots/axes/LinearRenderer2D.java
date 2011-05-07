@@ -38,6 +38,15 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 	public LinearRenderer2D() {
 	}
 
+	/**
+	 * Converts a world (axis) coordinate value to a view (screen) coordinate
+	 * value.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @return Screen coordinate value
+	 */
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -53,6 +62,15 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 		return (val - min)/(max - min)*getShapeLength();
 	}
 
+	/**
+	 * Converts a view (screen) coordinate value to a world (axis) coordinate
+	 * value.
+	 * @param axis Axis
+	 * @param value View coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @return World coordinate value
+	 */
 	public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();

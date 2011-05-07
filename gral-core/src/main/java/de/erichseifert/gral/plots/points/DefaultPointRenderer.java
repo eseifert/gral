@@ -37,9 +37,16 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * Class that creates <code>Drawable</code>s for a row of data.
  */
 public class DefaultPointRenderer extends AbstractPointRenderer {
-
-	public Drawable getPoint(final Axis axisY,
-			final AxisRenderer axisYRenderer, final Row row) {
+	/**
+	 * Returns the graphical representation to be drawn for the specified data
+	 * value.
+	 * @param axis that is used to project the point.
+	 * @param axisRenderer Renderer for the axis.
+	 * @param row Data row containing the point.
+	 * @return Component that can be used to draw the point
+	 */
+	public Drawable getPoint(final Axis axis,
+			final AxisRenderer axisRenderer, final Row row) {
 		Drawable drawable = new AbstractDrawable() {
 			public void draw(DrawingContext context) {
 				Paint paint = DefaultPointRenderer.this.getSetting(COLOR);
@@ -56,7 +63,7 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 					drawError(context, point, row.get(1).doubleValue(),
 							row.get(columnIndex - 1).doubleValue(),
 							row.get(columnIndex).doubleValue(),
-							axisY, axisYRenderer);
+							axis, axisRenderer);
 				}
 			}
 		};
@@ -64,6 +71,12 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 		return drawable;
 	}
 
+	/**
+	 * Returns a <code>Shape</code> instance that can be used
+	 * for further calculations.
+	 * @param row Data row containing the point.
+	 * @return Outline that describes the point's shape.
+	 */
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
 		return shape;

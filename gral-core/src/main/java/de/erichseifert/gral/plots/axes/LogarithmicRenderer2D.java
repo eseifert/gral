@@ -39,6 +39,15 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	public LogarithmicRenderer2D() {
 	}
 
+	/**
+	 * Converts a world (axis) coordinate value to a view (screen) coordinate
+	 * value.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @return Screen coordinate value
+	 */
 	public double worldToView(Axis axis, Number value, boolean extrapolate) {
 		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();
@@ -58,6 +67,15 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			(maxLog - minLog);
 	}
 
+	/**
+	 * Converts a view (screen) coordinate value to a world (axis) coordinate
+	 * value.
+	 * @param axis Axis
+	 * @param value View coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @return World coordinate value
+	 */
 	public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
 		checkAxisBounds(axis);
 		double min = axis.getMin().doubleValue();

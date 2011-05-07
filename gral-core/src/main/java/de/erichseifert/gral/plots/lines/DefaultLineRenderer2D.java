@@ -47,6 +47,12 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	public DefaultLineRenderer2D() {
 	}
 
+	/**
+	 * Returns a graphical representation for the line defined by
+	 * <code>points</code>.
+	 * @param points Points to be used for creating the line.
+	 * @return Representation of the line.
+	 */
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			public void draw(DrawingContext context) {

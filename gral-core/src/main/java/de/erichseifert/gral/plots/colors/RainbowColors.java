@@ -34,6 +34,11 @@ public class RainbowColors implements ColorMapper {
 	public RainbowColors() {
 	}
 
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	public Color get(double value) {
 		return Color.getHSBColor((float) value, 1f, 1f);
 	}

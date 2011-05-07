@@ -37,6 +37,11 @@ public class SingleColor implements ColorMapper {
 		this.color = color;
 	}
 
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	public Color get(double value) {
 		return color;
 	}

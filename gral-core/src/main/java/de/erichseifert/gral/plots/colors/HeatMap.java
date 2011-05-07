@@ -39,6 +39,11 @@ public class HeatMap implements ColorMapper {
 	public HeatMap() {
 	}
 
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	public Color get(double value) {
 		double x = 1.0 - value;
 		double x2 = x*x;

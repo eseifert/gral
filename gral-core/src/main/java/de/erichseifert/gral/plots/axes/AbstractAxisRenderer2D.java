@@ -125,8 +125,19 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(LABEL_COLOR, Color.BLACK);
 	}
 
+	/**
+	 * Returns a component that displays the specified axis.
+	 * @param axis axis to be displayed
+	 * @return component displaying the axis
+	 * @see Axis
+	 */
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
+			/**
+			 * Draws the <code>Drawable</code> with the specified
+			 * <code>Graphics2D</code> object.
+			 * @param context Environment used for drawing
+			 */
 			public void draw(DrawingContext context) {
 				if (shapeLines == null || shapeLines.length == 0) {
 					return;
@@ -353,6 +364,11 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return component;
 	}
 
+	/**
+	 * Returns a list of all tick element on the axis.
+	 * @param axis Axis
+	 * @return A list of <code>Tick</code> instances
+	 */
 	public List<Tick> getTicks(Axis axis) {
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
@@ -449,6 +465,16 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return tick;
 	}
 
+	/**
+	 * Returns the normal vector at the position of the specified value.
+	 * The vector is normalized.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @param forceLinear Force linear interpolation.
+	 * @return N-dimensional normal vector at the position
+	 */
 	public PointND<Double> getNormal(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		double valueView;
@@ -489,6 +515,16 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return shapeLengths[shapeLengths.length - 1];
 	}
 
+	/**
+	 * Returns the position of the specified value on the axis.
+	 * The value is returned in view coordinates.
+	 * @param axis Axis
+	 * @param value World coordinate value to convert
+	 * @param extrapolate Option to activate extrapolation value that are not
+	 *        on the axis
+	 * @param forceLinear Force linear interpolation.
+	 * @return N-dimensional point of the value
+	 */
 	public PointND<Double> getPosition(Axis axis, Number value,
 			boolean extrapolate, boolean forceLinear) {
 		if (shapeLines == null || shapeLines.length == 0 || value == null) {
@@ -580,6 +616,10 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		}
 	}
 
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (SHAPE.equals(key)) {

@@ -136,6 +136,10 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		graphics.setTransform(txOld);
 	}
 
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
 	public void settingChanged(SettingChangeEvent event) {
 	}
 }

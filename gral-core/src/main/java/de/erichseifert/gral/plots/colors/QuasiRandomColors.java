@@ -56,6 +56,11 @@ public class QuasiRandomColors implements ColorMapper {
 		};
 	}
 
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	public Color get(double value) {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);

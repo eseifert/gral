@@ -52,6 +52,12 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		setSettingDefault(SMOOTHNESS, 1.0);
 	}
 
+	/**
+	 * Returns a graphical representation for the line defined by
+	 * <code>points</code>.
+	 * @param points Points to be used for creating the line.
+	 * @return Representation of the line.
+	 */
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			public void draw(DrawingContext context) {

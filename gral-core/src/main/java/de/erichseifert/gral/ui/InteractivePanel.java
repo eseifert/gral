@@ -463,6 +463,18 @@ public class InteractivePanel extends DrawablePanel
 		}
 	}
 
+	/**
+     * Prints the page at the specified index into the specified
+     * {@link Graphics} context in the specified format.
+     * @param g the context into which the page is drawn
+     * @param pageFormat the size and orientation of the page being drawn
+     * @param pageIndex the zero based index of the page to be drawn
+     * @return PAGE_EXISTS if the page is rendered successfully
+     *         or NO_SUCH_PAGE if <code>pageIndex</code> specifies a
+     *	       non-existent page.
+     * @exception java.awt.print.PrinterException
+     *         thrown when the print job is terminated.
+	 */
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex)
 			throws PrinterException {
 		if (pageIndex > 0) {
@@ -519,13 +531,29 @@ public class InteractivePanel extends DrawablePanel
 		}
 	}
 
-	public void centerChanged(PlotNavigator source, String axisId,
+	/**
+	 * A method that gets called when the center of an axis in the
+	 * <code>PlotNavigator</code> has changed.
+	 * @param source Object that has caused the change
+	 * @param axisName Name of the axis that has changed
+	 * @param centerOld Previous value of axis center
+	 * @param centerNew New value of axis center
+	 */
+	public void centerChanged(PlotNavigator source, String axisName,
 			Number centerOld, Number centerNew) {
-		navigator.setCenter(axisId, centerNew);
+		navigator.setCenter(axisName, centerNew);
 		repaint();
 	}
 
-	public void zoomChanged(PlotNavigator source, String axisId,
+	/**
+	 * A method that gets called when the zoom level of an axis in the
+	 * <code>PlotNavigator</code> has changed.
+	 * @param source Object that has caused the change
+	 * @param axisName Name of the axis that has changed
+	 * @param zoomOld Previous zoom level of the axis
+	 * @param zoomNew New zoom level of the axis
+	 */
+	public void zoomChanged(PlotNavigator source, String axisName,
 			double zoomOld, double zoomNew) {
 		navigator.setZoom(zoomNew);
 		repaint();

@@ -85,6 +85,9 @@ public class HaltonSequence implements Iterator<Double> {
 		return h;
 	}
 
+	/**
+	 * Stub method to fulfill <code>Iterator</code> interface.
+	 */
 	public void remove() {
 	}
 

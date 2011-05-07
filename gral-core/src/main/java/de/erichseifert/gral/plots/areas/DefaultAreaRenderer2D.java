@@ -41,7 +41,14 @@ import de.erichseifert.gral.util.PointND;
  * interface.
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
-
+	/**
+	 * Returns the graphical representation to be drawn for the specified
+	 * data points.
+	 * @param axis Reference axis for the specified data points.
+	 * @param axisRenderer Renderer of the reference axis.
+	 * @param points Points to be used for creating the area.
+	 * @return Representation of the area.
+	 */
 	public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
 			Iterable<DataPoint> points) {
 		Shape path = getAreaShape(axis, axisRenderer, points);

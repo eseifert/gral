@@ -34,6 +34,11 @@ public class Grayscale implements ColorMapper {
 	public Grayscale() {
 	}
 
+	/**
+	 * Returns the Color according to the specified value.
+	 * @param value Value of color.
+	 * @return Color.
+	 */
 	public Color get(double value) {
 		return Color.getHSBColor(0f, 0f, (float) value);
 	}

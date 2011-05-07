@@ -57,6 +57,12 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		setSettingDefault(ASCENDING_POINT, 0.5);
 	}
 
+	/**
+	 * Returns a graphical representation for the line defined by
+	 * <code>points</code>.
+	 * @param points Points to be used for creating the line.
+	 * @return Representation of the line.
+	 */
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
 			public void draw(DrawingContext context) {
