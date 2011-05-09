@@ -50,7 +50,6 @@
           <libs>
             <lib>${java.home}/lib/rt.jar</lib>
           </libs>
-          <skip>true</skip>
           <proguardVersion>4.4</proguardVersion>
         </configuration>
         <dependencies>

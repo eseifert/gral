@@ -41,8 +41,8 @@ public class SimpleRasterPlot extends JPanel {
 		super(new BorderLayout());
 
 		// Create example data
-		int size = 256;
-		double f = 0.1;
+		int size = 128;
+		double f = 0.15;
 		DataTable data = new DataTable(size, Double.class);
 		for (int rowIndex = 0; rowIndex < data.getColumnCount(); rowIndex++) {
 			Number[] row = new Number[data.getColumnCount()];
@@ -64,7 +64,10 @@ public class SimpleRasterPlot extends JPanel {
 		plot.setSetting(RasterPlot.COLORS, new HeatMap());
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot));
+		InteractivePanel panel = new InteractivePanel(plot);
+		panel.setPannable(false);
+		panel.setZoomable(false);
+		add(panel);
 	}
 
 	public static void main(String[] args) {

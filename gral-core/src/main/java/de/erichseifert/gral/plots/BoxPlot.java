@@ -35,7 +35,6 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
-import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -99,6 +98,9 @@ public class BoxPlot extends XYPlot {
 	paint the lines of the median bar. */
 	public static final Key BAR_MEDIAN_STROKE =
 		new Key("boxplot.bar.median.stroke"); //$NON-NLS-1$
+
+	private final DataSource data;
+	private final DataTable stats;
 
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
@@ -269,20 +271,14 @@ public class BoxPlot extends XYPlot {
 		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
 			-Double.MAX_VALUE);
 
+		// Store original data source
+		this.data = data;
+		data.addDataListener(this);
+
 		// Generate data source with statistical values for each column
-		DataTable stats = new DataTable(Integer.class, Double.class,
+		stats = new DataTable(Integer.class, Double.class,
 			Double.class, Double.class, Double.class, Double.class);
-		for (int c = 0; c < data.getColumnCount(); c++) {
-			Column col = data.getColumn(c);
-			stats.add(
-				c + 1,
-				col.getStatistics(Statistics.MEDIAN),
-				col.getStatistics(Statistics.MIN),
-				col.getStatistics(Statistics.QUARTILE_1),
-				col.getStatistics(Statistics.QUARTILE_3),
-				col.getStatistics(Statistics.MAX)
-			);
-		}
+		updateBoxData();
 		add(stats);
 
 		// Adjust axes to generated data series
@@ -296,44 +292,47 @@ public class BoxPlot extends XYPlot {
 		PointRenderer pointRenderer = new BoxWhiskerRenderer(this);
 		setLineRenderer(stats, null);
 		setPointRenderer(stats, pointRenderer);
-
-		// Update boxes on changes to the original data source
-		data.addDataListener(new StatsUpdater(stats));
 	}
 
-	/**
-	 * Utility class that updates statistics when original data source changes.
-	 */
-	private static final class StatsUpdater implements DataListener {
-		private final DataTable stats;
+	private void updateBoxData() {
+		// Remove old entries
+		stats.clear();
 
-		public StatsUpdater(DataTable stats) {
-			this.stats = stats;
+		// Generate statistical values for each column
+		for (int c = 0; c < data.getColumnCount(); c++) {
+			Column col = data.getColumn(c);
+			stats.add(
+				c + 1,
+				col.getStatistics(Statistics.MEDIAN),
+				col.getStatistics(Statistics.MIN),
+				col.getStatistics(Statistics.QUARTILE_1),
+				col.getStatistics(Statistics.QUARTILE_3),
+				col.getStatistics(Statistics.MAX)
+			);
 		}
+	}
 
-		private void update(DataSource data) {
-			for (int c = 0; c < data.getColumnCount(); c++) {
-				Column col = data.getColumn(c);
-				stats.set(0, c, c + 1);
-				stats.set(1, c, col.getStatistics(Statistics.MEDIAN));
-				stats.set(2, c, col.getStatistics(Statistics.MIN));
-				stats.set(3, c, col.getStatistics(Statistics.QUARTILE_1));
-				stats.set(4, c, col.getStatistics(Statistics.QUARTILE_3));
-				stats.set(5, c, col.getStatistics(Statistics.MAX));
-			}
+	@Override
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		super.dataAdded(source, events);
+		if (source == data) {
+			updateBoxData();
 		}
+	}
 
-		public void dataUpdated(DataSource source, DataChangeEvent... events) {
-			update(source);
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		super.dataUpdated(source, events);
+		if (source == data) {
+			updateBoxData();
 		}
+	}
 
-		public void dataRemoved(DataSource source, DataChangeEvent... events) {
-			update(source);
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		super.dataRemoved(source, events);
+		if (source == data) {
+			updateBoxData();
 		}
-
-		public void dataAdded(DataSource source, DataChangeEvent... events) {
-			update(source);
-		}
-	};
-
+	}
 }

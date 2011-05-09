@@ -29,6 +29,7 @@ import java.awt.geom.Rectangle2D;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -71,6 +72,9 @@ public class RasterPlot extends XYPlot {
 	pixel values to colors. */
 	public static final Key COLORS =
 		new Key("rasterplot.color"); //$NON-NLS-1$
+
+	private final DataSource data;
+	private final DataTable pixels;
 
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
@@ -168,25 +172,17 @@ public class RasterPlot extends XYPlot {
 		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
 			-Double.MAX_VALUE);
 
-		// Generate pixel data with (x, y, value)
-		Statistics stats = data.getStatistics();
-		double min = stats.get(Statistics.MIN);
-		double max = stats.get(Statistics.MAX);
-		double range = max - min;
-		DataTable pixels = new DataTable(
-			Double.class, Double.class, Double.class);
-		int i = 0;
-		for (Number value : data) {
-			double x = i%data.getColumnCount();
-			double y = -i/data.getColumnCount();
-			double v = (value.doubleValue() - min) / range;
-			pixels.add(x, y, v);
-			i++;
-		}
+		// Store original data source
+		this.data = data;
+		data.addDataListener(this);
 
-		// Set generated data series
+		// Generated new data series
+		pixels = new DataTable(
+			Double.class, Double.class, Double.class);
+		updatePixelData();
 		add(pixels);
 
+		// Adjust axes to generated data series
 		getAxis(AXIS_X).setRange(0.0, data.getColumnCount());
 		getAxis(AXIS_Y).setRange(-data.getRowCount(), 0.0);
 
@@ -196,4 +192,49 @@ public class RasterPlot extends XYPlot {
 		setPointRenderer(pixels, pointRenderer);
 	}
 
+	/**
+	 * Utility method to update generated data series.
+	 */
+	private void updatePixelData() {
+		// Remove old entries
+		pixels.clear();
+
+		// Generate pixel data with (x, y, value)
+		Statistics stats = data.getStatistics();
+		double min = stats.get(Statistics.MIN);
+		double max = stats.get(Statistics.MAX);
+		double range = max - min;
+		int i = 0;
+		for (Number value : data) {
+			double x =  i%data.getColumnCount();
+			double y = -i/data.getColumnCount();
+			double v = (value.doubleValue() - min) / range;
+			pixels.add(x, y, v);
+			i++;
+		}
+	}
+
+	@Override
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		super.dataAdded(source, events);
+		if (source == data) {
+			updatePixelData();
+		}
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		super.dataUpdated(source, events);
+		if (source == data) {
+			updatePixelData();
+		}
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		super.dataRemoved(source, events);
+		if (source == data) {
+			updatePixelData();
+		}
+	}
 }
