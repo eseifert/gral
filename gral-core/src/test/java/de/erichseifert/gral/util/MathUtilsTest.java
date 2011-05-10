@@ -55,6 +55,8 @@ public class MathUtilsTest {
 		assertEquals(0.50, MathUtils.round(1.0/2.0, 1e-2), DELTA);
 		assertEquals(0.33, MathUtils.round(1.0/3.0, 1e-2), DELTA);
 		assertEquals(0.11, MathUtils.round(1.0/9.0, 1e-2), DELTA);
+		// Test with precision 0.0
+		assertEquals(0.0, MathUtils.round(1.0, 0.0), DELTA);
 	}
 
 	@Test
@@ -69,6 +71,8 @@ public class MathUtilsTest {
 		assertEquals(0.50, MathUtils.floor(1.0/2.0, 1e-2), DELTA);
 		assertEquals(0.33, MathUtils.floor(1.0/3.0, 1e-2), DELTA);
 		assertEquals(0.11, MathUtils.floor(1.0/9.0, 1e-2), DELTA);
+		// Test with precision 0.0
+		assertEquals(0.0, MathUtils.floor(1.0, 0.0), DELTA);
 	}
 
 	@Test
@@ -83,6 +87,8 @@ public class MathUtilsTest {
 		assertEquals(0.50, MathUtils.ceil(1.0/2.0, 1e-2), DELTA);
 		assertEquals(0.34, MathUtils.ceil(1.0/3.0, 1e-2), DELTA);
 		assertEquals(0.12, MathUtils.ceil(1.0/9.0, 1e-2), DELTA);
+		// Test with precision 0.0
+		assertEquals(0.0, MathUtils.ceil(1.0, 0.0), DELTA);
 	}
 
 	@Test

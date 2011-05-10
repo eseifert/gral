@@ -539,8 +539,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			valueView = worldToView(axis, value, extrapolate);
 		}
 
-		if (Double.isNaN(valueView) || Double.isInfinite(valueView)) {
+		if (Double.isNaN(valueView)) {
 			return null;
+		}
+
+		// TODO Check if this is a valid way to allow infinite values
+		if (valueView == Double.NEGATIVE_INFINITY) {
+			valueView = 0.0;
+		} else if (valueView == Double.POSITIVE_INFINITY) {
+			valueView = getShapeLength();
 		}
 
 		if (valueView <= 0.0 || valueView >= getShapeLength()) {

@@ -63,7 +63,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		}
 		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
 		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
-		return (Math.log10(value.doubleValue()) - minLog)*getShapeLength() /
+		return (Math.log10(val) - minLog)*getShapeLength() /
 			(maxLog - minLog);
 	}
 
@@ -116,6 +116,11 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		double tickSpacingMinor = (ticksMinorCount > 0)
 			? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 
+		// TODO Check if this is a valid solution to allow zeroes
+		if (min == 0.0) {
+			min = 1.0;
+		}
+
 		final double BASE = 10.0;
 		double powerMin = MathUtils.magnitude(BASE, min);
 		double powerMax = MathUtils.magnitude(BASE, max);
@@ -162,7 +167,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		if ((axis.getMin().doubleValue() < 0.0)
 				|| (axis.getMax().doubleValue() < 0.0)) {
 			throw new IllegalStateException(
-					"Axis bounds must be greater than or equal to zero."); //$NON-NLS-1$
+				"Axis bounds must be greater than or equal to zero for logarithmic axes."); //$NON-NLS-1$
 		}
 	}
 

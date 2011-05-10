@@ -58,6 +58,9 @@ public abstract class MathUtils {
 	 * @return Rounded value
 	 */
 	public static double round(double a, double precision) {
+		if (precision == 0.0) {
+			return 0.0;
+		}
 		return Math.round(a/precision) * precision;
 	}
 
@@ -69,6 +72,9 @@ public abstract class MathUtils {
 	 * @return Rounded value
 	 */
 	public static double floor(double a, double precision) {
+		if (precision == 0.0) {
+			return 0.0;
+		}
 		return Math.floor(a/precision) * precision;
 	}
 
@@ -80,6 +86,9 @@ public abstract class MathUtils {
 	 * @return Rounded value
 	 */
 	public static double ceil(double a, double precision) {
+		if (precision == 0.0) {
+			return 0.0;
+		}
 		return Math.ceil(a/precision) * precision;
 	}
 
