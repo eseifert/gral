@@ -289,6 +289,7 @@ public abstract class Plot extends DrawableContainer
 			comp = renderer.getRendererComponent(axis);
 		}
 		setAxisComponent(axisName, comp);
+		layout();
 	}
 
 	/**
