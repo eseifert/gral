@@ -40,7 +40,31 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <compileSource>1.5</compileSource>
+    <runtime.jar>${java.home}/lib/rt.jar</runtime.jar>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>macosx</id>
+      <properties>
+        <runtime.jar>${java.home}/bundle/Classes/classes.jar</runtime.jar>
+      </properties>
+    </profile>
+    <profile>
+      <id>nocompress</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.pyx4me</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <executions>
+              <execution><phase>__do_not_run__</phase></execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <build>
     <plugins>

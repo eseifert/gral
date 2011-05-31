@@ -202,6 +202,8 @@ public class InteractivePanel extends DrawablePanel
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
 						InteractivePanel.this);
+				// Clear artifacts of the file chooser
+				repaint();
 				// If the user aborted we can stop
 				if (ret != JFileChooser.APPROVE_OPTION) {
 					return;
@@ -220,6 +222,8 @@ public class InteractivePanel extends DrawablePanel
 						Messages.getString("InteractivePanel.warning"), //$NON-NLS-1$
 						JOptionPane.YES_NO_OPTION
 					);
+					// Clear artifacts of the confirm dialog
+					repaint();
 					if (retOverwrite == JOptionPane.NO_OPTION) {
 						return;
 					}

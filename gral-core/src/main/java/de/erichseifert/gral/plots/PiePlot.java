@@ -303,6 +303,15 @@ public class PiePlot extends Plot implements DataListener {
 	}
 
 	@Override
+	public void add(int index, DataSource source, boolean visible) {
+		if (getData().size() != 0) {
+			throw new IllegalArgumentException(
+				"This plot type only supports a single data source."); //$NON-NLS-1$
+		}
+		super.add(index, source, visible);
+	}
+
+	@Override
 	public void dataAdded(DataSource data, DataChangeEvent... events) {
 		((DataListener) getPlotArea()).dataAdded(data, events);
 	}

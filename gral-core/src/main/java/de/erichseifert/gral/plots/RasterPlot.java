@@ -100,8 +100,8 @@ public class RasterPlot extends XYPlot {
 		 * @param row Data row containing the point.
 		 * @return Component that can be used to draw the point
 		 */
-		public Drawable getPoint(final Axis axisY,
-				final AxisRenderer axisYRenderer, final Row row) {
+		public Drawable getPoint(final Axis axis,
+				final AxisRenderer axisRenderer, final Row row) {
 			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				private final Rectangle2D pixel = new Rectangle2D.Double();
@@ -212,6 +212,15 @@ public class RasterPlot extends XYPlot {
 			pixels.add(x, y, v);
 			i++;
 		}
+	}
+
+	@Override
+	public void add(int index, DataSource source, boolean visible) {
+		if (getData().size() != 0) {
+			throw new IllegalArgumentException(
+				"This plot type only supports a single data source."); //$NON-NLS-1$
+		}
+		super.add(index, source, visible);
 	}
 
 	@Override

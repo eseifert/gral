@@ -16,53 +16,74 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
-        <configuration>
-          <outputDirectory>target</outputDirectory>
-          <show>public</show>
-          <nohelp>true</nohelp>
-        </configuration>
+        <artifactId>maven-source-plugin</artifactId>
         <executions>
           <execution>
-            <id>make-javadoc</id>
-            <phase>package</phase>
+            <id>attach-sources</id>
             <goals>
-              <goal>javadoc</goal>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.pyx4me</groupId>
-        <artifactId>proguard-maven-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <outputDirectory>target</outputDirectory>
+          <show>protected</show>
+          <nohelp>true</nohelp>
+        </configuration>
         <executions>
           <execution>
-            <phase>package</phase>
-            <goals><goal>proguard</goal></goals>
+            <id>attach-javadoc</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
           </execution>
         </executions>
-        <configuration>
-          <proguardInclude>src/etc/proguard.conf</proguardInclude>
-          <options>
-            <option>-target ${compileSource}</option>
-          </options>
-          <libs>
-            <lib>${java.home}/lib/rt.jar</lib>
-          </libs>
-          <proguardVersion>4.4</proguardVersion>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>net.sf.proguard</groupId>
-            <artifactId>proguard</artifactId>
-            <version>4.4</version>
-            <scope>runtime</scope>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>proguard</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.pyx4me</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals><goal>proguard</goal></goals>
+              </execution>
+            </executions>
+            <configuration>
+              <proguardInclude>src/etc/proguard.conf</proguardInclude>
+              <options>
+                <option>-target ${compileSource}</option>
+              </options>
+              <libs>
+                <lib>${runtime.jar}</lib>
+              </libs>
+              <proguardVersion>4.4</proguardVersion>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.proguard</groupId>
+                <artifactId>proguard</artifactId>
+                <version>4.4</version>
+                <scope>runtime</scope>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <dependencies>
     <dependency>

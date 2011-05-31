@@ -313,6 +313,15 @@ public class BoxPlot extends XYPlot {
 	}
 
 	@Override
+	public void add(int index, DataSource source, boolean visible) {
+		if (getData().size() != 0) {
+			throw new IllegalArgumentException(
+				"This plot type only supports a single data source."); //$NON-NLS-1$
+		}
+		super.add(index, source, visible);
+	}
+
+	@Override
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		super.dataAdded(source, events);
 		if (source == data) {
