@@ -200,7 +200,7 @@ public class PlotNavigator {
 		double zoom = 0.0;
 		int count = 0;
 		for (NavigationInfo info: infos.values()) {
-			if (Double.isNaN(info.getZoom())) {
+			if (!MathUtils.isCalculatable(info.getZoom())) {
 				continue;
 			}
 			zoom += info.getZoom();
@@ -214,8 +214,7 @@ public class PlotNavigator {
 	 * @param zoomNew New zoom level.
 	 */
 	public void setZoom(double zoomNew) {
-		if ((zoomNew <= 0.0) || Double.isNaN(zoomNew)
-				|| Double.isInfinite(zoomNew)) {
+		if ((zoomNew <= 0.0) || !MathUtils.isCalculatable(zoomNew)) {
 			return;
 		}
 		zoomNew = MathUtils.limit(zoomNew, zoomMin, zoomMax);
@@ -275,10 +274,10 @@ public class PlotNavigator {
 			double max = 0.0;
 			Number center = 0.0;
 			AxisRenderer renderer = plot.getAxisRenderer(axisName);
-			if (renderer != null) {
+			if (renderer != null && axis.isValid()) {
 				min = renderer.worldToView(axis, axis.getMin(), false);
 				max = renderer.worldToView(axis, axis.getMax(), false);
-				if (!Double.isNaN(min) && !Double.isNaN(max)) {
+				if (MathUtils.isCalculatable(min) && MathUtils.isCalculatable(max)) {
 					center = renderer.viewToWorld(axis, (min + max)/2.0, false);
 				}
 			}

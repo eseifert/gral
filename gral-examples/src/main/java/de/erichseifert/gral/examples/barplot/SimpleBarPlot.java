@@ -43,26 +43,22 @@ public class SimpleBarPlot extends JPanel {
 		super(new BorderLayout());
 
 		// Create example data
-		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
-		data.add(1,  1,  6);
-		data.add(2,  3,  8);
-		data.add(3, -2,  2);
-		data.add(4,  6,  6);
-		data.add(5, -4,  8);
-		data.add(6,  8, 18);
-		data.add(7,  9,  9);
-		data.add(8, 11,  1);
+		DataTable data = new DataTable(Double.class, Integer.class, Integer.class);
+		data.add(0.1,  1,  6);
+		data.add(0.2,  3,  8);
+		data.add(0.3, -2,  2);
+		data.add(0.4,  6,  6);
+		data.add(0.5, -4,  8);
+		data.add(0.6,  8, 18);
+		data.add(0.7,  9,  9);
+		data.add(0.8, 11,  1);
 
 		// Create new bar plot
 		BarPlot plot = new BarPlot(data);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
-		plot.setSetting(BarPlot.BAR_WIDTH, 0.75);
-
-		// Format axes
-		plot.getAxis(BarPlot.AXIS_X).setRange(0.5, 8.5);
-		plot.getAxis(BarPlot.AXIS_Y).setRange(-4.0, 11.0);
+		plot.setSetting(BarPlot.BAR_WIDTH, 0.075);
 
 		// Format bars
 		PointRenderer pointRenderer = plot.getPointRenderer(data);

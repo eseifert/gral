@@ -40,6 +40,9 @@ public class AxisTest {
 		assertEquals(-5.0, axis.getMin().doubleValue(), DELTA);
 		axis.setMin(10.0);
 		assertEquals(10.0, axis.getMin().doubleValue(), DELTA);
+		// Test auto-scaling mode
+		axis.setAutoscaled(true);
+		assertEquals(10.0, axis.getMin().doubleValue(), DELTA);
 	}
 
 	@Test
@@ -47,12 +50,18 @@ public class AxisTest {
 		assertEquals(5.0, axis.getMax().doubleValue(), DELTA);
 		axis.setMax(10.0);
 		assertEquals(10.0, axis.getMax().doubleValue(), DELTA);
+		// Test auto-scaling mode
+		axis.setAutoscaled(true);
+		assertEquals(10.0, axis.getMax().doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testRange() {
 		assertEquals(10.0, axis.getRange(), DELTA);
 		axis.setRange(1.0, 3.0);
+		assertEquals(2.0, axis.getRange(), DELTA);
+		// Test auto-scaling mode
+		axis.setAutoscaled(true);
 		assertEquals(2.0, axis.getRange(), DELTA);
 	}
 

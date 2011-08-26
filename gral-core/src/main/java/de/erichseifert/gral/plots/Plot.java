@@ -266,6 +266,38 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
+	 * Creates all axes that are defined by the current plot type.
+	 */
+	protected void createDefaultAxes() {
+	}
+
+	/**
+	 * Creates all axis renderers that are defined by the current plot type.
+	 */
+	protected void createDefaultAxisRenderers() {
+	}
+
+	/**
+	 * Tries to automatically set the ranges of all axes that are set to auto-scale.
+	 * @see Axis#setAutoscaled(boolean)
+	 */
+	protected void autoScaleAxes() {
+		if (data.isEmpty()) {
+			return;
+		}
+		for (String axisName : getAxesNames()) {
+			Axis axis = getAxis(axisName);
+			if (axis == null || !axis.isAutoscaled()) {
+				continue;
+			}
+			double min = getAxisMin(axisName);
+			double max = getAxisMax(axisName);
+			double margin = 0.0*(max - min);
+			axis.setRange(min - margin, max + margin);
+		}
+	}
+
+	/**
 	 * Returns the renderer for the axis with the specified name.
 	 * @param axisName Axis name.
 	 * @return Instance that renders the axis.
@@ -432,11 +464,12 @@ public abstract class Plot extends DrawableContainer
 	 */
 	public void add(int index, DataSource source, boolean visible) {
 		data.add(index, source);
-		if (getLegend() != null) {
-			getLegend().add(source);
-		}
 		if (visible) {
 			dataVisible.add(source);
+		}
+		autoScaleAxes();
+		if (getLegend() != null) {
+			getLegend().add(source);
 		}
 		source.addDataListener(this);
 		refresh();

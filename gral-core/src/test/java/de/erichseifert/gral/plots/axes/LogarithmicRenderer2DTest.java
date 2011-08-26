@@ -47,7 +47,8 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testDraw() {
-		Axis axis = new Axis(0.1, 10.0);
+		Axis axis = new Axis();
+		axis.setRange(0.1, 10.0);
 		Drawable d = renderer.getRendererComponent(axis);
 		assertNotNull(d);
 		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);

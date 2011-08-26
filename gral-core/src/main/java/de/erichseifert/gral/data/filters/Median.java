@@ -105,7 +105,7 @@ public class Median extends Filter {
 		}
 		List<Double> window = new ArrayList<Double>(w.size());
 		for (Double v : w) {
-			if (Double.isNaN(v)) {
+			if (!MathUtils.isCalculatable(v)) {
 				return Double.NaN;
 			}
 			window.add(v);

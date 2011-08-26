@@ -47,7 +47,8 @@ public class DefaultAreaRendererTest {
 
 	@Before
 	public void setUp() {
-		axis = new Axis(-5.0, 5.0);
+		axis = new Axis();
+		axis.setRange(-5.0, 5.0);
 		axisRenderer = new LinearRenderer2D();
 	}
 

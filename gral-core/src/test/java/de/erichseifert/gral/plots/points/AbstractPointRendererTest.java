@@ -89,7 +89,8 @@ public class AbstractPointRendererTest {
 
 	@Test
 	public void testDraw() {
-		Axis axis = new Axis(0.0, 1.0);
+		Axis axis = new Axis();
+		axis.setRange(0.0, 1.0);
 		AxisRenderer axisRenderer = new LinearRenderer2D();
 		// Get line
 		Drawable point = r.getPoint(axis, axisRenderer, row);

@@ -22,6 +22,7 @@
 package de.erichseifert.gral.data.filters;
 
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.util.MathUtils;
 
 /**
  * <p>Class that applies a specified kernel to a data source to convolve it.</p>
@@ -86,7 +87,7 @@ public class Convolution extends Filter {
 			int r = row + k;
 			Number original = getOriginal(col, r);
 			double v = (original != null) ? original.doubleValue() : Double.NaN;
-			if (Double.isNaN(v) || Double.isInfinite(v)) {
+			if (!MathUtils.isCalculatable(v)) {
 				return v;
 			}
 			sum += kernel.get(k) * v;

@@ -129,7 +129,7 @@ public class Statistics implements DataListener {
 			if (v != null) {
 				val = v.doubleValue();
 			}
-			if (Double.isNaN(val)) {
+			if (!MathUtils.isCalculatable(val)) {
 				continue;
 			}
 
@@ -186,7 +186,7 @@ public class Statistics implements DataListener {
 		List<Double> values = new SortedList<Double>();
 		for (Number cell : data) {
 			double value = cell.doubleValue();
-			if (!Double.isNaN(value)) {
+			if (MathUtils.isCalculatable(value)) {
 				values.add(value);
 			}
 		}

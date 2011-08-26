@@ -370,10 +370,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @return A list of <code>Tick</code> instances
 	 */
 	public List<Tick> getTicks(Axis axis) {
+		List<Tick> ticks = new LinkedList<Tick>();
+
+		if (!axis.isValid()) {
+			return ticks;
+		}
+
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 
-		List<Tick> ticks = new LinkedList<Tick>();
 		Set<Double> tickPositions = new HashSet<Double>();
 
 		createTicksCustom(ticks, axis, min, max, tickPositions);
@@ -386,8 +391,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				isAutoSpacing = true;
 			} else {
 				double tickSpacingValue = tickSpacing.doubleValue();
-				if (tickSpacingValue <= 0.0 || Double.isNaN(tickSpacingValue) ||
-						Double.isInfinite(tickSpacingValue)) {
+				if (tickSpacingValue <= 0.0 || !MathUtils.isCalculatable(tickSpacingValue)) {
 					isAutoSpacing = true;
 				}
 			}

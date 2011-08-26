@@ -25,6 +25,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.util.MathUtils;
 
 
 /**
@@ -51,7 +52,7 @@ public class SizeablePointRenderer extends DefaultPointRenderer {
 			return shape;
 		}
 		double size = row.get(sizeColumn).doubleValue();
-		if (size < 0.0 || Double.isNaN(size) || Double.isInfinite(size)) {
+		if (size < 0.0 || !MathUtils.isCalculatable(size)) {
 			return null;
 		}
 		if (size != 1.0) {

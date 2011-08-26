@@ -128,6 +128,8 @@ public class InteractivePanel extends DrawablePanel
 	/** Object to be used as listener for panning actions. */
 	private NavigationMoveListener panListener;
 
+	private boolean stateInitialized;
+
 	/**
 	 * Listener class for zooming actions.
 	 */
@@ -683,5 +685,14 @@ public class InteractivePanel extends DrawablePanel
 		if (navigator != null) {
 			navigator.setDefaultState();
 		}
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		if (!stateInitialized) {
+			setDefaultState();
+			stateInitialized = true;
+		}
+		super.paint(g);
 	}
 }

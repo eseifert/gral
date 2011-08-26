@@ -24,7 +24,9 @@ package de.erichseifert.gral.plots;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
@@ -36,6 +38,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -54,9 +57,16 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class BarPlot extends XYPlot {
-	/** Key for specifying a {@link java.lang.Number} value for the relative
-	width of the bars. */
-	public static final Key BAR_WIDTH = new Key("barplot.barWidth"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the  width of
+	the bars in axis coordinates. */
+	public static final Key BAR_WIDTH = new Key("barplot.bar.width"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the minimum
+	height of the bars in view units (e.g. pixels on screen). */
+	public static final Key BAR_HEIGHT_MIN = new Key("barplot.bar.heightMin"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Boolean} value which defines
+	whether painting should happen over all bars at once, otherwise each bar
+	will be filled independently. */
+	public static final Key PAINT_ALL_BARS = new Key("barplot.paint.global"); //$NON-NLS-1$
 
 	/**
 	 * Class that renders a bar in a bar plot.
@@ -92,16 +102,17 @@ public class BarPlot extends XYPlot {
 					Paint paint = BarRenderer.this.getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
-					/*
-					// TODO Optionally fill all bars with a single paint:
-					AffineTransform txOld = graphics.getTransform();
-					Rectangle2D shapeBounds = shape.getBounds2D();
-					Rectangle2D paintBoundaries = plotArea.getBounds();
-					paintBoundaries = new Rectangle2D.Double(
-						shapeBounds.getX(), paintBoundaries.getY() - txOld.getTranslateY(),
-						shapeBounds.getWidth(), paintBoundaries.getHeight()
-					);
-					*/
+
+					if (plot.<Boolean>getSetting(PAINT_ALL_BARS)) {
+						AffineTransform txOld = graphics.getTransform();
+						Rectangle2D shapeBounds = point.getBounds2D();
+						paintBoundaries = plot.getPlotArea().getBounds();
+						paintBoundaries = new Rectangle2D.Double(
+							shapeBounds.getX(), paintBoundaries.getY() - txOld.getTranslateY(),
+							shapeBounds.getWidth(), paintBoundaries.getHeight()
+						);
+					}
+
 					GraphicsUtils.fillPaintedShape(
 							graphics, point, paint, paintBoundaries);
 
@@ -142,6 +153,11 @@ public class BarPlot extends XYPlot {
 				plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();
 			double barAlign = 0.5;
 
+			// Sanity checks
+			if (barWidthRel<0.0) {
+				barWidthRel=0.0;
+			}
+
 			double barXMin = axisXRenderer
 				.getPosition(axisX, valueX - barWidthRel*barAlign, true, false)
 				.get(PointND.X);
@@ -159,9 +175,25 @@ public class BarPlot extends XYPlot {
 			double barWidth = Math.abs(barXMax - barXMin);
 			double barHeight = Math.abs(barYMax - barYMin);
 
+			// position of the bar's left edge in screen coordinates
 			double barX = axisXRenderer.getPosition(
 					axisX, valueX, true, false).get(PointND.X);
-			double barY = (barYMax == barYOrigin) ? 0.0 : -barHeight;
+			// position of the bar's upper edge in screen coordinates
+			// (the origin of the screen y axis is at the top)
+			boolean barAboveAxis = barYMax == barYOrigin;
+			double barY = barAboveAxis ? 0.0 : -barHeight;
+
+			Number barHeightMinObj = plot.<Number>getSetting(BAR_HEIGHT_MIN);
+			if (barHeightMinObj != null) {
+				double barHeightMin = barHeightMinObj.doubleValue();
+				if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
+						barHeight < barHeightMin) {
+					if (barAboveAxis) {
+						barY += -barHeightMin + barHeight;
+					}
+					barHeight = barHeightMin;
+				}
+			}
 
 			Shape shape = new Rectangle2D.Double(
 					barXMin - barX, barY, barWidth, barHeight);
@@ -179,6 +211,8 @@ public class BarPlot extends XYPlot {
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		setSettingDefault(BAR_WIDTH, 1.0);
+		setSettingDefault(BAR_HEIGHT_MIN, 0.0);
+		setSettingDefault(PAINT_ALL_BARS, false);
 
 		PointRenderer pointRenderer = new BarRenderer(this);
 		for (DataSource s : data) {
@@ -187,4 +221,21 @@ public class BarPlot extends XYPlot {
 		}
 	}
 
+	@Override
+	protected void autoScaleAxes() {
+		List<DataSource> data = getData();
+		if (data.isEmpty()) {
+			return;
+		}
+
+		super.autoScaleAxes();
+
+		Axis axisX = getAxis(AXIS_X);
+		if (axisX != null) {
+			double xMin = getAxisMin(AXIS_X);
+			double xMax = getAxisMax(AXIS_X);
+			double xMargin = (xMax - xMin)/data.get(0).getRowCount()/2.0;
+			axisX.setRange(xMin - xMargin, xMax + xMargin);
+		}
+	}
 }

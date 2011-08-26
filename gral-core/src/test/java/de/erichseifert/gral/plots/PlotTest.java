@@ -137,8 +137,10 @@ public class PlotTest {
 		assertNull(plot.getAxis("a"));
 		assertNull(plot.getAxis("b"));
 		// Set
-		Axis a = new Axis(0.0, 1.0);
-		Axis b = new Axis(2.0, 3.0);
+		Axis a = new Axis();
+		Axis b = new Axis();
+		a.setRange(0.0, 1.0);
+		b.setRange(2.0, 3.0);
 		plot.setAxis("a", a);
 		plot.setAxis("b", b);
 		assertEquals(a, plot.getAxis("a"));

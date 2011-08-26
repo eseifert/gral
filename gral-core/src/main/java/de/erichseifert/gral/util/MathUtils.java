@@ -327,4 +327,25 @@ public abstract class MathUtils {
 		return values.get(i) + (values.get(i + 1) - values.get(i))*(c + d*xFrac);
 	}
 
+	/**
+	 * Returns whether a specified <code>java.lang.Number</code> object can be
+	 * used for calculations. <code>null</code> values, <code>NaN</code> values
+	 * or infinite values are considered as non-calculatable.
+	 * @param n Number object.
+	 * @return whether <code>n</code> can be used for calculations.
+	 */
+	public static boolean isCalculatable(Number n) {
+		return (n != null) && isCalculatable(n.doubleValue());
+	}
+
+	/**
+	 * Returns whether a specified double can be used for calculations.
+	 * <code>NaN</code> values or infinite values are considered
+	 * non-calculatable.
+	 * @param n double value
+	 * @return whether <code>n</code> can be used for calculations.
+	 */
+	public static boolean isCalculatable(double n) {
+		return !Double.isNaN(n) && !Double.isInfinite(n);
+	}
 }

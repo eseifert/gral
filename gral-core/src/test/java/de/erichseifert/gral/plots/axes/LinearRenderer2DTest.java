@@ -40,7 +40,8 @@ public class LinearRenderer2DTest {
 
 	@Before
 	public void setUp() {
-		axis = new Axis(-5.0, 5.0);
+		axis = new Axis();
+		axis.setRange(-5.0, 5.0);
 		renderer = new LinearRenderer2D();
 	}
 

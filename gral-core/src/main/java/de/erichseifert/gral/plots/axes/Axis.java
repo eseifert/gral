@@ -24,6 +24,8 @@ package de.erichseifert.gral.plots.axes;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.erichseifert.gral.util.MathUtils;
+
 /**
  * <p>Class that represents an arbitrary axis.</p>
  * <p>Functionality includes:</p>
@@ -40,6 +42,25 @@ public class Axis {
 	private Number min;
 	/** Maximal value on axis. */
 	private Number max;
+	/** Has the axis a valid range. Used for auto-scaling. */
+	private boolean autoscaled;
+
+	/**
+	 * Initializes a new instance with a specified automatic scaling mode, but
+	 * without minimum and maximum values.
+	 * @param autoscaled <code>true</code> to turn automatic scaling on
+	 */
+	private Axis(boolean autoscaled) {
+		axisListeners = new HashSet<AxisListener>();
+		this.autoscaled = autoscaled;
+	}
+
+	/**
+	 * Initializes a new instance without minimum and maximum values.
+	 */
+	public Axis() {
+		this(true);
+	}
 
 	/**
 	 * Initializes a new instance with the specified minimum and maximum values.
@@ -47,8 +68,7 @@ public class Axis {
 	 * @param max maximum value
 	 */
 	public Axis(Number min, Number max) {
-		axisListeners = new HashSet<AxisListener>();
-
+		this(false);
 		this.min = min;
 		this.max = max;
 	}
@@ -98,7 +118,7 @@ public class Axis {
 	 * @param min Minimum value.
 	 */
 	public void setMin(Number min) {
-		setRange(min, this.max);
+		setRange(min, getMax());
 	}
 
 	/**
@@ -114,7 +134,7 @@ public class Axis {
 	 * @param max Maximum value.
 	 */
 	public void setMax(Number max) {
-		setRange(this.min, max);
+		setRange(getMin(), max);
 	}
 
 	/**
@@ -122,7 +142,7 @@ public class Axis {
 	 * @return Distance between maximum and minimum value.
 	 */
 	public double getRange() {
-		return max.doubleValue() - min.doubleValue();
+		return getMax().doubleValue() - getMin().doubleValue();
 	}
 
 	/**
@@ -131,11 +151,42 @@ public class Axis {
 	 * @param max Maximum value.
 	 */
 	public void setRange(Number min, Number max) {
-		if (this.min.equals(min) && this.max.equals(max)) {
+		if ((getMin() != null) && getMin().equals(min) &&
+				(getMax() != null) && getMax().equals(max)) {
 			return;
 		}
 		this.min = min;
 		this.max = max;
 		fireRangeChanged(min, max);
+	}
+
+	/**
+	 * Returns whether the axis range should be determined automatically rather
+	 * than using the axis's minimum and a maximum values.
+	 * @return whether the axis is scaled automatically to fit the current data
+	 */
+	public boolean isAutoscaled() {
+		return autoscaled;
+	}
+
+	/**
+	 * Sets whether the axis range should be determined automatically rather
+	 * than using the axis's minimum and a maximum values.
+	 * @param autoscaled Defines whether the axis should be automatically
+	 *                   scaled to fit the current data.
+	 */
+	public void setAutoscaled(boolean autoscaled) {
+		if (this.autoscaled != autoscaled) {
+			this.autoscaled = autoscaled;
+		}
+	}
+
+	/**
+	 * Returns whether the currently set minimum and maximum values are valid.
+	 * @return <code>true</code> when minimum and maximum values are correct,
+	 *         otherwise <code>false</code>
+	 */
+	public boolean isValid() {
+		return MathUtils.isCalculatable(min) && MathUtils.isCalculatable(max);
 	}
 }

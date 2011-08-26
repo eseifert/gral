@@ -41,6 +41,7 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.MathUtils;
 
 
 /**
@@ -168,7 +169,7 @@ public class PiePlot extends Plot implements DataListener {
 				double sliceStart = sliceOffset + slice[0];
 				double sliceSpan = slice[1];
 				sliceNo++;
-				if (Double.isNaN(sliceSpan)) {
+				if (!MathUtils.isCalculatable(sliceSpan)) {
 					continue;
 				}
 
@@ -266,7 +267,7 @@ public class PiePlot extends Plot implements DataListener {
 				double[] slice = new double[] { sliceStart, Double.NaN };
 				slices.add(slice);
 
-				if (Double.isNaN(val) || Double.isInfinite(val)) {
+				if (!MathUtils.isCalculatable(val)) {
 					continue;
 				}
 

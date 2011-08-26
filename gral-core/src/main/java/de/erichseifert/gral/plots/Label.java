@@ -35,6 +35,7 @@ import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
 
@@ -110,7 +111,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		);
 
 		double rotation = this.<Number>getSetting(ROTATION).doubleValue();
-		if (!Double.isNaN(rotation) && (rotation%360.0 != 0.0)) {
+		if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
 			txLabel.rotate(-rotation/180.0*Math.PI);
 		}
 
@@ -149,7 +150,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
 			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
-			if (!Double.isNaN(rotation) && (rotation%360.0 != 0.0)) {
+			if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
 				shape = AffineTransform.getRotateInstance(
 					-rotation/180.0*Math.PI,
 					bounds.getCenterX(),
