@@ -109,8 +109,9 @@ public class InteractivePanel extends DrawablePanel
 	"resetView", "exportImage", or "print". */
 	protected final ActionMap ACTIONS;
 
-	/** Popup menu. */
-	private PopupListener popupListener;
+	/** Cache for the popup menu. */
+	private JPopupMenu popupMenu;
+	private boolean popupMenuEnabled;
 
 	/** Chooser for image export. */
 	private final JFileChooser exportImageChooser;
@@ -245,7 +246,8 @@ public class InteractivePanel extends DrawablePanel
 			}
 		});
 
-		setPopupMenu(createPopupMenu());
+		popupMenuEnabled = true;
+		addMouseListener(new PopupListener());
 
 		if (getDrawable() instanceof Plot) {
 			Plot plot = (Plot) getDrawable();
@@ -259,28 +261,48 @@ public class InteractivePanel extends DrawablePanel
 		}
 	}
 
-	protected void setPopupMenu(JPopupMenu menu) {
-		if (popupListener != null) {
-			removeMouseListener(popupListener);
-			popupListener = null;
+	/**
+	 * Method that returns the popup menu for a given mouse event. It will be
+	 * called on each popup event if the menu is enabled. If the menu is static
+	 * caching can be used to prevent unnecessary generation of menu objects.
+	 * @param e Mouse event that triggered the popup menu.
+	 * @return A popup menu instance, or <code>null</code> if no popup menu should be shown.
+	 * @see #isPopupMenuEnabled()
+	 * @see #setPopupMenuEnabled(boolean)
+	 */
+	protected JPopupMenu getPopupMenu(MouseEvent e) {
+		if (popupMenu == null) {
+			popupMenu = new JPopupMenu();
+			popupMenu.add(ACTIONS.get("zoomIn")); //$NON-NLS-1$
+			popupMenu.add(ACTIONS.get("zoomOut")); //$NON-NLS-1$
+			popupMenu.add(ACTIONS.get("resetView")); //$NON-NLS-1$
+			popupMenu.addSeparator();
+			popupMenu.add(ACTIONS.get("exportImage")); //$NON-NLS-1$
+			popupMenu.add(ACTIONS.get("print")); //$NON-NLS-1$
 		}
-		if (menu != null) {
-			popupListener = new PopupListener(menu);
-			addMouseListener(popupListener);
-		}
+		return popupMenu;
 	}
 
-	protected JPopupMenu createPopupMenu() {
-		JPopupMenu menu = new JPopupMenu();
+	/**
+	 * Returns whether a popup menu will be shown by this panel when the user
+	 * takes the appropriate action. The necessary action depends on the
+	 * operating system of the user.
+	 * @return <code>true</code> when a popup menu will be shown,
+	 *         otherwise <code>false</code>.
+	 */
+	public boolean isPopupMenuEnabled() {
+		return popupMenuEnabled;
+	}
 
-		menu.add(ACTIONS.get("zoomIn")); //$NON-NLS-1$
-		menu.add(ACTIONS.get("zoomOut")); //$NON-NLS-1$
-		menu.add(ACTIONS.get("resetView")); //$NON-NLS-1$
-		menu.addSeparator();
-		menu.add(ACTIONS.get("exportImage")); //$NON-NLS-1$
-		menu.add(ACTIONS.get("print")); //$NON-NLS-1$
-
-		return menu;
+	/**
+	 * Sets whether a popup menu will be shown by this panel when the user
+	 * takes the appropriate action. The necessary action depends on the
+	 * operating system of the user.
+	 * @param popupMenuEnabled <code>true</code> when a popup menu should be
+	 *        shown, otherwise <code>false</code>.
+	 */
+	public void setPopupMenuEnabled(boolean popupMenuEnabled) {
+		this.popupMenuEnabled = popupMenuEnabled;
 	}
 
 	/**
@@ -335,13 +357,7 @@ public class InteractivePanel extends DrawablePanel
 	/**
 	 * Class that is responsible for showing the popup menu.
 	 */
-	private static class PopupListener extends MouseAdapter {
-		private final JPopupMenu menu;
-
-		public PopupListener(JPopupMenu menu) {
-			this.menu = menu;
-		}
-
+	private class PopupListener extends MouseAdapter {
 	    @Override
 		public void mousePressed(MouseEvent e) {
 	        showPopup(e);
@@ -353,9 +369,14 @@ public class InteractivePanel extends DrawablePanel
 	    }
 
 	    private void showPopup(MouseEvent e) {
-	        if (e.isPopupTrigger()) {
-	            menu.show(e.getComponent(), e.getX(), e.getY());
+	        if (!isPopupMenuEnabled() || !e.isPopupTrigger()) {
+	        	return;
 	        }
+        	JPopupMenu menu = getPopupMenu(e);
+        	if (menu == null) {
+        		return;
+        	}
+    		menu.show(e.getComponent(), e.getX(), e.getY());
 	    }
 	}
 
