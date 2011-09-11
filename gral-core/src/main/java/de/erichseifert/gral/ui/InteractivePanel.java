@@ -45,8 +45,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -105,18 +105,12 @@ public class InteractivePanel extends DrawablePanel
 	/** Defines whether the panel can be panned. */
 	private boolean pannable;
 
+	/** Map that stored actions by names like "zoomIn", "zoomOut",
+	"resetView", "exportImage", or "print". */
+	protected final ActionMap ACTIONS;
+
 	/** Popup menu. */
-	private final JPopupMenu menu;
-	/** Menu item for zooming in. */
-	private final JMenuItem zoomIn;
-	/** Menu item for zooming out. */
-	private final JMenuItem zoomOut;
-	/** Menu item for restoring original view. */
-	private final JMenuItem resetView;
-	/** Menu item for exporting the current view as image. */
-	private final JMenuItem exportImage;
-	/** Menu item for printing the current view. */
-	private final JMenuItem print;
+	private PopupListener popupListener;
 
 	/** Chooser for image export. */
 	private final JFileChooser exportImageChooser;
@@ -128,6 +122,7 @@ public class InteractivePanel extends DrawablePanel
 	/** Object to be used as listener for panning actions. */
 	private NavigationMoveListener panListener;
 
+	/** Workaround to find out when the panel has been drawn the first time. */
 	private boolean stateInitialized;
 
 	/**
@@ -168,25 +163,20 @@ public class InteractivePanel extends DrawablePanel
 		exportImageChooser.setDialogTitle(Messages.getString(
 				"InteractivePanel.exportImageTitle")); //$NON-NLS-1$
 
-		menu = new JPopupMenu();
-
-		zoomIn = new JMenuItem(new AbstractAction(Messages.getString(
-				"InteractivePanel.zoomIn")) { //$NON-NLS-1$
+		ACTIONS = new ActionMap();
+		ACTIONS.put("zoomIn", new AbstractAction(Messages.getString( //$NON-NLS-1$
+			"InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(1);
 			}
 		});
-		menu.add(zoomIn);
-
-		zoomOut = new JMenuItem(new AbstractAction(Messages.getString(
-				"InteractivePanel.zoomOut")) { //$NON-NLS-1$
+		ACTIONS.put("zoomOut", new AbstractAction(Messages.getString( //$NON-NLS-1$
+			"InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(-1);
 			}
 		});
-		menu.add(zoomOut);
-
-		resetView = new JMenuItem(new AbstractAction(Messages.getString(
+		ACTIONS.put("resetView", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.resetView")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
@@ -195,11 +185,7 @@ public class InteractivePanel extends DrawablePanel
 				}
 			}
 		});
-		menu.add(resetView);
-
-		menu.addSeparator();
-
-		exportImage = new JMenuItem(new AbstractAction(Messages.getString(
+		ACTIONS.put("exportImage", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.exportImage")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
@@ -245,9 +231,7 @@ public class InteractivePanel extends DrawablePanel
 					file, ed.getDocumentBounds());
 			}
 		});
-		menu.add(exportImage);
-
-		print = new JMenuItem(new AbstractAction(Messages.getString(
+		ACTIONS.put("print", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.print")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {
@@ -260,9 +244,8 @@ public class InteractivePanel extends DrawablePanel
 				}
 			}
 		});
-		menu.add(print);
 
-		addMouseListener(new PopupListener(menu));
+		setPopupMenu(createPopupMenu());
 
 		if (getDrawable() instanceof Plot) {
 			Plot plot = (Plot) getDrawable();
@@ -274,6 +257,30 @@ public class InteractivePanel extends DrawablePanel
 				setPannable(true);
 			}
 		}
+	}
+
+	protected void setPopupMenu(JPopupMenu menu) {
+		if (popupListener != null) {
+			removeMouseListener(popupListener);
+			popupListener = null;
+		}
+		if (menu != null) {
+			popupListener = new PopupListener(menu);
+			addMouseListener(popupListener);
+		}
+	}
+
+	protected JPopupMenu createPopupMenu() {
+		JPopupMenu menu = new JPopupMenu();
+
+		menu.add(ACTIONS.get("zoomIn")); //$NON-NLS-1$
+		menu.add(ACTIONS.get("zoomOut")); //$NON-NLS-1$
+		menu.add(ACTIONS.get("resetView")); //$NON-NLS-1$
+		menu.addSeparator();
+		menu.add(ACTIONS.get("exportImage")); //$NON-NLS-1$
+		menu.add(ACTIONS.get("print")); //$NON-NLS-1$
+
+		return menu;
 	}
 
 	/**
@@ -598,9 +605,9 @@ public class InteractivePanel extends DrawablePanel
 			addMouseWheelListener(zoomListener);
 		}
 
-		zoomIn.setEnabled(isZoomable());
-		zoomOut.setEnabled(isZoomable());
-		resetView.setEnabled(isZoomable() && isPannable());
+		ACTIONS.get("zoomIn").setEnabled(isZoomable()); //$NON-NLS-1$
+		ACTIONS.get("zoomOut").setEnabled(isZoomable()); //$NON-NLS-1$
+		ACTIONS.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
 	}
 
 	/**
@@ -637,7 +644,7 @@ public class InteractivePanel extends DrawablePanel
 			addMouseMotionListener(panListener);
 		}
 
-		resetView.setEnabled(isZoomable() && isPannable());
+		ACTIONS.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
 	}
 
 	/**
