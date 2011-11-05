@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots.colors;
 
 import java.awt.Color;
+import java.awt.Paint;
 
 /**
  * Class that represents a ColorMapper with a single color.
@@ -38,11 +39,11 @@ public class SingleColor implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Color according to the specified value.
+	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint.
 	 */
-	public Color get(double value) {
+	public Paint get(double value) {
 		return color;
 	}
 

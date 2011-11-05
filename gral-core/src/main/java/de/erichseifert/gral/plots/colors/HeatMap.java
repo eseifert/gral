@@ -22,16 +22,21 @@
 package de.erichseifert.gral.plots.colors;
 
 import java.awt.Color;
+import java.awt.Paint;
+
+import de.erichseifert.gral.util.MathUtils;
 
 /**
  * Class that generates shades of gray for values between 0.0 and 1.0.
  */
-public class HeatMap implements ColorMapper {
-	private static final Color COLOR1 = new Color(0.0f, 0.0f, 0.0f);
-	private static final Color COLOR2 = new Color(0.0f, 0.0f, 1.0f);
-	private static final Color COLOR3 = new Color(1.0f, 0.0f, 0.0f);
-	private static final Color COLOR4 = new Color(1.0f, 1.0f, 0.0f);
-	private static final Color COLOR5 = new Color(1.0f, 1.0f, 1.0f);
+public class HeatMap extends ScaledColorMapper {
+	private static final Color[] COLORS = {
+	    new Color(0.0f, 0.0f, 0.0f),
+	    new Color(0.0f, 0.0f, 1.0f),
+	    new Color(1.0f, 0.0f, 0.0f),
+	    new Color(1.0f, 1.0f, 0.0f),
+	    new Color(1.0f, 1.0f, 1.0f)
+	};
 
 	/**
 	 * Creates a new instance.
@@ -40,27 +45,38 @@ public class HeatMap implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Color according to the specified value.
+	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint.
 	 */
-	public Color get(double value) {
-		double x = 1.0 - value;
+	public Paint get(double value) {
+		double x = value*getScale();
+		double xInv = 1.0 - x;
+		double xInv2 = xInv*xInv;
 		double x2 = x*x;
-		double value2 = value*value;
 
 		// Bernstein coefficients
-		double f1 = x2*x2;
-		double f2 = 4.0*value*x2*x;
-		double f3 = 6.0*value2*x2;
-		double f4 = 4.0*value*value2*x;
-		double f5 = value2*value2;
+		double[] coeffs = {
+			xInv2*xInv2,
+			4.0*x*xInv2*xInv,
+			6.0*x2*xInv2,
+			4.0*x*x2*xInv,
+			x2*x2
+		};
+
+		double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+		for (int i = 0; i < COLORS.length; i++) {
+			r += coeffs[i]*COLORS[i].getRed();
+			g += coeffs[i]*COLORS[i].getGreen();
+			b += coeffs[i]*COLORS[i].getBlue();
+			a += coeffs[i]*COLORS[i].getAlpha();
+		}
 
 		return new Color(
-			(float)(f1*COLOR1.getRed()   + f2*COLOR2.getRed()   + f3*COLOR3.getRed()   + f4*COLOR4.getRed()   + f5*COLOR5.getRed())  /255f,
-			(float)(f1*COLOR1.getGreen() + f2*COLOR2.getGreen() + f3*COLOR3.getGreen() + f4*COLOR4.getGreen() + f5*COLOR5.getGreen())/255f,
-			(float)(f1*COLOR1.getBlue()  + f2*COLOR2.getBlue()  + f3*COLOR3.getBlue()  + f4*COLOR4.getBlue()  + f5*COLOR5.getBlue()) /255f,
-			(float)(f1*COLOR1.getAlpha() + f2*COLOR2.getAlpha() + f3*COLOR3.getAlpha() + f4*COLOR4.getAlpha() + f5*COLOR5.getAlpha())/255f
+			(float) MathUtils.limit(r, 0.0, 255.0)/255f,
+			(float) MathUtils.limit(g, 0.0, 255.0)/255f,
+			(float) MathUtils.limit(b, 0.0, 255.0)/255f,
+			(float) MathUtils.limit(a, 0.0, 255.0)/255f
 		);
 	}
 }

@@ -20,17 +20,17 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 package de.erichseifert.gral.plots.colors;
-import java.awt.Color;
+import java.awt.Paint;
 
 /**
- * Interface that provides a function to retrieve Colors. This can be used to
- * generate colors for various elements in a plot, e.g. lines, areas, etc.
+ * Interface that maps numbers to Paint objects. This can be used to generate
+ * colors or gradients for various elements in a plot, e.g. lines, areas, etc.
  */
 public interface ColorMapper {
 	/**
 	 * Returns the Color according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint object.
 	 */
-	Color get(double value);
+	Paint get(double value);
 }

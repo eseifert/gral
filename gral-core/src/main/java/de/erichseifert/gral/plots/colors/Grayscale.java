@@ -22,11 +22,12 @@
 package de.erichseifert.gral.plots.colors;
 
 import java.awt.Color;
+import java.awt.Paint;
 
 /**
  * Class that generates shades of gray for values between 0.0 and 1.0.
  */
-public class Grayscale implements ColorMapper {
+public class Grayscale extends ScaledColorMapper {
 
 	/**
 	 * Creates a new instance.
@@ -35,11 +36,11 @@ public class Grayscale implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Color according to the specified value.
+	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint.
 	 */
-	public Color get(double value) {
-		return Color.getHSBColor(0f, 0f, (float) value);
+	public Paint get(double value) {
+		return Color.getHSBColor(0f, 0f, (float) (value * getScale()));
 	}
 }

@@ -62,13 +62,19 @@ public class Statistics implements DataListener {
 	/** Key for specifying the expected value.
 	This is the first central moment: E((x - E(x))^1) */
 	public static final String MEAN_DEVIATION = "mean deviation"; //$NON-NLS-1$
-	/** Key for specifying the variance.
+	/** Key for specifying the non-normalized variance.
 	This is the second central moment: E((x - E(x))^2) */
-	public static final String VARIANCE = "variance"; //$NON-NLS-1$
-	/** Key for specifying the skewness.
+	public static final String VARIANCE_BASE = "variance base"; //$NON-NLS-1$
+	/** Key for specifying the variance of a sample.
+	1/(N - 1) * sum(i=1; i<N; (x[i] - mean)^2) */
+	public static final String VARIANCE = "sample variance"; //$NON-NLS-1$
+	/** Key for specifying the population variance.
+	1/N * sum(i=1; i<N; (x[i] - mean)^2) */
+	public static final String POPULATION_VARIANCE = "population variance"; //$NON-NLS-1$
+	/** Key for specifying the non-normalized skewness.
 	This is the third central moment: E((x - E(x))^3) */
 	public static final String SKEWNESS = "skewness"; //$NON-NLS-1$
-	/** Key for specifying the kurtosis.
+	/** Key for specifying the non-normalized kurtosis.
 	This is the fourth central moment: E((x - E(x))^4) */
 	public static final String KURTOSIS = "kurtosis"; //$NON-NLS-1$
 
@@ -165,7 +171,11 @@ public class Statistics implements DataListener {
 		// Mean deviation (first moment) for expected uniform distribution is always 0.
 		stats.put(MEAN_DEVIATION, 0.0);
 		// Variance (second moment)
-		stats.put(VARIANCE, stats.get(SUM2) - mean*stats.get(SUM));
+		stats.put(VARIANCE_BASE, stats.get(SUM2) - mean*stats.get(SUM));
+		// Sample variance
+		stats.put(VARIANCE, stats.get(VARIANCE_BASE)/(stats.get(N) - 1));
+		// Population variance
+		stats.put(POPULATION_VARIANCE, stats.get(VARIANCE_BASE)/stats.get(N));
 		// Skewness (third moment)
 		stats.put(SKEWNESS, stats.get(SUM3)
 			- 3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
@@ -253,7 +263,7 @@ public class Statistics implements DataListener {
 			} else if (
 					(MEAN.equals(key) && !stats.containsKey(MEAN)) ||
 					(MEAN_DEVIATION.equals(key) && !stats.containsKey(MEAN_DEVIATION)) ||
-					(VARIANCE.equals(key) && !stats.containsKey(VARIANCE)) ||
+					(VARIANCE_BASE.equals(key) && !stats.containsKey(VARIANCE_BASE)) ||
 					(SKEWNESS.equals(key) && !stats.containsKey(SKEWNESS)) ||
 					(KURTOSIS.equals(key) && !stats.containsKey(KURTOSIS))) {
 				createDerivedStats(data, stats);

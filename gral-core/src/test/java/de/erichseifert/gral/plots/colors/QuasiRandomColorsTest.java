@@ -24,7 +24,7 @@ package de.erichseifert.gral.plots.colors;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
+import java.awt.Paint;
 
 import org.junit.Test;
 
@@ -32,9 +32,9 @@ public class QuasiRandomColorsTest {
 	@Test
 	public void testGet() {
 		QuasiRandomColors c = new QuasiRandomColors();
-		Color prv = null;
+		Paint prv = null;
 		for (double i = 0.0; i <= 1.0; i += 0.1) {
-			Color cur = c.get(i);
+			Paint cur = c.get(i);
 			assertNotNull(cur);
 			assertFalse(cur.equals(prv));
 			prv = cur;

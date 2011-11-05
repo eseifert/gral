@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
+import java.awt.Paint;
 
 import org.junit.Test;
 
@@ -61,14 +61,14 @@ public class RandomColorsTest {
 		RandomColors c = new RandomColors();
 
 		int STEPS = 10;
-		Color[] actual = new Color[STEPS];
-		
+		Paint[] actual = new Paint[STEPS];
+
 		// Test two runs in order to hit cache
 		for (int run = 0; run < 2; run++) {
-			Color prv = null;
+			Paint prv = null;
 			double x = 0.0;
 			for (int i = 0; i < STEPS; i++) {
-				Color cur = c.get(x);
+				Paint cur = c.get(x);
 				if (run == 0) {
 					actual[i] = cur;
 				} else {
@@ -77,7 +77,7 @@ public class RandomColorsTest {
 				assertNotNull(cur);
 				assertFalse(cur.equals(prv));
 				prv = cur;
-				x += 1.0/(double)STEPS;
+				x += 1.0/STEPS;
 			}
 		}
 	}

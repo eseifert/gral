@@ -41,6 +41,8 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -66,7 +68,8 @@ public class BoxPlot extends XYPlot {
 	width of the box. */
 	public static final Key BOX_WIDTH =
 		new Key("boxplot.box.width"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
+	/** Key for specifying an instance of
+	{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used to
 	paint the background of the box. */
 	public static final Key BOX_BACKGROUND =
 		new Key("boxplot.box.background"); //$NON-NLS-1$
@@ -203,7 +206,8 @@ public class BoxPlot extends XYPlot {
 
 					// Paint shapes
 					Graphics2D graphics = context.getGraphics();
-					Paint paintBox = plot.getSetting(BOX_BACKGROUND);
+					ColorMapper paintBoxMapper = plot.getSetting(BOX_BACKGROUND);
+					Paint paintBox = paintBoxMapper.get(valueX);
 					Paint paintStrokeBox = plot.getSetting(BOX_COLOR);
 					Stroke strokeBox = plot.getSetting(BOX_BORDER);
 					Paint paintWhisker = plot.getSetting(WHISKER_COLOR);
@@ -253,7 +257,7 @@ public class BoxPlot extends XYPlot {
 	 */
 	public BoxPlot(DataSource data) {
 		setSettingDefault(BOX_WIDTH, 0.75);
-		setSettingDefault(BOX_BACKGROUND, Color.WHITE);
+		setSettingDefault(BOX_BACKGROUND, new SingleColor(Color.WHITE));
 		setSettingDefault(BOX_COLOR, Color.BLACK);
 		setSettingDefault(BOX_BORDER, new BasicStroke(1f));
 		setSettingDefault(WHISKER_COLOR, Color.BLACK);

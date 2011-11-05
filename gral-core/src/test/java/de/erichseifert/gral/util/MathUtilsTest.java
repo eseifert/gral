@@ -92,12 +92,21 @@ public class MathUtilsTest {
 	}
 
 	@Test
-	public void testLimit() {
+	public void testLimitDouble() {
 		assertEquals(0.0, MathUtils.limit(-0.5, 0.0, 1.0), DELTA);
 		assertEquals(0.0, MathUtils.limit( 0.0, 0.0, 1.0), DELTA);
 		assertEquals(0.5, MathUtils.limit( 0.5, 0.0, 1.0), DELTA);
 		assertEquals(1.0, MathUtils.limit( 1.0, 0.0, 1.0), DELTA);
 		assertEquals(1.0, MathUtils.limit( 1.5, 0.0, 1.0), DELTA);
+	}
+
+	@Test
+	public void testLimitInt() {
+		assertEquals( 0, MathUtils.limit(-5, 0, 10));
+		assertEquals( 0, MathUtils.limit( 0, 0, 10));
+		assertEquals( 5, MathUtils.limit( 5, 0, 10));
+		assertEquals(10, MathUtils.limit(10, 0, 10));
+		assertEquals(10, MathUtils.limit(15, 0, 10));
 	}
 
 	@Test

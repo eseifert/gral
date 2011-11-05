@@ -21,8 +21,8 @@
  */
 package de.erichseifert.gral.plots;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
@@ -138,9 +138,9 @@ public class RasterPlot extends XYPlot {
 					// Paint pixel
 					Graphics2D graphics = context.getGraphics();
 					ColorMapper colorMapper = plot.getSetting(COLORS);
-					Color color = colorMapper.get(value);
+					Paint paint = colorMapper.get(value);
 					GraphicsUtils.fillPaintedShape(
-							graphics, pixel, color, pixel.getBounds2D());
+							graphics, pixel, paint, pixel.getBounds2D());
 				}
 			};
 		}

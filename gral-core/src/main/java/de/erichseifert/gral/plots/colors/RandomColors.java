@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots.colors;
 
 import java.awt.Color;
+import java.awt.Paint;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,11 +69,11 @@ public class RandomColors implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Color according to the specified value.
+	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint.
 	 */
-	public Color get(double value) {
+	public Paint get(double value) {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);
 		}

@@ -130,15 +130,15 @@ public class StatisticsTest {
 
 	@Test
 	public void testVariance() {
-		assertEquals(157.95833333333337, stats.get(Statistics.VARIANCE), DELTA);
+		assertEquals(157.95833333333337, stats.get(Statistics.VARIANCE_BASE), DELTA);
 		// Horizontal
-		assertEquals(  2.00000000000000, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(  2.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals( 18.87500000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 0), DELTA);
-		assertEquals( 48.00000000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 1), DELTA);
-		assertEquals( 42.00000000000000, stats.get(Statistics.VARIANCE, Orientation.VERTICAL, 2), DELTA);
+		assertEquals( 18.87500000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 0), DELTA);
+		assertEquals( 48.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 42.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test

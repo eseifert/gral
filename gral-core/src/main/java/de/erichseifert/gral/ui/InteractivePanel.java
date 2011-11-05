@@ -107,7 +107,7 @@ public class InteractivePanel extends DrawablePanel
 
 	/** Map that stored actions by names like "zoomIn", "zoomOut",
 	"resetView", "exportImage", or "print". */
-	protected final ActionMap ACTIONS;
+	protected final ActionMap actions;
 
 	/** Cache for the popup menu. */
 	private JPopupMenu popupMenu;
@@ -164,20 +164,20 @@ public class InteractivePanel extends DrawablePanel
 		exportImageChooser.setDialogTitle(Messages.getString(
 				"InteractivePanel.exportImageTitle")); //$NON-NLS-1$
 
-		ACTIONS = new ActionMap();
-		ACTIONS.put("zoomIn", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions = new ActionMap();
+		actions.put("zoomIn", new AbstractAction(Messages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(1);
 			}
 		});
-		ACTIONS.put("zoomOut", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("zoomOut", new AbstractAction(Messages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(-1);
 			}
 		});
-		ACTIONS.put("resetView", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("resetView", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.resetView")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				if (navigator != null) {
@@ -186,7 +186,7 @@ public class InteractivePanel extends DrawablePanel
 				}
 			}
 		});
-		ACTIONS.put("exportImage", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("exportImage", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.exportImage")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
@@ -232,7 +232,7 @@ public class InteractivePanel extends DrawablePanel
 					file, ed.getDocumentBounds());
 			}
 		});
-		ACTIONS.put("print", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("print", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.print")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {
@@ -273,12 +273,12 @@ public class InteractivePanel extends DrawablePanel
 	protected JPopupMenu getPopupMenu(MouseEvent e) {
 		if (popupMenu == null) {
 			popupMenu = new JPopupMenu();
-			popupMenu.add(ACTIONS.get("zoomIn")); //$NON-NLS-1$
-			popupMenu.add(ACTIONS.get("zoomOut")); //$NON-NLS-1$
-			popupMenu.add(ACTIONS.get("resetView")); //$NON-NLS-1$
+			popupMenu.add(actions.get("zoomIn")); //$NON-NLS-1$
+			popupMenu.add(actions.get("zoomOut")); //$NON-NLS-1$
+			popupMenu.add(actions.get("resetView")); //$NON-NLS-1$
 			popupMenu.addSeparator();
-			popupMenu.add(ACTIONS.get("exportImage")); //$NON-NLS-1$
-			popupMenu.add(ACTIONS.get("print")); //$NON-NLS-1$
+			popupMenu.add(actions.get("exportImage")); //$NON-NLS-1$
+			popupMenu.add(actions.get("print")); //$NON-NLS-1$
 		}
 		return popupMenu;
 	}
@@ -626,9 +626,9 @@ public class InteractivePanel extends DrawablePanel
 			addMouseWheelListener(zoomListener);
 		}
 
-		ACTIONS.get("zoomIn").setEnabled(isZoomable()); //$NON-NLS-1$
-		ACTIONS.get("zoomOut").setEnabled(isZoomable()); //$NON-NLS-1$
-		ACTIONS.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
+		actions.get("zoomIn").setEnabled(isZoomable()); //$NON-NLS-1$
+		actions.get("zoomOut").setEnabled(isZoomable()); //$NON-NLS-1$
+		actions.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
 	}
 
 	/**
@@ -665,7 +665,7 @@ public class InteractivePanel extends DrawablePanel
 			addMouseMotionListener(panListener);
 		}
 
-		ACTIONS.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
+		actions.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
 	}
 
 	/**

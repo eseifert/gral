@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.ui.InteractivePanel.NavigationDirection;
 import de.erichseifert.gral.util.Insets2D;
@@ -66,6 +67,9 @@ public class SimpleBoxPlot extends JPanel {
 					new String[] {"Column 1", "Column 2", "Column 3"}
 			)
 		);
+
+		// Format boxes
+		plot.setSetting(BoxPlot.BOX_BACKGROUND, new QuasiRandomColors());
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

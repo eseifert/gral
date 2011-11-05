@@ -22,11 +22,12 @@
 package de.erichseifert.gral.plots.colors;
 
 import java.awt.Color;
+import java.awt.Paint;
 
 /**
  * Class that generates the colors of a rainbow.
  */
-public class RainbowColors implements ColorMapper {
+public class RainbowColors extends ScaledColorMapper {
 
 	/**
 	 * Creates a new RainbowColors object.
@@ -35,11 +36,11 @@ public class RainbowColors implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Color according to the specified value.
+	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.
-	 * @return Color.
+	 * @return Paint.
 	 */
-	public Color get(double value) {
-		return Color.getHSBColor((float) value, 1f, 1f);
+	public Paint get(double value) {
+		return Color.getHSBColor((float) (value*getScale()), 1f, 1f);
 	}
 }
