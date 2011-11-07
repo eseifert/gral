@@ -24,15 +24,20 @@ package de.erichseifert.gral.plots.colors;
 import java.awt.Color;
 import java.awt.Paint;
 
+import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.MathUtils;
+
 /**
  * Class that generates shades of gray for values between 0.0 and 1.0.
  */
 public class Grayscale extends ScaledColorMapper {
+	private final double[] rgb;
 
 	/**
 	 * Creates a new instance.
 	 */
 	public Grayscale() {
+		rgb = new double[3];
 	}
 
 	/**
@@ -41,6 +46,11 @@ public class Grayscale extends ScaledColorMapper {
 	 * @return Paint.
 	 */
 	public Paint get(double value) {
-		return Color.getHSBColor(0f, 0f, (float) scale(value));
+		GraphicsUtils.luv2rgb(new double[] {100.0*scale(value), 0.0, 0.0}, rgb);
+		return new Color(
+			(float) MathUtils.limit(rgb[0], 0.0, 1.0),
+			(float) MathUtils.limit(rgb[1], 0.0, 1.0),
+			(float) MathUtils.limit(rgb[2], 0.0, 1.0)
+		);
 	}
 }
