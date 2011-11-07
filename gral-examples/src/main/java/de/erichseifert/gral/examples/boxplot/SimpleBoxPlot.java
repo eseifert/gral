@@ -22,6 +22,7 @@
 package de.erichseifert.gral.examples.boxplot;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -30,7 +31,8 @@ import javax.swing.JPanel;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.colors.QuasiRandomColors;
+import de.erichseifert.gral.plots.colors.MultiColor;
+import de.erichseifert.gral.plots.colors.ScaledColorMapper;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.ui.InteractivePanel.NavigationDirection;
 import de.erichseifert.gral.util.Insets2D;
@@ -69,7 +71,9 @@ public class SimpleBoxPlot extends JPanel {
 		);
 
 		// Format boxes
-		plot.setSetting(BoxPlot.BOX_BACKGROUND, new QuasiRandomColors());
+		ScaledColorMapper colors = new MultiColor(Color.RED, Color.BLUE);
+		colors.setRange(1.0, 3.0);
+		plot.setSetting(BoxPlot.BOX_BACKGROUND, colors);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

@@ -27,7 +27,7 @@ import java.awt.Paint;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates shades of gray for values between 0.0 and 1.0.
+ * Class that generates different color shades for values between 0.0 and 1.0.
  */
 public class HeatMap extends ScaledColorMapper {
 	private static final Color[] COLORS = {
@@ -50,7 +50,7 @@ public class HeatMap extends ScaledColorMapper {
 	 * @return Paint.
 	 */
 	public Paint get(double value) {
-		double x = value*getScale();
+		double x = scale(value);
 		double xInv = 1.0 - x;
 		double xInv2 = xInv*xInv;
 		double x2 = x*x;

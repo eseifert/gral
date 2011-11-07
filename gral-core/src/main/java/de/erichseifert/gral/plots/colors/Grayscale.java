@@ -41,6 +41,6 @@ public class Grayscale extends ScaledColorMapper {
 	 * @return Paint.
 	 */
 	public Paint get(double value) {
-		return Color.getHSBColor(0f, 0f, (float) (value * getScale()));
+		return Color.getHSBColor(0f, 0f, (float) scale(value));
 	}
 }

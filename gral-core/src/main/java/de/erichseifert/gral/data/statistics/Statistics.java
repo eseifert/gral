@@ -66,10 +66,10 @@ public class Statistics implements DataListener {
 	This is the second central moment: E((x - E(x))^2) */
 	public static final String VARIANCE_BASE = "variance base"; //$NON-NLS-1$
 	/** Key for specifying the variance of a sample.
-	1/(N - 1) * sum(i=1; i<N; (x[i] - mean)^2) */
+	1/(N - 1) * sum of (x[i] - mean)^2 where i=1..N */
 	public static final String VARIANCE = "sample variance"; //$NON-NLS-1$
 	/** Key for specifying the population variance.
-	1/N * sum(i=1; i<N; (x[i] - mean)^2) */
+	1/N * sum of (x[i] - mean)^2 where i=1..N */
 	public static final String POPULATION_VARIANCE = "population variance"; //$NON-NLS-1$
 	/** Key for specifying the non-normalized skewness.
 	This is the third central moment: E((x - E(x))^3) */

@@ -41,6 +41,6 @@ public class RainbowColors extends ScaledColorMapper {
 	 * @return Paint.
 	 */
 	public Paint get(double value) {
-		return Color.getHSBColor((float) (value*getScale()), 1f, 1f);
+		return Color.getHSBColor((float) scale(value), 1f, 1f);
 	}
 }
