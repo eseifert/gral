@@ -22,7 +22,6 @@
 package de.erichseifert.gral.util;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Class that calculates the values of the Halton sequence.
@@ -61,7 +60,6 @@ public class HaltonSequence implements Iterator<Double> {
     /**
      * Returns the next element in the iteration.
      * @return the next element in the iteration.
-     * @exception NoSuchElementException iteration has no more elements.
      */
 	public Double next() {
 		long i, digit;

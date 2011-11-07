@@ -26,8 +26,12 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	ScaledColorMapperTest.class,
+	GrayscaleTest.class,
 	RainbowColorsTest.class,
 	SingleColorTest.class,
+	MultiColorTest.class,
+	HeatMapTest.class,
 	RandomColorsTest.class,
 	QuasiRandomColorsTest.class
 })

@@ -286,7 +286,7 @@ public abstract class GraphicsUtils {
 			luv = new double[xyz.length];
 		}
 		if (yr > CIE_EPSILON) {
-			luv[0] = (116.0*Math.pow(yr, 1.0/3.0) - 16.0);
+			luv[0] = 116.0*Math.pow(yr, 1.0/3.0) - 16.0;
 		} else {
 			luv[0] = CIE_KAPPA*yr;
 		}

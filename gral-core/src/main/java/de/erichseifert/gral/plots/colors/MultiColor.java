@@ -34,6 +34,7 @@ import de.erichseifert.gral.util.MathUtils;
  * Linearly blends different colors for values between 0.0 and 1.0.
  */
 public class MultiColor extends ScaledColorMapper {
+	/** Colors that will be used for blending. **/
 	private final List<Color> colors;
 
 	/**
@@ -91,7 +92,7 @@ public class MultiColor extends ScaledColorMapper {
 
 	/**
 	 * Returns the colors that are used for blending.
-	 * @return
+	 * @return A list of colors in the order they will be used for blending.
 	 */
 	public List<Color> getColors() {
 		return Collections.unmodifiableList(colors);
