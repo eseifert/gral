@@ -39,6 +39,7 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.Placement;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -82,6 +83,8 @@ public class BarPlot extends XYPlot {
 		 */
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
+			setSettingDefault(VALUE_ALIGNMENT_Y, 0.0);
+			setSettingDefault(VALUE_PLACEMENT, Placement.OUTSIDE);
 		}
 
 		/**

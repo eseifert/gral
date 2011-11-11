@@ -72,13 +72,12 @@ public class HistogramPlot extends JPanel {
 		plot.setSetting(BarPlot.BAR_WIDTH, 0.78);
 
 		// Format x axis
-		plot.getAxis(BarPlot.AXIS_X).setRange(-4.4, 4.4);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.8);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
 		// Format y axis
 		plot.getAxis(BarPlot.AXIS_Y).setRange(0.0,
-				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX), 25.0));
+				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX)*1.1, 25.0));
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_MINOR, false);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, -4.4);
@@ -86,6 +85,8 @@ public class HistogramPlot extends JPanel {
 		// Format bars
 		plot.getPointRenderer(histogram2d).setSetting(
 				PointRenderer.COLOR, new Color(0.5f, 0.6f, 0.7f, 0.5f));
+		plot.getPointRenderer(histogram2d).setSetting(
+				PointRenderer.VALUE_DISPLAYED, true);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

@@ -35,35 +35,48 @@ import de.erichseifert.gral.util.SettingsStorage;
  * <p>An interface providing functions for rendering points in a plot.
  * It defines methods for:</p>
  * <ul>
- *   <li>Retrieving the point of a certain cell in a DataTable</li>
+ *   <li>Retrieving the point of a certain row in a DataTable</li>
  *   <li>Getting and setting the points color</li>
  *   <li>Getting and setting the bounds of the points</li>
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Shape} instance defining the form of the point. */
+	/** Key for specifying the {@link java.awt.Shape} instance defining the
+	form of the point. */
 	static final Key SHAPE = new Key("point"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the point shape. */
 	static final Key COLOR = new Key("point.color"); //$NON-NLS-1$
 
-	/** Key for specifying whether the data value of a point is displayed or
-	not. */
+	/** Key for specifying a {@link java.lang.Boolean} value whether the data
+	value of a point is displayed or not. */
 	static final Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.lang.Number} value that positions the
-	value horizontally. */
+	/** Key for specifying the {@link java.lang.Number} value that positions
+	the value horizontally. */
 	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.lang.Number} value that positions the
-	value vertically. */
+	/** Key for specifying the {@link java.lang.Number} value that positions
+	the value vertically. */
 	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
+	/** Key for specifying the {@link de.erichseifert.gral.util.Placement}
+	value that specifies whether the value should be displayed inside or
+	outside of the point. */
+	static final Key VALUE_PLACEMENT = new Key("point.value.placement"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the distance
+	 of values to the point. The distance is specified relative to the font
+	 height. */
+	static final Key VALUE_DISTANCE = new Key("point.value.placement"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
 	static final Key VALUE_COLOR = new Key("point.value.paint"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.awt.Font} instance to be used to
+	paint the value text. */
+	static final Key VALUE_FONT = new Key("point.value.font"); //$NON-NLS-1$
 
-	/** Key for specifying whether the error value is displayed. */
+	/** Key for specifying a {@link java.lang.Boolean} value whether the error
+	value is displayed. */
 	static final Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
