@@ -37,13 +37,13 @@ import java.text.Format;
 import java.text.NumberFormat;
 
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.Placement;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
@@ -64,16 +64,16 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		setSettingDefault(SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
 		setSettingDefault(COLOR, Color.BLACK);
 
-		setSettingDefault(VALUE_DISPLAYED, false);
+		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(VALUE_FORMAT, NumberFormat.getInstance());
+		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
-		setSettingDefault(VALUE_PLACEMENT, Placement.INSIDE);
 		setSettingDefault(VALUE_DISTANCE, 1.0);
 		setSettingDefault(VALUE_COLOR, Color.BLACK);
 		setSettingDefault(VALUE_FONT, Font.decode(null));
 
-		setSettingDefault(ERROR_DISPLAYED, false);
+		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(ERROR_COLOR, Color.BLACK);
 		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
 		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
@@ -87,41 +87,52 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 */
 	protected void drawValue(DrawingContext context,
 			Shape point, Object value) {
+		// Value format
 		Format format = getSetting(VALUE_FORMAT);
+		// Text to display
 		String text = format.format(value);
-		Label valueLabel = new Label(text);
-		valueLabel.setSetting(Label.ALIGNMENT_X, getSetting(VALUE_ALIGNMENT_X));
-		valueLabel.setSetting(Label.ALIGNMENT_Y, getSetting(VALUE_ALIGNMENT_Y));
-		valueLabel.setSetting(Label.COLOR, getSetting(VALUE_COLOR));
-		valueLabel.setSetting(Label.FONT, getSetting(VALUE_FONT));
+		// Font
+		Font font = getSetting(VALUE_FONT);
+		double fontSize = font.getSize2D();
+		// Location
+		Location location = getSetting(VALUE_LOCATION);
+		// Distance
+		Number distanceObj = getSetting(VALUE_DISTANCE);
+		double distance = MathUtils.isCalculatable(distanceObj)
+			? distanceObj.doubleValue()*fontSize : 0.0;
 
-		double fontSize = this.<Font>getSetting(VALUE_FONT).getSize2D();
-		Placement placement = getSetting(VALUE_PLACEMENT);
-		Number valueDistanceObj = getSetting(VALUE_DISTANCE);
-		double valueDistance = MathUtils.isCalculatable(valueDistanceObj)
-			? valueDistanceObj.doubleValue()*fontSize : 0.0;
+		Label label = new Label(text);
+		label.setSetting(Label.ALIGNMENT_X, getSetting(VALUE_ALIGNMENT_X));
+		label.setSetting(Label.ALIGNMENT_Y, getSetting(VALUE_ALIGNMENT_Y));
+		label.setSetting(Label.COLOR, getSetting(VALUE_COLOR));
+		label.setSetting(Label.FONT, font);
+
 		Rectangle2D boundsPoint = point.getBounds2D();
-		if (placement == Placement.OUTSIDE) {
-			Dimension2D boundsValue = valueLabel.getPreferredSize();
-			double padX = valueDistance + boundsValue.getWidth();
-			double padY = valueDistance + boundsValue.getHeight();
-			valueLabel.setBounds(
-				boundsPoint.getX() - padX,
-				boundsPoint.getY() - padY,
-				boundsPoint.getWidth() + 2.0*padX,
-				boundsPoint.getHeight() + 2.0*padY
-			);
-		} else if (placement == Placement.INSIDE) {
-			double padX = valueDistance;
-			double padY = valueDistance;
-			valueLabel.setBounds(
-				boundsPoint.getX() + padX,
-				boundsPoint.getY() + padY,
-				boundsPoint.getWidth() - 2.0*padX,
-				boundsPoint.getHeight() - 2.0*padY
-			);
+		Dimension2D boundsLabel = label.getPreferredSize();
+
+		// Horizontal layout
+		double x, w = boundsLabel.getWidth();
+		if (location == Location.NORTH_EAST || location == Location.EAST || location == Location.SOUTH_EAST) {
+			x = boundsPoint.getMinX() - distance - boundsLabel.getWidth();
+		} else if (location == Location.NORTH_WEST || location == Location.WEST || location == Location.SOUTH_WEST) {
+			x = boundsPoint.getMaxX() + distance + boundsLabel.getWidth();
+		} else {
+			x = boundsPoint.getX() + distance;
+			w = boundsPoint.getWidth() - 2.0*distance;
 		}
-		valueLabel.draw(context);
+		// Vertical layout
+		double y, h = boundsLabel.getHeight();
+		if (location == Location.NORTH_EAST || location == Location.NORTH || location == Location.NORTH_WEST) {
+			y = boundsPoint.getMinY() - distance - boundsLabel.getHeight();
+		} else if (location == Location.SOUTH_EAST || location == Location.SOUTH || location == Location.SOUTH_WEST) {
+			y = boundsPoint.getMaxY() + distance + boundsLabel.getHeight();
+		} else {
+			y = boundsPoint.getY() + distance;
+			h = boundsPoint.getHeight() - 2.0*distance;
+		}
+
+		label.setBounds(x, y, w, h);
+		label.draw(context);
 	}
 
 	/**

@@ -23,11 +23,13 @@ package de.erichseifert.gral.examples.barplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.LinearGradientPaint;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.points.PointRenderer;
@@ -73,7 +75,10 @@ public class SimpleBarPlot extends JPanel {
 				)
 		);
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		pointRenderer.setSetting(PointRenderer.VALUE_ALIGNMENT_Y, 0.5);
+		pointRenderer.setSetting(PointRenderer.VALUE_LOCATION, Location.CENTER);
+		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, Color.WHITE);
+		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
+				Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot));

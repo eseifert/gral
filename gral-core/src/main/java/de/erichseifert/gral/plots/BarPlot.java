@@ -31,6 +31,7 @@ import java.util.List;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -39,7 +40,6 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.Placement;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -83,8 +83,7 @@ public class BarPlot extends XYPlot {
 		 */
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
-			setSettingDefault(VALUE_ALIGNMENT_Y, 0.0);
-			setSettingDefault(VALUE_PLACEMENT, Placement.OUTSIDE);
+			setSettingDefault(VALUE_LOCATION, Location.NORTH);
 		}
 
 		/**
@@ -140,17 +139,6 @@ public class BarPlot extends XYPlot {
 			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 			double axisYOrigin = 0.0;
-
-			/*
-			double axisYMin = axisY.getMin().doubleValue();
-			double axisYMax = axisY.getMax().doubleValue();
-			double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
-
-			if ((axisYOrigin <= axisYMin && valueY <= axisYMin) ||
-			    (axisYOrigin >= axisYMax && valueY >= axisYMax)) {
-				return new Path2D.Double();
-			}
-			//*/
 
 			double barWidthRel =
 				plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();

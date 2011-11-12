@@ -54,20 +54,19 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
+	/** Key for specifying the positioning of the data value using a
+	{@link de.erichseifert.gral.Location} value. */
+	public static final Key VALUE_LOCATION = new Key("point.value.location"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.lang.Number} value that positions
 	the value horizontally. */
 	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.lang.Number} value that positions
 	the value vertically. */
 	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.util.Placement}
-	value that specifies whether the value should be displayed inside or
-	outside of the point. */
-	static final Key VALUE_PLACEMENT = new Key("point.value.placement"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the distance
 	 of values to the point. The distance is specified relative to the font
 	 height. */
-	static final Key VALUE_DISTANCE = new Key("point.value.placement"); //$NON-NLS-1$
+	static final Key VALUE_DISTANCE = new Key("point.value.distance"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
 	static final Key VALUE_COLOR = new Key("point.value.paint"); //$NON-NLS-1$
@@ -80,7 +79,7 @@ public interface PointRenderer extends SettingsStorage {
 	static final Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
-	static final Key ERROR_COLOR = new Key("point.error.color"); //$NON-NLS-1$
+	static final Key ERROR_COLOR = new Key("point.error.paint"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Shape} instance defining the
 	form of the points at the end of the error bars. */
 	static final Key ERROR_SHAPE = new Key("point.error.shape"); //$NON-NLS-1$
