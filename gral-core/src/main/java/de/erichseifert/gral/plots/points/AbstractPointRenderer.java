@@ -98,8 +98,10 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		Location location = getSetting(VALUE_LOCATION);
 		// Distance
 		Number distanceObj = getSetting(VALUE_DISTANCE);
-		double distance = MathUtils.isCalculatable(distanceObj)
-			? distanceObj.doubleValue()*fontSize : 0.0;
+		double distance = 0.0;
+		if (MathUtils.isCalculatable(distanceObj)) {
+			distance = distanceObj.doubleValue()*fontSize;
+		}
 
 		Label label = new Label(text);
 		label.setSetting(Label.ALIGNMENT_X, getSetting(VALUE_ALIGNMENT_X));

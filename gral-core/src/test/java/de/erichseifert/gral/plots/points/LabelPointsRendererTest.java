@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots.points;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.awt.Shape;
 
@@ -37,16 +38,32 @@ public class LabelPointsRendererTest {
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
-		table.add(1, 3,  1); // 0
-		table.add(2, 1,  2); // 1
-		table.add(3, 2, -1); // 2
+		table.add(1, 3, 1);              // 0
+		table.add(2, (Integer) null, 2); // 1
 	}
 
 	@Test
 	public void testPointPath() {
-		PointRenderer labelRenderer = new LabelPointRenderer();
-		Shape path = labelRenderer.getPointPath(new Row(table, 0));
+		PointRenderer r = new LabelPointRenderer();
+		Shape path = r.getPointPath(new Row(table, 0));
 		assertNotNull(path);
 	}
 
+	@Test
+	public void testInvalidColumn() {
+		PointRenderer r = new LabelPointRenderer();
+		r.setSetting(LabelPointRenderer.COLUMN, table.getColumnCount());
+		Shape path = r.getPointPath(new Row(table, 0));
+		assertNull(path);
+	}
+
+	@Test
+	public void testNullLabel() {
+		PointRenderer r = new LabelPointRenderer();
+		r.setSetting(LabelPointRenderer.COLUMN, 1);
+		Row row = new Row(table, 1);
+		assertNull(row.get(1));
+		Shape path = r.getPointPath(row);
+		assertNull(path);
+	}
 }

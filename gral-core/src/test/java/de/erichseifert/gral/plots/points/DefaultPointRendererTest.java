@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.points;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -35,37 +37,55 @@ import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
-
 public class DefaultPointRendererTest {
 	private static DataTable table;
 	private static Row row;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		table = new DataTable(Integer.class);
-		table.add(1); // 0
-		table.add(2); // 1
-		table.add(3); // 2
-		table.add(4); // 3
-		table.add(5); // 4
-		table.add(6); // 5
-		table.add(7); // 6
-		table.add(8); // 7
+		table = new DataTable(Integer.class, Integer.class);
+		table.add(1, 9); // 0
+		table.add(2, 8); // 1
+		table.add(3, 7); // 2
+		table.add(4, 6); // 3
+		table.add(5, 5); // 4
+		table.add(6, 4); // 5
+		table.add(7, 3); // 6
+		table.add(8, 1); // 7
 
 		row = new Row(table, 0);
 	}
 
-	@Test
-	public void testPoint() {
-		// Get line
-		PointRenderer r = new DefaultPointRenderer();
+	private static void assertPointRenderer(PointRenderer r) {
+		// Get point
 		Drawable point = r.getPoint(null, null, row);
 		assertNotNull(point);
 
 		// Draw line
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		point.draw(context);
+		assertNonEmptyImage(image);
+	}
+
+	@Test
+	public void testPoint() {
+		PointRenderer r = new DefaultPointRenderer();
+		assertPointRenderer(r);
+	}
+
+	@Test
+	public void testDisplayValue() {
+		PointRenderer r = new DefaultPointRenderer();
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		assertPointRenderer(r);
+	}
+
+	@Test
+	public void testDisplayError() {
+		PointRenderer r = new DefaultPointRenderer();
+		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
+		assertPointRenderer(r);
 	}
 
 	@Test

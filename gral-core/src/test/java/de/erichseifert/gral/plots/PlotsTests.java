@@ -45,6 +45,7 @@ import de.erichseifert.gral.plots.points.PointsTests;
 	PiePlotTest.class,
 	BarPlotTest.class,
 	BoxPlotTest.class,
+	RasterPlotTest.class,
 	PlotNavigatorTest.class
 })
 public class PlotsTests {

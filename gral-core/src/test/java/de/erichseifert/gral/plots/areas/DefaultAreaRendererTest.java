@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.areas;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -64,10 +66,10 @@ public class DefaultAreaRendererTest {
 		assertNotNull(area);
 
 		// Draw area
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
-		// TODO Assert something
+		assertNonEmptyImage(image);
 	}
 
 	@Test

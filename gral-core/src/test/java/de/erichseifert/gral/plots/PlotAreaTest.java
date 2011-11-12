@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -75,11 +77,12 @@ public class PlotAreaTest {
 		plotArea.setSetting(Plot.BACKGROUND, Color.WHITE);
 		plotArea.setSetting(Plot.BORDER, new BasicStroke(1f));
 
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plotArea.draw(context);
 		assertTrue(plotArea.isDrawn);
+		assertNonEmptyImage(image);
 	}
 
 }

@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.lines;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -49,13 +51,14 @@ public class DiscreteLineRendererTest {
 			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
 		);
 
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		for (Orientation dir : Orientation.values()) {
 			r.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, dir);
 			Drawable line = r.getLine(points);
 			assertNotNull(line);
 			line.draw(context);
+			assertNonEmptyImage(image);
 		}
 	}
 

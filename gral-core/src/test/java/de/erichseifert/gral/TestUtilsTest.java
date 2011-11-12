@@ -19,57 +19,44 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.plots.lines;
+package de.erichseifert.gral;
 
 import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.PointND;
-
-public class SmoothLineRendererTest {
+public class TestUtilsTest {
+	@Test
+	public void testCreateTestImage() {
+		BufferedImage image = createTestImage();
+		assertNotNull(image);
+		assertTrue(image.getWidth() > 0);
+		assertTrue(image.getHeight() > 0);
+		assertEquals(BufferedImage.TYPE_INT_ARGB, image.getType());
+	}
 
 	@Test
-	public void testLine() {
-		// Get line
-		LineRenderer r = new SmoothLineRenderer2D();
-		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
-		);
+	public void testAssertNonEmptyImage() {
+		BufferedImage image = new BufferedImage(40, 30, BufferedImage.TYPE_INT_ARGB);
 
-		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-		r.setSetting(SmoothLineRenderer2D.SMOOTHNESS, 0.5);
-		Drawable line = r.getLine(points);
-		assertNotNull(line);
-		line.draw(context);
+		// Assert must fail on empty image
+		try {
+			assertNonEmptyImage(image);
+			fail();
+		} catch (AssertionError e) {
+		}
+
+		// Assert must succeed on empty image
+		Color color = Color.BLACK;
+		image.setRGB(0, 0, color.getRGB());
 		assertNonEmptyImage(image);
 	}
-
-	@Test
-	public void testSettings() {
-		// Get
-		LineRenderer r = new SmoothLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-		// Set
-		r.setSetting(LineRenderer.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer.COLOR));
-		// Remove
-		r.removeSetting(LineRenderer.COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-	}
-
 }

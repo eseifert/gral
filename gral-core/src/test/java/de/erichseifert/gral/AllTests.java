@@ -33,6 +33,7 @@ import de.erichseifert.gral.util.UtilTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	TestUtilsTest.class,
 	UtilTests.class,
 	DataTests.class,
 	PlotsTests.class,

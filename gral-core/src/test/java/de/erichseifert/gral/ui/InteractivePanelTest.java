@@ -21,11 +21,15 @@
  */
 package de.erichseifert.gral.ui;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -35,8 +39,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
+import de.erichseifert.gral.DrawingContext;
 
 public class InteractivePanelTest {
 	private static Drawable drawable;
@@ -44,7 +49,12 @@ public class InteractivePanelTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		drawable = new DrawableContainer();
+		drawable = new AbstractDrawable() {
+			public void draw(DrawingContext context) {
+				Graphics2D g = context.getGraphics();
+				g.draw(new Line2D.Double(0.0, 0.0, 0.0, 0.0));
+			}
+		};
 	}
 
 	@Before
@@ -60,18 +70,25 @@ public class InteractivePanelTest {
 
 	@Test
 	public void testPrint() throws PrinterException {
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = (Graphics2D) image.getGraphics();
+		BufferedImage image;
 		PageFormat page = new PageFormat();
 		int ret;
 
 		// Test valid page
-		ret = panel.print(graphics, page, 0);
+		image = createTestImage();
+		ret = panel.print(image.getGraphics(), page, 0);
 		assertEquals(Printable.PAGE_EXISTS, ret);
+		assertNonEmptyImage(image);
 
 		// Test invalid page
-		ret = panel.print(graphics, page, 1);
+		image = createTestImage();
+		ret = panel.print(image.getGraphics(), page, 1);
 		assertEquals(Printable.NO_SUCH_PAGE, ret);
+		try {
+			assertNonEmptyImage(image);
+			fail();
+		} catch (AssertionError e) {
+		}
 	}
 
 }

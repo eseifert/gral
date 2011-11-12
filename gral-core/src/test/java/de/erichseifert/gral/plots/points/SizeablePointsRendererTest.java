@@ -41,35 +41,72 @@ public class SizeablePointsRendererTest {
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
-		table.add(1, 3,  1); // 0
-		table.add(2, 1,  2); // 1
-		table.add(3, 2, -1); // 2
+		table.add(1, 3, 1);              // 0
+		table.add(2, 5, 2);              // 1
+		table.add(3, 2, -1);             // 2
+		table.add(4, 1, 0);              // 3
+		table.add(5, 4, (Integer) null); // 4
 
 		shape = new Rectangle2D.Double(-5.0, -5.0, 10.0, 10.0);
 	}
 
 	@Test
-	public void testPointPath() {
-		// Unsized shape
-		PointRenderer unsized = new SizeablePointRenderer();
-		unsized.setSetting(PointRenderer.SHAPE, shape);
-		Shape unsizedExpected = shape;
-		Shape unsizedPath = unsized.getPointPath(new Row(table, 0));
-		assertEquals(unsizedExpected.getBounds2D(), unsizedPath.getBounds2D());
-
-		// Unsized shape
-		PointRenderer sized = new SizeablePointRenderer();
-		sized.setSetting(PointRenderer.SHAPE, shape);
-		Shape sizedExpected = AffineTransform.getScaleInstance(2.0, 2.0)
-				.createTransformedShape(shape);
-		Shape sizedPath = sized.getPointPath(new Row(table, 1));
-		assertEquals(sizedExpected.getBounds2D(), sizedPath.getBounds2D());
-
-		// Invalid size
-		PointRenderer invalid = new SizeablePointRenderer();
-		invalid.setSetting(PointRenderer.SHAPE, shape);
-		Shape invalidPath = invalid.getPointPath(new Row(table, 2));
-		assertNull(invalidPath);
+	public void testUnsized() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape expected = shape;
+		Shape path = r.getPointPath(new Row(table, 0));
+		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}
 
+	@Test
+	public void testSized() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape expected = AffineTransform.getScaleInstance(2.0, 2.0)
+				.createTransformedShape(shape);
+		Shape path = r.getPointPath(new Row(table, 1));
+		assertEquals(expected.getBounds2D(), path.getBounds2D());
+	}
+
+	@Test
+	public void testNegativeSize() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape path = r.getPointPath(new Row(table, 2));
+		assertNull(path);
+	}
+
+	@Test
+	public void testZeroSize() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape path = r.getPointPath(new Row(table, 3));
+		assertNull(path);
+	}
+
+	@Test
+	public void testNullSize() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape path = r.getPointPath(new Row(table, 4));
+		assertNull(path);
+	}
+
+	@Test
+	public void testInvalidColumn() {
+		PointRenderer r = new SizeablePointRenderer();
+		r.setSetting(PointRenderer.SHAPE, shape);
+		Shape path;
+
+		// Column index too big
+		r.setSetting(SizeablePointRenderer.COLUMN, table.getColumnCount());
+		path = r.getPointPath(new Row(table, 0));
+		assertEquals(shape, path);
+
+		// Column index too small
+		r.setSetting(SizeablePointRenderer.COLUMN, -1);
+		path = r.getPointPath(new Row(table, 0));
+		assertEquals(shape, path);
+	}
 }

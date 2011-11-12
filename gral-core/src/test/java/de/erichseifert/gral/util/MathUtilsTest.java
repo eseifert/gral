@@ -174,4 +174,23 @@ public class MathUtilsTest {
 		assertEquals(75.00, MathUtils.quantile(values, 1.0), DELTA);
 	}
 
+	@Test
+	public void testIsCalculatable() {
+		// Number
+		assertTrue(MathUtils.isCalculatable(new Byte((byte) 0)));
+		assertTrue(MathUtils.isCalculatable(new Integer(0)));
+		assertTrue(MathUtils.isCalculatable(new Long(0L)));
+		assertTrue(MathUtils.isCalculatable(new Float(0f)));
+		assertTrue(MathUtils.isCalculatable(new Double(0.0)));
+		assertFalse(MathUtils.isCalculatable(null));
+		assertFalse(MathUtils.isCalculatable(new Double(Double.NaN)));
+		assertFalse(MathUtils.isCalculatable(new Double(Double.NEGATIVE_INFINITY)));
+		assertFalse(MathUtils.isCalculatable(new Double(Double.POSITIVE_INFINITY)));
+
+		// double
+		assertTrue(MathUtils.isCalculatable(0.0));
+		assertFalse(MathUtils.isCalculatable(Double.NaN));
+		assertFalse(MathUtils.isCalculatable(Double.NEGATIVE_INFINITY));
+		assertFalse(MathUtils.isCalculatable(Double.POSITIVE_INFINITY));
+	}
 }

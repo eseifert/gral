@@ -102,7 +102,7 @@ public class BoxPlot extends XYPlot {
 	public static final Key BAR_MEDIAN_STROKE =
 		new Key("boxplot.bar.median.stroke"); //$NON-NLS-1$
 
-	private final DataSource data;
+	private DataSource data;
 	private final DataTable stats;
 
 	/**
@@ -282,8 +282,7 @@ public class BoxPlot extends XYPlot {
 		// Generate data source with statistical values for each column
 		stats = new DataTable(Integer.class, Double.class,
 			Double.class, Double.class, Double.class, Double.class);
-		updateBoxData();
-		add(stats);
+		add(data);
 
 		// Adjust axes to generated data series
 		getAxis(AXIS_X).setRange(0.5, data.getColumnCount() + 0.5);
@@ -302,6 +301,10 @@ public class BoxPlot extends XYPlot {
 		// Remove old entries
 		stats.clear();
 
+		if (data == null) {
+			return;
+		}
+
 		// Generate statistical values for each column
 		for (int c = 0; c < data.getColumnCount(); c++) {
 			Column col = data.getColumn(c);
@@ -318,11 +321,25 @@ public class BoxPlot extends XYPlot {
 
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
-		if (getData().size() != 0) {
+		if (getData().size() > 0) {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		super.add(index, source, visible);
+		data = source;
+		updateBoxData();
+		super.add(index, stats, visible);
+		stats.removeDataListener(this);
+	}
+
+	@Override
+	public boolean remove(DataSource source) {
+		boolean existed = false;
+		if (source == data) {
+			existed = super.remove(stats);
+			data = null;
+			updateBoxData();
+		}
+		return existed;
 	}
 
 	@Override

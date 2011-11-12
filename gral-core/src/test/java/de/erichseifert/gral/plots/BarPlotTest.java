@@ -37,19 +37,26 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 
 public class BarPlotTest {
-	private BarPlot plot;
-	private boolean isDrawn;
+	private MockBarPlot plot;
+
+	private static final class MockBarPlot extends BarPlot {
+		public boolean isDrawn;
+
+		public MockBarPlot(DataSource... data) {
+			super(data);
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			super.draw(context);
+			isDrawn = true;
+		}
+	}
 
 	@Before
 	public void setUp() {
 		DataSource data = new DummyData(2, 1, 1.0);
-		plot = new BarPlot(data) {
-			@Override
-			public void draw(DrawingContext context) {
-				super.draw(context);
-				isDrawn = true;
-			}
-		};
+		plot = new MockBarPlot(data);
 	}
 
 	@Test
@@ -74,7 +81,7 @@ public class BarPlotTest {
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
-		assertTrue(isDrawn);
+		assertTrue(plot.isDrawn);
 	}
 
 }

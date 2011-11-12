@@ -48,10 +48,10 @@ public class LabelPointRenderer extends DefaultPointRenderer {
 	public static final Key FONT = new Key("labelPoint.font"); //$NON-NLS-1$
 	/** Key for specifying the horizontal alignment relative to the data point.
 	0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X = new Key("label.alignment.x"); //$NON-NLS-1$
+	public static final Key ALIGNMENT_X = new Key("labelPoint.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying the vertical alignment relative to the data point.
 	0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
+	public static final Key ALIGNMENT_Y = new Key("labelPoint.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link de.erichseifert.gral.Location}
 	value where the label will be aligned at. */
 

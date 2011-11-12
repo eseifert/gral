@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -51,9 +53,10 @@ public class LogarithmicRenderer2DTest {
 		axis.setRange(0.1, 10.0);
 		Drawable d = renderer.getRendererComponent(axis);
 		assertNotNull(d);
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		d.draw(context);
+		assertNonEmptyImage(image);
 	}
 
 	@Test

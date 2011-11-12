@@ -23,17 +23,17 @@ package de.erichseifert.gral.data.statistics;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.util.Orientation;
 
 public class HistogramTest {
-	private static DataTable table;
+	private DataTable table;
 
-	@BeforeClass
-	public static void setUpBeforeClass() {
+	@Before
+	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
 		table.add(1, 3); // 1
@@ -119,4 +119,19 @@ public class HistogramTest {
 		}
 	}
 
+	@Test
+	public void testDataAdd() {
+		Histogram histogram = new Histogram1D(table, Orientation.VERTICAL, 4);
+		assertEquals(3L, histogram.get(0, 0));
+		table.add(1, 1);
+		assertEquals(4L, histogram.get(0, 0));
+	}
+
+	@Test
+	public void testDataRemove() {
+		Histogram histogram = new Histogram1D(table, Orientation.VERTICAL, 4);
+		assertEquals(3L, histogram.get(0, 0));
+		table.remove(0);
+		assertEquals(2L, histogram.get(0, 0));
+	}
 }

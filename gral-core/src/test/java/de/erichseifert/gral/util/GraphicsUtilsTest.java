@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.util;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -51,18 +53,27 @@ public class GraphicsUtilsTest {
 
 	@Test
 	public void testPaintedShape() {
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = (Graphics2D) image.getGraphics();
+		BufferedImage image;
 		Shape shape = new Rectangle2D.Double(10.0, 10.0, 300.0, 220.0);
 		Paint paint = Color.red;
 
-		GraphicsUtils.fillPaintedShape(graphics, shape, paint, null);
-		Rectangle2D paintBounds = shape.getBounds2D();
-		GraphicsUtils.fillPaintedShape(graphics, shape, paint, paintBounds);
+		image = createTestImage();
+		GraphicsUtils.fillPaintedShape((Graphics2D) image.getGraphics(), shape, paint, null);
+		assertNonEmptyImage(image);
 
-		GraphicsUtils.drawPaintedShape(graphics, shape, paint, paintBounds, null);
+		image = createTestImage();
+		Rectangle2D paintBounds = shape.getBounds2D();
+		GraphicsUtils.fillPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds);
+		assertNonEmptyImage(image);
+
+		image = createTestImage();
+		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, null);
+		assertNonEmptyImage(image);
+
 		BasicStroke stroke = new BasicStroke(2f);
-		GraphicsUtils.drawPaintedShape(graphics, shape, paint, paintBounds, stroke);
+		image = createTestImage();
+		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, stroke);
+		assertNonEmptyImage(image);
 	}
 
 	private static void assertEqualsArray(double[] expected, double[] actual, double delta) {

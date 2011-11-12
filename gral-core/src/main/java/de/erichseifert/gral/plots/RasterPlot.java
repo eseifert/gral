@@ -73,7 +73,7 @@ public class RasterPlot extends XYPlot {
 	public static final Key COLORS =
 		new Key("rasterplot.color"); //$NON-NLS-1$
 
-	private final DataSource data;
+	private DataSource data;
 	private final DataTable pixels;
 
 	/**
@@ -177,10 +177,8 @@ public class RasterPlot extends XYPlot {
 		data.addDataListener(this);
 
 		// Generated new data series
-		pixels = new DataTable(
-			Double.class, Double.class, Double.class);
-		updatePixelData();
-		add(pixels);
+		pixels = new DataTable(Double.class, Double.class, Double.class);
+		add(data);
 
 		// Adjust axes to generated data series
 		getAxis(AXIS_X).setRange(0.0, data.getColumnCount());
@@ -199,6 +197,10 @@ public class RasterPlot extends XYPlot {
 		// Remove old entries
 		pixels.clear();
 
+		if (data == null) {
+			return;
+		}
+
 		// Generate pixel data with (x, y, value)
 		Statistics stats = data.getStatistics();
 		double min = stats.get(Statistics.MIN);
@@ -216,11 +218,25 @@ public class RasterPlot extends XYPlot {
 
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
-		if (getData().size() != 0) {
+		if (getData().size() > 0) {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		super.add(index, source, visible);
+		data = source;
+		updatePixelData();
+		super.add(index, pixels, visible);
+		pixels.removeDataListener(this);
+	}
+
+	@Override
+	public boolean remove(DataSource source) {
+		boolean existed = false;
+		if (source == data) {
+			existed = super.remove(pixels);
+			data = null;
+			updatePixelData();
+		}
+		return existed;
 	}
 
 	@Override

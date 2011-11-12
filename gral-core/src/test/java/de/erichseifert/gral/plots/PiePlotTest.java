@@ -21,9 +21,12 @@
  */
 package de.erichseifert.gral.plots;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -37,19 +40,27 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 
 public class PiePlotTest {
-	private PiePlot plot;
-	private boolean isDrawn;
+	private DataSource data;
+	private MockPiePlot plot;
+
+	private static final class MockPiePlot extends PiePlot {
+		public boolean isDrawn;
+
+		public MockPiePlot(DataSource data) {
+			super(data);
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			super.draw(context);
+			isDrawn = true;
+		}
+	}
 
 	@Before
 	public void setUp() {
-		DataSource data = new DummyData(1, 3, 1.0);
-		plot = new PiePlot(data) {
-			@Override
-			public void draw(DrawingContext context) {
-				super.draw(context);
-				isDrawn = true;
-			}
-		};
+		data = new DummyData(1, 3, 1.0);
+		plot = new MockPiePlot(data);
 	}
 
 	@Test
@@ -68,11 +79,24 @@ public class PiePlotTest {
 
 	@Test
 	public void testDraw() {
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
-		assertTrue(isDrawn);
+		assertTrue(plot.isDrawn);
+		assertNonEmptyImage(image);
 	}
 
+	@Test
+	public void testAddRemoveData() {
+		plot.remove(data);
+		assertEquals(0, plot.getData().size());
+		plot.add(data);
+		assertEquals(1, plot.getData().size());
+		try {
+			plot.add(data);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+	}
 }

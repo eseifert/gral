@@ -48,11 +48,15 @@ public class SizeablePointRenderer extends DefaultPointRenderer {
 	public Shape getPointPath(Row row) {
 		Shape shape = getSetting(SHAPE);
 		int sizeColumn = this.<Number>getSetting(COLUMN).intValue();
-		if (sizeColumn >= row.size()) {
+		if (sizeColumn >= row.size() || sizeColumn < 0) {
 			return shape;
 		}
-		double size = row.get(sizeColumn).doubleValue();
-		if (size < 0.0 || !MathUtils.isCalculatable(size)) {
+		Number sizeObj = row.get(sizeColumn);
+		if (!MathUtils.isCalculatable(sizeObj)) {
+			return null;
+		}
+		double size = sizeObj.doubleValue();
+		if (size <= 0.0) {
 			return null;
 		}
 		if (size != 1.0) {

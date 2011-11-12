@@ -24,10 +24,10 @@ package de.erichseifert.gral.plots;
 import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -35,63 +35,70 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 
-public class LegendTest {
-	private Legend legend;
-	private boolean isDrawn;
+public class RasterPlotTest {
+	private DataSource data;
+	private MockRasterPlot plot;
+
+	private static final class MockRasterPlot extends RasterPlot {
+		public boolean isDrawn;
+
+		public MockRasterPlot(DataSource data) {
+			super(data);
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			super.draw(context);
+			isDrawn = true;
+		}
+	}
 
 	@Before
 	public void setUp() {
-		legend = new Legend() {
-			@Override
-			protected void drawSymbol(DrawingContext context,
-					Drawable symbol, DataSource data) {
-				isDrawn = true;
-			}
-		};
-	}
-
-	@Test
-	public void testDataSources() {
-		DataSource source = new DummyData(1, 1, 1.0);
-		assertFalse(legend.contains(source));
-		legend.add(source);
-		assertTrue(legend.contains(source));
-		legend.remove(source);
-		assertFalse(legend.contains(source));
+		data = new DummyData(2, 12, 1.0);
+		plot = new MockRasterPlot(data);
 	}
 
 	@Test
 	public void testSettings() {
 		// Get
-		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
+		assertNull(plot.getSetting(Plot.BACKGROUND));
 
 		// Set
-		legend.setSetting(Legend.BACKGROUND, Color.RED);
-		assertEquals(Color.RED, legend.<String>getSetting(Legend.BACKGROUND));
+		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
+		assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
 
 		// Remove
-		legend.removeSetting(Legend.BACKGROUND);
-		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
+		plot.removeSetting(Plot.BACKGROUND);
+		assertNull(plot.getSetting(Plot.BACKGROUND));
 	}
 
 	@Test
 	public void testDraw() {
-		legend.setSetting(Legend.BACKGROUND, Color.WHITE);
-		legend.setSetting(Legend.BORDER, new BasicStroke(1f));
-		legend.add(new DummyData(1, 1, 1.0));
-
+		plot.getAxis(BarPlot.AXIS_X).setRange(-1.0, 3.0);
+		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
 		BufferedImage image = createTestImage();
-		legend.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
+		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-		legend.draw(context);
-		assertTrue(isDrawn);
+		plot.draw(context);
+		assertTrue(plot.isDrawn);
 		assertNonEmptyImage(image);
 	}
 
+	@Test
+	public void testAddRemoveData() {
+		plot.remove(data);
+		assertEquals(0, plot.getData().size());
+		plot.add(data);
+		assertEquals(1, plot.getData().size());
+		try {
+			plot.add(data);
+			fail();
+		} catch (IllegalArgumentException e) {
+		}
+	}
 }

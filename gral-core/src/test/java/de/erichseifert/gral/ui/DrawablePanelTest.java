@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.ui;
 
+import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -28,14 +30,16 @@ import static org.junit.Assert.assertSame;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
+import de.erichseifert.gral.DrawingContext;
 
 public class DrawablePanelTest {
 	private static final double DELTA = 1e-15;
@@ -44,7 +48,12 @@ public class DrawablePanelTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		drawable = new DrawableContainer();
+		drawable = new AbstractDrawable() {
+			public void draw(DrawingContext context) {
+				Graphics2D g = context.getGraphics();
+				g.draw(new Line2D.Double(0.0, 0.0, 0.0, 0.0));
+			}
+		};
 	}
 
 	@Before
@@ -96,10 +105,10 @@ public class DrawablePanelTest {
 
 	@Test
 	public void testDraw() {
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = (Graphics2D) image.getGraphics();
+		BufferedImage image = createTestImage();
 		panel.setBounds(0, 0, image.getWidth(), image.getHeight());
-		panel.paint(graphics);
+		panel.paint(image.getGraphics());
+		assertNonEmptyImage(image);
 	}
 
 }
