@@ -96,10 +96,8 @@ public class BarPlot extends XYPlot {
 		 */
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row) {
-			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
-					// TODO Translate?
 					Shape point = getPointPath(row);
 					Paint paint = BarRenderer.this.getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;

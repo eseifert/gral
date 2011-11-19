@@ -28,8 +28,10 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.BoxPlot;
+import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.MultiColor;
 import de.erichseifert.gral.plots.colors.ScaledColorMapper;
@@ -57,7 +59,8 @@ public class SimpleBoxPlot extends JPanel {
 		}
 
 		// Create new box-and-whisker plot
-		BoxPlot plot = new BoxPlot(data);
+		DataSource boxData = BoxPlot.createBoxData(data);
+		BoxPlot plot = new BoxPlot(boxData);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 20.0));
@@ -73,7 +76,7 @@ public class SimpleBoxPlot extends JPanel {
 		// Format boxes
 		ScaledColorMapper colors = new MultiColor(Color.RED, Color.BLUE);
 		colors.setRange(1.0, 3.0);
-		plot.setSetting(BoxPlot.BOX_BACKGROUND, colors);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BACKGROUND, colors);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

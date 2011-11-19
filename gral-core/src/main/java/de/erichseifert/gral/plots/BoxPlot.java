@@ -34,7 +34,6 @@ import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.Column;
-import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -44,14 +43,28 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
 
 /**
  * <p>Class that displays data as a box-and-whisker plot showing summaries of
- * important statistical values.</p>
+ * important statistical values. The data source must provide six columns to
+ * the <code>BoxPlot</code>:<p>
+ * <ul>
+ *   <li>Box position (for multiple boxes)</li>
+ *   <li>Position of the center bar (e.g. median)</li>
+ *   <li>Length of the lower whisker and position of the bottom bar
+ *   (e.g. minimum)</li>
+ *   <li>Position of the bottom edge of the box (e.g. first quartile)</li>
+ *   <li>Position of the top edge of the box (e.g. third quartile)</li>
+ *   <li>Length of the upper whisker and position of the top bar
+ *   (e.g. maximum)</li>
+ * </li>
+ * <p>The utility method {@link #createBoxData(DataSource)} can be used to
+ * obtain common statistics for these properties from the each column of an
+ * existing data source.</p>
+ * 
  * <p>To create a new <code>BoxPlot</code> simply create a new instance using
  * a data source. Example:</p>
  * <pre>
@@ -59,56 +72,77 @@ import de.erichseifert.gral.util.PointND;
  * data.add(10.98, -12.34);
  * data.add( 7.65,  45.67);
  * data.add(43.21,  89.01);
- *
- * BoxPlot plot = new BoxPlot(data);
+ * DataSource boxData = BoxPlot.createBoxData(data);
+ * BoxPlot plot = new BoxPlot(boxData);
  * </pre>
  */
 public class BoxPlot extends XYPlot {
-	/** Key for specifying a {@link java.lang.Number} value for the relative
-	width of the box. */
-	public static final Key BOX_WIDTH =
-		new Key("boxplot.box.width"); //$NON-NLS-1$
-	/** Key for specifying an instance of
-	{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used to
-	paint the background of the box. */
-	public static final Key BOX_BACKGROUND =
-		new Key("boxplot.box.background"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the border of the box and the lines of bars. */
-	public static final Key BOX_COLOR =
-		new Key("boxplot.box.background"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	paint the border of the box and the lines of the bars. */
-	public static final Key BOX_BORDER =
-		new Key("boxplot.box.border"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the lines of the whiskers. */
-	public static final Key WHISKER_COLOR =
-		new Key("boxplot.whisker.color"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	paint the lines of the whiskers. */
-	public static final Key WHISKER_STROKE =
-		new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the relative
-	width of the minimum and maximum bars. */
-	public static final Key BAR_WIDTH =
-		new Key("boxplot.bar.width"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the lines of the median bar. */
-	public static final Key BAR_MEDIAN_COLOR =
-		new Key("boxplot.bar.median.color"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	paint the lines of the median bar. */
-	public static final Key BAR_MEDIAN_STROKE =
-		new Key("boxplot.bar.median.stroke"); //$NON-NLS-1$
-
-	private DataSource data;
-	private final DataTable stats;
-
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
-	protected static class BoxWhiskerRenderer extends AbstractPointRenderer {
+	public static class BoxWhiskerRenderer extends AbstractPointRenderer {
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the horizontal position of a box. */
+		public static final Key COLUMN_POSITION =
+			new Key("boxplot.position.column"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the center bar. */
+		public static final Key COLUMN_BAR_CENTER =
+			new Key("boxplot.bar.center.column"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the bottom bar. */
+		public static final Key COLUMN_BAR_BOTTOM =
+			new Key("boxplot.bar.bottom.column"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the bottom edge of the box. */
+		public static final Key COLUMN_BOX_BOTTOM =
+			new Key("boxplot.box.bottom.column"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the bottom edge of the box. */
+		public static final Key COLUMN_BOX_TOP =
+			new Key("boxplot.box.top.column"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the top bar. */
+		public static final Key COLUMN_BAR_TOP =
+			new Key("boxplot.bar.top.column"); //$NON-NLS-1$
+		/** Key for specifying a {@link java.lang.Number} value for the relative
+		width of the box. */
+		public static final Key BOX_WIDTH =
+			new Key("boxplot.box.width"); //$NON-NLS-1$
+		/** Key for specifying an instance of
+		{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used to
+		paint the background of the box. */
+		public static final Key BOX_BACKGROUND =
+			new Key("boxplot.box.background"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Paint} instance to be used to
+		paint the border of the box and the lines of bars. */
+		public static final Key BOX_COLOR =
+			new Key("boxplot.box.background"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+		paint the border of the box and the lines of the bars. */
+		public static final Key BOX_BORDER =
+			new Key("boxplot.box.border"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Paint} instance to be used to
+		paint the lines of the whiskers. */
+		public static final Key WHISKER_COLOR =
+			new Key("boxplot.whisker.color"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+		paint the lines of the whiskers. */
+		public static final Key WHISKER_STROKE =
+			new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
+		/** Key for specifying a {@link java.lang.Number} value for the relative
+		width of the bottom and top bars. */
+		public static final Key BAR_WIDTH =
+			new Key("boxplot.bar.width"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Paint} instance to be used to
+		paint the lines of the center bar. */
+		public static final Key BAR_CENTER_COLOR =
+			new Key("boxplot.bar.center.color"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
+		paint the lines of the center bar. */
+		public static final Key BAR_CENTER_STROKE =
+			new Key("boxplot.bar.center.stroke"); //$NON-NLS-1$
+
 		/** Bar plot this renderer is associated to. */
 		private final BoxPlot plot;
 
@@ -119,6 +153,22 @@ public class BoxPlot extends XYPlot {
 		 */
 		public BoxWhiskerRenderer(BoxPlot plot) {
 			this.plot = plot;
+			setSettingDefault(COLUMN_POSITION, 0);
+			setSettingDefault(COLUMN_BAR_CENTER, 1);
+			setSettingDefault(COLUMN_BAR_BOTTOM, 2);
+			setSettingDefault(COLUMN_BOX_BOTTOM, 3);
+			setSettingDefault(COLUMN_BOX_TOP, 4);
+			setSettingDefault(COLUMN_BAR_TOP, 5);
+			setSettingDefault(BOX_WIDTH, 0.75);
+			setSettingDefault(BOX_BACKGROUND, new SingleColor(Color.WHITE));
+			setSettingDefault(BOX_COLOR, Color.BLACK);
+			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
+			setSettingDefault(WHISKER_COLOR, Color.BLACK);
+			setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
+			setSettingDefault(BAR_WIDTH, 0.75);
+			setSettingDefault(BAR_CENTER_COLOR, Color.BLACK);
+			setSettingDefault(BAR_CENTER_STROKE, new BasicStroke(
+				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 		}
 
 		/**
@@ -131,7 +181,6 @@ public class BoxPlot extends XYPlot {
 		 */
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row) {
-			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
 					Axis axisX = plot.getAxis(AXIS_X);
@@ -139,81 +188,88 @@ public class BoxPlot extends XYPlot {
 					AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 					AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 
-					// Get values from data
-					double valueX    = row.get(0).doubleValue();
-					double valueYMin = row.get(2).doubleValue();
-					double valueYQ1  = row.get(3).doubleValue();
-					double valueYQ2  = row.get(1).doubleValue();
-					double valueYQ3  = row.get(4).doubleValue();
-					double valueYMax = row.get(5).doubleValue();
+					// Get the values from data columns
+					BoxWhiskerRenderer renderer =  BoxWhiskerRenderer.this;
+					int colPos = renderer.<Integer>getSetting(COLUMN_POSITION);
+					int colBarCenter = renderer.<Integer>getSetting(COLUMN_BAR_CENTER);
+					int colBarBottom = renderer.<Integer>getSetting(COLUMN_BAR_BOTTOM);
+					int colBoxBottom = renderer.<Integer>getSetting(COLUMN_BOX_BOTTOM);
+					int colBoxTop = renderer.<Integer>getSetting(COLUMN_BOX_TOP);
+					int colBarTop = renderer.<Integer>getSetting(COLUMN_BAR_TOP);
+					double valueX = row.get(colPos).doubleValue();
+					double valueYBarBottom = row.get(colBarBottom).doubleValue();
+					double valueYBoxBottom = row.get(colBoxBottom).doubleValue();
+					double valueYBarCenter = row.get(colBarCenter).doubleValue();
+					double valueYBoxTop = row.get(colBoxTop).doubleValue();
+					double valueYBarTop = row.get(colBarTop).doubleValue();
 
 					// Calculate positions in screen units
-					double boxWidthRel =
-						plot.<Number>getSetting(BoxPlot.BOX_WIDTH).doubleValue();
+					double boxWidthRel = BoxWhiskerRenderer.this.
+						<Number>getSetting(BOX_WIDTH).doubleValue();
 					double boxAlign = 0.5;
 					// Box X
 					double boxXMin = axisXRenderer
 						.getPosition(axisX, valueX - boxWidthRel*boxAlign, true, false)
 						.get(PointND.X);
 					double boxX = axisXRenderer.getPosition(
-							axisX, valueX, true, false).get(PointND.X);
+						axisX, valueX, true, false).get(PointND.X);
 					double boxXMax = axisXRenderer
 						.getPosition(axisX, valueX + boxWidthRel*boxAlign, true, false)
 						.get(PointND.X);
 					// Box Y
-					double boxYMin = axisYRenderer.getPosition(
-							axisY, valueYMin, true, false).get(PointND.Y);
-					double boxYQ1 = axisYRenderer.getPosition(
-							axisY, valueYQ1, true, false).get(PointND.Y);
-					double boxY = axisYRenderer.getPosition(
-							axisY, valueYQ2, true, false).get(PointND.Y);
-					double boxYQ3 = axisYRenderer.getPosition(
-							axisY, valueYQ3, true, false).get(PointND.Y);
-					double boxYMax = axisYRenderer.getPosition(
-							axisY, valueYMax, true, false).get(PointND.Y);
+					double barYbottom = axisYRenderer.getPosition(
+							axisY, valueYBarBottom, true, false).get(PointND.Y);
+					double boxYBottom = axisYRenderer.getPosition(
+							axisY, valueYBoxBottom, true, false).get(PointND.Y);
+					double barYCenter = axisYRenderer.getPosition(
+							axisY, valueYBarCenter, true, false).get(PointND.Y);
+					double boxYTop = axisYRenderer.getPosition(
+							axisY, valueYBoxTop, true, false).get(PointND.Y);
+					double barYTop = axisYRenderer.getPosition(
+							axisY, valueYBarTop, true, false).get(PointND.Y);
 					double boxWidth = Math.abs(boxXMax - boxXMin);
 					// Bars
-					double barWidthRel =
-						plot.<Number>getSetting(BoxPlot.BAR_WIDTH).doubleValue();
+					double barWidthRel = BoxWhiskerRenderer.this.
+						<Number>getSetting(BAR_WIDTH).doubleValue();
 					double barXMin = boxXMin + (1.0 - barWidthRel)*boxWidth/2.0;
 					double barXMax = boxXMax - (1.0 - barWidthRel)*boxWidth/2.0;
 
 					// Create shapes
 					// The origin of all shapes is (boxX, boxY)
 					Rectangle2D box = new Rectangle2D.Double(
-						boxXMin - boxX, boxYQ3 - boxY,
-						boxWidth, Math.abs(boxYQ3 - boxYQ1));
+						boxXMin - boxX, boxYTop - barYCenter,
+						boxWidth, Math.abs(boxYTop - boxYBottom));
 					Line2D whiskerMax = new Line2D.Double(
-						0.0, boxYQ3 - boxY,
-						0.0, boxYMax - boxY
+						0.0, boxYTop - barYCenter,
+						0.0, barYTop - barYCenter
 					);
 					Line2D whiskerMin = new Line2D.Double(
-						0.0, boxYQ1 - boxY,
-						0.0, boxYMin - boxY
+						0.0, boxYBottom - barYCenter,
+						0.0, barYbottom - barYCenter
 					);
 					Line2D barMax = new Line2D.Double(
-						barXMin - boxX, boxYMax - boxY,
-						barXMax - boxX, boxYMax - boxY
+						barXMin - boxX, barYTop - barYCenter,
+						barXMax - boxX, barYTop - barYCenter
 					);
 					Line2D barMin = new Line2D.Double(
-						barXMin - boxX, boxYMin - boxY,
-						barXMax - boxX, boxYMin - boxY
+						barXMin - boxX, barYbottom - barYCenter,
+						barXMax - boxX, barYbottom - barYCenter
 					);
-					Line2D barMedian = new Line2D.Double(
+					Line2D barCenter = new Line2D.Double(
 						boxXMin - boxX, 0.0,
 						boxXMax - boxX, 0.0
 					);
 
 					// Paint shapes
 					Graphics2D graphics = context.getGraphics();
-					ColorMapper paintBoxMapper = plot.getSetting(BOX_BACKGROUND);
+					ColorMapper paintBoxMapper = BoxWhiskerRenderer.this.getSetting(BOX_BACKGROUND);
 					Paint paintBox = paintBoxMapper.get(valueX);
-					Paint paintStrokeBox = plot.getSetting(BOX_COLOR);
-					Stroke strokeBox = plot.getSetting(BOX_BORDER);
-					Paint paintWhisker = plot.getSetting(WHISKER_COLOR);
-					Stroke strokeWhisker = plot.getSetting(WHISKER_STROKE);
-					Paint paintBarMedian = plot.getSetting(BAR_MEDIAN_COLOR);
-					Stroke strokeBarMedian = plot.getSetting(BAR_MEDIAN_STROKE);
+					Paint paintStrokeBox = BoxWhiskerRenderer.this.getSetting(BOX_COLOR);
+					Stroke strokeBox = BoxWhiskerRenderer.this.getSetting(BOX_BORDER);
+					Paint paintWhisker = BoxWhiskerRenderer.this.getSetting(WHISKER_COLOR);
+					Stroke strokeWhisker = BoxWhiskerRenderer.this.getSetting(WHISKER_STROKE);
+					Paint paintBarCenter = BoxWhiskerRenderer.this.getSetting(BAR_CENTER_COLOR);
+					Stroke strokeBarCenter = BoxWhiskerRenderer.this.getSetting(BAR_CENTER_STROKE);
 					// Fill box
 					GraphicsUtils.fillPaintedShape(graphics, box, paintBox, box.getBounds2D());
 					// Save current graphics state
@@ -230,9 +286,9 @@ public class BoxPlot extends XYPlot {
 					graphics.draw(box);
 					graphics.draw(barMax);
 					graphics.draw(barMin);
-					graphics.setPaint(paintBarMedian);
-					graphics.setStroke(strokeBarMedian);
-					graphics.draw(barMedian);
+					graphics.setPaint(paintBarCenter);
+					graphics.setStroke(strokeBarCenter);
+					graphics.draw(barCenter);
 					// Restore previous graphics state
 					graphics.setStroke(strokeOld);
 					graphics.setPaint(paintOld);
@@ -256,54 +312,33 @@ public class BoxPlot extends XYPlot {
 	 * @param data Data to be displayed.
 	 */
 	public BoxPlot(DataSource data) {
-		setSettingDefault(BOX_WIDTH, 0.75);
-		setSettingDefault(BOX_BACKGROUND, new SingleColor(Color.WHITE));
-		setSettingDefault(BOX_COLOR, Color.BLACK);
-		setSettingDefault(BOX_BORDER, new BasicStroke(1f));
-		setSettingDefault(WHISKER_COLOR, Color.BLACK);
-		setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
-		setSettingDefault(BAR_WIDTH, 0.75);
-		setSettingDefault(BAR_MEDIAN_COLOR, Color.BLACK);
-		setSettingDefault(BAR_MEDIAN_STROKE, new BasicStroke(
-			2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
-
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 1.0);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.INTERSECTION,
-				-Double.MAX_VALUE);
+			-Double.MAX_VALUE);
 		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
 			-Double.MAX_VALUE);
 
-		// Store original data source
-		this.data = data;
-		data.addDataListener(this);
-
-		// Generate data source with statistical values for each column
-		stats = new DataTable(Integer.class, Double.class,
-			Double.class, Double.class, Double.class, Double.class);
 		add(data);
-
-		// Adjust axes to generated data series
-		getAxis(AXIS_X).setRange(0.5, data.getColumnCount() + 0.5);
-		double yMin = stats.getColumn(2).getStatistics(Statistics.MIN);
-		double yMax = stats.getColumn(5).getStatistics(Statistics.MAX);
-		double ySpacing = 0.05*(yMax - yMin);
-		getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
-
-		// Adjust rendering
-		PointRenderer pointRenderer = new BoxWhiskerRenderer(this);
-		setLineRenderer(stats, null);
-		setPointRenderer(stats, pointRenderer);
+		autoScaleAxes();
 	}
 
-	private void updateBoxData() {
-		// Remove old entries
-		stats.clear();
-
+	/**
+	 * Extracts statistics from the columns of an data source that are commonly
+	 * used for box-and-whisker plots. The result is a new data source
+	 * containing <i>column index</i>, <i>median</i>, <i>mininum</i>, <i>first
+	 * quartile</i>, <i>third quartile</i>, and <i>maximum</i> for each column.
+	 * @param data Original data source
+	 * @return New data source with (columnIndex, median, min, quartile1, quartile3, max)
+	 */
+	public static DataSource createBoxData(DataSource data) {
 		if (data == null) {
-			return;
+			throw new NullPointerException("Cannot extract statistics from null data source.");
 		}
+
+		DataTable stats = new DataTable(Integer.class, Double.class,
+				Double.class, Double.class, Double.class, Double.class);
 
 		// Generate statistical values for each column
 		for (int c = 0; c < data.getColumnCount(); c++) {
@@ -317,6 +352,7 @@ public class BoxPlot extends XYPlot {
 				col.getStatistics(Statistics.MAX)
 			);
 		}
+		return stats;
 	}
 
 	@Override
@@ -325,44 +361,27 @@ public class BoxPlot extends XYPlot {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		data = source;
-		updateBoxData();
-		super.add(index, stats, visible);
-		stats.removeDataListener(this);
-	}
-
-	@Override
-	public boolean remove(DataSource source) {
-		boolean existed = false;
-		if (source == data) {
-			existed = super.remove(stats);
-			data = null;
-			updateBoxData();
+		if (source.getColumnCount() < 6) {
+			throw new IllegalArgumentException(
+			"The data source does not have enough columns for BoxPlot."); //$NON-NLS-1$
 		}
-		return existed;
+		super.add(index, source, visible);
+		setLineRenderer(source, null);
+		setPointRenderer(source, new BoxWhiskerRenderer(this));
 	}
 
 	@Override
-	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		super.dataAdded(source, events);
-		if (source == data) {
-			updateBoxData();
-		}
-	}
-
-	@Override
-	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		super.dataUpdated(source, events);
-		if (source == data) {
-			updateBoxData();
-		}
-	}
-
-	@Override
-	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		super.dataRemoved(source, events);
-		if (source == data) {
-			updateBoxData();
+	protected void autoScaleAxes() {
+		for (DataSource data : getData()) {
+			// Adjust axes to generated data series
+			Column col0 = data.getColumn(0);
+			getAxis(AXIS_X).setRange(
+					col0.getStatistics(Statistics.MIN) - 0.5,
+					col0.getStatistics(Statistics.MAX) + 0.5);
+			double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
+			double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
+			double ySpacing = 0.05*(yMax - yMin);
+			getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
 		}
 	}
 }

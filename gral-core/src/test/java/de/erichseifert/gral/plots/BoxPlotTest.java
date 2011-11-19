@@ -38,6 +38,7 @@ import org.junit.Test;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
+import de.erichseifert.gral.data.EnumeratedData;
 
 public class BoxPlotTest {
 	private DataSource data;
@@ -59,7 +60,7 @@ public class BoxPlotTest {
 
 	@Before
 	public void setUp() {
-		data = new DummyData(2, 12, 1.0);
+		data = new EnumeratedData(new DummyData(5, 3, 1.0));
 		plot = new MockBoxPlot(data);
 	}
 

@@ -26,6 +26,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.RasterPlot;
 import de.erichseifert.gral.plots.colors.HeatMap;
@@ -43,9 +44,9 @@ public class SimpleRasterPlot extends JPanel {
 		// Create example data
 		int size = 128;
 		double f = 0.15;
-		DataTable data = new DataTable(size, Double.class);
-		for (int rowIndex = 0; rowIndex < data.getColumnCount(); rowIndex++) {
-			Number[] row = new Number[data.getColumnCount()];
+		DataTable raster = new DataTable(size, Double.class);
+		for (int rowIndex = 0; rowIndex < raster.getColumnCount(); rowIndex++) {
+			Number[] row = new Number[raster.getColumnCount()];
 			double y = f*rowIndex;
 			for (int colIndex = 0; colIndex < row.length; colIndex++) {
 				double x = f*colIndex;
@@ -53,14 +54,17 @@ public class SimpleRasterPlot extends JPanel {
 					Math.cos(Math.hypot(x - f*size/2.0, y - f*size/2.0)) *
 					Math.cos(Math.hypot(x + f*size/2.0, y + f*size/2.0));
 			}
-			data.add(row);
+			raster.add(row);
 		}
 
+		// Convert raster matrix to (x, y, value)
+		DataSource valuesByCoord = RasterPlot.createRasterData(raster);
+
 		// Create new bar plot
-		RasterPlot plot = new RasterPlot(data);
+		RasterPlot plot = new RasterPlot(valuesByCoord);
 
 		// Format plot
-		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
+		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
 		plot.setSetting(RasterPlot.COLORS, new HeatMap());
 
 		// Add plot to Swing component

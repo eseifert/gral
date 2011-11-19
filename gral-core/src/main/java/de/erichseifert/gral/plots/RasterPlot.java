@@ -24,12 +24,13 @@ package de.erichseifert.gral.plots;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -39,31 +40,38 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.Grayscale;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
 
 /**
- * <p>Class that displays the values in the columns and rows of a data source
- * as a raster of boxes.</p>
+ * <p>Class that displays two coordinate values and a value as a raster of
+ * boxes. The data source must provide at least three columns:</p>
+ * <ul>
+ *   <li>x coordinate</li>
+ *   <li>y coordinate</li>
+ *   <li>value</li>
+ * </ul>
+ * <p>The method {@link #createRasterData(DataSource)} can be used to convert
+ * a matrix of values to the (coordinates, value) format.</p>
+ * 
  * <p>To create a new <code>RasterPlot</code> simply create a new instance using
- * a data source. Example:</p>
+ * a suitable data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Double.class, Double.class);
  * data.add(10.98, -12.34);
  * data.add( 7.65,  45.67);
  * data.add(43.21,  89.01);
- *
- * RasterPlot plot = new RasterPlot(data);
+ * DataSource rasterData = RasterPlot.createRasterData(data);
+ * RasterPlot plot = new RasterPlot(rasterData);
  * </pre>
  */
 public class RasterPlot extends XYPlot {
-	/** Key for specifying a {@link java.awt.Point2D} instance which defines
+	/** Key for specifying a {@link java.awt.geom.Point2D} instance which defines
 	the horizontal and vertical offset of the raster from the origin. */
 	public static final Key OFFSET =
 		new Key("rasterplot.offset"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.awt.Dimension2D} instance which
+	/** Key for specifying a {@link java.awt.geom.Dimension2D} instance which
 	defines the horizontal and vertical distance of the raster pixels. */
 	public static final Key DISTANCE =
 		new Key("rasterplot.distance"); //$NON-NLS-1$
@@ -73,23 +81,33 @@ public class RasterPlot extends XYPlot {
 	public static final Key COLORS =
 		new Key("rasterplot.color"); //$NON-NLS-1$
 
-	private DataSource data;
-	private final DataTable pixels;
-
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	protected static class RasterRenderer extends AbstractPointRenderer {
 		/** Bar plot this renderer is associated to. */
 		private final RasterPlot plot;
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the x coordinate of a point. */
+		public static final Key COLUMN_X = new Key("rasterplot.columnX"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the y coordinate of a point. */
+		public static final Key COLUMN_Y = new Key("rasterplot.columnY"); //$NON-NLS-1$
+		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		index of the column that is used for the value of a point. */
+		public static final Key COLUMN_VALUE = new Key("rasterplot.columnValue"); //$NON-NLS-1$
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
-		 * plot as data provider.
+		 * plot as data provider. The default columns for (x, y, value) are set
+		 * to (0, 1, 2)
 		 * @param plot Data provider.
 		 */
 		public RasterRenderer(RasterPlot plot) {
 			this.plot = plot;
+			setSettingDefault(COLUMN_X, 0);
+			setSettingDefault(COLUMN_Y, 1);
+			setSettingDefault(COLUMN_VALUE, 2);
 		}
 
 		/**
@@ -102,7 +120,6 @@ public class RasterPlot extends XYPlot {
 		 */
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row) {
-			//final Drawable plotArea = BarPlot.this.plotArea;
 			return new AbstractDrawable() {
 				private final Rectangle2D pixel = new Rectangle2D.Double();
 				private final Axis axisX = plot.getAxis(AXIS_X);
@@ -111,9 +128,13 @@ public class RasterPlot extends XYPlot {
 				private final AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 
 				public void draw(DrawingContext context) {
-					double valueX = row.get(0).doubleValue();
-					double valueY = row.get(1).doubleValue();
-					double value = row.get(2).doubleValue();
+					RasterRenderer renderer = RasterRenderer.this;
+					int colX = renderer.<Integer>getSetting(COLUMN_X);
+					int colY = renderer.<Integer>getSetting(COLUMN_Y);
+					int colValue = renderer.<Integer>getSetting(COLUMN_VALUE);
+					double valueX = row.get(colX).doubleValue();
+					double valueY = row.get(colY).doubleValue();
+					double value = row.get(colValue).doubleValue();
 
 					// Pixel dimensions
 					double xMin = axisXRenderer
@@ -161,6 +182,8 @@ public class RasterPlot extends XYPlot {
 	 * @param data Data to be displayed.
 	 */
 	public RasterPlot(DataSource data) {
+		setSettingDefault(OFFSET, new Point2D.Double());
+		setSettingDefault(DISTANCE, new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0));
 		setSettingDefault(COLORS, new Grayscale());
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
@@ -172,34 +195,42 @@ public class RasterPlot extends XYPlot {
 		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
 			-Double.MAX_VALUE);
 
-		// Store original data source
-		this.data = data;
-		data.addDataListener(this);
-
-		// Generated new data series
-		pixels = new DataTable(Double.class, Double.class, Double.class);
+		// Store data
 		add(data);
 
-		// Adjust axes to generated data series
-		getAxis(AXIS_X).setRange(0.0, data.getColumnCount());
-		getAxis(AXIS_Y).setRange(-data.getRowCount(), 0.0);
+		// Adjust axes to the data series
+		autoScaleAxes();
+	}
 
-		// Adjust rendering
-		PointRenderer pointRenderer = new RasterRenderer(this);
-		setLineRenderer(pixels, null);
-		setPointRenderer(pixels, pointRenderer);
+	@Override
+	protected void autoScaleAxes() {
+		Dimension2D dist = getSetting(DISTANCE);
+		// In case we get called before settings defaults have been set,
+		// just set distance to a sane default
+		if (dist == null) {
+			dist = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
+		}
+		double xMin = getAxisMin(AXIS_X);
+		double xMax = getAxisMax(AXIS_X);
+		getAxis(AXIS_X).setRange(xMin, xMax + dist.getWidth());
+		double yMin = getAxisMin(AXIS_Y);
+		double yMax = getAxisMax(AXIS_Y);
+		getAxis(AXIS_Y).setRange(yMin - dist.getHeight(), yMax);
 	}
 
 	/**
-	 * Utility method to update generated data series.
+	 * Takes a matrix of values and creates a new data source that stores the
+	 * values in (x, y, value) format.
+	 * @param data Original data source with values in each cell.
+	 * @return New data source with (x, y, value) columns
 	 */
-	private void updatePixelData() {
-		// Remove old entries
-		pixels.clear();
-
+	public static DataSource createRasterData(DataSource data) {
 		if (data == null) {
-			return;
+			throw new NullPointerException("Cannot convert null data source.");
 		}
+
+		DataTable coordsValueData =
+			new DataTable(Double.class, Double.class, Double.class);
 
 		// Generate pixel data with (x, y, value)
 		Statistics stats = data.getStatistics();
@@ -211,9 +242,10 @@ public class RasterPlot extends XYPlot {
 			double x =  i%data.getColumnCount();
 			double y = -i/data.getColumnCount();
 			double v = (value.doubleValue() - min) / range;
-			pixels.add(x, y, v);
+			coordsValueData.add(x, y, v);
 			i++;
 		}
+		return coordsValueData;
 	}
 
 	@Override
@@ -222,44 +254,10 @@ public class RasterPlot extends XYPlot {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		data = source;
-		updatePixelData();
-		super.add(index, pixels, visible);
-		pixels.removeDataListener(this);
-	}
-
-	@Override
-	public boolean remove(DataSource source) {
-		boolean existed = false;
-		if (source == data) {
-			existed = super.remove(pixels);
-			data = null;
-			updatePixelData();
-		}
-		return existed;
-	}
-
-	@Override
-	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		super.dataAdded(source, events);
-		if (source == data) {
-			updatePixelData();
-		}
-	}
-
-	@Override
-	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		super.dataUpdated(source, events);
-		if (source == data) {
-			updatePixelData();
-		}
-	}
-
-	@Override
-	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		super.dataRemoved(source, events);
-		if (source == data) {
-			updatePixelData();
-		}
+		// Add data source
+		super.add(index, source, visible);
+		// Adjust rendering
+		setLineRenderer(source, null);
+		setPointRenderer(source, new RasterRenderer(this));
 	}
 }
