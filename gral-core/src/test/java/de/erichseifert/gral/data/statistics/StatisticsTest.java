@@ -116,55 +116,76 @@ public class StatisticsTest {
 	}
 
 	@Test
-	public void testMeanDeviation() {
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION), DELTA);
+	public void testSumOfDiffSquares() {
+		assertEquals(157.95833333333337, stats.get(Statistics.SUM_OF_DIFF_SQUARES), DELTA);
 		// Horizontal
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(  2.00000000000000, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  2.66666666666666, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 0), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 1), DELTA);
-		assertEquals(0.0, stats.get(Statistics.MEAN_DEVIATION, Orientation.VERTICAL, 2), DELTA);
+		assertEquals( 18.87500000000000, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.VERTICAL, 0), DELTA);
+		assertEquals( 48.00000000000000, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 42.00000000000000, stats.get(Statistics.SUM_OF_DIFF_SQUARES, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test
-	public void testVariance() {
-		assertEquals(157.95833333333337, stats.get(Statistics.VARIANCE_BASE), DELTA);
+	public void testSumOfDiffCubics() {
+		assertEquals(340.50347222222221, stats.get(Statistics.SUM_OF_DIFF_CUBICS), DELTA);
 		// Horizontal
-		assertEquals(  2.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(  2.66666666666666, stats.get(Statistics.VARIANCE_BASE, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(  0.00000000000000, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals( -1.77777777777777, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  1.77777777777777, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals( 18.87500000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 0), DELTA);
-		assertEquals( 48.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 1), DELTA);
-		assertEquals( 42.00000000000000, stats.get(Statistics.VARIANCE_BASE, Orientation.VERTICAL, 2), DELTA);
+		assertEquals( 17.90625000000000, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(198.00000000000000, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(  0.00000000000000, stats.get(Statistics.SUM_OF_DIFF_CUBICS, Orientation.VERTICAL, 2), DELTA);
 	}
 
+	@Test
+	public void testSumOfDiffQuads() {
+		assertEquals(2723.1039496527756, stats.get(Statistics.SUM_OF_DIFF_QUADS), DELTA);
+		// Horizontal
+		assertEquals(   2.0000000000000, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(   3.5555555555555, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(   3.5555555555555, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.HORIZONTAL, 2), DELTA);
+		// Vertical
+		assertEquals( 104.2753906250000, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(1332.0000000000000, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals( 388.5000000000000, stats.get(Statistics.SUM_OF_DIFF_QUADS, Orientation.VERTICAL, 2), DELTA);
+	}
+
+	/**
+	 * Tests skewness of a table, of its rows, and its columns for correctness.
+	 * The results of R "moments" package are used for validation.
+	 */
 	@Test
 	public void testSkewness() {
-		assertEquals(340.5034722222222, stats.get(Statistics.SKEWNESS), DELTA);
+		assertEquals(  -2.1597406540506, stats.get(Statistics.SKEWNESS), DELTA);
 		// Horizontal
-		assertEquals(  0.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals( -1.7777777777777, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(  1.7777777777777, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(  -3.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(  -3.7071067811865, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  -2.2928932188134, stats.get(Statistics.SKEWNESS, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals( 17.9062500000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 0), DELTA);
-		assertEquals(198.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 1), DELTA);
-		assertEquals(  0.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 2), DELTA);
+		assertEquals(  -2.3823830637406, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(  -1.3159758018366, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(  -3.0000000000000, stats.get(Statistics.SKEWNESS, Orientation.VERTICAL, 2), DELTA);
 	}
 
+	/**
+	 * Tests kurtosis of a table, of its rows, and its columns for correctness.
+	 * The results of R "moments" package are used for validation.
+	 */
 	@Test
 	public void testKurtosis() {
-		assertEquals(2723.1039496527756, stats.get(Statistics.KURTOSIS), DELTA);
+		assertEquals(  -0.3806690393420, stats.get(Statistics.KURTOSIS), DELTA);
 		// Horizontal
-		assertEquals(   2.0000000000000, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 0), DELTA);
-		assertEquals(   3.5555555555555, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 1), DELTA);
-		assertEquals(   3.5555555555555, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 2), DELTA);
+		assertEquals(  -1.5000000000000, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 0), DELTA);
+		assertEquals(  -1.5000000000000, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 1), DELTA);
+		assertEquals(  -1.5000000000000, stats.get(Statistics.KURTOSIS, Orientation.HORIZONTAL, 2), DELTA);
 		// Vertical
-		assertEquals( 104.2753906250000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 0), DELTA);
-		assertEquals(1332.0000000000000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 1), DELTA);
-		assertEquals( 388.5000000000000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 2), DELTA);
+		assertEquals(  -0.6584798912328, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 0), DELTA);
+		assertEquals(   1.6250000000000, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 1), DELTA);
+		assertEquals(  -1.2380952380952, stats.get(Statistics.KURTOSIS, Orientation.VERTICAL, 2), DELTA);
 	}
 
 	@Test

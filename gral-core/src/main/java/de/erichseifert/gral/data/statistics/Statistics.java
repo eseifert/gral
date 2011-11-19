@@ -59,23 +59,24 @@ public class Statistics implements DataListener {
 
 	/** Key for specifying the arithmetic mean of all values. */
 	public static final String MEAN = "mean"; //$NON-NLS-1$
-	/** Key for specifying the expected value.
-	This is the first central moment: E((x - E(x))^1) */
-	public static final String MEAN_DEVIATION = "mean deviation"; //$NON-NLS-1$
-	/** Key for specifying the non-normalized variance.
-	This is the second central moment: E((x - E(x))^2) */
-	public static final String VARIANCE_BASE = "variance base"; //$NON-NLS-1$
-	/** Key for specifying the variance of a sample.
-	1/(N - 1) * sum of (x[i] - mean)^2 where i=1..N */
+	/** Key for specifying the sum of squared differences.
+	This is identical to the second central moment: E((x - mean)^2) */
+	public static final String SUM_OF_DIFF_SQUARES = "M2"; //$NON-NLS-1$
+	/** Key for specifying the sum of squared differences.
+	This is identical to the third central moment: E((x - mean)^3) */
+	public static final String SUM_OF_DIFF_CUBICS = "M3"; //$NON-NLS-1$
+	/** Key for specifying the sum of squared differences.
+	This is identical to the fourth central moment: E((x - mean)^4) */
+	public static final String SUM_OF_DIFF_QUADS = "M4"; //$NON-NLS-1$
+	/** Key for specifying the variance of a sample. Formula:
+	<code>1/(N - 1) * sumOfSquares</code> */
 	public static final String VARIANCE = "sample variance"; //$NON-NLS-1$
-	/** Key for specifying the population variance.
-	1/N * sum of (x[i] - mean)^2 where i=1..N */
+	/** Key for specifying the population variance. Formula:
+	<code>1/N * sumOfSquares</code> */
 	public static final String POPULATION_VARIANCE = "population variance"; //$NON-NLS-1$
-	/** Key for specifying the non-normalized skewness.
-	This is the third central moment: E((x - E(x))^3) */
+	/** Key for specifying the skewness. */
 	public static final String SKEWNESS = "skewness"; //$NON-NLS-1$
-	/** Key for specifying the non-normalized kurtosis.
-	This is the fourth central moment: E((x - E(x))^4) */
+	/** Key for specifying the kurtosis. */
 	public static final String KURTOSIS = "kurtosis"; //$NON-NLS-1$
 
 	/** Key for specifying the median (or 50% quantile). */
@@ -120,24 +121,29 @@ public class Statistics implements DataListener {
 	/**
 	 * Utility method that calculates basic statistics like element count, sum,
 	 * or mean.
+	 * 
+	 * Notes: Calculation of higher order statistics is based on formulas from
+	 * http://people.xiph.org/~tterribe/notes/homs.html
+	 * 
 	 * @param data Data values used to calculate statistics
 	 * @param stats A <code>Map</code> that should store the new statistics.
 	 */
 	private void createBasicStats(Iterable<Number> data, Map<String, Double> stats) {
-		stats.put(N, 0.0);
-		stats.put(SUM, 0.0);
-		stats.put(SUM2, 0.0);
-		stats.put(SUM3, 0.0);
-		stats.put(SUM4, 0.0);
+		double n = 0.0;
+		double sum = 0.0;
+		double sum2 = 0.0;
+		double sum3 = 0.0;
+		double sum4 = 0.0;
+		double mean = 0.0;
+		double sumOfDiffSquares = 0.0;
+		double sumOfDiffCubics = 0.0;
+		double sumOfDiffQuads = 0.0;
 
 		for (Number v : data) {
-			double val = Double.NaN;
-			if (v != null) {
-				val = v.doubleValue();
-			}
-			if (!MathUtils.isCalculatable(val)) {
+			if (!MathUtils.isCalculatable(v)) {
 				continue;
 			}
+			double val = v.doubleValue();
 
 			if (!stats.containsKey(MIN) || val < stats.get(MIN)) {
 				stats.put(MIN, val);
@@ -146,49 +152,46 @@ public class Statistics implements DataListener {
 				stats.put(MAX, val);
 			}
 
+			n++;
+
 			double val2 = val*val;
-			stats.put(N, stats.get(N) + 1.0);
-			stats.put(SUM, stats.get(SUM) + val);
-			stats.put(SUM2, stats.get(SUM2) + val2);
-			stats.put(SUM3, stats.get(SUM3) + val2*val);
-			stats.put(SUM4, stats.get(SUM4) + val2*val2);
+			sum += val;
+			sum2 += val2;
+			sum3 += val2*val;
+			sum4 += val2*val2;
+
+			double delta = val - mean;
+			double deltaN = delta/n;
+			double deltaN2 = deltaN*deltaN;
+			double term1 = delta*deltaN*(n - 1.0);
+			mean += deltaN;
+			sumOfDiffQuads += term1*deltaN2*(n*n - 3.0*n + 3.0) + 6.0*deltaN2*sumOfDiffSquares - 4.0*deltaN*sumOfDiffCubics;
+			sumOfDiffCubics += term1*deltaN*(n - 2.0) - 3.0*deltaN*sumOfDiffSquares;
+			sumOfDiffSquares += term1;
 		}
-	}
 
-	/**
-	 * Utility method that calculates statistical values that can be derived
-	 * from other statistics.
-	 * @param data Data values used to calculate statistics
-	 * @param stats A <code>Map</code> that should store the new statistics.
-	 */
-	private void createDerivedStats(Iterable<Number> data, Map<String, Double> stats) {
-		// Calculate mean
-		double mean = get(data, stats, SUM) / get(data, stats, N);
+		stats.put(N, n);
+		stats.put(SUM,  sum);
+		stats.put(SUM2, sum2);
+		stats.put(SUM3, sum3);
+		stats.put(SUM4, sum4);
 		stats.put(MEAN, mean);
+		stats.put(SUM_OF_DIFF_QUADS, sumOfDiffQuads);
+		stats.put(SUM_OF_DIFF_CUBICS, sumOfDiffCubics);
+		stats.put(SUM_OF_DIFF_SQUARES, sumOfDiffSquares);
 
-		// Calculate statistical moments
-		double mean2 = mean*mean;
-		// Mean deviation (first moment) for expected uniform distribution is always 0.
-		stats.put(MEAN_DEVIATION, 0.0);
-		// Variance (second moment)
-		stats.put(VARIANCE_BASE, stats.get(SUM2) - mean*stats.get(SUM));
-		// Sample variance
-		stats.put(VARIANCE, stats.get(VARIANCE_BASE)/(stats.get(N) - 1));
-		// Population variance
-		stats.put(POPULATION_VARIANCE, stats.get(VARIANCE_BASE)/stats.get(N));
-		// Skewness (third moment)
-		stats.put(SKEWNESS, stats.get(SUM3)
-			- 3.0*mean*stats.get(SUM2) + 2.0*mean2*stats.get(SUM));
-		// Kurtosis (fourth moment)
-		stats.put(KURTOSIS, stats.get(SUM4)
-			- 4.0*mean*stats.get(SUM3) + 6.0*mean2*stats.get(SUM2)
-			- 3.0*mean2*mean*stats.get(SUM));
+		stats.put(VARIANCE, sumOfDiffSquares/(n - 1.0));
+		stats.put(POPULATION_VARIANCE, sumOfDiffSquares/n);
+		stats.put(SKEWNESS,
+			(sumOfDiffCubics/n)/Math.pow(sumOfDiffSquares/n, 3.0/2.0) - 3.0);
+		stats.put(KURTOSIS,
+			(n*sumOfDiffQuads)/(sumOfDiffSquares*sumOfDiffSquares) - 3.0);
 	}
 
 	/**
 	 * Utility method that calculates quantiles for the given data values and
-	 * stores the result in <code>stats</code>.
-	 * @param stats <code>Map</code> for storing result
+	 * stores the results in <code>stats</code>.
+	 * @param stats <code>Map</code> for storing results
 	 * @see de.erichseifert.gral.util.MathUtils.quantile(List<Double>,double)
 	 */
 	private void createDistributionStats(Iterable<Number> data, Map<String, Double> stats) {
@@ -251,28 +254,10 @@ public class Statistics implements DataListener {
 	 */
 	private double get(Iterable<Number> data, Map<String, Double> stats, String key) {
 		if (!stats.containsKey(key)) {
-			if (
-					(N.equals(key) && !stats.containsKey(N)) ||
-					(MIN.equals(key) && !stats.containsKey(MIN)) ||
-					(MAX.equals(key) && !stats.containsKey(MAX)) ||
-					(SUM.equals(key) && !stats.containsKey(SUM)) ||
-					(SUM2.equals(key) && !stats.containsKey(SUM2)) ||
-					(SUM3.equals(key) && !stats.containsKey(SUM3)) ||
-					(SUM4.equals(key) && !stats.containsKey(SUM4))) {
-				createBasicStats(data, stats);
-			} else if (
-					(MEAN.equals(key) && !stats.containsKey(MEAN)) ||
-					(MEAN_DEVIATION.equals(key) && !stats.containsKey(MEAN_DEVIATION)) ||
-					(VARIANCE_BASE.equals(key) && !stats.containsKey(VARIANCE_BASE)) ||
-					(SKEWNESS.equals(key) && !stats.containsKey(SKEWNESS)) ||
-					(KURTOSIS.equals(key) && !stats.containsKey(KURTOSIS))) {
-				createDerivedStats(data, stats);
-			} if (
-					(MEDIAN.equals(key) && !stats.containsKey(MEDIAN)) ||
-					(QUARTILE_1.equals(key) && !stats.containsKey(QUARTILE_1)) ||
-					(QUARTILE_2.equals(key) && !stats.containsKey(QUARTILE_2)) ||
-					(QUARTILE_3.equals(key) && !stats.containsKey(QUARTILE_3))) {
+			if (MEDIAN.equals(key) || QUARTILE_1.equals(key) || QUARTILE_2.equals(key) || QUARTILE_3.equals(key)) {
 				createDistributionStats(data, stats);
+			} else {
+				createBasicStats(data, stats);
 			}
 		}
 
