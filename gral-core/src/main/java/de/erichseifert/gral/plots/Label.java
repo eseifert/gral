@@ -33,7 +33,6 @@ import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
@@ -46,18 +45,16 @@ import de.erichseifert.gral.util.SettingsListener;
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends AbstractDrawable implements SettingsListener {
-	/** Key for specifying the horizontal alignment within the
-	bounding rectangle. 0 means left, 1 means right. */
+	/** Key for specifying a {@link java.lang.Number} value for the horizontal
+	alignment within the bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X = new Key("label.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying the vertical alignment within the
-	bounding rectangle. 0 means top, 1 means bottom. */
+	/** Key for specifying a {@link java.lang.Number} value for the vertical
+	alignment within the bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.Location}
-	value where the label will be aligned at. */
-	public static final Key ANCHOR = new Key("label.anchor"); //$NON-NLS-1$
 	/** Key for specifying the font of this label. */
 	public static final Key FONT = new Key("label.font"); //$NON-NLS-1$
-	/** Key for specifying the rotation of this label, */
+	/** Key for specifying a {@link java.lang.Number} value for the rotation of
+	this label in degrees. */
 	public static final Key ROTATION = new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */
@@ -89,7 +86,6 @@ public class Label extends AbstractDrawable implements SettingsListener {
 
 		setSettingDefault(ALIGNMENT_X, 0.5);
 		setSettingDefault(ALIGNMENT_Y, 0.5);
-		setSettingDefault(ANCHOR, Location.CENTER);
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ROTATION, 0.0);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -105,42 +101,44 @@ public class Label extends AbstractDrawable implements SettingsListener {
 			return;
 		}
 
-		AffineTransform txLabel = AffineTransform.getTranslateInstance(
-			getX() + getWidth()/2.0,
-			getY() + getHeight()/2.0
-		);
+		Shape labelShape = outline;
+		Rectangle2D textBounds = outline.getBounds2D();
 
+		// Rotate label text around its center point
 		double rotation = this.<Number>getSetting(ROTATION).doubleValue();
 		if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
-			txLabel.rotate(-rotation/180.0*Math.PI);
+			AffineTransform txLabelText = AffineTransform.getRotateInstance(
+				-rotation/180.0*Math.PI,
+				textBounds.getCenterX(),
+				textBounds.getCenterY()
+			);
+			labelShape = txLabelText.createTransformedShape(outline);
+			textBounds = labelShape.getBounds2D();
 		}
 
-		Rectangle2D textBounds = getLayout().getBounds();
+		// Get graphics instance and store state information
+		Graphics2D graphics = context.getGraphics();
+		AffineTransform txOld = graphics.getTransform();
+
+		// Calculate absolute text position:
+		// First, move the text to the upper left of the bounding rectangle
+		double shapePosX = getX() - textBounds.getX();
+		double shapePosY = getY() - textBounds.getY();
+		// Position the text inside the bounding rectangle using the alignment
+		// settings
 		double alignmentX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
 		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
-		Location anchor = getSetting(ANCHOR);
-		double anchorModifierX =  anchor.getAlignmentH() - 0.5;
-		double anchorModifierY = -anchor.getAlignmentV() + 0.5;
-		txLabel.translate(
-			-textBounds.getX() - anchorModifierX*textBounds.getWidth()
-				- alignmentX*textBounds.getWidth() + (alignmentX - 0.5)*getWidth(),
-			-textBounds.getY() - anchorModifierY*textBounds.getHeight()
-				- alignmentY*textBounds.getHeight() + (alignmentY - 0.5)*getHeight()
-		);
+		shapePosX += alignmentX*(getWidth() - textBounds.getWidth());
+		shapePosY += alignmentY*(getHeight() - textBounds.getHeight());
+		// Apply positioning
+		graphics.translate(shapePosX, shapePosY);
 
-		Shape labelShape = txLabel.createTransformedShape(outline);
-
-		Graphics2D graphics = context.getGraphics();
-		Paint paintOld = graphics.getPaint();
-		/*
-		// DEBUG:
-		graphics.setPaint(new Color(1f, 0f, 0f, 0.2f));
-		graphics.fill(labelShape.getBounds2D());
-		//*/
+		// Paint the shape with the color from settings
 		Paint paint = getSetting(COLOR);
-		graphics.setPaint(paint);
 		GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
-		graphics.setPaint(paintOld);
+
+		// Restore previous state
+		graphics.setTransform(txOld);
 	}
 
 	@Override
@@ -151,11 +149,12 @@ public class Label extends AbstractDrawable implements SettingsListener {
 			Rectangle2D bounds = shape.getBounds2D();
 			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
 			if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
-				shape = AffineTransform.getRotateInstance(
+				AffineTransform txLabelText = AffineTransform.getRotateInstance(
 					-rotation/180.0*Math.PI,
 					bounds.getCenterX(),
 					bounds.getCenterY()
-				).createTransformedShape(shape);
+				);
+				shape = txLabelText.createTransformedShape(shape);
 			}
 			d.setSize(
 				shape.getBounds2D().getWidth(),
@@ -180,7 +179,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Returns the bounding rectangle of the text.
+	 * Returns the bounding rectangle of the text without rotation.
 	 * @return Bounds.
 	 */
 	public Rectangle2D getTextRectangle() {

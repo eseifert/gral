@@ -30,6 +30,7 @@ import static org.junit.Assert.assertTrue;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.image.BufferedImage;
 
 import org.junit.Before;
@@ -73,11 +74,11 @@ public class LegendTest {
 
 		// Set
 		legend.setSetting(Legend.BACKGROUND, Color.RED);
-		assertEquals(Color.RED, legend.<String>getSetting(Legend.BACKGROUND));
+		assertEquals(Color.RED, legend.<Paint>getSetting(Legend.BACKGROUND));
 
 		// Remove
 		legend.removeSetting(Legend.BACKGROUND);
-		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
+		assertEquals(Color.WHITE, legend.<Paint>getSetting(Legend.BACKGROUND));
 	}
 
 	@Test
