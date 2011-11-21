@@ -28,6 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
+import de.erichseifert.gral.util.MathUtils;
+
 /**
  * Class that generates pseudo-random colors.
  */
@@ -44,7 +46,7 @@ public class RandomColors implements ColorMapper {
 	private final Random random;
 	/** Variance settings for hue, saturation and brightness. */
 	//FIXME duplicate code! See QuasiRandomColors
-	private float[] colorVariance;
+	private final float[] colorVariance;
 
 	/**
 	 * Creates a new RandomColors object with default seed.
@@ -109,10 +111,14 @@ public class RandomColors implements ColorMapper {
 	 * @return Color.
 	 */
 	private Color getRandomColor() {
-		float hue        = colorVariance[0] + colorVariance[1]*random.nextFloat();
+		float hue = colorVariance[0] + colorVariance[1]*random.nextFloat();
 		float saturation = colorVariance[2] + colorVariance[3]*random.nextFloat();
 		float brightness = colorVariance[4] + colorVariance[5]*random.nextFloat();
-		return Color.getHSBColor(hue, saturation, brightness);
+		return Color.getHSBColor(
+			hue,
+			MathUtils.limit(saturation, 0f, 1f),
+			MathUtils.limit(brightness, 0f, 1f)
+		);
 	}
 
 	/**
@@ -145,7 +151,7 @@ public class RandomColors implements ColorMapper {
 	 *        can have.
 	 */
 	public void setColorVariance(float[] colorVariance) {
-		this.colorVariance = colorVariance;
+		System.arraycopy(colorVariance, 0, this.colorVariance, 0, this.colorVariance.length);
 	}
 
 }

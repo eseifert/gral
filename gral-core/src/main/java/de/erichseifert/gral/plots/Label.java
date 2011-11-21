@@ -51,10 +51,11 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	/** Key for specifying a {@link java.lang.Number} value for the vertical
 	alignment within the bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the font of this label. */
+	/** Key for specifying the {@link java.awt.Font} instance used to display
+	the text of this label. */
 	public static final Key FONT = new Key("label.font"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the rotation of
-	this label in degrees. */
+	this label in degrees. The rotation will be counterclockwise. */
 	public static final Key ROTATION = new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */

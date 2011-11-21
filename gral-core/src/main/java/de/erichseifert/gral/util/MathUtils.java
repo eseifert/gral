@@ -178,6 +178,26 @@ public abstract class MathUtils {
 	}
 
 	/**
+	 * Clamps a float number to specified limits: if <code>value</code> is
+	 * greater than <code>max</code> then <code>max</code> will be returned.
+	 * If <code>value</code> is greater than <code>min</code> then
+	 * <code>min</code> will be returned.
+	 * @param value Float value to be clamped
+	 * @param min Minimum
+	 * @param max Maximum
+	 * @return Clamped value
+	 */
+	public static float limit(float value, float min, float max) {
+		if (value > max) {
+			return max;
+		}
+		if (value < min) {
+			return min;
+		}
+		return value;
+	}
+
+	/**
 	 * Clamps a integer number to specified limits: if <code>value</code> is
 	 * greater than <code>max</code> then <code>max</code> will be returned.
 	 * If <code>value</code> is greater than <code>min</code> then

@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -326,5 +327,16 @@ public abstract class GraphicsUtils {
 	public static double[] luv2rgb(double[] luv, double[] rgb) {
 		double[] xyz = luv2xyz(luv, null);
 		return xyz2rgb(xyz, rgb);
+	}
+
+	/**
+	 * Creates a new color with the same color components but a different
+	 * alpha value.
+	 * @param color Original color.
+	 * @param alpha Alpha value for new color.
+	 * @return New color with specified alpha value.
+	 */
+	public static Color deriveWithAlpha(Color color, int alpha) {
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 	}
 }

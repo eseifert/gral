@@ -21,9 +21,11 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -67,12 +69,19 @@ public class BarPlot extends XYPlot {
 	/** Key for specifying a {@link java.lang.Boolean} value which defines
 	whether painting should happen over all bars at once, otherwise each bar
 	will be filled independently. */
-	public static final Key PAINT_ALL_BARS = new Key("barplot.paint.global"); //$NON-NLS-1$
+	public static final Key PAINT_ALL_BARS = new Key("barplot.bar.paintAll"); //$NON-NLS-1$
 
 	/**
 	 * Class that renders a bar in a bar plot.
 	 */
-	protected static class BarRenderer extends AbstractPointRenderer {
+	public static class BarRenderer extends AbstractPointRenderer {
+		/** Key for specifying a {@link java.awt.Stroke} instance used to paint
+		the outline of the point shape. */
+		public static final Key STROKE = new Key("barplot.bar.stroke"); //$NON-NLS-1$
+		/** Key for specifying a {@link java.awt.Paint} instance used to fill
+		the point shape. */
+		public static final Key STROKE_COLOR = new Key("barplot.bar.stroke.color"); //$NON-NLS-1$
+
 		/** Bar plot this renderer is associated to. */
 		private final BarPlot plot;
 
@@ -84,6 +93,8 @@ public class BarPlot extends XYPlot {
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
 			setSettingDefault(VALUE_LOCATION, Location.NORTH);
+			setSettingDefault(STROKE, null);
+			setSettingDefault(STROKE_COLOR, Color.BLACK);
 		}
 
 		/**
@@ -99,7 +110,7 @@ public class BarPlot extends XYPlot {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
 					Shape point = getPointPath(row);
-					Paint paint = BarRenderer.this.getSetting(COLOR);
+					Paint paint = BarRenderer.this.<Paint>getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 
@@ -115,6 +126,13 @@ public class BarPlot extends XYPlot {
 
 					GraphicsUtils.fillPaintedShape(
 							graphics, point, paint, paintBoundaries);
+
+					Stroke stroke = BarRenderer.this.<Stroke>getSetting(STROKE);
+					Paint strokePaint = BarRenderer.this.<Paint>getSetting(STROKE_COLOR);
+					if (stroke != null && strokePaint != null) {
+						GraphicsUtils.drawPaintedShape(
+							graphics, point, strokePaint, null, stroke);
+					}
 
 					if (BarRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
 						drawValue(context, point, row.get(1).doubleValue());

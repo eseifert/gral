@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.erichseifert.gral.util.HaltonSequence;
+import de.erichseifert.gral.util.MathUtils;
 
 
 /**
@@ -66,13 +67,14 @@ public class QuasiRandomColors implements ColorMapper {
 		if (colorCache.containsKey(value)) {
 			return colorCache.get(value);
 		}
-		float hue = colorVariance[0] + colorVariance[1]*
-				(float) ((double) seqHue.next());
-		float saturation = colorVariance[2] + colorVariance[3]*
-				(float) ((double) seqSat.next());
-		float brightness = colorVariance[4] + colorVariance[5]*
-				(float) ((double) seqBrightness.next());
-		Color color = Color.getHSBColor(hue, saturation, brightness);
+		float hue = colorVariance[0] + colorVariance[1]*seqHue.next().floatValue();
+		float saturation = colorVariance[2] + colorVariance[3]*seqSat.next().floatValue();
+		float brightness = colorVariance[4] + colorVariance[5]*seqBrightness.next().floatValue();
+		Color color = Color.getHSBColor(
+			hue,
+			MathUtils.limit(saturation, 0f, 1f),
+			MathUtils.limit(brightness, 0f, 1f)
+		);
 		colorCache.put(value, color);
 		return color;
 	}

@@ -101,6 +101,15 @@ public class MathUtilsTest {
 	}
 
 	@Test
+	public void testLimitFloat() {
+		assertEquals(0.0, MathUtils.limit(-0.5f, 0.0f, 1.0f), DELTA);
+		assertEquals(0.0, MathUtils.limit( 0.0f, 0.0f, 1.0f), DELTA);
+		assertEquals(0.5, MathUtils.limit( 0.5f, 0.0f, 1.0f), DELTA);
+		assertEquals(1.0, MathUtils.limit( 1.0f, 0.0f, 1.0f), DELTA);
+		assertEquals(1.0, MathUtils.limit( 1.5f, 0.0f, 1.0f), DELTA);
+	}
+
+	@Test
 	public void testLimitInt() {
 		assertEquals( 0, MathUtils.limit(-5, 0, 10));
 		assertEquals( 0, MathUtils.limit( 0, 0, 10));

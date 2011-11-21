@@ -92,4 +92,5 @@ public class DrawablePanel extends JPanel {
 	public Dimension getMinimumSize() {
 		return super.getPreferredSize();
 	}
+
 }

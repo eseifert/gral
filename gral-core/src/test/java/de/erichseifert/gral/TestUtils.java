@@ -47,7 +47,7 @@ public class TestUtils {
 	public static final void assertNonEmptyImage(BufferedImage image) {
 		assertTrue(image.getWidth() > 0);
 		assertTrue(image.getHeight() > 0);
-		int[] data = ((DataBufferInt)(image).getRaster().getDataBuffer()).getData();
+		int[] data = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		for (int i = 0; i < data.length; i++) {
 			int color = data[i];
 			int alpha = color & 0xFF000000;

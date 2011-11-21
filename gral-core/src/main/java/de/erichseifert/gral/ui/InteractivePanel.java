@@ -716,11 +716,11 @@ public class InteractivePanel extends DrawablePanel
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		if (!stateInitialized) {
 			setDefaultState();
 			stateInitialized = true;
 		}
-		super.paint(g);
+		super.paintComponent(g);
 	}
 }

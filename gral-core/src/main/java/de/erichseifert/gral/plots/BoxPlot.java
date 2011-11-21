@@ -64,7 +64,7 @@ import de.erichseifert.gral.util.PointND;
  * <p>The utility method {@link #createBoxData(DataSource)} can be used to
  * obtain common statistics for these properties from the each column of an
  * existing data source.</p>
- * 
+ *
  * <p>To create a new <code>BoxPlot</code> simply create a new instance using
  * a data source. Example:</p>
  * <pre>
@@ -81,65 +81,68 @@ public class BoxPlot extends XYPlot {
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	public static class BoxWhiskerRenderer extends AbstractPointRenderer {
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the horizontal position of a box. */
+		/** Key for specifying the {@link java.lang.Integer} value which
+		specifies the index of the column that is used for the horizontal
+		position of a box. */
 		public static final Key COLUMN_POSITION =
 			new Key("boxplot.position.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the center bar. */
+		/** Key for specifying the {@link java.lang.Integer} value which
+		specifies the index of the column that is used for the center bar. */
 		public static final Key COLUMN_BAR_CENTER =
 			new Key("boxplot.bar.center.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the bottom bar. */
+		/** Key for specifying the {@link java.lang.Integer} value which
+		specifies the index of the column that is used for the bottom bar. */
 		public static final Key COLUMN_BAR_BOTTOM =
 			new Key("boxplot.bar.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the bottom edge of the box. */
+		/** Key for specifying the {@link java.lang.Integer} value which
+		specifies the index of the column that is used for the bottom edge of
+		the box. */
 		public static final Key COLUMN_BOX_BOTTOM =
 			new Key("boxplot.box.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the bottom edge of the box. */
+		/** Key for specifying the {@link java.lang.Integer} value which
+		specifies the index of the column that is used for the bottom edge of
+		the box. */
 		public static final Key COLUMN_BOX_TOP =
 			new Key("boxplot.box.top.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
-		index of the column that is used for the top bar. */
+		/** Key for specifying the {@link java.lang.Integer} which specifies
+		the index of the column that is used for the top bar. */
 		public static final Key COLUMN_BAR_TOP =
 			new Key("boxplot.bar.top.column"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the relative
-		width of the box. */
+		/** Key for specifying a {@link java.lang.Number} value for the
+		relative width of the box. */
 		public static final Key BOX_WIDTH =
 			new Key("boxplot.box.width"); //$NON-NLS-1$
 		/** Key for specifying an instance of
-		{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used to
-		paint the background of the box. */
+		{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used
+		to paint the background of the box. */
 		public static final Key BOX_BACKGROUND =
 			new Key("boxplot.box.background"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Paint} instance to be used to
-		paint the border of the box and the lines of bars. */
+		/** Key for specifying the {@link java.awt.Paint} instance to be used
+		to paint the border of the box and the lines of bars. */
 		public static final Key BOX_COLOR =
 			new Key("boxplot.box.background"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-		paint the border of the box and the lines of the bars. */
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used
+		to paint the border of the box and the lines of the bars. */
 		public static final Key BOX_BORDER =
 			new Key("boxplot.box.border"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Paint} instance to be used to
-		paint the lines of the whiskers. */
+		/** Key for specifying the {@link java.awt.Paint} instance to be used
+		to paint the lines of the whiskers. */
 		public static final Key WHISKER_COLOR =
 			new Key("boxplot.whisker.color"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-		paint the lines of the whiskers. */
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used
+		to paint the lines of the whiskers. */
 		public static final Key WHISKER_STROKE =
 			new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the relative
-		width of the bottom and top bars. */
+		/** Key for specifying a {@link java.lang.Number} value for the
+		relative width of the bottom and top bars. */
 		public static final Key BAR_WIDTH =
 			new Key("boxplot.bar.width"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Paint} instance to be used to
-		paint the lines of the center bar. */
+		/** Key for specifying the {@link java.awt.Paint} instance to be used
+		to paint the lines of the center bar. */
 		public static final Key BAR_CENTER_COLOR =
 			new Key("boxplot.bar.center.color"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-		paint the lines of the center bar. */
+		/** Key for specifying the {@link java.awt.Stroke} instance to be used
+		to paint the lines of the center bar. */
 		public static final Key BAR_CENTER_STROKE =
 			new Key("boxplot.bar.center.stroke"); //$NON-NLS-1$
 
@@ -172,8 +175,8 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns the graphical representation to be drawn for the specified data
-		 * value.
+		 * Returns the graphical representation to be drawn for the specified
+		 * data value.
 		 * @param axis that is used to project the point.
 		 * @param axisRenderer Renderer for the axis.
 		 * @param row Data row containing the point.
@@ -218,15 +221,15 @@ public class BoxPlot extends XYPlot {
 						.get(PointND.X);
 					// Box Y
 					double barYbottom = axisYRenderer.getPosition(
-							axisY, valueYBarBottom, true, false).get(PointND.Y);
+						axisY, valueYBarBottom, true, false).get(PointND.Y);
 					double boxYBottom = axisYRenderer.getPosition(
-							axisY, valueYBoxBottom, true, false).get(PointND.Y);
+						axisY, valueYBoxBottom, true, false).get(PointND.Y);
 					double barYCenter = axisYRenderer.getPosition(
-							axisY, valueYBarCenter, true, false).get(PointND.Y);
+						axisY, valueYBarCenter, true, false).get(PointND.Y);
 					double boxYTop = axisYRenderer.getPosition(
-							axisY, valueYBoxTop, true, false).get(PointND.Y);
+						axisY, valueYBoxTop, true, false).get(PointND.Y);
 					double barYTop = axisYRenderer.getPosition(
-							axisY, valueYBarTop, true, false).get(PointND.Y);
+						axisY, valueYBarTop, true, false).get(PointND.Y);
 					double boxWidth = Math.abs(boxXMax - boxXMin);
 					// Bars
 					double barWidthRel = BoxWhiskerRenderer.this.
@@ -262,16 +265,25 @@ public class BoxPlot extends XYPlot {
 
 					// Paint shapes
 					Graphics2D graphics = context.getGraphics();
-					ColorMapper paintBoxMapper = BoxWhiskerRenderer.this.getSetting(BOX_BACKGROUND);
-					Paint paintBox = paintBoxMapper.get(valueX);
-					Paint paintStrokeBox = BoxWhiskerRenderer.this.getSetting(BOX_COLOR);
-					Stroke strokeBox = BoxWhiskerRenderer.this.getSetting(BOX_BORDER);
-					Paint paintWhisker = BoxWhiskerRenderer.this.getSetting(WHISKER_COLOR);
-					Stroke strokeWhisker = BoxWhiskerRenderer.this.getSetting(WHISKER_STROKE);
-					Paint paintBarCenter = BoxWhiskerRenderer.this.getSetting(BAR_CENTER_COLOR);
-					Stroke strokeBarCenter = BoxWhiskerRenderer.this.getSetting(BAR_CENTER_STROKE);
+					ColorMapper paintBoxMapper =
+						BoxWhiskerRenderer.this.getSetting(BOX_BACKGROUND);
+					Paint paintBox =
+						paintBoxMapper.get(valueX);
+					Paint paintStrokeBox =
+						BoxWhiskerRenderer.this.getSetting(BOX_COLOR);
+					Stroke strokeBox =
+						BoxWhiskerRenderer.this.getSetting(BOX_BORDER);
+					Paint paintWhisker =
+						BoxWhiskerRenderer.this.getSetting(WHISKER_COLOR);
+					Stroke strokeWhisker =
+						BoxWhiskerRenderer.this.getSetting(WHISKER_STROKE);
+					Paint paintBarCenter =
+						BoxWhiskerRenderer.this.getSetting(BAR_CENTER_COLOR);
+					Stroke strokeBarCenter =
+						BoxWhiskerRenderer.this.getSetting(BAR_CENTER_STROKE);
 					// Fill box
-					GraphicsUtils.fillPaintedShape(graphics, box, paintBox, box.getBounds2D());
+					GraphicsUtils.fillPaintedShape(
+						graphics, box, paintBox, box.getBounds2D());
 					// Save current graphics state
 					Paint paintOld = graphics.getPaint();
 					Stroke strokeOld = graphics.getStroke();
@@ -330,15 +342,17 @@ public class BoxPlot extends XYPlot {
 	 * containing <i>column index</i>, <i>median</i>, <i>mininum</i>, <i>first
 	 * quartile</i>, <i>third quartile</i>, and <i>maximum</i> for each column.
 	 * @param data Original data source
-	 * @return New data source with (columnIndex, median, min, quartile1, quartile3, max)
+	 * @return New data source with (columnIndex, median, min, quartile1,
+	 *         quartile3, max)
 	 */
 	public static DataSource createBoxData(DataSource data) {
 		if (data == null) {
-			throw new NullPointerException("Cannot extract statistics from null data source.");
+			throw new NullPointerException(
+				"Cannot extract statistics from null data source.");
 		}
 
 		DataTable stats = new DataTable(Integer.class, Double.class,
-				Double.class, Double.class, Double.class, Double.class);
+			Double.class, Double.class, Double.class, Double.class);
 
 		// Generate statistical values for each column
 		for (int c = 0; c < data.getColumnCount(); c++) {
@@ -361,10 +375,6 @@ public class BoxPlot extends XYPlot {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		if (source.getColumnCount() < 6) {
-			throw new IllegalArgumentException(
-			"The data source does not have enough columns for BoxPlot."); //$NON-NLS-1$
-		}
 		super.add(index, source, visible);
 		setLineRenderer(source, null);
 		setPointRenderer(source, new BoxWhiskerRenderer(this));
@@ -376,8 +386,8 @@ public class BoxPlot extends XYPlot {
 			// Adjust axes to generated data series
 			Column col0 = data.getColumn(0);
 			getAxis(AXIS_X).setRange(
-					col0.getStatistics(Statistics.MIN) - 0.5,
-					col0.getStatistics(Statistics.MAX) + 0.5);
+				col0.getStatistics(Statistics.MIN) - 0.5,
+				col0.getStatistics(Statistics.MAX) + 0.5);
 			double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
 			double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
 			double ySpacing = 0.05*(yMax - yMin);
