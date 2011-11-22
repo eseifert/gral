@@ -21,16 +21,13 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
@@ -40,30 +37,36 @@ import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
-public class AreaPlot extends JPanel {
+public class AreaPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1L;
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
 	public AreaPlot() {
-		super(new BorderLayout());
-
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x=0.0; x<2.5*Math.PI; x+=Math.PI/15.0) {
-			double y1 = (x>=0.00*Math.PI && x<2.25*Math.PI) ? (4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian()) : Double.NaN;
-			double y2 = (x>=0.25*Math.PI && x<2.50*Math.PI) ? (4.0*Math.cos(x + 0.5*Math.PI) + 0.1*random.nextGaussian()) : Double.NaN;
-			double y3 = (x>=0.00*Math.PI && x<2.50*Math.PI) ? (2.0*Math.sin(2.0*x/2.5)       + 0.1*random.nextGaussian()) : Double.NaN;
+			double y1 = Double.NaN, y2 = Double.NaN, y3 = Double.NaN;
+			if (x>=0.00*Math.PI && x<2.25*Math.PI) {
+				y1 = 4.0*Math.sin(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
+			}
+			if (x>=0.25*Math.PI && x<2.50*Math.PI) {
+				y2 = 4.0*Math.cos(x + 0.5*Math.PI) + 0.1*random.nextGaussian();
+			}
+			if (x>=0.00*Math.PI && x<2.50*Math.PI) {
+				y3 = 2.0*Math.sin(2.0*x/2.5)       + 0.1*random.nextGaussian();
+			}
 			data.add(x, y1, y2, y3);
 		}
 
 		// Create data series
-		DataSeries data1 = new DataSeries("red",   data, 0, 1);
-		DataSeries data2 = new DataSeries("green", data, 0, 2);
-		DataSeries data3 = new DataSeries("blue",  data, 0, 3);
+		DataSeries data1 = new DataSeries("red", data, 0, 1);
+		DataSeries data2 = new DataSeries("blue 1", data, 0, 2);
+		DataSeries data3 = new DataSeries("blue 2", data, 0, 3);
 
 		// Create new xy-plot
 		XYPlot plot = new XYPlot(data1, data2, data3);
@@ -71,9 +74,9 @@ public class AreaPlot extends JPanel {
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 
 		// Format data series
-		formatFilledArea(plot, data1, new Color(0.9f, 0.3f, 0.2f));
-		formatFilledArea(plot, data2, new Color(0.0f, 0.3f, 0.9f));
-		formatLineArea(plot, data3, new Color(0.0f, 0.5f, 0.0f));
+		formatFilledArea(plot, data1, COLOR2);
+		formatFilledArea(plot, data2, COLOR1);
+		formatLineArea(plot, data3, GraphicsUtils.deriveDarker(COLOR1));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot));
@@ -89,7 +92,7 @@ public class AreaPlot extends JPanel {
 		line.setSetting(LineRenderer.GAP_ROUNDED, true);
 		plot.setLineRenderer(data, line);
 		AreaRenderer area = new DefaultAreaRenderer2D();
-		area.setSetting(AreaRenderer.COLOR, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+		area.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(color, 64));
 		plot.setAreaRenderer(data, area);
 	}
 
@@ -104,12 +107,17 @@ public class AreaPlot extends JPanel {
 		plot.setAreaRenderer(data, area);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Area plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Area plot of three series with different styling";
+	}
+
 	public static void main(String[] args) {
-		AreaPlot example = new AreaPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new AreaPlot().showInFrame();
 	}
 }

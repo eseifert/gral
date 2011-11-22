@@ -25,9 +25,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Random;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataSeries;
@@ -37,28 +34,27 @@ import de.erichseifert.gral.data.filters.Filter;
 import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.KernelUtils;
 import de.erichseifert.gral.data.filters.Median;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 
 /**
  * Example that shows how to use convultion filtering.
  */
-public class ConvolutionExample extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class ConvolutionExample extends ExamplePanel {
+	private static final int SAMPLE_COUNT = 200;
 
 	public ConvolutionExample() {
-		super(new BorderLayout());
-
 		// Generate 200 data points
 		DataTable data = new DataTable(Double.class, Double.class);
 		Random r = new Random();
-		for (int i = 0; i < 200; i++) {
-			double x = i/2.0/3.141;
+		for (int i = 0; i < SAMPLE_COUNT; i++) {
+			double x = i/2.0/Math.PI;
 			double yError = Math.sqrt(3.0*0.1)*r.nextGaussian();
 			double y = 10.0*Math.sin(x/5.0) + yError*yError*yError;
 			data.add(x, y);
@@ -100,11 +96,11 @@ public class ConvolutionExample extends JPanel {
 		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
 
 		// Format data series as lines of different colors
-		formatLine(plot, ds, new Color(0f, 0f, 0f));
-		formatLine(plot, dsLowpass, new Color(1.0f, 0.2f, 0.0f));
-		formatLine(plot, dsHighpass, new Color(0.2f, 0.4f, 0.8f));
-		formatLine(plot, dsMovingAverage, new Color(0f, 0.67f, 0f));
-		formatLine(plot, dsMovingMedian, new Color(0.5f, 0f, 0.5f));
+		formatLine(plot, ds, Color.BLACK);
+		formatLine(plot, dsLowpass, COLOR1);
+		formatLine(plot, dsHighpass, GraphicsUtils.deriveDarker(COLOR1));
+		formatLine(plot, dsMovingAverage, COLOR2);
+		formatLine(plot, dsMovingMedian, GraphicsUtils.deriveDarker(COLOR2));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
@@ -117,12 +113,17 @@ public class ConvolutionExample extends JPanel {
 		plot.setLineRenderer(series, line);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Convolution area plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Area plot showing various ways of filtering data with convolution";
+	}
+
 	public static void main(String[] args) {
-		ConvolutionExample example = new ConvolutionExample();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new ConvolutionExample().showInFrame();
 	}
 }

@@ -21,29 +21,23 @@
  */
 package de.erichseifert.gral.examples.barplot;
 
-import java.awt.BorderLayout;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.LinearGradientPaint;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimpleBarPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
-
+public class SimpleBarPlot extends ExamplePanel {
 	public SimpleBarPlot() {
-		super(new BorderLayout());
-
 		// Create example data
 		DataTable data = new DataTable(Double.class, Integer.class, Integer.class);
 		data.add(0.1,  1,  6);
@@ -66,17 +60,20 @@ public class SimpleBarPlot extends JPanel {
 		PointRenderer pointRenderer = plot.getPointRenderer(data);
 		pointRenderer.setSetting(PointRenderer.COLOR,
 				new LinearGradientPaint(0f,0f, 0f,1f,
-						new float[] {0.0f, 0.5f, 1.0f},
-						new Color[] {
-							new Color(0.5f, 0.8f, 0.0f),
-							new Color(0.0f, 0.5f, 0.6f),
-							new Color(0.0f, 0.2f, 0.9f)
-						}
+						new float[] { 0.0f, 1.0f },
+						new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }
+				)
+		);
+		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE, new BasicStroke(3f));
+		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE_COLOR,
+				new LinearGradientPaint(0f,0f, 0f,1f,
+						new float[] { 0.0f, 1.0f },
+						new Color[] { GraphicsUtils.deriveBrighter(COLOR1), COLOR1 }
 				)
 		);
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		pointRenderer.setSetting(PointRenderer.VALUE_LOCATION, Location.CENTER);
-		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, Color.WHITE);
+		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, GraphicsUtils.deriveDarker(COLOR1));
 		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
 				Font.decode(null).deriveFont(Font.BOLD));
 
@@ -84,12 +81,17 @@ public class SimpleBarPlot extends JPanel {
 		add(new InteractivePanel(plot));
 	}
 
+	@Override
+	public String getTitle() {
+		return "Bar plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Bar plot with example data and color gradients";
+	}
+
 	public static void main(String[] args) {
-		SimpleBarPlot example = new SimpleBarPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new SimpleBarPlot().showInFrame();
 	}
 }

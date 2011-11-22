@@ -21,15 +21,15 @@
  */
 package de.erichseifert.gral.examples.boxplot;
 
-import java.awt.BorderLayout;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Stroke;
 import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -37,21 +37,22 @@ import de.erichseifert.gral.plots.colors.MultiColor;
 import de.erichseifert.gral.plots.colors.ScaledColorMapper;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.ui.InteractivePanel.NavigationDirection;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.vectorgraphics2d.DataUtils;
 
 
-public class SimpleBoxPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class SimpleBoxPlot extends ExamplePanel {
+	private static final int SAMPLE_COUNT = 50;
 
 	public SimpleBoxPlot() {
-		super(new BorderLayout());
+		setPreferredSize(new Dimension(400, 600));
+
 		Random random = new Random();
 
 		// Create example data
 		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			int x = (int) Math.round(5.0*random.nextGaussian());
 			int y = (int) Math.round(5.0*random.nextGaussian());
 			int z = (int) Math.round(5.0*random.nextGaussian());
@@ -63,7 +64,7 @@ public class SimpleBoxPlot extends JPanel {
 		BoxPlot plot = new BoxPlot(boxData);
 
 		// Format plot
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 20.0));
+		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
 		// Format axes
 		plot.getAxisRenderer(BoxPlot.AXIS_X).setSetting(
@@ -74,9 +75,15 @@ public class SimpleBoxPlot extends JPanel {
 		);
 
 		// Format boxes
-		ScaledColorMapper colors = new MultiColor(Color.RED, Color.BLUE);
+		Stroke stroke = new BasicStroke(2f);
+		ScaledColorMapper colors = new MultiColor(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
 		colors.setRange(1.0, 3.0);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_STROKE, stroke);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BORDER, stroke);
 		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BACKGROUND, colors);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_COLOR, COLOR1);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_COLOR, COLOR1);
+		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BAR_CENTER_COLOR, COLOR1);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);
@@ -84,12 +91,17 @@ public class SimpleBoxPlot extends JPanel {
 		add(panel);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Box-and-whisker plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return String.format("Three box-and-whisker plots created from %d random samples", SAMPLE_COUNT);
+	}
+
 	public static void main(String[] args) {
-		SimpleBoxPlot example = new SimpleBoxPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(400, 600);
-		frame.setVisible(true);
+		new SimpleBoxPlot().showInFrame();
 	}
 }

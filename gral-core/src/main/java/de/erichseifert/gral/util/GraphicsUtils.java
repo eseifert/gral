@@ -330,6 +330,23 @@ public abstract class GraphicsUtils {
 	}
 
 	/**
+	 * Linearly blends two colors with a defined weight.
+	 * @param color1 First color.
+	 * @param color2 Second color.
+	 * @param weight Weighting factor in the range 0 to 1 (0 means color1, 1 means second color)
+	 * @return New blended color
+	 */
+	public static Color blend(Color color1, Color color2, double weight) {
+		double w2 = MathUtils.limit(weight, 0.0, 1.0);
+		double w1 = 1.0 - w2;
+		int r = (int) Math.round(w1*color1.getRed()   + w2*color2.getRed());
+		int g = (int) Math.round(w1*color1.getGreen() + w2*color2.getGreen());
+		int b = (int) Math.round(w1*color1.getBlue()  + w2*color2.getBlue());
+		int a = (int) Math.round(w1*color1.getAlpha() + w2*color2.getAlpha());
+		return new Color(r, g, b, a);
+	}
+
+	/**
 	 * Creates a new color with the same color components but a different
 	 * alpha value.
 	 * @param color Original color.
@@ -339,4 +356,25 @@ public abstract class GraphicsUtils {
 	public static Color deriveWithAlpha(Color color, int alpha) {
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 	}
+
+	/**
+	 * Creates a new darker version of a color by blending it with black. The
+	 * derived color has the same alpha value as the original color.
+	 * @param color Original color.
+	 * @return Darker color with same alpha value.
+	 */
+	public static Color deriveDarker(Color color) {
+		return deriveWithAlpha(blend(color, Color.BLACK, 0.5), color.getAlpha());
+	}
+
+	/**
+	 * Creates a new brighter version of a color by blending it with white. The
+	 * derived color has the same alpha value as the original color.
+	 * @param color Original color.
+	 * @return Brighter color with same alpha value.
+	 */
+	public static Color deriveBrighter(Color color) {
+		return deriveWithAlpha(blend(color, Color.WHITE, 0.5), color.getAlpha());
+	}
+
 }

@@ -21,38 +21,33 @@
  */
 package de.erichseifert.gral.examples.barplot;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.data.statistics.Histogram1D;
 import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Orientation;
 
 
-public class HistogramPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class HistogramPlot extends ExamplePanel {
+	private static final int SAMPLE_COUNT = 1000;
+
 
 	public HistogramPlot() {
-		super(new BorderLayout());
-
 		// Create example data
 		Random random = new Random();
 		DataTable data = new DataTable(Double.class);
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			data.add(random.nextGaussian());
 		}
 
@@ -83,10 +78,10 @@ public class HistogramPlot extends JPanel {
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, -4.4);
 
 		// Format bars
-		plot.getPointRenderer(histogram2d).setSetting(
-				PointRenderer.COLOR, new Color(0.5f, 0.6f, 0.7f, 0.5f));
-		plot.getPointRenderer(histogram2d).setSetting(
-				PointRenderer.VALUE_DISPLAYED, true);
+		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.COLOR,
+			GraphicsUtils.deriveWithAlpha(COLOR1, 128));
+		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.VALUE_DISPLAYED,
+			true);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);
@@ -95,12 +90,17 @@ public class HistogramPlot extends JPanel {
 		add(panel);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Histogram plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return String.format("Histogram of %d samples", SAMPLE_COUNT);
+	}
+
 	public static void main(String[] args) {
-		HistogramPlot example = new HistogramPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new HistogramPlot().showInFrame();
 	}
 }

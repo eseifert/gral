@@ -29,9 +29,9 @@ import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
@@ -39,16 +39,17 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
-public class StackedPlots extends JPanel {
+public class StackedPlots extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1L;
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
 	public StackedPlots() {
-		super(new GridLayout(2, 1));
+		setLayout(new GridLayout(2, 1));
 
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class);
@@ -60,13 +61,13 @@ public class StackedPlots extends JPanel {
 
 		// Create and format upper plot
 		XYPlot plotUpper = new XYPlot(data);
-		Color colorUpper = new Color(0.9f, 0.3f, 0.2f);
+		Color colorUpper = COLOR1;
 		plotUpper.setPointRenderer(data, null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setSetting(LineRenderer.COLOR, colorUpper);
 		plotUpper.setLineRenderer(data, lineUpper);
 		AreaRenderer areaUpper = new DefaultAreaRenderer2D();
-		areaUpper.setSetting(AreaRenderer.COLOR, new Color(colorUpper.getRed(), colorUpper.getGreen(), colorUpper.getBlue(), 63));
+		areaUpper.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(colorUpper, 64));
 		plotUpper.setAreaRenderer(data, areaUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 		InteractivePanel panelUpper = new InteractivePanel(plotUpper);
@@ -74,7 +75,7 @@ public class StackedPlots extends JPanel {
 
 		// Create and format lower plot
 		XYPlot plotLower = new XYPlot(data);
-		Color colorLower = new Color(0.0f, 0.3f, 1.0f);
+		Color colorLower = COLOR1;
 		PointRenderer pointsLower = plotLower.getPointRenderer(data);
 		pointsLower.setSetting(PointRenderer.COLOR, colorLower);
 		pointsLower.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-3, -3, 6, 6));
@@ -89,6 +90,16 @@ public class StackedPlots extends JPanel {
 
 		// Connect the two panels, i.e. user (mouse) actions affect both plots
 		panelUpper.connect(panelLower);
+	}
+
+	@Override
+	public String getTitle() {
+		return "Stacked plots";
+	}
+
+	@Override
+	public String getDescription() {
+		return "An area and a line plot with synchronized actions.";
 	}
 
 	public static void main(String[] args) {

@@ -24,17 +24,16 @@ package de.erichseifert.gral.examples.xyplot;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.LinearGradientPaint;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
@@ -44,20 +43,16 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 
 
-public class SimpleXYPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class SimpleXYPlot extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
 	public SimpleXYPlot() {
-		super(new BorderLayout());
-		setBackground(new Color(1.0f, 0.99f, 0.95f));
-
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x = 1.0; x <= 400.0; x *= 1.5) {
@@ -74,18 +69,17 @@ public class SimpleXYPlot extends JPanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		plot.setSetting(XYPlot.TITLE, "A Sample XY Plot");
+		plot.setSetting(XYPlot.BACKGROUND, Color.WHITE);
+		plot.setSetting(XYPlot.TITLE, getDescription());
 
 		// Format plot area
-		plot.getPlotArea().setSetting(PlotArea.BACKGROUND, new LinearGradientPaint(
-				0f,0f, 1f,0f, new float[] {0.00f, 0.05f},
-				new Color[] {new Color(0.15f,0.05f,0.00f,0.15f), new Color(0.15f,0.05f,0.00f,0.00f)}));
+		plot.getPlotArea().setSetting(PlotArea.BACKGROUND, new RadialGradientPaint(
+			new Point2D.Double(0.5, 0.5),
+			0.75f,
+			new float[] { 0.6f, 0.8f, 1.0f },
+			new Color[] { new Color(0, 0, 0, 0), new Color(0, 0, 0, 32), new Color(0, 0, 0, 128) }
+		));
 		plot.getPlotArea().setSetting(PlotArea.BORDER, null);
-		// Set custom grid color
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_COLOR, Color.BLUE);
-		// Disable grid
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
-		//plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false);
 
 		// Format axes
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
@@ -101,50 +95,52 @@ public class SimpleXYPlot extends JPanel {
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setSetting(AxisRenderer.SHAPE_STROKE, stroke);
 		axisRendererY.setSetting(AxisRenderer.LABEL, "Linear axis");
-		// Custom stroke for the ticks
-		//axisRendererX.setSetting(AxisRenderer.TICKS_STROKE, stroke);
-		// Swap axis direction
-		//axisRendererX.setSetting(AxisRenderer.SHAPE_DIRECTION_SWAPPED, true);
-		//plot.setAxisRenderer(XYPlot.AXIS_Y, new LogarithmicRenderer2D());
 		// Change intersection point of Y axis
 		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
 		// Change tick spacing
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
-		//axisRendererY.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 
 		// Format rendering of data points
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
+		sizeablePointRenderer.setSetting(PointRenderer.COLOR, GraphicsUtils.deriveDarker(COLOR1));
 		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
 		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
+		defaultPointRenderer.setSetting(PointRenderer.COLOR, GraphicsUtils.deriveDarker(COLOR2));
 		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
+		defaultPointRenderer.setSetting(PointRenderer.ERROR_COLOR, COLOR2);
 		plot.setPointRenderer(seriesLog, defaultPointRenderer);
-		// Custom point bounds
-		//plot.getPointRenderer(seriesLog).setBounds(new Rectangle2D.Double(-10.0, -5.0, 20.0, 5.0));
-		// Custom point coloring
-		//plot.getPointRenderer().setColor(Color.RED);
 
 		// Format data lines
 		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
-		discreteRenderer.setSetting(LineRenderer.COLOR, new Color(0.5f, 0.2f, 0.0f, 0.7f));
-		discreteRenderer.setSetting(LineRenderer.STROKE, new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, new float[] {3f, 6f}, 0.0f));
+		discreteRenderer.setSetting(LineRenderer.COLOR, COLOR1);
+		discreteRenderer.setSetting(LineRenderer.STROKE, new BasicStroke(
+			3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+			10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for points
 		discreteRenderer.setSetting(LineRenderer.GAP, 2.0);
 		discreteRenderer.setSetting(LineRenderer.GAP_ROUNDED, true);
 		// Custom ascending
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, Orientation.VERTICAL);
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT, 0.5);
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION,
+			Orientation.VERTICAL);
+		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT,
+			0.5);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
 	}
 
+	@Override
+	public String getTitle() {
+		return "x-y plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Styled x-y plot with example data";
+	}
+
 	public static void main(String[] args) {
-		SimpleXYPlot example = new SimpleXYPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new SimpleXYPlot().showInFrame();
 	}
 }

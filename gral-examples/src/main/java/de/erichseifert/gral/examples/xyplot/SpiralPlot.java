@@ -23,28 +23,25 @@ package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.geom.Ellipse2D;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SpiralPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
-
+public class SpiralPlot extends ExamplePanel {
 	public SpiralPlot() {
-		super(new BorderLayout());
-		setBackground(new Color(0.75f, 0.75f, 0.75f));  // Set the background color of the Swing component
+		setPreferredSize(new Dimension(600, 600));
 
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class);
@@ -63,6 +60,7 @@ public class SpiralPlot extends JPanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0));  // Add a margin to the plot
+		plot.setSetting(Plot.BACKGROUND, new Color(0.75f, 0.75f, 0.75f));
 
 		// Format plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.BORDER, null);        // Remove border of plot area
@@ -79,21 +77,27 @@ public class SpiralPlot extends JPanel {
 		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);  // Scale y axis from -10 to 10
 
 		// Format data series
+		Color color = GraphicsUtils.deriveWithAlpha(COLOR1, 96);
 		PointRenderer pointRenderer = new SizeablePointRenderer();
 		pointRenderer.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
-		pointRenderer.setSetting(PointRenderer.COLOR, new Color(0f, 0f, 0.5f, 0.25f));  // color of data points
+		pointRenderer.setSetting(PointRenderer.COLOR, color);  // color of data points
 		pointRenderer.setSetting(SizeablePointRenderer.COLUMN, 2);  // data column which determines the scaling of data point shapes
 		plot.setPointRenderer(series, pointRenderer);  // Assign the point renderer to the data series
 
 		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component
 	}
 
+	@Override
+	public String getTitle() {
+		return "Spiral bubble plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Bubble plot showing data points in a spiral-like shape";
+	}
+
 	public static void main(String[] args) {
-		SpiralPlot example = new SpiralPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 600);
-		frame.setVisible(true);
+		new SpiralPlot().showInFrame();
 	}
 }

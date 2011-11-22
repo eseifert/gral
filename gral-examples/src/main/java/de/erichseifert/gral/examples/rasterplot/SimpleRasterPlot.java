@@ -21,38 +21,36 @@
  */
 package de.erichseifert.gral.examples.rasterplot;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Dimension;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.RasterPlot;
-import de.erichseifert.gral.plots.colors.HeatMap;
+import de.erichseifert.gral.plots.colors.MultiColor;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
 
-public class SimpleRasterPlot extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class SimpleRasterPlot extends ExamplePanel {
+	private static final int SIZE = 64;
+	private static final double ZOOM = 0.3;
 
 	public SimpleRasterPlot() {
-		super(new BorderLayout());
+		setPreferredSize(new Dimension(600, 600));
 
 		// Create example data
-		int size = 128;
-		double f = 0.15;
-		DataTable raster = new DataTable(size, Double.class);
+		DataTable raster = new DataTable(SIZE, Double.class);
 		for (int rowIndex = 0; rowIndex < raster.getColumnCount(); rowIndex++) {
 			Number[] row = new Number[raster.getColumnCount()];
-			double y = f*rowIndex;
+			double y = ZOOM*rowIndex;
 			for (int colIndex = 0; colIndex < row.length; colIndex++) {
-				double x = f*colIndex;
+				double x = ZOOM*colIndex;
 				row[colIndex] =
-					Math.cos(Math.hypot(x - f*size/2.0, y - f*size/2.0)) *
-					Math.cos(Math.hypot(x + f*size/2.0, y + f*size/2.0));
+					Math.cos(Math.hypot(x - ZOOM*SIZE/2.0, y - ZOOM*SIZE/2.0)) *
+					Math.cos(Math.hypot(x + ZOOM*SIZE/2.0, y + ZOOM*SIZE/2.0));
 			}
 			raster.add(row);
 		}
@@ -65,7 +63,7 @@ public class SimpleRasterPlot extends JPanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
-		plot.setSetting(RasterPlot.COLORS, new HeatMap());
+		plot.setSetting(RasterPlot.COLORS, new MultiColor(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);
@@ -74,12 +72,17 @@ public class SimpleRasterPlot extends JPanel {
 		add(panel);
 	}
 
+	@Override
+	public String getTitle() {
+		return "Raster plot";
+	}
+
+	@Override
+	public String getDescription() {
+		return String.format("Raster plot of %d×%d values", SIZE, SIZE);
+	}
+
 	public static void main(String[] args) {
-		SimpleRasterPlot example = new SimpleRasterPlot();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 600);
-		frame.setVisible(true);
+		new SimpleRasterPlot().showInFrame();
 	}
 }

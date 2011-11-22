@@ -34,8 +34,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import de.erichseifert.gral.Legend;
@@ -44,6 +42,7 @@ import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
@@ -52,6 +51,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 
@@ -136,18 +136,13 @@ final class UpdateTask implements ActionListener {
 	}
 }
 
-public class MemoryUsage extends JPanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+public class MemoryUsage extends ExamplePanel {
 	/** Size of the data buffer in no. of element. */
 	private static final int BUFFER_SIZE = 400;
 	/** Update interval in milliseconds */
 	private static final int INTERVAL = 100;
 
 	public MemoryUsage() {
-		super(new BorderLayout());
-		setBackground(new Color(1.0f, 1.0f, 1.0f));
-
 		DataTable data = new DataTable(Double.class, Long.class, Long.class, Long.class);
 		double time = System.currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
@@ -185,24 +180,40 @@ public class MemoryUsage extends JPanel {
 		axisRendererY.setSetting(AxisRenderer.TICKS_MINOR_COUNT, 4);
 		axisRendererY.setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat("0 MiB"));
 
+		Color color1Dark = GraphicsUtils.deriveDarker(COLOR1);
+
 		// Format first data series
 		plot.setPointRenderer(memSysUsage, null);
 		AreaRenderer area1 = new DefaultAreaRenderer2D();
-		area1.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(0f, 0f, 0f, 1f, new float[] {0f, 1f},
-				new Color[] {new Color(1.0f, 0.0f, 0.0f, 0.5f), new Color(1.0f, 0.0f, 0.0f, 0.1f)}));
+		area1.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(
+			0f, 0f, 0f, 1f,
+			new float[] {0f, 1f},
+			new Color[] {
+				GraphicsUtils.deriveWithAlpha(COLOR1, 128),
+				GraphicsUtils.deriveWithAlpha(COLOR1, 24)
+			}
+		));
 		plot.setAreaRenderer(memSysUsage, area1);
 
 		// Format second data series
 		plot.setPointRenderer(memVm, null);
 		LineRenderer line2 = new DefaultLineRenderer2D();
-		line2.setSetting(LineRenderer.COLOR, new Color(0.0f, 0.3f, 1.0f, 0.5f));
+		line2.setSetting(LineRenderer.COLOR,
+				GraphicsUtils.deriveWithAlpha(color1Dark, 128)
+		);
 		plot.setLineRenderer(memVm, line2);
 
 		// Format third data series
 		plot.setPointRenderer(memVmUsage, null);
 		AreaRenderer area3 = new DefaultAreaRenderer2D();
-		area3.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(0f, 0f, 0f, 1f, new float[] {0f, 1f},
-				new Color[] {new Color(0.0f, 0.3f, 1.0f, 0.5f), new Color(0.0f, 0.3f, 1.0f, 0.1f)}));
+		area3.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(
+				0f, 0f, 0f, 1f,
+				new float[] {0f, 1f},
+				new Color[] {
+					GraphicsUtils.deriveWithAlpha(COLOR2, 128),
+					GraphicsUtils.deriveWithAlpha(COLOR2, 24)
+				}
+		));
 		plot.setAreaRenderer(memVmUsage, area3);
 
 		// Add plot to frame
@@ -218,12 +229,19 @@ public class MemoryUsage extends JPanel {
 		updateTimer.start();
 	}
 
+	@Override
+	public String getTitle() {
+		return "Memory usage";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Area plot of the system's current memory usage. This example " +
+			"works best with Oracle VM, but it can show VM memory usage on " +
+			"other VMs too.";
+	}
+
 	public static void main(String[] args) {
-		MemoryUsage example = new MemoryUsage();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new MemoryUsage().showInFrame();
 	}
 }
