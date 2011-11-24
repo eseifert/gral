@@ -24,6 +24,7 @@ package de.erichseifert.gral.plots;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
@@ -128,15 +129,23 @@ public class PiePlot extends Plot implements DataListener {
 			// TODO Use real font size instead of fixed value
 			final double fontSize = 10.0;
 
+			Shape clipBoundsOld = graphics.getClip();
 			Insets2D clipOffset = getSetting(CLIPPING);
 			if (clipOffset != null) {
 				// Perform clipping
-				Rectangle2D clipBounds = new Rectangle2D.Double(
+				Shape clipBounds = new Rectangle2D.Double(
 						clipOffset.getLeft()*fontSize,
 						clipOffset.getTop()*fontSize,
 						getWidth() - clipOffset.getHorizontal()*fontSize,
 						getHeight() - clipOffset.getVertical()*fontSize
 				);
+				// Take care of old clipping region. This is used when getting
+				// scrolled in a JScrollPane for example.
+				if (clipBoundsOld != null) {
+					Area clipBoundsNew = new Area(clipBoundsOld);
+					clipBoundsNew.intersect(new Area(clipBoundsOld));
+					clipBounds = clipBoundsNew;
+				}
 				graphics.setClip(clipBounds);
 			}
 
@@ -196,7 +205,7 @@ public class PiePlot extends Plot implements DataListener {
 
 			if (clipOffset != null) {
 				// Reset clipping
-				graphics.setClip(null);
+				graphics.setClip(clipBoundsOld);
 			}
 
 			graphics.setTransform(txOffset);
