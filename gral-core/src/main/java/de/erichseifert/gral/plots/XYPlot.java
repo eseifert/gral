@@ -273,7 +273,7 @@ public class XYPlot extends Plot  {
 				// scrolled in a JScrollPane for example.
 				if (clipBoundsOld != null) {
 					Area clipBoundsNew = new Area(clipBoundsOld);
-					clipBoundsNew.intersect(new Area(clipBoundsOld));
+					clipBoundsNew.intersect(new Area(clipBounds));
 					clipBounds = clipBoundsNew;
 				}
 				graphics.setClip(clipBounds);
