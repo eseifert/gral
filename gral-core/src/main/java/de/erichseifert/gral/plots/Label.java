@@ -109,7 +109,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		double rotation = this.<Number>getSetting(ROTATION).doubleValue();
 		if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
 			AffineTransform txLabelText = AffineTransform.getRotateInstance(
-				-rotation/180.0*Math.PI,
+				Math.toRadians(-rotation),
 				textBounds.getCenterX(),
 				textBounds.getCenterY()
 			);
@@ -151,7 +151,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
 			if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
 				AffineTransform txLabelText = AffineTransform.getRotateInstance(
-					-rotation/180.0*Math.PI,
+					Math.toRadians(-rotation),
 					bounds.getCenterX(),
 					bounds.getCenterY()
 				);

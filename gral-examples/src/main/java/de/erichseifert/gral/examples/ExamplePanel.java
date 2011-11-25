@@ -46,6 +46,7 @@ public abstract class ExamplePanel extends JPanel {
 	public ExamplePanel() {
 		super(new BorderLayout());
 		setPreferredSize(new Dimension(800, 600));
+		setBackground(Color.WHITE);
 	}
 
 	/**

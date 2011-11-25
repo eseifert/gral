@@ -314,7 +314,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				label.setSetting(Label.ROTATION, rotation);
 				if ((rotation%360.0) != 0.0) {
 					marginShape = AffineTransform.getRotateInstance(
-						-rotation/180.0*Math.PI,
+						Math.toRadians(-rotation),
 						marginBounds.getCenterX(),
 						marginBounds.getCenterY()
 					).createTransformedShape(marginShape);

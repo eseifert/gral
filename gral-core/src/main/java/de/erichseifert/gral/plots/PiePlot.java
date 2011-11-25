@@ -166,25 +166,27 @@ public class PiePlot extends Plot implements DataListener {
 				.doubleValue();
 			double sizeInner = size * sizeRelInner;
 			Ellipse2D inner = new Ellipse2D.Double(
-					-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
+				-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
 			Area whole = new Area(inner);
 
 			double gap = plot.<Number>getSetting(PiePlot.GAP).doubleValue();
 
 			double sliceOffset = plot.<Number>getSetting(PiePlot.START)
 				.doubleValue();
-			int sliceNo = 0;
+
+			boolean isClockwise = plot.<Boolean>getSetting(PiePlot.CLOCKWISE);
+
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];
 				double sliceSpan = slice[1];
-				sliceNo++;
+
 				if (!MathUtils.isCalculatable(sliceSpan)) {
 					continue;
 				}
 
 				// Construct slice
 				Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d,
-						size, size, sliceStart, sliceSpan, Arc2D.PIE);
+					size, size, sliceStart, sliceSpan, Arc2D.PIE);
 				Area doughnutSlice = new Area(pieSlice);
 				if (gap > 0.0) {
 					Stroke sliceStroke =
@@ -198,9 +200,15 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Paint slice
-				Paint paint = colorList.get(sliceNo - 1.0/slices.size());
+				double sliceStartRel;
+				if (isClockwise) {
+					sliceStartRel = MathUtils.normalizeDegrees(-slice[0]) / 360.0;
+				} else {
+					sliceStartRel = MathUtils.normalizeDegrees(slice[0]) / 360.0;
+				}
+				Paint paint = colorList.get(sliceStartRel);
 				GraphicsUtils.fillPaintedShape(
-						graphics, doughnutSlice, paint, null);
+					graphics, doughnutSlice, paint, null);
 			}
 
 			if (clipOffset != null) {

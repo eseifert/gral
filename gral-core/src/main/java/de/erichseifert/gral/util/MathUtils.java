@@ -387,4 +387,16 @@ public abstract class MathUtils {
 	public static boolean isCalculatable(double n) {
 		return !Double.isNaN(n) && !Double.isInfinite(n);
 	}
+
+	/**
+	 * Converts an angle in degrees so that it lies between 0.0 and 360.0.
+	 * @param angle Arbitrary angle in degrees.
+	 * @return Angle between 0.0 and 360.0.
+	 */
+	public static double normalizeDegrees(double angle) {
+		while (angle < 0.0) {
+			angle += 360.0;
+		}
+		return angle%360.0;
+	}
 }
