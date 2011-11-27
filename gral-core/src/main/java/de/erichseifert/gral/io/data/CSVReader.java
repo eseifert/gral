@@ -77,19 +77,35 @@ public class CSVReader extends AbstractDataReader {
 		));
 	}
 
+	/**
+	 * Token types for analyzing CSV or TSV input.
+	 */
 	private static enum CSVTokenType {
+		/** Type for text tokens containing value content. */
 		TEXT,
+		/** Type for quotes that may wrap value content. */
 		QUOTE,
+		/** Type for row separators. */
 		ROW,
+		/** Type for column separators. */
 		COLUMN,
 	}
 
+	/**
+	 *
+	 */
 	private static final class CSVTokenizer extends StatefulTokenizer {
-
+		/**
+		 * Initializes a new tokenizer instance with a grammar to analyze CSV
+		 * or TSV content. The character that separates columns must be
+		 * provided.
+		 * @param separator Column separator character.
+		 */
 		public CSVTokenizer(char separator) {
 			addJoinedType(CSVTokenType.TEXT);
 			addIngoredType(CSVTokenType.QUOTE);
 
+			// Basic Set of rules for analyzing CSV content
 			putRules(
 				new Rule("\n|\r\n|\r", CSVTokenType.ROW),
 				new Rule("\\s*("+Pattern.quote(String.valueOf(separator))+")\\s*",
@@ -97,6 +113,7 @@ public class CSVReader extends AbstractDataReader {
 				new Rule("\"", CSVTokenType.QUOTE, "quoted"),
 				new Rule(".", CSVTokenType.TEXT)
 			);
+			// Set of rules that is valid inside quoted content
 			putRules("quoted",
 				new Rule("(\")\"", CSVTokenType.TEXT),
 				new Rule("\"", CSVTokenType.QUOTE, "#pop"),
