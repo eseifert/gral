@@ -88,30 +88,38 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 */
 	protected void drawValue(DrawingContext context,
 			Shape point, Object value) {
-		// Value format
+
+		// Formatting
 		Format format = getSetting(VALUE_FORMAT);
-		// Provide sane defaults
 		if ((format == null) && (value instanceof Number)) {
 			format = NumberFormat.getInstance();
 		}
+
 		// Text to display
 		String text = (format != null) ? format.format(value) : value.toString();
-		// Font
+
+		// Visual settings
+		Color color = getSetting(VALUE_COLOR);
 		Font font = getSetting(VALUE_FONT);
 		double fontSize = font.getSize2D();
-		// Location
+
+		// Layout settings
 		Location location = getSetting(VALUE_LOCATION);
-		// Distance
+		Number alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X);
+		Number alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y);
+		Number rotation = this.<Number>getSetting(VALUE_ROTATION);
 		Number distanceObj = getSetting(VALUE_DISTANCE);
 		double distance = 0.0;
 		if (MathUtils.isCalculatable(distanceObj)) {
 			distance = distanceObj.doubleValue()*fontSize;
 		}
 
+		// Create a label with the settings
 		Label label = new Label(text);
-		label.setSetting(Label.ALIGNMENT_X, getSetting(VALUE_ALIGNMENT_X));
-		label.setSetting(Label.ALIGNMENT_Y, getSetting(VALUE_ALIGNMENT_Y));
-		label.setSetting(Label.COLOR, getSetting(VALUE_COLOR));
+		label.setSetting(Label.ALIGNMENT_X, alignX);
+		label.setSetting(Label.ALIGNMENT_Y, alignY);
+		label.setSetting(Label.ROTATION, rotation);
+		label.setSetting(Label.COLOR, color);
 		label.setSetting(Label.FONT, font);
 
 		Rectangle2D boundsPoint = point.getBounds2D();

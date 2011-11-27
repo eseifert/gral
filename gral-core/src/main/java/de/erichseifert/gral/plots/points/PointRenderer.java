@@ -57,15 +57,18 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
-	/** Key for specifying the positioning of the data value using a
-	{@link de.erichseifert.gral.Location} value. */
+	/** Key for specifying a {@link de.erichseifert.gral.Location} value for
+	the positioning of the data value relative to the data point. */
 	public static final Key VALUE_LOCATION = new Key("point.value.location"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.lang.Number} value that positions
+	/** Key for specifying a {@link java.lang.Number} value that positions
 	the value horizontally. */
 	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.lang.Number} value that positions
+	/** Key for specifying a {@link java.lang.Number} value that positions
 	the value vertically. */
 	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for setting the
+	rotation of the value in degrees. */
+	static final Key VALUE_ROTATION = new Key("point.value.rotation"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the distance
 	 of values to the point. The distance is specified relative to the font
 	 height. */
