@@ -33,6 +33,7 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
+import java.text.NumberFormat;
 
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Location;
@@ -89,6 +90,10 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 			Shape point, Object value) {
 		// Value format
 		Format format = getSetting(VALUE_FORMAT);
+		// Provide sane defaults
+		if ((format == null) && (value instanceof Number)) {
+			format = NumberFormat.getInstance();
+		}
 		// Text to display
 		String text = (format != null) ? format.format(value) : value.toString();
 		// Font
