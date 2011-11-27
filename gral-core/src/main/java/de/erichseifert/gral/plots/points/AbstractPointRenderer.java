@@ -68,6 +68,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
+		setSettingDefault(VALUE_ROTATION, 0.0);
 		setSettingDefault(VALUE_DISTANCE, 1.0);
 		setSettingDefault(VALUE_COLOR, Color.BLACK);
 		setSettingDefault(VALUE_FONT, Font.decode(null));

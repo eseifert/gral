@@ -106,15 +106,21 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		Rectangle2D textBounds = outline.getBounds2D();
 
 		// Rotate label text around its center point
-		double rotation = this.<Number>getSetting(ROTATION).doubleValue();
-		if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
-			AffineTransform txLabelText = AffineTransform.getRotateInstance(
-				Math.toRadians(-rotation),
-				textBounds.getCenterX(),
-				textBounds.getCenterY()
-			);
-			labelShape = txLabelText.createTransformedShape(outline);
-			textBounds = labelShape.getBounds2D();
+		Number rotationObj = this.<Number>getSetting(ROTATION);
+
+		if (MathUtils.isCalculatable(rotationObj)) {
+			double rotation =
+				MathUtils.normalizeDegrees(rotationObj.doubleValue());
+			if (rotation != 0.0) {
+				AffineTransform txLabelText =
+					AffineTransform.getRotateInstance(
+						Math.toRadians(-rotation),
+						textBounds.getCenterX(),
+						textBounds.getCenterY()
+					);
+				labelShape = txLabelText.createTransformedShape(labelShape);
+				textBounds = labelShape.getBounds2D();
+			}
 		}
 
 		// Get graphics instance and store state information
@@ -148,14 +154,19 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		if (getLayout() != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
-			double rotation = this.<Number>getSetting(ROTATION).doubleValue();
-			if (MathUtils.isCalculatable(rotation) && (rotation%360.0 != 0.0)) {
-				AffineTransform txLabelText = AffineTransform.getRotateInstance(
-					Math.toRadians(-rotation),
-					bounds.getCenterX(),
-					bounds.getCenterY()
-				);
-				shape = txLabelText.createTransformedShape(shape);
+			Number rotationObj = this.<Number>getSetting(ROTATION);
+			if (MathUtils.isCalculatable(rotationObj)) {
+				double rotation =
+					MathUtils.normalizeDegrees(rotationObj.doubleValue());
+				if (rotation != 0.0) {
+					AffineTransform txLabelText =
+						AffineTransform.getRotateInstance(
+							Math.toRadians(-rotation),
+							bounds.getCenterX(),
+							bounds.getCenterY()
+						);
+					shape = txLabelText.createTransformedShape(shape);
+				}
 			}
 			d.setSize(
 				shape.getBounds2D().getWidth(),

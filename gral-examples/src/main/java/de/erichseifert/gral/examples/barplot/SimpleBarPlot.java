@@ -62,24 +62,24 @@ public class SimpleBarPlot extends ExamplePanel {
 		// Format bars
 		PointRenderer pointRenderer = plot.getPointRenderer(data);
 		pointRenderer.setSetting(PointRenderer.COLOR,
-				new LinearGradientPaint(0f,0f, 0f,1f,
-						new float[] { 0.0f, 1.0f },
-						new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }
-				)
+			new LinearGradientPaint(0f,0f, 0f,1f,
+					new float[] { 0.0f, 1.0f },
+					new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }
+			)
 		);
 		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE, new BasicStroke(3f));
 		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE_COLOR,
-				new LinearGradientPaint(0f,0f, 0f,1f,
-						new float[] { 0.0f, 1.0f },
-						new Color[] { GraphicsUtils.deriveBrighter(COLOR1), COLOR1 }
-				)
+			new LinearGradientPaint(0f,0f, 0f,1f,
+					new float[] { 0.0f, 1.0f },
+					new Color[] { GraphicsUtils.deriveBrighter(COLOR1), COLOR1 }
+			)
 		);
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		pointRenderer.setSetting(PointRenderer.VALUE_COLUMN, 2);
 		pointRenderer.setSetting(PointRenderer.VALUE_LOCATION, Location.CENTER);
 		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, GraphicsUtils.deriveDarker(COLOR1));
 		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
-				Font.decode(null).deriveFont(Font.BOLD));
+			Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot));
