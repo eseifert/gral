@@ -33,7 +33,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
-import java.text.NumberFormat;
 
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Location;
@@ -65,7 +64,6 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 
 		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(VALUE_COLUMN, 1);
-		setSettingDefault(VALUE_FORMAT, NumberFormat.getInstance());
 		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
@@ -92,7 +90,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		// Value format
 		Format format = getSetting(VALUE_FORMAT);
 		// Text to display
-		String text = format.format(value);
+		String text = (format != null) ? format.format(value) : value.toString();
 		// Font
 		Font font = getSetting(VALUE_FONT);
 		double fontSize = font.getSize2D();

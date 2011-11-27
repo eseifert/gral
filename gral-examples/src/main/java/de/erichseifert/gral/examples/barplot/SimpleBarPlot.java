@@ -42,15 +42,15 @@ public class SimpleBarPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public SimpleBarPlot() {
 		// Create example data
-		DataTable data = new DataTable(Double.class, Integer.class, Integer.class);
-		data.add(0.1,  1,  6);
-		data.add(0.2,  3,  8);
-		data.add(0.3, -2,  2);
-		data.add(0.4,  6,  6);
-		data.add(0.5, -4,  8);
-		data.add(0.6,  8, 18);
-		data.add(0.7,  9,  9);
-		data.add(0.8, 11,  1);
+		DataTable data = new DataTable(Double.class, Integer.class, String.class);
+		data.add(0.1,  1, "January");
+		data.add(0.2,  3, "February");
+		data.add(0.3, -2, "March");
+		data.add(0.4,  6, "April");
+		data.add(0.5, -4, "May");
+		data.add(0.6,  8, "June");
+		data.add(0.7,  9, "July");
+		data.add(0.8, 11, "August");
 
 		// Create new bar plot
 		BarPlot plot = new BarPlot(data);
@@ -75,6 +75,7 @@ public class SimpleBarPlot extends ExamplePanel {
 				)
 		);
 		pointRenderer.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		pointRenderer.setSetting(PointRenderer.VALUE_COLUMN, 2);
 		pointRenderer.setSetting(PointRenderer.VALUE_LOCATION, Location.CENTER);
 		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, GraphicsUtils.deriveDarker(COLOR1));
 		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
