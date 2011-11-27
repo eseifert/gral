@@ -36,6 +36,7 @@ public class DataAccessorTest {
 	private static DataTable table;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
@@ -91,6 +92,7 @@ public class DataAccessorTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testEquality() {
 		Row row1 = new Row(table, 1);
 		Row row2 = new Row(table, 1);

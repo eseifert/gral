@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data;
 
+import java.util.Arrays;
+
 
 /**
  * Class that represents a data source containing the same value in each cell.
@@ -28,7 +30,7 @@ package de.erichseifert.gral.data;
  */
 public class DummyData extends AbstractDataSource {
 	/** Value that will be returned for all positions in this data source. */
-	private final Number value;
+	private final Comparable<?> value;
 	/** Number of columns. */
 	private final int cols;
 	/** Number of rows. */
@@ -41,10 +43,16 @@ public class DummyData extends AbstractDataSource {
 	 * @param rows Number of rows.
 	 * @param value Value of the cells.
 	 */
-	public DummyData(int cols, int rows, Number value) {
+	@SuppressWarnings("unchecked")
+	public DummyData(int cols, int rows, Comparable<?> value) {
+		value.getClass();
 		this.cols = cols;
 		this.rows = rows;
 		this.value = value;
+
+		Class<? extends Comparable<?>>[] types = new Class[cols];
+		Arrays.fill(types, value.getClass());
+		setColumnTypes(types);
 	}
 
 	/**
@@ -53,7 +61,7 @@ public class DummyData extends AbstractDataSource {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		return value;
 	}
 

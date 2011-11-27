@@ -33,6 +33,7 @@ public class HistogramTest {
 	private DataTable table;
 
 	@Before
+	@SuppressWarnings("unchecked")
 	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
@@ -46,7 +47,7 @@ public class HistogramTest {
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		Histogram histogram = new Histogram1D(table, Orientation.VERTICAL, 4);
 
 		assertEquals(table.getColumnCount(), histogram.getColumnCount());

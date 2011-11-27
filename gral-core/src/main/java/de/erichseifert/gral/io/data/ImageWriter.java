@@ -107,7 +107,12 @@ public class ImageWriter extends AbstractDataWriter {
 		int pos = 0;
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				double value = data.get(x, y).doubleValue()*factor + offset;
+				Comparable<?> cell = data.get(x, y);
+				if (!(cell instanceof Number)) {
+					continue;
+				}
+				Number numericCell = (Number) cell;
+				double value = numericCell.doubleValue()*factor + offset;
 				byte v = (byte) Math.round(MathUtils.limit(value, 0.0, 255.0));
 				pixelData[pos++] = v;
 			}

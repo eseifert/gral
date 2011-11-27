@@ -40,9 +40,11 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class HistogramPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
+
 	private static final int SAMPLE_COUNT = 1000;
 
-
+	@SuppressWarnings("unchecked")
 	public HistogramPlot() {
 		// Create example data
 		Random random = new Random();

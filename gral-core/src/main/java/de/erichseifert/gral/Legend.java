@@ -42,7 +42,7 @@ import de.erichseifert.gral.util.SettingsListener;
 
 /**
  * <p>Abstract class that serves as a base for legends in plots.
- * It stores a list of of items of type <code>Item</code> which are used to
+ * It stores a list of of items of type {@code Item} are used to
  * display a symbol and label for each (visible) data source.</p>
  * <p>Like other elements legends can be styled using various settings. The
  * settings are used to control to control how the legend, and its items
@@ -82,7 +82,7 @@ public abstract class Legend extends DrawableContainer
 	private final Map<DataSource, Drawable> components;
 
 	/**
-	 * Class that displays a specific data source as an item of a Legend.
+	 * Class that displays a specific data source as an item of a legend.
 	 */
 	protected class Item extends DrawableContainer {
 		/** Data source that is related to this item. */
@@ -142,8 +142,8 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Initializes a new <code>Legend</code> instance with default background
-	 * color, border, orientation and gap between the items.
+	 * Initializes a new instance with a default background color, a border, an
+	 * orientation and a gap between the items.
 	 */
 	public Legend() {
 		components = new HashMap<DataSource, Drawable>();
@@ -167,8 +167,8 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the background of this Legend with the specified <code>Graphics2D</code>
-	 * object.
+	 * Draws the background of this legend with the specified
+	 * {@code Graphics2D} object.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
@@ -179,8 +179,7 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the border of this Legend with the specified <code>Graphics2D</code>
-	 * object.
+	 * Draws the border of this legend with the specified {@cod{@code Graphics2D}t.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {
@@ -198,8 +197,8 @@ public abstract class Legend extends DrawableContainer
 	 * @param data Data source.
 	 */
 	protected abstract void drawSymbol(
-			DrawingContext context,
-			Drawable symbol, DataSource data);
+		DrawingContext context,
+		Drawable symbol, DataSource data);
 
 	/**
 	 * Adds the specified data source in order to display it.
@@ -214,7 +213,7 @@ public abstract class Legend extends DrawableContainer
 	/**
 	 * Returns whether the specified data source was added to the legend.
 	 * @param source Data source
-	 * @return <code>true</code> if legend contains the data source, otherwise <code>false</code>
+	 * @return {@code true} if legend contains the data source, otherwise {@code false}
 	 */
 	public boolean contains(DataSource source) {
 		return components.containsKey(source);
@@ -267,7 +266,7 @@ public abstract class Legend extends DrawableContainer
 					continue;
 				}
 				((Item) item).label.setSetting(Label.FONT,
-						Legend.this.<Font>getSetting(FONT));
+					Legend.this.<Font>getSetting(FONT));
 			}
 		}
 	}

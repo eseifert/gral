@@ -89,15 +89,15 @@ public class ImageReader extends AbstractDataReader {
 	}
 
 	/**
-	 * Returns a DataSource that was imported.
+	 * Returns a data source that was imported.
 	 * @param input Input to be read.
-	 * @param types Number types for the columns of the DataSource.
+	 * @param types Number types for the columns of the data source.
 	 * @return DataSource Imported data.
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
 	 */
 	@SuppressWarnings("unchecked")
-	public DataSource read(InputStream input, Class<? extends Number>... types)
+	public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
 			throws IOException {
 		BufferedImage image = ImageIO.read(input);
 

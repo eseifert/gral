@@ -71,14 +71,14 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	private boolean valid;
 
 	/**
-	 * Creates a new empty <code>Label</code> object.
+	 * Initializes a new empty {@code Label} instances.
 	 */
 	public Label() {
 		this(""); //$NON-NLS-1$
 	}
 
 	/**
-	 * Creates a new <code>Label</code> object with the specified text.
+	 * Initializes a new {@code Label} instance with the specified text.
 	 * @param text Text to be displayed.
 	 */
 	public Label(String text) {
@@ -93,8 +93,8 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Draws the <code>Drawable</code> with the specified
-	 * <code>Graphics2D</code> object.
+	 * Draws the {@code Drawable} with the specified
+	 * {@code Graphics2D} object.
 	 * @param context Environment used for drawing
 	 */
 	public void draw(DrawingContext context) {
@@ -166,8 +166,8 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Returns the <code>TextLayout</code> instance for this label.
-	 * @return <code>TextLayout</code> instance for this label.
+	 * Returns the {@code de TextLayout} instance for this label.
+	 * @return {@code TextLayout} instance for this label.
 	 */
 	protected TextLayout getLayout() {
 		if (!valid && text != null && !text.isEmpty()) {

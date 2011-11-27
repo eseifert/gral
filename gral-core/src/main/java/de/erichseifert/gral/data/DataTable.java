@@ -33,17 +33,17 @@ import de.erichseifert.gral.data.comparators.DataComparator;
 
 /**
  * <p>A writable implementation of a data source. Additionally to the standard
- * functionality of <code>DataSource</code> it allows for adding and deleting
+ * functionality of {@code DataSource} it allows for adding and deleting
  * rows. Additionally, all data in the table can be deleted.</p>
  * <p>The data in the table can be sorted row-wise with the method
- * <code>sort(DataComparator...)</code>. For example, this way column 1 could
+ * {@code sort(DataComparator...)}. For example, this way column 1 could
  * be sorted ascending and column 3 descending.</p>
  *
  * @see DataSource
  */
 public class DataTable extends AbstractDataSource {
 	/** All values stored as rows of column arrays. */
-	private final List<Number[]> rows;
+	private final List<Comparable<?>[]> rows;
 	/** Number of rows. */
 	private int rowCount;
 
@@ -52,9 +52,9 @@ public class DataTable extends AbstractDataSource {
 	 * column types.
 	 * @param types Type for each column
 	 */
-	public DataTable(Class<? extends Number>... types) {
+	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
-		rows = new ArrayList<Number[]>();
+		rows = new ArrayList<Comparable<?>[]>();
 	}
 
 	/**
@@ -63,11 +63,12 @@ public class DataTable extends AbstractDataSource {
 	 * @param cols Number of columns
 	 * @param type Data type for all columns
 	 */
-	public DataTable(int cols, Class<? extends Number> type) {
+	@SuppressWarnings("unchecked")
+	public DataTable(int cols, Class<? extends Comparable<?>> type) {
 		this();
-		Class<?>[] types = new Class<?>[cols];
+		Class<? extends Comparable<?>>[] types = new Class[cols];
 		Arrays.fill(types, type);
-		setColumnTypes((Class<? extends Number>[]) types);
+		setColumnTypes(types);
 	}
 
 	/**
@@ -83,13 +84,13 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/**
-	 * Adds a row with the specified <code>Number</code> values to the table.
+	 * Adds a row with the specified comparable values to the table.
 	 * The values are added in the order they are specified. If the types of
 	 * the table columns and the values do not match, an
-	 * <code>IllegalArgumentException</code> is thrown.
+	 * {@code IllegalArgumentException} is thrown.
 	 * @param values values to be added as a row
 	 */
-	public void add(Number... values) {
+	public void add(Comparable<?>... values) {
 		add(Arrays.asList(values));
 	}
 
@@ -97,25 +98,25 @@ public class DataTable extends AbstractDataSource {
 	 * Adds a row with the specified container's elements to the table.
 	 * The values are added in the order they are specified. If the types of
 	 * the table columns and the values do not match, an
-	 * <code>IllegalArgumentException</code> is thrown.
+	 * {@code IllegalArgumentException} is thrown.
 	 * @param values values to be added as a row
 	 */
-	public void add(Collection<? extends Number> values) {
+	public void add(Collection<? extends Comparable<?>> values) {
 		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(MessageFormat.format(
-					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
-					getColumnCount(), values.size()));
+				"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
+				getColumnCount(), values.size()));
 		}
 		int i = 0;
-		Number[] row = new Number[values.size()];
+		Comparable<?>[] row = new Comparable<?>[values.size()];
 		DataChangeEvent[] events = new DataChangeEvent[row.length];
-		Class<? extends Number>[] types = getColumnTypes();
-		for (Number value : values) {
+		Class<? extends Comparable<?>>[] types = getColumnTypes();
+		for (Comparable<?> value : values) {
 			if ((value != null)
 					&& !(types[i].isAssignableFrom(value.getClass()))) {
 				throw new IllegalArgumentException(MessageFormat.format(
-						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
-						types[i], value.getClass()));
+					"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
+					types[i], value.getClass()));
 			}
 			row[i] = value;
 			events[i] = new DataChangeEvent(this, i, rowCount, null, value);
@@ -130,12 +131,12 @@ public class DataTable extends AbstractDataSource {
 	 * Adds the specified row to the table.
 	 * The values are added in the order they are specified. If the types of
 	 * the table columns and the values do not match, an
-	 * <code>IllegalArgumentException</code> is thrown.
+	 * {@code IllegalArgumentException} is thrown.
 	 * @param row Row to be added
 	 */
 	public void add(Row row) {
-		List<Number> values = new ArrayList<Number>(row.size());
-		for (Number value : row) {
+		List<Comparable<?>> values = new ArrayList<Comparable<?>>(row.size());
+		for (Comparable<?> value : row) {
 			values.add(value);
 		}
 		add(values);
@@ -172,19 +173,21 @@ public class DataTable extends AbstractDataSource {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		return rows.get(row)[col];
 	}
 
 	/**
-	 * Sets the value of a certain cell.
+	 * Sets the value of a cell specified by its column and row indexes.
+	 * @param <T> Data type of the cell.
 	 * @param col Column of the cell to change.
 	 * @param row Row of the cell to change.
 	 * @param value New value to be set.
 	 * @return Old value that was replaced.
 	 */
-	public Number set(int col, int row, Number value) {
-		Number old = get(col, row);
+	@SuppressWarnings("unchecked")
+	public <T> Comparable<T> set(int col, int row, Comparable<T> value) {
+		Comparable<T> old = (Comparable<T>) get(col, row);
 		if (!old.equals(value)) {
 			rows.get(row)[col] = value;
 			notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
@@ -206,8 +209,8 @@ public class DataTable extends AbstractDataSource {
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(final DataComparator... comparators) {
-		Collections.sort(rows, new Comparator<Number[]>() {
-			public int compare(Number[] o1, Number[] o2) {
+		Collections.sort(rows, new Comparator<Comparable<?>[]>() {
+			public int compare(Comparable<?>[] o1, Comparable<?>[] o2) {
 				for (DataComparator comp : comparators) {
 					int result = comp.compare(o1, o2);
 					if (result != 0) {

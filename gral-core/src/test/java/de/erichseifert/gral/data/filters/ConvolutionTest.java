@@ -23,6 +23,7 @@ package de.erichseifert.gral.data.filters;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,26 +36,33 @@ public class ConvolutionTest {
 	private static Kernel kernel;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
-		table = new DataTable(Double.class, Double.class);
-		table.add(1.0, 1.0); // 0
-		table.add(2.0, 1.0); // 1
-		table.add(3.0, 1.0); // 2
-		table.add(4.0, 1.0); // 3
-		table.add(5.0, 1.0); // 4
-		table.add(6.0, 1.0); // 5
-		table.add(7.0, 1.0); // 6
-		table.add(8.0, 1.0); // 7
+		table = new DataTable(Double.class, Double.class, String.class);
+		table.add(1.0, 1.0, "a"); // 0
+		table.add(2.0, 1.0, "b"); // 1
+		table.add(3.0, 1.0, "c"); // 2
+		table.add(4.0, 1.0, "d"); // 3
+		table.add(5.0, 1.0, "e"); // 4
+		table.add(6.0, 1.0, "f"); // 5
+		table.add(7.0, 1.0, "g"); // 6
+		table.add(8.0, 1.0, "h"); // 7
 
 		kernel = new Kernel(1.0, 1.0, 1.0);
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
-
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
+		assertEquals(table.getColumnCount(), filter.getColumnTypes().length);
+
+		try {
+			new Convolution(table, kernel, Filter.Mode.ZERO, 0, 2);
+			fail("Filtering a non-numeric column must raise an IllegalArgumentException.");
+		} catch (IllegalArgumentException e) {
+		}
 	}
 
 	@Test
@@ -77,77 +85,77 @@ public class ConvolutionTest {
 	public void testColumns() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0);
 
-		assertEquals(3.0, filter.get(0, 0).doubleValue(), DELTA);
-		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertEquals(9.0, filter.get(0, 2).doubleValue(), DELTA);
+		assertEquals(3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
+		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(9.0, ((Number) filter.get(0, 2)).doubleValue(), DELTA);
 
-		assertEquals(1.0, filter.get(1, 0).doubleValue(), DELTA);
-		assertEquals(1.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertEquals(1.0, filter.get(1, 2).doubleValue(), DELTA);
+		assertEquals(1.0, ((Number) filter.get(1, 0)).doubleValue(), DELTA);
+		assertEquals(1.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertEquals(1.0, ((Number) filter.get(1, 2)).doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testModeOmit() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
 
-		assertTrue(Double.isNaN(filter.get(0, 0).doubleValue()));
-		assertEquals(6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertTrue(Double.isNaN(filter.get(0, 7).doubleValue()));
+		assertTrue(Double.isNaN(((Number) filter.get(0, 0)).doubleValue()));
+		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertTrue(Double.isNaN(((Number) filter.get(0, 7)).doubleValue()));
 
-		assertTrue(Double.isNaN(filter.get(1, 0).doubleValue()));
-		assertEquals(3.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertTrue(Double.isNaN(filter.get(1, 7).doubleValue()));
+		assertTrue(Double.isNaN(((Number) filter.get(1, 0)).doubleValue()));
+		assertEquals(3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertTrue(Double.isNaN(((Number) filter.get(1, 7)).doubleValue()));
 	}
 
 	@Test
 	public void testModeZero() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
 
-		assertEquals( 3.0, filter.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertEquals(15.0, filter.get(0, 7).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
+		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(15.0, ((Number) filter.get(0, 7)).doubleValue(), DELTA);
 
-		assertEquals( 2.0, filter.get(1, 0).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertEquals( 2.0, filter.get(1, 7).doubleValue(), DELTA);
+		assertEquals( 2.0, ((Number) filter.get(1, 0)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertEquals( 2.0, ((Number) filter.get(1, 7)).doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testModeRepeat() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.REPEAT, 0, 1);
 
-		assertEquals( 4.0, filter.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertEquals(23.0, filter.get(0, 7).doubleValue(), DELTA);
+		assertEquals( 4.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
+		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(23.0, ((Number) filter.get(0, 7)).doubleValue(), DELTA);
 
-		assertEquals( 3.0, filter.get(1, 0).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 7).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 0)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 7)).doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testModeMirror() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.MIRROR, 0, 1);
 
-		assertEquals( 5.0, filter.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertEquals(22.0, filter.get(0, 7).doubleValue(), DELTA);
+		assertEquals( 5.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
+		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(22.0, ((Number) filter.get(0, 7)).doubleValue(), DELTA);
 
-		assertEquals( 3.0, filter.get(1, 0).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 7).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 0)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 7)).doubleValue(), DELTA);
 	}
 
 	@Test
 	public void testModeCircular() {
 		Convolution filter = new Convolution(table, kernel, Filter.Mode.CIRCULAR, 0, 1);
 
-		assertEquals(11.0, filter.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 6.0, filter.get(0, 1).doubleValue(), DELTA);
-		assertEquals(16.0, filter.get(0, 7).doubleValue(), DELTA);
+		assertEquals(11.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
+		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(16.0, ((Number) filter.get(0, 7)).doubleValue(), DELTA);
 
-		assertEquals( 3.0, filter.get(1, 0).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 1).doubleValue(), DELTA);
-		assertEquals( 3.0, filter.get(1, 7).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 0)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) filter.get(1, 7)).doubleValue(), DELTA);
 	}
 }

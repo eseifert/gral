@@ -49,9 +49,9 @@ public class HaltonSequence implements Iterator<Double> {
 
     /**
      * Returns whether the iteration has more elements. This means it returns
-     * <code>true</code> if <code>next</code> would return an element rather
+     * {@code true} if {@code next} would return an element rather
      * than throwing an exception.
-     * @return <code>true</code> if the iterator has more elements.
+     * @return {@code true} if the iterator has more elements.
      */
 	public boolean hasNext() {
 		return true;
@@ -84,7 +84,7 @@ public class HaltonSequence implements Iterator<Double> {
 	}
 
 	/**
-	 * Stub method to fulfill <code>Iterator</code> interface.
+	 * Stub method to fulfill {@code Iterator} interface.
 	 */
 	public void remove() {
 	}

@@ -44,8 +44,8 @@ public abstract class MathUtils {
 	 * @param a First value
 	 * @param b Second value
 	 * @param delta Precision
-	 * @return <code>true</code> if the difference of <i>a</i> and <b>b</b> is
-	 *         smaller or equal than <i>delta</i>, otherwise <code>false</code>
+	 * @return {@code true} if the difference of <i>a</i> and <b>b</b> is
+	 *         smaller or equal than <i>delta</i>, otherwise {@code false}
 	 */
 	public static boolean almostEqual(double a, double b, double delta) {
 		return Math.abs(a - b) <= delta;
@@ -65,7 +65,7 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Returns a rounded number smaller than <code>a</code> with a defined
+	 * Returns a rounded number smaller than {@code a} with a defined
 	 * precision.
 	 * @param a Value
 	 * @param precision Precision
@@ -79,7 +79,7 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Returns a rounded number larger than <code>a</code> with a defined
+	 * Returns a rounded number larger than {@code a} with a defined
 	 * precision.
 	 * @param a Value
 	 * @param precision Precision
@@ -93,12 +93,12 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Perform a binary search on a sorted array <code>a</code> to find the
-	 * element with the nearest element to <code>key</code>.
+	 * Perform a binary search on a sorted array {@code a} to find the
+	 * element with the nearest element to {@code key}.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
 	 * @return Index of the array element whose value is nearly or exactly
-	 *         <code>key</code>
+	 *         {@code key}
 	 */
 	public static int binarySearch(double[] a, double key) {
 		int l = 0;
@@ -118,13 +118,13 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Perform a binary search on a sorted array <code>a</code> to find the
-	 * element with the smallest distance to <code>key</code>. The returned
-	 * element's value is always less than or equal to <code>key</code>.
+	 * Perform a binary search on a sorted array {@code a} to find the
+	 * element with the smallest distance to {@code key}. The returned
+	 * element's value is always less than or equal to {@code key}.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
 	 * @return Index of the array element whose value is less than or equal to
-	 *         <code>key</code>
+	 *         {@code key}
 	 */
 	public static int binarySearchFloor(double[] a, double key) {
 		if (a.length == 0) {
@@ -138,13 +138,13 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Perform a binary search on a sorted array <code>a</code> to find the
-	 * element with the smallest distance to <code>key</code>. The returned
-	 * element's value is always greater than or equal to <code>key</code>.
+	 * Perform a binary search on a sorted array {@code a} to find the
+	 * element with the smallest distance to {@code key}. The returned
+	 * element's value is always greater than or equal to {@code key}.
 	 * @param a Array with ascending values
 	 * @param key Pivot value
 	 * @return Index of the array element whose value is greater than or equal
-	 * 		   to <code>key</code>
+	 * 		   to {@code key}
 	 */
 	public static int binarySearchCeil(double[] a, double key) {
 		if (a.length == 0) {
@@ -158,10 +158,10 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Clamps a double number to specified limits: if <code>value</code> is
-	 * greater than <code>max</code> then <code>max</code> will be returned.
-	 * If <code>value</code> is greater than <code>min</code> then
-	 * <code>min</code> will be returned.
+	 * Clamps a double number to specified limits: if {@code value} is
+	 * greater than {@code max} then {@code max} will be returned.
+	 * If {@code value} is greater than {@code min} then
+	 * {@code min} will be returned.
 	 * @param value Double value to be clamped
 	 * @param min Minimum
 	 * @param max Maximum
@@ -178,10 +178,10 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Clamps a float number to specified limits: if <code>value</code> is
-	 * greater than <code>max</code> then <code>max</code> will be returned.
-	 * If <code>value</code> is greater than <code>min</code> then
-	 * <code>min</code> will be returned.
+	 * Clamps a float number to specified limits: if {@code value} is
+	 * greater than {@code max} then {@code max} will be returned.
+	 * If {@code value} is greater than {@code min} then
+	 * {@code min} will be returned.
 	 * @param value Float value to be clamped
 	 * @param min Minimum
 	 * @param max Maximum
@@ -198,10 +198,10 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Clamps a integer number to specified limits: if <code>value</code> is
-	 * greater than <code>max</code> then <code>max</code> will be returned.
-	 * If <code>value</code> is greater than <code>min</code> then
-	 * <code>min</code> will be returned.
+	 * Clamps a integer number to specified limits: if {@code value} is
+	 * greater than {@code max} then {@code max} will be returned.
+	 * If {@code value} is greater than {@code min} then
+	 * {@code min} will be returned.
 	 * @param value Integer value to be clamped
 	 * @param min Minimum
 	 * @param max Maximum
@@ -218,7 +218,7 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * <p>Perform a randomized search on an unsorted array <code>a</code> to
+	 * <p>Perform a randomized search on an unsorted array {@code a} to
 	 * find the <i>i</i>th smallest element. The array contents are be modified
 	 * during the operation!</p>
 	 * <p>See Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
@@ -296,7 +296,7 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Swaps two elements at indexes <code>i1</code> and <code>i2</code> of an
+	 * Swaps two elements at indexes {@code i1} and {@code i2} of an
 	 * array in-place.
 	 * @param <T> Data type of the array
 	 * @param a Array
@@ -334,10 +334,14 @@ public abstract class MathUtils {
 	 * method that is used by R (method 7). The list must be sorted.</p>
 	 * <p>For more information see:</p>
 	 * <ul>
-	 *   <li><a href="http://adorio-research.org/wordpress/?p=125">Statistics: computing quantiles with Python</a></li>
-	 *   <li><a href="http://en.wikipedia.org/wiki/Quantile#Estimating_the_quantiles_of_a_population">Wikipedia article on quantile calculation</a></li>
-	 *   <li><a href="http://svn.r-project.org/R/trunk/src/library/stats/R/quantile.R">Source code of quantile calculation in R language</a></li>
-	 *   <li><a href="http://stackoverflow.com/questions/95007/explain-the-quantile-function-in-r">Stackoverflow thread on quantile calculation in R</a></li>
+	 *   <li><a href="http://adorio-research.org/wordpress/?p=125">Statistics:
+	 *   	computing quantiles with Python</a></li>
+	 *   <li><a href="http://en.wikipedia.org/wiki/Quantile#Estimating_the_quantiles_of_a_population">Wikipedia
+	 *   	article on quantile calculation</a></li>
+	 *   <li><a href="http://svn.r-project.org/R/trunk/src/library/stats/R/quantile.R">Source
+	 *   	code of quantile calculation in R language</a></li>
+	 *   <li><a href="http://stackoverflow.com/questions/95007/explain-the-quantile-function-in-r">Stackoverflow
+	 *   	thread on quantile calculation in R</a></li>
 	 * </ul>
 	 * @param values Data values.
 	 * @param q Quantile in range [0, 1]
@@ -367,11 +371,11 @@ public abstract class MathUtils {
 	}
 
 	/**
-	 * Returns whether a specified <code>java.lang.Number</code> object can be
-	 * used for calculations. <code>null</code> values, <code>NaN</code> values
+	 * Returns whether a specified {@code java.lang.Number} object can be
+	 * used for calculations. {@code null} values, {@code NaN} values
 	 * or infinite values are considered as non-calculatable.
 	 * @param n Number object.
-	 * @return whether <code>n</code> can be used for calculations.
+	 * @return whether {@code n} can be used for calculations.
 	 */
 	public static boolean isCalculatable(Number n) {
 		return (n != null) && isCalculatable(n.doubleValue());
@@ -379,10 +383,10 @@ public abstract class MathUtils {
 
 	/**
 	 * Returns whether a specified double can be used for calculations.
-	 * <code>NaN</code> values or infinite values are considered
+	 * {@code NaN} values or infinite values are considered
 	 * non-calculatable.
 	 * @param n double value
-	 * @return whether <code>n</code> can be used for calculations.
+	 * @return whether {@code n} can be used for calculations.
 	 */
 	public static boolean isCalculatable(double n) {
 		return !Double.isNaN(n) && !Double.isInfinite(n);

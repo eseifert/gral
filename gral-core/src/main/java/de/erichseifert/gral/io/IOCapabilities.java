@@ -39,7 +39,7 @@ public class IOCapabilities {
 	private final String[] extensions;
 
 	/**
-	 * Creates a new <code>IOCapabilities</code> object with the specified
+	 * Creates a new {@code IOCapabilities} object with the specified
 	 * format, name, MIME-Type and filename extensions.
 	 * @param format Format.
 	 * @param name Name.

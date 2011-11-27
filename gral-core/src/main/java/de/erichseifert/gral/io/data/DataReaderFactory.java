@@ -29,10 +29,9 @@ import java.text.MessageFormat;
 import de.erichseifert.gral.io.AbstractIOFactory;
 
 /**
- * <p>A factory class that produces <code>DataReader</code> instances for a
+ * <p>A factory class that produces {@code DataReader} instances for a
  * specified format. The produced readers can be used to retrieve data from
- * an <code>InputStream</code> and to get a <code>DataSource</code>
- * instance.</p>
+ * an {@code InputStream} and to get a {@code DataSource} instance.</p>
  * <p>Example usage:</p>
  * <pre>
  * DataReaderFactory factory = DataReaderFactory.getInstance();

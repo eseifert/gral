@@ -48,6 +48,7 @@ public class StackedPlots extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	public StackedPlots() {
 		setLayout(new GridLayout(2, 1));
 

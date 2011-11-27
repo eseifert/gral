@@ -42,14 +42,14 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	private static final int INITIAL_LINE_CAPACITY = 10000;
 
 	/**
-	 * Initializes a new <code>DefaultLineRenderer2D</code> instance.
+	 * Initializes a new {@code DefaultLineRenderer2D} instance.
 	 */
 	public DefaultLineRenderer2D() {
 	}
 
 	/**
 	 * Returns a graphical representation for the line defined by
-	 * <code>points</code>.
+	 *{@code e points}.
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */

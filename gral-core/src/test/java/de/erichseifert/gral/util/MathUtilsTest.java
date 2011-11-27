@@ -186,9 +186,9 @@ public class MathUtilsTest {
 	@Test
 	public void testIsCalculatable() {
 		// Number
-		assertTrue(MathUtils.isCalculatable(new Byte((byte) 0)));
-		assertTrue(MathUtils.isCalculatable(new Integer(0)));
-		assertTrue(MathUtils.isCalculatable(new Long(0L)));
+		assertTrue(MathUtils.isCalculatable(Byte.valueOf((byte) 0)));
+		assertTrue(MathUtils.isCalculatable(Integer.valueOf(0)));
+		assertTrue(MathUtils.isCalculatable(Long.valueOf(0L)));
 		assertTrue(MathUtils.isCalculatable(new Float(0f)));
 		assertTrue(MathUtils.isCalculatable(new Double(0.0)));
 		assertFalse(MathUtils.isCalculatable(null));

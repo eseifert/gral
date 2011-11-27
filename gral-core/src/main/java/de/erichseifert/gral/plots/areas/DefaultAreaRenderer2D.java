@@ -37,7 +37,7 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Default two-dimensional implementation of the <code>AreaRenderer</code>
+ * Default two-dimensional implementation of the {@code AreaRenderer}
  * interface.
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {

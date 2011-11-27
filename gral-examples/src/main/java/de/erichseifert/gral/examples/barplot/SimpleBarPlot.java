@@ -37,6 +37,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimpleBarPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("unchecked")
 	public SimpleBarPlot() {
 		// Create example data
 		DataTable data = new DataTable(Double.class, Integer.class, Integer.class);

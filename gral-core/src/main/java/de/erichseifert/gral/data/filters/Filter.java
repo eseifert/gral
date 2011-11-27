@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -75,19 +76,39 @@ public abstract class Filter extends AbstractDataSource
 	private Mode mode;
 
 	/**
-	 * Creates a new Filter object with the specified DataSource, Mode and
-	 * columns to filter.
-	 * @param original DataSource to be filtered.
-	 * @param mode Mode to be used.
-	 * @param cols Column indexes to be filtered.
+	 * Initializes a new instance with the specified data source, border
+	 * handling and columns to be filtered. The columns must be numeric,
+	 * otherwise an {@code IllegalArgumentException} is thrown.
+	 * @param original Data source to be filtered.
+	 * @param mode Border handling mode to be used.
+	 * @param cols Indexes of numeric columns to be filtered.
 	 */
+	@SuppressWarnings("unchecked")
 	public Filter(DataSource original, Mode mode, int... cols) {
 		this.rows = new ArrayList<Double[]>(original.getRowCount());
 		this.original = original;
 		this.mode = mode;
+
 		this.cols = Arrays.copyOf(cols, cols.length);
 		// A sorted array is necessary for binary search
 		Arrays.sort(this.cols);
+
+		// Check if columns are numeric
+		Class<? extends Comparable<?>>[] originalColumnTypes =
+			original.getColumnTypes();
+		for (int colIndex : this.cols) {
+			if (!original.isColumnNumeric(colIndex)) {
+				throw new IllegalArgumentException(MessageFormat.format(
+					"Column {0,number,integer} isn't numeric and cannot be filtered.", //$NON-NLS-1$
+					colIndex));
+			}
+		}
+
+		Class<? extends Comparable<?>>[] types = originalColumnTypes;
+		for (int colIndex : this.cols) {
+			types[colIndex] = Double.class;
+		}
+		setColumnTypes(types);
 
 		this.original.addDataListener(this);
 		dataUpdated(this.original);
@@ -99,7 +120,7 @@ public abstract class Filter extends AbstractDataSource
 	 * @param row Row index.
 	 * @return Original value.
 	 */
-	protected Number getOriginal(int col, int row) {
+	protected Comparable<?> getOriginal(int col, int row) {
 		int rowLast = original.getRowCount() - 1;
 		if (row < 0 || row > rowLast) {
 			if (Mode.OMIT.equals(mode)) {
@@ -161,7 +182,7 @@ public abstract class Filter extends AbstractDataSource
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		int colPos = getIndex(col);
 		if (colPos < 0) {
 			return original.get(col, row);
@@ -176,13 +197,13 @@ public abstract class Filter extends AbstractDataSource
 	 * @param value New cell value.
 	 * @return The previous value before it has been changed.
 	 */
-	protected Number set(int col, int row, double value) {
+	protected Number set(int col, int row, Double value) {
 		int colPos = getIndex(col);
 		if (colPos < 0) {
 			throw new IllegalArgumentException(
-					"Can't set value in unfiltered column."); //$NON-NLS-1$
+				"Can't set value in unfiltered column."); //$NON-NLS-1$
 		}
-		Number old = rows.get(row)[colPos];
+		Double old = rows.get(row)[colPos];
 		rows.get(row)[colPos] = value;
 		notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
 		return old;
@@ -223,7 +244,7 @@ public abstract class Filter extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -236,7 +257,7 @@ public abstract class Filter extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -249,7 +270,7 @@ public abstract class Filter extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

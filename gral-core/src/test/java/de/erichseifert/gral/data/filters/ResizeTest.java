@@ -38,6 +38,7 @@ public class ResizeTest {
 	private static DataTable dataDiagonal;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		dataEmpty = new DataTable(Double.class, Double.class, Double.class);
 		dataEmpty.add(0.0, 0.0, 0.0); // 0
@@ -67,15 +68,15 @@ public class ResizeTest {
 		for (int i = 0; i < expected.length; i++) {
 			int col = i % filter.getColumnCount();
 			int row = i / filter.getColumnCount();
-			assertEquals(expected[i], filter.get(col, row).doubleValue(), DELTA);
+			assertEquals(expected[i], ((Number) filter.get(col, row)).doubleValue(), DELTA);
 		}
 	}
 
 	private void assertIdentity(DataSource data) {
 		assertFiltered(data, data.getColumnCount(), data.getRowCount(), new double[] {
-			data.get(0, 0).doubleValue(), data.get(1, 0).doubleValue(), data.get(2, 0).doubleValue(),
-			data.get(0, 1).doubleValue(), data.get(1, 1).doubleValue(), data.get(2, 1).doubleValue(),
-			data.get(0, 2).doubleValue(), data.get(1, 2).doubleValue(), data.get(2, 2).doubleValue(),
+			((Number) data.get(0, 0)).doubleValue(), ((Number) data.get(1, 0)).doubleValue(), ((Number) data.get(2, 0)).doubleValue(),
+			((Number) data.get(0, 1)).doubleValue(), ((Number) data.get(1, 1)).doubleValue(), ((Number) data.get(2, 1)).doubleValue(),
+			((Number) data.get(0, 2)).doubleValue(), ((Number) data.get(1, 2)).doubleValue(), ((Number) data.get(2, 2)).doubleValue(),
 		});
 	}
 

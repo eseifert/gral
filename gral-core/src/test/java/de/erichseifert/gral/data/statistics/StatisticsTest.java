@@ -36,6 +36,7 @@ public class StatisticsTest {
 	private Statistics stats;
 
 	@Before
+	@SuppressWarnings("unchecked")
 	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(0, 1, 2); // 0

@@ -28,7 +28,7 @@ import de.erichseifert.gral.Drawable;
 
 
 /**
- * Interface providing functions for rendering <code>Drawable</code>
+ * Interface providing functions for rendering {@code Drawable}
  * instances and writing them to an output stream. As an example: a plot
  * can be saved into a bitmap file.
  * @see DrawableWriterFactory
@@ -41,8 +41,8 @@ public interface DrawableWriter {
 	public String getMimeType();
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param width Width of the image.
 	 * @param height Height of the image.
@@ -52,8 +52,8 @@ public interface DrawableWriter {
 			double width, double height) throws IOException;
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param x Horizontal position.
 	 * @param y Vertical position.

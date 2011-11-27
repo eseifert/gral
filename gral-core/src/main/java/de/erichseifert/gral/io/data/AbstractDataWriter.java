@@ -31,7 +31,7 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
  */
 public abstract class AbstractDataWriter extends IOCapabilitiesStorage
 		implements DataWriter {
-	/** Settings stored as pairs <code>(key, value)</code>. */
+	/** Settings stored as (key, value) pairs. */
 	private final Map<String, Object> settings;
 	/** Default settings. */
 	private final Map<String, Object> defaults;
@@ -62,6 +62,7 @@ public abstract class AbstractDataWriter extends IOCapabilitiesStorage
 	 * @param key key of the setting
 	 * @return the value of the setting
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getSetting(String key) {
 		if (!settings.containsKey(key)) {
 			return (T) defaults.get(key);

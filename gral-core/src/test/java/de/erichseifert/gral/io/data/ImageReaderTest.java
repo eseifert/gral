@@ -70,7 +70,7 @@ public class ImageReaderTest {
 		DataSource data = reader.read(imageData);
 		assertEquals(3, data.getColumnCount());
 		assertEquals(4, data.getRowCount());
-		
+
 		double[] expected = new double[] {
 			255.0,   0.0,   0.0,
 			  0.0, 255.0,   0.0,
@@ -80,7 +80,7 @@ public class ImageReaderTest {
 		for (int i = 0; i < expected.length; i++) {
 			int col = i % 3;
 			int row = i / 3;
-			double value = data.get(col, row).doubleValue();
+			double value = ((Number) data.get(col, row)).doubleValue();
 			assertEquals(expected[i], value, DELTA);
 		}
 	}

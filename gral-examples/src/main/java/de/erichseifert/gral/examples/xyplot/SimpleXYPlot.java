@@ -49,20 +49,24 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class SimpleXYPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	public SimpleXYPlot() {
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		DataTable data = new DataTable(Double.class, Double.class, Double.class,
+				Double.class, Double.class, Double.class);
 		for (double x = 1.0; x <= 400.0; x *= 1.5) {
 			double x2 = x/5.0;
-			data.add(-Math.sqrt(x2) + 5.0,  x2,  5.0*Math.log10(x2),  1.0 + 2.0*random.nextDouble());
+			data.add(x2, -Math.sqrt(x2) + 5.0,  5.0*Math.log10(x2),
+				random.nextDouble() + 1.0, random.nextDouble() + 0.5, 1.0 + 2.0*random.nextDouble());
 		}
 
 		// Create data series
-		DataSeries seriesLog = new DataSeries(data, 1, 2, 3, 3);
-		DataSeries seriesLin = new DataSeries(data, 1, 0, 3);
+		DataSeries seriesLog = new DataSeries(data, 0, 2, 3, 4);
+		DataSeries seriesLin = new DataSeries(data, 0, 1, 5);
 
 		// Create new xy-plot
 		XYPlot plot = new XYPlot(seriesLog, seriesLin);

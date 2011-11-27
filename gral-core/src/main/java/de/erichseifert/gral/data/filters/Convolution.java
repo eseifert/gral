@@ -28,7 +28,7 @@ import de.erichseifert.gral.util.MathUtils;
  * <p>Class that applies a specified kernel to a data source to convolve it.</p>
  * <p>Functionality includes:</p>
  * <ul>
- *   <li>Getting and setting the <code>Kernel</code> used for convolution</li>
+ *   <li>Getting and setting the {@code Kernel} used for convolution</li>
  * </ul>
  */
 public class Convolution extends Filter {
@@ -36,8 +36,8 @@ public class Convolution extends Filter {
 	private final Kernel kernel;
 
 	/**
-	 * Creates a new <code>Convolution</code> object with the specified DataSource,
-	 * Kernel, Mode and columns.
+	 * Initialized a new instance with the specified data source, convolution
+	 * kernel, edge handling mode, and columns to be filtered.
 	 * @param original DataSource to be filtered.
 	 * @param kernel Kernel to be used.
 	 * @param mode Mode of filtering.
@@ -79,14 +79,16 @@ public class Convolution extends Filter {
 	 */
 	private double convolve(int col, int row) {
 		if (kernel == null) {
-			Number original = getOriginal(col, row);
-			return (original != null) ? original.doubleValue() : Double.NaN;
+			Comparable<?> original = getOriginal(col, row);
+			Number originalNumber = (Number) original;
+			return (originalNumber != null) ? originalNumber.doubleValue() : Double.NaN;
 		}
 		double sum = 0.0;
 		for (int k = kernel.getMinIndex(); k <= kernel.getMaxIndex(); k++) {
 			int r = row + k;
-			Number original = getOriginal(col, r);
-			double v = (original != null) ? original.doubleValue() : Double.NaN;
+			Comparable<?> original = getOriginal(col, r);
+			Number originalNumber = (Number) original;
+			double v = (originalNumber != null) ? originalNumber.doubleValue() : Double.NaN;
 			if (!MathUtils.isCalculatable(v)) {
 				return v;
 			}

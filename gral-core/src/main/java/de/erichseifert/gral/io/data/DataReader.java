@@ -32,14 +32,14 @@ import de.erichseifert.gral.data.DataSource;
  */
 public interface DataReader {
 	/**
-	 * Returns a DataSource that was imported.
+	 * Returns a data source that contains the imported data.
 	 * @param input Input to be read.
-	 * @param types Number types for the columns of the DataSource.
-	 * @return DataSource Imported data.
+	 * @param types Types for the columns of the data source.
+	 * @return Imported data.
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
 	 */
-	DataSource read(InputStream input, Class<? extends Number>... types)
+	DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
 		throws IOException;
 
 	/**

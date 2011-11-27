@@ -20,6 +20,6 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Unit tests for <code>de.erichseifert.gral.plots.colors</code> package.
+ * Unit tests for {@code de.erichseifert.gral.plots.colors} package.
  */
 package de.erichseifert.gral.plots.colors;

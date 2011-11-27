@@ -39,8 +39,8 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Default two-dimensional implementation of the <code>AreaRenderer</code>
- * interface that draws lines from data points to the main axis.
+ * Default two-dimensional implementation of the {@code AreaRenderer} interface
+ * that draws lines from data points to the main axis.
  */
 public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	/** Key for specifying the {@link java.awt.Stroke} instance that is used

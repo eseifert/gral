@@ -50,7 +50,7 @@ import de.erichseifert.gral.util.PointND;
 /**
  * <p>Class that displays data as a box-and-whisker plot showing summaries of
  * important statistical values. The data source must provide six columns to
- * the <code>BoxPlot</code>:<p>
+ * the {@code BoxPlot}:<p>
  * <ul>
  *   <li>Box position (for multiple boxes)</li>
  *   <li>Position of the center bar (e.g. median)</li>
@@ -65,7 +65,7 @@ import de.erichseifert.gral.util.PointND;
  * obtain common statistics for these properties from the each column of an
  * existing data source.</p>
  *
- * <p>To create a new <code>BoxPlot</code> simply create a new instance using
+ * <p>To create a new {@code BoxPlot} simply create a new instance using
  * a data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Double.class, Double.class);
@@ -180,10 +180,11 @@ public class BoxPlot extends XYPlot {
 		 * @param axis that is used to project the point.
 		 * @param axisRenderer Renderer for the axis.
 		 * @param row Data row containing the point.
+		 * @param col Index of the column that will be projected on the axis.
 		 * @return Component that can be used to draw the point
 		 */
 		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row) {
+				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
 					Axis axisX = plot.getAxis(AXIS_X);
@@ -199,12 +200,22 @@ public class BoxPlot extends XYPlot {
 					int colBoxBottom = renderer.<Integer>getSetting(COLUMN_BOX_BOTTOM);
 					int colBoxTop = renderer.<Integer>getSetting(COLUMN_BOX_TOP);
 					int colBarTop = renderer.<Integer>getSetting(COLUMN_BAR_TOP);
-					double valueX = row.get(colPos).doubleValue();
-					double valueYBarBottom = row.get(colBarBottom).doubleValue();
-					double valueYBoxBottom = row.get(colBoxBottom).doubleValue();
-					double valueYBarCenter = row.get(colBarCenter).doubleValue();
-					double valueYBoxTop = row.get(colBoxTop).doubleValue();
-					double valueYBarTop = row.get(colBarTop).doubleValue();
+
+					if (!row.isColumnNumeric(colPos) ||
+							!row.isColumnNumeric(colBarCenter) ||
+							!row.isColumnNumeric(colBarBottom) ||
+							!row.isColumnNumeric(colBoxBottom) ||
+							!row.isColumnNumeric(colBoxTop) ||
+							!row.isColumnNumeric(colBarTop)) {
+						return;
+					}
+
+					double valueX = ((Number) row.get(colPos)).doubleValue();
+					double valueYBarBottom = ((Number) row.get(colBarBottom)).doubleValue();
+					double valueYBoxBottom = ((Number) row.get(colBoxBottom)).doubleValue();
+					double valueYBarCenter = ((Number) row.get(colBarCenter)).doubleValue();
+					double valueYBoxTop = ((Number) row.get(colBoxTop)).doubleValue();
+					double valueYBarTop = ((Number) row.get(colBarTop)).doubleValue();
 
 					// Calculate positions in screen units
 					double boxWidthRel = BoxWhiskerRenderer.this.
@@ -309,7 +320,7 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns a <code>Shape</code> instance that can be used
+		 * Returns a {@code Shape} instance that can be used
 		 * for further calculations.
 		 * @param row Data row containing the point.
 		 * @return Outline that describes the point's shape.
@@ -345,6 +356,7 @@ public class BoxPlot extends XYPlot {
 	 * @return New data source with (columnIndex, median, min, quartile1,
 	 *         quartile3, max)
 	 */
+	@SuppressWarnings("unchecked")
 	public static DataSource createBoxData(DataSource data) {
 		if (data == null) {
 			throw new NullPointerException(

@@ -62,7 +62,7 @@ import de.erichseifert.gral.util.PointND;
 /**
  * <p>Class that displays data in an two dimensional coordinate system
  * (x-y plot). It also serves as a base class for many other plot types.</p>
- * <p>To create a new <code>XYPlot</code> simply create a new instance
+ * <p>To create a new {@code XYPlot} simply create a new instance
  * using one or more data sources. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Integer.class, Integer.class);
@@ -90,7 +90,7 @@ public class XYPlot extends Plot  {
 	private final Map<DataSource, AreaRenderer> areaRenderers;
 
 	/**
-	 * Class that represents the drawing area of an <code>XYPlot</code>.
+	 * Class that represents the drawing area of an {@code XYPlot}.
 	 */
 	public static class XYPlotArea2D extends PlotArea {
 		/** Key for specifying a {@link java.lang.Boolean} value which decides
@@ -142,8 +142,8 @@ public class XYPlot extends Plot  {
 		}
 
 		/**
-		 * Draws the <code>Drawable</code> with the specified
-		 * <code>Graphics2D</code> object.
+		 * Draws the {@code Drawable} with the specified {@code Graphics2D}
+		 * object.
 		 * @param context Environment used for drawing
 		 */
 		public void draw(DrawingContext context) {
@@ -156,7 +156,7 @@ public class XYPlot extends Plot  {
 		}
 
 		/**
-		 * Draws the grid into the specified <code>Graphics2D</code> object.
+		 * Draws the grid using the specified drawing context.
 		 * @param context Environment used for drawing.
 		 */
 		protected void drawGrid(DrawingContext context) {
@@ -281,6 +281,20 @@ public class XYPlot extends Plot  {
 
 			// Paint points and lines
 			for (DataSource s : plot.getVisibleData()) {
+				// Skip empty data source
+				if (s.getColumnCount() == 0) {
+					continue;
+				}
+
+				int colX = 0;
+				if (colX < 0 || colX >= s.getColumnCount() || !s.isColumnNumeric(colX)) {
+					continue;
+				}
+				int colY = 1;
+				if (colY < 0 || colY >= s.getColumnCount() || !s.isColumnNumeric(colY)) {
+					continue;
+				}
+
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
 				LineRenderer lineRenderer = plot.getLineRenderer(s);
 				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
@@ -297,15 +311,15 @@ public class XYPlot extends Plot  {
 				List<DataPoint> dataPoints = new LinkedList<DataPoint>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
-					Number valueX = row.get(0);
-					Number valueY = row.get(1);
+					Number valueX = (Number) row.get(colX);
+					Number valueY = (Number) row.get(colY);
+
 					PointND<Double> axisPosX = (axisXRenderer != null)
 							? axisXRenderer.getPosition(axisX, valueX, true, false)
 							: new PointND<Double>(0.0, 0.0);
 					PointND<Double> axisPosY = (axisYRenderer != null)
 							? axisYRenderer.getPosition(axisY, valueY, true, false)
 							: new PointND<Double>(0.0, 0.0);
-
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
@@ -317,7 +331,7 @@ public class XYPlot extends Plot  {
 					Shape point = null;
 					if (pointRenderer != null) {
 						drawable = pointRenderer.getPoint(
-								axisY, axisYRenderer, row);
+							axisY, axisYRenderer, row, colY);
 						point = pointRenderer.getPointPath(row);
 					}
 					DataPoint dataPoint = new DataPoint(pos, drawable, point);
@@ -357,7 +371,7 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Class that displays a legend in an <code>XYPlot</code>.
+	 * Class that displays a legend in an {@code XYPlot}.
 	 */
 	public static class XYLegend extends Legend {
 		/** Source for dummy data. */
@@ -414,7 +428,7 @@ public class XYPlot extends Plot  {
 				Point2D pos = p2.getPosition().getPoint2D();
 				AffineTransform txOrig = graphics.getTransform();
 				graphics.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(axis, axisRenderer, row).draw(context);
+				pointRenderer.getPoint(axis, axisRenderer, row, 0).draw(context);
 				graphics.setTransform(txOrig);
 			}
 		}
@@ -629,9 +643,8 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Returns the <code>PointRenderer</code> for the specified
-	 * data source.
-	 * @param s data source.
+	 * Returns the {@code PointRenderer} for the specified data source.
+	 * @param s Data source.
 	 * @return PointRenderer.
 	 */
 	public PointRenderer getPointRenderer(DataSource s) {
@@ -639,9 +652,9 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Sets the <code>PointRenderer</code> for a certain data source
-	 * to the specified instance.
-	 * @param s data source.
+	 * Sets the {@code PointRenderer} for a certain data source to the
+	 * specified value.
+	 * @param s Data source.
 	 * @param pointRenderer PointRenderer to be set.
 	 */
 	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
@@ -649,38 +662,38 @@ public class XYPlot extends Plot  {
 	}
 
 	/**
-	 * Returns the <code>LineRenderer</code> for the specified data source.
-	 * @param s data source.
-	 * @return <code>LineRenderer</code>.
+	 * Returns the {@code LineRenderer} for the specified data source.
+	 * @param s Data source.
+	 * @return {@code LineRenderer}.
 	 */
 	public LineRenderer getLineRenderer(DataSource s) {
 		return lineRenderers.get(s);
 	}
 
 	/**
-	 * Sets the <code>LineRenderer</code> for a certain data source
-	 * to the specified value.
-	 * @param s <code>DataSource</code>.
-	 * @param lineRenderer <code>LineRenderer</code> to be set.
+	 * Sets the {@code LineRenderer} for a certain data source to the specified
+	 * value.
+	 * @param s Data source.
+	 * @param lineRenderer {@code LineRenderer} to be set.
 	 */
 	public void setLineRenderer(DataSource s, LineRenderer lineRenderer) {
 		lineRenderers.put(s, lineRenderer);
 	}
 
 	/**
-	 * Returns the <code>AreaRenderer</code> for the specified data source.
-	 * @param s <code>DataSource</code>.
-	 * @return <code>AreaRenderer</code>.
+	 * Returns the {@code AreaRenderer} for the specified data source.
+	 * @param s Data source.
+	 * @return {@code AreaRenderer}.
 	 */
 	public AreaRenderer getAreaRenderer(DataSource s) {
 		return areaRenderers.get(s);
 	}
 
 	/**
-	 * Sets the <code>AreaRenderer</code> for a certain <code>DataSource</code>
-	 * to the specified value.
-	 * @param s <code>DataSource</code>.
-	 * @param areaRenderer <code>AreaRenderer</code> to be set.
+	 * Sets the {@code AreaRenderer} for a certain data source to the specified
+	 * value.
+	 * @param s Data source.
+	 * @param areaRenderer {@code AreaRenderer} to be set.
 	 */
 	public void setAreaRenderer(DataSource s, AreaRenderer areaRenderer) {
 		areaRenderers.put(s, areaRenderer);

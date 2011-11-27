@@ -31,7 +31,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 
 /**
- * Abstract implementation of the <code>DataSource</code> interface.
+ * Abstract implementation of the {@code DataSource} interface.
  * This class provides access to statistical information,
  * administration and notification of listeners and supports
  * iteration of data values.
@@ -40,7 +40,7 @@ public abstract class AbstractDataSource implements DataSource {
 	/** Number of columns. */
 	private int columnCount;
 	/** Data types that are allowed in the respective columns. */
-	private Class<? extends Number>[] types;
+	private Class<? extends Comparable<?>>[] types;
 	/** Set of objects that will be notified of changes to the data values. */
 	private final Set<DataListener> dataListeners;
 	/** Statistical description of the data values. */
@@ -49,15 +49,14 @@ public abstract class AbstractDataSource implements DataSource {
 	/**
 	 * Iterator that returns each row of the DataSource.
 	 */
-	private class DataSourceIterator implements Iterator<Number> {
+	private class DataSourceIterator implements Iterator<Comparable<?>> {
 		/** Index of current column. */
 		private int col;
 		/** Index of current row. */
 		private int row;
 
 		/**
-		 * Initializes a new iterator instance that starts at
-		 * <code>(0, 0)</code>.
+		 * Initializes a new iterator instance that starts at (0, 0).
 		 */
 		public DataSourceIterator() {
 			col = 0;
@@ -65,10 +64,10 @@ public abstract class AbstractDataSource implements DataSource {
 		}
 
 	    /**
-	     * Returns <code>true</code> if the iteration has more elements.
-	     * (In other words, returns <code>true</code> if <code>next</code>
+	     * Returns {@code true} if the iteration has more elements.
+	     * (In other words, returns {@code true} if {@code next}
 	     * would return an element rather than throwing an exception.)
-	     * @return <code>true</code> if the iterator has more elements.
+	     * @return {@code true} if the iterator has more elements.
 	     */
 		public boolean hasNext() {
 			return (col < getColumnCount()) && (row < getRowCount());
@@ -79,11 +78,11 @@ public abstract class AbstractDataSource implements DataSource {
 	     * @return the next element in the iteration.
 	     * @exception NoSuchElementException iteration has no more elements.
 	     */
-		public Number next() {
+		public Comparable<?> next() {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			Number value = get(col, row);
+			Comparable<?> value = get(col, row);
 			if (++col >= getColumnCount()) {
 				col = 0;
 				++row;
@@ -92,8 +91,8 @@ public abstract class AbstractDataSource implements DataSource {
 		}
 
 	    /**
-	     * <code>remove</code> method to fulfill <code>Iterator</code>
-	     * interface.
+	     * Method that theoretically removes a cell from a data source.
+	     * However, this is not supported.
 	     */
 		public void remove() {
 			throw new UnsupportedOperationException();
@@ -105,7 +104,7 @@ public abstract class AbstractDataSource implements DataSource {
 	 * column types.
 	 * @param types type for each column
 	 */
-	public AbstractDataSource(Class<? extends Number>... types) {
+	public AbstractDataSource(Class<? extends Comparable<?>>... types) {
 		setColumnTypes(types);
 		dataListeners = new LinkedHashSet<DataListener>();
 	}
@@ -123,7 +122,7 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Adds the specified <code>DataListener</code> to this data source.
+	 * Adds the specified {@code DataListener} to this data source.
 	 * @param dataListener listener to be added.
 	 */
 	public void addDataListener(DataListener dataListener) {
@@ -131,7 +130,7 @@ public abstract class AbstractDataSource implements DataSource {
 	}
 
 	/**
-	 * Removes the specified <code>DataListener</code> from this data source.
+	 * Removes the specified {@code DataListener} from this data source.
 	 * @param dataListener listener to be removed.
 	 */
 	public void removeDataListener(DataListener dataListener) {
@@ -143,7 +142,7 @@ public abstract class AbstractDataSource implements DataSource {
      *
      * @return an Iterator.
      */
-	public Iterator<Number> iterator() {
+	public Iterator<Comparable<?>> iterator() {
 		return new DataSourceIterator();
 	}
 
@@ -199,25 +198,36 @@ public abstract class AbstractDataSource implements DataSource {
 	 * Returns the data types of all columns.
 	 * @return The data types of all column in the data source
 	 */
-	public Class<? extends Number>[] getColumnTypes() {
-		Class<? extends Number>[] types = Arrays.copyOf(this.types, this.types.length);
+	public Class<? extends Comparable<?>>[] getColumnTypes() {
+		Class<? extends Comparable<?>>[] types =
+			Arrays.copyOf(this.types, this.types.length);
 		return types;
 	}
 
 	/**
-	 * Sets the data types of all columns. This also changes the  number of
+	 * Returns whether the column at the specified index contains numbers.
+	 * @param columnIndex Index of the column to test.
+	 * @return {@code true} if the column is numeric, otherwise {@code false}.
+	 */
+	public boolean isColumnNumeric(int columnIndex) {
+		Class<?> columnType = types[columnIndex];
+		return Number.class.isAssignableFrom(columnType);
+	}
+
+	/**
+	 * Sets the data types of all columns. This also changes the number of
 	 * columns.
 	 * @param types Data types.
 	 */
-	protected void setColumnTypes(Class<? extends Number>... types) {
+	protected void setColumnTypes(Class<? extends Comparable<?>>... types) {
 		this.types = Arrays.copyOf(types, types.length);
 		columnCount = types.length;
 	}
 
 	/**
 	 * Returns the row with the specified index.
-	 * @param row index of the row to return
-	 * @return the specified row of the data source
+	 * @param row Index of the row to return
+	 * @return the Specified row of the data source
 	 */
 	public Row getRow(int row) {
 		return new Row(this, row);

@@ -73,6 +73,7 @@ public class PlotTest {
 	}
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0

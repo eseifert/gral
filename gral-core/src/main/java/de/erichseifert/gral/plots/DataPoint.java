@@ -39,8 +39,8 @@ public class DataPoint {
 	private final Shape point;
 
 	/**
-	 * Creates a new <code>DataPoint</code> object with the specified position,
-	 * <code>Drawable</code>, and shape.
+	 * Creates a new {@code DataPoint} object with the specified position,
+	 * {@code Drawable}, and shape.
 	 * @param position Coordinates.
 	 * @param drawable Representation.
 	 * @param point Point.
@@ -52,7 +52,7 @@ public class DataPoint {
 	}
 
 	/**
-	 * Returns the coordinates of this <code>DataPoint</code>.
+	 * Returns the coordinates of this {@code DataPoint}.
 	 * @return Position.
 	 */
 	public PointND<Double> getPosition() {
@@ -60,16 +60,16 @@ public class DataPoint {
 	}
 
 	/**
-	 * Returns the <code>Drawable</code> which represents this
-	 * <code>DataPoint</code>.
-	 * @return <code>Drawable</code> instance.
+	 * Returns the {@code Drawable} which represents this
+	 * {@code DataPoint}.
+	 * @return {@code Drawable} instance.
 	 */
 	public Drawable getDrawable() {
 		return drawable;
 	}
 
 	/**
-	 * Returns the point of this <code>DataPoint</code>.
+	 * Returns the point of this {@code DataPoint}.
 	 * @return Point.
 	 */
 	public Shape getPoint() {

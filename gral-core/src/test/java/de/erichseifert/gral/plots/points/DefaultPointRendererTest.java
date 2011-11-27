@@ -42,6 +42,7 @@ public class DefaultPointRendererTest {
 	private static Row row;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 9); // 0
@@ -58,7 +59,7 @@ public class DefaultPointRendererTest {
 
 	private static void assertPointRenderer(PointRenderer r) {
 		// Get point
-		Drawable point = r.getPoint(null, null, row);
+		Drawable point = r.getPoint(null, null, row, 1);
 		assertNotNull(point);
 
 		// Draw line

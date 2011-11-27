@@ -41,6 +41,7 @@ public class ImageWriterTest {
 	private static DataTable data;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		data = new DataTable(Double.class, Double.class, Integer.class);
 		data.add(255.0,   0.0,   0);
@@ -64,7 +65,7 @@ public class ImageWriterTest {
 		for (int i = 0; i < imageData.length; i++) {
 			int col = i % image.getWidth();
 			int row = i / image.getWidth();
-			double expected = data.get(col, row).doubleValue();
+			double expected = ((Number) data.get(col, row)).doubleValue();
 			double value = imageData[i];
 			if (value < 0.0) {
 				value += 256.0;

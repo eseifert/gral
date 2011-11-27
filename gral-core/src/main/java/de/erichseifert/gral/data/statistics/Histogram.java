@@ -27,7 +27,10 @@ import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 
 /**
- * Abstract base class for histograms.
+ * Abstract base class for histograms. Derived classes must
+ * make sure the {@code getColumnTypes()} method returns a correct array
+ * with column types.
+ * @see AbstractDataSource#setColumnTypes(Class...)
  */
 public abstract class Histogram extends AbstractDataSource
 		implements DataListener {
@@ -38,6 +41,7 @@ public abstract class Histogram extends AbstractDataSource
 	 * Initializes a new histograms with a data source.
 	 * @param data Data source to be analyzed.
 	 */
+	@SuppressWarnings("unchecked")
 	public Histogram(DataSource data) {
 		this.data = data;
 		this.data.addDataListener(this);
@@ -51,7 +55,7 @@ public abstract class Histogram extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -64,7 +68,7 @@ public abstract class Histogram extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -77,7 +81,7 @@ public abstract class Histogram extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

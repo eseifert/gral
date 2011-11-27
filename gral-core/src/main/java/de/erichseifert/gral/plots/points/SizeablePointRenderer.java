@@ -29,7 +29,7 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that provides <code>Drawable</code>s, which are sized accordingly to
+ * Class that provides {@code Drawable}s, which are sized accordingly to
  * the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer {
@@ -46,12 +46,12 @@ public class SizeablePointRenderer extends DefaultPointRenderer {
 
 	@Override
 	public Shape getPointPath(Row row) {
-		Shape shape = getSetting(SHAPE);
-		int sizeColumn = this.<Number>getSetting(COLUMN).intValue();
-		if (sizeColumn >= row.size() || sizeColumn < 0) {
+		Shape shape = this.<Shape>getSetting(SHAPE);
+		int colSize = this.<Integer>getSetting(COLUMN);
+		if (colSize >= row.size() || colSize < 0 || !row.isColumnNumeric(colSize)) {
 			return shape;
 		}
-		Number sizeObj = row.get(sizeColumn);
+		Number sizeObj = (Number) row.get(colSize);
 		if (!MathUtils.isCalculatable(sizeObj)) {
 			return null;
 		}

@@ -48,7 +48,7 @@ public class Axis {
 	/**
 	 * Initializes a new instance with a specified automatic scaling mode, but
 	 * without minimum and maximum values.
-	 * @param autoscaled <code>true</code> to turn automatic scaling on
+	 * @param autoscaled {@code true} to turn automatic scaling on
 	 */
 	private Axis(boolean autoscaled) {
 		axisListeners = new HashSet<AxisListener>();
@@ -74,7 +74,7 @@ public class Axis {
 	}
 
 	/**
-	 * Adds the specified <code>AxisListener</code> to this Axis.
+	 * Adds the specified {@code AxisListener} to this Axis.
 	 * The Listeners will be notified if changes to the Axis occur,
 	 * for Example if the minimum or maximum value changes.
 	 * @param listener Listener to be added
@@ -85,7 +85,7 @@ public class Axis {
 	}
 
 	/**
-	 * Removes the specified <code>AxisListener</code> from this Axis.
+	 * Removes the specified {@code AxisListener} from this Axis.
 	 * @param listener Listener to be removed
 	 * @see AxisListener
 	 */
@@ -94,7 +94,7 @@ public class Axis {
 	}
 
 	/**
-	 * Notifies all registered <code>AxisListener</code>s that the value
+	 * Notifies all registered {@code AxisListener}s that the value
 	 * range has changed.
 	 * @param min new minimum value
 	 * @param max new maximum value
@@ -183,8 +183,8 @@ public class Axis {
 
 	/**
 	 * Returns whether the currently set minimum and maximum values are valid.
-	 * @return <code>true</code> when minimum and maximum values are correct,
-	 *         otherwise <code>false</code>
+	 * @return {@code true} when minimum and maximum values are correct,
+	 *         otherwise {@code false}
 	 */
 	public boolean isValid() {
 		return MathUtils.isCalculatable(min) && MathUtils.isCalculatable(max);

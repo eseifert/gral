@@ -23,6 +23,7 @@ package de.erichseifert.gral.data.statistics;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class Histogram1D extends Histogram {
 	/** Intervals that will be used for aggregation. */
 	private final List<Number[]> breaks;
 	/** Bin cells that store all aggregation counts. */
-	private final List<long[]> cells;
+	private final List<long[]> cellList;
 
 	/** Minimum values for cells. */
 	private final Map<Integer, Long> cacheMin;
@@ -57,7 +58,7 @@ public class Histogram1D extends Histogram {
 		super(data);
 		this.orientation = orientation;
 		breaks = new ArrayList<Number[]>();
-		cells = new ArrayList<long[]>();
+		cellList = new ArrayList<long[]>();
 		cacheMin = new HashMap<Integer, Long>();
 		cacheMax = new HashMap<Integer, Long>();
 	}
@@ -74,8 +75,10 @@ public class Histogram1D extends Histogram {
 		this(data, orientation);
 
 		// Create equally spaced breaks
-		int count = (orientation == Orientation.VERTICAL)
-				? getData().getColumnCount() : getData().getRowCount();
+		int count = getData().getColumnCount();
+		if (orientation == Orientation.HORIZONTAL) {
+			count = getData().getRowCount();
+		}
 		Statistics stats = getData().getStatistics();
 		for (int index = 0; index < count; index++) {
 			double min = stats.get(Statistics.MIN, orientation, index);
@@ -101,8 +104,10 @@ public class Histogram1D extends Histogram {
 	public Histogram1D(DataSource data, Orientation orientation,
 			Number[]... breaks) {
 		this(data, orientation);
-		int count = (orientation == Orientation.VERTICAL)
-				? getData().getColumnCount() : getData().getRowCount();
+		int count = getData().getColumnCount();
+		if (orientation == Orientation.HORIZONTAL) {
+			count = getData().getRowCount();
+		}
 		if (breaks.length != count) {
 			throw new IllegalArgumentException(MessageFormat.format(
 				"Invalid number of breaks: got {0,number,integer}, expected {1,number,integer}.", //$NON-NLS-1$
@@ -120,7 +125,7 @@ public class Histogram1D extends Histogram {
 	@Override
 	protected void rebuildCells() {
 		// FIXME Very naive implementation
-		cells.clear();
+		cellList.clear();
 		cacheMin.clear();
 		cacheMax.clear();
 
@@ -130,11 +135,21 @@ public class Histogram1D extends Histogram {
 			long[] cells = new long[brk.length - 1];
 			long colMin = Long.MAX_VALUE;
 			long colMax = Long.MIN_VALUE;
-			DataAccessor data = (orientation == Orientation.VERTICAL)
-					? getData().getColumn(breakIndex) : getData().getRow(breakIndex);
+
+			DataAccessor data = null;
+			if (orientation == Orientation.VERTICAL) {
+				data = getData().getColumn(breakIndex);
+			} else {
+				data = getData().getRow(breakIndex);
+			}
+
 			// Iterate over data cells
-			for (Number value : data) {
-				double val = value.doubleValue();
+			for (Comparable<?> cell : data) {
+				if (!(cell instanceof Number)) {
+					continue;
+				}
+				Number numericCell = (Number) cell;
+				double val = numericCell.doubleValue();
 				// Iterate over histogram rows
 				for (int i = 0; i < brk.length - 1; i++) {
 					// Put the value into corresponding class
@@ -151,7 +166,7 @@ public class Histogram1D extends Histogram {
 					}
 				}
 			}
-			this.cells.add(cells);
+			cellList.add(cells);
 			cacheMin.put(breakIndex, colMin);
 			cacheMax.put(breakIndex, colMax);
 			breakIndex++;
@@ -185,8 +200,8 @@ public class Histogram1D extends Histogram {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
-		return cells.get(col)[row];
+	public Comparable<?> get(int col, int row) {
+		return cellList.get(col)[row];
 	}
 
 	/**
@@ -195,7 +210,7 @@ public class Histogram1D extends Histogram {
 	 */
 	public int getRowCount() {
 		int rowCount = 0;
-		for (long[] cells : this.cells) {
+		for (long[] cells : this.cellList) {
 			rowCount = Math.max(cells.length, rowCount);
 		}
 		return rowCount;
@@ -203,6 +218,14 @@ public class Histogram1D extends Histogram {
 
 	@Override
 	public int getColumnCount() {
-		return cells.size();
+		return cellList.size();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Class<? extends Comparable<?>>[] getColumnTypes() {
+		Class<? extends Comparable<?>>[] types = new Class[getColumnCount()];
+		Arrays.fill(types, Long.class);
+		return types;
 	}
 }

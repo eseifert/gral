@@ -86,7 +86,7 @@ public interface Container extends Iterable<Drawable> {
 	/**
 	 * Return additional information on component
 	 * @param drawable Component
-	 * @return Information object or <code>null</code>
+	 * @return Information object or {@code null}
 	 */
 	Object getConstraints(Drawable drawable);
 

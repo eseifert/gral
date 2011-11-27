@@ -29,9 +29,9 @@ import java.text.MessageFormat;
 import de.erichseifert.gral.io.AbstractIOFactory;
 
 /**
- * <p>A factory class that produces <code>DataWriter</code> instances for a
+ * <p>A factory class that produces {@code DataWriter} instances for a
  * specified format. The produced writers can be used to output a
- * <code>DataSource</code> to a data sink.</p>
+ * {@code DataSource} to a data sink.</p>
  * <p>Example usage:</p>
  * <pre>
  * DataWriterFactory factory = DataWriterFactory.getInstance();

@@ -34,6 +34,7 @@ public class DataTableTest {
 	private DataTable table;
 
 	@Before
+	@SuppressWarnings("unchecked")
 	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
@@ -47,6 +48,7 @@ public class DataTableTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCreate() {
 		// Constructor with types
 		DataTable table1 = new DataTable(Integer.class, Double.class, Long.class, Float.class);
@@ -133,16 +135,17 @@ public class DataTableTest {
 	public void testIterator() {
 		int i = 0;
 		int colCount = table.getColumnCount();
-		for (Number cell : table) {
+		for (Comparable<?> cell : table) {
 			int col = i % colCount;
 			int row = i / colCount;
-			Number expected = table.get(col, row);
+			Comparable<?> expected = table.get(col, row);
 			assertEquals(expected, cell);
 			i++;
 		}
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testSort() {
 		DataTable table = new DataTable(Integer.class, Integer.class, Integer.class);
 		int[] original = {

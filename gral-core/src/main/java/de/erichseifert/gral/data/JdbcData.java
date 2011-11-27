@@ -37,7 +37,7 @@ import java.util.Arrays;
  */
 public class JdbcData extends AbstractDataSource {
 	/** The data types of all columns. */
-	private Class<? extends Number>[] types;
+	private Class<? extends Comparable<?>>[] types;
 	/** The JDBC connection. */
 	private final Connection connection;
 	/** The name of the table containing the data. */
@@ -62,6 +62,7 @@ public class JdbcData extends AbstractDataSource {
 	 * @param table Properly quoted name of the table.
 	 * @param buffered Turns on buffering of JDBC queries.
 	 */
+	@SuppressWarnings("unchecked")
 	public JdbcData(Connection connection, String table, boolean buffered) {
 		this.connection = connection;
 		this.table = table;
@@ -91,7 +92,7 @@ public class JdbcData extends AbstractDataSource {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		try {
 			ResultSet result = bufferedQuery;
 			if (!isBuffered() || result == null) {
@@ -125,7 +126,7 @@ public class JdbcData extends AbstractDataSource {
 	}
 
 	@Override
-	public Class<? extends Number>[] getColumnTypes() {
+	public Class<? extends Comparable<?>>[] getColumnTypes() {
 		return Arrays.copyOf(types, types.length);
 	}
 
@@ -138,15 +139,16 @@ public class JdbcData extends AbstractDataSource {
 		if (!isBuffered() || rowCount < 0) {
 			try {
 				PreparedStatement stmt = connection.prepareStatement(
-						"SELECT COUNT(*) FROM " + table, //$NON-NLS-1$
-						ResultSet.TYPE_SCROLL_SENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
+					"SELECT COUNT(*) FROM " + table, //$NON-NLS-1$
+					ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
 				ResultSet result = stmt.executeQuery();
-				if (!result.first()) {
-					return 0;
+				if (result.first()) {
+					rowCount = result.getInt(1);
+					bufferedRowCount = rowCount;
+				} else {
+					rowCount = 0;
 				}
-				rowCount = result.getInt(1);
-				bufferedRowCount = rowCount;
 				result.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -157,59 +159,69 @@ public class JdbcData extends AbstractDataSource {
 	}
 
 	/**
-	 * Fetches the column types as Java <code>Class</code> objects from the
+	 * Fetches the column types as Java {@code Class} objects from the
 	 * JDBC table.
-	 * @return Column types as Java <code>Class</code> objects
+	 * @return Column types as Java {@code Class} objects
 	 * @throws SQLException if an error occurs during access to JDBC table.
 	 */
-	private Class<? extends Number>[] getJdbcColumnTypes()
+	@SuppressWarnings("unchecked")
+	private Class<? extends Comparable<?>>[] getJdbcColumnTypes()
 			throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement(
-				"SELECT * FROM " + table + " WHERE 1 = 0"); //$NON-NLS-1$ //$NON-NLS-2$
+			"SELECT * FROM " + table + " WHERE 1 = 0"); //$NON-NLS-1$ //$NON-NLS-2$
 		ResultSetMetaData metadata = stmt.getMetaData();
 		int colCount = metadata.getColumnCount();
 		Class<?>[] types = new Class<?>[colCount];
 		for (int colIndex = 0; colIndex < colCount; colIndex++) {
 			int sqlType = metadata.getColumnType(colIndex + 1);
+			Class<? extends Comparable<?>> type = null;
 			switch (sqlType) {
 			case Types.TINYINT:
-				types[colIndex] = Byte.class;
+				type = Byte.class;
 				break;
 			case Types.SMALLINT:
-				types[colIndex] = Short.class;
+				type = Short.class;
 				break;
 			case Types.INTEGER:
-				types[colIndex] = Integer.class;
+				type = Integer.class;
 				break;
 			case Types.BIGINT:
-				types[colIndex] = Long.class;
+				type = Long.class;
 				break;
 			case Types.REAL:
-				types[colIndex] = Float.class;
+				type = Float.class;
 				break;
 			case Types.FLOAT:
 			case Types.DOUBLE:
-				types[colIndex] = Double.class;
+				type = Double.class;
 				break;
 			case Types.DATE:
-				types[colIndex] = Date.class;
+				type = Date.class;
 				break;
 			case Types.TIME:
-				types[colIndex] = Time.class;
+				type = Time.class;
 				break;
 			case Types.TIMESTAMP:
-				types[colIndex] = Timestamp.class;
+				type = Timestamp.class;
 				break;
+			case Types.CHAR:
+			case Types.NCHAR:
+			case Types.VARCHAR:
+			case Types.LONGVARCHAR:
+			case Types.NVARCHAR:
+			case Types.LONGNVARCHAR:
+				type = String.class;
 			default:
 				break;
 			}
+			types[colIndex] = type;
 		}
-		return (Class<? extends Number>[]) types;
+		return (Class<? extends Comparable<?>>[]) types;
 	}
 
 	/**
-	 * Converts a value of a JDBC <code>ResultSet</code> to a Java compatible
-	 * data value. If the data type is unknown <code>null</code> will be
+	 * Converts a value of a JDBC {@code ResultSet} to a Java compatible
+	 * data value. If the data type is unknown {@code null} will be
 	 * returned.
 	 * @param row ResultSet object.
 	 * @param col Column.
@@ -217,8 +229,8 @@ public class JdbcData extends AbstractDataSource {
 	 * @throws SQLException if an error occurs during conversion or accessing
 	 *         the result set.
 	 */
-	private Number jdbcToJavaValue(ResultSet row, int col) throws SQLException {
-		Class<? extends Number> colType = types[col];
+	private Comparable<?> jdbcToJavaValue(ResultSet row, int col) throws SQLException {
+		Class<? extends Comparable<?>> colType = types[col];
 		int sqlCol = col + 1;
 		if (Byte.class.equals(colType)) {
 			return row.getByte(sqlCol);
@@ -245,8 +257,8 @@ public class JdbcData extends AbstractDataSource {
 
 	/**
 	 * Returns whether this data source is buffered.
-	 * @return <code>true</code> when this object uses buffering,
-	 *         <code>false</code> otherwise
+	 * @return {@code true} when this object uses buffering,
+	 *         {@code false} otherwise
 	 */
 	public boolean isBuffered() {
 		return buffered;
@@ -255,8 +267,8 @@ public class JdbcData extends AbstractDataSource {
 	/**
 	 * Determines whether this data source should buffer intermediate results.
 	 * This implies that the data doesn't change during access.
-	 * @param buffered <code>true</code> when this object should use buffering,
-	 *                 <code>false</code> otherwise
+	 * @param buffered {@code true} when this object should use buffering,
+	 *                 {@code false} otherwise
 	 */
 	public void setBuffered(boolean buffered) {
 		this.buffered = buffered;

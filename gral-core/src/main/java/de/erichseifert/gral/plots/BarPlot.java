@@ -47,7 +47,7 @@ import de.erichseifert.gral.util.PointND;
 
 /**
  * <p>Class that displays data in a bar plot.</p>
- * <p>To create a new <code>BarPlot</code> simply create a new instance
+ * <p>To create a new {@code BarPlot} simply create a new instance
  * using one or more data sources. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Integer.class, Double.class);
@@ -103,14 +103,16 @@ public class BarPlot extends XYPlot {
 		 * @param axis that is used to project the point.
 		 * @param axisRenderer Renderer for the axis.
 		 * @param row Data row containing the point.
+		 * @param col Index of the column that will be projected on the axis.
 		 * @return Component that can be used to draw the point
 		 */
 		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row) {
+				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
+					PointRenderer renderer = BarRenderer.this;
 					Shape point = getPointPath(row);
-					Paint paint = BarRenderer.this.<Paint>getSetting(COLOR);
+					Paint paint = renderer.<Paint>getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 
@@ -125,31 +127,40 @@ public class BarPlot extends XYPlot {
 					}
 
 					GraphicsUtils.fillPaintedShape(
-							graphics, point, paint, paintBoundaries);
+						graphics, point, paint, paintBoundaries);
 
-					Stroke stroke = BarRenderer.this.<Stroke>getSetting(STROKE);
-					Paint strokePaint = BarRenderer.this.<Paint>getSetting(STROKE_COLOR);
+					Stroke stroke = renderer.<Stroke>getSetting(STROKE);
+					Paint strokePaint = renderer.<Paint>getSetting(STROKE_COLOR);
 					if (stroke != null && strokePaint != null) {
 						GraphicsUtils.drawPaintedShape(
 							graphics, point, strokePaint, null, stroke);
 					}
 
-					if (BarRenderer.this.<Boolean>getSetting(VALUE_DISPLAYED)) {
-						drawValue(context, point, row.get(1).doubleValue());
+					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+						Comparable<?> value = row.get(colValue);
+						drawValue(context, point, value);
 					}
 				}
 			};
 		}
 
 		/**
-		 * Returns a <code>Shape</code> instance that can be used
+		 * Returns a {@code Shape} instance that can be used
 		 * for further calculations.
 		 * @param row Data row containing the point.
 		 * @return Outline that describes the point's shape.
 		 */
 		public Shape getPointPath(Row row) {
-			double valueX = row.get(0).doubleValue();
-			double valueY = row.get(1).doubleValue();
+			int colX = 0;
+			int colY = 1;
+
+			if (!row.isColumnNumeric(colX) || !row.isColumnNumeric(colY)) {
+				return null;
+			}
+
+			double valueX = ((Number) row.get(colX)).doubleValue();
+			double valueY = ((Number) row.get(colY)).doubleValue();
 			Axis axisX = plot.getAxis(AXIS_X);
 			Axis axisY = plot.getAxis(AXIS_Y);
 			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
@@ -184,7 +195,7 @@ public class BarPlot extends XYPlot {
 
 			// position of the bar's left edge in screen coordinates
 			double barX = axisXRenderer.getPosition(
-					axisX, valueX, true, false).get(PointND.X);
+				axisX, valueX, true, false).get(PointND.X);
 			// position of the bar's upper edge in screen coordinates
 			// (the origin of the screen y axis is at the top)
 			boolean barAboveAxis = barYMax == barYOrigin;
@@ -203,7 +214,7 @@ public class BarPlot extends XYPlot {
 			}
 
 			Shape shape = new Rectangle2D.Double(
-					barXMin - barX, barY, barWidth, barHeight);
+				barXMin - barX, barY, barWidth, barHeight);
 			return shape;
 		}
 	}

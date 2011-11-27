@@ -20,6 +20,6 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Unit tests for <code>de.erichseifert.gral.plots.shapes</code> package.
+ * Unit tests for {@code de.erichseifert.gral.plots.shapes} package.
  */
 package de.erichseifert.gral.plots.points;

@@ -59,7 +59,7 @@ public interface IOFactory<T> {
 	/**
 	 * Returns whether the specified MIME type is supported.
 	 * @param mimeType MIME type.
-	 * @return <code>true</code> if supported, otherwise <code>false</code>.
+	 * @return {@code true} if supported, otherwise {@code false}.
 	 */
 	boolean isFormatSupported(String mimeType);
 }

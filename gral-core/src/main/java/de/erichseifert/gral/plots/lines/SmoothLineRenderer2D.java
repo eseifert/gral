@@ -34,7 +34,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * <p>Class that connects <code>DataPoint</code>s with a smooth line.</p>
+ * <p>Class that connects {@code DataPoint}s with a smooth line.</p>
  * <p>See <a href="http://www.antigrain.com/research/bezier_interpolation/">Interpolation
  * with Bezier Curves</a> for more information.</p>
  */
@@ -45,7 +45,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		new Key("line.smooth.smoothness"); //$NON-NLS-1$
 
 	/**
-	 * Initializes a new <code>SmoothLineRenderer2D</code> instance with
+	 * Initializes a new {@code SmoothLineRenderer2D} instance with
 	 * default settings.
 	 */
 	public SmoothLineRenderer2D() {
@@ -54,7 +54,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 
 	/**
 	 * Returns a graphical representation for the line defined by
-	 * <code>points</code>.
+	 * {@code points}.
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */
@@ -125,7 +125,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	 * which can be used to draw a smooth Bézier curve through two points
 	 * <i>p1</i> and <i>p2</i>. To get a smooth curve the two neighboring
 	 * points <i>p0</i> and <i>p3</i> are required. However, <i>p0</i> and
-	 * <i>p3</i> may also be set to <code>null</code> in case of end points.
+	 * <i>p3</i> may also be set to {@code null} in case of end points.
 	 * @param p0 Previous neighbor.
 	 * @param p1 First point.
 	 * @param p2 Second point.

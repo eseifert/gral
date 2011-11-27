@@ -31,13 +31,13 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * <p>Class that writes all values of a <code>DataSource</code> to a character
+ * <p>Class that writes all values of a {@code DataSource} to a character
  * separated file. The file then stores the values separated by a certain
  * delimiter character. The delimiter is chosen based on the file type but can
  * also be set manually. By default the comma character will be used as a
  * delimiter for separating columns. Lines end with a carriage return and a
  * line feed character.</p>
- * <p><code>CSVWriter</code>s instances should be obtained by the
+ * <p>{@code CSVWriter} instances should be obtained by the
  * {@link DataWriterFactory} rather than being created manually:</p>
  * <pre>
  * DataWriterFactory factory = DataWriterFactory.getInstance();
@@ -47,6 +47,10 @@ import de.erichseifert.gral.util.Messages;
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
 public class CSVWriter extends AbstractDataWriter {
+	/** Key for specifying a {@link Character} value that defines the
+	delimiting character used to separate columns. */
+	public static final String SEPARATOR_CHAR = CSVReader.SEPARATOR_CHAR;
+
 	static {
 		addCapabilities(new IOCapabilities(
 			"CSV", //$NON-NLS-1$
@@ -73,9 +77,9 @@ public class CSVWriter extends AbstractDataWriter {
 	public CSVWriter(String mimeType) {
 		super(mimeType);
 		if ("text/tab-separated-values".equals(mimeType)) { //$NON-NLS-1$
-			setDefault("separator", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, '\t'); //$NON-NLS-1$
 		} else {
-			setDefault("separator", ","); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, ','); //$NON-NLS-1$
 		}
 	}
 
@@ -86,12 +90,12 @@ public class CSVWriter extends AbstractDataWriter {
 	 * @throws IOException if writing the data failed
 	 */
 	public void write(DataSource data, OutputStream output) throws IOException {
-		String separator = getSetting("separator"); //$NON-NLS-1$
+		Character separator = getSetting(SEPARATOR_CHAR);
 		OutputStreamWriter writer = new OutputStreamWriter(output);
 
 		int i = 0;
 		int colCount = data.getColumnCount();
-		for (Number cell : data) {
+		for (Comparable<?> cell : data) {
 			writer.write(String.valueOf(cell));
 
 			int col = i % colCount;

@@ -43,7 +43,7 @@ public class SettingChangeEvent extends EventObject {
 	 * @param key Key of the setting.
 	 * @param valOld Old value.
 	 * @param valNew New value.
-	 * @param defaultSetting <code>true</code> if a default setting has changed.
+	 * @param defaultSetting {@code true} if a default setting has changed.
 	 */
 	public SettingChangeEvent(Object source, Key key,
 			Object valOld, Object valNew, boolean defaultSetting) {
@@ -80,7 +80,7 @@ public class SettingChangeEvent extends EventObject {
 
 	/**
 	 * Returns whether the setting is a default setting.
-	 * @return <code>true</code> or <code>false</code>
+	 * @return {@code true} or {@code false}
 	 */
 	public boolean isDefaultSetting() {
 		return defaultSetting;

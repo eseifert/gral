@@ -33,7 +33,7 @@ import java.awt.geom.Rectangle2D;
  */
 public interface Drawable {
 	/**
-	 * Returns the bounds of this <code>Drawable</code>.
+	 * Returns the bounds of this {@code Drawable}.
 	 * @return a bounding rectangle
 	 */
 	Rectangle2D getBounds();
@@ -77,14 +77,14 @@ public interface Drawable {
 	double getHeight();
 
 	/**
-	 * Returns the preferred size of the <code>Drawable</code>.
+	 * Returns the preferred size of the {@code Drawable}.
 	 * @return horizontal and vertical extent that wants to be reached
 	 */
 	Dimension2D getPreferredSize();
 
 	/**
-	 * Draws the <code>Drawable</code> with the specified
-	 * <code>Graphics2D</code> object.
+	 * Draws the {@code Drawable} with the specified
+	 * {@code Graphics2D} object.
 	 * @param context Environment used for drawing
 	 */
 	void draw(DrawingContext context);

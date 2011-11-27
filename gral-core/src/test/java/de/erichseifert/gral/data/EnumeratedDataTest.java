@@ -31,6 +31,7 @@ public class EnumeratedDataTest {
 	private static DataTable table;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(3, 1); // 0
@@ -39,22 +40,22 @@ public class EnumeratedDataTest {
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		// without parameters
 		EnumeratedData withoutParams = new EnumeratedData(table);
 		assertEquals(table.getColumnCount() + 1, withoutParams.getColumnCount());
 		assertEquals(table.getRowCount(), withoutParams.getRowCount());
-		assertEquals(0.0, withoutParams.get(0, 0).doubleValue(), DELTA);
-		assertEquals(1.0, withoutParams.get(0, 1).doubleValue(), DELTA);
-		assertEquals(2.0, withoutParams.get(0, 2).doubleValue(), DELTA);
+		assertEquals(0.0, ((Number) withoutParams.get(0, 0)).doubleValue(), DELTA);
+		assertEquals(1.0, ((Number) withoutParams.get(0, 1)).doubleValue(), DELTA);
+		assertEquals(2.0, ((Number) withoutParams.get(0, 2)).doubleValue(), DELTA);
 
 		// with parameters
 		EnumeratedData withParams = new EnumeratedData(table, -1, 2.0);
 		assertEquals(table.getColumnCount() + 1, withParams.getColumnCount());
 		assertEquals(table.getRowCount(), withParams.getRowCount());
-		assertEquals(-1.0, withParams.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 1.0, withParams.get(0, 1).doubleValue(), DELTA);
-		assertEquals( 3.0, withParams.get(0, 2).doubleValue(), DELTA);
+		assertEquals(-1.0, ((Number) withParams.get(0, 0)).doubleValue(), DELTA);
+		assertEquals( 1.0, ((Number) withParams.get(0, 1)).doubleValue(), DELTA);
+		assertEquals( 3.0, ((Number) withParams.get(0, 2)).doubleValue(), DELTA);
 	}
 
 }

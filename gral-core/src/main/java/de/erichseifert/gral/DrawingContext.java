@@ -59,7 +59,7 @@ public class DrawingContext {
 	private final Target target;
 
 	/**
-	 * Initializes a new context with a <code>Graphics2D</code> object.
+	 * Initializes a new context with a {@code Graphics2D} object.
 	 * @param graphics Object for drawing geometry.
 	 */
 	public DrawingContext(Graphics2D graphics) {
@@ -67,7 +67,7 @@ public class DrawingContext {
 	}
 
 	/**
-	 * Initializes a new context with a <code>Graphics2D</code> object.
+	 * Initializes a new context with a {@code Graphics2D} object.
 	 * @param graphics Object for drawing geometry.
 	 * @param quality Drawing quality.
 	 * @param target Target media.

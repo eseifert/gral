@@ -48,7 +48,7 @@ public class Row extends DataAccessor {
 	}
 
 	@Override
-	public Number get(int col) {
+	public Comparable<?> get(int col) {
 		if (getSource() == null) {
 			return null;
 		}
@@ -64,5 +64,14 @@ public class Row extends DataAccessor {
 	public double getStatistics(String key) {
 		return getSource().getStatistics()
 			.get(key, Orientation.HORIZONTAL, getIndex());
+	}
+
+	/**
+	 * Returns whether the column at the specified index contains numbers.
+	 * @param columnIndex Index of the column to test.
+	 * @return {@code true} if the column is numeric, otherwise {@code false}.
+	 */
+	public boolean isColumnNumeric(int columnIndex) {
+		return getSource().isColumnNumeric(columnIndex);
 	}
 }

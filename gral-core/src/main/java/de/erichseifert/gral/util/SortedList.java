@@ -28,10 +28,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Resizable implementation of the List interface that automatically sorts all
- * values. It implements the methods <code>get</code>, <code>size</code>,
- * <code>add</code>, and <code>size</code>. The stored elements must implement
- * the interface <code>Comparable</code>.
+ * Resizable implementation of the {@code List} interface that automatically
+ * sorts all values. It implements the methods {@code get}, {@code size},
+ * {@code add}, and {@code size}. The stored elements must implement the
+ * interface {@code Comparable}.
  * @param <T> Data type of stored elements.
  */
 public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
@@ -93,6 +93,7 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public int indexOf(Object o) {
 		try {
 			return Collections.binarySearch(elements, (T) o);

@@ -31,14 +31,15 @@ import de.erichseifert.gral.data.DataTable;
 
 public class ComparatorTest {
 	private static DataTable data;
-	private Number[] row1;
-	private Number[] row2;
+	private Comparable<?>[] row1;
+	private Comparable<?>[] row2;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
-		data = new DataTable(Double.class, Double.class, Double.class);
-		data.add(1.0, 2.0, 3.0);
-		data.add(2.0, 2.0, 2.0);
+		data = new DataTable(Double.class, Double.class, Double.class, String.class);
+		data.add(1.0, 2.0, 3.0, "foo");
+		data.add(2.0, 2.0, 2.0, "bar");
 	}
 
 	@Before
@@ -61,32 +62,30 @@ public class ComparatorTest {
 
 	@Test
 	public void testAscending() {
-		DataComparator comparator1 = new Ascending(0);
-		DataComparator comparator2 = new Ascending(1);
-		DataComparator comparator3 = new Ascending(2);
+		int[] expected = {
+			-1, 0, 1, 4
+		};
 
-		assertEquals(-1, comparator1.compare(row1, row2));
-		assertEquals( 0, comparator2.compare(row1, row2));
-		assertEquals( 1, comparator3.compare(row1, row2));
-
-		assertEquals(0, comparator1.compare(row1, row1));
-		assertEquals(0, comparator2.compare(row1, row1));
-		assertEquals(0, comparator3.compare(row1, row1));
+		for (int i = 0; i < data.getColumnCount(); i++) {
+			DataComparator comparator = new Ascending(i);
+			assertEquals(expected[i], comparator.compare(row1, row2));
+			assertEquals(0, comparator.compare(row1, row1));
+			assertEquals(0, comparator.compare(row2, row2));
+		}
 	}
 
 	@Test
 	public void testDescending() {
-		DataComparator comparator1 = new Descending(0);
-		DataComparator comparator2 = new Descending(1);
-		DataComparator comparator3 = new Descending(2);
+		int[] expected = {
+			1, 0, -1, -4
+		};
 
-		assertEquals( 1, comparator1.compare(row1, row2));
-		assertEquals( 0, comparator2.compare(row1, row2));
-		assertEquals(-1, comparator3.compare(row1, row2));
-
-		assertEquals(0, comparator1.compare(row1, row1));
-		assertEquals(0, comparator2.compare(row1, row1));
-		assertEquals(0, comparator3.compare(row1, row1));
+		for (int i = 0; i < data.getColumnCount(); i++) {
+			DataComparator comparator = new Descending(i);
+			assertEquals(expected[i], comparator.compare(row1, row2));
+			assertEquals(0, comparator.compare(row1, row1));
+			assertEquals(0, comparator.compare(row2, row2));
+		}
 	}
 
 }

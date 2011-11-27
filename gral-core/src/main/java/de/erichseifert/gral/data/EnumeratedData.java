@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
+
 /**
  * <p>Class that creates a new data source which adds a leading column
  * containing the row number.</p>
@@ -51,10 +52,17 @@ public class EnumeratedData extends AbstractDataSource {
 	 * @param offset Offset of enumeration
 	 * @param steps Scaling of enumeration
 	 */
+	@SuppressWarnings("unchecked")
 	public EnumeratedData(DataSource original, double offset, double steps) {
 		this.original = original;
 		this.offset = offset;
 		this.steps = steps;
+
+		Class<? extends Comparable<?>>[] typesOrig = original.getColumnTypes();
+		Class<? extends Comparable<?>>[] types = new Class[typesOrig.length + 1];
+		System.arraycopy(typesOrig, 0, types, 1, typesOrig.length);
+		types[0] = Double.class;
+		setColumnTypes(types);
 	}
 
 	/**
@@ -72,16 +80,11 @@ public class EnumeratedData extends AbstractDataSource {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		if (col < 1) {
 			return row*steps + offset;
 		}
 		return original.get(col - 1, row);
-	}
-
-	@Override
-	public int getColumnCount() {
-		return original.getColumnCount() + 1;
 	}
 
 	/**
@@ -91,5 +94,4 @@ public class EnumeratedData extends AbstractDataSource {
 	public int getRowCount() {
 		return original.getRowCount();
 	}
-
 }

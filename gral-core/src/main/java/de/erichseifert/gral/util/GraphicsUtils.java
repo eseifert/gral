@@ -147,7 +147,7 @@ public abstract class GraphicsUtils {
 	/**
 	 * Converts color components from the sRGB to the CIE XYZ color space.
 	 * A D50 white point is assumed for the sRGB conversion. If the <i>xyz</i>
-	 * array is <code>null</code>, a new one will be created with the same
+	 * array is {@code null}, a new one will be created with the same
 	 * size as the <i>rgb</i> array.
 	 *
 	 * See http://www.brucelindbloom.com/index.html?Eqn_RGB_to_XYZ.html
@@ -183,7 +183,7 @@ public abstract class GraphicsUtils {
 
 	/**
 	 * Convert color components from the CIE L*u*v* to the CIE XYZ color space.
-	 * If the <i>xyz</i> array is <code>null</code>, a new one will be created
+	 * If the <i>xyz</i> array is {@code null}, a new one will be created
 	 * with the same size as the <i>luv</i> array.
 	 *
 	 * See http://www.brucelindbloom.com/index.html?Eqn_Luv_to_XYZ.html
@@ -214,7 +214,7 @@ public abstract class GraphicsUtils {
 			? xyz[1]*((39.0*luv[0])/(luv[2] + 13.0*luv[0]*XYZ_R_D50_V0) - 5.0)
 			: 0.0;
 
-		xyz[0] = (a != c) ? (d - b)/(a - c) : 0.0;
+		xyz[0] = !MathUtils.almostEqual(a, c, 1e-15) ? (d - b)/(a - c) : 0.0;
 		xyz[2] = xyz[0]*a + b;
 
 		return xyz;
@@ -223,7 +223,7 @@ public abstract class GraphicsUtils {
 	/**
 	 * Converts color components from the sRGB to the CIE XYZ color space.
 	 * A D50 white point is assumed for the sRGB conversion. If the <i>rgb</i>
-	 * array is <code>null</code>, a new one will be created with the same
+	 * array is {@code null}, a new one will be created with the same
 	 * size as the <i>xyz</i> array.
 	 *
 	 * See http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_RGB.html
@@ -259,7 +259,7 @@ public abstract class GraphicsUtils {
 
 	/**
 	 * Converts color components from the CIE XYZ to the CIE L*u*v* color
-	 * space. If the <i>luv</i> array is <code>null</code>, a new one will be
+	 * space. If the <i>luv</i> array is {@code null}, a new one will be
 	 * created with the same size as the <i>xyz</i> array.
 	 *
 	 * http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_Luv.html
@@ -300,7 +300,7 @@ public abstract class GraphicsUtils {
 	/**
 	 * Converts color components from the CIE L*u*v* to the sRGB color space.
 	 * A D50 white point is assumed for the sRGB conversion. If the <i>luv</i>
-	 * array is <code>null</code>, a new one will be created with the same
+	 * array is {@code null}, a new one will be created with the same
 	 * size as the <i>rgb</i> array.
 	 *
 	 * @param rgb Color components in the sRGB color space.
@@ -316,7 +316,7 @@ public abstract class GraphicsUtils {
 	/**
 	 * Converts color components from the CIE L*u*v* to the sRGB color space.
 	 * A D50 white point is assumed for the sRGB conversion. If the <i>rgb</i>
-	 * array is <code>null</code>, a new one will be created with the same size
+	 * array is {@code null}, a new one will be created with the same size
 	 * as the <i>luv</i> array.
 	 *
 	 * @param luv Color components in the CIE L*u*v* color space.

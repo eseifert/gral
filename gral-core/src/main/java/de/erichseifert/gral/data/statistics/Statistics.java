@@ -69,10 +69,10 @@ public class Statistics implements DataListener {
 	This is identical to the fourth central moment: E((x - mean)^4) */
 	public static final String SUM_OF_DIFF_QUADS = "M4"; //$NON-NLS-1$
 	/** Key for specifying the variance of a sample. Formula:
-	<code>1/(N - 1) * sumOfSquares</code> */
+	{@code 1/(N - 1) * sumOfSquares} */
 	public static final String VARIANCE = "sample variance"; //$NON-NLS-1$
 	/** Key for specifying the population variance. Formula:
-	<code>1/N * sumOfSquares</code> */
+	{@code 1/N * sumOfSquares} */
 	public static final String POPULATION_VARIANCE = "population variance"; //$NON-NLS-1$
 	/** Key for specifying the skewness. */
 	public static final String SKEWNESS = "skewness"; //$NON-NLS-1$
@@ -121,14 +121,14 @@ public class Statistics implements DataListener {
 	/**
 	 * Utility method that calculates basic statistics like element count, sum,
 	 * or mean.
-	 * 
+	 *
 	 * Notes: Calculation of higher order statistics is based on formulas from
 	 * http://people.xiph.org/~tterribe/notes/homs.html
-	 * 
+	 *
 	 * @param data Data values used to calculate statistics
-	 * @param stats A <code>Map</code> that should store the new statistics.
+	 * @param stats A {@code Map} that should store the new statistics.
 	 */
-	private void createBasicStats(Iterable<Number> data, Map<String, Double> stats) {
+	private void createBasicStats(Iterable<Comparable<?>> data, Map<String, Double> stats) {
 		double n = 0.0;
 		double sum = 0.0;
 		double sum2 = 0.0;
@@ -139,11 +139,15 @@ public class Statistics implements DataListener {
 		double sumOfDiffCubics = 0.0;
 		double sumOfDiffQuads = 0.0;
 
-		for (Number v : data) {
-			if (!MathUtils.isCalculatable(v)) {
+		for (Comparable<?> cell : data) {
+			if (!(cell instanceof Number)) {
 				continue;
 			}
-			double val = v.doubleValue();
+			Number numericCell = (Number) cell;
+			if (!MathUtils.isCalculatable(numericCell)) {
+				continue;
+			}
+			double val = numericCell.doubleValue();
 
 			if (!stats.containsKey(MIN) || val < stats.get(MIN)) {
 				stats.put(MIN, val);
@@ -165,8 +169,10 @@ public class Statistics implements DataListener {
 			double deltaN2 = deltaN*deltaN;
 			double term1 = delta*deltaN*(n - 1.0);
 			mean += deltaN;
-			sumOfDiffQuads += term1*deltaN2*(n*n - 3.0*n + 3.0) + 6.0*deltaN2*sumOfDiffSquares - 4.0*deltaN*sumOfDiffCubics;
-			sumOfDiffCubics += term1*deltaN*(n - 2.0) - 3.0*deltaN*sumOfDiffSquares;
+			sumOfDiffQuads += term1*deltaN2*(n*n - 3.0*n + 3.0) +
+				6.0*deltaN2*sumOfDiffSquares - 4.0*deltaN*sumOfDiffCubics;
+			sumOfDiffCubics += term1*deltaN*(n - 2.0) -
+				3.0*deltaN*sumOfDiffSquares;
 			sumOfDiffSquares += term1;
 		}
 
@@ -190,15 +196,19 @@ public class Statistics implements DataListener {
 
 	/**
 	 * Utility method that calculates quantiles for the given data values and
-	 * stores the results in <code>stats</code>.
-	 * @param stats <code>Map</code> for storing results
+	 * stores the results in {@code stats}.
+	 * @param stats {@code Map} for storing results
 	 * @see de.erichseifert.gral.util.MathUtils.quantile(List<Double>,double)
 	 */
-	private void createDistributionStats(Iterable<Number> data, Map<String, Double> stats) {
+	private void createDistributionStats(Iterable<Comparable<?>> data, Map<String, Double> stats) {
 		// Create sorted list of data
 		List<Double> values = new SortedList<Double>();
-		for (Number cell : data) {
-			double value = cell.doubleValue();
+		for (Comparable<?> cell : data) {
+			if (!(cell instanceof Number)) {
+				continue;
+			}
+			Number numericCell = (Number) cell;
+			double value = numericCell.doubleValue();
 			if (MathUtils.isCalculatable(value)) {
 				values.add(value);
 			}
@@ -231,7 +241,7 @@ public class Statistics implements DataListener {
 	 */
 	public double get(String key, Orientation orientation, int index) {
 		Map<String, Double> stats = null;
-		Iterable<Number> statsData = null;
+		Iterable<Comparable<?>> statsData = null;
 		if (orientation == Orientation.VERTICAL) {
 			stats = statisticsByCol.get(index);
 			statsData = data.getColumn(index);
@@ -247,12 +257,12 @@ public class Statistics implements DataListener {
 	 * If the specified statistical value does not exist <i>NaN</i>
 	 * is returned
 	 * @param data Data values.
-	 * @param stats <code>Map</code> with statistics.
+	 * @param stats {@code Map} with statistics.
 	 * @param key Requested information.
 	 * @return The value for the specified key as  value, or <i>NaN</i>
 	 *         if the specified statistical value does not exist
 	 */
-	private double get(Iterable<Number> data, Map<String, Double> stats, String key) {
+	private double get(Iterable<Comparable<?>> data, Map<String, Double> stats, String key) {
 		if (!stats.containsKey(key)) {
 			if (MEDIAN.equals(key) || QUARTILE_1.equals(key) || QUARTILE_2.equals(key) || QUARTILE_3.equals(key)) {
 				createDistributionStats(data, stats);
@@ -268,7 +278,7 @@ public class Statistics implements DataListener {
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -294,7 +304,7 @@ public class Statistics implements DataListener {
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -309,7 +319,7 @@ public class Statistics implements DataListener {
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

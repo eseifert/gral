@@ -31,7 +31,6 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -65,6 +64,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		setSettingDefault(COLOR, Color.BLACK);
 
 		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
+		setSettingDefault(VALUE_COLUMN, 1);
 		setSettingDefault(VALUE_FORMAT, NumberFormat.getInstance());
 		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
@@ -74,13 +74,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		setSettingDefault(VALUE_FONT, Font.decode(null));
 
 		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
+		setSettingDefault(ERROR_COLUMN_TOP, 2);
+		setSettingDefault(ERROR_COLUMN_BOTTOM, 3);
 		setSettingDefault(ERROR_COLOR, Color.BLACK);
 		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
 		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
 	}
 
 	/**
-	 * Draws the specified value for the specified shape.
+	 * Draws the specified value label for the specified shape.
 	 * @param context Environment used for drawing.
 	 * @param point Point to draw into.
 	 * @param value Value to be displayed.
@@ -140,48 +142,50 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	/**
 	 * Draws an error bar.
 	 * @param context Environment used for drawing.
-	 * @param point Point to draw error bar for.
-	 * @param value Value of the data point.
-	 * @param errorTop Upper value of the error bar.
-	 * @param errorBottom Lower value of the error bar.
+	 * @param point Shape of the point.
+	 * @param value Position of the current point in axis units.
+	 * @param lengthTop Upper value of the error bar in axis units.
+	 * @param lengthBottom Lower value of the error bar in axis units.
 	 * @param axis Axis.
 	 * @param axisRenderer Axis renderer.
 	 */
 	protected void drawError(DrawingContext context, Shape point,
-			double value, double errorTop, double errorBottom,
+			double value, double lengthTop, double lengthBottom,
 			Axis axis, AxisRenderer axisRenderer) {
 		if (axisRenderer == null) {
 			return;
 		}
-		double posX = point.getBounds2D().getCenterX();
-		double valueTop = value + errorTop;
-		double valueBottom = value - errorBottom;
-		double posY = axisRenderer.getPosition(
-			axis, value, true, false).get(PointND.Y);
-		double posYTop = axisRenderer.getPosition(
-			axis, valueTop, true, false).get(PointND.Y) - posY;
-		double posYBottom = axisRenderer.getPosition(
-			axis, valueBottom, true, false).get(PointND.Y) - posY;
-		Point2D pointTop = new Point2D.Double(posX, posYTop);
-		Point2D pointBottom = new Point2D.Double(posX, posYBottom);
-		Line2D errorBar = new Line2D.Double(pointTop, pointBottom);
+		Graphics2D graphics = context.getGraphics();
+		AffineTransform txOld = graphics.getTransform();
+
+		// Calculate positions
+		PointND<Double> pointValue = axisRenderer.getPosition(
+			axis, value, true, false);
+		double posY = pointValue.get(PointND.Y);
+
+		PointND<Double> pointTop = axisRenderer.getPosition(
+			axis, value + lengthTop, true, false);
+		double posYTop = pointTop.get(PointND.Y) - posY;
+
+		PointND<Double> pointBottom = axisRenderer.getPosition(
+			axis, value - lengthBottom, true, false);
+		double posYBottom = pointBottom.get(PointND.Y) - posY;
 
 		// Draw the error bar
+		Line2D errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
 		Paint errorPaint = getSetting(ERROR_COLOR);
 		Stroke errorStroke = getSetting(ERROR_STROKE);
-		Graphics2D graphics = context.getGraphics();
 		GraphicsUtils.drawPaintedShape(
 			graphics, errorBar, errorPaint, null, errorStroke);
 
 		// Draw the shapes at the end of the error bars
 		Shape endShape = getSetting(ERROR_SHAPE);
-		AffineTransform txOld = graphics.getTransform();
-		graphics.translate(posX, posYTop);
+		graphics.translate(0.0, posYTop);
 		Stroke endShapeStroke = new BasicStroke(1f);
 		GraphicsUtils.drawPaintedShape(
 			graphics, endShape, errorPaint, null, endShapeStroke);
 		graphics.setTransform(txOld);
-		graphics.translate(posX, posYBottom);
+		graphics.translate(0.0, posYBottom);
 		GraphicsUtils.drawPaintedShape(
 			graphics, endShape, errorPaint, null, endShapeStroke);
 		graphics.setTransform(txOld);

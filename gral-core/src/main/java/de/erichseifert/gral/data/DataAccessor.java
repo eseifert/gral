@@ -27,11 +27,11 @@ import java.util.Locale;
 
 /**
  * Abstract base for reading substructures of a data source, i.e. columns or
- * rows. <code>DataAccessor</code>s are iterable and provide utility methods
+ * rows. {@code DataAccessor}s are iterable and provide utility methods
  * for statistics and array conversion.
  * @see DataSource
  */
-public abstract class DataAccessor implements Iterable<Number> {
+public abstract class DataAccessor implements Iterable<Comparable<?>> {
 	/** Data source that provides the values that should be accessed. */
 	private final DataSource source;
 	/** Index of current column or row. */
@@ -69,7 +69,7 @@ public abstract class DataAccessor implements Iterable<Number> {
 	 * @param index Index.
 	 * @return Value of the accessed cell.
 	 */
-	public abstract Number get(int index);
+	public abstract Comparable<?> get(int index);
 
 	/**
 	 * Returns the number of elements in this column.
@@ -103,19 +103,19 @@ public abstract class DataAccessor implements Iterable<Number> {
 	@Override
 	public String toString() {
 		return String.format(Locale.US,
-				"%s[source=%s,index=%d]", //$NON-NLS-1$
-				getClass().getName(), getSource(), getIndex());
+			"%s[source=%s,index=%d]", //$NON-NLS-1$
+			getClass().getName(), getSource(), getIndex());
 	}
 
 	/**
 	 * Converts the data column to an array.
 	 * @param data Optional array as data sink.
-	 *             If array is <code>null</code> a new array will be created.
+	 *             If array is {@code null} a new array will be created.
 	 * @return Array with row data;
 	 */
-	public Number[] toArray(Number[] data) {
+	public Comparable<?>[] toArray(Comparable<?>[] data) {
 		if (data == null) {
-			data = new Number[size()];
+			data = new Comparable<?>[size()];
 		}
 		if (data.length != size()) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -139,16 +139,16 @@ public abstract class DataAccessor implements Iterable<Number> {
      * Returns an iterator over the elements of this object.
      * @return an iterator.
      */
-	public Iterator<Number> iterator() {
-		return new Iterator<Number>() {
+	public Iterator<Comparable<?>> iterator() {
+		return new Iterator<Comparable<?>>() {
 			private int i;
 
 			public boolean hasNext() {
 				return i < size();
 			}
 
-			public Number next() {
-				Number value = get(i++);
+			public Comparable<?> next() {
+				Comparable<?> value = get(i++);
 				return value;
 			}
 

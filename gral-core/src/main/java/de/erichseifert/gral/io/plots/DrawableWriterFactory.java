@@ -30,7 +30,7 @@ import de.erichseifert.gral.io.AbstractIOFactory;
 
 
 /**
- * <p>Class that provides <code>DrawableWriter</code> implementations for
+ * <p>Class that provides {@code DrawableWriter} implementations for
  * different file formats.</p>
  *
  * <p>Example Usage:</p>

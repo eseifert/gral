@@ -48,9 +48,10 @@ import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 public class AbstractPointRendererTest {
 	private static DataTable table;
 	private static Row row;
-	private TestPointRenderer r;
+	private MockPointRenderer r;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class);
 		table.add(1); // 0
@@ -65,16 +66,16 @@ public class AbstractPointRendererTest {
 		row = new Row(table, 0);
 	}
 
-	private static final class TestPointRenderer extends AbstractPointRenderer {
+	private static final class MockPointRenderer extends AbstractPointRenderer {
 		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
-				final Row row) {
+				final Row row, final int col) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
 					Shape point = getPointPath(row);
-					Number value = row.get(0);
+					Comparable<?> cell = row.get(0);
+					Number value = (Number) cell;
 					drawValue(context, point, value);
-					drawError(context, point, value.doubleValue(),
-							1.0, 0.0, axis, axisRenderer);
+					drawError(context, point, value.doubleValue(), 1.0, 0.5, axis, axisRenderer);
 				}
 			};
 		}
@@ -86,7 +87,7 @@ public class AbstractPointRendererTest {
 
 	@Before
 	public void setUp() {
-		r = new TestPointRenderer();
+		r = new MockPointRenderer();
 	}
 
 	@Test
@@ -95,7 +96,7 @@ public class AbstractPointRendererTest {
 		axis.setRange(0.0, 1.0);
 		AxisRenderer axisRenderer = new LinearRenderer2D();
 		// Get line
-		Drawable point = r.getPoint(axis, axisRenderer, row);
+		Drawable point = r.getPoint(axis, axisRenderer, row, 0);
 		assertNotNull(point);
 
 		// Draw line

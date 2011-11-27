@@ -33,10 +33,12 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class ScatterPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	private static final int SAMPLE_COUNT = 100000;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	public ScatterPlot() {
 		// Generate 100,000 data points
 		DataTable data = new DataTable(Double.class, Double.class);

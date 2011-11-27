@@ -21,28 +21,32 @@
  */
 package de.erichseifert.gral.io.data;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.util.Messages;
+import de.erichseifert.gral.util.StatefulTokenizer;
+import de.erichseifert.gral.util.StatefulTokenizer.Token;
 
 
 /**
- * <p>Class that creates a <code>DataSource</code> from file contents which are
+ * <p>Class that creates a {@code DataSource} from file contents which are
  * separated by a certain delimiter character. The delimiter is chosen based on
  * the file type but can also be set manually. By default the comma character
  * will be used as a delimiter for separating columns.</p>
- * <p><code>CSVReader</code>s instances should be obtained by the
+ * <p>{@code CSVReader} instances should be obtained by the
  * {@link DataReaderFactory} rather than being created manually:</p>
  * <pre>
  * DataReaderFactory factory = DataReaderFactory.getInstance();
@@ -52,6 +56,10 @@ import de.erichseifert.gral.util.Messages;
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
  */
 public class CSVReader extends AbstractDataReader {
+	/** Key for specifying a {@link Character} value that defines the
+	delimiting character used to separate columns. */
+	public static final String SEPARATOR_CHAR = "separator"; //$NON-NLS-1$
+
 	static {
 		addCapabilities(new IOCapabilities(
 			"CSV", //$NON-NLS-1$
@@ -69,6 +77,34 @@ public class CSVReader extends AbstractDataReader {
 		));
 	}
 
+	private static enum CSVTokenType {
+		TEXT,
+		QUOTE,
+		ROW,
+		COLUMN,
+	}
+
+	private static final class CSVTokenizer extends StatefulTokenizer {
+
+		public CSVTokenizer(char separator) {
+			addJoinedType(CSVTokenType.TEXT);
+			addIngoredType(CSVTokenType.QUOTE);
+
+			putRules(
+				new Rule("\n|\r\n|\r", CSVTokenType.ROW),
+				new Rule("\\s*("+Pattern.quote(String.valueOf(separator))+")\\s*",
+					CSVTokenType.COLUMN),
+				new Rule("\"", CSVTokenType.QUOTE, "quoted"),
+				new Rule(".", CSVTokenType.TEXT)
+			);
+			putRules("quoted",
+				new Rule("(\")\"", CSVTokenType.TEXT),
+				new Rule("\"", CSVTokenType.QUOTE, "#pop"),
+				new Rule(".", CSVTokenType.TEXT)
+			);
+		}
+	}
+
 	/**
 	 * Creates a new instance with the specified MIME type. The delimiter is
 	 * set depending on the MIME type parameter. By default a comma is used as
@@ -78,9 +114,9 @@ public class CSVReader extends AbstractDataReader {
 	public CSVReader(String mimeType) {
 		super(mimeType);
 		if ("text/tab-separated-values".equals(mimeType)) { //$NON-NLS-1$
-			setDefault("separator", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, '\t'); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			setDefault("separator", ","); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, ','); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -92,11 +128,29 @@ public class CSVReader extends AbstractDataReader {
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
 	 */
-	public DataSource read(InputStream input, Class<? extends Number>... types)
+	public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
 			throws IOException {
-		Map<Class<? extends Number>, Method> parseMethods =
-			new HashMap<Class<? extends Number>, Method>();
-		for (Class<? extends Number> type : types) {
+		// Read all contents from the input stream
+		Scanner scanner = new Scanner(input).useDelimiter("\\Z");
+		String content = scanner.next();
+
+		// Tokenize the string
+		Character separator = getSetting(SEPARATOR_CHAR);
+		CSVTokenizer tokenizer = new CSVTokenizer(separator);
+		List<Token> tokens = tokenizer.tokenize(content);
+
+		// Add row token if there was no trailing line break
+		Token lastToken = tokens.get(tokens.size() - 1);
+		if (lastToken.getType() != CSVTokenType.ROW) {
+			Token eof = new Token(lastToken.getEnd(), lastToken.getEnd(), CSVTokenType.ROW, "");
+			tokens.add(eof);
+		}
+
+		// Find methods for all column data types that can be used to convert
+		// the text to the column data type
+		Map<Class<? extends Comparable<?>>, Method> parseMethods =
+			new HashMap<Class<? extends Comparable<?>>, Method>();
+		for (Class<? extends Comparable<?>> type : types) {
 			if (parseMethods.containsKey(type)) {
 				continue;
 			}
@@ -106,67 +160,105 @@ public class CSVReader extends AbstractDataReader {
 			}
 		}
 
-		String separatorPattern = getSetting("separator"); //$NON-NLS-1$
+		// Process the data and store the data.
 		DataTable data = new DataTable(types);
-		BufferedReader reader =
-			new BufferedReader(new InputStreamReader(input));
-		String line = null;
-		for (int lineNo = 0; (line = reader.readLine()) != null; lineNo++) {
-			String[] cols = line.split(separatorPattern);
-			if (cols.length < types.length) {
-				throw new IllegalArgumentException(MessageFormat.format(
-					"Column count in file does not match: got {0,number,integer}, but expected {1,number,integer}.", //$NON-NLS-1$
-					cols.length, types.length));
-			}
-			Number[] row = new Number[types.length];
-			for (int i = 0; i < types.length; i++) {
-				Method parseMethod = parseMethods.get(types[i]);
+		List<Comparable<?>> row = new LinkedList<Comparable<?>>();
+		int rowIndex = 0;
+		int colIndex = 0;
+		String cellContent = "";
+		for (Token token : tokens) {
+			if (token.getType() == CSVTokenType.TEXT) {
+				// Store the token text
+				cellContent = token.getContent();
+			} else if (token.getType() == CSVTokenType.COLUMN ||
+					token.getType() == CSVTokenType.ROW) {
+				// Check for a valid number of columns
+				if (colIndex >= types.length) {
+					throw new IllegalArgumentException(MessageFormat.format(
+						"Too many columns in line {0,number,integer}: got {1,number,integer}, but expected {2,number,integer}.", //$NON-NLS-1$
+						rowIndex + 1, colIndex + 1, types.length));
+				}
+
+				// We need to add the cell to the row in both cases because
+				// rows don't have a trailing column token
+				Class<? extends Comparable<?>> colType = types[colIndex];
+				Method parseMethod = parseMethods.get(colType);
 				try {
-					row[i] = (Number) parseMethod.invoke(null, cols[i]);
+					Comparable<?> cell = (Comparable<?>) parseMethod.invoke(
+						null, cellContent);
+					row.add(cell);
 				} catch (IllegalArgumentException e) {
 					throw new RuntimeException(MessageFormat.format(
 						"Could not invoke method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
-						types[i].getSimpleName(), i));
+						types[colIndex].getSimpleName(), colIndex));
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(MessageFormat.format(
 						"Could not access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
-						types[i].getSimpleName(), i));
+						types[colIndex].getSimpleName(), colIndex));
 				} catch (InvocationTargetException e) {
 					throw new IOException(MessageFormat.format(
 						"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected {3} value.", //$NON-NLS-1$
-						i, lineNo, cols[i], types[i].getSimpleName()));
+						rowIndex + 1, colIndex + 1, cellContent, colType.getSimpleName()));
+				}
+				colIndex++;
+
+				if (token.getType() == CSVTokenType.ROW) {
+					// Check for a valid number of columns
+					if (row.size() < types.length) {
+						throw new IllegalArgumentException(MessageFormat.format(
+							"Not enough columns in line {0,number,integer}: got {1,number,integer}, but expected {2,number,integer}.", //$NON-NLS-1$
+							rowIndex + 1, row.size(), types.length));
+					}
+
+					// Add the row to the table
+					data.add(row);
+					rowIndex++;
+
+					// Start a new row
+					row.clear();
+					colIndex = 0;
+					cellContent = "";
 				}
 			}
-			data.add(row);
 		}
+
 		return data;
 	}
 
 	/**
-	 * Returns a Method that returns a parsed value in the specified type.
+	 * Returns a method that can return a parsed value of the specified type.
 	 * @param c Desired type.
 	 * @return Method that parses a data type.
 	 */
 	private static Method getParseMethod(Class<?> c) {
 		Method parse = null;
-		for (Method m : c.getMethods()) {
-			boolean isStatic = m.toString().indexOf("static") >= 0; //$NON-NLS-1$
-			if (!isStatic) {
-				continue;
+
+		if (String.class.isAssignableFrom(c)) {
+			try {
+				parse = String.class.getMethod("valueOf", Object.class);
+			} catch (NoSuchMethodException e) {
+				parse = null;
 			}
-			Class<?>[] types = m.getParameterTypes();
-			boolean hasStringParameter =
-				(types.length == 1) && String.class.equals(types[0]);
-			if (!hasStringParameter) {
-				continue;
+		} else {
+			for (Method m : c.getMethods()) {
+				boolean isStatic = m.toString().indexOf("static") >= 0; //$NON-NLS-1$
+				if (!isStatic) {
+					continue;
+				}
+				Class<?>[] types = m.getParameterTypes();
+				boolean hasStringParameter =
+					(types.length == 1) && String.class.equals(types[0]);
+				if (!hasStringParameter) {
+					continue;
+				}
+				boolean parseName = m.getName().startsWith("parse"); //$NON-NLS-1$
+				if (!parseName) {
+					continue;
+				}
+				parse = m;
 			}
-			boolean parseName = m.getName().startsWith("parse"); //$NON-NLS-1$
-			if (!parseName) {
-				continue;
-			}
-			parse = m;
 		}
+
 		return parse;
 	}
-
 }

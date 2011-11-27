@@ -32,8 +32,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 /**
- * Implementation of <code>Container</code> that is a <code>Drawable</code>
- * itself and stores instances of <code>Drawable</code> as components.
+ * Implementation of {@code Container} that is a {@code Drawable}
+ * itself and stores instances of {@code Drawable} as components.
  * It takes care of laying out, managing insets for and painting the
  * components.
  *
@@ -52,7 +52,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	private final Map<Drawable, Object> constraints;
 
 	/**
-	 * Creates a new container for <code>Drawable</code>s without layout
+	 * Creates a new container for {@code Drawable}s without layout
 	 * manager.
 	 */
 	public DrawableContainer() {
@@ -60,7 +60,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Creates a new container for <code>Drawable</code>s with the specified
+	 * Creates a new container for {@code Drawable}s with the specified
 	 * layout manager.
 	 * @param layout Layout manager to be set.
 	 */
@@ -71,8 +71,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Draws the <code>Drawable</code> with the specified
-	 * <code>Graphics2D</code> object.
+	 * Draws the {@code Drawable} with the specified drawing context.
 	 * @param context Environment used for drawing
 	 */
 	public void draw(DrawingContext context) {
@@ -80,7 +79,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Invokes the draw method of each <code>Drawable</code>.
+	 * Invokes the draw method of each {@code Drawable}.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawComponents(DrawingContext context) {
@@ -111,7 +110,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	/**
 	 * Return additional information on component
 	 * @param drawable Component
-	 * @return Information object or <code>null</code>
+	 * @return Information object or {@code null}
 	 */
 	public Object getConstraints(Drawable drawable) {
 		return constraints.get(drawable);

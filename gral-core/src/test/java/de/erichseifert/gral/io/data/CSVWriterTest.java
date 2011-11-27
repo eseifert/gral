@@ -36,6 +36,7 @@ public class CSVWriterTest {
 	private static DataTable data;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		data = new DataTable(Double.class, Double.class, Integer.class);
 		data.add(0.0, 10.0, 20);
@@ -74,7 +75,7 @@ public class CSVWriterTest {
 		OutputStream output = new ByteArrayOutputStream();
 
 		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
-		writer.setSetting("separator", ";");
+		writer.setSetting(CSVWriter.SEPARATOR_CHAR, ';');
 		writer.write(data, output);
 
 		assertEquals(

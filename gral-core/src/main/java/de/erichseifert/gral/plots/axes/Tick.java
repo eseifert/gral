@@ -51,7 +51,7 @@ public class Tick extends DataPoint {
 
 	/**
 	 * Creates a new instance with the specified position, normal,
-	 * <code>Drawable</code>, point and label.
+	 * {@code Drawable}, point and label.
 	 * @param type Type of the tick mark.
 	 * @param position Coordinates.
 	 * @param normal Normal.

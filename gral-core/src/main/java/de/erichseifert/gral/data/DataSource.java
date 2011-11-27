@@ -26,7 +26,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 /**
  * Immutable view on a source for tabular data.
  */
-public interface DataSource extends Iterable<Number> {
+public interface DataSource extends Iterable<Comparable<?>> {
 	/**
 	 * Returns the column with the specified index.
 	 * @param col index of the column to return
@@ -38,7 +38,7 @@ public interface DataSource extends Iterable<Number> {
 	 * Returns the data types of all columns.
 	 * @return The data types of all column in the data source
 	 */
-	Class<? extends Number>[] getColumnTypes();
+	Class<? extends Comparable<?>>[] getColumnTypes();
 
 	/**
 	 * Returns the row with the specified index.
@@ -53,7 +53,7 @@ public interface DataSource extends Iterable<Number> {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	Number get(int col, int row);
+	Comparable<?> get(int col, int row);
 
 	/**
 	 * Retrieves a object instance that contains various statistical
@@ -75,13 +75,20 @@ public interface DataSource extends Iterable<Number> {
 	int getColumnCount();
 
 	/**
-	 * Adds the specified <code>DataListener</code> to this data source.
+	 * Returns whether the column at the specified index contains numbers.
+	 * @param columnIndex Index of the column to test.
+	 * @return {@code true} if the column is numeric, otherwise {@code false}.
+	 */
+	boolean isColumnNumeric(int columnIndex);
+
+	/**
+	 * Adds the specified {@code DataListener} to this data source.
 	 * @param dataListener listener to be added.
 	 */
 	void addDataListener(DataListener dataListener);
 
 	/**
-	 * Removes the specified <code>DataListener</code> from this data source.
+	 * Removes the specified {@code DataListener} from this data source.
 	 * @param dataListener listener to be removed.
 	 */
 	void removeDataListener(DataListener dataListener);

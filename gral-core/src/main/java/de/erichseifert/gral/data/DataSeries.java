@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that represents a view on several columns of a
- * <code>DataSource</code>.
+ * Class that represents a view on several columns of a {@code DataSource}.
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {
@@ -39,7 +38,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 
 	/**
 	 * Constructor without name. The first column will be column
-	 * <code>0</code>, the second column <code>1</code> and so on,
+	 * {@code 0}, the second column {@code 1} and so on,
 	 * whereas the value of the specified columns is the column number
 	 * in the data source.
 	 * @param data Data source
@@ -51,29 +50,38 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 
 	/**
 	 * Constructor that initializes a named data series. The first column will
-	 * be column <code>0</code>, the second column <code>1</code> and so on,
+	 * be column {@code 0}, the second column {@code 1} and so on,
 	 * whereas the value of the specified columns is the column number in the
 	 * data source.
 	 * @param name Descriptive name
 	 * @param data Data source
 	 * @param cols Column numbers
 	 */
+	@SuppressWarnings("unchecked")
 	public DataSeries(String name, DataSource data, int... cols) {
-		this.name = name;
 		this.data = data;
+		this.cols = new ArrayList<Integer>();
+		this.name = name;
 		this.data.addDataListener(this);
-		int colCount = cols.length;
-		if (colCount == 0) {
-			colCount = data.getColumnCount();
-			cols = new int[colCount];
-			for (int i = 0; i < cols.length; i++) {
-				cols[i] = i;
+
+		Class<? extends Comparable<?>>[] typesOrig = data.getColumnTypes();
+		Class<? extends Comparable<?>>[] types = null;
+
+		if (cols.length > 0) {
+			types = new Class[cols.length];
+			int t = 0;
+			for (int colIndex : cols) {
+				this.cols.add(colIndex);
+				types[t++] = typesOrig[colIndex];
 			}
+		} else {
+			for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
+				this.cols.add(colIndex);
+			}
+			types = typesOrig;
 		}
-		this.cols = new ArrayList<Integer>(colCount);
-		for (int col : cols) {
-			this.cols.add(col);
-		}
+
+		setColumnTypes(types);
 	}
 
 	/**
@@ -98,7 +106,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		try {
 			int dataCol = cols.get(col);
 			return data.get(dataCol, row);
@@ -123,7 +131,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -135,7 +143,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -147,7 +155,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

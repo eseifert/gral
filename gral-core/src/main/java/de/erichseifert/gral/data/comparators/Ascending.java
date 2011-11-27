@@ -22,8 +22,8 @@
 package de.erichseifert.gral.data.comparators;
 
 /**
- * Class that represents a <code>DataComparator</code> sorting a specific
- * column in ascending order.
+ * Class that represents a {@code DataComparator} for comparing two arrays of
+ * column values at a defined index for ascending order.
  * @see de.erichseifert.gral.data.DataTable#sort(DataComparator...)
  */
 public class Ascending extends DataComparator {
@@ -31,7 +31,7 @@ public class Ascending extends DataComparator {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Creates a new Ascending object sorting according to the specified
+	 * Creates a new Ascending object for sorting according to the specified
 	 * column.
 	 * @param col Column index to be compared.
 	 */
@@ -40,26 +40,35 @@ public class Ascending extends DataComparator {
 	}
 
 	/**
-	 * <p>Compares two numbers for order and returns a corresponding integer:</p>
+	 * <p>Compares the values of two rows at the specified column for order and
+	 * returns a corresponding integer:</p>
 	 * <ul>
-	 *   <li>–1 means <code>o1</code> is smaller than <code>o2</code></li>
-	 *   <li>0 means <code>o1</code> is equal to <code>o2</code></li>
-	 *   <li>1 means <code>o1</code> is larger than <code>o2</code></li>
+	 *   <li>a negative value means {@code row1} is smaller than {@code row2}</li>
+	 *   <li>0 means {@code row1} is equal to {@code row2}</li>
+	 *   <li>a positive value means {@code row1} is larger than {@code row2}</li>
 	 * </ul>
-	 * @param o1 First value
-	 * @param o2 Second value
-	 * @return An integer number describing order:
-	 *         –1 if <code>o1</code> is smaller than <code>o2</code>,
-	 *         0 if <code>o1</code> is equal to <code>o2</code>,
-	 *         1 if <code>o1</code> is larger than <code>o2</code>,
+	 * @param row1 First value
+	 * @param row2 Second value
+	 * @return An integer number describing the order:
+	 *         a negative value if {@code row1} is smaller than {@code row2},
+	 *         0 if {@code row1} is equal to {@code row2},
+	 *         a positive value if {@code row1} is larger than {@code row2},
 	 */
-	public int compare(Number[] o1, Number[] o2) {
-		if (o1 == o2) {
+	@SuppressWarnings("unchecked")
+	public int compare(Comparable<?>[] row1, Comparable<?>[] row2) {
+		Comparable<Object> value1 = (Comparable<Object>) row1[getColumn()];
+		Comparable<Object> value2 = (Comparable<Object>) row2[getColumn()];
+
+		// null values sort as if larger than non-null values
+		if (value1 == null && value2 == null) {
 			return 0;
+		} else if (value1 == null) {
+			return 1;
+		} else if (value2 == null) {
+			return -1;
 		}
-		double o1Val = o1[getColumn()].doubleValue();
-		double o2Val = o2[getColumn()].doubleValue();
-		return Double.compare(o1Val, o2Val);
+
+		return value1.compareTo(value2);
 	}
 
 }

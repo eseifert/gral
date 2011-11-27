@@ -69,8 +69,7 @@ public class PlotNavigator {
 		private double zoom;
 
 		/**
-		 * Constructor which initializes a new <code>NavigationInfo</code>
-		 * instance.
+		 * Initializes a new {@code NavigationInfo} instance.
 		 * @param min Minimum value in axis units.
 		 * @param max Maximum value in axis units.
 		 * @param center Center in axis units.
@@ -137,8 +136,8 @@ public class PlotNavigator {
 	}
 
 	/**
-	 * Creates a new <code>PlotNavigator</code> object that is responsible for
-	 * zooming and panning all axes of the specified plot.
+	 * Initializes a new instance that is responsible for zooming and panning
+	 * all axes of the specified plot.
 	 * @param plot Plot to be zoomed and panned.
 	 */
 	public PlotNavigator(Plot plot) {

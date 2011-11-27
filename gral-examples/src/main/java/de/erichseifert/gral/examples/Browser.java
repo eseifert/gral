@@ -42,6 +42,8 @@ import de.erichseifert.gral.examples.xyplot.SpiralPlot;
 import de.erichseifert.gral.examples.xyplot.StackedPlots;
 
 public class Browser extends JFrame implements ListSelectionListener {
+	private static final long serialVersionUID = 1L;
+
 	private static final ExamplePanel[] examples = {
 		new HistogramPlot(),
 		new SimpleBarPlot(),
@@ -80,6 +82,9 @@ public class Browser extends JFrame implements ListSelectionListener {
 
 	private void setExample(ExamplePanel example) {
 		exampleScrollPane.getViewport().setView(example);
+		if (example != examplesList.getSelectedValue()) {
+			examplesList.setSelectedValue(example, true);
+		}
 	}
 
 	public static void main(String[] args) {

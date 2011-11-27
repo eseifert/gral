@@ -43,12 +43,14 @@ import de.erichseifert.vectorgraphics2d.DataUtils;
 
 
 public class SimpleBoxPlot extends ExamplePanel {
-	private static final int SAMPLE_COUNT = 50;
+	private static final long serialVersionUID = 1L;
 
+	private static final int SAMPLE_COUNT = 50;
+	private static final Random random = new Random();
+
+	@SuppressWarnings("unchecked")
 	public SimpleBoxPlot() {
 		setPreferredSize(new Dimension(400, 600));
-
-		Random random = new Random();
 
 		// Create example data
 		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);

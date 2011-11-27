@@ -41,8 +41,8 @@ public interface AxisRenderer extends SettingsStorage {
 	 or labels. */
 	Key SHAPE_VISIBLE = new Key("axis.shape.visible"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Boolean} value which decides
-	 whether normal vector is calculated using clockwise (<code>true</code>)
-	 or counterclockwise rotation (<code>false</code>). */
+	 whether normal vector is calculated using clockwise ({@code true})
+	 or counterclockwise rotation ({@code false}). */
 	Key SHAPE_NORMAL_ORIENTATION_CLOCKWISE =
 		new Key("axis.shape.normalOrientationClockwise"); //$NON-NLS-1$
 	/** Key for specifying {@link java.awt.Paint} instance to be used to paint
@@ -118,7 +118,7 @@ public interface AxisRenderer extends SettingsStorage {
 	 paint the the shapes of minor ticks. */
 	Key TICKS_MINOR_COLOR = new Key("label.color"); //$NON-NLS-1$
 	/** Custom labels as a {@link java.util.Map} with a position
-	 (<code>Double</code>) as key and a label (<code>String</code>) as value. */
+	 ({@code Double}) as key and a label ({@code String}) as value. */
 	Key TICKS_CUSTOM = new Key("axis.ticks.custom"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.lang.String} instance for the label
 	 text of the axis. */
@@ -172,7 +172,7 @@ public interface AxisRenderer extends SettingsStorage {
 	/**
 	 * Returns a list of all tick element on the axis.
 	 * @param axis Axis
-	 * @return A list of <code>Tick</code> instances
+	 * @return A list of {@code Tick} instances
 	 */
 	public abstract List<Tick> getTicks(Axis axis);
 

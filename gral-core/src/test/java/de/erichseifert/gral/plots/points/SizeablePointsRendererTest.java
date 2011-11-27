@@ -39,6 +39,7 @@ public class SizeablePointsRendererTest {
 	private static Shape shape;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 1);              // 0

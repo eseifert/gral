@@ -25,12 +25,12 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * Abstract implementation of a <code>Comparator</code> for
- * <code>Number[]</code> arrays. This class allows to specify the position of
- * the arrays that should be compared.
+ * Abstract implementation of a {@code Comparator} for arrays of column values.
+ * This class allows to specify the index at which the arrays should be
+ * compared.
  * @see de.erichseifert.gral.data.DataTable#sort(DataComparator...)
  */
-public abstract class DataComparator implements Comparator<Number[]>, Serializable {
+public abstract class DataComparator implements Comparator<Comparable<?>[]>, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1L;
 	/** Column that should be used for comparing. */

@@ -42,6 +42,7 @@ public class DrawableWriterTest {
 	private final DataTable data;
 	private final XYPlot plot;
 
+	@SuppressWarnings("unchecked")
 	public DrawableWriterTest() {
 		data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		data.add(1.0, 4.5, 4.3, 4.0);

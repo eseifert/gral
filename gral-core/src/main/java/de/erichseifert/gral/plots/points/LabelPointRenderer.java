@@ -34,7 +34,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that provides <code>Drawable</code>s, which display a specified data
+ * Class that provides {@code Drawable}s, which display a specified data
  * values.
  */
 public class LabelPointRenderer extends DefaultPointRenderer {
@@ -46,11 +46,11 @@ public class LabelPointRenderer extends DefaultPointRenderer {
 	public static final Key FORMAT = new Key("labelPoint.format"); //$NON-NLS-1$
 	/** Key for specifying the font of this label. */
 	public static final Key FONT = new Key("labelPoint.font"); //$NON-NLS-1$
-	/** Key for specifying the horizontal alignment relative to the data point.
-	0 means left, 1 means right. */
+	/** Key for specifying a {@link Number} value for the horizontal alignment
+	relative to the data point. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X = new Key("labelPoint.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying the vertical alignment relative to the data point.
-	0 means top, 1 means bottom. */
+	/** Key for specifying a {@link Number} value for the vertical alignment
+    relative to the data point. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y = new Key("labelPoint.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link de.erichseifert.gral.Location}
 	value where the label will be aligned at. */
@@ -68,12 +68,12 @@ public class LabelPointRenderer extends DefaultPointRenderer {
 
 	@Override
 	public Shape getPointPath(Row row) {
-		int labelColumn = this.<Number>getSetting(COLUMN).intValue();
-		if (labelColumn >= row.size()) {
+		int colLabel = this.<Number>getSetting(COLUMN).intValue();
+		if (colLabel >= row.size()) {
 			return null;
 		}
 
-		Number labelValue = row.get(labelColumn);
+		Comparable<?> labelValue = row.get(colLabel);
 		if (labelValue == null) {
 			return null;
 		}

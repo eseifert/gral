@@ -25,8 +25,8 @@ import java.util.Locale;
 
 /**
  * <p>Class that stores the horizontal and vertical extent of an object.</p>
- * <p>Please use this instead of <code>java.awt.geom.Dimension2D</code>,
- * as the java class doesn't support double values.</p>
+ * <p>This implementation adds support of double values to
+ * {@code java.awt.geom.Dimension2D}.</p>
  */
 public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 

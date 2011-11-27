@@ -31,10 +31,11 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that creates <code>Drawable</code>s for a row of data.
+ * Class that creates {@code Drawable}s for a row of data.
  */
 public class DefaultPointRenderer extends AbstractPointRenderer {
 	/**
@@ -46,24 +47,36 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 	 * @return Component that can be used to draw the point
 	 */
 	public Drawable getPoint(final Axis axis,
-			final AxisRenderer axisRenderer, final Row row) {
+			final AxisRenderer axisRenderer, final Row row, final int col) {
 		Drawable drawable = new AbstractDrawable() {
 			public void draw(DrawingContext context) {
-				Paint paint = DefaultPointRenderer.this.getSetting(COLOR);
+				PointRenderer renderer = DefaultPointRenderer.this;
+				Paint paint = renderer.getSetting(COLOR);
 				Shape point = getPointPath(row);
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), point, paint, null);
-				PointRenderer renderer = DefaultPointRenderer.this;
 
 				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
-					drawValue(context, point, row.get(1).doubleValue());
+					int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+					Comparable<?> value = row.get(colValue);
+					drawValue(context, point, value);
 				}
+
 				if (renderer.<Boolean>getSetting(ERROR_DISPLAYED)) {
-					int columnIndex = row.size() - 1;
-					drawError(context, point, row.get(1).doubleValue(),
-							row.get(columnIndex - 1).doubleValue(),
-							row.get(columnIndex).doubleValue(),
-							axis, axisRenderer);
+					int colErrorTop = renderer.<Integer>getSetting(ERROR_COLUMN_TOP);
+					int colErrorBottom = renderer.<Integer>getSetting(ERROR_COLUMN_BOTTOM);
+					if (colErrorTop >= 0 && colErrorTop < row.size() && row.isColumnNumeric(colErrorTop) &&
+							colErrorBottom >= 0 && colErrorBottom < row.size() && row.isColumnNumeric(colErrorBottom)) {
+						Number value = (Number) row.get(col);
+						Number errorTop = (Number) row.get(colErrorTop);
+						Number errorBottom = (Number) row.get(colErrorBottom);
+						if (MathUtils.isCalculatable(errorTop) &&
+								MathUtils.isCalculatable(errorBottom)) {
+							drawError(context, point, value.doubleValue(),
+								errorTop.doubleValue(), errorBottom.doubleValue(),
+								axis, axisRenderer);
+						}
+					}
 				}
 			}
 		};
@@ -72,7 +85,7 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 	}
 
 	/**
-	 * Returns a <code>Shape</code> instance that can be used
+	 * Returns a {@code Shape} instance that can be used
 	 * for further calculations.
 	 * @param row Data row containing the point.
 	 * @return Outline that describes the point's shape.

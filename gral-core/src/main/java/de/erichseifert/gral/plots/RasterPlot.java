@@ -54,8 +54,8 @@ import de.erichseifert.gral.util.PointND;
  * </ul>
  * <p>The method {@link #createRasterData(DataSource)} can be used to convert
  * a matrix of values to the (coordinates, value) format.</p>
- * 
- * <p>To create a new <code>RasterPlot</code> simply create a new instance using
+ *
+ * <p>To create a new {@code RasterPlot} simply create a new instance using
  * a suitable data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Double.class, Double.class);
@@ -116,25 +116,38 @@ public class RasterPlot extends XYPlot {
 		 * @param axis that is used to project the point.
 		 * @param axisRenderer Renderer for the axis.
 		 * @param row Data row containing the point.
+		 * @param col Index of the column that will be projected on the axis.
 		 * @return Component that can be used to draw the point
 		 */
 		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row) {
+				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
 				private final Rectangle2D pixel = new Rectangle2D.Double();
 				private final Axis axisX = plot.getAxis(AXIS_X);
 				private final Axis axisY = plot.getAxis(AXIS_Y);
-				private final AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
-				private final AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
+				private final AxisRenderer axisXRenderer =
+					plot.getAxisRenderer(AXIS_X);
+				private final AxisRenderer axisYRenderer =
+					plot.getAxisRenderer(AXIS_Y);
 
 				public void draw(DrawingContext context) {
 					RasterRenderer renderer = RasterRenderer.this;
 					int colX = renderer.<Integer>getSetting(COLUMN_X);
+					if (colX < 0 || colX >= row.size() || !row.isColumnNumeric(colX)) {
+						return;
+					}
 					int colY = renderer.<Integer>getSetting(COLUMN_Y);
+					if (colY < 0 || colY >= row.size() || !row.isColumnNumeric(colY)) {
+						return;
+					}
 					int colValue = renderer.<Integer>getSetting(COLUMN_VALUE);
-					double valueX = row.get(colX).doubleValue();
-					double valueY = row.get(colY).doubleValue();
-					double value = row.get(colValue).doubleValue();
+					if (colValue < 0 || colValue >= row.size() || !row.isColumnNumeric(colValue)) {
+						return;
+					}
+
+					double valueX = ((Number) row.get(colX)).doubleValue();
+					double valueY = ((Number) row.get(colY)).doubleValue();
+					double value = ((Number) row.get(colValue)).doubleValue();
 
 					// Pixel dimensions
 					double xMin = axisXRenderer
@@ -167,7 +180,7 @@ public class RasterPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns a <code>Shape</code> instance that can be used
+		 * Returns a {@code Shape} instance that can be used
 		 * for further calculations.
 		 * @param row Data row containing the point.
 		 * @return Outline that describes the point's shape.
@@ -224,6 +237,7 @@ public class RasterPlot extends XYPlot {
 	 * @param data Original data source with values in each cell.
 	 * @return New data source with (x, y, value) columns
 	 */
+	@SuppressWarnings("unchecked")
 	public static DataSource createRasterData(DataSource data) {
 		if (data == null) {
 			throw new NullPointerException("Cannot convert null data source.");
@@ -238,11 +252,15 @@ public class RasterPlot extends XYPlot {
 		double max = stats.get(Statistics.MAX);
 		double range = max - min;
 		int i = 0;
-		for (Number value : data) {
-			double x =  i%data.getColumnCount();
-			double y = -i/data.getColumnCount();
-			double v = (value.doubleValue() - min) / range;
-			coordsValueData.add(x, y, v);
+		for (Comparable<?> cell : data) {
+			int x =  i%data.getColumnCount();
+			int y = -i/data.getColumnCount();
+			double v = Double.NaN;
+			if (cell instanceof Number) {
+				Number numericCell = (Number) cell;
+				v = (numericCell.doubleValue() - min) / range;
+			}
+			coordsValueData.add((double) x, (double) y, v);
 			i++;
 		}
 		return coordsValueData;

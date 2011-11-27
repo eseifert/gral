@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
@@ -28,11 +29,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RowSubsetTest {
-	private static final double DELTA = 1e-15;
 	private static DataTable table;
 	private RowSubset data;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
@@ -50,27 +51,30 @@ public class RowSubsetTest {
 		data = new RowSubset(table) {
 			@Override
 			public boolean accept(Row row) {
-				return (row.get(0).doubleValue() % 2.0) == 0.0;
+				Comparable<?> cell = row.get(0);
+				return (cell instanceof Number) &&
+					(((Number) cell).doubleValue() % 2.0) == 0.0;
 			}
 		};
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		assertEquals(table.getColumnCount(), data.getColumnCount());
 		assertEquals(table.getRowCount()/2, data.getRowCount());
+		assertArrayEquals(table.getColumnTypes(), data.getColumnTypes());
 	}
 
 	@Test
 	public void testGetIntInt() {
-		assertEquals( 2.0, data.get(0, 0).doubleValue(), DELTA);
-		assertEquals( 4.0, data.get(0, 1).doubleValue(), DELTA);
-		assertEquals( 6.0, data.get(0, 2).doubleValue(), DELTA);
-		assertEquals( 8.0, data.get(0, 3).doubleValue(), DELTA);
-		assertEquals( 3.0, data.get(1, 0).doubleValue(), DELTA);
-		assertEquals( 6.0, data.get(1, 1).doubleValue(), DELTA);
-		assertEquals( 8.0, data.get(1, 2).doubleValue(), DELTA);
-		assertEquals(11.0, data.get(1, 3).doubleValue(), DELTA);
+		assertEquals( 2, data.get(0, 0));
+		assertEquals( 4, data.get(0, 1));
+		assertEquals( 6, data.get(0, 2));
+		assertEquals( 8, data.get(0, 3));
+		assertEquals( 3, data.get(1, 0));
+		assertEquals( 6, data.get(1, 1));
+		assertEquals( 8, data.get(1, 2));
+		assertEquals(11, data.get(1, 3));
 	}
 
 	@Test

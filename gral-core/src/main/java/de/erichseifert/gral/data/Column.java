@@ -27,7 +27,7 @@ import de.erichseifert.gral.util.Orientation;
 
 /**
  * <p>Class for accessing a specific column of a data source. The data of the
- * column can be accessed using the <code>get(int)</code> method.</p>
+ * column can be accessed using the {@code get(int)} method.</p>
  *
  * <p>Example for accessing value at column 2, row 3 of a data source:</p>
  * <pre>
@@ -49,7 +49,7 @@ public class Column extends DataAccessor {
 	}
 
 	@Override
-	public Number get(int row) {
+	public Comparable<?> get(int row) {
 		if (getSource() == null) {
 			return null;
 		}
@@ -65,5 +65,13 @@ public class Column extends DataAccessor {
 	public double getStatistics(String key) {
 		return getSource().getStatistics()
 			.get(key, Orientation.VERTICAL, getIndex());
+	}
+
+	/**
+	 * Returns whether this column only contains numbers.
+	 * @return {@code true} if this column is numeric, otherwise {@code false}.
+	 */
+	public boolean isNumeric() {
+		return getSource().isColumnNumeric(getIndex());
 	}
 }

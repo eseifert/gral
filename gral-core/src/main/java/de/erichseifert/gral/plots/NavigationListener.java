@@ -30,7 +30,7 @@ package de.erichseifert.gral.plots;
 public interface NavigationListener {
 	/**
 	 * A method that gets called when the center of an axis in the
-	 * <code>PlotNavigator</code> has changed.
+	 * {@code PlotNavigator} has changed.
 	 * @param source Object that has caused the change
 	 * @param axisName Name of the axis that has changed
 	 * @param centerOld Previous value of axis center
@@ -41,7 +41,7 @@ public interface NavigationListener {
 
 	/**
 	 * A method that gets called when the zoom level of an axis in the
-	 * <code>PlotNavigator</code> has changed.
+	 * {@code PlotNavigator} has changed.
 	 * @param source Object that has caused the change
 	 * @param axisName Name of the axis that has changed
 	 * @param zoomOld Previous zoom level of the axis

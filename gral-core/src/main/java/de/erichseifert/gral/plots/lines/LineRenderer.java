@@ -52,7 +52,7 @@ public interface LineRenderer extends SettingsStorage {
 
 	/**
 	 * Returns a graphical representation for the line defined by
-	 * <code>points</code>.
+	 * {@code points}.
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */

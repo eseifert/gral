@@ -40,7 +40,7 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that stores <code>Drawable</code> instances as bitmap graphics.
+ * Class that stores {@code Drawable} instances as bitmap graphics.
  * Supported formats:
  * <ul>
  *   <li>Windows Bitmap (BMP)</li>
@@ -99,7 +99,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	private int rasterFormat;
 
 	/**
-	 * Creates a new <code>BitmapWriter</code> object with the specified
+	 * Creates a new {@code BitmapWriter} object with the specified
 	 * MIME-Type.
 	 * @param mimeType Output MIME-Type.
 	 */
@@ -132,8 +132,8 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	}
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param width Width of the image.
 	 * @param height Height of the image.
@@ -145,8 +145,8 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	}
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param x Horizontal position.
 	 * @param y Vertical position.

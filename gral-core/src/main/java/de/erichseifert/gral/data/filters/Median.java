@@ -72,8 +72,8 @@ public class Median extends Filter {
 			colWindows.add(window);
 			// Prefill window
 			for (int rowIndex = getOffset() - getWindowSize(); rowIndex < 0; rowIndex++) {
-				double v = getOriginal(colIndexOriginal, rowIndex)
-					.doubleValue();
+				Comparable<?> vOrig = getOriginal(colIndexOriginal, rowIndex);
+				double v = ((Number) vOrig).doubleValue();
 				window.add(v);
 			}
 		}
@@ -85,8 +85,9 @@ public class Median extends Filter {
 					window.remove(0);
 				}
 				int colIndexOriginal = getIndexOriginal(colIndex);
-				double v = getOriginal(colIndexOriginal,
-						rowIndex - getOffset() + getWindowSize()).doubleValue();
+				Comparable<?> vOrig = getOriginal(colIndexOriginal,
+						rowIndex - getOffset() + getWindowSize());
+				double v = ((Number) vOrig).doubleValue();
 				window.add(v);
 				filteredRow[colIndex] = median(window);
 			}

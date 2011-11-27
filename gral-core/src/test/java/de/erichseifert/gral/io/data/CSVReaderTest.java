@@ -35,7 +35,8 @@ import de.erichseifert.gral.data.DataSource;
 
 public class CSVReaderTest {
 	@Test
-	public void testReader() throws IOException {
+	@SuppressWarnings("unchecked")
+	public void testMimeTypes() throws IOException {
 		String[] formats = {
 			"text/csv",
 			"text/tab-separated-values"
@@ -44,11 +45,11 @@ public class CSVReaderTest {
 		String[] dataStrings = {
 			"0,10.0,20\r\n" +
 			"1,11.0,21\r\n" +
-			"2,12.0,22",
+			"2,12.0,22\r\n",
 
 			"0\t10.0\t20\r\n" +
 			"1\t11.0\t21\r\n" +
-			"2\t12.0\t22"
+			"2\t12.0\t22\r\n"
 		};
 
 		for (int i = 0; i < formats.length; i++) {
@@ -68,15 +69,16 @@ public class CSVReaderTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testSeparator() throws IOException {
 		InputStream input = new ByteArrayInputStream((
 			"0;10.0;20\r\n" +
 			"1;11.0;21\r\n" +
-			"2;12.0;22"
+			"2;12.0;22\r\n"
 		).getBytes());
 
 		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
-		reader.setSetting("separator", ";");
+		reader.setSetting(CSVReader.SEPARATOR_CHAR, ';');
 		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
 
 		assertEquals( 0,   data.get(0, 0));
@@ -91,11 +93,95 @@ public class CSVReaderTest {
 	}
 
 	@Test
-	public void testIllegalNumberFormat() throws IOException {
+	@SuppressWarnings("unchecked")
+	public void testQuotedNumbers() throws IOException {
+		InputStream input = new ByteArrayInputStream((
+			"\"0\",\"10.0\",\"20\"\r\n" +
+			"\"1\",\"11.0\",\"21\"\r\n" +
+			"\"2\",\"12.0\",\"22\"\r\n"
+		).getBytes());
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
+
+		assertEquals( 0,   data.get(0, 0));
+		assertEquals( 1,   data.get(0, 1));
+		assertEquals( 2,   data.get(0, 2));
+		assertEquals(10.0, data.get(1, 0));
+		assertEquals(11.0, data.get(1, 1));
+		assertEquals(12.0, data.get(1, 2));
+		assertEquals(20.0, data.get(2, 0));
+		assertEquals(21.0, data.get(2, 1));
+		assertEquals(22.0, data.get(2, 2));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testQuotedString() throws IOException {
+		InputStream input = new ByteArrayInputStream((
+			"\"foo\tbar\"\tfoo bar\r\n" +
+			"foobar\t\"foo \"\"the\"\" bar\"\r\n"
+		).getBytes());
+		DataReader reader = DataReaderFactory.getInstance().get("text/tab-separated-values");
+		DataSource data = reader.read(input, String.class, String.class);
+
+		assertEquals("foo\tbar", data.get(0, 0));
+		assertEquals("foo bar", data.get(1, 0));
+		assertEquals("foobar", data.get(0, 1));
+		assertEquals("foo \"the\" bar", data.get(1, 1));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testLineSeparators() throws IOException {
+		String[] dataStrings = {
+			"0,10.0,20\r\n" +
+			"1,11.0,21\r\n" +
+			"2,12.0,22\r\n",
+
+			"0,10.0,20\r" +
+			"1,11.0,21\r" +
+			"2,12.0,22\r",
+
+			"0,10.0,20\n" +
+			"1,11.0,21\n" +
+			"2,12.0,22\n",
+
+			"0,10.0,20\r\n" +
+			"1,11.0,21\r\n" +
+			"2,12.0,22",
+
+			"0,10.0,20\r" +
+			"1,11.0,21\r" +
+			"2,12.0,22",
+
+			"0,10.0,20\n" +
+			"1,11.0,21\n" +
+			"2,12.0,22"
+		};
+
+		for (String dataString : dataStrings) {
+			DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+			ByteArrayInputStream input = new ByteArrayInputStream(dataString.getBytes());
+			DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
+			assertEquals( 0,   data.get(0, 0));
+			assertEquals( 1,   data.get(0, 1));
+			assertEquals( 2,   data.get(0, 2));
+			assertEquals(10.0, data.get(1, 0));
+			assertEquals(11.0, data.get(1, 1));
+			assertEquals(12.0, data.get(1, 2));
+			assertEquals(20.0, data.get(2, 0));
+			assertEquals(21.0, data.get(2, 1));
+			assertEquals(22.0, data.get(2, 2));
+		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testIllegalType() throws IOException {
 		InputStream input = new ByteArrayInputStream((
 			"0.0,10.0,20\r\n" +
 			"1,11.0,21\r\n" +
-			"2,12.0,22"
+			"2,12.0,22\r\n"
 		).getBytes());
 		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 		try {
@@ -106,18 +192,34 @@ public class CSVReaderTest {
 	}
 
 	@Test
-	public void testIllegalColumnCount() throws IOException, ParseException {
+	@SuppressWarnings("unchecked")
+	public void testNotEnoughColumns() throws IOException, ParseException {
 		InputStream input = new ByteArrayInputStream((
 			"0,10.0,20\r\n" +
 			"1,11.0\r\n" +
-			"2,12.0,22"
+			"2,12.0,22\r\n"
 		).getBytes());
 		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
 		try {
 			reader.read(input, Integer.class, Double.class, Double.class);
-			fail("Expected IllegalArgumentException");
+			fail("Expected IllegalArgumentException because there are not enough columns.");
 		} catch (IllegalArgumentException e) {
 		}
 	}
 
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testTooManyColumns() throws IOException, ParseException {
+		InputStream input = new ByteArrayInputStream((
+			"0,10.0,20\r\n" +
+			"1,11.0,21,42\r\n" +
+			"2,12.0,22\r\n"
+		).getBytes());
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		try {
+			reader.read(input, Integer.class, Double.class, Double.class);
+			fail("Expected IllegalArgumentException because there are too many columns.");
+		} catch (IllegalArgumentException e) {
+		}
+	}
 }

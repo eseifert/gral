@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.PlotArea;
+import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
@@ -48,7 +49,7 @@ import de.erichseifert.gral.util.MathUtils;
 /**
  * <p>Class that displays data as segments of a pie plot. Empty segments are
  * displayed for negative values.</p>
- * <p>To create a new <code>PiePlot</code> simply create a new instance using
+ * <p>To create a new {@code PiePlot} simply create a new instance using
  * a data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Integer.class, Double.class);
@@ -74,8 +75,8 @@ public class PiePlot extends Plot implements DataListener {
 	public static final Key COLORS =
 		new Key("pieplot.colorlist"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Boolean} value which decides
-	whether the segments should be ordered clockwise (<code>true</code>) or
-	counterclockwise (<code>false</code>). */
+	whether the segments should be ordered clockwise ({@code true}) or
+	counterclockwise ({@code false}). */
 	public static final Key CLOCKWISE =
 		new Key("pieplot.clockwise"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the starting
@@ -88,7 +89,7 @@ public class PiePlot extends Plot implements DataListener {
 		new Key("pieplot.gap"); //$NON-NLS-1$
 
 	/**
-	 * Class that represents the drawing area of a <code>PiePlot</code>.
+	 * Class that represents the drawing area of a {@code PiePlot}.
 	 */
 	public static class PiePlotArea2D extends PlotArea
 			implements DataListener {
@@ -97,7 +98,7 @@ public class PiePlot extends Plot implements DataListener {
 		/** Factor that stores the degrees per data value. */
 		private double degreesPerValue;
 		/** Interval boundaries of the pie slices. */
-		private ArrayList<double[]> slices;
+		private final ArrayList<double[]> slices;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -106,11 +107,11 @@ public class PiePlot extends Plot implements DataListener {
 		 */
 		public PiePlotArea2D(PiePlot plot) {
 			this.plot = plot;
+			slices = new ArrayList<double[]>();
 		}
 
 		/**
-		 * Draws the <code>Drawable</code> with the specified
-		 * <code>Graphics2D</code> object.
+		 * Draws the {@code Drawable} with the specified drawing context.
 		 * @param context Environment used for drawing
 		 */
 		public void draw(DrawingContext context) {
@@ -223,7 +224,7 @@ public class PiePlot extends Plot implements DataListener {
 		/**
 		 * Method that is invoked when data has been added.
 		 * This method is invoked by objects that provide support for
-		 * <code>DataListener</code>s and should not be called manually.
+		 * {@code DataListener}s and should not be called manually.
 		 * @param source Data source that has changed
 		 * @param events Optional event object describing the data values that
 		 *        have been added
@@ -235,7 +236,7 @@ public class PiePlot extends Plot implements DataListener {
 		/**
 		 * Method that is invoked when data has been updated.
 		 * This method is invoked by objects that provide support for
-		 * <code>DataListener</code>s and should not be called manually.
+		 * {@code DataListener}s and should not be called manually.
 		 * @param source Data source that has changed
 		 * @param events Optional event object describing the data values that
 		 *        have been added
@@ -247,7 +248,7 @@ public class PiePlot extends Plot implements DataListener {
 		/**
 		 * Method that is invoked when data has been added.
 		 * This method is invoked by objects that provide support for
-		 * <code>DataListener</code>s and should not be called manually.
+		 * {@code DataListener}s and should not be called manually.
 		 * @param source Data source that has changed
 		 * @param events Optional event object describing the data values that
 		 *        have been added
@@ -261,10 +262,20 @@ public class PiePlot extends Plot implements DataListener {
 		 * @param data Data source which has changed
 		 */
 		private void update(DataSource data) {
+			slices.clear();
+
+			int colIndex = 0;
+			Column col = new Column(data, colIndex);
+
+			if (!col.isNumeric()) {
+				return;
+			}
+
 			// Calculate sum of all values
 			double colYSum = 0.0;
-			for (int i = 0; i < data.getRowCount();  i++) {
-				double val = data.get(0, i).doubleValue();
+			for (Comparable<?> cell : col) {
+				Number numericCell = (Number) cell;
+				double val = numericCell.doubleValue();
 				// Negative values cause "empty" slices
 				colYSum += Math.abs(val);
 			}
@@ -277,10 +288,10 @@ public class PiePlot extends Plot implements DataListener {
 			}
 
 			// Calculate starting angles
-			slices = new ArrayList<double[]>(data.getRowCount());
 			double sliceStart = 0.0;
-			for (int i = 0; i < data.getRowCount(); i++) {
-				double val = data.get(0, i).doubleValue();
+			for (Comparable<?> cell : col) {
+				Number numericCell = (Number) cell;
+				double val = numericCell.doubleValue();
 				double[] slice = new double[] { sliceStart, Double.NaN };
 				slices.add(slice);
 

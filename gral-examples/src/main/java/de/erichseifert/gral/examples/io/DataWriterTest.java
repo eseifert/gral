@@ -36,6 +36,7 @@ import de.erichseifert.gral.io.data.DataWriterFactory;
 public class DataWriterTest {
 	private final DataTable data;
 
+	@SuppressWarnings("unchecked")
 	public DataWriterTest() {
 		data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		data.add(1.0, 4.5, 4.3, 4.0);

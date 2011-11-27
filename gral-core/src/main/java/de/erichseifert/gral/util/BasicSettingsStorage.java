@@ -34,9 +34,9 @@ import java.util.Set;
 public class BasicSettingsStorage implements SettingsStorage {
 	/** Set of listener objects that will notified on changes. */
 	private final Set<SettingsListener> settingsListeners;
-	/** Map of user defined settings as <code>(key, value)</code> pairs. */
+	/** Map of user defined settings as (key, value) pairs. */
 	private final Map<SettingsStorage.Key, Object> settings;
-	/** Map of default settings as <code>(key, value)</code> pairs. */
+	/** Map of default settings as (key, value) pairs. */
 	private final Map<SettingsStorage.Key, Object> defaults;
 
 	/**
@@ -49,10 +49,10 @@ public class BasicSettingsStorage implements SettingsStorage {
 	}
 
 	/**
-	 * Returns <code>true</code> if there is a setting for the specified key.
+	 * Returns {@code true} if there is a setting for the specified key.
 	 * @param key Key of the setting.
-	 * @return <code>true</code> if the key has a setting,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the key has a setting,
+	 *         {@code false} otherwise.
 	 */
 	public boolean hasSetting(Key key) {
 		if (settings.containsKey(key)) {
@@ -68,6 +68,7 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param key Key.
 	 * @return Setting.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getSetting(Key key) {
 		if (settings.containsKey(key)) {
 			return (T) settings.get(key);
@@ -99,11 +100,11 @@ public class BasicSettingsStorage implements SettingsStorage {
 	}
 
 	/**
-	 * Returns <code>true</code> if there is a default setting for the
+	 * Returns {@code true} if there is a default setting for the
 	 * specified key.
 	 * @param key Key of the setting.
-	 * @return <code>true</code> if the key has a default setting,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the key has a default setting,
+	 *         {@code false} otherwise.
 	 */
 	public boolean hasSettingDefault(Key key) {
 		return defaults.containsKey(key);
@@ -153,8 +154,8 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param key Key.
 	 * @param valueOld Old value.
 	 * @param valueNew New value.
-	 * @param defaultSetting <code>true</code> if a default setting has changed,
-	 *        <code>false</code> otherwise.
+	 * @param defaultSetting {@code true} if a default setting has changed,
+	 *        {@code false} otherwise.
 	 */
 	protected void notifySettingChanged(Key key,
 			Object valueOld, Object valueNew, boolean defaultSetting) {

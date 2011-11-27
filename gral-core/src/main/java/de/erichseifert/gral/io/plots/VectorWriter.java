@@ -40,7 +40,7 @@ import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.util.Messages;
 
 /**
- * <p>Class that stores <code>Drawable</code> instances as vector graphics.
+ * <p>Class that stores {@code Drawable} instances as vector graphics.
  * This implementation requires the <i>VectorGraphics2D</i> library to provide
  * support for the following file formats:</p>
  * <ul>
@@ -55,8 +55,7 @@ import de.erichseifert.gral.util.Messages;
  */
 public class VectorWriter extends IOCapabilitiesStorage
 		implements DrawableWriter {
-	/** Mapping of MIME type string to <code>Graphics2D</code>
-	implementation. */
+	/** Mapping of MIME type string to {@code Graphics2D}lementation. */
 	private static final Map<String, Class<?>> graphics;
 	/** Java package that contains the VecorGraphics2D package. */
 	private static final String VECTORGRAPHICS2D_PACKAGE =
@@ -111,14 +110,15 @@ public class VectorWriter extends IOCapabilitiesStorage
 
 	/** Current data format as MIME type string. */
 	private final String mimeType;
-	/** Current <code>Graphics2D</code> implementation used for rendering. */
+	/** Current {@cod{@code Graphics2D}ation used for rendering. */
 	private final Class<? extends Graphics2D> graphicsClass;
 
 	/**
-	 * Creates a new <code>VectorWriter</code> object with the specified
+	 * Creates a new {@code VectorWriter} object with the specified
 	 * MIME-Type.
 	 * @param mimeType Output MIME-Type.
 	 */
+	@SuppressWarnings("unchecked")
 	protected VectorWriter(String mimeType) {
 		this.mimeType = mimeType;
 		Class<? extends Graphics2D> gfxCls = null;
@@ -135,8 +135,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 	}
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param width Width of the image.
 	 * @param height Height of the image.
@@ -148,8 +148,8 @@ public class VectorWriter extends IOCapabilitiesStorage
 	}
 
 	/**
-	 * Stores the specified <code>Drawable</code> instance.
-	 * @param d <code>Drawable</code> to be written.
+	 * Stores the specified {@code Drawable} instance.
+	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param x Horizontal position.
 	 * @param y Vertical position.

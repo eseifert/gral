@@ -77,8 +77,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private double[] shapeLengths;
 
 	/**
-	 * Initializes a new <code>AbstractAxisRenderer2D</code> instances with
-	 * default settings.
+	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAxisRenderer2D() {
 		addSettingsListener(this);
@@ -134,8 +133,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
 			/**
-			 * Draws the <code>Drawable</code> with the specified
-			 * <code>Graphics2D</code> object.
+			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing
 			 */
 			public void draw(DrawingContext context) {
@@ -367,7 +365,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	/**
 	 * Returns a list of all tick element on the axis.
 	 * @param axis Axis
-	 * @return A list of <code>Tick</code> instances
+	 * @return A list of {@code Tick} instances
 	 */
 	public List<Tick> getTicks(Axis axis) {
 		List<Tick> ticks = new LinkedList<Tick>();

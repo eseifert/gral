@@ -35,6 +35,7 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimpleRasterPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	private static final int SIZE = 64;
 	private static final double ZOOM = 0.3;
 
@@ -44,7 +45,7 @@ public class SimpleRasterPlot extends ExamplePanel {
 		// Create example data
 		DataTable raster = new DataTable(SIZE, Double.class);
 		for (int rowIndex = 0; rowIndex < raster.getColumnCount(); rowIndex++) {
-			Number[] row = new Number[raster.getColumnCount()];
+			Comparable<?>[] row = new Comparable<?>[raster.getColumnCount()];
 			double y = ZOOM*rowIndex;
 			for (int colIndex = 0; colIndex < row.length; colIndex++) {
 				double x = ZOOM*colIndex;

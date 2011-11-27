@@ -137,11 +137,13 @@ final class UpdateTask implements ActionListener {
 }
 
 public class MemoryUsage extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	/** Size of the data buffer in no. of element. */
 	private static final int BUFFER_SIZE = 400;
 	/** Update interval in milliseconds */
 	private static final int INTERVAL = 100;
 
+	@SuppressWarnings("unchecked")
 	public MemoryUsage() {
 		DataTable data = new DataTable(Double.class, Long.class, Long.class, Long.class);
 		double time = System.currentTimeMillis();

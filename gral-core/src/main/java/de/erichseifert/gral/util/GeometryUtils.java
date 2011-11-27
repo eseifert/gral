@@ -136,7 +136,7 @@ public abstract class GeometryUtils {
      * Returns the intersection point of two lines.
      * @param l1 First line
      * @param l2 Second line
-     * @return Intersection point, or <code>null</code> if
+     * @return Intersection point, or {@code null} if
      * no intersection was found
      */
     public static Point2D intersection(final Line2D l1, final Line2D l2) {
@@ -220,7 +220,7 @@ public abstract class GeometryUtils {
      * Subtract all shapes of data points from another shape to yield gaps.
      * @param shape Shape from which to subtract.
      * @param gap Size of the gap.
-     * @param rounded Gap corners will be rounded if <code>true</code>.
+     * @param rounded Gap corners will be rounded if {@code true}.
      * @param dataPoints Collection of data points
      * @return Shape with punched holes
      */

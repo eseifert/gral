@@ -45,7 +45,7 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 	}
 
 	/**
-	 * Returns the bounds of this <code>Drawable</code>.
+	 * Returns the bounds of this {@code Drawable}.
 	 * @return a bounding rectangle
 	 */
 	public Rectangle2D getBounds() {
@@ -107,7 +107,7 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 	}
 
 	/**
-	 * Returns the preferred size of the <code>Drawable</code>.
+	 * Returns the preferred size of the {@code Drawable}.
 	 * @return horizontal and vertical extent that wants to be reached
 	 */
 	public Dimension2D getPreferredSize() {

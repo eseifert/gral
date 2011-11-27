@@ -35,7 +35,7 @@ import de.erichseifert.gral.util.Orientation;
 
 
 /**
- * Class that connects <code>DataPoint</code>s with a stair-like line.
+ * Class that connects {@code DataPoint}s with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Key for specifying an instance of
@@ -49,7 +49,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		new Key("line.discrete.ascendingPoint"); //$NON-NLS-1$
 
 	/**
-	 * Initializes a new <code>DiscreteLineRenderer2D</code> instance with
+	 * Initializes a new {@code DiscreteLineRenderer2D} instance with
 	 * default settings.
 	 */
 	public DiscreteLineRenderer2D() {
@@ -59,7 +59,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 
 	/**
 	 * Returns a graphical representation for the line defined by
-	 * <code>points</code>.
+	 * {@code points}.
 	 * @param points Points to be used for creating the line.
 	 * @return Representation of the line.
 	 */

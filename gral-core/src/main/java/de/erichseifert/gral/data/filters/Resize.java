@@ -30,8 +30,9 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
 /**
- * Filter to change the size of equally spaced data sources.
- * The values of the scaled result are created using averaging.
+ * Filter to change the size of equally spaced data sources. All columns of the
+ * data sources must be numeric, otherwise an {@code IllegalArgumentException}
+ * will be thrown. The values of the scaled result are created by averaging.
  */
 public class Resize extends Filter {
 	/** Number of columns. */
@@ -70,7 +71,7 @@ public class Resize extends Filter {
 	}
 
 	@Override
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		if ((cols <= 0 || cols == original.getColumnCount()) &&
 			(rows <= 0 || rows == original.getRowCount())) {
 			return getOriginal(col, row);
@@ -127,7 +128,10 @@ public class Resize extends Filter {
 
 		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
 			Row row = data.getRow(rowIndex);
-			add(row.toArray(null));
+			Comparable<?>[] rowData = row.toArray(null);
+			Double[] rowValues = new Double[rowData.length];
+			System.arraycopy(rowData, 0, rowValues, 0, rowValues.length);
+			add(rowValues);
 		}
 	}
 
@@ -159,7 +163,8 @@ public class Resize extends Filter {
 
 		double sum = 0.0;
 		for (int i = startFloor; i < endCeil; i++) {
-			double val = data.get(i).doubleValue();
+			Number number = (Number) data.get(i);
+			double val = number.doubleValue();
 			if (i == startFloor && startCeil != start) {
 				sum += (startCeil - start) * val;
 			} else if (i == endCeil - 1 && endFloor != end) {

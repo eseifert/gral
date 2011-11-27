@@ -20,6 +20,6 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Classes for converting instances of <code>Drawable</code> to various file formats.
+ * Classes for converting instances of {@code Drawable} to various file formats.
  */
 package de.erichseifert.gral.io.plots;

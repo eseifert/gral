@@ -46,6 +46,7 @@ public class AreaPlot extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	public AreaPlot() {
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);

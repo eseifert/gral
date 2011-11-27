@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -135,8 +136,8 @@ public abstract class Plot extends DrawableContainer
 	private Legend legend;
 
 	/**
-	 * Initializes a new <code>Plot</code> instance with the specified data
-	 * series. The series will be visible by default.
+	 * Initializes a new {@code Plot} instance with the specified data series.
+	 * The series will be visible by default.
 	 * @param series Initial data series to be displayed.
 	 */
 	public Plot(DataSource... series) {
@@ -200,7 +201,7 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
-	 * Draws the plot's axes into the specified <code>Graphics2D</code> object.
+	 * Draws the plot's axes into the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawAxes(DrawingContext context) {
@@ -212,8 +213,7 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
-	 * Draws the plot's legend into the specified <code>Graphics2D</code>
-	 * object.
+	 * Draws the plot's legend into the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawLegend(DrawingContext context) {
@@ -235,7 +235,7 @@ public abstract class Plot extends DrawableContainer
 
 	/**
 	 * Sets the axis with the specified name and the associated
-	 * <code>AxisRenderer</code>.
+	 * {@code AxisRenderer}.
 	 * @param name Name of the axis.
 	 * @param axis Axis.
 	 */
@@ -348,7 +348,7 @@ public abstract class Plot extends DrawableContainer
 
 	/**
 	 * Returns the drawing area of this plot.
-	 * @return <code>PlotArea2D</code>.
+	 * @return {@code PlotArea2D}.
 	 */
 	public PlotArea getPlotArea() {
 		return plotArea;
@@ -356,7 +356,7 @@ public abstract class Plot extends DrawableContainer
 
 	/**
 	 * Sets the drawing area to the specified value.
-	 * @param plotArea <code>PlotArea2D</code> to be set.
+	 * @param plotArea {@code PlotArea2D} to be set.
 	 */
 	protected void setPlotArea(PlotArea plotArea) {
 		if (this.plotArea != null) {
@@ -448,8 +448,8 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Adds a new data series to the plot.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be displayed,
-	 *        <code>false</code> otherwise.
+	 * @param visible {@code true} if the series should be displayed,
+	 *        {@code false} otherwise.
 	 */
 	public void add(DataSource source, boolean visible) {
 		add(data.size(), source, visible);
@@ -459,8 +459,8 @@ public abstract class Plot extends DrawableContainer
 	 * Inserts the specified data series to the plot at a specified position.
 	 * @param index Position.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be displayed,
-	 *        <code>false</code> otherwise.
+	 * @param visible {@code true} if the series should be displayed,
+	 *        {@code false} otherwise.
 	 */
 	public void add(int index, DataSource source, boolean visible) {
 		data.add(index, source);
@@ -478,8 +478,8 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Returns whether the plot contains the specified data series.
 	 * @param source Data series.
-	 * @return <code>true</code> if the specified element is stored in the
-	 *         plot, otherwise <code>false</code>
+	 * @return {@code true} if the specified element is stored in the
+	 *         plot, otherwise {@code false}
 	 */
 	public boolean contains(DataSource source) {
 		return data.contains(source);
@@ -497,8 +497,8 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Deletes the specified data series from the plot.
 	 * @param source Data series.
-	 * @return <code>true</code> if the series existed,
-	 *         otherwise <code>false</code>.
+	 * @return {@code true} if the series existed,
+	 *         otherwise {@code false}.
 	 */
 	public boolean remove(DataSource source) {
 		source.removeDataListener(this);
@@ -528,10 +528,10 @@ public abstract class Plot extends DrawableContainer
 
 	/**
 	 * Returns the mapping of a data source column to an axis name. If no
-	 * mapping exists <code>null</code> will be returned.
+	 * mapping exists {@code null} will be returned.
 	 * @param source Data source.
 	 * @param col Column index.
-	 * @return Axis name or <code>null</code> if no mapping exists.
+	 * @return Axis name or {@code null} if no mapping exists.
 	 */
 	private String getMapping(DataSource source, int col) {
 		if (!contains(source)) {
@@ -545,11 +545,11 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Returns the mapping of data source columns to axis names. The elements
 	 * of returned array equal the column indexes, i.e. the first element (axis
-	 * name) matches the first column of <code>source</code>. If no mapping
-	 * exists <code>null</code> will be stored in the array.
+	 * name) matches the first column of {@code source}. If no mapping exists
+	 * {@code null} will be stored in the array.
 	 * @param source Data source.
 	 * @return Array containing axis names in the order of the columns,
-	 *         or <code>null</code> if no mapping exists for the column.
+	 *         or {@code null} if no mapping exists for the column.
 	 */
 	public String[] getMapping(DataSource source) {
 		String[] mapping = new String[source.getColumnCount()];
@@ -562,21 +562,20 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Sets the mapping of data source columns to axis names. The column index
 	 * is taken from the order of the axis names, i.e. the first column of
-	 * <code>source</code> will be mapped to first element of
-	 * <code>axisNames</code>. Axis names with value <code>null</code> will be
-	 * ignored.
+	 * {@code source} will be mapped to first element of {@code axisNames}.
+	 * Axis names with value {@code null} will be ignored.
 	 * @param source Data source.
 	 * @param axisNames Sequence of axis names in the order of the columns.
 	 */
 	public void setMapping(DataSource source, String... axisNames) {
 		if (!contains(source)) {
 			throw new IllegalArgumentException(
-					"Data source does not exist in plot."); //$NON-NLS-1$
+				"Data source does not exist in plot."); //$NON-NLS-1$
 		}
 		if (axisNames.length > source.getColumnCount()) {
-			throw new IllegalArgumentException(String.format(
-					"Data source only has %d column, %d values given.", //$NON-NLS-1$
-					source.getColumnCount(), axisNames.length));
+			throw new IllegalArgumentException(MessageFormat.format(
+				"Data source only has {0,number,integer} column, {1,number,integer} values given.", //$NON-NLS-1$
+				source.getColumnCount(), axisNames.length));
 		}
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
@@ -589,10 +588,9 @@ public abstract class Plot extends DrawableContainer
 	}
 
 	/**
-	 * Returns the minimum value of the axis specified by
-	 * <code>axisName</code>.
+	 * Returns the minimum value of the axis specified by {@code axisName}.
 	 * @param axisName Name of the axis.
-	 * @return Minimum value for the specified axis, or <code>0.0</code> if no
+	 * @return Minimum value for the specified axis, or {@code 0.0} if no
 	 *         minimum value can be determined.
 	 */
 	protected Double getAxisMin(String axisName) {
@@ -603,10 +601,9 @@ public abstract class Plot extends DrawableContainer
 		return min;
 	}
 	/**
-	 * Returns the maximum value of the axis specified by
-	 * <code>axisName</code>.
+	 * Returns the maximum value of the axis specified by {@code axisName}.
 	 * @param axisName Name of the axis.
-	 * @return Maximum value for the specified axis, or <code>0.0</code> if no
+	 * @return Maximum value for the specified axis, or {@code 0.0} if no
 	 *         maximum value can be determined.
 	 */
 	protected Double getAxisMax(String axisName) {
@@ -642,7 +639,7 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Returns whether the specified data series is drawn.
 	 * @param source Data series.
-	 * @return <code>true</code> if visible, <code>false</code> otherwise.
+	 * @return {@code true} if visible, {@code false} otherwise.
 	 */
 	public boolean isVisible(DataSource source) {
 		return dataVisible.contains(source);
@@ -651,8 +648,8 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Changes the visibility of the specified data series.
 	 * @param source Data series.
-	 * @param visible <code>true</code> if the series should be visible,
-	 *        <code>false</code> otherwise.
+	 * @param visible {@code true} if the series should be visible,
+	 *        {@code false} otherwise.
 	 */
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {
@@ -669,7 +666,7 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -681,7 +678,7 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -693,7 +690,7 @@ public abstract class Plot extends DrawableContainer
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

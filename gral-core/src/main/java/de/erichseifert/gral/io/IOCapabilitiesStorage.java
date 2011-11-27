@@ -41,7 +41,7 @@ public abstract class IOCapabilitiesStorage {
 	}
 
 	/**
-	 * Returns a <code>Set</code> with capabilities for all supported formats.
+	 * Returns a {@code Set} with capabilities for all supported formats.
 	 * @return Capabilities.
 	 */
 	public static Set<IOCapabilities> getCapabilities() {

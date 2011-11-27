@@ -26,14 +26,19 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class DummyDataTest {
-	private static final double DELTA = 1e-15;
-
 	@Test
-	public void testCreation() {
-		DummyData data = new DummyData(1, 1, 1.0);
-		assertEquals(1, data.getColumnCount());
-		assertEquals(1, data.getRowCount());
-		assertEquals(1.0, data.get(0, 0).doubleValue(), DELTA);
+	public void testCreate() {
+		Comparable<?>[] expected = { Integer.valueOf(42), new Double(1.23), "foobar" };
+
+		for (Comparable<?> value : expected) {
+			DummyData integer = new DummyData(2, 3, value);
+			assertEquals(2, integer.getColumnCount());
+			assertEquals(3, integer.getRowCount());
+			assertEquals(integer.getColumnCount(), integer.getColumnTypes().length);
+			for (Comparable<?> cell : integer) {
+				assertEquals(value, cell);
+			}
+		}
 	}
 
 }

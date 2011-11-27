@@ -51,6 +51,9 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Boolean} value whether the data
 	value of a point is displayed or not. */
 	static final Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	the column that contains the displayed values. */
+	static final Key VALUE_COLUMN = new Key("point.value.column"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
@@ -77,6 +80,12 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying a {@link java.lang.Boolean} value whether the error
 	value is displayed. */
 	static final Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	the column that contains the upper error value. */
+	static final Key ERROR_COLUMN_TOP = new Key("point.error.columnTop"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	the column that contains the lower error value. */
+	static final Key ERROR_COLUMN_BOTTOM = new Key("point.error.columnBottom"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
 	static final Key ERROR_COLOR = new Key("point.error.paint"); //$NON-NLS-1$
@@ -93,12 +102,13 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param axis that is used to project the point.
 	 * @param axisRenderer Renderer for the axis.
 	 * @param row Data row containing the point.
-	 * @return Component that can be used to draw the point
+	 * @param col Index of the column that will be projected on the axis.
+	 * @return Component that can be used to draw the point.
 	 */
-	Drawable getPoint(Axis axis, AxisRenderer axisRenderer, Row row);
+	Drawable getPoint(Axis axis, AxisRenderer axisRenderer, Row row, int col);
 
 	/**
-	 * Returns a <code>Shape</code> instance that can be used
+	 * Returns a {@code Shape} instance that can be used
 	 * for further calculations.
 	 * @param row Data row containing the point.
 	 * @return Outline that describes the point's shape.

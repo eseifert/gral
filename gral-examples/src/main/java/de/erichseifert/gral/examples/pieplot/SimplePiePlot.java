@@ -33,10 +33,12 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimplePiePlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	private static final int SAMPLE_COUNT = 15;
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
+	@SuppressWarnings("unchecked")
 	public SimplePiePlot() {
 		// Create data
 		DataTable data = new DataTable(Integer.class);

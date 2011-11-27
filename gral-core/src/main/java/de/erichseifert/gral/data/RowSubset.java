@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * <p>Abstract class that represents a view on several rows of a data source.
- * Implementations must implement the method <code>accept(Row)</code> which
+ * Implementations must implement the method {@code accept(Row)} which
  * decides whether a specific row should be contained in this filtered data
  * source.</p>
  *
@@ -50,6 +50,7 @@ public abstract class RowSubset extends AbstractDataSource
 	 * Creates a new instance with the specified data source.
 	 * @param original DataSource to be filtered.
 	 */
+	@SuppressWarnings("unchecked")
 	public RowSubset(DataSource original) {
 		accepted = new ArrayList<Integer>();
 		this.original = original;
@@ -69,7 +70,7 @@ public abstract class RowSubset extends AbstractDataSource
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell
 	 */
-	public Number get(int col, int row) {
+	public Comparable<?> get(int col, int row) {
 		int rowOrig = accepted.get(row);
 		return original.get(col, rowOrig);
 	}
@@ -87,10 +88,15 @@ public abstract class RowSubset extends AbstractDataSource
 		return accepted.size();
 	}
 
+	@Override
+	public Class<? extends Comparable<?>>[] getColumnTypes() {
+		return original.getColumnTypes();
+	}
+
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -103,7 +109,7 @@ public abstract class RowSubset extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added
@@ -116,7 +122,7 @@ public abstract class RowSubset extends AbstractDataSource
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
-	 * <code>DataListener</code>s and should not be called manually.
+	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has changed
 	 * @param events Optional event object describing the data values that
 	 *        have been added

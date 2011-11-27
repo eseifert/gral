@@ -36,7 +36,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Abstract implementation of <code>IOFactory</code> which provides basic
+ * Abstract implementation of {@code IOFactory} which provides basic
  * functionality.
  *
  * @param <T> The type of objects which should be produced by this factory
@@ -50,6 +50,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 * @param propFileName File name of the properties file(s)
 	 * @throws IOException if reading the properties file(s) failed
 	 */
+	@SuppressWarnings("unchecked")
 	protected AbstractIOFactory(String propFileName) throws IOException {
 		entries = new HashMap<String, Class<? extends T>>();
 
@@ -93,6 +94,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 * @param mimeType MIME type of the format
 	 * @return Capabilities for the specified format.
 	 */
+	@SuppressWarnings("unchecked")
 	public IOCapabilities getCapabilities(String mimeType) {
 		Class<? extends T> clazz = entries.get(mimeType);
 		try {
@@ -154,7 +156,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	/**
 	 * Returns whether the specified MIME type is supported.
 	 * @param mimeType MIME type.
-	 * @return <code>true</code> if supported, otherwise <code>false</code>.
+	 * @return {@code true} if supported, otherwise {@code false}.
 	 */
 	public boolean isFormatSupported(String mimeType) {
 		return entries.containsKey(mimeType);

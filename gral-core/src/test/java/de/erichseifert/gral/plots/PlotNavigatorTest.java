@@ -42,6 +42,7 @@ public class PlotNavigatorTest {
 	private PlotNavigator nav;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0
@@ -65,7 +66,7 @@ public class PlotNavigatorTest {
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		// Valid initialization
 		PlotNavigator navigator1 = nav;
 		assertEquals(plot, navigator1.getPlot());

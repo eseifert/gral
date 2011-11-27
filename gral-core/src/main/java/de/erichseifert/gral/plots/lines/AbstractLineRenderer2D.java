@@ -45,7 +45,7 @@ import de.erichseifert.gral.util.SettingsListener;
 public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		implements LineRenderer, SettingsListener {
 	/**
-	 * Initializes a new <code>AbstractLineRenderer2D</code> instance with
+	 * Initializes a new {@code AbstractLineRenderer2D} instance with
 	 * default settings.
 	 */
 	public AbstractLineRenderer2D() {

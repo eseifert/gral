@@ -32,6 +32,7 @@ public class MedianTest {
 	private static DataTable table;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0
@@ -45,7 +46,7 @@ public class MedianTest {
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
 
 		assertEquals(table.getColumnCount(), filter.getColumnCount());

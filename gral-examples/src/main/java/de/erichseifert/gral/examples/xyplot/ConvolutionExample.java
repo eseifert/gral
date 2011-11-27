@@ -47,8 +47,10 @@ import de.erichseifert.gral.util.Orientation;
  * Example that shows how to use convultion filtering.
  */
 public class ConvolutionExample extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
 	private static final int SAMPLE_COUNT = 200;
 
+	@SuppressWarnings("unchecked")
 	public ConvolutionExample() {
 		// Generate 200 data points
 		DataTable data = new DataTable(Double.class, Double.class);

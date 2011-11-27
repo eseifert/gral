@@ -66,8 +66,8 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * A panel implementation that displays a <code>Drawable</code> instance as a
- * rich Swing component. Special handling is applied to <code>XYPlot</code>
+ * A panel implementation that displays a {@code Drawable} instance as a
+ * rich Swing component. Special handling is applied to {@code XYPlot}
  * instances.
  * @see de.erichseifert.gral.plots.XYPlot
  */
@@ -266,7 +266,7 @@ public class InteractivePanel extends DrawablePanel
 	 * called on each popup event if the menu is enabled. If the menu is static
 	 * caching can be used to prevent unnecessary generation of menu objects.
 	 * @param e Mouse event that triggered the popup menu.
-	 * @return A popup menu instance, or <code>null</code> if no popup menu should be shown.
+	 * @return A popup menu instance, or {@code null} if no popup menu should be shown.
 	 * @see #isPopupMenuEnabled()
 	 * @see #setPopupMenuEnabled(boolean)
 	 */
@@ -287,8 +287,8 @@ public class InteractivePanel extends DrawablePanel
 	 * Returns whether a popup menu will be shown by this panel when the user
 	 * takes the appropriate action. The necessary action depends on the
 	 * operating system of the user.
-	 * @return <code>true</code> when a popup menu will be shown,
-	 *         otherwise <code>false</code>.
+	 * @return {@code true} when a popup menu will be shown,
+	 *         otherwise {@code false}.
 	 */
 	public boolean isPopupMenuEnabled() {
 		return popupMenuEnabled;
@@ -298,8 +298,8 @@ public class InteractivePanel extends DrawablePanel
 	 * Sets whether a popup menu will be shown by this panel when the user
 	 * takes the appropriate action. The necessary action depends on the
 	 * operating system of the user.
-	 * @param popupMenuEnabled <code>true</code> when a popup menu should be
-	 *        shown, otherwise <code>false</code>.
+	 * @param popupMenuEnabled {@code true} when a popup menu should be
+	 *        shown, otherwise {@code false}.
 	 */
 	public void setPopupMenuEnabled(boolean popupMenuEnabled) {
 		this.popupMenuEnabled = popupMenuEnabled;
@@ -388,7 +388,7 @@ public class InteractivePanel extends DrawablePanel
 		private final PlotNavigator navigator;
 		/** Plot that will be changed by this class. */
 		private final Plot plot;
-		/** Previously clicked point (or <code>null</code>). */
+		/** Previously clicked point (or {@code null}). */
 		private Point posPrev;
 
 		/**
@@ -504,7 +504,7 @@ public class InteractivePanel extends DrawablePanel
      * @param pageFormat the size and orientation of the page being drawn
      * @param pageIndex the zero based index of the page to be drawn
      * @return PAGE_EXISTS if the page is rendered successfully
-     *         or NO_SUCH_PAGE if <code>pageIndex</code> specifies a
+     *         or NO_SUCH_PAGE if {@code pageIndex} specifies a
      *	       non-existent page.
      * @exception java.awt.print.PrinterException
      *         thrown when the print job is terminated.
@@ -567,7 +567,7 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * A method that gets called when the center of an axis in the
-	 * <code>PlotNavigator</code> has changed.
+	 * {@code PlotNavigator} has changed.
 	 * @param source Object that has caused the change
 	 * @param axisName Name of the axis that has changed
 	 * @param centerOld Previous value of axis center
@@ -581,7 +581,7 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * A method that gets called when the zoom level of an axis in the
-	 * <code>PlotNavigator</code> has changed.
+	 * {@code PlotNavigator} has changed.
 	 * @param source Object that has caused the change
 	 * @param axisName Name of the axis that has changed
 	 * @param zoomOld Previous zoom level of the axis
@@ -595,8 +595,8 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * Returns whether the plot area in the panel can be zoomed.
-	 * @return <code>true</code> if the plot can be zoomed,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the plot can be zoomed,
+	 *         {@code false} otherwise.
 	 */
 	public boolean isZoomable() {
 		return zoomable;
@@ -604,8 +604,8 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * Sets whether the plot area in the panel can be zoomed.
-	 * @param zoomable <code>true</code> if the plot should be zoomable,
-	 *                 <code>false</code> otherwise.
+	 * @param zoomable {@code true} if the plot should be zoomable,
+	 *                 {@code false} otherwise.
 	 */
 	public void setZoomable(boolean zoomable) {
 		if (!(getDrawable() instanceof Plot) || (this.zoomable == zoomable)) {
@@ -633,8 +633,8 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * Returns whether the plot area in the panel can be panned.
-	 * @return <code>true</code> if the plot can be panned,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the plot can be panned,
+	 *         {@code false} otherwise.
 	 */
 	public boolean isPannable() {
 		return pannable;
@@ -642,8 +642,8 @@ public class InteractivePanel extends DrawablePanel
 
 	/**
 	 * Sets whether the plot area in the panel can be panned.
-	 * @param pannable <code>true</code> if the plot should be pannable,
-	 *                 <code>false</code> otherwise.
+	 * @param pannable {@code true} if the plot should be pannable,
+	 *                 {@code false} otherwise.
 	 */
 	public void setPannable(boolean pannable) {
 		if (!(getDrawable() instanceof XYPlot) || (this.pannable == pannable)) {
@@ -669,9 +669,9 @@ public class InteractivePanel extends DrawablePanel
 	}
 
 	/**
-	 * Returns the direction in which can be navigated. <code>null</code> will
+	 * Returns the direction in which can be navigated. {@code null} will
 	 * be returned if the displayed plot does not support navigation.
-	 * @return the direction in which can be navigated, or <code>null</code> if
+	 * @return the direction in which can be navigated, or {@code null} if
 	 *         the displayed plot does not support navigation.
 	 */
 	public NavigationDirection getNavigateDirection() {

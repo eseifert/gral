@@ -55,13 +55,12 @@ public abstract class PlotArea extends AbstractDrawable
 	instance that defines the clipping of the plotted data relative to
 	the plot area. Positive inset values result in clipping inside the plot
 	area, negative values result in clipping outside the plot area.
-	Specifying a <code>null</code> values will turn off clipping. */
+	Specifying a {@code null} values will turn off clipping. */
 	public static final Key CLIPPING =
 		new Key("plotarea.clipping"); //$NON-NLS-1$
 
 	/**
-	 * Creates a new <code>PlotArea2D</code> object with default
-	 * background color and border.
+	 * Initializes a new instance with default background color and border.
 	 */
 	public PlotArea() {
 		addSettingsListener(this);

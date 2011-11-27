@@ -38,21 +38,22 @@ public class DataChangeEvent extends EventObject {
 	/** Row of the value that has changed. */
 	private final int row;
 	/** Value before changes have been applied. */
-	private final Number valOld;
+	private final Comparable<?> valOld;
 	/** Changed value. */
-	private final Number valNew;
+	private final Comparable<?> valNew;
 
 	/**
 	 * Initializes a new event with data source, position of the data value,
 	 * and the values.
-	 * @param source Data source
-	 * @param col Columns of the value
-	 * @param row Row of the value
-	 * @param valOld Old value
-	 * @param valNew New value
+	 * @param <T> Data type of the cell that has changed.
+	 * @param source Data source.
+	 * @param col Columns of the value.
+	 * @param row Row of the value.
+	 * @param valOld Old value.
+	 * @param valNew New value.
 	 */
-	public DataChangeEvent(DataSource source, int col, int row,
-			Number valOld, Number valNew) {
+	public <T> DataChangeEvent(DataSource source, int col, int row,
+			Comparable<T> valOld, Comparable<T> valNew) {
 		super(source);
 		this.col = col;
 		this.row = row;
@@ -80,7 +81,7 @@ public class DataChangeEvent extends EventObject {
 	 * Returns the old value before it has changed.
 	 * @return Value before the change.
 	 */
-	public Number getOld() {
+	public Comparable<?> getOld() {
 		return valOld;
 	}
 
@@ -88,7 +89,7 @@ public class DataChangeEvent extends EventObject {
 	 * Returns the new value after the change has been applied.
 	 * @return Value after the change.
 	 */
-	public Number getNew() {
+	public Comparable<?> getNew() {
 		return valNew;
 	}
 }

@@ -40,6 +40,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SpiralPlot extends ExamplePanel {
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("unchecked")
 	public SpiralPlot() {
 		setPreferredSize(new Dimension(600, 600));
 

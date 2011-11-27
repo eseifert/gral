@@ -20,6 +20,6 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Unit tests for <code>de.erichseifert.gral.plots.axes</code> package.
+ * Unit tests for {@code de.erichseifert.gral.plots.axes} package.
  */
 package de.erichseifert.gral.plots.axes;

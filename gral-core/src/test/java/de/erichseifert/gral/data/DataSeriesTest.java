@@ -32,6 +32,7 @@ public class DataSeriesTest {
 	private static DataTable table;
 
 	@BeforeClass
+	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 5); // 0
@@ -50,18 +51,21 @@ public class DataSeriesTest {
 		DataSeries unnamed = new DataSeries(table, 2, 1);
 		assertEquals(2, unnamed.getColumnCount());
 		assertEquals(table.getRowCount(), unnamed.getRowCount());
+		assertEquals(unnamed.getColumnCount(), unnamed.getColumnTypes().length);
 		assertEquals(null, unnamed.getName());
 
 		// with name
 		DataSeries named = new DataSeries("foo", table, 2, 1);
 		assertEquals(2, named.getColumnCount());
 		assertEquals(table.getRowCount(), named.getRowCount());
+		assertEquals(named.getColumnCount(), named.getColumnTypes().length);
 		assertEquals("foo", named.getName());
 
 		// without columns
 		DataSeries allCols = new DataSeries("bar", table);
 		assertEquals(table.getColumnCount(), allCols.getColumnCount());
 		assertEquals(table.getRowCount(), allCols.getRowCount());
+		assertEquals(allCols.getColumnCount(), allCols.getColumnTypes().length);
 		assertEquals("bar", allCols.getName());
 	}
 
