@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots.lines;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -58,7 +58,7 @@ public class DiscreteLineRendererTest {
 			Drawable line = r.getLine(points);
 			assertNotNull(line);
 			line.draw(context);
-			assertNonEmptyImage(image);
+			assertNotEmpty(image);
 		}
 	}
 

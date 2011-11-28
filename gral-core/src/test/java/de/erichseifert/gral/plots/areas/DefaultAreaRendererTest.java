@@ -21,7 +21,8 @@
  */
 package de.erichseifert.gral.plots.areas;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertEmpty;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -56,7 +57,7 @@ public class DefaultAreaRendererTest {
 
 	@Test
 	public void testArea() {
-		// Get line
+		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
@@ -69,7 +70,55 @@ public class DefaultAreaRendererTest {
 		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
+	}
+
+	@Test
+	public void testNullRenderer() {
+		// Get area
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+		);
+		Drawable area = r.getArea(axis, null, points);
+		assertNotNull(area);
+
+		// Draw area
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		area.draw(context);
+		assertEmpty(image);
+	}
+
+	@Test
+	public void testEmptyShape() {
+		// Get area
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList();
+		Drawable area = r.getArea(axis, null, points);
+		assertNotNull(area);
+
+		// Draw area
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		area.draw(context);
+		assertEmpty(image);
+	}
+
+	@Test
+	public void testNullPoint() {
+		// Get area
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList((DataPoint) null);
+		Drawable area = r.getArea(axis, null, points);
+		assertNotNull(area);
+
+		// Draw area
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		area.draw(context);
+		assertEmpty(image);
 	}
 
 	@Test
@@ -83,6 +132,38 @@ public class DefaultAreaRendererTest {
 		// Remove
 		r.removeSetting(AreaRenderer.COLOR);
 		assertEquals(Color.GRAY, r.getSetting(AreaRenderer.COLOR));
+	}
+
+	@Test
+	public void testGap() {
+		AreaRenderer r = new DefaultAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+		);
+
+		List<Double> gaps = Arrays.asList(
+			(Double) null, Double.NaN,
+			Double.valueOf(0.0), Double.valueOf(1.0));
+		List<Boolean> roundeds = Arrays.asList(false, true);
+
+		// Test different gap sizes
+		for (Double gap : gaps) {
+			r.setSetting(AreaRenderer.GAP, gap);
+
+			// Draw non-rounded and non rounded gaps
+			for (Boolean rounded : roundeds) {
+				r.setSetting(AreaRenderer.GAP_ROUNDED, rounded);
+
+				Drawable area = r.getArea(axis, axisRenderer, points);
+				assertNotNull(area);
+
+				BufferedImage image = createTestImage();
+				DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+				area.draw(context);
+				assertNotEmpty(image);
+			}
+		}
 	}
 
 }

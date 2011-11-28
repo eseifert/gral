@@ -460,7 +460,11 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		} else {
 			Format labelFormat = getSetting(TICK_LABELS_FORMAT);
-			tickLabel = labelFormat.format(tickPositionWorld);
+			if (labelFormat != null) {
+				tickLabel = labelFormat.format(tickPositionWorld);
+			} else {
+				tickLabel = String.valueOf(tickPositionWorld);
+			}
 		}
 
 		Tick tick = new Tick(type, tickPoint, tickNormal, null, null, tickLabel);

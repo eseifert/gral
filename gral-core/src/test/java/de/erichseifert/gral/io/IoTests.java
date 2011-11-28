@@ -30,7 +30,9 @@ import de.erichseifert.gral.io.plots.PlotsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	// Tests for classes
 	AbstractIoFactoryTest.class,
+	// Tests for sub-packages
 	DataTests.class,
 	PlotsTests.class
 })

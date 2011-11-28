@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,7 +54,7 @@ public class LinearRenderer2DTest {
 		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		d.draw(context);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 
 	@Test

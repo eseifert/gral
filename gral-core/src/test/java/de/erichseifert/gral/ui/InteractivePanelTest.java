@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.ui;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -78,14 +78,14 @@ public class InteractivePanelTest {
 		image = createTestImage();
 		ret = panel.print(image.getGraphics(), page, 0);
 		assertEquals(Printable.PAGE_EXISTS, ret);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 
 		// Test invalid page
 		image = createTestImage();
 		ret = panel.print(image.getGraphics(), page, 1);
 		assertEquals(Printable.NO_SUCH_PAGE, ret);
 		try {
-			assertNonEmptyImage(image);
+			assertNotEmpty(image);
 			fail();
 		} catch (AssertionError e) {
 		}

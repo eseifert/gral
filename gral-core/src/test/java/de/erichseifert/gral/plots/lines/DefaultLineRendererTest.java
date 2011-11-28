@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots.lines;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -56,7 +56,7 @@ public class DefaultLineRendererTest {
 		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		line.draw(context);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 
 	@Test
@@ -72,4 +72,35 @@ public class DefaultLineRendererTest {
 		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
 	}
 
+	@Test
+	public void testGap() {
+		LineRenderer r = new DefaultLineRenderer2D();
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+		);
+
+		List<Double> gaps = Arrays.asList(
+			(Double) null, Double.NaN,
+			Double.valueOf(0.0), Double.valueOf(1.0));
+		List<Boolean> roundeds = Arrays.asList(false, true);
+
+		// Test different gap sizes
+		for (Double gap : gaps) {
+			r.setSetting(LineRenderer.GAP, gap);
+
+			// Draw non-rounded and non rounded gaps
+			for (Boolean rounded : roundeds) {
+				r.setSetting(LineRenderer.GAP_ROUNDED, rounded);
+
+				Drawable line = r.getLine(points);
+				assertNotNull(line);
+
+				BufferedImage image = createTestImage();
+				DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+				line.draw(context);
+				assertNotEmpty(image);
+			}
+		}
+	}
 }

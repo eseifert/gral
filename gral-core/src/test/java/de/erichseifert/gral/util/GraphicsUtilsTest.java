@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -59,21 +59,21 @@ public class GraphicsUtilsTest {
 
 		image = createTestImage();
 		GraphicsUtils.fillPaintedShape((Graphics2D) image.getGraphics(), shape, paint, null);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 
 		image = createTestImage();
 		Rectangle2D paintBounds = shape.getBounds2D();
 		GraphicsUtils.fillPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 
 		image = createTestImage();
 		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, null);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 
 		BasicStroke stroke = new BasicStroke(2f);
 		image = createTestImage();
 		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, stroke);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 
 	private static void assertEqualsArray(double[] expected, double[] actual, double delta) {

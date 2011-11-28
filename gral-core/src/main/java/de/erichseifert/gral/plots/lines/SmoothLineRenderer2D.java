@@ -71,6 +71,9 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 				Point2D ctrl1 = new Point2D.Double();
 				Point2D ctrl2 = new Point2D.Double();
 				for (DataPoint point : points) {
+					if (point == null) {
+						continue;
+					}
 					p3 = point.getPosition().getPoint2D();
 
 					addCurve(line, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);

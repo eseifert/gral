@@ -31,12 +31,15 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	// Tests for classes
 	DataTableTest.class,
 	DataSeriesTest.class,
 	RowSubsetTest.class,
 	EnumeratedDataTest.class,
 	DummyDataTest.class,
 	DataAccessorTest.class,
+	JdbcDataTest.class,
+	// Tests for sub-packages
 	ComparatorTest.class,
 	StatisticsTests.class,
 	FiltersTests.class

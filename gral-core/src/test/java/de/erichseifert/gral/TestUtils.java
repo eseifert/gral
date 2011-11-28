@@ -40,15 +40,60 @@ public class TestUtils {
 	}
 
 	/**
-	 * Fails if the image is empty. An image is considered empty when it
-	 * contains at least one non-transparent pixel (alpha &gt; 0).
+	 * Fails if the image is not empty and prints a specified message. The
+	 * image is considered as empty when it contains only transparent pixels
+	 * (alpha &lt; 0).
+	 * @param message Custom message.
 	 * @param image Image to test.
 	 */
-	public static final void assertNonEmptyImage(BufferedImage image) {
+	public static final void assertEmpty(String message, BufferedImage image) {
+		if (!isEmpty(image)) {
+			fail((String.valueOf(message) + " Image is not empty.").trim());
+		}
+	}
+
+	/**
+	 * Fails if the image is not empty. The image is considered as empty when
+	 * it contains only transparent pixels (alpha &lt; 0).
+	 * @param image Image to test.
+	 */
+	public static final void assertEmpty(BufferedImage image) {
+		assertEmpty("", image);
+	}
+
+	/**
+	 * Fails if the image is empty and prints a specified message. The image is
+	 * considered as not empty when it contains at least one transparent pixel
+	 * (alpha &gt; 0).
+	 * @param message Custom message.
+	 * @param image Image to test.
+	 */
+	public static final void assertNotEmpty(String message, BufferedImage image) {
 		// An image without data is considered empty
 		assertTrue(image.getWidth() > 0);
 		assertTrue(image.getHeight() > 0);
 
+		if (isEmpty(image)) {
+			fail((String.valueOf(message) + " Image is empty.").trim());
+		}
+	}
+
+	/**
+	 * Fails if the image is empty. The image is considered as not empty when
+	 * it contains at least one transparent pixel (alpha &gt; 0).
+	 * @param image Image to test.
+	 */
+	public static void assertNotEmpty(BufferedImage image) {
+		assertNotEmpty("", image);
+	}
+
+	/**
+	 * Returns whether the specified image is empty. The image is considered
+	 * as empty when it contains only transparent pixels (alpha &lt; 0).
+	 * @param image Image to test.
+	 * @return {@code true} when the image is empty, otherwise {@code false}
+	 */
+	private static boolean isEmpty(BufferedImage image) {
 		// Check whether there are non-transparent pixel values
 		DataBufferInt buf = (DataBufferInt) image.getRaster().getDataBuffer();
 		int[] data = buf.getData();
@@ -56,26 +101,68 @@ public class TestUtils {
 			int color = data[i];
 			int alpha = color & 0xFF000000;
 			if (alpha != 0) {
-				return;
+				return false;
 			}
 		}
-
-		fail();
+		return true;
 	}
 
 	/**
-	 * Fails if two images are equal.
+	 * Fails if the contents of two images aren't equal and prints a specified message.
+	 * @param message Custom message.
 	 * @param image1 First image.
 	 * @param image2 Second image.
 	 */
-	public static final void assertNotEqual(BufferedImage image1, BufferedImage image2) {
+	public static final void assertEquals(String message, BufferedImage image1, BufferedImage image2) {
+		if (!isEqual(image1, image2)) {
+			fail((String.valueOf(message) + " Image contents are different.").trim());
+		}
+	}
+
+	/**
+	 * Fails if the contents of two images aren't equal.
+	 * @param image1 First image.
+	 * @param image2 Second image.
+	 */
+	public static final void assertEquals(BufferedImage image1, BufferedImage image2) {
+		assertEquals("", image1, image2);
+	}
+
+	/**
+	 * Fails if the contents of two images are equal and prints a specified message.
+	 * @param message Custom message.
+	 * @param image1 First image.
+	 * @param image2 Second image.
+	 */
+	public static final void assertNotEquals(String message, BufferedImage image1, BufferedImage image2) {
+		if (isEqual(image1, image2)) {
+			fail((String.valueOf(message) + " Image contents are identical.").trim());
+		}
+	}
+
+	/**
+	 * Fails if the contents of two images are equal.
+	 * @param image1 First image.
+	 * @param image2 Second image.
+	 */
+	public static final void assertNotEquals(BufferedImage image1, BufferedImage image2) {
+		assertNotEquals("", image1, image2);
+	}
+
+	/**
+	 * Returns whether two images contain the same pixels.
+	 * @param image1 First image.
+	 * @param image2 Second image.
+	 * @return {@code true} when the images are equal, otherwise {@code false}
+	 */
+	private static boolean isEqual(BufferedImage image1, BufferedImage image2) {
 		DataBufferInt buf1 = (DataBufferInt) image1.getRaster().getDataBuffer();
 		DataBufferInt buf2 = (DataBufferInt) image2.getRaster().getDataBuffer();
 
 		// If the image dimensions are different, the images are considered as
-		// different too
+		// not equal
 		if (buf1.getSize() != buf2.getSize()) {
-			return;
+			return false;
 		}
 
 		// Check whether there are different pixel values
@@ -85,10 +172,9 @@ public class TestUtils {
 			int color1 = data1[i];
 			int color2 = data2[i];
 			if (color1 != color2) {
-				return;
+				return false;
 			}
 		}
-
-		fail();
+		return true;
 	}
 }

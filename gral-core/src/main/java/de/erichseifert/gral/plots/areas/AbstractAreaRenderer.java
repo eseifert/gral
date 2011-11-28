@@ -28,6 +28,7 @@ import java.awt.geom.Area;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
 
@@ -60,12 +61,19 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape area, Iterable<DataPoint> dataPoints) {
-		// Subtract shapes of data points from the area to yield gaps.
-		double gapSize = this.<Number>getSetting(GAP).doubleValue();
-		boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
-		Area punched = GeometryUtils.punch(
-				area, gapSize, isGapRounded, dataPoints);
+		Number sizeObj = this.<Number>getSetting(GAP);
+		if (!MathUtils.isCalculatable(sizeObj)) {
+			return area;
+		}
+		double size = sizeObj.doubleValue();
+		if (size == 0.0) {
+			return area;
+		}
 
+		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+		// Subtract shapes of data points from the area to yield gaps.
+		Area punched = GeometryUtils.punch(
+			area, size, rounded, dataPoints);
 		return punched;
 	}
 

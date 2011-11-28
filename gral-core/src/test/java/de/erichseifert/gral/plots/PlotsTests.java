@@ -33,13 +33,15 @@ import de.erichseifert.gral.plots.points.PointsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	// Tests for sub-packages
 	AxesTests.class,
 	ColorsTests.class,
 	AreasTests.class,
 	LinesTests.class,
 	PointsTests.class,
-	PlotAreaTest.class,
+	// Tests for classes
 	LabelTest.class,
+	PlotAreaTest.class,
 	LegendTest.class,
 	PlotTest.class,
 	XYPlotTest.class,

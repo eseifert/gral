@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.ui;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -108,7 +108,7 @@ public class DrawablePanelTest {
 		BufferedImage image = createTestImage();
 		panel.setBounds(0, 0, image.getWidth(), image.getHeight());
 		panel.paint(image.getGraphics());
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 
 }

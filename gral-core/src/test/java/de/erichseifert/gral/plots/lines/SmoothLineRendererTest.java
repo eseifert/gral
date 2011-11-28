@@ -21,7 +21,8 @@
  */
 package de.erichseifert.gral.plots.lines;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertEmpty;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,14 +50,45 @@ public class SmoothLineRendererTest {
 			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
 			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
 		);
-
-		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		r.setSetting(SmoothLineRenderer2D.SMOOTHNESS, 0.5);
 		Drawable line = r.getLine(points);
 		assertNotNull(line);
+
+		// Draw line
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		line.draw(context);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
+	}
+
+	@Test
+	public void testNullPoint() {
+		// Get line
+		LineRenderer r = new SmoothLineRenderer2D();
+		List<DataPoint> points = Arrays.asList((DataPoint) null);
+		Drawable line = r.getLine(points);
+		assertNotNull(line);
+
+		// Draw line
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		line.draw(context);
+		assertEmpty(image);
+	}
+
+	@Test
+	public void testEmptyShape() {
+		// Get line
+		LineRenderer r = new SmoothLineRenderer2D();
+		List<DataPoint> points = Arrays.asList();
+		Drawable line = r.getLine(points);
+		assertNotNull(line);
+
+		// Draw line
+		BufferedImage image = createTestImage();
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		line.draw(context);
+		assertEmpty(image);
 	}
 
 	@Test

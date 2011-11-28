@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -116,7 +116,7 @@ public class LabelTest {
 			label.draw(context);
 			assertTrue(label.isDrawn);
 			if (!label.getText().isEmpty()) {
-				assertNonEmptyImage(image);
+				assertNotEmpty(image);
 			}
 		}
 	}

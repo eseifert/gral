@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -82,7 +82,7 @@ public class PlotAreaTest {
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plotArea.draw(context);
 		assertTrue(plotArea.isDrawn);
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 
 }

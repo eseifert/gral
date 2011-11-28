@@ -30,6 +30,7 @@ import java.awt.geom.Area;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
 
@@ -68,15 +69,20 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		Stroke stroke = getSetting(LineRenderer.STROKE);
 		Shape lineShape = stroke.createStrokedShape(line);
 
-		// Subtract shapes of data points from line to yield gaps.
-		double gapSize = this.<Number>getSetting(GAP).doubleValue();
-		if (gapSize > 0.0) {
-			boolean isGapRounded = this.<Boolean>getSetting(GAP_ROUNDED);
-			Area punched = GeometryUtils.punch(
-					lineShape, gapSize, isGapRounded, dataPoints);
-			return punched;
+		Number sizeObj = this.<Number>getSetting(GAP);
+		if (!MathUtils.isCalculatable(sizeObj)) {
+			return lineShape;
 		}
-		return lineShape;
+		double size = sizeObj.doubleValue();
+		if (size == 0.0) {
+			return lineShape;
+		}
+
+		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+		// Subtract shapes of data points from the line to yield gaps.
+		Area punched = GeometryUtils.punch(
+				lineShape, size, rounded, dataPoints);
+		return punched;
 	}
 
 	/**

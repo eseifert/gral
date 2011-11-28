@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral;
 
-import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -49,7 +49,7 @@ public class TestUtilsTest {
 
 		// Assert must fail on empty image
 		try {
-			assertNonEmptyImage(image);
+			assertNotEmpty(image);
 			fail();
 		} catch (AssertionError e) {
 		}
@@ -57,6 +57,6 @@ public class TestUtilsTest {
 		// Assert must succeed on empty image
 		Color color = Color.BLACK;
 		image.setRGB(0, 0, color.getRGB());
-		assertNonEmptyImage(image);
+		assertNotEmpty(image);
 	}
 }
