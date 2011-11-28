@@ -44,6 +44,7 @@ public class DefaultPointRenderer extends AbstractPointRenderer {
 	 * @param axis that is used to project the point.
 	 * @param axisRenderer Renderer for the axis.
 	 * @param row Data row containing the point.
+	 * @param col Index of the column that will be projected on the axis.
 	 * @return Component that can be used to draw the point
 	 */
 	public Drawable getPoint(final Axis axis,

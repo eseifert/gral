@@ -46,7 +46,7 @@ public class DataSeriesTest {
 	}
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		// without name
 		DataSeries unnamed = new DataSeries(table, 2, 1);
 		assertEquals(2, unnamed.getColumnCount());

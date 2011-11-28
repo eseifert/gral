@@ -230,7 +230,7 @@ public abstract class StatefulTokenizer {
 	 * tokenizer output.
 	 * @param tokenType Type of the tokens that should be ignored.
 	 */
-	protected void addIngoredType(Object tokenType) {
+	protected void addIgnoredType(Object tokenType) {
 		ignoredTypes.add(tokenType);
 	}
 
@@ -244,6 +244,7 @@ public abstract class StatefulTokenizer {
 
 	/**
 	 * Sets the rules for the specified state in the grammar.
+	 * @param name A unique name to identify the rule set.
 	 * @param rules A sequence or an array with rules to be added.
 	 */
 	protected void putRules(String name, Rule... rules) {

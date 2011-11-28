@@ -103,7 +103,7 @@ public class CSVReader extends AbstractDataReader {
 		 */
 		public CSVTokenizer(char separator) {
 			addJoinedType(CSVTokenType.TEXT);
-			addIngoredType(CSVTokenType.QUOTE);
+			addIgnoredType(CSVTokenType.QUOTE);
 
 			// Basic Set of rules for analyzing CSV content
 			putRules(

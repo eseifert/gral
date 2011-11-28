@@ -245,11 +245,13 @@ public class JdbcData extends AbstractDataSource {
 		} else if (Double.class.equals(colType)) {
 			return row.getDouble(sqlCol);
 		} else if (Date.class.equals(colType)) {
-			return row.getDate(sqlCol).getTime();
+			return row.getDate(sqlCol);
 		} else if (Time.class.equals(colType)) {
-			return row.getTime(sqlCol).getTime();
+			return row.getTime(sqlCol);
 		} else if (Timestamp.class.equals(colType)) {
-			return row.getTimestamp(sqlCol).getTime();
+			return row.getTimestamp(sqlCol);
+		} else if (String.class.equals(colType)) {
+			return row.getString(sqlCol);
 		} else {
 			return null;
 		}
