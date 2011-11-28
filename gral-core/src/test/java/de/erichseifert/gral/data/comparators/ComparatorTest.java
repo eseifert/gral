@@ -31,21 +31,24 @@ import de.erichseifert.gral.data.DataTable;
 
 public class ComparatorTest {
 	private static DataTable data;
-	private Comparable<?>[] row1;
-	private Comparable<?>[] row2;
+	private Comparable<?>[] row1, row2, row3, row4;
 
 	@BeforeClass
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		data = new DataTable(Double.class, Double.class, Double.class, String.class);
-		data.add(1.0, 2.0, 3.0, "foo");
-		data.add(2.0, 2.0, 2.0, "bar");
+		data.add(1.0, 2.0, 4.0, "foo");
+		data.add(2.0, 2.0, 3.0, "bar");
+		data.add(3.0, 2.0, 2.0, null);
+		data.add(4.0, 2.0, 1.0, null);
 	}
 
 	@Before
 	public void setUp() {
 		row1 = data.getRow(0).toArray(null);
 		row2 = data.getRow(1).toArray(null);
+		row3 = data.getRow(2).toArray(null);
+		row4 = data.getRow(3).toArray(null);
 	}
 
 	@Test
@@ -62,29 +65,45 @@ public class ComparatorTest {
 
 	@Test
 	public void testAscending() {
-		int[] expected = {
-			-1, 0, 1, 4
+		int[][] expected = {
+			{ -1, 0,  1,  4 },
+			{ -1, 0,  1, -1 },
+			{  1, 0, -1,  1 },
+			{ -1, 0,  1,  0 }
 		};
 
 		for (int i = 0; i < data.getColumnCount(); i++) {
 			DataComparator comparator = new Ascending(i);
-			assertEquals(expected[i], comparator.compare(row1, row2));
+			assertEquals(expected[0][i], comparator.compare(row1, row2));
+			assertEquals(expected[1][i], comparator.compare(row2, row3));
+			assertEquals(expected[2][i], comparator.compare(row3, row1));
+			assertEquals(expected[3][i], comparator.compare(row3, row4));
 			assertEquals(0, comparator.compare(row1, row1));
 			assertEquals(0, comparator.compare(row2, row2));
+			assertEquals(0, comparator.compare(row3, row3));
+			assertEquals(0, comparator.compare(row4, row4));
 		}
 	}
 
 	@Test
 	public void testDescending() {
-		int[] expected = {
-			1, 0, -1, -4
+		int[][] expected = {
+			{  1, 0, -1, -4 },
+			{  1, 0, -1,  1 },
+			{ -1, 0,  1, -1 },
+			{  1, 0, -1,  0 }
 		};
 
 		for (int i = 0; i < data.getColumnCount(); i++) {
 			DataComparator comparator = new Descending(i);
-			assertEquals(expected[i], comparator.compare(row1, row2));
+			assertEquals(expected[0][i], comparator.compare(row1, row2));
+			assertEquals(expected[1][i], comparator.compare(row2, row3));
+			assertEquals(expected[2][i], comparator.compare(row3, row1));
+			assertEquals(expected[3][i], comparator.compare(row3, row4));
 			assertEquals(0, comparator.compare(row1, row1));
 			assertEquals(0, comparator.compare(row2, row2));
+			assertEquals(0, comparator.compare(row3, row3));
+			assertEquals(0, comparator.compare(row4, row4));
 		}
 	}
 
