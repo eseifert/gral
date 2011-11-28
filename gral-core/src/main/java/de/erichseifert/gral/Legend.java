@@ -179,7 +179,7 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the border of this legend with the specified {@cod{@code Graphics2D}t.
+	 * Draws the border of this legend with the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {

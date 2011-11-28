@@ -205,15 +205,6 @@ public class AbstractPointRendererTest {
 		point = r.getPoint(axis, axisRenderer, row, 0);
 		point.draw(context);
 
-		//*
-		try {
-			ImageIO.write(unset, "png", new File("/home/erich/dokumente/gral/AbstractPointRendererTest-unset.png"));
-			ImageIO.write(set, "png", new File("/home/erich/dokumente/gral/AbstractPointRendererTest-set.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//*/
-
 		assertNotEqual(unset, set);
 	}
 
