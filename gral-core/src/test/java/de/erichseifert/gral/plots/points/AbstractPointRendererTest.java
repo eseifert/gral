@@ -22,15 +22,22 @@
 package de.erichseifert.gral.plots.points;
 
 import static de.erichseifert.gral.TestUtils.assertNonEmptyImage;
+import static de.erichseifert.gral.TestUtils.assertNotEqual;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -44,10 +51,13 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.PointND;
 
 public class AbstractPointRendererTest {
 	private static DataTable table;
 	private static Row row;
+	private static Axis axis;
 	private MockPointRenderer r;
 
 	@BeforeClass
@@ -63,7 +73,10 @@ public class AbstractPointRendererTest {
 		table.add(7); // 6
 		table.add(8); // 7
 
-		row = new Row(table, 0);
+		row = new Row(table, 4);
+
+		axis = new Axis();
+		axis.setRange(0.0, 10.0);
 	}
 
 	private static final class MockPointRenderer extends AbstractPointRenderer {
@@ -71,17 +84,41 @@ public class AbstractPointRendererTest {
 				final Row row, final int col) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
+					MockPointRenderer renderer = MockPointRenderer.this;
+					Graphics2D g = context.getGraphics();
+
 					Shape point = getPointPath(row);
 					Comparable<?> cell = row.get(0);
-					Number value = (Number) cell;
-					drawValue(context, point, value);
-					drawError(context, point, value.doubleValue(), 1.0, 0.5, axis, axisRenderer);
+					Number valueObj = (Number) cell;
+					double value = valueObj.doubleValue();
+
+					// Calculate positions
+					PointND<Double> pointValue = axisRenderer.getPosition(
+						axis, value, true, false);
+					double posX = pointValue.get(PointND.X);
+					double posY = pointValue.get(PointND.Y);
+
+					g.translate(posX, posY);
+					Paint paint = renderer.<Paint>getSetting(PointRenderer.COLOR);
+					GraphicsUtils.fillPaintedShape(g, point, paint, null);
+
+					boolean displayValueLabel = renderer.<Boolean>getSetting(PointRenderer.VALUE_DISPLAYED);
+					if (displayValueLabel) {
+						drawValue(context, point, valueObj);
+					}
+
+					boolean displayErrorBars = renderer.<Boolean>getSetting(PointRenderer.ERROR_DISPLAYED);
+					if (displayErrorBars) {
+						drawError(context, point, value, 2.0, 2.0, axis, axisRenderer);
+					}
+
+					g.translate(-posX, -posY);
 				}
 			};
 		}
 
 		public Shape getPointPath(Row row) {
-			return new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+			return new Rectangle2D.Double(-1.3, -1.3, 3.0, 3.0);
 		}
 	}
 
@@ -92,9 +129,9 @@ public class AbstractPointRendererTest {
 
 	@Test
 	public void testDraw() {
-		Axis axis = new Axis();
-		axis.setRange(0.0, 1.0);
 		AxisRenderer axisRenderer = new LinearRenderer2D();
+		// TODO Layout axis by setting shape in renderer
+
 		// Get line
 		Drawable point = r.getPoint(axis, axisRenderer, row, 0);
 		assertNotNull(point);
@@ -102,6 +139,7 @@ public class AbstractPointRendererTest {
 		// Draw line
 		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		layout(image, axisRenderer);
 		point.draw(context);
 		assertNonEmptyImage(image);
 	}
@@ -118,4 +156,72 @@ public class AbstractPointRendererTest {
 		assertEquals(Color.BLACK, r.getSetting(PointRenderer.COLOR));
 	}
 
+	@Test
+	public void testValueRendering() {
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		DrawingContext context;
+		Drawable point;
+
+		// Draw without value labels
+		BufferedImage unset = createTestImage();
+		context = new DrawingContext((Graphics2D) unset.getGraphics());
+		layout(unset, axisRenderer);
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, false);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		// Draw with value labels
+		BufferedImage set = createTestImage();
+		context = new DrawingContext((Graphics2D) set.getGraphics());
+		layout(set, axisRenderer);
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		assertNotEqual(unset, set);
+	}
+
+	@Test
+	public void testErrorRendering() {
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		DrawingContext context;
+		Drawable point;
+
+		// Draw without value labels
+		BufferedImage unset = createTestImage();
+		context = new DrawingContext((Graphics2D) unset.getGraphics());
+		layout(unset, axisRenderer);
+		r.setSetting(PointRenderer.ERROR_DISPLAYED, false);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		// Draw with value labels
+		BufferedImage set = createTestImage();
+		context = new DrawingContext((Graphics2D) set.getGraphics());
+		layout(set, axisRenderer);
+		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		//*
+		try {
+			ImageIO.write(unset, "png", new File("/home/erich/dokumente/gral/AbstractPointRendererTest-unset.png"));
+			ImageIO.write(set, "png", new File("/home/erich/dokumente/gral/AbstractPointRendererTest-set.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//*/
+
+		assertNotEqual(unset, set);
+	}
+
+	private static void layout(BufferedImage image, AxisRenderer axisRenderer) {
+		Line2D axisShape = new Line2D.Double(
+			image.getWidth()/2.0, 0.0,
+			image.getWidth()/2.0, image.getHeight()
+		);
+		axisRenderer.setSetting(AxisRenderer.SHAPE, axisShape);
+	}
 }

@@ -37,15 +37,15 @@ import java.util.regex.Pattern;
  *
  * The class is intended to be sub-classed to implement new grammars.
  * Different sets of rules can be defined with the method
- * {{@link #addState(String, Rule[])}}, e.g. for string processing. Each rule
+ * {{@link #putRules(String, Rule[])}}, e.g. for string processing. Each rule
  * in a set produces one token with a type name and it can switch to another
  * state or switch back to the previous state with the special state
  * {@code "#pop"}. The is a list of tokens with arbitrary type.
  *
  * The list of produced tokens can be filtered: tokens of same type can be
- * joined by adding the type with {@link #addJoinedType(String)} and tokens can
+ * joined by adding the type with {@link #addJoinedType(Object)} and tokens can
  * be omitted from the result for easier post-processing by adding with
- * {@link #addIgnoredType(String)}.
+ * {@link #addIgnoredType(Object)}.
  */
 public abstract class StatefulTokenizer {
 	/** The name of the initial state. */

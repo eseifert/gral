@@ -52,31 +52,41 @@ public class DataTableTest {
 	public void testCreate() {
 		// Constructor with types
 		DataTable table1 = new DataTable(Integer.class, Double.class, Long.class, Float.class);
-		table1.add(-10, 1.0, 1L, 10f);
-		table1.add(-20, 2.0, 2L, 20f);
-		table1.add(-30, 3.0, 3L, 30f);
 		assertEquals(4, table1.getColumnCount());
-		assertEquals(Integer.class, table1.getColumnTypes()[0]);
-		assertEquals(Double.class, table1.getColumnTypes()[1]);
-		assertEquals(Long.class, table1.getColumnTypes()[2]);
-		assertEquals(Float.class, table1.getColumnTypes()[3]);
-		assertEquals(3, table1.getRowCount());
+		assertEquals(0, table1.getRowCount());
+		Class<? extends Comparable<?>>[] types1 = table1.getColumnTypes();
+		assertEquals(Integer.class, types1[0]);
+		assertEquals(Double.class, types1[1]);
+		assertEquals(Long.class, types1[2]);
+		assertEquals(Float.class, types1[3]);
+
+		// Constructor with single type
+		DataTable table2 = new DataTable(3, Double.class);
+		assertEquals(3, table2.getColumnCount());
+		assertEquals(0, table1.getRowCount());
+		Class<? extends Comparable<?>>[] types2 = table2.getColumnTypes();
+		for (int i = 0; i < types2.length; i++) {
+			assertEquals(Double.class, types2[i]);
+		}
 
 		// Copy constructor
-		DataTable table2 = new DataTable(table1);
-		assertEquals(table1.getColumnCount(), table2.getColumnCount());
-		assertEquals(table1.getColumnTypes()[0], table2.getColumnTypes()[0]);
-		assertEquals(table1.getColumnTypes()[1], table2.getColumnTypes()[1]);
-		assertEquals(table1.getColumnTypes()[2], table2.getColumnTypes()[2]);
-		assertEquals(table1.getColumnTypes()[3], table2.getColumnTypes()[3]);
-		assertEquals(table1.getRowCount(), table2.getRowCount());
-		assertEquals(table1.getRow(0), table2.getRow(0));
-		assertEquals(table1.getRow(1), table2.getRow(1));
-		assertEquals(table1.getRow(2), table2.getRow(2));
+		DataTable table3 = new DataTable(table1);
+		assertEquals(table1.getColumnCount(), table3.getColumnCount());
+		assertEquals(table1.getRowCount(), table3.getRowCount());
+		Class<? extends Comparable<?>>[] types3 = table1.getColumnTypes();
+		for (int i = 0; i < types3.length; i++) {
+			assertEquals(types1[i], types3[i]);
+		}
 	}
 
 	@Test
 	public void testAdd() {
+		int sizeBefore = table.getRowCount();
+		table.add(0, -1);
+		table.add(1, -2);
+		table.add(2, -3);
+		assertEquals(sizeBefore + 3, table.getRowCount());
+
 		// Wrong number of columns
 		try {
 			table.add(1);
@@ -94,7 +104,10 @@ public class DataTableTest {
 
 	@Test
 	public void testSet() {
+		int sizeBefore = table.getRowCount();
+
 		table.set(1, 2, -1);
+		assertEquals(sizeBefore, table.getRowCount());
 		assertEquals(-1, table.get(1, 2));
 
 		// Illegal column index
@@ -107,7 +120,9 @@ public class DataTableTest {
 
 	@Test
 	public void testRemove() {
+		int sizeBefore = table.getRowCount();
 		table.remove(0);
+		assertEquals(sizeBefore - 1, table.getRowCount());
 
 		// Invalid (negative) index
 		try {

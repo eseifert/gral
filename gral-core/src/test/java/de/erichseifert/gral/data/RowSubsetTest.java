@@ -23,18 +23,18 @@ package de.erichseifert.gral.data;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RowSubsetTest {
-	private static DataTable table;
+	private DataTable table;
 	private RowSubset data;
 
-	@BeforeClass
+	@Before
 	@SuppressWarnings("unchecked")
-	public static void setUpBeforeClass() {
+	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
 		table.add(2, 3); // 1
@@ -44,10 +44,7 @@ public class RowSubsetTest {
 		table.add(6, 8); // 5
 		table.add(7, 9); // 6
 		table.add(8, 11); // 7
-	}
 
-	@Before
-	public void setUp() {
 		data = new RowSubset(table) {
 			@Override
 			public boolean accept(Row row) {
@@ -85,4 +82,35 @@ public class RowSubsetTest {
 		assertEquals(table.getRow(7), data.getRow(3));
 	}
 
+	@Test
+	public void testDataAdded() {
+		int sizeBefore = data.getRowCount();
+		table.add(10, -1);
+		assertTrue(data.getRowCount() > sizeBefore);
+	}
+
+	@Test
+	public void testDataUpdated() {
+		int sizeBefore = data.getRowCount();
+
+		// Change one rows to be included in subset
+		table.set(0, 1, -2);
+		assertEquals(sizeBefore, data.getRowCount());
+
+		// Change one rows to be excluded from subset
+		table.set(0, 1, -3);
+		assertTrue(data.getRowCount() < sizeBefore);
+
+		// Change two rows to be included in subset
+		table.set(0, 1, -2);
+		table.set(0, 2, -2);
+		assertTrue(data.getRowCount() > sizeBefore);
+	}
+
+	@Test
+	public void testDataRemoved() {
+		int sizeBefore = data.getRowCount();
+		table.remove(1);
+		assertTrue(data.getRowCount() < sizeBefore);
+	}
 }

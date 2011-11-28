@@ -45,9 +45,13 @@ public class TestUtils {
 	 * @param image Image to test.
 	 */
 	public static final void assertNonEmptyImage(BufferedImage image) {
+		// An image without data is considered empty
 		assertTrue(image.getWidth() > 0);
 		assertTrue(image.getHeight() > 0);
-		int[] data = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+
+		// Check whether there are non-transparent pixel values
+		DataBufferInt buf = (DataBufferInt) image.getRaster().getDataBuffer();
+		int[] data = buf.getData();
 		for (int i = 0; i < data.length; i++) {
 			int color = data[i];
 			int alpha = color & 0xFF000000;
@@ -55,6 +59,36 @@ public class TestUtils {
 				return;
 			}
 		}
+
+		fail();
+	}
+
+	/**
+	 * Fails if two images are equal.
+	 * @param image1 First image.
+	 * @param image2 Second image.
+	 */
+	public static final void assertNotEqual(BufferedImage image1, BufferedImage image2) {
+		DataBufferInt buf1 = (DataBufferInt) image1.getRaster().getDataBuffer();
+		DataBufferInt buf2 = (DataBufferInt) image2.getRaster().getDataBuffer();
+
+		// If the image dimensions are different, the images are considered as
+		// different too
+		if (buf1.getSize() != buf2.getSize()) {
+			return;
+		}
+
+		// Check whether there are different pixel values
+		int[] data1 = buf1.getData();
+		int[] data2 = buf2.getData();
+		for (int i = 0; i < data1.length; i++) {
+			int color1 = data1[i];
+			int color2 = data2[i];
+			if (color1 != color2) {
+				return;
+			}
+		}
+
 		fail();
 	}
 }
