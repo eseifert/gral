@@ -202,17 +202,20 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Paint slice
-				double sliceStartRel, sliceEndRel;
-				if (isClockwise) {
-					sliceStartRel = MathUtils.normalizeDegrees(-slice[0])/360.0;
-					sliceEndRel = sliceStartRel - slice[1]/360.0;
-				} else {
-					sliceStartRel = MathUtils.normalizeDegrees(slice[0])/360.0;
-					sliceEndRel = sliceStartRel + slice[1]/360.0;
+				double coloringRel = 0.0;
+				if (slices.size() > 1) {
+					double sliceStartRel, sliceEndRel;
+					if (isClockwise) {
+						sliceStartRel = MathUtils.normalizeDegrees(-slice[0])/360.0;
+						sliceEndRel = sliceStartRel - slice[1]/360.0;
+					} else {
+						sliceStartRel = MathUtils.normalizeDegrees(slice[0])/360.0;
+						sliceEndRel = sliceStartRel + slice[1]/360.0;
+					}
+					double posRel = sliceIndex / ((double) slices.size() - 1);
+					coloringRel =
+						(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
 				}
-				double posRel = sliceIndex / ((double) slices.size() - 1);
-				double coloringRel =
-					(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
 				Paint paint = colorList.get(coloringRel);
 				GraphicsUtils.fillPaintedShape(
 					graphics, doughnutSlice, paint, null);
