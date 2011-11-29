@@ -177,6 +177,7 @@ public class PiePlot extends Plot implements DataListener {
 
 			boolean isClockwise = plot.<Boolean>getSetting(PiePlot.CLOCKWISE);
 
+			int sliceIndex = 0;
 			for (double[] slice : slices) {
 				double sliceStart = sliceOffset + slice[0];
 				double sliceSpan = slice[1];
@@ -201,15 +202,22 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Paint slice
-				double sliceStartRel;
+				double sliceStartRel, sliceEndRel;
 				if (isClockwise) {
-					sliceStartRel = MathUtils.normalizeDegrees(-slice[0]) / 360.0;
+					sliceStartRel = MathUtils.normalizeDegrees(-slice[0])/360.0;
+					sliceEndRel = sliceStartRel - slice[1]/360.0;
 				} else {
-					sliceStartRel = MathUtils.normalizeDegrees(slice[0]) / 360.0;
+					sliceStartRel = MathUtils.normalizeDegrees(slice[0])/360.0;
+					sliceEndRel = sliceStartRel + slice[1]/360.0;
 				}
-				Paint paint = colorList.get(sliceStartRel);
+				double posRel = sliceIndex / ((double) slices.size() - 1);
+				double coloringRel =
+					(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
+				Paint paint = colorList.get(coloringRel);
 				GraphicsUtils.fillPaintedShape(
 					graphics, doughnutSlice, paint, null);
+
+				sliceIndex++;
 			}
 
 			if (clipOffset != null) {

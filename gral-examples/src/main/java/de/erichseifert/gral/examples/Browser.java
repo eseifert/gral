@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.examples;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -31,6 +33,7 @@ import javax.swing.event.ListSelectionListener;
 import de.erichseifert.gral.examples.barplot.HistogramPlot;
 import de.erichseifert.gral.examples.barplot.SimpleBarPlot;
 import de.erichseifert.gral.examples.boxplot.SimpleBoxPlot;
+import de.erichseifert.gral.examples.pieplot.DynamicPiePlot;
 import de.erichseifert.gral.examples.pieplot.SimplePiePlot;
 import de.erichseifert.gral.examples.rasterplot.SimpleRasterPlot;
 import de.erichseifert.gral.examples.xyplot.AreaPlot;
@@ -42,12 +45,29 @@ import de.erichseifert.gral.examples.xyplot.SpiralPlot;
 import de.erichseifert.gral.examples.xyplot.StackedPlots;
 
 public class Browser extends JFrame implements ListSelectionListener {
+	private static class ExamplesList extends JList {
+		private final ExamplePanel[] examples;
+
+		public ExamplesList(ExamplePanel[] examples) {
+			super(examples);
+			this.examples = examples;
+		}
+
+		@Override
+		public String getToolTipText(MouseEvent event) {
+			int index = locationToIndex(event.getPoint());
+			ExamplePanel item = (ExamplePanel) getModel().getElementAt(index);
+			return item.getDescription();
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private static final ExamplePanel[] examples = {
 		new HistogramPlot(),
 		new SimpleBarPlot(),
 		new SimpleBoxPlot(),
+		new DynamicPiePlot(),
 		new SimplePiePlot(),
 		new SimpleRasterPlot(),
 		new AreaPlot(),
@@ -58,6 +78,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 		new SpiralPlot(),
 		new StackedPlots()
 	};
+
 	private final JList examplesList;
 	private final JScrollPane exampleScrollPane;
 
@@ -67,7 +88,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 		setSize(1000, 800);
 		setLocationRelativeTo(null);
 
-		examplesList = new JList(examples);
+		examplesList = new ExamplesList(examples);
 		examplesList.addListSelectionListener(this);
 		exampleScrollPane = new JScrollPane();
 		setExample(examples[0]);
