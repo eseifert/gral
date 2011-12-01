@@ -35,8 +35,6 @@ import de.erichseifert.gral.util.Insets2D;
  */
 public class EdgeLayout implements Layout {
 	// TODO Add setters and getters.
-	// FIXME Use SettingsStorage?
-	// FIXME Extract abstract superclass as an additional layer between Layout and EdgeLayout?
 	/** Horizontal spacing. */
 	private final double hgap;
 	/** Vertical spacing. */
