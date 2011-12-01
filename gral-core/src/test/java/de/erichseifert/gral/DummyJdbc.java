@@ -1797,4 +1797,14 @@ class DummyPreparedStatement implements PreparedStatement {
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new UnsupportedOperationException();
 	}
+
+	// Java 1.7
+	public void closeOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException();
+	}
+
+	// Java 1.7
+	public boolean isCloseOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException();
+	}
 }
