@@ -33,8 +33,8 @@ import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.colors.MultiColor;
-import de.erichseifert.gral.plots.colors.ScaledColorMapper;
+import de.erichseifert.gral.plots.colors.LinearGradient;
+import de.erichseifert.gral.plots.colors.ScaledContinuousColorMapper;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.ui.InteractivePanel.NavigationDirection;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -78,7 +78,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 
 		// Format boxes
 		Stroke stroke = new BasicStroke(2f);
-		ScaledColorMapper colors = new MultiColor(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
+		ScaledContinuousColorMapper colors = new LinearGradient(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
 		colors.setRange(1.0, 3.0);
 		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_STROKE, stroke);
 		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BORDER, stroke);

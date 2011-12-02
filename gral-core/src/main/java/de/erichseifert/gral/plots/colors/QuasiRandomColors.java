@@ -31,9 +31,9 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that generates seemingly random colors.
+ * Class that generates seemingly random colors for specified index values.
  */
-public class QuasiRandomColors implements ColorMapper {
+public class QuasiRandomColors extends IndexedColorMapper {
 	/** Object for mapping a plot value to a hue. */
 	private final HaltonSequence seqHue = new HaltonSequence(3);
 	/** Object for mapping a plot value to a saturation. */
@@ -41,7 +41,7 @@ public class QuasiRandomColors implements ColorMapper {
 	/** Object for mapping a plot value to a brightness. */
 	private final HaltonSequence seqBrightness = new HaltonSequence(2);
 	/** Cache for colors that have already been generated. */
-	private final Map<Double, Color> colorCache;
+	private final Map<Integer, Color> colorCache;
 	/** Variance settings for hue, saturation and brightness. */
 	//FIXME duplicate code! See RandomColors
 	private float[] colorVariance;
@@ -50,7 +50,7 @@ public class QuasiRandomColors implements ColorMapper {
 	 * Creates a new QuasiRandomColors object with default color variance.
 	 */
 	public QuasiRandomColors() {
-		colorCache = new HashMap<Double, Color>();
+		colorCache = new HashMap<Integer, Color>();
 		colorVariance = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation
@@ -59,13 +59,15 @@ public class QuasiRandomColors implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Paint according to the specified value.
-	 * @param value Value of color.
-	 * @return Paint.
+	 * Returns the Paint associated to the specified index value.
+	 * @param index Numeric index.
+	 * @return Paint object.
 	 */
-	public Paint get(double value) {
-		if (colorCache.containsKey(value)) {
-			return colorCache.get(value);
+	@Override
+	public Paint get(int index) {
+		Integer key = Integer.valueOf(index);
+		if (colorCache.containsKey(key)) {
+			return colorCache.get(key);
 		}
 		float hue = colorVariance[0] + colorVariance[1]*seqHue.next().floatValue();
 		float saturation = colorVariance[2] + colorVariance[3]*seqSat.next().floatValue();
@@ -75,7 +77,7 @@ public class QuasiRandomColors implements ColorMapper {
 			MathUtils.limit(saturation, 0f, 1f),
 			MathUtils.limit(brightness, 0f, 1f)
 		);
-		colorCache.put(value, color);
+		colorCache.put(key, color);
 		return color;
 	}
 
@@ -95,5 +97,4 @@ public class QuasiRandomColors implements ColorMapper {
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;
 	}
-
 }

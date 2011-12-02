@@ -34,7 +34,7 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.Plot;
-import de.erichseifert.gral.plots.colors.MultiColor;
+import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -63,7 +63,7 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		// Change the width of gaps between segments
 		plot.setSetting(PiePlot.GAP, 0.2);
 		// Change the colors
-		MultiColor colors = new MultiColor(COLOR1, COLOR2);
+		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
 		plot.setSetting(PiePlot.COLORS, colors);
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0));

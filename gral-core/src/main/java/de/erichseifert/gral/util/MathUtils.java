@@ -158,6 +158,27 @@ public abstract class MathUtils {
 	}
 
 	/**
+	 * Clamps a number object to specified limits: if {@code value} is
+	 * greater than {@code max} then {@code max} will be returned.
+	 * If {@code value} is greater than {@code min} then
+	 * {@code min} will be returned.
+	 * @param <T> Numeric data type
+	 * @param value Double value to be clamped
+	 * @param min Minimum
+	 * @param max Maximum
+	 * @return Clamped value
+	 */
+	public static <T extends Number> T limit(T value, T min, T max) {
+		if (value.doubleValue() > max.doubleValue()) {
+			return max;
+		}
+		if (value.doubleValue() < min.doubleValue()) {
+			return min;
+		}
+		return value;
+	}
+
+	/**
 	 * Clamps a double number to specified limits: if {@code value} is
 	 * greater than {@code max} then {@code max} will be returned.
 	 * If {@code value} is greater than {@code min} then

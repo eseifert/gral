@@ -41,6 +41,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -278,8 +279,14 @@ public class BoxPlot extends XYPlot {
 					Graphics2D graphics = context.getGraphics();
 					ColorMapper paintBoxMapper =
 						BoxWhiskerRenderer.this.getSetting(BOX_BACKGROUND);
-					Paint paintBox =
-						paintBoxMapper.get(valueX);
+					Paint paintBox;
+					if (paintBoxMapper instanceof ContinuousColorMapper) {
+						paintBox = ((ContinuousColorMapper) paintBoxMapper)
+							.get(valueX);
+					} else {
+						Integer index = Integer.valueOf(row.getIndex());
+						paintBox = paintBoxMapper.get(index);
+					}
 					Paint paintStrokeBox =
 						BoxWhiskerRenderer.this.getSetting(BOX_COLOR);
 					Stroke strokeBox =

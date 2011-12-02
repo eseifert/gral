@@ -31,9 +31,8 @@ public class RainbowColorsTest {
 	@Test
 	public void testGet() {
 		RainbowColors c = new RainbowColors();
-		for (float i = 0.0f; i <= 1.0f; i += 0.1f) {
-			assertEquals(Color.getHSBColor(i, 1f, 1f), c.get(i));
+		for (double i = 0.0; i <= 1.0f; i += 0.1f) {
+			assertEquals(Color.getHSBColor((float) i, 1f, 1f), c.get(i));
 		}
 	}
-
 }

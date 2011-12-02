@@ -38,6 +38,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.Grayscale;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -147,7 +148,7 @@ public class RasterPlot extends XYPlot {
 
 					double valueX = ((Number) row.get(colX)).doubleValue();
 					double valueY = ((Number) row.get(colY)).doubleValue();
-					double value = ((Number) row.get(colValue)).doubleValue();
+					Number value = (Number) row.get(colValue);
 
 					// Pixel dimensions
 					double xMin = axisXRenderer
@@ -172,9 +173,16 @@ public class RasterPlot extends XYPlot {
 					// Paint pixel
 					Graphics2D graphics = context.getGraphics();
 					ColorMapper colorMapper = plot.getSetting(COLORS);
-					Paint paint = colorMapper.get(value);
+					Paint paint;
+					if (colorMapper instanceof ContinuousColorMapper) {
+						paint = ((ContinuousColorMapper) colorMapper)
+							.get(value.doubleValue());
+					} else {
+						Integer index = value.intValue();
+						paint = colorMapper.get(index);
+					}
 					GraphicsUtils.fillPaintedShape(
-							graphics, pixel, paint, pixel.getBounds2D());
+						graphics, pixel, paint, pixel.getBounds2D());
 				}
 			};
 		}

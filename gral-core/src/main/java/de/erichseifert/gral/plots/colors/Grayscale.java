@@ -30,27 +30,30 @@ import de.erichseifert.gral.util.MathUtils;
 /**
  * Class that generates shades of gray for values between 0.0 and 1.0.
  */
-public class Grayscale extends ScaledColorMapper {
-	private final double[] rgb;
-
+public class Grayscale extends ScaledContinuousColorMapper {
 	/**
-	 * Creates a new instance.
-	 */
-	public Grayscale() {
-		rgb = new double[3];
-	}
-
-	/**
-	 * Returns the Paint according to the specified value.
+	 * Returns the Paint object according to the specified value.
 	 * @param value Value of color.
-	 * @return Paint.
+	 * @return Paint object.
 	 */
+	@Override
 	public Paint get(double value) {
-		GraphicsUtils.luv2rgb(new double[] {100.0*scale(value), 0.0, 0.0}, rgb);
+		Double v = scale(value);
+		v = applyMode(v, 0.0, 1.0);
+		if (!MathUtils.isCalculatable(v)) {
+			return null;
+		}
+		double lightness = 100.0*v.doubleValue();
+		double[] rgb = GraphicsUtils.luv2rgb(new double[] {lightness, 0.0, 0.0}, null);
 		return new Color(
 			(float) MathUtils.limit(rgb[0], 0.0, 1.0),
 			(float) MathUtils.limit(rgb[1], 0.0, 1.0),
 			(float) MathUtils.limit(rgb[2], 0.0, 1.0)
 		);
+	}
+
+	@Override
+	public void setMode(Mode mode) {
+		super.setMode(mode);
 	}
 }

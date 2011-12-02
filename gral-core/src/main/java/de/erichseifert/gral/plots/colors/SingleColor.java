@@ -27,7 +27,8 @@ import java.awt.Paint;
 /**
  * Class that represents a ColorMapper with a single color.
  */
-public class SingleColor implements ColorMapper {
+public class SingleColor extends IndexedColorMapper {
+	/** The color that will be returned in any case. */
 	private Color color;
 
 	/**
@@ -40,10 +41,11 @@ public class SingleColor implements ColorMapper {
 
 	/**
 	 * Returns the Paint according to the specified value.
-	 * @param value Value of color.
+	 * @param value Numeric index.
 	 * @return Paint.
 	 */
-	public Paint get(double value) {
+	@Override
+	public Paint get(int value) {
 		return color;
 	}
 
@@ -62,5 +64,4 @@ public class SingleColor implements ColorMapper {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-
 }

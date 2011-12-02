@@ -31,9 +31,9 @@ import java.util.Random;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates pseudo-random colors.
+ * Class that generates pseudo-random colors for specified index values.
  */
-public class RandomColors implements ColorMapper {
+public class RandomColors extends IndexedColorMapper {
 	/** Number of comparisons that will be done before accepting two similar
 	random values. */
 	private static final int NUM_COMPARISONS = 4;
@@ -41,7 +41,7 @@ public class RandomColors implements ColorMapper {
 	private static final double MIN_DIST = 0.3;
 
 	/** Cache for colors that have already been generated. */
-	private final Map<Double, Color> colorCache;
+	private final Map<Integer, Color> colorCache;
 	/** Object for generating random values. */
 	private final Random random;
 	/** Variance settings for hue, saturation and brightness. */
@@ -53,7 +53,7 @@ public class RandomColors implements ColorMapper {
 	 */
 	public RandomColors() {
 		random = new Random();
-		colorCache = new LinkedHashMap<Double, Color>();
+		colorCache = new LinkedHashMap<Integer, Color>();
 		colorVariance = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation
@@ -71,13 +71,15 @@ public class RandomColors implements ColorMapper {
 	}
 
 	/**
-	 * Returns the Paint according to the specified value.
-	 * @param value Value of color.
+	 * Returns the Paint associated to the specified index value.
+	 * @param index Numeric index.
 	 * @return Paint.
 	 */
-	public Paint get(double value) {
-		if (colorCache.containsKey(value)) {
-			return colorCache.get(value);
+	@Override
+	public Paint get(int index) {
+		Integer key = Integer.valueOf(index);
+		if (colorCache.containsKey(key)) {
+			return colorCache.get(key);
 		}
 
 		// Use the same random numbers for the same input value
@@ -101,7 +103,7 @@ public class RandomColors implements ColorMapper {
 		} while (!match);
 
 		// Remember previous colors to avoid similarities
-		colorCache.put(value, r);
+		colorCache.put(key, r);
 
 		return r;
 	}
@@ -153,5 +155,4 @@ public class RandomColors implements ColorMapper {
 	public void setColorVariance(float[] colorVariance) {
 		System.arraycopy(colorVariance, 0, this.colorVariance, 0, this.colorVariance.length);
 	}
-
 }

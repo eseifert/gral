@@ -48,20 +48,18 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public abstract class Filter extends AbstractDataSource
 		implements DataListener {
-	/**
-	 * Behavior when engaging the borders of a column, so that the filter
-	 * would need more data values than available.
-	 */
+	/** Type to define the behavior when engaging the borders of a column, i.e.
+	the filter would need more data values than available. */
 	public static enum Mode {
-		/**	Ignores missing values. */
+		/**	Ignore missing values. */
 		OMIT,
-		/**	Treats missing values as zero. */
+		/**	Treat missing values as zero. */
 		ZERO,
-		/**	Repeats the last value. */
+		/**	Repeat the last value. */
 		REPEAT,
-		/**	Mirrors values at the last value. */
+		/**	Mirror values at the last value. */
 		MIRROR,
-		/**	Repeats the data. */
+		/**	Repeat the data. */
 		CIRCULAR
 	};
 

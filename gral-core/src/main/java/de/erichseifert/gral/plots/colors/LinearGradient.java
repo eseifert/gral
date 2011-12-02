@@ -33,20 +33,18 @@ import de.erichseifert.gral.util.MathUtils;
 /**
  * Linearly blends different colors for values between 0.0 and 1.0.
  */
-public class MultiColor extends ScaledColorMapper {
+public class LinearGradient extends ScaledContinuousColorMapper {
 	/** Colors that will be used for blending. **/
 	private final List<Color> colors;
 
 	/**
 	 * Creates a new instance with at least two colors.
 	 * @param color1 First color.
-	 * @param color2 Second color.
-	 * @param colors More colors.
+	 * @param colors Additional colors.
 	 */
-	public MultiColor(Color color1, Color color2, Color... colors) {
+	public LinearGradient(Color color1, Color... colors) {
 		this.colors = new ArrayList<Color>();
 		this.colors.add(color1);
-		this.colors.add(color2);
 		this.colors.addAll(Arrays.asList(colors));
 	}
 
@@ -55,8 +53,15 @@ public class MultiColor extends ScaledColorMapper {
 	 * @param value Value of color.
 	 * @return Paint.
 	 */
+	@Override
 	public Paint get(double value) {
-		double x = scale(value);
+		Double v = scale(value);
+		v = applyMode(v, 0.0, 1.0);
+		if (!MathUtils.isCalculatable(v)) {
+			return null;
+		}
+
+		double x = v.doubleValue();
 		int colorMax = colors.size() - 1;
 		double pos = MathUtils.limit(x*colorMax, 0.0, colorMax);
 
@@ -88,6 +93,11 @@ public class MultiColor extends ScaledColorMapper {
 			(int) Math.round(b),
 			(int) Math.round(a)
 		);
+	}
+
+	@Override
+	public void setMode(Mode mode) {
+		super.setMode(mode);
 	}
 
 	/**

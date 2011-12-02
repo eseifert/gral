@@ -33,18 +33,24 @@ import de.erichseifert.gral.util.MathUtils;
 
 public class ScaledColorMapperTest {
 	private static final double DELTA = 1e-15;
-	private ScaledColorMapper cm;
+	private ScaledContinuousColorMapper cm;
 
-	private static final class ScaledColorMapperMock extends ScaledColorMapper {
+	private static final class ScaledContinuousColorMapperMock extends ScaledContinuousColorMapper {
+		@Override
 		public Paint get(double value) {
-			float v = (float) MathUtils.limit(scale(value), 0.0, 1.0);
-			return new Color(v, v, v);
+			double v = scale(value);
+			v = applyMode(v, 0.0, 1.0);
+			if (!MathUtils.isCalculatable(v)) {
+				return null;
+			}
+			float i = (float) v;
+			return new Color(i, i, i);
 		}
 	}
 
 	@Before
 	public void setUp() {
-		cm = new ScaledColorMapperMock();
+		cm = new ScaledContinuousColorMapperMock();
 	}
 
 	@Test

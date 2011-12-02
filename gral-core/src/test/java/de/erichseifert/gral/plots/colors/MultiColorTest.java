@@ -31,7 +31,7 @@ import org.junit.Test;
 public class MultiColorTest {
 	@Test
 	public void testCreation() {
-		MultiColor c = new MultiColor(Color.WHITE, Color.BLACK);
+		LinearGradient c = new LinearGradient(Color.WHITE, Color.BLACK);
 		List<Color> colors = c.getColors();
 		assertEquals(2, colors.size());
 		assertEquals(Color.WHITE, colors.get(0));
@@ -40,7 +40,7 @@ public class MultiColorTest {
 
 	@Test
 	public void testColor() {
-		MultiColor c = new MultiColor(Color.RED, Color.GREEN, Color.BLUE);
+		LinearGradient c = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
 		List<Color> colors = c.getColors();
 		assertEquals(3, colors.size());
 		assertEquals(new Color(255,   0,   0), c.get(0.00));

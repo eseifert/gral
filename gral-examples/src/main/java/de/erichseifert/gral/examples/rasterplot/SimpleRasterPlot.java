@@ -28,7 +28,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.RasterPlot;
-import de.erichseifert.gral.plots.colors.MultiColor;
+import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -64,7 +64,7 @@ public class SimpleRasterPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
-		plot.setSetting(RasterPlot.COLORS, new MultiColor(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
+		plot.setSetting(RasterPlot.COLORS, new LinearGradient(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

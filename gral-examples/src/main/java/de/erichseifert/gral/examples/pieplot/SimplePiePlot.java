@@ -27,7 +27,8 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
-import de.erichseifert.gral.plots.colors.MultiColor;
+import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -59,8 +60,8 @@ public class SimplePiePlot extends ExamplePanel {
 		// Change the width of gaps between segments
 		plot.setSetting(PiePlot.GAP, 0.2);
 		// Change the colors
-		MultiColor colors = new MultiColor(COLOR1, COLOR2);
-		//colors.setColorVariance(new float[] {0.5345f, 0.0f, 0.7250f, 0.2f, 0.7843f, 0.3f});
+		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
+		colors.setMode(ColorMapper.Mode.CIRCULAR);
 		plot.setSetting(PiePlot.COLORS, colors);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 

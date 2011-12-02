@@ -30,7 +30,7 @@ import org.junit.Test;
 public class SingleColorTest {
 
 	@Test
-	public void testCreation() {
+	public void testCreate() {
 		SingleColor c = new SingleColor(Color.WHITE);
 		assertEquals(Color.WHITE, c.getColor());
 	}
@@ -48,7 +48,7 @@ public class SingleColorTest {
 	@Test
 	public void testGet() {
 		SingleColor c = new SingleColor(Color.BLUE);
-		for (double i = 0.0; i <= 1.0; i += 0.1) {
+		for (int i = 0; i <= 10; i++) {
 			assertEquals(Color.BLUE, c.get(i));
 		}
 	}

@@ -21,12 +21,14 @@
  */
 package de.erichseifert.gral.plots.colors;
 
+
 /**
- * An abstract implementation of ColorMapper that serves as a base class for
- * mappers that allow to apply a a scaling factor to the values passed to
- * {@link ColorMapper#get(double)}.
+ * An abstract base class for implementations of {@code ContinuousColorMapper}
+ * that allow to apply a a scaling factor to the values passed to
+ * {@link #get(double)}.
  */
-public abstract class ScaledColorMapper implements ColorMapper {
+public abstract class ScaledContinuousColorMapper
+		extends ContinuousColorMapper {
 	/** Offset. **/
 	private double offset;
 	/** Scaling factor. **/
@@ -36,7 +38,7 @@ public abstract class ScaledColorMapper implements ColorMapper {
 	 * Default constructor that initializes a new instance with a default
 	 * offset of 0.0 and a scale of 1.0.
 	 */
-	public ScaledColorMapper() {
+	public ScaledContinuousColorMapper() {
 		this(0.0, 1.0);
 	}
 
@@ -46,7 +48,7 @@ public abstract class ScaledColorMapper implements ColorMapper {
 	 * @param offset Offset.
 	 * @param scale Scaling factor.
 	 */
-	public ScaledColorMapper(double offset, double scale) {
+	public ScaledContinuousColorMapper(double offset, double scale) {
 		this.offset = offset;
 		this.scale = scale;
 	}
@@ -98,7 +100,7 @@ public abstract class ScaledColorMapper implements ColorMapper {
 	 * @param value Original value.
 	 * @return Transformed value.
 	 */
-	protected double scale(double value) {
+	protected Double scale(double value) {
 		return (value - getOffset())/getScale();
 	}
 }

@@ -32,8 +32,10 @@ public class QuasiRandomColorsTest {
 	@Test
 	public void testGet() {
 		QuasiRandomColors c = new QuasiRandomColors();
+		final int STEPS = 10;
+
 		Paint prv = null;
-		for (double i = 0.0; i <= 1.0; i += 0.1) {
+		for (int i = 0; i < STEPS; i++) {
 			Paint cur = c.get(i);
 			assertNotNull(cur);
 			assertFalse(cur.equals(prv));

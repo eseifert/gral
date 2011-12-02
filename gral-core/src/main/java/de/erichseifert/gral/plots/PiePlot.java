@@ -40,6 +40,7 @@ import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -157,7 +158,7 @@ public class PiePlot extends Plot implements DataListener {
 				return;
 			}
 			graphics.translate(w/2d, h/2d);
-			ColorMapper colorList = plot.getSetting(PiePlot.COLORS);
+			ColorMapper colorMapper = plot.getSetting(PiePlot.COLORS);
 
 			double sizeRel = plot.<Number>getSetting(PiePlot.RADIUS)
 				.doubleValue();
@@ -202,21 +203,27 @@ public class PiePlot extends Plot implements DataListener {
 				}
 
 				// Paint slice
-				double coloringRel = 0.0;
-				if (slices.size() > 1) {
-					double sliceStartRel, sliceEndRel;
-					if (isClockwise) {
-						sliceStartRel = MathUtils.normalizeDegrees(-slice[0])/360.0;
-						sliceEndRel = sliceStartRel - slice[1]/360.0;
-					} else {
-						sliceStartRel = MathUtils.normalizeDegrees(slice[0])/360.0;
-						sliceEndRel = sliceStartRel + slice[1]/360.0;
+				Paint paint;
+				if (colorMapper instanceof ContinuousColorMapper) {
+					double coloringRel = 0.0;
+					if (slices.size() > 1) {
+						double sliceStartRel, sliceEndRel;
+						if (isClockwise) {
+							sliceStartRel = MathUtils.normalizeDegrees(-slice[0])/360.0;
+							sliceEndRel = sliceStartRel - slice[1]/360.0;
+						} else {
+							sliceStartRel = MathUtils.normalizeDegrees(slice[0])/360.0;
+							sliceEndRel = sliceStartRel + slice[1]/360.0;
+						}
+						double posRel = sliceIndex / ((double) slices.size() - 1);
+						coloringRel =
+							(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
 					}
-					double posRel = sliceIndex / ((double) slices.size() - 1);
-					coloringRel =
-						(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
+					paint = ((ContinuousColorMapper) colorMapper).get(coloringRel);
+				} else {
+					Integer index = Integer.valueOf(sliceIndex);
+					paint = colorMapper.get(index);
 				}
-				Paint paint = colorList.get(coloringRel);
 				GraphicsUtils.fillPaintedShape(
 					graphics, doughnutSlice, paint, null);
 

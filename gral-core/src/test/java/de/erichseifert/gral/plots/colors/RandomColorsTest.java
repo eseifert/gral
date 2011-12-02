@@ -51,8 +51,8 @@ public class RandomColorsTest {
 	public void testCreationInt() {
 		RandomColors c1 = new RandomColors(0);
 		RandomColors c2 = new RandomColors(0);
-		for (double x = 0.0; x <= 1.0; x += 0.1) {
-			assertEquals(c1.get(x), c2.get(x));
+		for (int i = 0; i <= 10; i++) {
+			assertEquals(c1.get(i), c2.get(i));
 		}
 	}
 
@@ -66,9 +66,8 @@ public class RandomColorsTest {
 		// Test two runs in order to hit cache
 		for (int run = 0; run < 2; run++) {
 			Paint prv = null;
-			double x = 0.0;
 			for (int i = 0; i < STEPS; i++) {
-				Paint cur = c.get(x);
+				Paint cur = c.get(i);
 				if (run == 0) {
 					actual[i] = cur;
 				} else {
@@ -77,7 +76,6 @@ public class RandomColorsTest {
 				assertNotNull(cur);
 				assertFalse(cur.equals(prv));
 				prv = cur;
-				x += 1.0/STEPS;
 			}
 		}
 	}
