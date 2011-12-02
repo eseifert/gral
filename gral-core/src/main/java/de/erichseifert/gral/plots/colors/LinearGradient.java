@@ -38,7 +38,7 @@ public class LinearGradient extends ScaledContinuousColorMapper {
 	private final List<Color> colors;
 
 	/**
-	 * Creates a new instance with at least two colors.
+	 * Creates a new instance with at least one color.
 	 * @param color1 First color.
 	 * @param colors Additional colors.
 	 */

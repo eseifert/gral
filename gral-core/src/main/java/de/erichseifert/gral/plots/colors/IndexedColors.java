@@ -31,14 +31,14 @@ import java.util.List;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Maps index values to a color in a specified palette.
+ * Maps index values to a specified color palette.
  */
 public class IndexedColors extends IndexedColorMapper {
-	/** Colors that will be used for blending. **/
+	/** Color palette that will be used for mapping. **/
 	private final List<Color> colors;
 
 	/**
-	 * Creates a new instance with at least two colors.
+	 * Creates a new instance with at least one color.
 	 * @param color1 First color.
 	 * @param colors Additional colors.
 	 */
