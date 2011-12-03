@@ -63,8 +63,10 @@ public class DrawablePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D graphics = (Graphics2D) g;
-		getDrawable().draw(new DrawingContext(graphics));
+		if (isVisible()) {
+			Graphics2D graphics = (Graphics2D) g;
+			getDrawable().draw(new DrawingContext(graphics));
+		}
 	}
 
 	@Override
@@ -91,5 +93,4 @@ public class DrawablePanel extends JPanel {
 	public Dimension getMinimumSize() {
 		return super.getPreferredSize();
 	}
-
 }

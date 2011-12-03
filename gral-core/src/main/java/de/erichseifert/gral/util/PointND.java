@@ -126,7 +126,13 @@ public class PointND <T extends Number> {
 			return false;
 		}
 		for (int dim = 0; dim < coordinates.length; dim++) {
-			if (!get(dim).equals(p.get(dim))) {
+			Number dimA = get(dim);
+			Number dimB = p.get(dim);
+			if (dimA != null && dimB != null) {
+				if (!dimA.equals(dimB)) {
+					return false;
+				}
+			} else if (dimA != dimB) {
 				return false;
 			}
 		}

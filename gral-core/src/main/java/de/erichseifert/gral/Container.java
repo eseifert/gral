@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.util.Insets2D;
@@ -82,6 +83,15 @@ public interface Container extends Iterable<Drawable> {
 	 * @param constraints Additional information (e.g. for layout)
 	 */
 	void add(Drawable drawable, Object constraints);
+
+	/**
+	 * Returns the component at the specified point. If no component could be
+	 * found {@code null} will be returned.
+	 * @param point Two-dimensional point.
+	 * @return Component at the specified point, or {@code null} if no
+	 *         component could be found.
+	 */
+	Drawable getDrawableAt(Point2D point);
 
 	/**
 	 * Return additional information on component

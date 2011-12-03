@@ -31,6 +31,7 @@ import org.junit.Test;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.util.PointND;
 
 public class PlotNavigatorTest {
 	private static final double DELTA = 1e-15;
@@ -62,25 +63,28 @@ public class PlotNavigatorTest {
 	public void setUp() {
 		plot = new XYPlot(series1, series2);
 		plot.setBounds(0, 0, 100, 100);
-		nav = new PlotNavigator(plot);
+		nav = new XYPlot.XYPlotNavigator((XYPlot) plot);
 	}
 
 	@Test
 	public void testCreate() {
 		// Valid initialization
-		PlotNavigator navigator1 = nav;
-		assertEquals(plot, navigator1.getPlot());
-		assertEquals(1e-2, nav.getZoomMin(), DELTA);
-		assertEquals(1e+2, nav.getZoomMax(), DELTA);
+		assertEquals(plot, nav.getPlot());
 		assertEquals(1.0, nav.getZoom(), DELTA);
+		assertEquals(PlotNavigator.DEFAULT_ZOOM_FACTOR, nav.getZoomFactor(), DELTA);
+		assertEquals(PlotNavigator.DEFAULT_ZOOM_MIN, nav.getZoomMin(), DELTA);
+		assertEquals(PlotNavigator.DEFAULT_ZOOM_MAX, nav.getZoomMax(), DELTA);
 		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
-		assertEquals(axisX.getMin().doubleValue() + 0.5*axisX.getRange(), nav.getCenter(XYPlot.AXIS_X).doubleValue(), DELTA);
-		assertEquals(axisY.getMin().doubleValue() + 0.5*axisY.getRange(), nav.getCenter(XYPlot.AXIS_Y).doubleValue(), DELTA);
+		PointND<? extends Number> center = nav.getCenter();
+		assertEquals(axisX.getMin().doubleValue() + 0.5*axisX.getRange(),
+			center.get(0).doubleValue(), DELTA);
+		assertEquals(axisY.getMin().doubleValue() + 0.5*axisY.getRange(),
+			center.get(1).doubleValue(), DELTA);
 
 		// Invalid initialization
 		try {
-			new PlotNavigator(null);
+			new XYPlot.XYPlotNavigator(null);
 			fail("Expected NullPointerException.");
 		} catch (NullPointerException e) {
 		}
@@ -117,7 +121,7 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testCenter() {
-		nav.setCenter(XYPlot.AXIS_X, 0.0);
+		nav.setCenter(new PointND<Double>(0.0, 0.0));
 		assertEquals(-4.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(4.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
 	}
@@ -125,7 +129,7 @@ public class PlotNavigatorTest {
 	@Test
 	public void testReset() {
 		nav.setZoom(2.0);
-		nav.setCenter(XYPlot.AXIS_X, 6.0);
+		nav.setCenter(new PointND<Double>(6.0, 0.0));
 		nav.reset();
 		assertEquals(1.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(9.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);

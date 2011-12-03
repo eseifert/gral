@@ -94,10 +94,6 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		return "Pie with a changeable number of random data values";
 	}
 
-	public static void main(String[] args) {
-		new DynamicPiePlot().showInFrame();
-	}
-
 	private void setValueCount(int count) {
 		if (count == data.getRowCount()) {
 			return;
@@ -124,5 +120,9 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 			setValueCount(countNew);
 			repaint();
 		}
+	}
+
+	public static void main(String[] args) {
+		new DynamicPiePlot().showInFrame();
 	}
 }

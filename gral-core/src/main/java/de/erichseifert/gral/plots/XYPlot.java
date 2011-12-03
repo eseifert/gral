@@ -40,6 +40,8 @@ import java.util.Map;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.Legend;
+import de.erichseifert.gral.Navigable;
+import de.erichseifert.gral.Navigator;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
@@ -72,7 +74,7 @@ import de.erichseifert.gral.util.PointND;
  * XYPlot plot = new XYPlot(data);
  * </pre>
  */
-public class XYPlot extends Plot  {
+public class XYPlot extends Plot implements Navigable {
 	/** Key for specifying the x-axis of an xy-plot. */
 	public static String AXIS_X = "x"; //$NON-NLS-1$
 	/** Key for specifying the secondary x-axis of an xy-plot. */
@@ -88,6 +90,85 @@ public class XYPlot extends Plot  {
 	private final Map<DataSource, LineRenderer> lineRenderers;
 	/** Mapping from data source to area renderer. */
 	private final Map<DataSource, AreaRenderer> areaRenderers;
+
+	/** Cache for the {@code Navigator} implementation. */
+	private XYPlotNavigator navigator;
+	/** A flag that shows whether the navigator has been properly
+	initialized. */
+	private boolean navigatorInitialized;
+
+	/**
+	 * Constants which determine the direction of zoom and pan actions.
+	 */
+	public static enum NavigationDirection implements Navigator.NavigationDirection {
+		/** Value for zooming and panning horizontally. */
+		HORIZONTAL(XYPlot.AXIS_X, XYPlot.AXIS_X2),
+		/** Value for zooming and panning vertically. */
+		VERTICAL(XYPlot.AXIS_Y, XYPlot.AXIS_Y2),
+		/** Value for zooming and panning in all direction. */
+		ARBITRARY(XYPlot.AXIS_X, XYPlot.AXIS_Y, XYPlot.AXIS_X2, XYPlot.AXIS_Y2);
+
+		/** Names of the axes that have the same direction. */
+		private final String[] axesNames;
+
+		/**
+		 * Initializes a new instance with the names of the axes that have the
+		 * same direction.
+		 * @param axesNames Names of the axes that have the same direction.
+		 */
+		private NavigationDirection(String... axesNames) {
+			this.axesNames = axesNames;
+		}
+
+		/**
+		 * Returns the names of the axes that have the direction described by
+		 * this object.
+		 * @return Names of the axes that have the same direction.
+		 */
+		public String[] getAxesNames() {
+			return axesNames;
+		}
+	}
+
+	/**
+	 * Navigator implementation for two-dimensional plots.
+	 */
+	public static class XYPlotNavigator extends PlotNavigator {
+		/**
+		 * Initializes a new Navigator for two-dimensional plots with the
+		 * default axes.
+		 * @param plot Two-dimensional plot that should be controlled.
+		 */
+		public XYPlotNavigator(XYPlot plot) {
+			super(plot, XYPlot.NavigationDirection.ARBITRARY.getAxesNames());
+		}
+
+		@Override
+		public void setDirection(NavigationDirection direction) {
+			if (direction == getDirection()) {
+				return;
+			}
+			if (!(direction instanceof XYPlot.NavigationDirection)) {
+				throw new IllegalArgumentException("Unknown direction.");
+			}
+			String[] axesNames = ((XYPlot.NavigationDirection)direction).getAxesNames();
+			setAxes(axesNames);
+			super.setDirection(direction);
+		}
+
+		@Override
+		protected int getDimension(String axisName) {
+			if (XYPlot.AXIS_Y.equals(axisName) || XYPlot.AXIS_Y2.equals(axisName)) {
+				return 1;
+			}
+			return 0;
+		}
+
+		@Override
+		protected int getDimensions() {
+			return 2;
+		}
+	}
 
 	/**
 	 * Class that represents the drawing area of an {@code XYPlot}.
@@ -724,4 +805,23 @@ public class XYPlot extends Plot  {
 		setMapping(source, AXIS_X, AXIS_Y);
 	}
 
+	/**
+	 * Returns a navigator instance that can control the current object.
+	 * @return A navigator instance.
+	 */
+	public Navigator getNavigator() {
+		if (navigator == null) {
+			navigator = new XYPlotNavigator(this);
+		}
+		return navigator;
+	}
+
+	@Override
+	public void draw(DrawingContext context) {
+		super.draw(context);
+		if (!navigatorInitialized && navigator != null) {
+			navigator.setDefaultState();
+			navigatorInitialized = true;
+		}
+	}
 }

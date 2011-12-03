@@ -45,12 +45,13 @@ import de.erichseifert.gral.examples.xyplot.SpiralPlot;
 import de.erichseifert.gral.examples.xyplot.StackedPlots;
 
 public class Browser extends JFrame implements ListSelectionListener {
+	private static final long serialVersionUID = 1L;
+
 	private static class ExamplesList extends JList {
-		private final ExamplePanel[] examples;
+		private static final long serialVersionUID = 1L;
 
 		public ExamplesList(ExamplePanel[] examples) {
 			super(examples);
-			this.examples = examples;
 		}
 
 		@Override
@@ -60,8 +61,6 @@ public class Browser extends JFrame implements ListSelectionListener {
 			return item.getDescription();
 		}
 	}
-
-	private static final long serialVersionUID = 1L;
 
 	private static final ExamplePanel[] examples = {
 		new HistogramPlot(),
@@ -83,10 +82,8 @@ public class Browser extends JFrame implements ListSelectionListener {
 	private final JScrollPane exampleScrollPane;
 
 	public Browser() {
-		super("GRAL Examples");
+		super("GRAL examples");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1000, 800);
-		setLocationRelativeTo(null);
 
 		examplesList = new ExamplesList(examples);
 		examplesList.addListSelectionListener(this);
@@ -99,27 +96,28 @@ public class Browser extends JFrame implements ListSelectionListener {
 		listExamplesSplitter.setOneTouchExpandable(true);
 		listExamplesSplitter.setContinuousLayout(true);
 		getContentPane().add(listExamplesSplitter);
+
+		pack();
+		setLocationRelativeTo(null);
 	}
 
 	private void setExample(ExamplePanel example) {
+		if (example == exampleScrollPane.getViewport().getView()) {
+			return;
+		}
 		exampleScrollPane.getViewport().setView(example);
-		if (example != examplesList.getSelectedValue()) {
-			examplesList.setSelectedValue(example, true);
+		examplesList.setSelectedValue(example, true);
+	}
+
+	public void valueChanged(ListSelectionEvent e) {
+		Object source = e.getSource();
+		if (source == examplesList) {
+			setExample((ExamplePanel) examplesList.getSelectedValue());
 		}
 	}
 
 	public static void main(String[] args) {
 		JFrame frame = new Browser();
 		frame.setVisible(true);
-	}
-
-	public void valueChanged(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting()) {
-			return;
-		}
-		Object source = e.getSource();
-		if (source == examplesList) {
-			setExample((ExamplePanel) examplesList.getSelectedValue());
-		}
 	}
 }

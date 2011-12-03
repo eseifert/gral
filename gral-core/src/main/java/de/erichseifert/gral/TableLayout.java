@@ -40,7 +40,7 @@ public class TableLayout implements Layout {
 	private final double hgap;
 	/** Vertical spacing. */
 	private final double vgap;
-	
+
 	private double[] colWidths;
 	private double[] rowHeights;
 	private double colWidthsSum;
@@ -78,41 +78,47 @@ public class TableLayout implements Layout {
 		if (insets == null) {
 			insets = new Insets2D.Double();
 		}
-
 		Rectangle2D bounds = container.getBounds();
+		double containerWidth =
+			bounds.getWidth() - insets.getLeft() - insets.getRight();
+		double containerHeight =
+			bounds.getHeight() - insets.getTop() - insets.getBottom();
 
 		updateDimensions(container);
 		double remainderH =
-			Math.max(bounds.getWidth() - colWidthsSum, 0.0)/colWidths.length;
+			Math.max(containerWidth - colWidthsSum, 0.0)/colWidths.length;
 		double remainderV =
-			Math.max(bounds.getHeight() - rowHeightsSum, 0.0)/rowHeights.length;
+			Math.max(containerHeight - rowHeightsSum, 0.0)/rowHeights.length;
 
-		int i = 0;
-		double x = 0.0, y = 0.0;
+		int compIndex = 0;
+		double x = insets.getLeft(), y = insets.getTop();
 		for (Drawable component : container) {
-			int col = i%cols;
-			int row = i/cols;
+			int col = compIndex%cols;
+			int row = compIndex/cols;
 
 			Dimension2D size = component.getPreferredSize();
+
 			layoutComponent(component,
 				x, y,
 				Math.max(size.getWidth(), colWidths[col] + remainderH),
 				Math.max(size.getHeight(), rowHeights[row] + remainderV)
 			);
+
 			if (col < cols - 1) {
 				x += colWidths[col] + remainderH + hgap;
 			} else {
-				x = 0.0;
-				y += rowHeights[row] + + remainderV + vgap;
+				x = insets.getLeft();
+				y += rowHeights[row] + remainderV + vgap;
 			}
 
-			i++;
+			compIndex++;
 		}
 	}
 
 	/**
-	 * 
-	 * @param container
+	 * Calculates the preferred dimensions for all columns and rows.
+	 * @param container The container for which the dimension should be
+	 *        calculated.
 	 */
 	private void updateDimensions(Container container) {
 		int rows = (int) Math.ceil(container.size() / (double) cols);
@@ -120,7 +126,7 @@ public class TableLayout implements Layout {
 		colWidths = new double[cols];
 		rowHeights = new double[rows];
 
-		// First pass: find out the preferred dimensions for each columns and row
+		// Find out the preferred dimensions for each columns and row
 		int i = 0;
 		for (Drawable component : container) {
 			int col = i%cols;
@@ -152,11 +158,11 @@ public class TableLayout implements Layout {
 	}
 
 	/**
-	 * Returns the sum of all specified values.
+	 * Returns the sum of all values in the specified array.
 	 * @param values Values to sum.
-	 * @return sum of all values.
+	 * @return Sum of all values.
 	 */
-	private static final double sum(double... values) {
+	private static final double sum(double[] values) {
 		double sum = 0.0;
 		for (double v : values) {
 			sum += v;
@@ -165,18 +171,19 @@ public class TableLayout implements Layout {
 	}
 
 	/**
-	 * Sets the bounds of the specified Drawable to the specified values.
-	 * @param d Drawable to be aligned.
-	 * @param x X-coordinate.
-	 * @param y Y-coordinate.
+	 * Sets the bounds of the specified {@code Drawable} to the specified
+	 * values.
+	 * @param component {@code Drawable} that should be resized.
+	 * @param x X coordinate.
+	 * @param y Y coordinate.
 	 * @param w Width.
 	 * @param h Height.
 	 */
-	private static void layoutComponent(Drawable d,
+	private static void layoutComponent(Drawable component,
 			double x, double y, double w, double h) {
-		if (d == null) {
+		if (component == null) {
 			return;
 		}
-		d.setBounds(x, y, w, h);
+		component.setBounds(x, y, w, h);
 	}
 }

@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.ui;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -31,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -41,7 +41,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -51,40 +50,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import de.erichseifert.gral.Container;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Navigable;
+import de.erichseifert.gral.Navigator;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
-import de.erichseifert.gral.plots.NavigationListener;
-import de.erichseifert.gral.plots.Plot;
-import de.erichseifert.gral.plots.PlotNavigator;
-import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.Messages;
+import de.erichseifert.gral.util.PointND;
 
 
 /**
  * A panel implementation that displays a {@code Drawable} instance as a
- * rich Swing component. Special handling is applied to {@code XYPlot}
- * instances.
- * @see de.erichseifert.gral.plots.XYPlot
+ * rich Swing component.
  */
-public class InteractivePanel extends DrawablePanel
-		implements Printable, NavigationListener {
+public class InteractivePanel extends DrawablePanel implements Printable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1L;
-
-	/** Constants which determine the direction of zoom and pan actions. */
-	public static enum NavigationDirection {
-		/** Value for zooming and panning horizontally. */
-		HORIZONTAL,
-		/** Value for zooming and panning vertically. */
-		VERTICAL,
-		/** Value for zooming and panning in all direction. */
-		ARBITRARY
-	}
 
 	// FIXME Find better method to adjust resolution
 	/** Constant that can be used to convert from millimeters to points
@@ -97,8 +81,6 @@ public class InteractivePanel extends DrawablePanel
 
 	/** Value that is necessary before panning is triggered. */
 	private static final int MIN_DRAG = 0;
-	/** Factor that is used for zoom in and zoom out actions. */
-	private static final double ZOOM_FACTOR = 0.8;
 
 	/** Defines whether the panel can be zoomed. */
 	private boolean zoomable;
@@ -112,36 +94,40 @@ public class InteractivePanel extends DrawablePanel
 	/** Cache for the popup menu. */
 	private JPopupMenu popupMenu;
 	private boolean popupMenuEnabled;
+	private Point2D popupMenuPos;
 
 	/** Chooser for image export. */
 	private final JFileChooser exportImageChooser;
 
-	/** Navigator that controls the plot when zooming or panning. */
-	private PlotNavigator navigator;
 	/** Object to be used as listener for zooming actions. */
 	private MouseZoomListener zoomListener;
 	/** Object to be used as listener for panning actions. */
 	private NavigationMoveListener panListener;
 
-	/** Workaround to find out when the panel has been drawn the first time. */
-	private boolean stateInitialized;
-
 	/**
 	 * Listener class for zooming actions.
 	 */
-	private final class MouseZoomListener extends MouseAdapter
+	private final static class MouseZoomListener extends MouseAdapter
 			implements MouseWheelListener, Serializable {
+		private final InteractivePanel panel;
+
+		public MouseZoomListener(InteractivePanel panel) {
+			this.panel = panel;
+		}
+
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1L;
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			zoom(-e.getWheelRotation());
+			Point2D point = e.getPoint();
+			panel.zoom(point, -e.getWheelRotation());
 		}
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (SwingUtilities.isLeftMouseButton(e) &&
 					(e.getClickCount() == 2))  {
-				zoom(1);
+				Point2D point = e.getPoint();
+				panel.zoom(point, 1);
 			}
 		}
 	}
@@ -168,22 +154,19 @@ public class InteractivePanel extends DrawablePanel
 		actions.put("zoomIn", new AbstractAction(Messages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
-				zoom(1);
+				zoom(popupMenuPos, 1);
 			}
 		});
 		actions.put("zoomOut", new AbstractAction(Messages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
-				zoom(-1);
+				zoom(popupMenuPos, -1);
 			}
 		});
 		actions.put("resetView", new AbstractAction(Messages.getString( //$NON-NLS-1$
 				"InteractivePanel.resetView")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
-				if (navigator != null) {
-					navigator.reset();
-					repaint();
-				}
+				resetZoom(popupMenuPos);
 			}
 		});
 		actions.put("exportImage", new AbstractAction(Messages.getString( //$NON-NLS-1$
@@ -249,16 +232,8 @@ public class InteractivePanel extends DrawablePanel
 		popupMenuEnabled = true;
 		addMouseListener(new PopupListener());
 
-		if (getDrawable() instanceof Plot) {
-			Plot plot = (Plot) getDrawable();
-			navigator = new PlotNavigator(plot);
-			// Register a new handler to zoom the map with the mouse wheel
-			setZoomable(true);
-
-			if (getDrawable() instanceof XYPlot) {
-				setPannable(true);
-			}
-		}
+		setZoomable(true);
+		setPannable(true);
 	}
 
 	/**
@@ -306,41 +281,73 @@ public class InteractivePanel extends DrawablePanel
 	}
 
 	/**
-	 * Zooms the plot in (positive values) or out (negative values).
-	 * @param times Number of times the plot plot will be zoomed.
+	 * Zooms a navigable object in (positive values) or out (negative values).
+	 * @param point The location where the zoom was triggered.
+	 * @param times Number of times the navigable object will be zoomed.
 	 *        Positive values zoom in, negative values zoom out.
 	 */
-	private void zoom(double times) {
+	private void zoom(Point2D point, int times) {
 		if (!isZoomable()) {
 			return;
 		}
-		double zoomNew = navigator.getZoom()*Math.pow(ZOOM_FACTOR, times);
-		navigator.setZoom(zoomNew);
+
+		Navigable navigable = InteractivePanel.getNavigableAt(getDrawable(), point);
+		if (navigable == null) {
+			return;
+		}
+
+		Navigator navigator = navigable.getNavigator();
+		if (times >= 0) {
+			for (int i = 0; i < times; i++) {
+				navigator.zoomOut();
+			}
+		} else {
+			for (int i = 0; i < -times; i++) {
+				navigator.zoomIn();
+			}
+		}
+
+		repaint();
+	}
+
+	private void resetZoom(Point2D point) {
+		if (!isZoomable()) {
+			return;
+		}
+
+		Navigable navigable = InteractivePanel.getNavigableAt(getDrawable(), point);
+		if (navigable == null) {
+			return;
+		}
+
+		Navigator navigator = navigable.getNavigator();
+		navigator.reset();
+
 		repaint();
 	}
 
 	/**
 	 * Method that exports the current view to a file using a specified file type.
-	 * @param d Drawable that will be exported.
+	 * @param component Drawable that will be exported.
 	 * @param mimeType File format as MIME type string.
-	 * @param f File to export to.
+	 * @param file File to export to.
 	 * @param documentBounds Document boundary rectangle
 	 */
-	private void export(Drawable d, String mimeType, File f,
+	private void export(Drawable component, String mimeType, File file,
 			Rectangle2D documentBounds) {
 		FileOutputStream destination;
 		try {
-			destination = new FileOutputStream(f);
+			destination = new FileOutputStream(file);
 		} catch (FileNotFoundException ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
 			return;
 		}
-		DrawableWriter w = DrawableWriterFactory.getInstance().get(mimeType);
+		DrawableWriter writer = DrawableWriterFactory.getInstance().get(mimeType);
 		try {
-			w.write(d, destination,
-					documentBounds.getX(), documentBounds.getY(),
-					documentBounds.getWidth(), documentBounds.getHeight());
+			writer.write(component, destination,
+				documentBounds.getX(), documentBounds.getY(),
+				documentBounds.getWidth(), documentBounds.getHeight());
 		} catch (IOException ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
@@ -376,6 +383,7 @@ public class InteractivePanel extends DrawablePanel
         	if (menu == null) {
         		return;
         	}
+        	popupMenuPos = e.getPoint();
     		menu.show(e.getComponent(), e.getX(), e.getY());
 	    }
 	}
@@ -384,115 +392,47 @@ public class InteractivePanel extends DrawablePanel
 	 * Class that handles mouse moves for navigation.
 	 */
 	private static class NavigationMoveListener extends MouseAdapter {
-		/** Navigator that will be changed by this class. */
-		private final PlotNavigator navigator;
+		/** A reference to the panel for refreshing. */
+		private final InteractivePanel panel;
 		/** Plot that will be changed by this class. */
-		private final Plot plot;
-		/** Previously clicked point (or {@code null}). */
+		private Navigable navigable;
+		/** Previously clicked point or {@code null}. */
 		private Point posPrev;
 
 		/**
-		 * Creates a new listener and initializes it with a plot.
-		 * @param navigator PlotNavigator that should be adjusted.
+		 * Creates a new listener and initializes it with a panel.
+		 * @param panel InteractivePanel that should be refreshed.
 		 */
-		public NavigationMoveListener(PlotNavigator navigator) {
-			this.navigator = navigator;
-			this.plot = navigator.getPlot();
+		public NavigationMoveListener(InteractivePanel panel) {
+			this.panel = panel;
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			posPrev = e.getPoint();
+			Point point = e.getPoint();
+			navigable = InteractivePanel.getNavigableAt(panel.getDrawable(), point);
+			posPrev = point;
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
+			if (navigable == null) {
+				return;
+			}
+
 			// Calculate distance that the current view was dragged
 			// (screen units)
 			Point pos = e.getPoint();
+			Navigator navigator = navigable.getNavigator();
+
 			int dx = -pos.x + posPrev.x;
 			int dy =  pos.y - posPrev.y;
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				AxisRenderer axisXRenderer =
-					plot.getAxisRenderer(XYPlot.AXIS_X);
-				if (axisXRenderer != null) {
-					boolean swapped = axisXRenderer.<Boolean>getSetting(
-							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
-					if (swapped) {
-						dx = -dx;
-					}
-					Axis axisX = plot.getAxis(XYPlot.AXIS_X);
-					// Fetch current center on screen
-					double centerX = axisXRenderer.worldToView(
-							axisX, navigator.getCenter(XYPlot.AXIS_X), true);
-					// Move center and convert it to axis coordinates
-					Number centerXNew = axisXRenderer.viewToWorld(
-							axisX, centerX + dx, true);
-					// Change axis (world units)
-					navigator.setCenter(XYPlot.AXIS_X, centerXNew);
-				}
-				AxisRenderer axisX2Renderer =
-					plot.getAxisRenderer(XYPlot.AXIS_X2);
-				if (axisX2Renderer != null) {
-					boolean swapped = axisX2Renderer.<Boolean>getSetting(
-							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
-					if (swapped) {
-						dx = -dx;
-					}
-					Axis axisX2 = plot.getAxis(XYPlot.AXIS_X2);
-					// Fetch current center on screen
-					double centerX2 = axisX2Renderer.worldToView(
-							axisX2, navigator.getCenter(XYPlot.AXIS_X2), true);
-					// Move center and convert it to axis coordinates
-					Number centerX2New = axisX2Renderer.viewToWorld(
-							axisX2, centerX2 + dx, true);
-					// Change axis (world units)
-					navigator.setCenter(XYPlot.AXIS_X2, centerX2New);
-				}
-
-				AxisRenderer axisYRenderer =
-					plot.getAxisRenderer(XYPlot.AXIS_Y);
-				if (axisYRenderer != null) {
-					boolean swapped = axisYRenderer.<Boolean>getSetting(
-							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
-					if (swapped) {
-						dy = -dy;
-					}
-					Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
-					// Fetch current center on screen
-					double centerY = axisYRenderer.worldToView(
-						axisY, navigator.getCenter(XYPlot.AXIS_Y), true);
-					// Move center and convert it to axis coordinates
-					Number centerYNew = axisYRenderer.viewToWorld(
-						axisY, centerY + dy, true);
-					// Change axis (world units)
-					navigator.setCenter(XYPlot.AXIS_Y, centerYNew);
-				}
-				AxisRenderer axisY2Renderer =
-					plot.getAxisRenderer(XYPlot.AXIS_Y2);
-				if (axisY2Renderer != null) {
-					boolean swapped = axisY2Renderer.<Boolean>getSetting(
-							AxisRenderer.SHAPE_DIRECTION_SWAPPED);
-					if (swapped) {
-						dy = -dy;
-					}
-					Axis axisY2 = plot.getAxis(XYPlot.AXIS_Y2);
-					// Fetch current center on screen
-					double centerY2 = axisY2Renderer.worldToView(
-						axisY2, navigator.getCenter(XYPlot.AXIS_Y2), true);
-					// Move center and convert it to axis coordinates
-					Number centerY2New = axisY2Renderer.viewToWorld(
-						axisY2, centerY2 + dy, true);
-					// Change axis (world units)
-					navigator.setCenter(XYPlot.AXIS_Y2, centerY2New);
-				}
-
-				// Refresh display
-				if (e.getSource() instanceof Component) {
-					((Component) e.getSource()).repaint();
-				}
+				PointND<Integer> deltas = new PointND<Integer>(dx, dy);
+				navigator.pan(deltas);
+				panel.repaint();
 			}
 		}
 	}
@@ -541,59 +481,6 @@ public class InteractivePanel extends DrawablePanel
 	}
 
 	/**
-	 * Couples the actions of the current and the specified panel. All actions
-	 * applied to this panel will be also applied to the specified panel and
-	 * vice versa.
-	 * @param panel Panel to be bound to this instance.
-	 */
-	public void connect(final InteractivePanel panel) {
-		if (panel != null && panel != this) {
-			this.navigator.addNavigationListener(panel);
-			panel.navigator.addNavigationListener(this);
-		}
-	}
-
-	/**
-	 * Decouples the actions of the current and the specified panel. All actions
-	 * will be applied separately to each panel then.
-	 * @param panel Panel to be bound to this instance.
-	 */
-	public void disconnect(InteractivePanel panel) {
-		if (panel != null && panel != this) {
-			this.navigator.removeNavigationListener(panel);
-			panel.navigator.removeNavigationListener(this);
-		}
-	}
-
-	/**
-	 * A method that gets called when the center of an axis in the
-	 * {@code PlotNavigator} has changed.
-	 * @param source Object that has caused the change
-	 * @param axisName Name of the axis that has changed
-	 * @param centerOld Previous value of axis center
-	 * @param centerNew New value of axis center
-	 */
-	public void centerChanged(PlotNavigator source, String axisName,
-			Number centerOld, Number centerNew) {
-		navigator.setCenter(axisName, centerNew);
-		repaint();
-	}
-
-	/**
-	 * A method that gets called when the zoom level of an axis in the
-	 * {@code PlotNavigator} has changed.
-	 * @param source Object that has caused the change
-	 * @param axisName Name of the axis that has changed
-	 * @param zoomOld Previous zoom level of the axis
-	 * @param zoomNew New zoom level of the axis
-	 */
-	public void zoomChanged(PlotNavigator source, String axisName,
-			double zoomOld, double zoomNew) {
-		navigator.setZoom(zoomNew);
-		repaint();
-	}
-
-	/**
 	 * Returns whether the plot area in the panel can be zoomed.
 	 * @return {@code true} if the plot can be zoomed,
 	 *         {@code false} otherwise.
@@ -608,7 +495,7 @@ public class InteractivePanel extends DrawablePanel
 	 *                 {@code false} otherwise.
 	 */
 	public void setZoomable(boolean zoomable) {
-		if (!(getDrawable() instanceof Plot) || (this.zoomable == zoomable)) {
+		if (this.zoomable == zoomable) {
 			return;
 		}
 
@@ -621,7 +508,7 @@ public class InteractivePanel extends DrawablePanel
 		}
 
 		if (zoomable) {
-			zoomListener = new MouseZoomListener();
+			zoomListener = new MouseZoomListener(this);
 			addMouseListener(zoomListener);
 			addMouseWheelListener(zoomListener);
 		}
@@ -646,7 +533,7 @@ public class InteractivePanel extends DrawablePanel
 	 *                 {@code false} otherwise.
 	 */
 	public void setPannable(boolean pannable) {
-		if (!(getDrawable() instanceof XYPlot) || (this.pannable == pannable)) {
+		if (this.pannable == pannable) {
 			return;
 		}
 
@@ -660,7 +547,7 @@ public class InteractivePanel extends DrawablePanel
 		if (pannable) {
 			// Register a new handler to move the map by dragging
 			// This requires that an x- and a y-axis do exist in the plot
-			panListener = new NavigationMoveListener(navigator);
+			panListener = new NavigationMoveListener(this);
 			addMouseListener(panListener);
 			addMouseMotionListener(panListener);
 		}
@@ -669,58 +556,19 @@ public class InteractivePanel extends DrawablePanel
 	}
 
 	/**
-	 * Returns the direction in which can be navigated. {@code null} will
-	 * be returned if the displayed plot does not support navigation.
-	 * @return the direction in which can be navigated, or {@code null} if
-	 *         the displayed plot does not support navigation.
+	 * Recursively looks for a plot at the specified point and returns it, or
+	 * {@code null} if no plot could be found at the position.
+	 * @param point
+	 * @return
 	 */
-	public NavigationDirection getNavigateDirection() {
-		if (panListener != null) {
-			boolean isHorizontal = navigator.getAxes().contains(XYPlot.AXIS_X);
-			boolean isVertical = navigator.getAxes().contains(XYPlot.AXIS_Y);
-			if (isHorizontal && isVertical) {
-				return NavigationDirection.ARBITRARY;
-			} else if (isHorizontal) {
-				return NavigationDirection.HORIZONTAL;
-			} else {
-				return NavigationDirection.VERTICAL;
-			}
+	private static Navigable getNavigableAt(Drawable drawable, Point2D point) {
+		if ((drawable instanceof Navigable) && drawable.getBounds().contains(point)) {
+			return (Navigable) drawable;
+		}
+		if (drawable instanceof Container) {
+			Drawable component = ((Container) drawable).getDrawableAt(point);
+			return getNavigableAt(component, point);
 		}
 		return null;
-	}
-
-	/**
-	 * Sets the direction in which can be navigated.
-	 * @param direction The direction in which can be navigated.
-	 */
-	public void setNavigateDirection(NavigationDirection direction) {
-		if (panListener != null) {
-			if (NavigationDirection.HORIZONTAL.equals(direction)) {
-				navigator.setAxes(XYPlot.AXIS_X);
-			} else if (NavigationDirection.VERTICAL.equals(direction)) {
-				navigator.setAxes(XYPlot.AXIS_Y);
-			} else {
-				Collection<String> allAxes = navigator.getPlot().getAxesNames();
-				navigator.setAxes(allAxes);
-			}
-		}
-	}
-
-	/**
-	 * Sets the current position and zoom level as default values.
-	 */
-	public void setDefaultState() {
-		if (navigator != null) {
-			navigator.setDefaultState();
-		}
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		if (!stateInitialized) {
-			setDefaultState();
-			stateInitialized = true;
-		}
-		super.paintComponent(g);
 	}
 }

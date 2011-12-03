@@ -19,34 +19,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.plots;
+package de.erichseifert.gral;
+
+import de.erichseifert.gral.util.PointND;
+
 
 /**
  * An interface for classes that want to be notified on navigation changes like
  * panning or zooming.
  *
- * @see PlotNavigator
+ * @see Navigator
  */
 public interface NavigationListener {
 	/**
-	 * A method that gets called when the center of an axis in the
+	 * A method that gets called after the center of an object in the
 	 * {@code PlotNavigator} has changed.
-	 * @param source Object that has caused the change
-	 * @param axisName Name of the axis that has changed
-	 * @param centerOld Previous value of axis center
-	 * @param centerNew New value of axis center
+	 * @param event An object describing the change event.
 	 */
-	void centerChanged(PlotNavigator source, String axisName,
-			Number centerOld, Number centerNew);
+	void centerChanged(NavigationEvent<PointND<? extends Number>> event);
 
 	/**
-	 * A method that gets called when the zoom level of an axis in the
+	 * A method that gets called after the zoom level of an object in the
 	 * {@code PlotNavigator} has changed.
-	 * @param source Object that has caused the change
-	 * @param axisName Name of the axis that has changed
-	 * @param zoomOld Previous zoom level of the axis
-	 * @param zoomNew New zoom level of the axis
+	 * @param event An object describing the change event.
 	 */
-	void zoomChanged(PlotNavigator source, String axisName,
-			double zoomOld, double zoomNew);
+	void zoomChanged(NavigationEvent<Double> event);
 }

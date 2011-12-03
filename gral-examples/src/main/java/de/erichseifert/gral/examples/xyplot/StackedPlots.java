@@ -22,14 +22,13 @@
 package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Graphics;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
-import javax.swing.JFrame;
-
+import de.erichseifert.gral.DrawableContainer;
+import de.erichseifert.gral.TableLayout;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
@@ -50,8 +49,6 @@ public class StackedPlots extends ExamplePanel {
 
 	@SuppressWarnings("unchecked")
 	public StackedPlots() {
-		setLayout(new GridLayout(2, 1));
-
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class);
 		double x=0.0, y=0.0;
@@ -71,8 +68,6 @@ public class StackedPlots extends ExamplePanel {
 		areaUpper.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(colorUpper, 64));
 		plotUpper.setAreaRenderer(data, areaUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
-		InteractivePanel panelUpper = new InteractivePanel(plotUpper);
-		add(panelUpper);
 
 		// Create and format lower plot
 		XYPlot plotLower = new XYPlot(data);
@@ -86,11 +81,22 @@ public class StackedPlots extends ExamplePanel {
 		lineLower.setSetting(LineRenderer.COLOR, colorLower);
 		plotLower.setLineRenderer(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
-		InteractivePanel panelLower = new InteractivePanel(plotLower);
-		add(panelLower);
 
-		// Connect the two panels, i.e. user (mouse) actions affect both plots
-		panelUpper.connect(panelLower);
+		DrawableContainer plots = new DrawableContainer(new TableLayout(1));
+		plots.add(plotUpper);
+		plots.add(plotLower);
+
+		// Connect the two plots, i.e. user (mouse) actions affect both plots
+		plotUpper.getNavigator().connect(plotLower.getNavigator());
+
+		InteractivePanel panel = new InteractivePanel(plots) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+			}
+		};
+		add(panel);
+
 	}
 
 	@Override
@@ -104,11 +110,6 @@ public class StackedPlots extends ExamplePanel {
 	}
 
 	public static void main(String[] args) {
-		StackedPlots example = new StackedPlots();
-		JFrame frame = new JFrame("GRALTest");
-		frame.getContentPane().add(example, BorderLayout.CENTER);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		new StackedPlots().showInFrame();
 	}
 }

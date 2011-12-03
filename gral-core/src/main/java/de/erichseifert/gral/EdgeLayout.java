@@ -257,18 +257,19 @@ public class EdgeLayout implements Layout {
 	}
 
 	/**
-	 * Sets the bounds of the specified Drawable to the specified values.
-	 * @param d Drawable to be aligned.
-	 * @param x X-coordinate.
-	 * @param y Y-coordinate.
+	 * Sets the bounds of the specified {@code Drawable} to the specified
+	 * values.
+	 * @param component {@code Drawable} that should be resized.
+	 * @param x X coordinate.
+	 * @param y Y coordinate.
 	 * @param w Width.
 	 * @param h Height.
 	 */
-	private static void layoutComponent(Drawable d,
+	private static void layoutComponent(Drawable component,
 			double x, double y, double w, double h) {
-		if (d == null) {
+		if (component == null) {
 			return;
 		}
-		d.setBounds(x, y, w, h);
+		component.setBounds(x, y, w, h);
 	}
 }
