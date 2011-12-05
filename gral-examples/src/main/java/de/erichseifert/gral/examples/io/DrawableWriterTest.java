@@ -79,7 +79,6 @@ public class DrawableWriterTest {
 				DrawableWriter writer = DrawableWriterFactory.getInstance().get("application/postscript");
 				writer.write(plot, new FileOutputStream(file), 800, 600);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -40,6 +40,7 @@ import de.erichseifert.gral.util.UtilTests;
 	UITests.class,
 	EdgeLayoutTest.class,
 	StackedLayoutTest.class,
+	TableLayoutTest.class,
 	IoTests.class
 })
 public class AllTests {

@@ -22,6 +22,7 @@
 package de.erichseifert.gral;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
@@ -29,10 +30,8 @@ import java.awt.geom.Rectangle2D;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.util.Orientation;
 
-
-public class StackedLayoutTest {
+public class TableLayoutTest {
 	private static final double DELTA = 1e-15;
 	private static final Dimension2D GAP = new de.erichseifert.gral.util.Dimension2D.Double(5.0, 10.0);
 	private static final double COMP_WIDTH = 10.0;
@@ -67,22 +66,35 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testCreate() {
-		StackedLayout noGap = new StackedLayout(Orientation.VERTICAL);
-		assertEquals(Orientation.VERTICAL, noGap.getOrientation());
+		TableLayout noGap = new TableLayout(1);
 		Dimension2D gap1 = noGap.getGap();
 		assertEquals(0.0, gap1.getWidth(), DELTA);
 		assertEquals(0.0, gap1.getHeight(), DELTA);
 
-		StackedLayout gapped = new StackedLayout(Orientation.HORIZONTAL, GAP);
-		assertEquals(Orientation.HORIZONTAL, gapped.getOrientation());
+		TableLayout gapped = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
 		Dimension2D gap2 = gapped.getGap();
 		assertEquals(GAP.getWidth(), gap2.getWidth(), DELTA);
 		assertEquals(GAP.getHeight(), gap2.getHeight(), DELTA);
 	}
 
 	@Test
+	public void testCreateInvalid() {
+		try {
+			new TableLayout(-1, GAP.getWidth(), GAP.getHeight());
+			fail("Expected IllegalArgumentException because of negative column number.");
+		} catch (IllegalArgumentException e) {
+		}
+
+		try {
+			new TableLayout(0, GAP.getWidth(), GAP.getHeight());
+			fail("Expected IllegalArgumentException because column number was zero.");
+		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	@Test
 	public void testPreferredSizeVertical() {
-		Layout layout = new StackedLayout(Orientation.VERTICAL, GAP);
+		Layout layout = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(COMP_WIDTH, size.getWidth(), DELTA);
 		assertEquals(3.0*COMP_HEIGHT + 2.0*GAP.getHeight(), size.getHeight(), DELTA);
@@ -90,7 +102,7 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testPreferredSizeHorizontal() {
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP);
+		Layout layout = new TableLayout(3, GAP.getWidth(), GAP.getHeight());
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(3.0*COMP_WIDTH + 2.0*GAP.getWidth(), size.getWidth(), DELTA);
 		assertEquals(COMP_HEIGHT, size.getHeight(), DELTA);
@@ -98,7 +110,7 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testLayoutVertical() {
-		Layout layout = new StackedLayout(Orientation.VERTICAL, GAP);
+		Layout layout = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
 		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
@@ -108,24 +120,26 @@ public class StackedLayoutTest {
 		assertEquals(bounds.getMinX(), b.getX(), DELTA);
 		assertEquals(bounds.getMinX(), c.getX(), DELTA);
 		// Test y coordinates
-		assertEquals(12.5, a.getY(), DELTA);
-		assertEquals(27.5, b.getY(), DELTA);
-		assertEquals(42.5, c.getY(), DELTA);
+		double meanCompHeight = (bounds.getHeight() - 2.0*GAP.getHeight())/3.0;
+		assertEquals(bounds.getMinY() + 0.0*meanCompHeight + 0.0*GAP.getHeight(), a.getY(), DELTA);
+		assertEquals(bounds.getMinY() + 1.0*meanCompHeight + 1.0*GAP.getHeight(), b.getY(), DELTA);
+		assertEquals(bounds.getMinY() + 2.0*meanCompHeight + 2.0*GAP.getHeight(), c.getY(), DELTA);
 
 		// TODO Test width and height
 	}
 
 	@Test
 	public void testLayoutHorizontal() {
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP);
+		Layout layout = new TableLayout(3, GAP.getWidth(), GAP.getHeight());
 		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
 		// Test x coordinates
-		assertEquals(10.0, a.getX(), DELTA);
-		assertEquals(25.0, b.getX(), DELTA);
-		assertEquals(40.0, c.getX(), DELTA);
+		double meanCompWidth = (bounds.getWidth() - 2.0*GAP.getWidth())/3.0;
+		assertEquals(bounds.getMinX() + 0.0*meanCompWidth + 0.0*GAP.getWidth(), a.getX(), DELTA);
+		assertEquals(bounds.getMinX() + 1.0*meanCompWidth + 1.0*GAP.getWidth(), b.getX(), DELTA);
+		assertEquals(bounds.getMinX() + 2.0*meanCompWidth + 2.0*GAP.getWidth(), c.getX(), DELTA);
 		// Test y coordinates
 		assertEquals(bounds.getMinY(), a.getY(), DELTA);
 		assertEquals(bounds.getMinY(), b.getY(), DELTA);
@@ -133,27 +147,4 @@ public class StackedLayoutTest {
 
 		// TODO Test width and height
 	}
-
-	@Test
-	public void testOrientation() {
-		StackedLayout layout;
-		// Vertical
-		layout = new StackedLayout(Orientation.VERTICAL);
-		assertEquals(Orientation.VERTICAL, layout.getOrientation());
-		// Horizontal
-		layout = new StackedLayout(Orientation.HORIZONTAL);
-		assertEquals(Orientation.HORIZONTAL, layout.getOrientation());
-	}
-
-	@Test
-	public void testGap() {
-		StackedLayout layout;
-		// Vertical
-		layout = new StackedLayout(Orientation.VERTICAL, GAP);
-		assertEquals(GAP, layout.getGap());
-		// Horizontal
-		layout = new StackedLayout(Orientation.HORIZONTAL, GAP);
-		assertEquals(GAP, layout.getGap());
-	}
-
 }

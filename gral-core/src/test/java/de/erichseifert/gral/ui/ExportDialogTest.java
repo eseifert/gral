@@ -47,7 +47,6 @@ public class ExportDialogTest {
 
 		@Override
 		public void setDocumentBounds(double x, double y, double w, double h) {
-			// TODO Auto-generated method stub
 			super.setDocumentBounds(x, y, w, h);
 		}
 	}

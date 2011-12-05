@@ -23,6 +23,8 @@ package de.erichseifert.gral;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.util.Insets2D;
 
@@ -34,21 +36,28 @@ import de.erichseifert.gral.util.Insets2D;
  * each of the corners.
  */
 public class EdgeLayout implements Layout {
-	// TODO Add setters and getters.
 	/** Horizontal spacing. */
-	private final double hgap;
+	private final double gapH;
 	/** Vertical spacing. */
-	private final double vgap;
+	private final double gapV;
 
 	/**
 	 * Initializes a layout manager object with the specified distances between the
 	 * components.
-	 * @param hgap Horizontal gap.
-	 * @param vgap Vertical gap.
+	 * @param gapH Horizontal gap.
+	 * @param gapV Vertical gap.
 	 */
-	public EdgeLayout(double hgap, double vgap) {
-		this.hgap = hgap;
-		this.vgap = vgap;
+	public EdgeLayout(double gapH, double gapV) {
+		this.gapH = gapH;
+		this.gapV = gapV;
+	}
+
+	/**
+	 * Initializes a layout manager object without space between the
+	 * components.
+	 */
+	public EdgeLayout() {
+		this(0.0, 0.0);
 	}
 
 	/**
@@ -57,39 +66,17 @@ public class EdgeLayout implements Layout {
 	 * @param container Container to be laid out.
 	 */
 	public void layout(Container container) {
-		Insets2D insets = container.getInsets();
-		if (insets == null) {
-			insets = new Insets2D.Double();
-		}
-
-		Rectangle2D bounds = container.getBounds();
-
 		// Fetch components
-		Drawable center = null,
-		         north = null, northEast = null, east = null, southEast = null,
-		         south = null, southWest = null, west = null, northWest = null;
-		for (Drawable d: container) {
-			Location constraints = (Location) container.getConstraints(d);
-			if (Location.CENTER.equals(constraints)) {
-				center = d;
-			} else if (Location.NORTH.equals(constraints)) {
-				north = d;
-			} else if (Location.NORTH_EAST.equals(constraints)) {
-				northEast = d;
-			} else if (Location.EAST.equals(constraints)) {
-				east = d;
-			} else if (Location.SOUTH_EAST.equals(constraints)) {
-				southEast = d;
-			} else if (Location.SOUTH.equals(constraints)) {
-				south = d;
-			} else if (Location.SOUTH_WEST.equals(constraints)) {
-				southWest = d;
-			} else if (Location.WEST.equals(constraints)) {
-				west = d;
-			} else if (Location.NORTH_WEST.equals(constraints)) {
-				northWest = d;
-			}
-		}
+		Map<Location, Drawable> comps = getComponentsByLocation(container);
+		Drawable north = comps.get(Location.NORTH);
+		Drawable northEast = comps.get(Location.NORTH_EAST);
+		Drawable east = comps.get(Location.EAST);
+		Drawable southEast = comps.get(Location.SOUTH_EAST);
+		Drawable south = comps.get(Location.SOUTH);
+		Drawable southWest = comps.get(Location.SOUTH_WEST);
+		Drawable west = comps.get(Location.WEST);
+		Drawable northWest = comps.get(Location.NORTH_WEST);
+		Drawable center = comps.get(Location.CENTER);
 
 		// Calculate maximum widths and heights
 		double widthWest    = getMaxWidth(northWest,  west,   southWest);
@@ -97,10 +84,16 @@ public class EdgeLayout implements Layout {
 		double heightNorth  = getMaxHeight(northWest, north,  northEast);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double hgapEast  = (widthWest > 0.0 && center != null) ? hgap : 0.0;
-		double hgapWest  = (widthEast > 0.0 && center != null) ? hgap : 0.0;
-		double vgapNorth = (heightNorth > 0.0 && center != null) ? vgap : 0.0;
-		double vgapSouth = (heightSouth > 0.0 && center != null) ? vgap : 0.0;
+		double hgapEast  = (widthWest > 0.0 && center != null) ? gapH : 0.0;
+		double hgapWest  = (widthEast > 0.0 && center != null) ? gapH : 0.0;
+		double vgapNorth = (heightNorth > 0.0 && center != null) ? gapV : 0.0;
+		double vgapSouth = (heightSouth > 0.0 && center != null) ? gapV : 0.0;
+
+		Rectangle2D bounds = container.getBounds();
+		Insets2D insets = container.getInsets();
+		if (insets == null) {
+			insets = new Insets2D.Double();
+		}
 
 		double xWest   = bounds.getMinX() + insets.getLeft();
 		double xCenter = xWest + widthWest + hgapEast;
@@ -173,31 +166,16 @@ public class EdgeLayout implements Layout {
 	 */
 	public Dimension2D getPreferredSize(Container container) {
 		// Fetch components
-		Drawable north = null, northEast = null, east = null, southEast = null,
-		         south = null, southWest = null, west = null, northWest = null,
-		         center = null;
-		for (Drawable d: container) {
-			Object constraints = container.getConstraints(d);
-			if (Location.NORTH.equals(constraints)) {
-				north = d;
-			} else if (Location.NORTH_EAST.equals(constraints)) {
-				northEast = d;
-			} else if (Location.EAST.equals(constraints)) {
-				east = d;
-			} else if (Location.SOUTH_EAST.equals(constraints)) {
-				southEast = d;
-			} else if (Location.SOUTH.equals(constraints)) {
-				south = d;
-			} else if (Location.SOUTH_WEST.equals(constraints)) {
-				southWest = d;
-			} else if (Location.WEST.equals(constraints)) {
-				west = d;
-			} else if (Location.NORTH_WEST.equals(constraints)) {
-				northWest = d;
-			} else if (Location.CENTER.equals(constraints)) {
-				center = d;
-			}
-		}
+		Map<Location, Drawable> comps = getComponentsByLocation(container);
+		Drawable north = comps.get(Location.NORTH);
+		Drawable northEast = comps.get(Location.NORTH_EAST);
+		Drawable east = comps.get(Location.EAST);
+		Drawable southEast = comps.get(Location.SOUTH_EAST);
+		Drawable south = comps.get(Location.SOUTH);
+		Drawable southWest = comps.get(Location.SOUTH_WEST);
+		Drawable west = comps.get(Location.WEST);
+		Drawable northWest = comps.get(Location.NORTH_WEST);
+		Drawable center = comps.get(Location.CENTER);
 
 		// Calculate maximum widths and heights
 		double widthWest    = getMaxWidth(northWest,  west,   southWest);
@@ -207,19 +185,54 @@ public class EdgeLayout implements Layout {
 		double heightCenter = getMaxHeight(west,      center, east);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double hgapEast  = (widthWest > 0.0 && center != null) ? hgap : 0.0;
-		double hgapWest  = (widthEast > 0.0 && center != null) ? hgap : 0.0;
-		double vgapNorth = (heightNorth > 0.0 && center != null) ? vgap : 0.0;
-		double vgapSouth = (heightSouth > 0.0 && center != null) ? vgap : 0.0;
+		double hgapEast  = (widthWest > 0.0 && center != null) ? gapH : 0.0;
+		double hgapWest  = (widthEast > 0.0 && center != null) ? gapH : 0.0;
+		double vgapNorth = (heightNorth > 0.0 && center != null) ? gapV : 0.0;
+		double vgapSouth = (heightSouth > 0.0 && center != null) ? gapV : 0.0;
 
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
+		if (insets == null) {
+			insets = new Insets2D.Double();
+		}
+		double width = insets.getLeft() + widthEast + hgapEast + widthCenter +
+			hgapWest + widthWest + insets.getRight();
+		double height = insets.getTop() + heightNorth + vgapNorth + heightCenter +
+			vgapSouth + heightSouth + insets.getBottom();
+
 		return new de.erichseifert.gral.util.Dimension2D.Double(
-			insets.getLeft() + widthEast + hgapEast + widthCenter +
-				hgapWest + widthWest + insets.getRight(),
-			insets.getTop() + heightNorth + vgapNorth + heightCenter +
-				vgapSouth + heightSouth + insets.getBottom()
+			width, height
 		);
+	}
+
+	/**
+	 * Returns the minimal space between components. No space will be allocated
+	 * when no components are available.
+	 * @return Horizontal and vertical gaps
+	 */
+	public Dimension2D getGap() {
+		Dimension2D gap =
+			new de.erichseifert.gral.util.Dimension2D.Double();
+		gap.setSize(gapH, gapV);
+		return gap;
+	}
+
+	/**
+	 * Returns a map all components which are stored with a {@code Location}
+	 * constraint in the specified container.
+	 * @param container Container which stores the components
+	 * @return A map of all components (values) and their constraints (keys) in
+	 *         the specified container.
+	 */
+	private static Map<Location, Drawable> getComponentsByLocation(Container container) {
+		Map<Location, Drawable> drawablesByLocation = new HashMap<Location, Drawable>();
+		for (Drawable d: container) {
+			Object constraints = container.getConstraints(d);
+			if (constraints instanceof Location) {
+				drawablesByLocation.put((Location) constraints, d);
+			}
+		}
+		return drawablesByLocation;
 	}
 
 	/**

@@ -23,6 +23,8 @@ package de.erichseifert.gral;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.util.Insets2D;
 
@@ -37,26 +39,53 @@ public class TableLayout implements Layout {
 	/** Number of columns. */
 	private final int cols;
 	/** Horizontal spacing. */
-	private final double hgap;
+	private final double gapH;
 	/** Vertical spacing. */
-	private final double vgap;
+	private final double gapV;
 
-	private double[] colWidths;
-	private double[] rowHeights;
-	private double colWidthsSum;
-	private double rowHeightsSum;
+	/** Index of the column values in the array that is returned by
+	{@link #getInfo(Container)}. */
+	private static final int COLS = 0;
+	/** Index of the row values in the array that is returned by
+	{@link #getInfo(Container)}. */
+	private static final int ROWS = 1;
+
+	/**
+	 * Internal data class to store layout related values.
+	 */
+	private static final class Info {
+		/** Map of column/row index and maximal preferred size. */
+		public final Map<Integer, Double> sizes =
+			new HashMap<Integer, Double>();
+		/** Number of columns/rows */
+		public int size;
+		/** Sum of preferred sizes in horizontal/vertical direction. */
+		public double sizeSum;
+		/** Sum of insets in horizontal/vertical direction. */
+		public double insetsSum;
+		/** Sum of gaps in horizontal/vertical direction. */
+		public double gapSum;
+		/** Mean preferred size in horizontal/vertical direction. */
+		public double sizeMean;
+		/** Space in horizontal/vertical direction which couldn't be resized
+		because the size limits of some components have been reached. */
+		public double unsizeableSpace;
+	}
 
 	/**
 	 * Initializes a layout manager object with the specified number of columns
 	 * and the distances between the components.
 	 * @param cols Number of columns
-	 * @param hgap Horizontal gap.
-	 * @param vgap Vertical gap.
+	 * @param gapH Horizontal gap.
+	 * @param gapV Vertical gap.
 	 */
-	public TableLayout(int cols, double hgap, double vgap) {
+	public TableLayout(int cols, double gapH, double gapV) {
+		if (cols <= 0) {
+			throw new IllegalArgumentException("Invalid number of columns.");
+		}
 		this.cols = cols;
-		this.hgap = hgap;
-		this.vgap = vgap;
+		this.gapH = gapH;
+		this.gapV = gapV;
 	}
 
 	/**
@@ -69,79 +98,115 @@ public class TableLayout implements Layout {
 	}
 
 	/**
+	 * Calculates the preferred dimensions for all columns and rows.
+	 * @param container The container for which the dimension should be
+	 *        calculated.
+	 * @see TableLayout#COLS, TableLayout#ROWS
+	 */
+	private Info[] getInfo(Container container) {
+		Info[] infos = new Info[2];
+		infos[COLS] = new Info();
+		infos[ROWS] = new Info();
+
+		infos[COLS].size = cols;
+		infos[ROWS].size = (int) Math.ceil(container.size() / (double) cols);
+
+		// Find out the preferred dimensions for each columns and row
+		int compIndex = 0;
+		for (Drawable component : container) {
+			Integer col = compIndex%infos[COLS].size;
+			Integer row = compIndex/infos[COLS].size;
+
+			Double colWidth = infos[COLS].sizes.get(col);
+			Double rowHeight = infos[ROWS].sizes.get(row);
+
+			Dimension2D size = component.getPreferredSize();
+
+			infos[COLS].sizes.put(col, max(size.getWidth(), colWidth));
+			infos[ROWS].sizes.put(row, max(size.getHeight(), rowHeight));
+
+			compIndex++;
+		}
+
+		// Calculate container specific variables
+		Rectangle2D bounds = container.getBounds();
+		Insets2D insets = container.getInsets();
+		if (insets == null) {
+			insets = new Insets2D.Double();
+		}
+		infos[COLS].insetsSum = insets.getLeft() + insets.getRight();
+		infos[ROWS].insetsSum = insets.getTop() + insets.getBottom();
+		infos[COLS].gapSum = Math.max((infos[COLS].size - 1)*gapH, 0.0);
+		infos[ROWS].gapSum = Math.max((infos[ROWS].size - 1)*gapV, 0.0);
+		double containerWidth =
+			Math.max(bounds.getWidth() - infos[COLS].insetsSum - infos[COLS].gapSum, 0.0);
+		double containerHeight =
+			Math.max(bounds.getHeight() - infos[ROWS].insetsSum - infos[ROWS].gapSum, 0.0);
+		infos[COLS].sizeMean = (infos[COLS].size > 0) ? containerWidth/infos[COLS].size : 0.0;
+		infos[ROWS].sizeMean = (infos[ROWS].size > 0) ? containerHeight/infos[ROWS].size : 0.0;
+
+		// Values for columns and rows
+		for (Info info : infos) {
+			info.sizeSum = 0.0;
+			info.unsizeableSpace = 0.0;
+			int sizeable = 0;
+			for (double size : info.sizes.values()) {
+				info.sizeSum += size;
+				if (size >= info.sizeMean) {
+					info.unsizeableSpace += size - info.sizeMean;
+				} else {
+					sizeable++;
+				}
+			}
+			if (sizeable > 0) {
+				info.unsizeableSpace /= sizeable;
+			}
+		}
+
+		return infos;
+	}
+
+	/**
 	 * Arranges the components of the specified container according to this
 	 * layout.
 	 * @param container Container to be laid out.
 	 */
 	public void layout(Container container) {
+		Info[] infos = getInfo(container);
+
+		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
 		if (insets == null) {
 			insets = new Insets2D.Double();
 		}
-		Rectangle2D bounds = container.getBounds();
-		double containerWidth =
-			bounds.getWidth() - insets.getLeft() - insets.getRight();
-		double containerHeight =
-			bounds.getHeight() - insets.getTop() - insets.getBottom();
-
-		updateDimensions(container);
-		double remainderH =
-			Math.max(containerWidth - colWidthsSum, 0.0)/colWidths.length;
-		double remainderV =
-			Math.max(containerHeight - rowHeightsSum, 0.0)/rowHeights.length;
+		Integer lastCol = infos[COLS].size - 1;
 
 		int compIndex = 0;
-		double x = insets.getLeft(), y = insets.getTop();
+		double x = bounds.getX() + insets.getLeft();
+		double y = bounds.getY() + insets.getTop();
 		for (Drawable component : container) {
-			int col = compIndex%cols;
-			int row = compIndex/cols;
+			Integer col = compIndex%infos[COLS].size;
+			Integer row = compIndex/infos[COLS].size;
 
-			Dimension2D size = component.getPreferredSize();
+			double colWidth = infos[COLS].sizes.get(col);
+			double rowHeight = infos[ROWS].sizes.get(row);
 
-			layoutComponent(component,
-				x, y,
-				Math.max(size.getWidth(), colWidths[col] + remainderH),
-				Math.max(size.getHeight(), rowHeights[row] + remainderV)
-			);
+			double w = Math.max(infos[COLS].sizeMean - infos[COLS].unsizeableSpace, colWidth);
+			double h = Math.max(infos[ROWS].sizeMean - infos[ROWS].unsizeableSpace, rowHeight);
 
-			if (col < cols - 1) {
-				x += colWidths[col] + remainderH + hgap;
+			if (component != null) {
+				component.setBounds(x, y, w, h);
+			}
+
+			if (col.equals(lastCol)) {
+				x = bounds.getX() + insets.getLeft();
+				y += h + gapV;
 			} else {
-				x = insets.getLeft();
-				y += rowHeights[row] + remainderV + vgap;
+				x += w + gapH;
 			}
 
 			compIndex++;
 		}
-	}
-
-	/**
-	 * Calculates the preferred dimensions for all columns and rows.
-	 * @param container The container for which the dimension should be
-	 *        calculated.
-	 */
-	private void updateDimensions(Container container) {
-		int rows = (int) Math.ceil(container.size() / (double) cols);
-
-		colWidths = new double[cols];
-		rowHeights = new double[rows];
-
-		// Find out the preferred dimensions for each columns and row
-		int i = 0;
-		for (Drawable component : container) {
-			int col = i%cols;
-			int row = i/cols;
-
-			Dimension2D size = component.getPreferredSize();
-
-			colWidths[col] = Math.max(size.getWidth(), colWidths[col]);
-			rowHeights[row] = Math.max(size.getHeight(), rowHeights[row]);
-
-			i++;
-		}
-
-		colWidthsSum = sum(colWidths) + (colWidths.length - 1)*hgap;
-		rowHeightsSum = sum(rowHeights) + (rowHeights.length - 1)*vgap;
 	}
 
 	/**
@@ -150,40 +215,44 @@ public class TableLayout implements Layout {
 	 * @return Preferred extent of the specified container.
 	 */
 	public Dimension2D getPreferredSize(Container container) {
-		updateDimensions(container);
+		Info[] infos = getInfo(container);
 
 		return new de.erichseifert.gral.util.Dimension2D.Double(
-			colWidthsSum, rowHeightsSum
+			infos[COLS].sizeSum + infos[COLS].gapSum + infos[COLS].insetsSum,
+			infos[ROWS].sizeSum + infos[ROWS].gapSum + infos[ROWS].insetsSum
 		);
 	}
 
 	/**
-	 * Returns the sum of all values in the specified array.
-	 * @param values Values to sum.
-	 * @return Sum of all values.
+	 * Returns the minimal space between components.
+	 * @return Horizontal and vertical gaps
 	 */
-	private static final double sum(double[] values) {
-		double sum = 0.0;
-		for (double v : values) {
-			sum += v;
-		}
-		return sum;
+	public Dimension2D getGap() {
+		Dimension2D gap =
+			new de.erichseifert.gral.util.Dimension2D.Double();
+		gap.setSize(gapH, gapV);
+		return gap;
 	}
 
 	/**
-	 * Sets the bounds of the specified {@code Drawable} to the specified
-	 * values.
-	 * @param component {@code Drawable} that should be resized.
-	 * @param x X coordinate.
-	 * @param y Y coordinate.
-	 * @param w Width.
-	 * @param h Height.
+	 * Returns the value that is larger. If both are equal the first value will
+	 * be returned.
+	 * @param <T> Data type for the values.
+	 * @param a First value.
+	 * @param b Second value.
+	 * @return Larger value.
 	 */
-	private static void layoutComponent(Drawable component,
-			double x, double y, double w, double h) {
-		if (component == null) {
-			return;
+	private static <T extends Comparable<T>> T max(T a, T b) {
+		if (a == null || b == null) {
+			if (a == null) {
+				return b;
+			} else {
+				return a;
+			}
 		}
-		component.setBounds(x, y, w, h);
+		if (a.compareTo(b) >= 0) {
+			return a;
+		}
+		return b;
 	}
 }

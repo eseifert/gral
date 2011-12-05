@@ -80,6 +80,19 @@ public class EdgeLayoutTest {
 	}
 
 	@Test
+	public void testCreate() {
+		EdgeLayout noGap = new EdgeLayout();
+		Dimension2D gap1 = noGap.getGap();
+		assertEquals(0.0, gap1.getWidth(), DELTA);
+		assertEquals(0.0, gap1.getHeight(), DELTA);
+
+		EdgeLayout gapped = new EdgeLayout(GAP_H, GAP_V);
+		Dimension2D gap2 = gapped.getGap();
+		assertEquals(GAP_H, gap2.getWidth(), DELTA);
+		assertEquals(GAP_V, gap2.getHeight(), DELTA);
+	}
+
+	@Test
 	public void testPreferredSize() {
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(3.0*COMP_WIDTH + 2.0*GAP_H, size.getWidth(), DELTA);
@@ -112,6 +125,7 @@ public class EdgeLayoutTest {
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, sw.getY(), DELTA);
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, ss.getY(), DELTA);
 		assertEquals(bounds.getMaxY() - COMP_HEIGHT, se.getY(), DELTA);
+
 		// TODO Test width and height
 	}
 
