@@ -55,8 +55,7 @@ public class TableLayout implements Layout {
 	 */
 	private static final class Info {
 		/** Map of column/row index and maximal preferred size. */
-		public final Map<Integer, Double> sizes =
-			new HashMap<Integer, Double>();
+		public final Map<Integer, Double> sizes;
 		/** Number of columns/rows */
 		public int size;
 		/** Sum of preferred sizes in horizontal/vertical direction. */
@@ -70,6 +69,13 @@ public class TableLayout implements Layout {
 		/** Space in horizontal/vertical direction which couldn't be resized
 		because the size limits of some components have been reached. */
 		public double unsizeableSpace;
+
+		/**
+		 * Initializes a new instance for storing several variables.
+		 */
+		public Info() {
+			sizes = new HashMap<Integer, Double>();
+		}
 	}
 
 	/**
