@@ -157,11 +157,12 @@ public class XYPlot extends Plot implements Navigable {
 		}
 
 		@Override
-		protected int getDimension(String axisName) {
+		protected Number getDimensionValue(String axisName,
+				PointND<? extends Number> values) {
 			if (XYPlot.AXIS_Y.equals(axisName) || XYPlot.AXIS_Y2.equals(axisName)) {
-				return 1;
+				return -values.get(1).doubleValue();
 			}
-			return 0;
+			return values.get(0);
 		}
 
 		@Override

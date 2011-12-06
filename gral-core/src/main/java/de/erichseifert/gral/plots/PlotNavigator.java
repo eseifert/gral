@@ -24,15 +24,13 @@ package de.erichseifert.gral.plots;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import de.erichseifert.gral.AbstractNavigator;
 import de.erichseifert.gral.NavigationEvent;
-import de.erichseifert.gral.NavigationListener;
-import de.erichseifert.gral.Navigator;
+import de.erichseifert.gral.Navigator.NavigationDirection;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.MathUtils;
@@ -40,39 +38,22 @@ import de.erichseifert.gral.util.PointND;
 
 /**
  * Abstract base class that can be used to control the zoom and panning of a
- * plot. An arbitrary number of axes can be specified for interactive changes
- * to the the plot.
+ * plot. The navigator translates the interaction to operations on a defined
+ * set axes: Zooming is translated as scaling, panning is done by uniformly
+ * changing the minimum and maximum values of the axes.
+ *
+ * Additionally, the actions can also be bound to a certain direction by
+ * defining a more restricted set of axes. The method {@link #getDirection()}
+ * and {link {@link #setDirection(NavigationDirection)} provide a convenient
+ * way for setting predefined sets of axes.
  */
-public abstract class PlotNavigator implements Navigator {
-	/** Default zoom factor. */
-	public static final double DEFAULT_ZOOM_FACTOR = 1.25;
-	/** Default minimum of zoom factor. */
-	public static final double DEFAULT_ZOOM_MIN = 1e-2;
-	/** Default maximum of zoom factor. */
-	public static final double DEFAULT_ZOOM_MAX = 1e+2;
-
+public abstract class PlotNavigator extends AbstractNavigator {
 	/** Plot that will be navigated. */
 	private final Plot plot;
 	/** Mapping of axis name to informations on center and zoom. */
 	private final Map<String, NavigationInfo> infos;
 	/** Axes affected by navigation. */
 	private final List<String> axes;
-	/** Object that will be notified on navigation actions. */
-	private final Set<NavigationListener> navigationListeners;
-
-	/** Zoom factor used for zoom in and zoom out actions. */
-	private double zoomFactor;
-	/** Minimum allowed zoom level. */
-	private double zoomMin;
-	/** Maximum allowed zoom level. */
-	private double zoomMax;
-
-	/** A flag that tells whether to zoom the associated object. */
-	private boolean zoomable;
-	/** A flag that tells whether to pan the associated object. */
-	private boolean pannable;
-	/** The current navigation direction. */
-	private NavigationDirection direction;
 
 	/**
 	 * Data class for storing navigational information for an axis.
@@ -164,15 +145,8 @@ public abstract class PlotNavigator implements Navigator {
 	 *        navigator.
 	 */
 	public PlotNavigator(Plot plot, List<String> axesNames) {
-		navigationListeners = new HashSet<NavigationListener>();
 		axes = new LinkedList<String>();
 		infos = new HashMap<String, NavigationInfo>();
-
-		zoomFactor = DEFAULT_ZOOM_FACTOR;
-		zoomMin = DEFAULT_ZOOM_MIN;
-		zoomMax = DEFAULT_ZOOM_MAX;
-		zoomable = true;
-		pannable = true;
 
 		this.plot = plot;
 
@@ -236,24 +210,6 @@ public abstract class PlotNavigator implements Navigator {
 	}
 
 	/**
-	 * Returns whether the associated object can be zoomed.
-	 * @return {@code true} if the object can be zoomed,
-	 *         {@code false} otherwise.
-	 */
-	public boolean isZoomable() {
-		return zoomable;
-	}
-
-	/**
-	 * Sets whether the associated object can be zoomed.
-	 * @param zoomable A value that tells whether it should be possible to zoom
-	 *        the associated object.
-	 */
-	public void setZoomable(boolean zoomable) {
-		this.zoomable = zoomable;
-	}
-
-	/**
 	 * Returns the current zoom level of the associated object.
 	 * @return Current zoom level.
 	 */
@@ -284,7 +240,7 @@ public abstract class PlotNavigator implements Navigator {
 			return;
 		}
 		double zoomOld = getZoom();
-		zoomNew = MathUtils.limit(zoomNew, zoomMin, zoomMax);
+		zoomNew = MathUtils.limit(zoomNew, getZoomMin(), getZoomMax());
 		if (zoomOld == zoomNew) {
 			return;
 		}
@@ -299,46 +255,6 @@ public abstract class PlotNavigator implements Navigator {
 			new NavigationEvent<Double>(this, zoomOld, zoomNew);
 		fireZoomChanged(event);
 		refresh();
-	}
-
-	/**
-	 * Increases the current zoom level by the specified zoom factor.
-	 */
-	public void zoomIn() {
-		if (!isZoomable()) {
-			return;
-		}
-		double zoom = getZoom();
-		setZoom(zoom*getZoomFactor());
-	}
-
-	/**
-	 * Decreases the current zoom level by the specified zoom factor.
-	 */
-	public void zoomOut() {
-		if (!isZoomable()) {
-			return;
-		}
-		double zoom = getZoom();
-		setZoom(zoom/getZoomFactor());
-	}
-
-	/**
-	 * Returns whether the associated object can be panned.
-	 * @return {@code true} if the object can be panned,
-	 *         {@code false} otherwise.
-	 */
-	public boolean isPannable() {
-		return pannable;
-	}
-
-	/**
-	 * Sets whether the associated object can be panned.
-	 * @param pannable A value that tells whether it should be possible to pan
-	 *        the associated object.
-	 */
-	public void setPannable(boolean pannable) {
-		this.pannable = pannable;
 	}
 
 	/**
@@ -405,8 +321,7 @@ public abstract class PlotNavigator implements Navigator {
 		for (String axisName : getAxes()) {
 			NavigationInfo info = getInfo(axisName);
 			if (info != null) {
-				int dimension = getDimension(axisName);
-				double delta = deltas.get(dimension).doubleValue();
+				double delta = getDimensionValue(axisName, deltas).doubleValue();
 				AxisRenderer renderer =
 					getPlot().getAxisRenderer(axisName);
 				if (renderer != null) {
@@ -421,7 +336,7 @@ public abstract class PlotNavigator implements Navigator {
 						axis, info.getCenter(), true);
 					// Move center and convert it to axis coordinates
 					Number centerNew = renderer.viewToWorld(
-						axis, center + delta, true);
+						axis, center - delta, true);
 					// Change axis (world units)
 					info.setCenter(centerNew.doubleValue());
 					centerCoords[axisIndex] = centerNew.doubleValue();
@@ -500,158 +415,6 @@ public abstract class PlotNavigator implements Navigator {
 	}
 
 	/**
-	 * Returns the factor which is used to change the zoom level on
-	 * zoom in/out actions.
-	 * @return The current zoom factor.
-	 */
-	public double getZoomFactor() {
-		return zoomFactor;
-	}
-	/**
-	 * Sets the factor which should be used to change the zoom level on
-	 * zoom in/out actions.
-	 * @param factor The new zoom factor.
-	 */
-	public void setZoomFactor(double factor) {
-		zoomFactor = factor;
-	}
-
-	/**
-	 * Returns the minimal zoom factor.
-	 * @return Minimal zoom factor.
-	 */
-	public double getZoomMin() {
-		return zoomMin;
-	}
-	/**
-	 * Sets the minimal zoom factor.
-	 * @param min New minimal zoom factor.
-	 */
-	public void setZoomMin(double min) {
-		this.zoomMin = min;
-	}
-
-	/**
-	 * Returns the minimal zoom factor.
-	 * @return Maximal zoom factor.
-	 */
-	public double getZoomMax() {
-		return zoomMax;
-	}
-	/**
-	 * Sets the maximal zoom factor.
-	 * @param max New maximal zoom factor.
-	 */
-	public void setZoomMax(double max) {
-		this.zoomMax = max;
-	}
-
-	/**
-	 * Adds the specified listener object that gets notified on changes to
-	 * navigation information like panning or zooming.
-	 * @param l Listener object
-	 */
-	public void addNavigationListener(NavigationListener l) {
-		navigationListeners.add(l);
-	}
-
-	/**
-	 * Removes the specified listener object, i.e. it doesn't get notified on
-	 * changes to navigation information like panning or zooming.
-	 * @param l Listener object
-	 */
-	public void removeNavigationListener(NavigationListener l) {
-		navigationListeners.remove(l);
-	}
-
-	/**
-	 * Returns the current direction of the components that will be taken into
-	 * account for zooming and panning.
-	 * @return Direction.
-	 */
-	public NavigationDirection getDirection() {
-		return direction;
-	}
-
-	/**
-	 * Sets the direction of the components that will be taken into account for
-	 * zooming and panning.
-	 * @param direction Direction.
-	 */
-	public void setDirection(NavigationDirection direction) {
-		this.direction = direction;
-	}
-
-	/**
-	 * Couples the actions of the current and the specified navigator. All
-	 * actions applied to this navigator will be also applied to the specified
-	 * navigator and vice versa.
-	 * @param navigator Navigator which should be bound to this instance.
-	 */
-	public void connect(Navigator navigator) {
-		if (navigator != null && navigator != this) {
-			addNavigationListener(navigator);
-			navigator.addNavigationListener(this);
-		}
-	}
-
-	/**
-	 * Decouples the actions of the current and the connected specified
-	 * navigator. All actions will be applied separately to each navigator.
-	 * @param navigator Navigator to be bound to this instance.
-	 */
-	public void disconnect(Navigator navigator) {
-		if (navigator != null && navigator != this) {
-			removeNavigationListener(navigator);
-			navigator.removeNavigationListener(this);
-		}
-	}
-
-	/**
-	 * A method that gets called after the center of an object in a connected
-	 * {@code PlotNavigator} has changed.
-	 * @param event An object describing the change event.
-	 */
-	public void centerChanged(NavigationEvent<PointND<? extends Number>> event) {
-		if (event.getSource() != this) {
-			setCenter(event.getValueNew());
-		}
-	}
-
-	/**
-	 * A method that gets called after the zoom level of an object in a
-	 * connected {@code PlotNavigator} has changed.
-	 * @param event An object describing the change event.
-	 */
-	public void zoomChanged(NavigationEvent<Double> event) {
-		if (event.getSource() != this) {
-			setZoom(event.getValueNew());
-		}
-	}
-
-	/**
-	 * Notifies all navigation listeners that the center of one or more
-	 * components have been changed.
-	 * @param event An object describing the change event.
-	 */
-	protected void fireCenterChanged(NavigationEvent<PointND<? extends Number>> event) {
-		for (NavigationListener l : navigationListeners) {
-			l.centerChanged(event);
-		}
-	}
-
-	/**
-	 * Notifies all navigation listeners that the zoom level of all components
-	 * has been changed.
-	 * @param event An object describing the change event.
-	 */
-	protected void fireZoomChanged(NavigationEvent<Double> event) {
-		for (NavigationListener l : navigationListeners) {
-			l.zoomChanged(event);
-		}
-	}
-
-	/**
 	 * Returns navigational information for the axis with specified name.
 	 * @param axisName Axis name.
 	 * @return Navigational information.
@@ -699,7 +462,9 @@ public abstract class PlotNavigator implements Navigator {
 	 * specified name. The returned index must be larger than or equal to 0 and
 	 * smaller than the result of {@link #getDimensions()}.
 	 * @param axisName Name of the axis.
+	 * @param values Data values.
 	 * @return Dimension index.
 	 */
-	protected abstract int getDimension(String axisName);
+	protected abstract Number getDimensionValue(
+		String axisName, PointND<? extends Number> values);
 }

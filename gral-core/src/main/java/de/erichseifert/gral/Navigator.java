@@ -24,7 +24,28 @@ package de.erichseifert.gral;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * An interface to control associated {@code Navigable} objects.
+ * An interface for translating navigational interactions, such as zooming
+ * panning to control the associated {@link Navigable} object. At the moment
+ * the only supported operations are zooming and panning.
+ *
+ * A navigator stores an default state of the object that can be used to reset
+ * the object's state after actions have been performed. This must be
+ * implemented with the methods {@link #setDefaultState()} and
+ * {@link #reset()}.
+ *
+ * Zooming and panning may be activated and deactivated using the methods
+ * {@link #setZoomable(boolean)} and {@link #setPannable(boolean)}.
+ *
+ * Additionally, the actions can also be bound to a certain direction—like
+ * horizontal or vertical—by the convenience methods {@link #getDirection()}
+ * and {link {@link #setDirection(NavigationDirection)}. The data type, e.g.
+ * an enum type, for directions must implement the interface
+ * {@link NavigationDirection}.
+ *
+ * Sometimes, actions performed on an object should be applied to another
+ * object synchronously. The methods {@link #connect(Navigator)} and
+ * {@link #disconnect(Navigator)} may be implemented to provide functionality
+ * for this use case.
  */
 public interface Navigator extends NavigationListener {
 	/** Marker interface for implementation specific navigation direction,
@@ -190,7 +211,7 @@ public interface Navigator extends NavigationListener {
 	/**
 	 * Decouples the actions of the current and the connected specified
 	 * navigator. All actions will be applied separately to each navigator.
-	 * @param navigator Navigator to be bound to this instance.
+	 * @param navigator Navigator to be unbound from this instance.
 	 */
 	void disconnect(Navigator navigator);
 }

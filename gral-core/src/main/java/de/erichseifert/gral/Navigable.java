@@ -22,7 +22,8 @@
 package de.erichseifert.gral;
 
 /**
- * Interface for classes that can be interactively controlled.
+ * Interface for classes that can provide a {@code Navigator} which translates
+ * navigational actions.
  */
 public interface Navigable {
 	/**

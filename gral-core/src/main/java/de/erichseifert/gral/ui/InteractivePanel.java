@@ -425,8 +425,8 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			Point pos = e.getPoint();
 			Navigator navigator = navigable.getNavigator();
 
-			int dx = -pos.x + posPrev.x;
-			int dy =  pos.y - posPrev.y;
+			int dx = pos.x - posPrev.x;
+			int dy = pos.y - posPrev.y;
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {

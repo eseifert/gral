@@ -23,7 +23,6 @@ package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
@@ -89,14 +88,8 @@ public class StackedPlots extends ExamplePanel {
 		// Connect the two plots, i.e. user (mouse) actions affect both plots
 		plotUpper.getNavigator().connect(plotLower.getNavigator());
 
-		InteractivePanel panel = new InteractivePanel(plots) {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-			}
-		};
+		InteractivePanel panel = new InteractivePanel(plots);
 		add(panel);
-
 	}
 
 	@Override

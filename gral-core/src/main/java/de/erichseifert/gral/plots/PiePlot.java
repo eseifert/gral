@@ -30,10 +30,14 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
+import de.erichseifert.gral.AbstractNavigator;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Navigable;
+import de.erichseifert.gral.Navigator;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
@@ -45,6 +49,7 @@ import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.PointND;
 
 
 /**
@@ -54,16 +59,22 @@ import de.erichseifert.gral.util.MathUtils;
  * a data source. Example:</p>
  * <pre>
  * DataTable data = new DataTable(Integer.class, Double.class);
- * data.add(2005, -23.50);
- * data.add(2006, 100.00);
- * data.add(2007,  60.25);
+ * data.add(-23.50);
+ * data.add(100.00);
+ * data.add( 60.25);
  *
  * PiePlot plot = new PiePlot(data);
  * </pre>
  */
-public class PiePlot extends Plot implements DataListener {
-	/** Key for specifying the radius of the pie relative to the
-	plot area size. */
+public class PiePlot extends Plot implements DataListener, Navigable {
+	/** Key for specifying {@link java.awt.Point2D} instance defining the
+	center of the pie. The coordinates must be relative to the plot area
+	dimensions, i.e. 0.0 means left/top, 0.5 means the center, and 1.0 means
+	right/bottom. */
+	public static final Key CENTER =
+		new Key("pieplot.center"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the radius of
+	the pie relative to the plot area size. */
 	public static final Key RADIUS =
 		new Key("pieplot.radius"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the inner
@@ -88,6 +99,105 @@ public class PiePlot extends Plot implements DataListener {
 	gaps between the segments. */
 	public static final Key GAP =
 		new Key("pieplot.gap"); //$NON-NLS-1$
+
+	/** Cache for the {@code Navigator} implementation. */
+	private PiePlotNavigator navigator;
+
+	/**
+	 * Navigator implementation for pie plots. Zooming changes the
+	 * {@code RADIUS} setting and panning the {@code CENTER} setting.
+	 */
+	public static class PiePlotNavigator extends AbstractNavigator {
+		/** Pie plot that will be navigated. */
+		private final PiePlot plot;
+		/** Location of center in default state. */
+		private PointND<? extends Number> centerOriginal;
+		/** Zoom level in default state. */
+		private double zoomOriginal;
+		/** Current zoom level. */
+		private double zoom;
+
+		/**
+		 * Initializes a new instance with a pie plot to be navigated.
+		 * @param plot Pie plot.
+		 */
+		public PiePlotNavigator(PiePlot plot) {
+			this.plot = plot;
+			this.zoom = 1.0;
+			setDefaultState();
+		}
+
+		/**
+		 * Returns the current zoom level of the associated object.
+		 * @return Current zoom level.
+		 */
+		public double getZoom() {
+			return zoom;
+		}
+
+		/**
+		 * Sets the zoom level of the associated object to the specified value.
+		 * @param zoomNew New zoom level.
+		 */
+		public void setZoom(double zoomNew) {
+			zoom = zoomNew;
+			plot.setSetting(PiePlot.RADIUS, zoom*zoomOriginal);
+		}
+
+		/**
+		 * Returns the current center point. The returned point contains value in
+		 * world units.
+		 * @return Center point in world units.
+		 */
+		public PointND<? extends Number> getCenter() {
+			Point2D center = plot.<Point2D>getSetting(PiePlot.CENTER);
+			return new PointND<Double>(center.getX(), center.getY());
+		}
+
+		/**
+		 * Sets a new center point. The values of the point are in world units.
+		 * @param center New center point in world units.
+		 */
+		public void setCenter(PointND<? extends Number> center) {
+			Point2D center2d = center.getPoint2D();
+			plot.setSetting(PiePlot.CENTER, center2d);
+		}
+
+		/**
+		 * Moves the center by the relative values of the specified point.
+		 * The values of the point are in screen units.
+		 * @param deltas Relative values to use for panning.
+		 */
+		@SuppressWarnings("unchecked")
+		public void pan(PointND<? extends Number> deltas) {
+			PlotArea plotArea = plot.getPlotArea();
+			PointND<Double> center = (PointND<Double>) getCenter();
+			double x = center.get(0).doubleValue();
+			x += deltas.get(0).doubleValue()/plotArea.getWidth();
+			double y = center.get(1).doubleValue();
+			y += deltas.get(1).doubleValue()/plotArea.getHeight();
+			center.set(0, x);
+			center.set(1, y);
+			setCenter(center);
+		}
+
+		/**
+		 * Sets the object's position and zoom level to the default state.
+		 */
+		public void reset() {
+			setCenter(centerOriginal);
+			setZoom(1.0);
+		}
+
+		/**
+		 * Sets the current state as the default state of the object.
+		 * Resetting the navigator will then return to the default state.
+		 */
+		public void setDefaultState() {
+			centerOriginal = getCenter();
+			zoomOriginal = plot.<Number>getSetting(PiePlot.RADIUS).doubleValue();
+		}
+	}
 
 	/**
 	 * Class that represents the drawing area of a {@code PiePlot}.
@@ -157,7 +267,8 @@ public class PiePlot extends Plot implements DataListener {
 			if (w <= 0.0 || h <= 0.0) {
 				return;
 			}
-			graphics.translate(w/2d, h/2d);
+			Point2D center = plot.getSetting(PiePlot.CENTER);
+			graphics.translate(w*center.getX(), h*center.getY());
 			ColorMapper colorMapper = plot.getSetting(PiePlot.COLORS);
 
 			double sizeRel = plot.<Number>getSetting(PiePlot.RADIUS)
@@ -336,6 +447,7 @@ public class PiePlot extends Plot implements DataListener {
 	public PiePlot(DataSource data) {
 		super(data);
 
+		setSettingDefault(CENTER, new Point2D.Double(0.5, 0.5));
 		setSettingDefault(RADIUS, 1.0);
 		setSettingDefault(RADIUS_INNER, 0.0);
 		setSettingDefault(COLORS, new QuasiRandomColors());
@@ -371,5 +483,16 @@ public class PiePlot extends Plot implements DataListener {
 	@Override
 	public void dataRemoved(DataSource data, DataChangeEvent... events) {
 		((DataListener) getPlotArea()).dataRemoved(data, events);
+	}
+
+	/**
+	 * Returns a navigator instance that can control the current object.
+	 * @return A navigator instance.
+	 */
+	public Navigator getNavigator() {
+		if (navigator == null) {
+			navigator = new PiePlotNavigator(this);
+		}
+		return navigator;
 	}
 }
