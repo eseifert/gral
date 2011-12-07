@@ -28,12 +28,15 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import de.erichseifert.gral.plots.DataPoint;
 
@@ -247,4 +250,101 @@ public abstract class GeometryUtils {
 		return shapeArea;
     }
 
+    /**
+     * Utility data class for the values of the segments in a geometric shape.
+     * This is only used by {@link GeometryUtils#reverse(Shape)} at the moment.
+     */
+    private static final class PathSegment {
+    	/** Segment type id as defined in {@link PathIterator}. */
+    	public final int type;
+    	/** Starting point. */
+    	public final Point2D start;
+    	/** End point. */
+    	public final Point2D end;
+    	/** Coordinates necessary to draw the segment. */
+    	public final double[] coords;
+
+    	/**
+    	 * Initializes a new instance with type, starting and end point, and
+    	 * all other coordinates that are necessary to draw the segment.
+    	 * @param type Segment type id as defined in {@link PathIterator}.
+    	 * @param start Starting point.
+    	 * @param end End point.
+    	 * @param coords Array of coordinates necessary to draw the segment.
+    	 */
+    	public PathSegment(int type, Point2D start, Point2D end, double[] coords) {
+			this.type = type;
+			this.start = start;
+			this.end = end;
+			this.coords = new double[6];
+			System.arraycopy(coords, 0, this.coords, 0, 6);
+		}
+    }
+
+    /**
+     * Returns a clone of a specified shape which  has a reversed order of the
+     * points, lines and curves.
+     * @param shape Original shape.
+     * @return Shape with reversed direction.
+     */
+    public static Shape reverse(Shape shape) {
+    	PathIterator path =  shape.getPathIterator(null);
+
+    	Point2D pointStart = null, pointEnd = null;
+		double[] coords = new double[6];
+		List<PathSegment> segments = new LinkedList<PathSegment>();
+		while (!path.isDone()) {
+			int type = path.currentSegment(coords);
+
+			if (type == PathIterator.SEG_MOVETO || type == PathIterator.SEG_LINETO) {
+				pointEnd = new Point2D.Double(coords[0], coords[1]);
+			} else if (type == PathIterator.SEG_QUADTO) {
+				pointEnd = new Point2D.Double(coords[2], coords[3]);
+			} else if (type == PathIterator.SEG_CUBICTO) {
+				pointEnd = new Point2D.Double(coords[4], coords[5]);
+			}
+
+			PathSegment segment = new PathSegment(type, pointStart, pointEnd, coords);
+			segments.add(segment);
+
+			pointStart = pointEnd;
+			path.next();
+		}
+
+		boolean closed = false;
+		Path2D reversed = new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
+		for (ListIterator<PathSegment> i = segments.listIterator(segments.size()); i.hasPrevious();) {
+			PathSegment segment = i.previous();
+
+			if (segment.type == PathIterator.SEG_CLOSE) {
+				closed = true;
+				continue;
+			}
+
+			if (reversed.getCurrentPoint() == null) {
+				reversed.moveTo(
+					segment.end.getX(), segment.end.getY());
+			}
+			if (segment.type == PathIterator.SEG_LINETO) {
+				reversed.lineTo(
+					segment.start.getX(), segment.start.getY());
+			} else if (segment.type == PathIterator.SEG_QUADTO) {
+				reversed.quadTo(
+					segment.coords[0], segment.coords[1],
+					segment.start.getX(), segment.start.getY());
+			} else if (segment.type == PathIterator.SEG_CUBICTO) {
+				reversed.curveTo(
+					segment.coords[2], segment.coords[3],
+					segment.coords[0], segment.coords[1],
+					segment.start.getX(), segment.start.getY());
+			} else if (segment.type == PathIterator.SEG_MOVETO) {
+				if (closed) {
+					reversed.closePath();
+					closed = false;
+				}
+			}
+		}
+
+		return reversed;
+    }
 }

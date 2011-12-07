@@ -111,8 +111,8 @@ public interface PointRenderer extends SettingsStorage {
 	Drawable getPoint(Axis axis, AxisRenderer axisRenderer, Row row, int col);
 
 	/**
-	 * Returns a {@code Shape} instance that can be used
-	 * for further calculations.
+	 * Returns a {@code Shape} instance that can be used for further
+	 * calculations.
 	 * @param row Data row containing the point.
 	 * @return Outline that describes the point's shape.
 	 */

@@ -54,7 +54,7 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
-		rows = new ArrayList<Comparable<?>[]>();
+		rows = Collections.synchronizedList(new ArrayList<Comparable<?>[]>());
 	}
 
 	/**

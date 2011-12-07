@@ -34,6 +34,7 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.Plot;
+import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
@@ -58,15 +59,17 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		plot = new PiePlot(data);
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
-		// Change the width of gaps between segments
-		plot.setSetting(PiePlot.START, 90.0);
-		// Change the width of gaps between segments
-		plot.setSetting(PiePlot.GAP, 0.2);
-		// Change the colors
-		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		plot.setSetting(PiePlot.COLORS, colors);
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0));
+
+		// Change the width of gaps between segments
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.START, 90.0);
+		// Change the width of gaps between segments
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
+		// Change the colors
+		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLORS, colors);
+
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);
 		add(panel, BorderLayout.CENTER);

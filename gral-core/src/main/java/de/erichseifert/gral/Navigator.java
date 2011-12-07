@@ -38,8 +38,8 @@ import de.erichseifert.gral.util.PointND;
  *
  * Additionally, the actions can also be bound to a certain direction—like
  * horizontal or vertical—by the convenience methods {@link #getDirection()}
- * and {link {@link #setDirection(NavigationDirection)}. The data type, e.g.
- * an enum type, for directions must implement the interface
+ * and {@link #setDirection(NavigationDirection)}. The data type, e.g. an enum
+ * type, for directions must implement the interface
  * {@link NavigationDirection}.
  *
  * Sometimes, actions performed on an object should be applied to another

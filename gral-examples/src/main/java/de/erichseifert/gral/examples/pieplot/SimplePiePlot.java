@@ -27,7 +27,7 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
-import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
@@ -55,15 +55,16 @@ public class SimplePiePlot extends ExamplePanel {
 		plot.setSetting(PiePlot.TITLE, getDescription());
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
+		// Add some margin to the plot area
+		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+
 		// Change relative size of inner region
-		plot.setSetting(PiePlot.RADIUS_INNER, 0.4);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.RADIUS_INNER, 0.4);
 		// Change the width of gaps between segments
-		plot.setSetting(PiePlot.GAP, 0.2);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		colors.setMode(ColorMapper.Mode.CIRCULAR);
-		plot.setSetting(PiePlot.COLORS, colors);
-		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLORS, colors);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
