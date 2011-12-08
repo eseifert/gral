@@ -59,11 +59,11 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		plot = new PiePlot(data);
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
+		// Change the width of gaps between segments
+		plot.setSetting(PiePlot.START, 90.0);
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0));
 
-		// Change the width of gaps between segments
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.START, 90.0);
 		// Change the width of gaps between segments
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
 		// Change the colors

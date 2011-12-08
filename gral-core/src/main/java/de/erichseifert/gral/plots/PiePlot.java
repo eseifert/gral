@@ -88,21 +88,29 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	right/bottom. */
 	public static final Key CENTER =
 		new Key("pieplot.center"); //$NON-NLS-1$
-
 	/** Key for specifying a {@link java.lang.Number} value for the radius of
 	the pie relative to the plot area size. */
 	public static final Key RADIUS =
 		new Key("pieplot.radius"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the
+	starting angle of the first segment in degrees. The angle is applied
+	counterclockwise. */
+	public static final Key START =
+		new Key("pieplot.start"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Boolean} value which decides
+	whether the segments should be ordered clockwise ({@code true}) or
+	counterclockwise ({@code false}). */
+	public static final Key CLOCKWISE =
+		new Key("pieplot.clockwise"); //$NON-NLS-1$
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	/** Accumulated absolute values of the data source used to calculate the
 	slice positions. */
 	private final Map<DataSource, List<Double>> slicePositions;
-
 	/** Cache for the {@code Navigator} implementation. */
-	private PiePlotNavigator navigator;
 
+	private PiePlotNavigator navigator;
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
 	 * {@code RADIUS} setting and panning the {@code CENTER} setting.
@@ -320,8 +328,12 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 * A point renderer for a single slice in a pie plot.
 	 */
 	public static class PieSliceRenderer extends AbstractPointRenderer {
+		/** Key for specifying a {@link java.lang.Number} value for the outer
+		radius of the pie relative to the radius set in the plot. */
+		public static final Key RADIUS_OUTER =
+			new Key("pieplot.radius.inner"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Number} value for the inner
-		radius of the pie relative to the outer radius. */
+		radius of the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_INNER =
 			new Key("pieplot.radius.inner"); //$NON-NLS-1$
 		/** Key for specifying an instance of
@@ -329,16 +341,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		the segments. */
 		public static final Key COLORS =
 			new Key("pieplot.colorlist"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether the segments should be ordered clockwise ({@code true}) or
-		counterclockwise ({@code false}). */
-		public static final Key CLOCKWISE =
-			new Key("pieplot.clockwise"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the
-		starting angle of the first segment in degrees. The angle is applied
-		counterclockwise. */
-		public static final Key START =
-			new Key("pieplot.start"); //$NON-NLS-1$
 		/** Key for specifying a {@link java.lang.Number} value for the width of
 		gaps between the segments. */
 		public static final Key GAP =
@@ -352,10 +354,9 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		public PieSliceRenderer(PiePlot plot) {
 			this.plot =  plot;
 
+			setSettingDefault(RADIUS_OUTER, 1.0);
 			setSettingDefault(RADIUS_INNER, 0.0);
 			setSettingDefault(COLORS, new QuasiRandomColors());
-			setSettingDefault(CLOCKWISE, true);
-			setSettingDefault(START, 0.0);
 			setSettingDefault(GAP, 0.0);
 		}
 
@@ -385,9 +386,13 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 						PieSliceRenderer.VALUE_FONT);
 					double fontSize = font.getSize2D();
 
+					double plotAreaSize = Math.min(getWidth(), getHeight());
 					double sizeRel = plot.<Number>getSetting(
 						PiePlot.RADIUS).doubleValue();
-					double size = Math.min(getWidth(), getHeight())*sizeRel;
+					double sizeRelOuter = renderer.<Number>getSetting(
+							PieSliceRenderer.RADIUS_OUTER).doubleValue();
+					double size = plotAreaSize*sizeRel;
+					double sizeOuter = size*sizeRelOuter;
 
 					// Construct slice
 					double valueStart = 0.0;
@@ -402,23 +407,26 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 					double sliceStartRel = valueStart/valueMax;
 					double sliceEndRel = valueEnd/valueMax;
 
-					double start = renderer.<Number>getSetting(
-						PieSliceRenderer.START).doubleValue();
+					double start = plot.<Number>getSetting(
+						PiePlot.START).doubleValue();
 
-					boolean clockwise = renderer.<Boolean>getSetting(
-						PieSliceRenderer.CLOCKWISE);
+					boolean clockwise = plot.<Boolean>getSetting(
+						PiePlot.CLOCKWISE);
 					double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
 					double sliceStart;
 					if (clockwise) {
-						sliceStart = MathUtils.normalizeDegrees(
-							start - sliceEndRel*360.0);
+						sliceStart = start - sliceEndRel*360.0;
 					} else {
-						sliceStart = MathUtils.normalizeDegrees(
-							start + sliceStartRel*360.0);
+						sliceStart = start + sliceStartRel*360.0;
 					}
+					start = MathUtils.normalizeDegrees(start);
 
-					Arc2D pieSlice = new Arc2D.Double(-size/2d, -size/2d,
-						size, size, sliceStart, sliceSpan, Arc2D.PIE);
+					Arc2D pieSlice = new Arc2D.Double(
+						-sizeOuter/2d, -sizeOuter/2.0,
+						sizeOuter, sizeOuter,
+						sliceStart, sliceSpan,
+						Arc2D.PIE
+					);
 					Area doughnutSlice = new Area(pieSlice);
 
 					double gap = renderer.<Number>getSetting(
@@ -433,7 +441,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 					double sizeRelInner = renderer.<Number>getSetting(
 						PieSliceRenderer.RADIUS_INNER).doubleValue();
-					if (sizeRelInner > 0.0) {
+					if (sizeRelInner > 0.0 && sizeRelInner < sizeRelOuter) {
 						double sizeInner = size*sizeRelInner;
 						Ellipse2D inner = new Ellipse2D.Double(
 							-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
@@ -450,8 +458,9 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 						int rows = row.getSource().getRowCount();
 						if (rows > 1) {
 							double posRel = row.getIndex() / (double)(rows - 1);
+							double posRelInv = 1.0 - posRel;
 							coloringRel =
-								(1.0 - posRel)*sliceStartRel + posRel*sliceEndRel;
+								posRelInv*sliceStartRel + posRel*sliceEndRel;
 						}
 						paint = ((ContinuousColorMapper) colorMapper).get(coloringRel);
 					} else {
@@ -472,33 +481,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		public Shape getPointPath(Row row) {
 			throw new UnsupportedOperationException("Not available for pie plots.");
 		}
-
-		@Override
-		public <T> void setSetting(Key key, T value) {
-			T valueOld = getSetting(key);
-			super.setSetting(key, value);
-
-			if (PieSliceRenderer.START.equals(key)) {
-				AxisRenderer axisRenderer = plot.getAxisRenderer(PiePlot.AXIS_PIE);
-				Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
-
-				if (shape != null) {
-					double startOld = ((Number) valueOld).doubleValue();
-					double startNew = ((Number) value).doubleValue();
-					double delta = Math.toRadians(startOld - startNew);
-					AffineTransform tx = AffineTransform.getRotateInstance(delta);
-					shape = tx.createTransformedShape(shape);
-					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
-				}
-			} else if (PieSliceRenderer.CLOCKWISE.equals(key)) {
-				AxisRenderer axisRenderer = plot.getAxisRenderer(PiePlot.AXIS_PIE);
-				Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
-				if (shape != null && !value.equals(valueOld)) {
-					shape = GeometryUtils.reverse(shape);
-					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
-				}
-			}
-		};
 	}
 
 	/**
@@ -510,6 +492,8 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 		setSettingDefault(CENTER, new Point2D.Double(0.5, 0.5));
 		setSettingDefault(RADIUS, 1.0);
+		setSettingDefault(START, 0.0);
+		setSettingDefault(CLOCKWISE, true);
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
 		slicePositions = new HashMap<DataSource, List<Double>>();
@@ -529,16 +513,27 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 	@Override
 	public void refresh() {
-		// Remove previous calculations
-		slicePositions.clear();
+		// Remove obsolete calculations
+		List<DataSource> sources = getVisibleData();
+		for (DataSource data : slicePositions.keySet()) {
+			if (!sources.contains(data)) {
+				slicePositions.remove(data);
+			}
+		}
 
 		// Maintain a list of slice positions in world/data units for each
 		// data source
 		int colIndex = 0;
-		for (DataSource data : getData()) {
-			List<Double> positions = new ArrayList<Double>();
-			double sum = 0.0;
+		for (DataSource data : sources) {
 			Column col = data.getColumn(colIndex);
+			List<Double> positions = slicePositions.get(data);
+			if (positions != null) {
+				positions.clear();
+			} else {
+				positions = new ArrayList<Double>(col.size());
+				slicePositions.put(data, positions);
+			}
+			double sum = 0.0;
 			for (Comparable<?> cell : col) {
 				Number numericCell = (Number) cell;
 				double value = 0.0;
@@ -565,7 +560,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 	@Override
 	protected void autoScaleAxes() {
-		List<DataSource> sources = getData();
+		List<DataSource> sources = getVisibleData();
 		if (sources.isEmpty()) {
 			return;
 		}
@@ -609,6 +604,13 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		PointRenderer pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
 		setMapping(source, AXIS_PIE);
+	}
+
+	@Override
+	public boolean remove(DataSource source) {
+		boolean removed = super.remove(source);
+		slicePositions.remove(source);
+		return removed;
 	}
 
 	/**
@@ -657,4 +659,31 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		}
 		return positions.get(index);
 	}
+
+	@Override
+	public <T> void setSetting(Key key, T value) {
+		T valueOld = this.<T>getSetting(key);
+		super.setSetting(key, value);
+		if (value == null || value.equals(valueOld)) {
+			return;
+		}
+		if (START.equals(key) || CLOCKWISE.equals(key)) {
+			AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_PIE);
+			Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
+
+			if (shape != null) {
+				if (START.equals(key)) {
+					double startOld = ((Number) valueOld).doubleValue();
+					double startNew = ((Number) value).doubleValue();
+					double delta = Math.toRadians(startOld - startNew);
+					AffineTransform tx = AffineTransform.getRotateInstance(delta);
+					shape = tx.createTransformedShape(shape);
+					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
+				} else if (CLOCKWISE.equals(key)) {
+					shape = GeometryUtils.reverse(shape);
+					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
+				}
+			}
+		}
+	};
 }
