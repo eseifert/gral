@@ -43,8 +43,8 @@ public class GraphicsUtilsTest {
 
 	@Test
 	public void testGetOutline() {
-		Shape outline =
-			GraphicsUtils.getOutline("M", Font.decode(null), Float.MAX_VALUE, 0.5);
+		Shape outline = GraphicsUtils.getOutline(
+			"foobar", Font.decode(null), 0f, 0.5);
 		assertNotNull(outline);
 		Rectangle2D bounds = outline.getBounds2D();
 		assertTrue(bounds.getWidth() > 0.0);
