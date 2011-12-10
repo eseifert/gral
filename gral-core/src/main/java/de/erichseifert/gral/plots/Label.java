@@ -26,7 +26,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
@@ -47,24 +46,35 @@ import de.erichseifert.gral.util.SettingsListener;
 public class Label extends AbstractDrawable implements SettingsListener {
 	/** Key for specifying a {@link java.lang.Number} value for the horizontal
 	alignment within the bounding rectangle. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X = new Key("label.alignment.x"); //$NON-NLS-1$
+	public static final Key ALIGNMENT_X =
+		new Key("label.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the vertical
 	alignment within the bounding rectangle. 0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y = new Key("label.alignment.y"); //$NON-NLS-1$
+	public static final Key ALIGNMENT_Y =
+		new Key("label.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance used to display
 	the text of this label. */
-	public static final Key FONT = new Key("label.font"); //$NON-NLS-1$
+	public static final Key FONT =
+		new Key("label.font"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.lang.Number} value for the rotation of
 	this label in degrees. The rotation will be counterclockwise. */
-	public static final Key ROTATION = new Key("label.rotation"); //$NON-NLS-1$
+	public static final Key ROTATION =
+		new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */
-	public static final Key COLOR = new Key("label.color"); //$NON-NLS-1$
+	public static final Key COLOR =
+		new Key("label.color"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Number} value for the alignment
+	of text with multiple lines. 0 means left, 1 means right. */
+	public static final Key ALIGNMENT_TEXT =
+		new Key("label.alignment.text"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.lang.Boolean} value whether the words
+	of the text should be wrapped to fit the size of the label. */
+	public static final Key WORD_WRAP =
+		new Key("label.wordWrap"); //$NON-NLS-1$
 
 	/** Text for this label. */
 	private String text;
-	/** Cached text layout. */
-	private TextLayout layout;
 	/** Cached outline of the label text. */
 	private Shape outline;
 	/** Flag describing whether cached values are still valid. */
@@ -90,15 +100,17 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ROTATION, 0.0);
 		setSettingDefault(COLOR, Color.BLACK);
+		setSettingDefault(ALIGNMENT_TEXT, 0.5);
+		setSettingDefault(WORD_WRAP, Boolean.FALSE);
 	}
 
 	/**
-	 * Draws the {@code Drawable} with the specified
-	 * {@code Graphics2D} object.
+	 * Draws the object with the specified drawing context.
 	 * @param context Environment used for drawing
 	 */
 	public void draw(DrawingContext context) {
-		if (getLayout() == null) {
+		boolean wordWrap = this.<Boolean>getSetting(WORD_WRAP);
+		if (getOutline(wordWrap) == null) {
 			return;
 		}
 
@@ -151,7 +163,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	@Override
 	public Dimension2D getPreferredSize() {
 		Dimension2D d = super.getPreferredSize();
-		if (getLayout() != null) {
+		if (getOutline(false) != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
 			Number rotationObj = this.<Number>getSetting(ROTATION);
@@ -177,25 +189,31 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Returns the {@code de TextLayout} instance for this label.
-	 * @return {@code TextLayout} instance for this label.
+	 * Returns the outline for this label.
+	 * @param wordWrap Wrap the words of the text to fit the current size.
+	 * @return Outline for this label.
 	 */
-	protected TextLayout getLayout() {
+	protected Shape getOutline(boolean wordWrap) {
 		if (!valid && text != null && !text.isEmpty()) {
-			layout = GraphicsUtils.getLayout(
-					text, this.<Font>getSetting(FONT));
-			outline = layout.getOutline(null);
+			Font font = this.<Font>getSetting(FONT);
+			float wrappingWidth = 0f;
+			if (wordWrap) {
+				wrappingWidth = (float) getWidth();
+			}
+			double alignment = this.<Number>getSetting(ALIGNMENT_TEXT).doubleValue();
+			outline = GraphicsUtils.getOutline(text, font, wrappingWidth, alignment);
 			valid = true;
 		}
-		return layout;
+		return outline;
 	}
 
 	/**
-	 * Returns the bounding rectangle of the text without rotation.
-	 * @return Bounds.
+	 * Returns the bounding rectangle of the text without rotation or word
+	 * wrapping.
+	 * @return Bounding rectangle.
 	 */
 	public Rectangle2D getTextRectangle() {
-		return getLayout().getBounds();
+		return getOutline(false).getBounds();
 	}
 
 	/**
@@ -219,7 +237,6 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 * Revalidates the text layout.
 	 */
 	protected void invalidate() {
-		layout = null;
 		outline = null;
 		valid = false;
 	}
@@ -230,9 +247,15 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (FONT.equals(key)) {
+		if (FONT.equals(key) || ALIGNMENT_TEXT.equals(key) ||
+				WORD_WRAP.equals(key)) {
 			invalidate();
 		}
 	}
 
+	@Override
+	public void setBounds(double x, double y, double width, double height) {
+		super.setBounds(x, y, width, height);
+		invalidate();
+	}
 }

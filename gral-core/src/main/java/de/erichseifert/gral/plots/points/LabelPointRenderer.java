@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots.points;
 
 import java.awt.Font;
 import java.awt.Shape;
-import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
@@ -79,10 +78,10 @@ public class LabelPointRenderer extends DefaultPointRenderer {
 		}
 
 		Format format = getSetting(FORMAT);
+		Font font = getSetting(FONT);
 		String text = format.format(labelValue);
-		TextLayout layout = GraphicsUtils.getLayout(
-				text, this.<Font>getSetting(FONT));
-		Shape shape = layout.getOutline(null);
+		double alignment = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		Shape shape = GraphicsUtils.getOutline(text, font, 0f, alignment);
 
 		double alignX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
 		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();

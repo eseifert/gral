@@ -28,9 +28,16 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Abstract class that contains utility functions for working with graphics.
@@ -81,14 +88,72 @@ public abstract class GraphicsUtils {
 	}
 
 	/**
-	 * Returns the layout for the specified text with the specified font.
+	 * Returns the outline for the specified text using the specified font and
+	 * line width. The text may also contain line breaks ({@literal '\n'}).
 	 * @param text Text to be displayed.
 	 * @param font Font of the Text.
-	 * @return TextLayout.
+	 * @param wrappingWidth Maximum width of lines
+	 * @param alignment Alignment of the text when it spans multiple lines.
+	 * @return Shape of the text outline in the specified font.
 	 */
-	public static TextLayout getLayout(String text, Font font) {
-		TextLayout layout = new TextLayout(text, font, frc);
-		return layout;
+	public static Shape getOutline(String text, Font font, float wrappingWidth,
+			double alignment) {
+		boolean wordWrap = true;
+		if (wrappingWidth <= 0f) {
+			wordWrap = false;
+			wrappingWidth = Float.MAX_VALUE;
+		}
+
+		AttributedString string = new AttributedString(text);
+		string.addAttribute(TextAttribute.FONT, font);
+		AttributedCharacterIterator iterator = string.getIterator();
+		LineBreakMeasurer measurer = new LineBreakMeasurer(iterator, frc);
+
+		List<TextLayout> lines = new LinkedList<TextLayout>();
+		while (measurer.getPosition() < text.length()) {
+			// Find out which character will be wrapped next
+			int nextBreakPos = measurer.nextOffset(wrappingWidth);
+			int lineBreakPos = text.indexOf('\n', measurer.getPosition()) + 1;
+
+			int breakPos = nextBreakPos;
+			if (lineBreakPos > 0 && lineBreakPos < nextBreakPos) {
+				breakPos = lineBreakPos;
+			}
+			TextLayout line = measurer.nextLayout(wrappingWidth, breakPos, false);
+			lines.add(line);
+		}
+
+		if (!wordWrap) {
+			// Determine the maximal line length
+			float advanceMax = 0f;
+			for (TextLayout line : lines) {
+				advanceMax = Math.max(line.getAdvance(), advanceMax);
+			}
+			wrappingWidth = advanceMax;
+		}
+
+		AffineTransform txLinePos = new AffineTransform();
+		Area outlineAllLines = null;
+		for (TextLayout line : lines) {
+			// Distribute the space that's left
+			double dx = alignment*(wrappingWidth - line.getAdvance());
+
+			// Move to baseline
+			txLinePos.translate(dx, line.getAscent());
+			// Get the shape of the current line
+			Area outlineLine = new Area(line.getOutline(txLinePos));
+			// Add the shape of the line to the shape
+			if (outlineAllLines == null) {
+				outlineAllLines = outlineLine;
+			} else {
+				outlineAllLines.add(outlineLine);
+			}
+
+			// Move to next line
+			txLinePos.translate(-dx, line.getDescent() + line.getLeading());
+		}
+
+		return outlineAllLines;
 	}
 
 	/**

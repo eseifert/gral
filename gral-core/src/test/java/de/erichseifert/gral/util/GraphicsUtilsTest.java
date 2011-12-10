@@ -33,7 +33,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -43,10 +42,11 @@ public class GraphicsUtilsTest {
 	private static final double DELTA = 1e-15;
 
 	@Test
-	public void testGetLayout() {
-		TextLayout layout = GraphicsUtils.getLayout("M", Font.decode(null));
-		assertNotNull(layout);
-		Rectangle2D bounds = layout.getBounds();
+	public void testGetOutline() {
+		Shape outline =
+			GraphicsUtils.getOutline("M", Font.decode(null), Float.MAX_VALUE, 0.5);
+		assertNotNull(outline);
+		Rectangle2D bounds = outline.getBounds2D();
 		assertTrue(bounds.getWidth() > 0.0);
 		assertTrue(bounds.getHeight() > 0.0);
 	}
