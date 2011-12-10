@@ -198,10 +198,16 @@ public class Label extends AbstractDrawable implements SettingsListener {
 			Font font = this.<Font>getSetting(FONT);
 			float wrappingWidth = 0f;
 			if (wordWrap) {
-				wrappingWidth = (float) getWidth();
+				double rotation = Math.toRadians(this.<Number>getSetting(
+					ROTATION).doubleValue());
+				wrappingWidth = (float) (
+					Math.abs(Math.cos(rotation))*getWidth() +
+					Math.abs(Math.sin(rotation))*getHeight());
 			}
-			double alignment = this.<Number>getSetting(ALIGNMENT_TEXT).doubleValue();
-			outline = GraphicsUtils.getOutline(text, font, wrappingWidth, alignment);
+			double alignment = this.<Number>getSetting(
+				ALIGNMENT_TEXT).doubleValue();
+			outline = GraphicsUtils.getOutline(
+				text, font, wrappingWidth, alignment);
 			valid = true;
 		}
 		return outline;
@@ -247,8 +253,8 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 */
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (FONT.equals(key) || ALIGNMENT_TEXT.equals(key) ||
-				WORD_WRAP.equals(key)) {
+		if (ROTATION.equals(key) || FONT.equals(key) ||
+				ALIGNMENT_TEXT.equals(key) || WORD_WRAP.equals(key)) {
 			invalidate();
 		}
 	}
