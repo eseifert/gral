@@ -54,7 +54,7 @@ import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.axes.Tick;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.plots.lines.LineRenderer;
-import de.erichseifert.gral.plots.points.DefaultPointRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -797,7 +797,7 @@ public class XYPlot extends Plot implements Navigable {
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
 		super.add(index, source, visible);
-		PointRenderer pointRendererDefault = new DefaultPointRenderer();
+		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
 		setPointRenderer(source, pointRendererDefault);

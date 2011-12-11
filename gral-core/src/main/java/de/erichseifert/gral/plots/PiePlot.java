@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -30,9 +31,12 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +46,7 @@ import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.AbstractNavigator;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.Navigable;
 import de.erichseifert.gral.Navigator;
 import de.erichseifert.gral.PlotArea;
@@ -107,7 +112,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	/** Accumulated absolute values of the data source used to calculate the
 	slice positions. */
-	private final Map<DataSource, List<Double>> slicePositions;
+	private final Map<DataSource, List<Slice>> slices;
 	/** Cache for the {@code Navigator} implementation. */
 
 	private PiePlotNavigator navigator;
@@ -354,6 +359,10 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		public PieSliceRenderer(PiePlot plot) {
 			this.plot =  plot;
 
+			setSettingDefault(VALUE_COLUMN, 0);
+			setSettingDefault(ERROR_COLUMN_TOP, 1);
+			setSettingDefault(ERROR_COLUMN_BOTTOM, 2);
+
 			setSettingDefault(RADIUS_OUTER, 1.0);
 			setSettingDefault(RADIUS_INNER, 0.0);
 			setSettingDefault(COLORS, new QuasiRandomColors());
@@ -386,26 +395,23 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 						PieSliceRenderer.VALUE_FONT);
 					double fontSize = font.getSize2D();
 
-					double plotAreaSize = Math.min(getWidth(), getHeight());
-					double sizeRel = plot.<Number>getSetting(
+					double plotAreaSize = Math.min(getWidth(), getHeight())/2.0;
+					double radiusRel = plot.<Number>getSetting(
 						PiePlot.RADIUS).doubleValue();
-					double sizeRelOuter = renderer.<Number>getSetting(
-							PieSliceRenderer.RADIUS_OUTER).doubleValue();
-					double size = plotAreaSize*sizeRel;
-					double sizeOuter = size*sizeRelOuter;
+					double radiusRelOuter = renderer.<Number>getSetting(
+						PieSliceRenderer.RADIUS_OUTER).doubleValue();
+					double radius = plotAreaSize*radiusRel;
+					double radiusOuter = radius*radiusRelOuter;
 
 					// Construct slice
-					double valueStart = 0.0;
-					if (row.getIndex() > 0) {
-						valueStart = plot.getSlicePosition(
-							row.getSource(), row.getIndex() - 1);
-					}
-					double valueEnd = plot.getSlicePosition(
+					Slice slice = plot.getSlice(
 						row.getSource(), row.getIndex());
-					double valueMax = axis.getMax().doubleValue();
+					Slice sliceLast = plot.getSlice(
+						row.getSource(), row.getSource().getRowCount() - 1);
+					double sum = sliceLast.end;
 
-					double sliceStartRel = valueStart/valueMax;
-					double sliceEndRel = valueEnd/valueMax;
+					double sliceStartRel = slice.start/sum;
+					double sliceEndRel = slice.end/sum;
 
 					double start = plot.<Number>getSetting(
 						PiePlot.START).doubleValue();
@@ -422,8 +428,8 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 					start = MathUtils.normalizeDegrees(start);
 
 					Arc2D pieSlice = new Arc2D.Double(
-						-sizeOuter/2d, -sizeOuter/2.0,
-						sizeOuter, sizeOuter,
+						-radiusOuter, -radiusOuter,
+						2.0*radiusOuter, 2.0*radiusOuter,
 						sliceStart, sliceSpan,
 						Arc2D.PIE
 					);
@@ -439,12 +445,14 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 						doughnutSlice.subtract(sliceContour);
 					}
 
-					double sizeRelInner = renderer.<Number>getSetting(
+					double radiusRelInner = renderer.<Number>getSetting(
 						PieSliceRenderer.RADIUS_INNER).doubleValue();
-					if (sizeRelInner > 0.0 && sizeRelInner < sizeRelOuter) {
-						double sizeInner = size*sizeRelInner;
+					if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
+						double radiusInner = radius*radiusRelInner;
 						Ellipse2D inner = new Ellipse2D.Double(
-							-sizeInner/2d, -sizeInner/2d, sizeInner, sizeInner);
+							-radiusInner, -radiusInner,
+							2.0*radiusInner, 2.0*radiusInner
+						);
 						Area hole = new Area(inner);
 						doughnutSlice.subtract(hole);
 					}
@@ -468,6 +476,11 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 					}
 					GraphicsUtils.fillPaintedShape(
 						context.getGraphics(), doughnutSlice, paint, null);
+
+					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+						drawValueLabel(context, slice, radius, row, colValue);
+					}
 				}
 			};
 		}
@@ -479,7 +492,110 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		 * @return Outline that describes the point's shape.
 		 */
 		public Shape getPointPath(Row row) {
-			throw new UnsupportedOperationException("Not available for pie plots.");
+			throw new UnsupportedOperationException(
+				"Not available for pie plots."); //$NON-NLS-1$
+		}
+
+		/**
+		 * Draws the specified value label for the specified shape.
+		 * @param context Environment used for drawing.
+		 * @param slice Pie slice to draw.
+		 * @param radius Radius of pie slice in view units (e.g. pixels).
+		 * @param row Data row containing the point.
+		 * @param col Index of the column that will be projected on the axis.
+		 */
+		protected void drawValueLabel(DrawingContext context, Slice slice,
+				double radius, Row row, int col) {
+			Comparable<?> value = row.get(col);
+
+			// Formatting
+			Format format = getSetting(VALUE_FORMAT);
+			if ((format == null) && (value instanceof Number)) {
+				format = NumberFormat.getInstance();
+			}
+
+			// Text to display
+			String text = (format != null) ? format.format(value) : value.toString();
+
+			// Visual settings
+			Color color = getSetting(VALUE_COLOR);
+			Font font = getSetting(VALUE_FONT);
+			double fontSize = font.getSize2D();
+
+			// Layout settings
+			Location location = getSetting(VALUE_LOCATION);
+			double alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X).doubleValue();
+			double alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y).doubleValue();
+			Number rotation = this.<Number>getSetting(VALUE_ROTATION);
+			Number distanceObj = getSetting(VALUE_DISTANCE);
+			double distance = 0.0;
+			if (MathUtils.isCalculatable(distanceObj)) {
+				distance = distanceObj.doubleValue()*fontSize;
+			}
+
+			// Create a label with the settings
+			Label label = new Label(text);
+			label.setSetting(Label.ALIGNMENT_X, alignX);
+			label.setSetting(Label.ALIGNMENT_Y, alignY);
+			label.setSetting(Label.ROTATION, rotation);
+			label.setSetting(Label.COLOR, color);
+			label.setSetting(Label.FONT, font);
+
+			// Vertical layout
+			double radiusRelOuter = this.<Number>getSetting(
+				RADIUS_OUTER).doubleValue();
+			double radiusRelInner = this.<Number>getSetting(
+					RADIUS_INNER).doubleValue();
+			double radiusOuter = radius*radiusRelOuter;
+			double radiusInner = radius*radiusRelInner;
+			double distanceV = distance;
+			double labelPosV;
+			if (location == Location.NORTH) {
+				labelPosV = radiusOuter + distanceV;
+			} else if (location == Location.SOUTH) {
+				labelPosV = Math.max(radiusInner - distanceV, 0);
+			} else {
+				double sliceHeight = radiusOuter - radiusInner;
+				if (2.0*distance >= sliceHeight) {
+					alignY = 0.5;
+					distanceV = 0.0;
+				}
+				labelPosV = radiusInner + distanceV +
+					alignY*(sliceHeight - 2.0*distanceV);
+			}
+
+			// Horizontal layout
+			Slice sliceLast = plot.getSlice(
+				row.getSource(), row.getSource().getRowCount() - 1);
+			double sum = sliceLast.end;
+			double sliceStartRel = slice.start/sum;
+			double sliceEndRel = slice.end/sum;
+			double circumference = 2.0*labelPosV*Math.PI;
+			double distanceRelH = distance/circumference;
+			double sliceWidthRel = sliceEndRel - sliceStartRel;
+			if (2.0*distanceRelH >= sliceWidthRel) {
+				alignX = 0.5;
+				distanceRelH = 0.0;
+			}
+			double labelPosRelH = sliceStartRel + distanceRelH +
+				alignX*(sliceWidthRel - 2.0*distanceRelH);
+			double angleStart = Math.toRadians(-plot.<Number>getSetting(
+				PiePlot.START).doubleValue());
+			double direction = 1.0;
+			if (!plot.<Boolean>getSetting(PiePlot.CLOCKWISE)) {
+				direction = -1.0;
+			}
+			double angle = angleStart + direction*labelPosRelH*2.0*Math.PI;
+
+			// Layout
+			Dimension2D boundsLabel = label.getPreferredSize();
+			double x = labelPosV*Math.cos(angle) - boundsLabel.getHeight()/2.0;
+			double y = labelPosV*Math.sin(angle) - boundsLabel.getWidth()/2.0;
+			double w = boundsLabel.getWidth();
+			double h = boundsLabel.getHeight();
+			label.setBounds(x, y, w, h);
+
+			label.draw(context);
 		}
 	}
 
@@ -496,7 +612,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		setSettingDefault(CLOCKWISE, true);
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
-		slicePositions = new HashMap<DataSource, List<Double>>();
+		slices = new HashMap<DataSource, List<Slice>>();
 
 		setPlotArea(new PiePlotArea2D(this));
 		// TODO Implement legend for pie plot
@@ -515,36 +631,38 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	public void refresh() {
 		// Remove obsolete calculations
 		List<DataSource> sources = getVisibleData();
-		for (DataSource data : slicePositions.keySet()) {
+		for (DataSource data : slices.keySet()) {
 			if (!sources.contains(data)) {
-				slicePositions.remove(data);
+				slices.remove(data);
 			}
 		}
 
-		// Maintain a list of slice positions in world/data units for each
-		// data source
+		// Maintain a list of slices in world/data units for each
+		// data source. This is used by the point renderers.
 		int colIndex = 0;
 		for (DataSource data : sources) {
 			Column col = data.getColumn(colIndex);
-			List<Double> positions = slicePositions.get(data);
-			if (positions != null) {
-				positions.clear();
+			List<Slice> dataSlices = slices.get(data);
+			if (dataSlices != null) {
+				dataSlices.clear();
 			} else {
-				positions = new ArrayList<Double>(col.size());
-				slicePositions.put(data, positions);
+				dataSlices = new ArrayList<Slice>(col.size());
+				slices.put(data, dataSlices);
 			}
-			double sum = 0.0;
+			double start = 0.0;
 			for (Comparable<?> cell : col) {
 				Number numericCell = (Number) cell;
 				double value = 0.0;
 				if (MathUtils.isCalculatable(numericCell)) {
 					value = numericCell.doubleValue();
 				}
-				// abs is required because negative values cause "empty" slices
-				sum += Math.abs(value);
-				positions.add(sum);
+				// abs() is required because negative values cause
+				// "empty" slices
+				double span = Math.abs(value);
+				Slice slice = new Slice(start, start + span);
+				dataSlices.add(slice);
+				start += span;
 			}
-			slicePositions.put(data, positions);
 		}
 
 		// The maximum values could have been changed, so adjust all axes
@@ -566,12 +684,13 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		}
 
 		DataSource data = sources.get(0);
-		List<Double> positions = slicePositions.get(data);
-		if (positions == null || positions.isEmpty()) {
+		List<Slice> dataSlices = slices.get(data);
+		if (dataSlices == null || dataSlices.isEmpty()) {
 			return;
 		}
 
-		double sum = positions.get(positions.size() - 1);
+		Slice sliceLast = dataSlices.get(dataSlices.size() - 1);
+		double sum = sliceLast.end;
 		for (String axisName : getAxesNames()) {
 			Axis axis = getAxis(axisName);
 			if (axis == null || !axis.isAutoscaled()) {
@@ -609,7 +728,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	@Override
 	public boolean remove(DataSource source) {
 		boolean removed = super.remove(source);
-		slicePositions.remove(source);
+		slices.remove(source);
 		return removed;
 	}
 
@@ -644,6 +763,26 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	}
 
 	/**
+	 * Data class for storing slice information in world units.
+	 */
+	protected static final class Slice {
+		/** Value where the slice starts. */
+		public final double start;
+		/** Value where the slice ends. */
+		public final double end;
+
+		/**
+		 * Initializes a new slice with start and end value.
+		 * @param start Value where the slice starts.
+		 * @param end Value where the slice ends.
+		 */
+		public Slice(double start, double end) {
+			this.start = start;
+			this.end = end;
+		}
+	}
+
+	/**
 	 * Returns the sum of all absolute values from the specified data source up
 	 * to the row with the specified index. This is used to determine the
 	 * position of pie slices.
@@ -652,12 +791,12 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 * @return Sum of all absolute values from the specified data source up
 	 *         to the row with the specified index
 	 */
-	protected Double getSlicePosition(DataSource source, int index) {
-		List<Double> positions = slicePositions.get(source);
-		if (positions == null) {
+	protected Slice getSlice(DataSource source, int index) {
+		List<Slice> dataSlices = slices.get(source);
+		if (dataSlices == null) {
 			return null;
 		}
-		return positions.get(index);
+		return dataSlices.get(index);
 	}
 
 	@Override

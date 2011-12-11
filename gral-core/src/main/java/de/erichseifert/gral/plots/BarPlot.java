@@ -38,7 +38,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -74,7 +74,7 @@ public class BarPlot extends XYPlot {
 	/**
 	 * Class that renders a bar in a bar plot.
 	 */
-	public static class BarRenderer extends AbstractPointRenderer {
+	public static class BarRenderer extends DefaultPointRenderer2D {
 		/** Key for specifying a {@link java.awt.Stroke} instance used to paint
 		the outline of the point shape. */
 		public static final Key STROKE = new Key("barplot.bar.stroke"); //$NON-NLS-1$
@@ -138,8 +138,7 @@ public class BarPlot extends XYPlot {
 
 					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
 						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-						Comparable<?> value = row.get(colValue);
-						drawValue(context, point, value);
+						drawValueLabel(context, point, row, colValue);
 					}
 				}
 			};

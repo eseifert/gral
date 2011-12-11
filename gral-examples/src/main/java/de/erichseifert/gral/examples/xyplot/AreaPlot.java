@@ -34,7 +34,7 @@ import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.areas.LineAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
-import de.erichseifert.gral.plots.points.DefaultPointRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -84,7 +84,7 @@ public class AreaPlot extends ExamplePanel {
 	}
 
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
-		PointRenderer point = new DefaultPointRenderer();
+		PointRenderer point = new DefaultPointRenderer2D();
 		point.setSetting(PointRenderer.COLOR, color);
 		plot.setPointRenderer(data, point);
 		LineRenderer line = new DefaultLineRenderer2D();
@@ -98,7 +98,7 @@ public class AreaPlot extends ExamplePanel {
 	}
 
 	private static void formatLineArea(XYPlot plot, DataSource data, Color color) {
-		PointRenderer point = new DefaultPointRenderer();
+		PointRenderer point = new DefaultPointRenderer2D();
 		point.setSetting(PointRenderer.COLOR, color);
 		plot.setPointRenderer(data, point);
 		plot.setLineRenderer(data, null);

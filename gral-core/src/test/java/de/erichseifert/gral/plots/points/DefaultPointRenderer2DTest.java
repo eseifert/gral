@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots.points;
 
-import static de.erichseifert.gral.TestUtils.assertEquals;
+import static de.erichseifert.gral.TestUtils.assertEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEquals;
 import static de.erichseifert.gral.TestUtils.createTestImage;
@@ -32,6 +32,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,12 +43,13 @@ import org.junit.Test;
 
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
-public class DefaultPointRendererTest {
+public class DefaultPointRenderer2DTest {
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
@@ -71,7 +76,7 @@ public class DefaultPointRendererTest {
 
 	@Before
 	public void setUp() {
-		r = new DefaultPointRenderer();
+		r = new DefaultPointRenderer2D();
 	}
 
 	private static void layout(BufferedImage image, AxisRenderer axisRenderer) {
@@ -112,20 +117,100 @@ public class DefaultPointRendererTest {
 	}
 
 	@Test
-	public void testDisplayValue() {
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		assertPointRenderer(r);
-	}
-
-	@Test
-	public void testDisplayError() {
-		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
-		assertPointRenderer(r);
-	}
-
-	@Test
-	public void testErrorColumns() {
+	public void testValueDisplayed() {
 		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		DrawingContext context;
+		Drawable point;
+
+		// Draw without value labels
+		BufferedImage unset = createTestImage();
+		context = new DrawingContext((Graphics2D) unset.getGraphics());
+		layout(unset, axisRenderer);
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, false);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		// Draw with value labels
+		BufferedImage set = createTestImage();
+		context = new DrawingContext((Graphics2D) set.getGraphics());
+		layout(set, axisRenderer);
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
+
+		assertNotEquals(unset, set);
+	}
+
+	@Test
+	public void testValueFormat() {
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		List<Format> formats = Arrays.asList(
+			(Format) null, NumberFormat.getInstance());
+
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		for (Format format : formats) {
+			r.setSetting(PointRenderer.VALUE_FORMAT, format);
+			int colIndex = 0;
+			Drawable point = r.getPoint(axis, axisRenderer, row, colIndex);
+			assertNotNull(point);
+			BufferedImage image = createTestImage();
+			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			layout(image, axisRenderer);
+			point.draw(context);
+			assertNotEmpty(image);
+		}
+	}
+
+	@Test
+	public void testValueDistance() {
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		List<Double> distances = Arrays.asList(
+			(Double) null, Double.NaN,
+			Double.valueOf(0.0), Double.valueOf(1.0));
+
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		for (Double distance : distances) {
+			r.setSetting(PointRenderer.VALUE_DISTANCE, distance);
+			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
+			assertNotNull(point);
+			BufferedImage image = createTestImage();
+			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			layout(image, axisRenderer);
+			point.draw(context);
+			assertNotEmpty(image);
+		}
+	}
+
+	@Test
+	public void testValueLocation() {
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		Location[] locations = new Location[Location.values().length + 1];
+		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
+
+		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		for (Location location : locations) {
+			r.setSetting(PointRenderer.VALUE_LOCATION, location);
+			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
+			assertNotNull(point);
+			BufferedImage image = createTestImage();
+			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			layout(image, axisRenderer);
+			point.draw(context);
+			assertNotEmpty(image);
+		}
+	}
+
+	@Test
+	public void testErrorDisplayed() {
+		r.setSetting(PointRenderer.ERROR_COLUMN_TOP, 1);
+		r.setSetting(PointRenderer.ERROR_COLUMN_BOTTOM, 1);
+
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
 		DrawingContext context;
 		Drawable point;
 
@@ -139,23 +224,31 @@ public class DefaultPointRendererTest {
 
 		// Draw with error bars
 		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
-		for (int colIndex = -1; colIndex <= table.getColumnCount(); colIndex++) {
-			r.setSetting(PointRenderer.ERROR_COLUMN_TOP, colIndex);
-			r.setSetting(PointRenderer.ERROR_COLUMN_BOTTOM, colIndex);
+		BufferedImage set = createTestImage();
+		context = new DrawingContext((Graphics2D) set.getGraphics());
+		layout(set, axisRenderer);
+		point = r.getPoint(axis, axisRenderer, row, 0);
+		point.draw(context);
 
-			BufferedImage set = createTestImage();
-			context = new DrawingContext((Graphics2D) set.getGraphics());
-			layout(set, axisRenderer);
-			point = r.getPoint(axis, axisRenderer, row, 0);
-			point.draw(context);
-
-			String message = String.format("Column %d:", colIndex);
-			if (colIndex >= 0 && colIndex < table.getColumnCount() && table.isColumnNumeric(colIndex)) {
-				assertNotEquals(message, unset, set);
-			}  else {
-				assertEquals(message, unset, set);
-			}
-		}
+		assertNotEquals(unset, set);
 	}
 
+	@Test
+	public void testErrorNoAxisRenderer() {
+		r.setSetting(PointRenderer.SHAPE, null);
+
+		AxisRenderer axisRenderer = new LinearRenderer2D();
+
+		DrawingContext context;
+		Drawable point;
+
+		// Draw error bars
+		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
+		BufferedImage image = createTestImage();
+		context = new DrawingContext((Graphics2D) image.getGraphics());
+		layout(image, axisRenderer);
+		point = r.getPoint(axis, null, row, 0);
+		point.draw(context);
+		assertEmpty(image);
+	}
 }

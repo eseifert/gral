@@ -21,9 +21,7 @@
  */
 package de.erichseifert.gral.plots.points;
 
-import static de.erichseifert.gral.TestUtils.assertEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.assertNotEquals;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,10 +33,6 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.text.Format;
-import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -47,7 +41,6 @@ import org.junit.Test;
 import de.erichseifert.gral.AbstractDrawable;
 import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -109,16 +102,6 @@ public class AbstractPointRendererTest {
 						GraphicsUtils.fillPaintedShape(g, point, paint, null);
 					}
 
-					boolean displayValueLabel = renderer.<Boolean>getSetting(PointRenderer.VALUE_DISPLAYED);
-					if (displayValueLabel) {
-						drawValue(context, point, valueObj);
-					}
-
-					boolean displayErrorBars = renderer.<Boolean>getSetting(PointRenderer.ERROR_DISPLAYED);
-					if (displayErrorBars) {
-						drawError(context, point, value, 2.0, 2.0, axis, axisRenderer);
-					}
-
 					if (axisRenderer != null) {
 						g.translate(-posX, -posY);
 					}
@@ -170,137 +153,5 @@ public class AbstractPointRendererTest {
 		// Remove
 		r.removeSetting(PointRenderer.COLOR);
 		assertEquals(Color.BLACK, r.getSetting(PointRenderer.COLOR));
-	}
-
-	@Test
-	public void testValueRendering() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		DrawingContext context;
-		Drawable point;
-
-		// Draw without value labels
-		BufferedImage unset = createTestImage();
-		context = new DrawingContext((Graphics2D) unset.getGraphics());
-		layout(unset, axisRenderer);
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, false);
-		point = r.getPoint(axis, axisRenderer, row, 0);
-		point.draw(context);
-
-		// Draw with value labels
-		BufferedImage set = createTestImage();
-		context = new DrawingContext((Graphics2D) set.getGraphics());
-		layout(set, axisRenderer);
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		point = r.getPoint(axis, axisRenderer, row, 0);
-		point.draw(context);
-
-		assertNotEquals(unset, set);
-	}
-
-	@Test
-	public void testValueFormat() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		List<Format> formats = Arrays.asList(
-			(Format) null, NumberFormat.getInstance());
-
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		for (Format format : formats) {
-			r.setSetting(PointRenderer.VALUE_FORMAT, format);
-			for (int colIndex = 0; colIndex < table.getColumnCount(); colIndex++) {
-				Drawable point = r.getPoint(axis, axisRenderer, row, colIndex);
-				assertNotNull(point);
-				BufferedImage image = createTestImage();
-				DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-				layout(image, axisRenderer);
-				point.draw(context);
-				assertNotEmpty(image);
-			}
-		}
-	}
-
-	@Test
-	public void testValueDistance() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		List<Double> distances = Arrays.asList(
-			(Double) null, Double.NaN,
-			Double.valueOf(0.0), Double.valueOf(1.0));
-
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		for (Double distance : distances) {
-			r.setSetting(PointRenderer.VALUE_DISTANCE, distance);
-			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
-			assertNotNull(point);
-			BufferedImage image = createTestImage();
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-			layout(image, axisRenderer);
-			point.draw(context);
-			assertNotEmpty(image);
-		}
-	}
-
-	@Test
-	public void testValueLocation() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		Location[] locations = new Location[Location.values().length + 1];
-		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
-
-		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		for (Location location : locations) {
-			r.setSetting(PointRenderer.VALUE_LOCATION, location);
-			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
-			assertNotNull(point);
-			BufferedImage image = createTestImage();
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
-			layout(image, axisRenderer);
-			point.draw(context);
-			assertNotEmpty(image);
-		}
-	}
-
-	@Test
-	public void testErrorRendering() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		DrawingContext context;
-		Drawable point;
-
-		// Draw without error bars
-		r.setSetting(PointRenderer.ERROR_DISPLAYED, false);
-		BufferedImage unset = createTestImage();
-		context = new DrawingContext((Graphics2D) unset.getGraphics());
-		layout(unset, axisRenderer);
-		point = r.getPoint(axis, axisRenderer, row, 0);
-		point.draw(context);
-
-		// Draw with error bars
-		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
-		BufferedImage set = createTestImage();
-		context = new DrawingContext((Graphics2D) set.getGraphics());
-		layout(set, axisRenderer);
-		point = r.getPoint(axis, axisRenderer, row, 0);
-		point.draw(context);
-
-		assertNotEquals(unset, set);
-	}
-
-	@Test
-	public void testErrorNullRenderer() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
-		DrawingContext context;
-		Drawable point;
-
-		// Draw error bars
-		r.setSetting(PointRenderer.ERROR_DISPLAYED, true);
-		BufferedImage image = createTestImage();
-		context = new DrawingContext((Graphics2D) image.getGraphics());
-		layout(image, axisRenderer);
-		point = r.getPoint(axis, null, row, 0);
-		point.draw(context);
-		assertEmpty(image);
 	}
 }

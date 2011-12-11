@@ -39,7 +39,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
-import de.erichseifert.gral.plots.points.DefaultPointRenderer;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -108,7 +108,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
 		sizeablePointRenderer.setSetting(PointRenderer.COLOR, GraphicsUtils.deriveDarker(COLOR1));
 		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
-		PointRenderer defaultPointRenderer = new DefaultPointRenderer();
+		PointRenderer defaultPointRenderer = new DefaultPointRenderer2D();
 		defaultPointRenderer.setSetting(PointRenderer.COLOR, GraphicsUtils.deriveDarker(COLOR2));
 		defaultPointRenderer.setSetting(PointRenderer.ERROR_DISPLAYED, true);
 		defaultPointRenderer.setSetting(PointRenderer.ERROR_COLOR, COLOR2);
