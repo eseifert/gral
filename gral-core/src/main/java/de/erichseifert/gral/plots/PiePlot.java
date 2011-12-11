@@ -68,6 +68,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
+import de.erichseifert.gral.util.SettingChangeEvent;
 
 
 /**
@@ -819,20 +820,18 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	}
 
 	@Override
-	public <T> void setSetting(Key key, T value) {
-		T valueOld = this.<T>getSetting(key);
-		super.setSetting(key, value);
-		if (value == null || value.equals(valueOld)) {
-			return;
-		}
-		if (START.equals(key) || CLOCKWISE.equals(key)) {
-			AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
+	public void settingChanged(SettingChangeEvent event) {
+		super.settingChanged(event);
+		Key key = event.getKey();
+
+		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
+		if ((START.equals(key) || CLOCKWISE.equals(key)) && axisRenderer != null) {
 			Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
 
 			if (shape != null) {
-				if (START.equals(key)) {
-					double startOld = ((Number) valueOld).doubleValue();
-					double startNew = ((Number) value).doubleValue();
+				if (START.equals(key) && event.getValOld() != null) {
+					double startOld = ((Number) event.getValOld()).doubleValue();
+					double startNew = ((Number) event.getValNew()).doubleValue();
 					double delta = Math.toRadians(startOld - startNew);
 					AffineTransform tx = AffineTransform.getRotateInstance(delta);
 					shape = tx.createTransformedShape(shape);
@@ -843,5 +842,5 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 				}
 			}
 		}
-	};
+	}
 }
