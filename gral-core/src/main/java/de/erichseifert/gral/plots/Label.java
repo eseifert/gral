@@ -75,13 +75,14 @@ public class Label extends AbstractDrawable implements SettingsListener {
 
 	/** Text for this label. */
 	private String text;
-	/** Cached outline of the label text. */
-	private Shape outline;
-	/** Flag describing whether cached values are still valid. */
-	private boolean valid;
+
+	/** Cached outline of the label text with word wrapping. */
+	private Shape outlineWrapped;
+	/** Cached outline of the label text without word wrapping. */
+	private Shape outlineUnwrapped;
 
 	/**
-	 * Initializes a new empty {@code Label} instances.
+	 * Initializes a new empty {@code Label} instance.
 	 */
 	public Label() {
 		this(""); //$NON-NLS-1$
@@ -110,12 +111,13 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 */
 	public void draw(DrawingContext context) {
 		boolean wordWrap = this.<Boolean>getSetting(WORD_WRAP);
-		if (getOutline(wordWrap) == null) {
+		Shape labelShape = getCachedOutline(wordWrap);
+
+		if (labelShape == null) {
 			return;
 		}
 
-		Shape labelShape = outline;
-		Rectangle2D textBounds = outline.getBounds2D();
+		Rectangle2D textBounds = labelShape.getBounds2D();
 
 		// Rotate label text around its center point
 		Number rotationObj = this.<Number>getSetting(ROTATION);
@@ -163,7 +165,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	@Override
 	public Dimension2D getPreferredSize() {
 		Dimension2D d = super.getPreferredSize();
-		if (getOutline(false) != null) {
+		if (getCachedOutline(false) != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
 			Number rotationObj = this.<Number>getSetting(ROTATION);
@@ -189,28 +191,42 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Returns the outline for this label.
+	 * Returns an outline shape for this label.
 	 * @param wordWrap Wrap the words of the text to fit the current size.
 	 * @return Outline for this label.
 	 */
 	protected Shape getOutline(boolean wordWrap) {
-		if (!valid && text != null && !text.isEmpty()) {
-			Font font = this.<Font>getSetting(FONT);
-			float wrappingWidth = 0f;
-			if (wordWrap) {
-				double rotation = Math.toRadians(this.<Number>getSetting(
-					ROTATION).doubleValue());
-				wrappingWidth = (float) (
-					Math.abs(Math.cos(rotation))*getWidth() +
-					Math.abs(Math.sin(rotation))*getHeight());
-			}
-			double alignment = this.<Number>getSetting(
-				ALIGNMENT_TEXT).doubleValue();
-			outline = GraphicsUtils.getOutline(
-				text, font, wrappingWidth, alignment);
-			valid = true;
+		Font font = this.<Font>getSetting(FONT);
+		float wrappingWidth = 0f;
+		if (wordWrap) {
+			double rotation = Math.toRadians(this.<Number>getSetting(
+				ROTATION).doubleValue());
+			wrappingWidth = (float) (
+				Math.abs(Math.cos(rotation))*getWidth() +
+				Math.abs(Math.sin(rotation))*getHeight());
 		}
+		double alignment = this.<Number>getSetting(
+			ALIGNMENT_TEXT).doubleValue();
+		Shape outline = GraphicsUtils.getOutline(
+			text, font, wrappingWidth, alignment);
 		return outline;
+	}
+
+	/**
+	 * Returns a cached instance of the outline shape for this label.
+	 * @param wordWrap Flag, whether to wrap lines to fit the current size.
+	 * @return An instance of the outline shape for this label.
+	 */
+	protected Shape getCachedOutline(boolean wordWrap) {
+		if (!isValid() && text != null && !text.isEmpty()) {
+			outlineWrapped = getOutline(true);
+			outlineUnwrapped = getOutline(false);
+		}
+		if (wordWrap) {
+			return outlineWrapped;
+		} else {
+			return outlineUnwrapped;
+		}
 	}
 
 	/**
@@ -219,7 +235,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 * @return Bounding rectangle.
 	 */
 	public Rectangle2D getTextRectangle() {
-		return getOutline(false).getBounds();
+		return getCachedOutline(false).getBounds();
 	}
 
 	/**
@@ -240,11 +256,25 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	}
 
 	/**
-	 * Revalidates the text layout.
+	 * Marks the text layout as invalid. It has to be refreshed the next time.
 	 */
 	protected void invalidate() {
-		outline = null;
-		valid = false;
+		outlineWrapped = null;
+		outlineUnwrapped = null;
+	}
+
+	/**
+	 * Returns whether the cached values in this label are valid.
+	 * @return {@code true} if all cached values are valid,
+	 *         otherwise {@code false}.
+	 */
+	protected boolean isValid() {
+		boolean wordWrap = this.<Boolean>getSetting(WORD_WRAP);
+		if (wordWrap) {
+			return outlineWrapped != null;
+		} else {
+			return outlineUnwrapped != null;
+		}
 	}
 
 	/**
@@ -261,7 +291,11 @@ public class Label extends AbstractDrawable implements SettingsListener {
 
 	@Override
 	public void setBounds(double x, double y, double width, double height) {
+		double widthOld = getWidth();
+		double heightOld = getHeight();
 		super.setBounds(x, y, width, height);
-		invalidate();
+		if (width != widthOld || height != heightOld) {
+			invalidate();
+		}
 	}
 }
