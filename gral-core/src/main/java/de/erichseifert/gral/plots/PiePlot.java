@@ -33,6 +33,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
@@ -84,8 +85,8 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class PiePlot extends Plot implements DataListener, Navigable {
-	/** Key for specifying the x-axis of an xy-plot. */
-	public static String AXIS_PIE = "pie"; //$NON-NLS-1$
+	/** Key for specifying the tangential axis of a pie plot. */
+	public static String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
 	/** Key for specifying {@link java.awt.Point2D} instance defining the
 	center of the pie. The coordinates must be relative to the plot area
@@ -533,14 +534,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 				distance = distanceObj.doubleValue()*fontSize;
 			}
 
-			// Create a label with the settings
-			Label label = new Label(text);
-			label.setSetting(Label.ALIGNMENT_X, alignX);
-			label.setSetting(Label.ALIGNMENT_Y, alignY);
-			label.setSetting(Label.ROTATION, rotation);
-			label.setSetting(Label.COLOR, color);
-			label.setSetting(Label.FONT, font);
-
 			// Vertical layout
 			double radiusRelOuter = this.<Number>getSetting(
 				RADIUS_OUTER).doubleValue();
@@ -586,13 +579,39 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 				direction = -1.0;
 			}
 			double angle = angleStart + direction*labelPosRelH*2.0*Math.PI;
+			double dirX = Math.cos(angle);
+			double dirY = Math.sin(angle);
 
-			// Layout
-			Dimension2D boundsLabel = label.getPreferredSize();
-			double x = labelPosV*Math.cos(angle) - boundsLabel.getHeight()/2.0;
-			double y = labelPosV*Math.sin(angle) - boundsLabel.getWidth()/2.0;
-			double w = boundsLabel.getWidth();
-			double h = boundsLabel.getHeight();
+			// Create a label with the settings
+			Label label = new Label(text);
+			label.setSetting(Label.ALIGNMENT_X, 1.0 - 0.5*dirX - 0.5);
+			label.setSetting(Label.ALIGNMENT_Y, 1.0 - 0.5*dirY - 0.5);
+			label.setSetting(Label.ROTATION, rotation);
+			label.setSetting(Label.COLOR, color);
+			label.setSetting(Label.FONT, font);
+
+			// Calculate label position
+			Dimension2D sizeLabel = label.getPreferredSize();
+			Point2D labelAnchor;
+			if (location == Location.CENTER) {
+				labelAnchor = new Point2D.Double(0.5, 0.5);
+			} else {
+				double hypotLabel = sizeLabel.getWidth() + sizeLabel.getHeight();
+				Line2D sliceDirectionLine = new Line2D.Double(
+					0.0, 0.0, dirX*hypotLabel, dirY*hypotLabel);
+				Rectangle2D labelBounds = new Rectangle2D.Double(
+					-sizeLabel.getWidth()/2.0, -sizeLabel.getHeight()/2.0,
+					sizeLabel.getWidth(), sizeLabel.getHeight());
+				List<Point2D> intersections = GeometryUtils.intersection(
+					sliceDirectionLine, labelBounds);
+				labelAnchor = intersections.get(0);
+			}
+
+			// Resize label component
+			double x = labelPosV*dirX + labelAnchor.getX() - sizeLabel.getWidth()/2.0;
+			double y = labelPosV*dirY + labelAnchor.getY() - sizeLabel.getHeight()/2.0;
+			double w = sizeLabel.getWidth();
+			double h = sizeLabel.getHeight();
 			label.setBounds(x, y, w, h);
 
 			label.draw(context);
@@ -673,7 +692,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	protected void createDefaultAxes() {
 		// Create x axis and y axis by default
 		Axis axisPie = new Axis();
-		setAxis(AXIS_PIE, axisPie);
+		setAxis(AXIS_TANGENTIAL, axisPie);
 	}
 
 	@Override
@@ -710,7 +729,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		// Don't show axis
 		renderer.setSetting(AxisRenderer.SHAPE_VISIBLE, false);
 
-		setAxisRenderer(AXIS_PIE, renderer);
+		setAxisRenderer(AXIS_TANGENTIAL, renderer);
 	}
 
 	@Override
@@ -722,7 +741,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		super.add(index, source, visible);
 		PointRenderer pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
-		setMapping(source, AXIS_PIE);
+		setMapping(source, AXIS_TANGENTIAL);
 	}
 
 	@Override
@@ -807,7 +826,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 			return;
 		}
 		if (START.equals(key) || CLOCKWISE.equals(key)) {
-			AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_PIE);
+			AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
 			Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
 
 			if (shape != null) {

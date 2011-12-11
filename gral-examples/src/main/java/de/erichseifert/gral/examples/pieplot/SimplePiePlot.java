@@ -22,6 +22,8 @@
 package de.erichseifert.gral.examples.pieplot;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataTable;
@@ -35,7 +37,7 @@ import de.erichseifert.gral.util.Insets2D;
 
 public class SimplePiePlot extends ExamplePanel {
 	private static final long serialVersionUID = 1L;
-	private static final int SAMPLE_COUNT = 15;
+	private static final int SAMPLE_COUNT = 10;
 	/** Instance to generate random data values. */
 	private static Random random = new Random();
 
@@ -44,7 +46,7 @@ public class SimplePiePlot extends ExamplePanel {
 		// Create data
 		DataTable data = new DataTable(Integer.class);
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
-			int val = random.nextInt(10) + 1;
+			int val = random.nextInt(8) + 2;
 			data.add((random.nextDouble() <= 0.15) ? -val : val);
 		}
 
@@ -65,6 +67,10 @@ public class SimplePiePlot extends ExamplePanel {
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLORS, colors);
+		// Show labels
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_DISPLAYED, true);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_COLOR, Color.WHITE);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_FONT, Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
