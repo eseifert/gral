@@ -37,13 +37,13 @@ public class DataTableTest {
 	@SuppressWarnings("unchecked")
 	public void setUp() {
 		table = new DataTable(Integer.class, Integer.class);
-		table.add(1, 1); // 0
-		table.add(2, 3); // 1
-		table.add(3, 2); // 2
-		table.add(4, 6); // 3
-		table.add(5, 4); // 4
-		table.add(6, 8); // 5
-		table.add(7, 9); // 6
+		table.add(1,  1); // 0
+		table.add(2,  3); // 1
+		table.add(3,  2); // 2
+		table.add(4,  6); // 3
+		table.add(5,  4); // 4
+		table.add(6,  8); // 5
+		table.add(7,  9); // 6
 		table.add(8, 11); // 7
 	}
 

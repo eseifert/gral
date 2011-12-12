@@ -46,6 +46,8 @@ public class DataTable extends AbstractDataSource {
 	private final List<Comparable<?>[]> rows;
 	/** Number of rows. */
 	private int rowCount;
+	/** Structure for handling concurrent access by threads. */
+	private final Object mutex;
 
 	/**
 	 * Initializes a new instance with the specified number of columns and
@@ -54,7 +56,8 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
-		rows = Collections.synchronizedList(new ArrayList<Comparable<?>[]>());
+		rows = new ArrayList<Comparable<?>[]>();
+		mutex = this;
 	}
 
 	/**
@@ -89,9 +92,12 @@ public class DataTable extends AbstractDataSource {
 	 * the table columns and the values do not match, an
 	 * {@code IllegalArgumentException} is thrown.
 	 * @param values values to be added as a row
+	 * @return Index of the row that has been added.
 	 */
-	public void add(Comparable<?>... values) {
-		add(Arrays.asList(values));
+	public int add(Comparable<?>... values) {
+		synchronized (mutex) {
+			return add(Arrays.asList(values));
+		}
 	}
 
 	/**
@@ -100,31 +106,35 @@ public class DataTable extends AbstractDataSource {
 	 * the table columns and the values do not match, an
 	 * {@code IllegalArgumentException} is thrown.
 	 * @param values values to be added as a row
+	 * @return Index of the row that has been added.
 	 */
-	public void add(Collection<? extends Comparable<?>> values) {
-		if (values.size() != getColumnCount()) {
-			throw new IllegalArgumentException(MessageFormat.format(
-				"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
-				getColumnCount(), values.size()));
-		}
-		int i = 0;
-		Comparable<?>[] row = new Comparable<?>[values.size()];
-		DataChangeEvent[] events = new DataChangeEvent[row.length];
-		Class<? extends Comparable<?>>[] types = getColumnTypes();
-		for (Comparable<?> value : values) {
-			if ((value != null)
-					&& !(types[i].isAssignableFrom(value.getClass()))) {
+	public int add(Collection<? extends Comparable<?>> values) {
+		synchronized (mutex) {
+			if (values.size() != getColumnCount()) {
 				throw new IllegalArgumentException(MessageFormat.format(
-					"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
-					types[i], value.getClass()));
+					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
+					getColumnCount(), values.size()));
 			}
-			row[i] = value;
-			events[i] = new DataChangeEvent(this, i, rowCount, null, value);
-			i++;
+			int i = 0;
+			Comparable<?>[] row = new Comparable<?>[values.size()];
+			DataChangeEvent[] events = new DataChangeEvent[row.length];
+			Class<? extends Comparable<?>>[] types = getColumnTypes();
+			for (Comparable<?> value : values) {
+				if ((value != null)
+						&& !(types[i].isAssignableFrom(value.getClass()))) {
+					throw new IllegalArgumentException(MessageFormat.format(
+						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
+						types[i], value.getClass()));
+				}
+				row[i] = value;
+				events[i] = new DataChangeEvent(this, i, rowCount, null, value);
+				i++;
+			}
+			rows.add(row);
+			rowCount++;
+			notifyDataAdded(events);
+			return rowCount - 1;
 		}
-		rows.add(row);
-		rowCount++;
-		notifyDataAdded(events);
 	}
 
 	/**
@@ -133,13 +143,16 @@ public class DataTable extends AbstractDataSource {
 	 * the table columns and the values do not match, an
 	 * {@code IllegalArgumentException} is thrown.
 	 * @param row Row to be added
+	 * @return Index of the row that has been added.
 	 */
-	public void add(Row row) {
-		List<Comparable<?>> values = new ArrayList<Comparable<?>>(row.size());
-		for (Comparable<?> value : row) {
-			values.add(value);
+	public int add(Row row) {
+		synchronized (mutex) {
+			List<Comparable<?>> values = new ArrayList<Comparable<?>>(row.size());
+			for (Comparable<?> value : row) {
+				values.add(value);
+			}
+			return add(values);
 		}
-		add(values);
 	}
 
 	/**
@@ -147,13 +160,16 @@ public class DataTable extends AbstractDataSource {
 	 * @param row Index of the row to remove
 	 */
 	public void remove(int row) {
+		DataChangeEvent[] events;
 		Row r = new Row(this, row);
-		DataChangeEvent[] events = new DataChangeEvent[getColumnCount()];
-		for (int col = 0; col < events.length; col++) {
-			events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
+		synchronized (mutex) {
+			events = new DataChangeEvent[getColumnCount()];
+			for (int col = 0; col < events.length; col++) {
+				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
+			}
+			rows.remove(row);
+			rowCount--;
 		}
-		rows.remove(row);
-		rowCount--;
 		notifyDataRemoved(events);
 	}
 
@@ -161,8 +177,10 @@ public class DataTable extends AbstractDataSource {
 	 * Deletes all rows this table contains.
 	 */
 	public void clear() {
-		rows.clear();
-		rowCount = 0;
+		synchronized (mutex) {
+			rows.clear();
+			rowCount = 0;
+		}
 		// FIXME Give arguments to the following method invocation
 		notifyDataRemoved();
 	}
@@ -187,12 +205,14 @@ public class DataTable extends AbstractDataSource {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Comparable<T> set(int col, int row, Comparable<T> value) {
-		Comparable<T> old = (Comparable<T>) get(col, row);
-		if (!old.equals(value)) {
-			rows.get(row)[col] = value;
-			notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
+		synchronized (mutex) {
+			Comparable<T> old = (Comparable<T>) get(col, row);
+			if (!old.equals(value)) {
+				rows.get(row)[col] = value;
+				notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
+			}
+			return old;
 		}
-		return old;
 	}
 
 	/**
@@ -200,7 +220,9 @@ public class DataTable extends AbstractDataSource {
 	 * @return number of rows in the data source.
 	 */
 	public int getRowCount() {
-		return rowCount;
+		synchronized (mutex) {
+			return rowCount;
+		}
 	}
 
 	/**
@@ -209,16 +231,18 @@ public class DataTable extends AbstractDataSource {
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(final DataComparator... comparators) {
-		Collections.sort(rows, new Comparator<Comparable<?>[]>() {
-			public int compare(Comparable<?>[] o1, Comparable<?>[] o2) {
-				for (DataComparator comp : comparators) {
-					int result = comp.compare(o1, o2);
-					if (result != 0) {
-						return result;
+		synchronized (mutex) {
+			Collections.sort(rows, new Comparator<Comparable<?>[]>() {
+				public int compare(Comparable<?>[] o1, Comparable<?>[] o2) {
+					for (DataComparator comp : comparators) {
+						int result = comp.compare(o1, o2);
+						if (result != 0) {
+							return result;
+						}
 					}
+					return 0;
 				}
-				return 0;
-			}
-		});
+			});
+		}
 	}
 }

@@ -33,6 +33,7 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 @Suite.SuiteClasses({
 	// Tests for classes
 	DataTableTest.class,
+	DataTableConcurrencyTest.class,
 	DataSeriesTest.class,
 	RowSubsetTest.class,
 	EnumeratedDataTest.class,
