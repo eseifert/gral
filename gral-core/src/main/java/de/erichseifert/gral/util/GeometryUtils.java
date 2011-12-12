@@ -172,7 +172,7 @@ public abstract class GeometryUtils {
 		double sqrLenE = e.lengthSq();
 		kross = e.cross(d0);
 		sqrKross = kross*kross;
-		if (sqrKross > SQR_EPSILON*sqrLen0*sqrLenE) {
+		if (sqrKross > EPSILON_SQ*sqrLen0*sqrLenE) {
 			return null;
 		}
 		*/

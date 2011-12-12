@@ -33,7 +33,6 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
@@ -593,24 +592,20 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 			// Calculate label position
 			Dimension2D sizeLabel = label.getPreferredSize();
-			Point2D labelAnchor;
-			if (location == Location.CENTER) {
-				labelAnchor = new Point2D.Double(0.5, 0.5);
-			} else {
-				double hypotLabel = sizeLabel.getWidth() + sizeLabel.getHeight();
-				Line2D sliceDirectionLine = new Line2D.Double(
-					0.0, 0.0, dirX*hypotLabel, dirY*hypotLabel);
-				Rectangle2D labelBounds = new Rectangle2D.Double(
-					-sizeLabel.getWidth()/2.0, -sizeLabel.getHeight()/2.0,
-					sizeLabel.getWidth(), sizeLabel.getHeight());
-				List<Point2D> intersections = GeometryUtils.intersection(
-					sliceDirectionLine, labelBounds);
-				labelAnchor = intersections.get(0);
+			double anchorX = 0.5;
+			double anchorY = 0.5;
+			if (location == Location.NORTH || location == Location.SOUTH) {
+				anchorX = dirX*sizeLabel.getWidth()/2.0;
+				anchorY = dirY*sizeLabel.getHeight()/2.0;
+				if (location == Location.SOUTH) {
+					anchorX = -anchorX;
+					anchorY = -anchorY;
+				}
 			}
 
 			// Resize label component
-			double x = labelPosV*dirX + labelAnchor.getX() - sizeLabel.getWidth()/2.0;
-			double y = labelPosV*dirY + labelAnchor.getY() - sizeLabel.getHeight()/2.0;
+			double x = labelPosV*dirX + anchorX - sizeLabel.getWidth()/2.0;
+			double y = labelPosV*dirY + anchorY - sizeLabel.getHeight()/2.0;
 			double w = sizeLabel.getWidth();
 			double h = sizeLabel.getHeight();
 			label.setBounds(x, y, w, h);
