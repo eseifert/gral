@@ -46,8 +46,6 @@ public class DataTable extends AbstractDataSource {
 	private final List<Comparable<?>[]> rows;
 	/** Number of rows. */
 	private int rowCount;
-	/** Structure for handling concurrent access by threads. */
-	private final Object mutex;
 
 	/**
 	 * Comparator class for comparing two arrays containing row data using a
@@ -92,7 +90,6 @@ public class DataTable extends AbstractDataSource {
 	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
 		rows = new ArrayList<Comparable<?>[]>();
-		mutex = this;
 	}
 
 	/**
@@ -142,7 +139,7 @@ public class DataTable extends AbstractDataSource {
 	 * @return Index of the row that has been added.
 	 */
 	public int add(Collection<? extends Comparable<?>> values) {
-		synchronized (mutex) {
+		synchronized (this) {
 			if (values.size() != getColumnCount()) {
 				throw new IllegalArgumentException(MessageFormat.format(
 					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
@@ -195,7 +192,7 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void remove(int row) {
 		DataChangeEvent[] events;
-		synchronized (mutex) {
+		synchronized (this) {
 			Row r = new Row(this, row);
 			events = new DataChangeEvent[getColumnCount()];
 			for (int col = 0; col < events.length; col++) {
@@ -211,7 +208,7 @@ public class DataTable extends AbstractDataSource {
 	 * Deletes all rows this table contains.
 	 */
 	public void clear() {
-		synchronized (mutex) {
+		synchronized (rows) {
 			rows.clear();
 			rowCount = 0;
 		}
@@ -226,7 +223,9 @@ public class DataTable extends AbstractDataSource {
 	 * @return the specified value of the data cell
 	 */
 	public Comparable<?> get(int col, int row) {
-		return rows.get(row)[col];
+		synchronized (rows) {
+			return rows.get(row)[col];
+		}
 	}
 
 	/**
@@ -239,14 +238,19 @@ public class DataTable extends AbstractDataSource {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Comparable<T> set(int col, int row, Comparable<T> value) {
-		synchronized (mutex) {
-			Comparable<T> old = (Comparable<T>) get(col, row);
+		Comparable<T> old;
+		DataChangeEvent event = null;
+		synchronized (this) {
+			old = (Comparable<T>) get(col, row);
 			if (!old.equals(value)) {
 				rows.get(row)[col] = value;
-				notifyDataUpdated(new DataChangeEvent(this, col, row, old, value));
+				event = new DataChangeEvent(this, col, row, old, value);
 			}
-			return old;
 		}
+		if (event != null) {
+			notifyDataUpdated(event);
+		}
+		return old;
 	}
 
 	/**
@@ -263,8 +267,9 @@ public class DataTable extends AbstractDataSource {
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(final DataComparator... comparators) {
-		synchronized (mutex) {
-			Collections.sort(rows, new RowComparator(comparators));
+		synchronized (rows) {
+			RowComparator comparator = new RowComparator(comparators);
+			Collections.sort(rows, comparator);
 		}
 	}
 }
