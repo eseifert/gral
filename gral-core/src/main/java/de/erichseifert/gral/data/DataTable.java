@@ -50,6 +50,41 @@ public class DataTable extends AbstractDataSource {
 	private final Object mutex;
 
 	/**
+	 * Comparator class for comparing two arrays containing row data using a
+	 * specified set of {@code DataComparator}s.
+	 */
+	private final class RowComparator implements Comparator<Comparable<?>[]> {
+		/** Rules to use for sorting. */
+		private final DataComparator[] comparators;
+
+		/**
+		 * Initializes a new instance with a specified set of
+		 * {@code DataComparator}s.
+		 * @param comparators Set of {@code DataComparator}s to use as rules.
+		 */
+		public RowComparator(DataComparator[] comparators) {
+			this.comparators = comparators;
+		}
+
+		/**
+		 * Compares two rows using the rules defined by the
+		 * {@code DataComparator}s of this instance.
+	     * @return A negative number if first argument is less than the second,
+	     *         zero if first argument is equal to the second,
+	     *         or a positive integer as the greater than the second.
+		 */
+		public int compare(Comparable<?>[] row1, Comparable<?>[] row2) {
+			for (DataComparator comparator : comparators) {
+				int result = comparator.compare(row1, row2);
+				if (result != 0) {
+					return result;
+				}
+			}
+			return 0;
+		}
+	};
+
+	/**
 	 * Initializes a new instance with the specified number of columns and
 	 * column types.
 	 * @param types Type for each column
@@ -95,9 +130,7 @@ public class DataTable extends AbstractDataSource {
 	 * @return Index of the row that has been added.
 	 */
 	public int add(Comparable<?>... values) {
-		synchronized (mutex) {
-			return add(Arrays.asList(values));
-		}
+		return add(Arrays.asList(values));
 	}
 
 	/**
@@ -146,13 +179,14 @@ public class DataTable extends AbstractDataSource {
 	 * @return Index of the row that has been added.
 	 */
 	public int add(Row row) {
-		synchronized (mutex) {
-			List<Comparable<?>> values = new ArrayList<Comparable<?>>(row.size());
+		List<Comparable<?>> values;
+		synchronized (row) {
+			values = new ArrayList<Comparable<?>>(row.size());
 			for (Comparable<?> value : row) {
 				values.add(value);
 			}
-			return add(values);
 		}
+		return add(values);
 	}
 
 	/**
@@ -161,8 +195,8 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void remove(int row) {
 		DataChangeEvent[] events;
-		Row r = new Row(this, row);
 		synchronized (mutex) {
+			Row r = new Row(this, row);
 			events = new DataChangeEvent[getColumnCount()];
 			for (int col = 0; col < events.length; col++) {
 				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
@@ -220,9 +254,7 @@ public class DataTable extends AbstractDataSource {
 	 * @return number of rows in the data source.
 	 */
 	public int getRowCount() {
-		synchronized (mutex) {
-			return rowCount;
-		}
+		return rowCount;
 	}
 
 	/**
@@ -232,17 +264,7 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void sort(final DataComparator... comparators) {
 		synchronized (mutex) {
-			Collections.sort(rows, new Comparator<Comparable<?>[]>() {
-				public int compare(Comparable<?>[] o1, Comparable<?>[] o2) {
-					for (DataComparator comp : comparators) {
-						int result = comp.compare(o1, o2);
-						if (result != 0) {
-							return result;
-						}
-					}
-					return 0;
-				}
-			});
+			Collections.sort(rows, new RowComparator(comparators));
 		}
 	}
 }

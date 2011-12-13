@@ -51,6 +51,7 @@ import de.erichseifert.gral.Navigable;
 import de.erichseifert.gral.Navigator;
 import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.Column;
+import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
@@ -111,12 +112,11 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
-	/** Accumulated absolute values of the data source used to calculate the
-	slice positions. */
+	/** Slice objects with start and end position for each visible data source. */
 	private final Map<DataSource, List<Slice>> slices;
 	/** Cache for the {@code Navigator} implementation. */
-
 	private PiePlotNavigator navigator;
+
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
 	 * {@code RADIUS} setting and panning the {@code CENTER} setting.
@@ -331,6 +331,26 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	}
 
 	/**
+	 * Data class for storing slice information in world units.
+	 */
+	protected static final class Slice {
+		/** Value where the slice starts. */
+		public final double start;
+		/** Value where the slice ends. */
+		public final double end;
+
+		/**
+		 * Initializes a new slice with start and end value.
+		 * @param start Value where the slice starts.
+		 * @param end Value where the slice ends.
+		 */
+		public Slice(double start, double end) {
+			this.start = start;
+			this.end = end;
+		}
+	}
+
+	/**
 	 * A point renderer for a single slice in a pie plot.
 	 */
 	public static class PieSliceRenderer extends AbstractPointRenderer {
@@ -407,9 +427,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 					// Construct slice
 					Slice slice = plot.getSlice(
 						row.getSource(), row.getIndex());
-					Slice sliceLast = plot.getSlice(
-						row.getSource(), row.getSource().getRowCount() - 1);
-					double sum = sliceLast.end;
+					double sum = plot.getSum(row.getSource());
 
 					double sliceStartRel = slice.start/sum;
 					double sliceEndRel = slice.end/sum;
@@ -558,9 +576,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 			}
 
 			// Horizontal layout
-			Slice sliceLast = plot.getSlice(
-				row.getSource(), row.getSource().getRowCount() - 1);
-			double sum = sliceLast.end;
+			double sum = plot.getSum(row.getSource());
 			double sliceStartRel = slice.start/sum;
 			double sliceEndRel = slice.end/sum;
 			double circumference = 2.0*labelPosV*Math.PI;
@@ -643,48 +659,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	}
 
 	@Override
-	public void refresh() {
-		// Remove obsolete calculations
-		List<DataSource> sources = getVisibleData();
-		for (DataSource data : slices.keySet()) {
-			if (!sources.contains(data)) {
-				slices.remove(data);
-			}
-		}
-
-		// Maintain a list of slices in world/data units for each
-		// data source. This is used by the point renderers.
-		int colIndex = 0;
-		for (DataSource data : sources) {
-			Column col = data.getColumn(colIndex);
-			List<Slice> dataSlices = slices.get(data);
-			if (dataSlices != null) {
-				dataSlices.clear();
-			} else {
-				dataSlices = new ArrayList<Slice>(col.size());
-				slices.put(data, dataSlices);
-			}
-			double start = 0.0;
-			for (Comparable<?> cell : col) {
-				Number numericCell = (Number) cell;
-				double value = 0.0;
-				if (MathUtils.isCalculatable(numericCell)) {
-					value = numericCell.doubleValue();
-				}
-				// abs() is required because negative values cause
-				// "empty" slices
-				double span = Math.abs(value);
-				Slice slice = new Slice(start, start + span);
-				dataSlices.add(slice);
-				start += span;
-			}
-		}
-
-		// The maximum values could have been changed, so adjust all axes
-		autoScaleAxes();
-	}
-
-	@Override
 	protected void createDefaultAxes() {
 		// Create x axis and y axis by default
 		Axis axisPie = new Axis();
@@ -699,13 +673,15 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		}
 
 		DataSource data = sources.get(0);
-		List<Slice> dataSlices = slices.get(data);
-		if (dataSlices == null || dataSlices.isEmpty()) {
+		if (data.getRowCount() == 0) {
 			return;
 		}
 
-		Slice sliceLast = dataSlices.get(dataSlices.size() - 1);
-		double sum = sliceLast.end;
+		double sum = getSum(data);
+		if (sum == 0.0) {
+			return;
+		}
+
 		for (String axisName : getAxesNames()) {
 			Axis axis = getAxis(axisName);
 			if (axis == null || !axis.isAutoscaled()) {
@@ -720,7 +696,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		// Create a linear renderer for the pie slices by default
 		AxisRenderer renderer = new LinearRenderer2D();
 		// Create a circle with radius 1.0 as shape for the axis
-		Shape shape = new Ellipse2D.Double(-100.0, -100.0, 200.0, 200.0);
+		Shape shape = new Ellipse2D.Double(-1.0, -1.0, 2.0, 2.0);
 		renderer.setSetting(AxisRenderer.SHAPE, shape);
 		// Don't show axis
 		renderer.setSetting(AxisRenderer.SHAPE_VISIBLE, false);
@@ -738,13 +714,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		PointRenderer pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
 		setMapping(source, AXIS_TANGENTIAL);
-	}
-
-	@Override
-	public boolean remove(DataSource source) {
-		boolean removed = super.remove(source);
-		slices.remove(source);
-		return removed;
 	}
 
 	/**
@@ -778,26 +747,6 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	}
 
 	/**
-	 * Data class for storing slice information in world units.
-	 */
-	protected static final class Slice {
-		/** Value where the slice starts. */
-		public final double start;
-		/** Value where the slice ends. */
-		public final double end;
-
-		/**
-		 * Initializes a new slice with start and end value.
-		 * @param start Value where the slice starts.
-		 * @param end Value where the slice ends.
-		 */
-		public Slice(double start, double end) {
-			this.start = start;
-			this.end = end;
-		}
-	}
-
-	/**
 	 * Returns the sum of all absolute values from the specified data source up
 	 * to the row with the specified index. This is used to determine the
 	 * position of pie slices.
@@ -807,11 +756,69 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 *         to the row with the specified index
 	 */
 	protected Slice getSlice(DataSource source, int index) {
-		List<Slice> dataSlices = slices.get(source);
-		if (dataSlices == null) {
-			return null;
+		synchronized (this) {
+			List<Slice> dataSlices = slices.get(source);
+			if (dataSlices == null) {
+				createSlices(source);
+				dataSlices = slices.get(source);
+			}
+			return dataSlices.get(index);
 		}
-		return dataSlices.get(index);
+	}
+
+	/**
+	 * Returns the sum of all absolute values in the data column of a specified
+	 * data source.
+	 * @param source Data source.
+	 * @return Sum of all absolute values for the specified data source.
+	 */
+	protected double getSum(DataSource source) {
+		synchronized (source) {
+			if (source.getRowCount() == 0) {
+				return 0.0;
+			}
+			Slice lastSlice = getSlice(source, source.getRowCount() - 1);
+			return lastSlice.end;
+		}
+	}
+
+	/**
+	 * Creates the slice objects with start and end information for a specified
+	 * data source.
+	 * @param source Data source.
+	 */
+	private void createSlices(DataSource source) {
+		if (!isVisible(source)) {
+			return;
+		}
+		final int colIndex = 0;
+        Column col = source.getColumn(colIndex);
+        List<Slice> dataSlices = new ArrayList<Slice>(col.size());
+        slices.put(source, dataSlices);
+
+        double start = 0.0;
+        for (Comparable<?> cell : col) {
+            Number numericCell = (Number) cell;
+            double value = 0.0;
+            if (MathUtils.isCalculatable(numericCell)) {
+                value = numericCell.doubleValue();
+            }
+            // abs() is required because negative values cause
+            // "empty" slices
+            double span = Math.abs(value);
+            Slice slice = new Slice(start, start + span);
+            dataSlices.add(slice);
+            start += span;
+        }
+	}
+
+	/**
+	 * Rebuilds cached information for a specified data source.
+	 * @param source Data source.
+	 */
+	protected void revalidate(DataSource source) {
+		slices.remove(source);
+		autoScaleAxes();
 	}
 
 	@Override
@@ -837,5 +844,23 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		super.dataAdded(source, events);
+		revalidate(source);
+	}
+
+	@Override
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		super.dataUpdated(source, events);
+		revalidate(source);
+	}
+
+	@Override
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		super.dataRemoved(source, events);
+		revalidate(source);
 	}
 }
