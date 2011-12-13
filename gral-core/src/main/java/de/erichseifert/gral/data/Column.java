@@ -50,10 +50,11 @@ public class Column extends DataAccessor {
 
 	@Override
 	public Comparable<?> get(int row) {
-		if (getSource() == null) {
+		DataSource source = getSource();
+		if (source == null) {
 			return null;
 		}
-		return getSource().get(getIndex(), row);
+		return source.get(getIndex(), row);
 	}
 
 	@Override

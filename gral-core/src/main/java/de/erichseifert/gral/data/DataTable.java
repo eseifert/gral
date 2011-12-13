@@ -205,6 +205,24 @@ public class DataTable extends AbstractDataSource {
 	}
 
 	/**
+	 * Removes the last row from the table.
+	 */
+	public void removeLast() {
+		DataChangeEvent[] events;
+		synchronized (this) {
+			int row = getRowCount() - 1;
+			Row r = new Row(this, row);
+			events = new DataChangeEvent[getColumnCount()];
+			for (int col = 0; col < events.length; col++) {
+				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
+			}
+			rows.remove(row);
+			rowCount--;
+		}
+		notifyDataRemoved(events);
+	}
+
+	/**
 	 * Deletes all rows this table contains.
 	 */
 	public void clear() {

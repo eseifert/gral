@@ -49,10 +49,11 @@ public class Row extends DataAccessor {
 
 	@Override
 	public Comparable<?> get(int col) {
-		if (getSource() == null) {
+		DataSource source = getSource();
+		if (source == null) {
 			return null;
 		}
-		return getSource().get(col, getIndex());
+		return source.get(col, getIndex());
 	}
 
 	@Override

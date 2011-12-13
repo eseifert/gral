@@ -39,7 +39,6 @@ public class DataTableConcurrencyTest {
 	}
 
 	private static class DataTableReader extends Thread {
-		private static final Random random = new Random();
 		private final DataTable table;
 		public final AtomicInteger read;
 
@@ -62,22 +61,16 @@ public class DataTableConcurrencyTest {
 		}
 	}
 
-	private static class DataTableWriter extends Thread {
+	private static class DataTableProducer extends Thread {
 		private static final Random random = new Random();
 		private final DataTable table;
 
-		public DataTableWriter(DataTable table) {
+		public DataTableProducer(DataTable table) {
 			this.table = table;
 		}
 
 		@Override
 		public void run() {
-			try {
-				Thread.sleep(random.nextInt(50));
-			} catch (InterruptedException e) {
-				throw new IllegalStateException(e);
-			}
-
 			// Add row
 			int value1 = random.nextInt();
 			int value2 = random.nextInt();
@@ -86,6 +79,20 @@ public class DataTableConcurrencyTest {
 			// Verify
 			assertEquals(value1, table.get(0, row));
 			assertEquals(value2, table.get(1, row));
+		}
+	}
+
+	private static class DataTableConsumer extends Thread {
+		private final DataTable table;
+
+		public DataTableConsumer(DataTable table) {
+			this.table = table;
+		}
+
+		@Override
+		public void run() {
+			// Remove the first row
+			table.remove(0);
 		}
 	}
 
@@ -100,51 +107,89 @@ public class DataTableConcurrencyTest {
 		table.add(7,  9); // 6
 		table.add(8, 11); // 7
 
-		DataTableReader reader = new DataTableReader(table);
-		reader.start();
-		reader.join();
-		assertEquals(table.getColumnCount()*table.getRowCount(), reader.read.intValue());
+		DataTableReader[] readers = new DataTableReader[100];
+		for (int i = 0; i < readers.length; i++) {
+			readers[i] = new DataTableReader(table);
+		}
+		for (DataTableReader reader : readers) {
+			reader.start();
+		}
+		for (DataTableReader reader : readers) {
+			reader.join();
+		}
 	}
 
 	@Test
 	public void testConcurrentWrite() throws InterruptedException {
-		Thread[] writers = new DataTableWriter[100];
-		for (int i = 0; i < writers.length; i++) {
-			writers[i] = new DataTableWriter(table);
+		DataTableProducer[] producers = new DataTableProducer[100];
+		for (int i = 0; i < producers.length; i++) {
+			producers[i] = new DataTableProducer(table);
 		}
-		for (Thread writer : writers) {
-			writer.start();
+		for (DataTableProducer producer : producers) {
+			producer.start();
 		}
-		for (Thread writer : writers) {
-			writer.join();
+		for (DataTableProducer producer : producers) {
+			producer.join();
 		}
-		//assertEquals(table.getRowCount(), writer.written.intValue());
+
+		assertEquals(producers.length, table.getRowCount());
 	}
 
 	@Test
-	public void testConcurrentAccess() throws InterruptedException {
-		Thread[] writers = new Thread[100];
-		for (int i = 0; i < writers.length; i++) {
-			writers[i] = new DataTableWriter(table);
+	public void testConcurrentReadWrite() throws InterruptedException {
+		DataTableProducer[] producers = new DataTableProducer[100];
+		for (int i = 0; i < producers.length; i++) {
+			producers[i] = new DataTableProducer(table);
 		}
 
-		Thread[] readers = new Thread[100];
+		DataTableReader[] readers = new DataTableReader[100];
 		for (int i = 0; i < readers.length; i++) {
 			readers[i] = new DataTableReader(table);
 		}
 
-		for (Thread writer : writers) {
-			writer.start();
+		for (DataTableProducer producer : producers) {
+			producer.start();
 		}
-		for (Thread reader : readers) {
+		for (DataTableReader reader : readers) {
 			reader.start();
 		}
 
-		for (Thread writer : writers) {
-			writer.join();
+		for (DataTableProducer producer : producers) {
+			producer.join();
 		}
-		for (Thread reader : readers) {
+		for (DataTableReader reader : readers) {
 			reader.join();
 		}
+
+		assertEquals(producers.length, table.getRowCount());
+	}
+
+	@Test
+	public void testConcurrentProduceConsume() throws InterruptedException {
+		DataTableProducer[] producers = new DataTableProducer[100];
+		for (int i = 0; i < producers.length; i++) {
+			producers[i] = new DataTableProducer(table);
+		}
+
+		DataTableConsumer[] consumers = new DataTableConsumer[100];
+		for (int i = 0; i < consumers.length; i++) {
+			consumers[i] = new DataTableConsumer(table);
+		}
+
+		for (DataTableProducer producer : producers) {
+			producer.start();
+		}
+		for (DataTableConsumer consumer : consumers) {
+			consumer.start();
+		}
+
+		for (DataTableProducer producer : producers) {
+			producer.join();
+		}
+		for (DataTableConsumer consumer : consumers) {
+			consumer.join();
+		}
+
+		assertEquals(0, table.getRowCount());
 	}
 }
