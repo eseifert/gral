@@ -60,16 +60,19 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class BarPlot extends XYPlot {
-	/** Key for specifying a {@link java.lang.Number} value for the  width of
-	the bars in axis coordinates. */
-	public static final Key BAR_WIDTH = new Key("barplot.bar.width"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the minimum
-	height of the bars in view units (e.g. pixels on screen). */
-	public static final Key BAR_HEIGHT_MIN = new Key("barplot.bar.heightMin"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Boolean} value which defines
-	whether painting should happen over all bars at once, otherwise each bar
-	will be filled independently. */
-	public static final Key PAINT_ALL_BARS = new Key("barplot.bar.paintAll"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value for the  width of the bars in
+	axis coordinates. */
+	public static final Key BAR_WIDTH =
+		new Key("barplot.bar.width"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value for the minimum height of the
+	bars in view units (e.g. pixels on screen). */
+	public static final Key BAR_HEIGHT_MIN =
+		new Key("barplot.bar.heightMin"); //$NON-NLS-1$
+	/** Key for specifying a {@link Boolean} value which defines whether
+	painting should happen over all bars at once, otherwise each bar will be
+	filled independently. */
+	public static final Key PAINT_ALL_BARS =
+		new Key("barplot.bar.paintAll"); //$NON-NLS-1$
 
 	/**
 	 * Class that renders a bar in a bar plot.

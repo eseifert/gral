@@ -82,35 +82,32 @@ public class BoxPlot extends XYPlot {
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	public static class BoxWhiskerRenderer extends AbstractPointRenderer {
-		/** Key for specifying the {@link java.lang.Integer} value which
-		specifies the index of the column that is used for the horizontal
-		position of a box. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the horizontal position of a box. */
 		public static final Key COLUMN_POSITION =
 			new Key("boxplot.position.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} value which
-		specifies the index of the column that is used for the center bar. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the center bar. */
 		public static final Key COLUMN_BAR_CENTER =
 			new Key("boxplot.bar.center.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} value which
-		specifies the index of the column that is used for the bottom bar. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the bottom bar. */
 		public static final Key COLUMN_BAR_BOTTOM =
 			new Key("boxplot.bar.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} value which
-		specifies the index of the column that is used for the bottom edge of
-		the box. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the bottom edge of the box. */
 		public static final Key COLUMN_BOX_BOTTOM =
 			new Key("boxplot.box.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} value which
-		specifies the index of the column that is used for the bottom edge of
-		the box. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the bottom edge of the box. */
 		public static final Key COLUMN_BOX_TOP =
 			new Key("boxplot.box.top.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies
-		the index of the column that is used for the top bar. */
+		/** Key for specifying the {@link Integer} value which specifies the
+		index of the column that is used for the top bar. */
 		public static final Key COLUMN_BAR_TOP =
 			new Key("boxplot.bar.top.column"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the
-		relative width of the box. */
+		/** Key for specifying a {@link Number} value for the relative width
+		of the box. */
 		public static final Key BOX_WIDTH =
 			new Key("boxplot.box.width"); //$NON-NLS-1$
 		/** Key for specifying an instance of
@@ -134,8 +131,8 @@ public class BoxPlot extends XYPlot {
 		to paint the lines of the whiskers. */
 		public static final Key WHISKER_STROKE =
 			new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the
-		relative width of the bottom and top bars. */
+		/** Key for specifying a {@link Number} value for the relative width of
+		the bottom and top bars. */
 		public static final Key BAR_WIDTH =
 			new Key("boxplot.bar.width"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used

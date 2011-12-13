@@ -95,18 +95,17 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	right/bottom. */
 	public static final Key CENTER =
 		new Key("pieplot.center"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the radius of
-	the pie relative to the plot area size. */
+	/** Key for specifying a {@link Number} value for the radius of the pie
+	relative to the plot area size. */
 	public static final Key RADIUS =
 		new Key("pieplot.radius"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the
-	starting angle of the first segment in degrees. The angle is applied
-	counterclockwise. */
+	/** Key for specifying a {@link Number} value for the starting angle of the
+	first segment in degrees. The angle is applied counterclockwise. */
 	public static final Key START =
 		new Key("pieplot.start"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Boolean} value which decides
-	whether the segments should be ordered clockwise ({@code true}) or
-	counterclockwise ({@code false}). */
+	/** Key for specifying a {@link Boolean} value which decides whether the
+	segments should be ordered clockwise ({@code true}) or counterclockwise
+	({@code false}). */
 	public static final Key CLOCKWISE =
 		new Key("pieplot.clockwise"); //$NON-NLS-1$
 
@@ -354,12 +353,12 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 * A point renderer for a single slice in a pie plot.
 	 */
 	public static class PieSliceRenderer extends AbstractPointRenderer {
-		/** Key for specifying a {@link java.lang.Number} value for the outer
-		radius of the pie relative to the radius set in the plot. */
+		/** Key for specifying a {@link Number} value for the outer radius of
+		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_OUTER =
 			new Key("pieplot.radius.inner"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the inner
-		radius of the pie relative to the radius set in the plot. */
+		/** Key for specifying a {@link Number} value for the inner radius of
+		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_INNER =
 			new Key("pieplot.radius.inner"); //$NON-NLS-1$
 		/** Key for specifying an instance of
@@ -367,10 +366,12 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		the segments. */
 		public static final Key COLORS =
 			new Key("pieplot.colorlist"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Number} value for the width of
-		gaps between the segments. */
+		/** Key for specifying a {@link Number} value for the width of gaps
+		between the segments. */
 		public static final Key GAP =
 			new Key("pieplot.gap"); //$NON-NLS-1$
+		
+		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
 		/**

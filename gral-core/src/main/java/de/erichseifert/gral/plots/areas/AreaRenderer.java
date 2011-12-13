@@ -31,19 +31,19 @@ import de.erichseifert.gral.util.SettingsStorage;
  * Interface for renderers that display areas in plots.
  */
 public interface AreaRenderer extends SettingsStorage {
-	/** Key for specifying a {@link java.lang.Number} value for the gap between
-	 the area and a data point. */
+	/** Key for specifying a {@link Number} value for the gap between the area
+	and a data point. */
 	Key GAP = new Key("area.gap.size"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Boolean} value that decides
-	 whether the gaps should have rounded corners. */
+	/** Key for specifying a {@link Boolean} value that decides whether the
+	gaps should have rounded corners. */
 	Key GAP_ROUNDED = new Key("area.gap.rounded"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Paint} instance used to fill
-	the area shape. */
+	/** Key for specifying the {@link java.awt.Paint} instance used to fill the
+	area shape. */
 	Key COLOR = new Key("area.color"); //$NON-NLS-1$
 
 	/**
-	 * Returns the graphical representation to be drawn for the specified
-	 * data points.
+	 * Returns the graphical representation to be drawn for the specified data
+	 * points.
 	 * @param axis Reference axis for the specified data points.
 	 * @param axisRenderer Renderer of the reference axis.
 	 * @param points Points to be used for creating the area.

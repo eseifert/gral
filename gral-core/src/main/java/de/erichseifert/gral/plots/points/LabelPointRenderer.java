@@ -37,22 +37,28 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * values.
  */
 public class LabelPointRenderer extends DefaultPointRenderer2D {
-	/** Key for specifying the {@link java.lang.Integer} which specifies the
-	index of the column that is used for point sizes. */
-	public static final Key COLUMN = new Key("labelPoint.column"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.text.Format} instance which specifies
-	how the labels will be displayed. */
-	public static final Key FORMAT = new Key("labelPoint.format"); //$NON-NLS-1$
-	/** Key for specifying the font of this label. */
-	public static final Key FONT = new Key("labelPoint.font"); //$NON-NLS-1$
+	/** Key for specifying the {@link Integer} which specifies the index of the
+	column that is used for point sizes. */
+	public static final Key COLUMN =
+		new Key("labelPoint.column"); //$NON-NLS-1$
+	/** Key for specifying the {@link java.text.Format} instance which
+	specifies how the labels will be displayed. */
+	public static final Key FORMAT =
+		new Key("labelPoint.format"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.awt.Font} instance for the font of
+	this label. */
+	public static final Key FONT =
+		new Key("labelPoint.font"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the horizontal alignment
 	relative to the data point. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X = new Key("labelPoint.alignment.x"); //$NON-NLS-1$
+	public static final Key ALIGNMENT_X =
+		new Key("labelPoint.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the vertical alignment
     relative to the data point. 0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y = new Key("labelPoint.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.Location}
-	value where the label will be aligned at. */
+	public static final Key ALIGNMENT_Y =
+		new Key("labelPoint.alignment.y"); //$NON-NLS-1$
+	/** Key for specifying the {@link de.erichseifert.gral.Location} value
+	where the label will be aligned at. */
 
 	/**
 	 * Initializes a new object.

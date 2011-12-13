@@ -39,8 +39,8 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * with Bezier Curves</a> for more information.</p>
  */
 public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
-	/** Key for specifying a {@link java.lang.Number} value for the smoothness
-	of the line. The value must be in range 0 (sharpest) to 1 (smoothest). */
+	/** Key for specifying a {@link Number} value for the smoothness of the
+	line. The value must be in range 0 (sharpest) to 1 (smoothest). */
 	public static final Key SMOOTHNESS =
 		new Key("line.smooth.smoothness"); //$NON-NLS-1$
 

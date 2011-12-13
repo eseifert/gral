@@ -88,15 +88,18 @@ public class RasterPlot extends XYPlot {
 	protected static class RasterRenderer extends AbstractPointRenderer {
 		/** Bar plot this renderer is associated to. */
 		private final RasterPlot plot;
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		/** Key for specifying the {@link Integer} which specifies the
 		index of the column that is used for the x coordinate of a point. */
-		public static final Key COLUMN_X = new Key("rasterplot.columnX"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		public static final Key COLUMN_X =
+			new Key("rasterplot.columnX"); //$NON-NLS-1$
+		/** Key for specifying the {@link Integer} which specifies the
 		index of the column that is used for the y coordinate of a point. */
-		public static final Key COLUMN_Y = new Key("rasterplot.columnY"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.lang.Integer} which specifies the
+		public static final Key COLUMN_Y =
+			new Key("rasterplot.columnY"); //$NON-NLS-1$
+		/** Key for specifying the {@link Integer} which specifies the
 		index of the column that is used for the value of a point. */
-		public static final Key COLUMN_VALUE = new Key("rasterplot.columnValue"); //$NON-NLS-1$
+		public static final Key COLUMN_VALUE =
+			new Key("rasterplot.columnValue"); //$NON-NLS-1$
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a

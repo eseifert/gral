@@ -72,8 +72,8 @@ import de.erichseifert.gral.util.Tuple;
  */
 public abstract class Plot extends DrawableContainer
 		implements DataListener, SettingsListener {
-	/** Key for specifying the {@link java.lang.String} instance for the title
-	of the plot. */
+	/** Key for specifying the {@link String} instance for the title of the
+	plot. */
 	public static final Key TITLE =
 		new Key("plot.title"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance that is used to
@@ -92,18 +92,20 @@ public abstract class Plot extends DrawableContainer
 	fill the border of the plot. */
 	public static final Key COLOR =
 		new Key("plot.color"); //$NON-NLS-1$
-	/** Key for specifying the whether antialiasing is enabled. */
+	/** Key for specifying a {@link Boolean} value to set whether antialiasing
+	should used for drawing ({@code true}) or not ({@code false}). */
 	public static final Key ANTIALISING =
 		new Key("plot.antialiasing"); //$NON-NLS-1$
-	/** Key for specifying whether the legend should be shown. */
+	/** Key for specifying a {@link Boolean} value to set whether the legend
+	should be shown. */
 	public static final Key LEGEND =
 		new Key("plot.legend"); //$NON-NLS-1$
-	/** Key for specifying the positioning of the legend using a
-	{@link de.erichseifert.gral.Location} value. */
+	/** Key for specifying a {@link de.erichseifert.gral.Location} value for
+	the positioning of the legend. */
 	public static final Key LEGEND_LOCATION =
 		new Key("plot.legend.location"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.util.Insets2D} that
-	describes the legend's margin. */
+	/** Key for specifying an {@link de.erichseifert.gral.util.Insets2D}
+	instance that describes the legend's margin. */
 	public static final Key LEGEND_MARGIN =
 		new Key("plot.legend.margin"); //$NON-NLS-1$
 

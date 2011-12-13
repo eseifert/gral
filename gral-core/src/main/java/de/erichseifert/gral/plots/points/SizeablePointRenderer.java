@@ -33,9 +33,10 @@ import de.erichseifert.gral.util.MathUtils;
  * the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer2D {
-	/** Key for specifying the {@link java.lang.Integer} which specifies the
-	index of the column that is used for point sizes. */
-	public static final Key COLUMN = new Key("sizeablePoint.column"); //$NON-NLS-1$
+	/** Key for specifying the {@link Integer} which specifies the index of the
+	column that is used for point sizes. */
+	public static final Key COLUMN =
+		new Key("sizeablePoint.column"); //$NON-NLS-1$
 
 	/**
 	 * Initializes a new object.

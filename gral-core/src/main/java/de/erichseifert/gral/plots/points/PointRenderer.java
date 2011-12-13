@@ -43,61 +43,79 @@ import de.erichseifert.gral.util.SettingsStorage;
 public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Shape} instance defining the
 	form of the point. */
-	static final Key SHAPE = new Key("point"); //$NON-NLS-1$
+	static final Key SHAPE =
+		new Key("point"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the point shape. */
-	static final Key COLOR = new Key("point.color"); //$NON-NLS-1$
+	static final Key COLOR =
+		new Key("point.color"); //$NON-NLS-1$
 
-	/** Key for specifying a {@link java.lang.Boolean} value whether the data
+	/** Key for specifying a {@link Boolean} value whether the data
 	value of a point is displayed or not. */
-	static final Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	static final Key VALUE_DISPLAYED =
+		new Key("point.value.displayed"); //$NON-NLS-1$
+	/** Key for specifying a {@link Integer} value for the index of
 	the column that contains the displayed values. */
-	static final Key VALUE_COLUMN = new Key("point.value.column"); //$NON-NLS-1$
+	static final Key VALUE_COLUMN =
+		new Key("point.value.column"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
-	static final Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
+	static final Key VALUE_FORMAT =
+		new Key("point.value.format"); //$NON-NLS-1$
 	/** Key for specifying a {@link de.erichseifert.gral.Location} value for
 	the positioning of the data value relative to the data point. */
-	public static final Key VALUE_LOCATION = new Key("point.value.location"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value that positions
+	public static final Key VALUE_LOCATION =
+		new Key("point.value.location"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value that positions
 	the value horizontally. */
-	static final Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value that positions
+	static final Key VALUE_ALIGNMENT_X =
+		new Key("point.value.alignment.x"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value that positions
 	the value vertically. */
-	static final Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for setting the
+	static final Key VALUE_ALIGNMENT_Y =
+		new Key("point.value.alignment.y"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value for setting the
 	rotation of the value in degrees. */
-	static final Key VALUE_ROTATION = new Key("point.value.rotation"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the distance
+	static final Key VALUE_ROTATION =
+		new Key("point.value.rotation"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value for the distance
 	 of values to the point. The distance is specified relative to the font
 	 height. */
-	static final Key VALUE_DISTANCE = new Key("point.value.distance"); //$NON-NLS-1$
+	static final Key VALUE_DISTANCE =
+		new Key("point.value.distance"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
-	static final Key VALUE_COLOR = new Key("point.value.paint"); //$NON-NLS-1$
+	static final Key VALUE_COLOR =
+		new Key("point.value.paint"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance to be used to
 	paint the value text. */
-	static final Key VALUE_FONT = new Key("point.value.font"); //$NON-NLS-1$
+	static final Key VALUE_FONT =
+		new Key("point.value.font"); //$NON-NLS-1$
 
-	/** Key for specifying a {@link java.lang.Boolean} value whether the error
+	/** Key for specifying a {@link Boolean} value whether the error
 	value is displayed. */
-	static final Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	static final Key ERROR_DISPLAYED =
+		new Key("point.error.displayed"); //$NON-NLS-1$
+	/** Key for specifying a {@link Integer} value for the index of
 	the column that contains the upper error value. */
-	static final Key ERROR_COLUMN_TOP = new Key("point.error.columnTop"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Integer} value for the index of
+	static final Key ERROR_COLUMN_TOP =
+		new Key("point.error.columnTop"); //$NON-NLS-1$
+	/** Key for specifying a {@link Integer} value for the index of
 	the column that contains the lower error value. */
-	static final Key ERROR_COLUMN_BOTTOM = new Key("point.error.columnBottom"); //$NON-NLS-1$
+	static final Key ERROR_COLUMN_BOTTOM =
+		new Key("point.error.columnBottom"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
-	static final Key ERROR_COLOR = new Key("point.error.paint"); //$NON-NLS-1$
+	static final Key ERROR_COLOR =
+		new Key("point.error.paint"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Shape} instance defining the
 	form of the points at the end of the error bars. */
-	static final Key ERROR_SHAPE = new Key("point.error.shape"); //$NON-NLS-1$
+	static final Key ERROR_SHAPE =
+		new Key("point.error.shape"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance defining the
 	error bars. */
-	static final Key ERROR_STROKE = new Key("point.error.stroke"); //$NON-NLS-1$
+	static final Key ERROR_STROKE =
+		new Key("point.error.stroke"); //$NON-NLS-1$
 
 	/**
 	 * Returns the graphical representation to be drawn for the specified data

@@ -38,17 +38,21 @@ import de.erichseifert.gral.util.SettingsStorage;
 public interface LineRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	define the line shape. */
-	Key STROKE = new Key("line.stroke"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the gap
-	between the line and a point. If the gap value is equal to or smaller than
-	0 no gap will be used. */
-	Key GAP = new Key("line.gap.size"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Boolean} value which decides
-	whether the gaps should have rounded corners. */
-	Key GAP_ROUNDED = new Key("line.gap.rounded"); //$NON-NLS-1$
+	Key STROKE =
+		new Key("line.stroke"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value for the gap between the line
+	and a point. If the gap value is equal to or smaller than 0 no gap will be
+	used. */
+	Key GAP =
+		new Key("line.gap.size"); //$NON-NLS-1$
+	/** Key for specifying a {@link Boolean} value which decides whether the
+	gaps should have rounded corners. */
+	Key GAP_ROUNDED =
+		new Key("line.gap.rounded"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the line shape. */
-	Key COLOR = new Key("line.color"); //$NON-NLS-1$
+	Key COLOR =
+		new Key("line.color"); //$NON-NLS-1$
 
 	/**
 	 * Returns a graphical representation for the line defined by

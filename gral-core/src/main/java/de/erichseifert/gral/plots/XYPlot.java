@@ -175,12 +175,12 @@ public class XYPlot extends Plot implements Navigable {
 	 * Class that represents the drawing area of an {@code XYPlot}.
 	 */
 	public static class XYPlotArea2D extends PlotArea {
-		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether horizontal grid lines at major ticks along x-axis are drawn. */
+		/** Key for specifying a {@link Boolean} value which decides whether
+		horizontal grid lines at major ticks along x-axis are drawn. */
 		public static final Key GRID_MAJOR_X =
 			new Key("xyplot.grid.major.x"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether vertical grid lines at major ticks along y-axis are drawn. */
+		/** Key for specifying a {@link Boolean} value which decides whether
+		vertical grid lines at major ticks along y-axis are drawn. */
 		public static final Key GRID_MAJOR_Y =
 			new Key("xyplot.grid.major.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
@@ -188,12 +188,12 @@ public class XYPlot extends Plot implements Navigable {
 		public static final Key GRID_MAJOR_COLOR =
 			new Key("xyplot.grid.major.color"); //$NON-NLS-1$
 
-		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether horizontal grid lines at minor ticks along x-axis are drawn. */
+		/** Key for specifying a {@link Boolean} value which decides whether
+		horizontal grid lines at minor ticks along x-axis are drawn. */
 		public static final Key GRID_MINOR_X =
 			new Key("xyplot.grid.minor.x"); //$NON-NLS-1$
-		/** Key for specifying a {@link java.lang.Boolean} value which decides
-		whether  vertical grid lines at minor ticks along y-axis are drawn. */
+		/** Key for specifying a {@link Boolean} value which decides whether
+		vertical grid lines at minor ticks along y-axis are drawn. */
 		public static final Key GRID_MINOR_Y =
 			new Key("xyplot.grid.minor.y"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used

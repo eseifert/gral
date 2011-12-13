@@ -44,32 +44,32 @@ import de.erichseifert.gral.util.SettingsListener;
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends AbstractDrawable implements SettingsListener {
-	/** Key for specifying a {@link java.lang.Number} value for the horizontal
-	alignment within the bounding rectangle. 0 means left, 1 means right. */
+	/** Key for specifying a {@link Number} value for the horizontal alignment
+	within the bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X =
 		new Key("label.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the vertical
-	alignment within the bounding rectangle. 0 means top, 1 means bottom. */
+	/** Key for specifying a {@link Number} value for the vertical alignment
+	within the bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y =
 		new Key("label.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance used to display
 	the text of this label. */
 	public static final Key FONT =
 		new Key("label.font"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the rotation of
-	this label in degrees. The rotation will be counterclockwise. */
+	/** Key for specifying a {@link Number} value for the rotation of this
+	label in degrees. The rotation will be counterclockwise. */
 	public static final Key ROTATION =
 		new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */
 	public static final Key COLOR =
 		new Key("label.color"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Number} value for the alignment
-	of text with multiple lines. 0 means left, 1 means right. */
+	/** Key for specifying a {@link Number} value for the alignment of text
+	with multiple lines. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_TEXT =
 		new Key("label.alignment.text"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.lang.Boolean} value whether the words
-	of the text should be wrapped to fit the size of the label. */
+	/** Key for specifying a {@link Boolean} value whether the words of the
+	text should be wrapped to fit the size of the label. */
 	public static final Key WORD_WRAP =
 		new Key("label.wordWrap"); //$NON-NLS-1$
 
