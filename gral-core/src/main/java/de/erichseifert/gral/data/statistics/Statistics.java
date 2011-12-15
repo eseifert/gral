@@ -243,9 +243,15 @@ public class Statistics implements DataListener {
 		Map<String, Double> stats = null;
 		Iterable<Comparable<?>> statsData = null;
 		if (orientation == Orientation.VERTICAL) {
+			if (index >= statisticsByCol.size()) {
+				statisticsByCol.add(new HashMap<String, Double>());
+			}
 			stats = statisticsByCol.get(index);
 			statsData = data.getColumn(index);
 		} else {
+			if (index >= statisticsByRow.size()) {
+				statisticsByRow.add(new HashMap<String, Double>());
+			}
 			stats = statisticsByRow.get(index);
 			statsData = data.getRow(index);
 		}
@@ -262,9 +268,11 @@ public class Statistics implements DataListener {
 	 * @return The value for the specified key as  value, or <i>NaN</i>
 	 *         if the specified statistical value does not exist
 	 */
-	private double get(Iterable<Comparable<?>> data, Map<String, Double> stats, String key) {
+	private double get(Iterable<Comparable<?>> data, Map<String, Double> stats,
+			String key) {
 		if (!stats.containsKey(key)) {
-			if (MEDIAN.equals(key) || QUARTILE_1.equals(key) || QUARTILE_2.equals(key) || QUARTILE_3.equals(key)) {
+			if (MEDIAN.equals(key) || QUARTILE_1.equals(key) ||
+					QUARTILE_2.equals(key) || QUARTILE_3.equals(key)) {
 				createDistributionStats(data, stats);
 			} else {
 				createBasicStats(data, stats);
@@ -285,19 +293,8 @@ public class Statistics implements DataListener {
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		for (DataChangeEvent event : events) {
-			int col = event.getCol();
-			int row = event.getRow();
-
-			// Create new empty entry for column and row statistics
-			if (col >= statisticsByCol.size()) {
-				statisticsByCol.add(new HashMap<String, Double>());
-			}
-			if (row >= statisticsByRow.size()) {
-				statisticsByRow.add(new HashMap<String, Double>());
-			}
-
 			// Mark statistics as invalid
-			invalidate(col, row);
+			invalidate(event.getCol(), event.getRow());
 		}
 	}
 
@@ -328,8 +325,6 @@ public class Statistics implements DataListener {
 		for (DataChangeEvent event : events) {
 			// Mark statistics as invalid
 			invalidate(event.getCol(), event.getRow());
-
-			// TODO Remove obsolete maps of deleted columns and rows
 		}
 	}
 
@@ -340,7 +335,11 @@ public class Statistics implements DataListener {
 	 */
 	protected void invalidate(int col, int row) {
 		statistics.clear();
-		statisticsByCol.get(col).clear();
-		statisticsByRow.get(row).clear();
+		if (col < statisticsByCol.size()) {
+			statisticsByCol.get(col).clear();
+		}
+		if (row < statisticsByRow.size()) {
+			statisticsByRow.get(row).clear();
+		}
 	}
 }

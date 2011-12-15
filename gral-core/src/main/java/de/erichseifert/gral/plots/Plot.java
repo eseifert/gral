@@ -474,7 +474,7 @@ public abstract class Plot extends DrawableContainer
 			getLegend().add(source);
 		}
 		source.addDataListener(this);
-		refresh();
+		invalidate();
 	}
 
 	/**
@@ -509,7 +509,7 @@ public abstract class Plot extends DrawableContainer
 			getLegend().remove(source);
 		}
 		boolean existed = data.remove(source);
-		refresh();
+		invalidate();
 		return existed;
 	}
 
@@ -525,7 +525,7 @@ public abstract class Plot extends DrawableContainer
 			getLegend().clear();
 		}
 		data.clear();
-		refresh();
+		invalidate();
 	}
 
 	/**
@@ -586,7 +586,7 @@ public abstract class Plot extends DrawableContainer
 				mapping.put(mapKey, axisName);
 			}
 		}
-		refresh();
+		invalidate();
 	}
 
 	/**
@@ -597,6 +597,10 @@ public abstract class Plot extends DrawableContainer
 	 */
 	protected Double getAxisMin(String axisName) {
 		Double min = axisMin.get(axisName);
+		if (min == null) {
+			revalidate();
+			min = axisMin.get(axisName);
+		}
 		if (min == null) {
 			return 0.0;
 		}
@@ -610,6 +614,10 @@ public abstract class Plot extends DrawableContainer
 	 */
 	protected Double getAxisMax(String axisName) {
 		Double max = axisMax.get(axisName);
+		if (max == null) {
+			revalidate();
+			max = axisMax.get(axisName);
+		}
 		if (max == null) {
 			return 0.0;
 		}
@@ -656,11 +664,11 @@ public abstract class Plot extends DrawableContainer
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {
 			if (dataVisible.add(source)) {
-				refresh();
+				invalidate();
 			}
 		} else {
 			if (dataVisible.remove(source)) {
-				refresh();
+				invalidate();
 			}
 		}
 	}
@@ -674,7 +682,7 @@ public abstract class Plot extends DrawableContainer
 	 *        have been added
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		refresh();
+		invalidate();
 	}
 
 	/**
@@ -686,7 +694,7 @@ public abstract class Plot extends DrawableContainer
 	 *        have been added
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		refresh();
+		invalidate();
 	}
 
 	/**
@@ -698,32 +706,37 @@ public abstract class Plot extends DrawableContainer
 	 *        have been added
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		refresh();
+		invalidate();
 	}
 
 	/**
 	 * Causes the plot data to be be updated.
 	 */
-	public void refresh() {
+	private void invalidate() {
 		axisMin.clear();
 		axisMax.clear();
-		for (Entry<Tuple, String> entry : mapping.entrySet()) {
-			Tuple mapKey = entry.getKey();
-			DataSource s = (DataSource) mapKey.get(0);
-			Column col = s.getColumn((Integer) mapKey.get(1));
-			String axisName = entry.getValue();
+	}
 
-			Double min = axisMin.get(axisName);
-			Double max = axisMax.get(axisName);
-			if (min == null || max == null) {
-				min = col.getStatistics(Statistics.MIN);
-				max = col.getStatistics(Statistics.MAX);
-			} else {
-				min = Math.min(min, col.getStatistics(Statistics.MIN));
-				max = Math.max(max, col.getStatistics(Statistics.MAX));
+	private void revalidate() {
+		synchronized (this) {
+			for (Entry<Tuple, String> entry : mapping.entrySet()) {
+				Tuple mapKey = entry.getKey();
+				DataSource s = (DataSource) mapKey.get(0);
+				Column col = s.getColumn((Integer) mapKey.get(1));
+				String axisName = entry.getValue();
+
+				Double min = axisMin.get(axisName);
+				Double max = axisMax.get(axisName);
+				if (min == null || max == null) {
+					min = col.getStatistics(Statistics.MIN);
+					max = col.getStatistics(Statistics.MAX);
+				} else {
+					min = Math.min(min, col.getStatistics(Statistics.MIN));
+					max = Math.max(max, col.getStatistics(Statistics.MAX));
+				}
+				axisMin.put(axisName, min);
+				axisMax.put(axisName, max);
 			}
-			axisMin.put(axisName, min);
-			axisMax.put(axisName, max);
 		}
 	}
 }

@@ -139,6 +139,8 @@ public class DataTable extends AbstractDataSource {
 	 * @return Index of the row that has been added.
 	 */
 	public int add(Collection<? extends Comparable<?>> values) {
+		DataChangeEvent[] events;
+		int rowCount;
 		synchronized (this) {
 			if (values.size() != getColumnCount()) {
 				throw new IllegalArgumentException(MessageFormat.format(
@@ -147,7 +149,7 @@ public class DataTable extends AbstractDataSource {
 			}
 			int i = 0;
 			Comparable<?>[] row = new Comparable<?>[values.size()];
-			DataChangeEvent[] events = new DataChangeEvent[row.length];
+			events = new DataChangeEvent[row.length];
 			Class<? extends Comparable<?>>[] types = getColumnTypes();
 			for (Comparable<?> value : values) {
 				if ((value != null)
@@ -157,14 +159,14 @@ public class DataTable extends AbstractDataSource {
 						types[i], value.getClass()));
 				}
 				row[i] = value;
-				events[i] = new DataChangeEvent(this, i, rowCount, null, value);
+				events[i] = new DataChangeEvent(this, i, this.rowCount, null, value);
 				i++;
 			}
 			rows.add(row);
-			rowCount++;
-			notifyDataAdded(events);
-			return rowCount - 1;
+			rowCount = this.rowCount++;
 		}
+		notifyDataAdded(events);
+		return rowCount;
 	}
 
 	/**
@@ -192,7 +194,7 @@ public class DataTable extends AbstractDataSource {
 	 */
 	public void remove(int row) {
 		DataChangeEvent[] events;
-		synchronized (this) {
+		synchronized (rows) {
 			Row r = new Row(this, row);
 			events = new DataChangeEvent[getColumnCount()];
 			for (int col = 0; col < events.length; col++) {
@@ -241,9 +243,17 @@ public class DataTable extends AbstractDataSource {
 	 * @return the specified value of the data cell
 	 */
 	public Comparable<?> get(int col, int row) {
+		Comparable<?>[] r;
 		synchronized (rows) {
-			return rows.get(row)[col];
+			if (row >= rows.size()) {
+				return null;
+			}
+			r = rows.get(row);
 		}
+		if (r == null) {
+			return null;
+		}
+		return r[col];
 	}
 
 	/**

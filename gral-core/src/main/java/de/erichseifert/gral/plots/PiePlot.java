@@ -251,7 +251,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		}
 
 		@Override
-		protected synchronized void drawPlot(DrawingContext context) {
+		protected void drawPlot(DrawingContext context) {
 			Graphics2D graphics = context.getGraphics();
 			AffineTransform txOrig = graphics.getTransform();
 			graphics.translate(getX(), getY());
@@ -370,7 +370,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 		between the segments. */
 		public static final Key GAP =
 			new Key("pieplot.gap"); //$NON-NLS-1$
-		
+
 		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
@@ -426,9 +426,16 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 					double radiusOuter = radius*radiusRelOuter;
 
 					// Construct slice
+					double sum = plot.getSum(row.getSource());
+					if (sum == 0.0) {
+						return;
+					}
+
 					Slice slice = plot.getSlice(
 						row.getSource(), row.getIndex());
-					double sum = plot.getSum(row.getSource());
+					if (slice == null) {
+						return;
+					}
 
 					double sliceStartRel = slice.start/sum;
 					double sliceEndRel = slice.end/sum;
@@ -578,6 +585,9 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 
 			// Horizontal layout
 			double sum = plot.getSum(row.getSource());
+			if (sum == 0.0) {
+				return;
+			}
 			double sliceStartRel = slice.start/sum;
 			double sliceEndRel = slice.end/sum;
 			double circumference = 2.0*labelPosV*Math.PI;
@@ -757,14 +767,20 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 *         to the row with the specified index
 	 */
 	protected Slice getSlice(DataSource source, int index) {
-		synchronized (this) {
-			List<Slice> dataSlices = slices.get(source);
-			if (dataSlices == null) {
-				createSlices(source);
-				dataSlices = slices.get(source);
-			}
-			return dataSlices.get(index);
+		if (index < 0) {
+			return null;
 		}
+		List<Slice> dataSlices;
+		synchronized (slices) {
+			if (!slices.containsKey(source)) {
+				createSlices(source);
+			}
+			dataSlices = slices.get(source);
+		}
+		if (dataSlices == null || index >= dataSlices.size()) {
+			return null;
+		}
+		return dataSlices.get(index);
 	}
 
 	/**
@@ -774,13 +790,14 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 	 * @return Sum of all absolute values for the specified data source.
 	 */
 	protected double getSum(DataSource source) {
+		double sum = 0.0;
 		synchronized (source) {
-			if (source.getRowCount() == 0) {
-				return 0.0;
-			}
 			Slice lastSlice = getSlice(source, source.getRowCount() - 1);
-			return lastSlice.end;
+			if (lastSlice != null) {
+				sum = lastSlice.end;
+			}
 		}
+		return sum;
 	}
 
 	/**
@@ -793,7 +810,7 @@ public class PiePlot extends Plot implements DataListener, Navigable {
 			return;
 		}
 		final int colIndex = 0;
-        Column col = source.getColumn(colIndex);
+		Column col = source.getColumn(colIndex);
         List<Slice> dataSlices = new ArrayList<Slice>(col.size());
         slices.put(source, dataSlices);
 
