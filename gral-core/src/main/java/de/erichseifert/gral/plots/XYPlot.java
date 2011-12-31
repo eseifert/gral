@@ -73,7 +73,7 @@ import de.erichseifert.gral.util.PointND;
  * XYPlot plot = new XYPlot(data);
  * </pre>
  */
-public class XYPlot extends Plot implements Navigable {
+public class XYPlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the x-axis of an xy-plot. */
 	public static String AXIS_X = "x"; //$NON-NLS-1$
 	/** Key for specifying the secondary x-axis of an xy-plot. */

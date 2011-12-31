@@ -53,7 +53,7 @@ public class PlotTest {
 	private static DataSeries series1, series2;
 	private MockPlot plot;
 
-	private static class MockPlot extends Plot  {
+	private static class MockPlot extends AbstractPlot  {
 		public boolean drawn;
 
 		public MockPlot(DataSource... data) {

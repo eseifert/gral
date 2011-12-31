@@ -44,7 +44,6 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
-import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -84,7 +83,7 @@ import de.erichseifert.gral.util.SettingChangeEvent;
  * PiePlot plot = new PiePlot(data);
  * </pre>
  */
-public class PiePlot extends Plot implements DataListener, Navigable {
+public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 

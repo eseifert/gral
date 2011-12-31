@@ -47,7 +47,7 @@ import de.erichseifert.gral.util.PointND;
  * provide a convenient way for setting predefined sets of axes.
  */
 public abstract class PlotNavigator extends AbstractNavigator {
-	/** Plot that will be navigated. */
+	/** AbstractPlot that will be navigated. */
 	private final Plot plot;
 	/** Mapping of axis name to informations on center and zoom. */
 	private final Map<String, NavigationInfo> infos;
@@ -139,7 +139,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 	/**
 	 * Initializes a new instance that is responsible for zooming and panning
 	 * the axes with the specified names of the specified plot.
-	 * @param plot Plot to be zoomed and panned.
+	 * @param plot AbstractPlot to be zoomed and panned.
 	 * @param axesNames Names of the axes that should be controlled by this
 	 *        navigator.
 	 */
@@ -155,7 +155,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 	/**
 	 * Initializes a new instance that is responsible for zooming and panning
 	 * the axes with the specified names of the specified plot.
-	 * @param plot Plot to be zoomed and panned.
+	 * @param plot AbstractPlot to be zoomed and panned.
 	 * @param axesNames Names of the axes that should be controlled by this
 	 *        navigator.
 	 */

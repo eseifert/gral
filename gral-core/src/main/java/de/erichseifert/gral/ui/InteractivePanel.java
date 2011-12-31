@@ -394,7 +394,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	private static class NavigationMoveListener extends MouseAdapter {
 		/** A reference to the panel for refreshing. */
 		private final InteractivePanel panel;
-		/** Plot that will be changed by this class. */
+		/** AbstractPlot that will be changed by this class. */
 		private Navigable navigable;
 		/** Previously clicked point or {@code null}. */
 		private Point posPrev;
