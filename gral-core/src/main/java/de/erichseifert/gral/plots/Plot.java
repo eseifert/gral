@@ -38,23 +38,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import de.erichseifert.gral.Container;
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.EdgeLayout;
-import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.Location;
-import de.erichseifert.gral.PlotArea;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.graphics.Container;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.Tuple;
@@ -100,7 +98,7 @@ public abstract class Plot extends DrawableContainer
 	should be shown. */
 	public static final Key LEGEND =
 		new Key("plot.legend"); //$NON-NLS-1$
-	/** Key for specifying a {@link de.erichseifert.gral.Location} value for
+	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
 	the positioning of the legend. */
 	public static final Key LEGEND_LOCATION =
 		new Key("plot.legend.location"); //$NON-NLS-1$

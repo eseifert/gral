@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
@@ -57,7 +57,7 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 	/**
 	 * Returns the x-position of the bounds.
 	 * @return horizontal position of the upper-left corner of the bounding
-	 * rectangle
+	 *         rectangle.
 	 */
 	public double getX() {
 		return bounds.getX();
@@ -65,7 +65,7 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 	/**
 	 * Returns the y-position of the bounds.
 	 * @return vertical position of the upper-left corner of the bounding
-	 * rectangle
+	 *         rectangle.
 	 */
 	public double getY() {
 		return bounds.getY();
@@ -73,14 +73,14 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 
 	/**
 	 * Returns the width of the bounds.
-	 * @return horizontal extent
+	 * @return horizontal extent.
 	 */
 	public double getWidth() {
 		return bounds.getWidth();
 	}
 	/**
 	 * Returns the height of the bounds.
-	 * @return vertical extent
+	 * @return vertical extent.
 	 */
 	public double getHeight() {
 		return bounds.getHeight();
@@ -92,7 +92,7 @@ public abstract class AbstractDrawable extends BasicSettingsStorage
 	 */
 	public void setBounds(Rectangle2D bounds) {
 		setBounds(bounds.getX(), bounds.getY(),
-				bounds.getWidth(), bounds.getHeight());
+			bounds.getWidth(), bounds.getHeight());
 	}
 	/**
 	 * Sets the bounds to the specified coordinates, width and height.

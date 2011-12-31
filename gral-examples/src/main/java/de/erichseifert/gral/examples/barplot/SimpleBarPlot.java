@@ -26,7 +26,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.LinearGradientPaint;
 
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
@@ -34,6 +33,7 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Location;
 
 
 public class SimpleBarPlot extends ExamplePanel {

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.plots;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -32,9 +32,16 @@ import java.util.Map;
 
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.AbstractDrawable;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.EdgeLayout;
+import de.erichseifert.gral.graphics.Layout;
+import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;

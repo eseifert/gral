@@ -27,8 +27,8 @@ import java.awt.Font;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.util.BasicSettingsStorage;
+import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
 

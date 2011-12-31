@@ -28,8 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.erichseifert.gral.AbstractNavigator;
-import de.erichseifert.gral.NavigationEvent;
+import de.erichseifert.gral.navigation.AbstractNavigator;
+import de.erichseifert.gral.navigation.NavigationEvent;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.MathUtils;

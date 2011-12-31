@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.graphics;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -44,7 +44,7 @@ import de.erichseifert.gral.util.Insets2D;
 public class DrawableContainer extends AbstractDrawable implements Container {
 	/** Empty margins that should be preserved around the contents of this
 	    container. */
-	private final Insets2D insets = new Insets2D.Double();
+	private final Insets2D insets;
 	/** Object that manages the layout of all container components. */
 	private Layout layout;
 	/** Elements stored in this container. */
@@ -66,6 +66,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 * @param layout Layout manager to be set.
 	 */
 	public DrawableContainer(Layout layout) {
+		insets = new Insets2D.Double();
 		components = new LinkedList<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
 		this.layout = layout;

@@ -36,11 +36,10 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LegendTest {
 	private Legend legend;

@@ -35,8 +35,7 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.PlotArea;
+import de.erichseifert.gral.graphics.DrawingContext;
 
 public class PlotAreaTest {
 	private TestPlotArea2D plotArea;

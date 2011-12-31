@@ -25,8 +25,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Random;
 
-import de.erichseifert.gral.Legend;
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.filters.Convolution;
@@ -35,12 +33,14 @@ import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.KernelUtils;
 import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.plots.Legend;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
 
 /**

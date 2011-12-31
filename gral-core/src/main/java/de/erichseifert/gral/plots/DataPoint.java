@@ -23,7 +23,7 @@ package de.erichseifert.gral.plots;
 
 import java.awt.Shape;
 
-import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.util.PointND;
 
 

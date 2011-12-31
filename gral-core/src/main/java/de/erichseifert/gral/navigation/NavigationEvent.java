@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.navigation;
 
 /**
  * Data class that describes a navigational event, like zooming or panning.

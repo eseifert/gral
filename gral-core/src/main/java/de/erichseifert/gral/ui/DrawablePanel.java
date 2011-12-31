@@ -29,8 +29,8 @@ import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 
 /**
  * A class that represents an adapter between the components of this library

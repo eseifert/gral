@@ -26,9 +26,9 @@ import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
-import de.erichseifert.gral.AbstractDrawable;
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.graphics.AbstractDrawable;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.GraphicsUtils;
 
@@ -109,18 +109,20 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	private static void addCurve(Path2D line, Point2D p0, Point2D p1,
 			Point2D p2, Point2D p3, Point2D ctrl1, Point2D ctrl2,
 			double smoothness) {
-		if (p1 != null) {
-			if (line.getCurrentPoint() == null) {
-				line.moveTo(p1.getX(), p1.getY());
-			}
-			if (p2 != null) {
-				getControlsPoints(p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
-				line.curveTo(
-					ctrl1.getX(), ctrl1.getY(),
-					ctrl2.getX(), ctrl2.getY(),
-					p2.getX(), p2.getY());
-			}
+		if (p1 == null ) {
+			return;
 		}
+		if (line.getCurrentPoint() == null) {
+			line.moveTo(p1.getX(), p1.getY());
+		}
+		if (p2 == null) {
+			return;
+		}
+		getControlsPoints(p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
+		line.curveTo(
+			ctrl1.getX(), ctrl1.getY(),
+			ctrl2.getX(), ctrl2.getY(),
+			p2.getX(), p2.getY());
 	}
 
 	/**

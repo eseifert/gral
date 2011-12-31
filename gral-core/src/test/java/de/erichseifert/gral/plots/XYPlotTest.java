@@ -36,9 +36,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 public class XYPlotTest {

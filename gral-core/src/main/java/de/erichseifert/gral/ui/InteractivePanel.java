@@ -50,14 +50,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import de.erichseifert.gral.Container;
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Navigable;
-import de.erichseifert.gral.Navigator;
+import de.erichseifert.gral.graphics.Container;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
+import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.util.Messages;
 import de.erichseifert.gral.util.PointND;
 

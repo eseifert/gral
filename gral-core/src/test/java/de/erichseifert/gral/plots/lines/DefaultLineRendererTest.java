@@ -34,8 +34,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.util.PointND;
 

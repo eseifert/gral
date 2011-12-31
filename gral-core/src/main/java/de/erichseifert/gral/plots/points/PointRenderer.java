@@ -23,8 +23,8 @@ package de.erichseifert.gral.plots.points;
 
 import java.awt.Shape;
 
-import de.erichseifert.gral.Drawable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.SettingsStorage;
@@ -62,7 +62,7 @@ public interface PointRenderer extends SettingsStorage {
 	format the displayed data values. */
 	static final Key VALUE_FORMAT =
 		new Key("point.value.format"); //$NON-NLS-1$
-	/** Key for specifying a {@link de.erichseifert.gral.Location} value for
+	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
 	the positioning of the data value relative to the data point. */
 	public static final Key VALUE_LOCATION =
 		new Key("point.value.location"); //$NON-NLS-1$

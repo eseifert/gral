@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.graphics;
 
 import java.awt.Graphics2D;
 
@@ -76,7 +76,6 @@ public class DrawingContext {
 		this.graphics = graphics;
 		this.quality = quality;
 		this.target = target;
-
 	}
 
 	/**
@@ -102,5 +101,4 @@ public class DrawingContext {
 	public Target getTarget() {
 		return target;
 	}
-
 }

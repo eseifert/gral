@@ -30,8 +30,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawableContainer;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
 
 public class ExportDialogTest {
 	private static Drawable drawable;

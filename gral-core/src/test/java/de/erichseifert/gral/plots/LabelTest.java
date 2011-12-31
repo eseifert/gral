@@ -35,8 +35,8 @@ import java.awt.image.BufferedImage;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.DrawingContext;
 import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.Dimension2D;
 
 public class LabelTest {

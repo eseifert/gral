@@ -32,8 +32,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.util.Messages;

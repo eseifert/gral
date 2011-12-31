@@ -41,14 +41,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.Location;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.util.Location;
 public class DefaultPointRenderer2DTest {
 	private static DataTable table;
 	private static Row row;

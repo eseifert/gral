@@ -40,7 +40,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.util.Messages;
 
 /**

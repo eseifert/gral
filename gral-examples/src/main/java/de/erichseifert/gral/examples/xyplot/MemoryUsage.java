@@ -36,13 +36,13 @@ import java.text.DecimalFormat;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
-import de.erichseifert.gral.Legend;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.plots.Legend;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;

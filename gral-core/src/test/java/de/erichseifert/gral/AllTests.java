@@ -26,9 +26,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import de.erichseifert.gral.data.DataTests;
+import de.erichseifert.gral.graphics.GraphicsTests;
 import de.erichseifert.gral.io.IoTests;
 import de.erichseifert.gral.plots.PlotsTests;
-import de.erichseifert.gral.ui.UITests;
+import de.erichseifert.gral.ui.UiTests;
 import de.erichseifert.gral.util.UtilTests;
 
 @RunWith(Suite.class)
@@ -36,12 +37,10 @@ import de.erichseifert.gral.util.UtilTests;
 	TestUtilsTest.class,
 	UtilTests.class,
 	DataTests.class,
+	GraphicsTests.class,
 	PlotsTests.class,
-	UITests.class,
-	EdgeLayoutTest.class,
-	StackedLayoutTest.class,
-	TableLayoutTest.class,
-	IoTests.class
+	IoTests.class,
+	UiTests.class
 })
 public class AllTests {
 }

@@ -31,10 +31,10 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.erichseifert.gral.Drawable;
-import de.erichseifert.gral.DrawingContext;
-import de.erichseifert.gral.DrawingContext.Quality;
-import de.erichseifert.gral.DrawingContext.Target;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.DrawingContext.Quality;
+import de.erichseifert.gral.graphics.DrawingContext.Target;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.IOCapabilitiesStorage;
 import de.erichseifert.gral.util.Messages;

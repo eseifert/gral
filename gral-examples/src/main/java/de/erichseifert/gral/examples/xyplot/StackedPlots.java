@@ -26,10 +26,10 @@ import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
-import de.erichseifert.gral.DrawableContainer;
-import de.erichseifert.gral.TableLayout;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.TableLayout;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;

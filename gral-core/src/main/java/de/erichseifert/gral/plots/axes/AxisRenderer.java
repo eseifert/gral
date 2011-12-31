@@ -23,7 +23,7 @@ package de.erichseifert.gral.plots.axes;
 
 import java.util.List;
 
-import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SettingsStorage;
 

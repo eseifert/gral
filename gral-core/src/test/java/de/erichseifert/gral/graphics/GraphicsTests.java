@@ -19,16 +19,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.graphics;
 
-/**
- * Interface for classes that can provide a {@code Navigator} which translates
- * navigational actions.
- */
-public interface Navigable {
-	/**
-	 * Returns a navigator instance that can control the current object.
-	 * @return A navigator instance.
-	 */
-	Navigator getNavigator();
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	// Tests for classes
+	EdgeLayoutTest.class,
+	StackedLayoutTest.class,
+	TableLayoutTest.class
+})
+public class GraphicsTests {
 }

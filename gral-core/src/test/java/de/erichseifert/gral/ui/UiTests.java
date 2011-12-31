@@ -19,28 +19,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral;
+package de.erichseifert.gral.ui;
 
-import java.awt.geom.Dimension2D;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
-/**
- * Interface that provides basic functions for arranging a layout.
- * Functionality includes the arrangement of components and returning the
- * preferred size of a specified container using this layout.
- */
-public interface Layout {
-
-	/**
-	 * Arranges the components of the specified container according to this
-	 * layout.
-	 * @param container Container to be laid out.
-	 */
-	void layout(Container container);
-
-	/**
-	 * Returns the preferred size of the specified container using this layout.
-	 * @param container Container whose preferred size is to be returned.
-	 * @return Preferred extent of the specified container.
-	 */
-	Dimension2D getPreferredSize(Container container);
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	DrawablePanelTest.class,
+	InteractivePanelTest.class,
+	DrawableWriterFilterTest.class,
+	ExportDialogTest.class,
+	ExportChooserTest.class
+})
+public class UiTests {
 }

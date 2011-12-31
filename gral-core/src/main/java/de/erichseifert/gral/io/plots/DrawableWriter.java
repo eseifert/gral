@@ -24,7 +24,7 @@ package de.erichseifert.gral.io.plots;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.graphics.Drawable;
 
 
 /**

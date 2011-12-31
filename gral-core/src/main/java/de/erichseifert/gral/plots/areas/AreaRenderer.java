@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.plots.areas;
 
-import de.erichseifert.gral.Drawable;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
