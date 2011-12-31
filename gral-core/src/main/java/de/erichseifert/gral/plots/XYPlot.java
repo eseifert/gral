@@ -56,6 +56,7 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -213,12 +214,12 @@ public class XYPlot extends Plot implements Navigable {
 			setSettingDefault(GRID_MAJOR_X, true);
 			setSettingDefault(GRID_MAJOR_Y, true);
 			setSettingDefault(GRID_MAJOR_COLOR,
-					new Color(0.0f, 0.0f, 0.0f, 0.1f));
+				new Color(0.0f, 0.0f, 0.0f, 0.1f));
 
 			setSettingDefault(GRID_MINOR_X, false);
 			setSettingDefault(GRID_MINOR_Y, false);
 			setSettingDefault(GRID_MINOR_COLOR,
-					new Color(0.0f, 0.0f, 0.0f, 0.05f));
+				new Color(0.0f, 0.0f, 0.0f, 0.05f));
 		}
 
 		/**
@@ -290,9 +291,9 @@ public class XYPlot extends Plot implements Navigable {
 
 			// Draw gridY
 			if (isGridMajorY || isGridMinorY) {
-				AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 				Axis axisY = plot.getAxis(AXIS_Y);
-				if (axisYRenderer != null && axisY != null && axisY.isValid()) {
+				AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
+				if (axisY != null && axisY.isValid() && axisYRenderer != null) {
 					Shape shapeY = axisYRenderer.getSetting(AxisRenderer.SHAPE);
 					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 					List<Tick> ticksY = axisYRenderer.getTicks(axisY);
@@ -301,10 +302,8 @@ public class XYPlot extends Plot implements Navigable {
 						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 					);
 					for (Tick tick : ticksY) {
-						boolean isMajorTick =
-							TickType.MAJOR.equals(tick.getType());
-						boolean isMinorTick =
-							TickType.MINOR.equals(tick.getType());
+						boolean isMajorTick = tick.getType() == TickType.MAJOR;
+						boolean isMinorTick = tick.getType() == TickType.MINOR;
 						if ((isMajorTick && !isGridMajorY) ||
 								(isMinorTick && !isGridMinorY)) {
 							continue;
@@ -315,7 +314,7 @@ public class XYPlot extends Plot implements Navigable {
 						}
 
 						Paint paint = getSetting(GRID_MAJOR_COLOR);
-						if (TickType.MINOR.equals(tick.getType())) {
+						if (tick.getType() == TickType.MINOR) {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
@@ -577,135 +576,96 @@ public class XYPlot extends Plot implements Navigable {
 
 	/**
 	 * Calculates the bounds of the axes.
-	 * FIXME Clean up code and do more efficient checks (loop?)
 	 */
 	protected void layoutAxes() {
 		if (getPlotArea() == null) {
 			return;
 		}
 
-		Rectangle2D plotBounds = getPlotArea().getBounds();
-		Axis axisX = getAxis(AXIS_X);
-		Axis axisY = getAxis(AXIS_Y);
-		AxisRenderer axisXRenderer = getAxisRenderer(AXIS_X);
-		AxisRenderer axisX2Renderer = getAxisRenderer(AXIS_X2);
-		AxisRenderer axisYRenderer = getAxisRenderer(AXIS_Y);
-		AxisRenderer axisY2Renderer = getAxisRenderer(AXIS_Y2);
-		Drawable axisXComp = getAxisComponent(AXIS_X);
-		Drawable axisX2Comp = getAxisComponent(AXIS_X2);
-		Drawable axisYComp = getAxisComponent(AXIS_Y);
-		Drawable axisY2Comp = getAxisComponent(AXIS_Y2);
-		Dimension2D axisXSize = null;
-		Dimension2D axisX2Size = null;
-		Dimension2D axisYSize = null;
-		Dimension2D axisY2Size = null;
-
 		// Set the new shapes first to allow for correct positioning
-		if (axisXComp != null && axisXRenderer != null) {
-			axisXSize = axisXComp.getPreferredSize();
-			axisXRenderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
-				0.0, 0.0,
-				plotBounds.getWidth(), 0.0
-			));
-		}
-		if (axisX2Comp != null && axisX2Renderer != null) {
-			axisX2Size = axisX2Comp.getPreferredSize();
-			axisX2Renderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
-				0.0, 0.0,
-				plotBounds.getWidth(), 0.0
-			));
-		}
-		if (axisYComp != null && axisYRenderer != null) {
-			axisYSize = axisYComp.getPreferredSize();
-			axisYRenderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
-				axisYSize.getWidth(), plotBounds.getHeight(),
-				axisYSize.getWidth(), 0.0
-			));
-		}
-		if (axisY2Comp != null && axisY2Renderer != null) {
-			axisY2Size = axisY2Comp.getPreferredSize();
-			axisY2Renderer.setSetting(AxisRenderer.SHAPE, new Line2D.Double(
-				axisY2Size.getWidth(), plotBounds.getHeight(),
-				axisY2Size.getWidth(), 0.0
-			));
-		}
+		layoutAxisShape(AXIS_X, Orientation.HORIZONTAL);
+		layoutAxisShape(AXIS_X2, Orientation.HORIZONTAL);
+		layoutAxisShape(AXIS_Y, Orientation.VERTICAL);
+		layoutAxisShape(AXIS_Y2, Orientation.VERTICAL);
 
 		// Set bounds with new axis shapes
-		if (axisXRenderer != null && axisXComp != null) {
-			PointND<Double> axisXPos = null;
-			if (axisYRenderer != null && axisY != null && axisY.isValid()) {
-				Double axisXIntersection =
-					axisXRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
-					.doubleValue();
-				axisXPos = axisYRenderer.getPosition(
-					axisY, axisXIntersection, false, false);
-			}
-			if (axisXPos == null) {
-				axisXPos = new PointND<Double>(0.0, 0.0);
-			}
-			axisXComp.setBounds(
-				plotBounds.getMinX(),
-				axisXPos.get(1) + plotBounds.getMinY(),
-				plotBounds.getWidth(),
-				axisXSize.getHeight()
-			);
-		}
-		// Set bounds with new axis shapes
-		if (axisX2Renderer != null && axisX2Comp != null) {
-			PointND<Double> axisX2Pos = null;
-			if (axisYRenderer != null && axisY != null && axisY.isValid()) {
-				Double axisX2Intersection =
-					axisX2Renderer.<Number>getSetting(AxisRenderer.INTERSECTION)
-					.doubleValue();
-				axisX2Pos = axisYRenderer.getPosition(
-					axisY, axisX2Intersection, false, false);
-			}
-			if (axisX2Pos == null) {
-				axisX2Pos = new PointND<Double>(0.0, 0.0);
-			}
-			axisX2Comp.setBounds(
-				plotBounds.getMinX(),
-				axisX2Pos.get(1) + plotBounds.getMinY(),
-				plotBounds.getWidth(),
-				axisX2Size.getHeight()
-			);
+		layoutAxisComponent(AXIS_X, Orientation.HORIZONTAL);
+		layoutAxisComponent(AXIS_X2, Orientation.HORIZONTAL);
+		layoutAxisComponent(AXIS_Y, Orientation.VERTICAL);
+		layoutAxisComponent(AXIS_Y2, Orientation.VERTICAL);
+	}
+
+	private void layoutAxisShape(String axisName, Orientation orientation) {
+		Rectangle2D plotBounds = getPlotArea().getBounds();
+
+		Drawable comp = getAxisComponent(axisName);
+		AxisRenderer renderer = getAxisRenderer(axisName);
+
+		if (comp == null || renderer == null) {
+			return;
 		}
 
-		if (axisYRenderer != null && axisYComp != null) {
-			PointND<Double> axisYPos = null;
-			if (axisXRenderer != null && axisX != null && axisX.isValid()) {
-				Double axisYIntersection =
-					axisYRenderer.<Number>getSetting(AxisRenderer.INTERSECTION)
-					.doubleValue();
-				axisYPos = axisXRenderer.getPosition(
-					axisX, axisYIntersection, false, false);
-			}
-			if (axisYPos == null) {
-				axisYPos = new PointND<Double>(0.0, 0.0);
-			}
-			axisYComp.setBounds(
-				plotBounds.getMinX() - axisYSize.getWidth() + axisYPos.get(0),
-				plotBounds.getMinY(),
-				axisYSize.getWidth(),
-				plotBounds.getHeight()
+		Dimension2D size = comp.getPreferredSize();
+
+		Shape shape;
+		if (orientation == Orientation.HORIZONTAL) {
+			shape = new Line2D.Double(
+				0.0, 0.0,
+				plotBounds.getWidth(), 0.0
+			);
+		} else {
+			shape = new Line2D.Double(
+				size.getWidth(), plotBounds.getHeight(),
+				size.getWidth(), 0.0
 			);
 		}
-		if (axisY2Renderer != null && axisY2Comp != null) {
-			PointND<Double> axisY2Pos = null;
-			if (axisXRenderer != null && axisX != null && axisX.isValid()) {
-				Double axisY2Intersection =
-					axisY2Renderer.<Number>getSetting(AxisRenderer.INTERSECTION)
-					.doubleValue();
-				axisY2Pos = axisXRenderer.getPosition(
-					axisX, axisY2Intersection, false, false);
-			}
-			if (axisY2Pos == null) {
-				axisY2Pos = new PointND<Double>(0.0, 0.0);
-			}
-			axisY2Comp.setBounds(
-				plotBounds.getMinX() - axisY2Size.getWidth() + axisY2Pos.get(0),
+		renderer.setSetting(AxisRenderer.SHAPE, shape);
+	}
+
+	private void layoutAxisComponent(String axisName, Orientation orientation) {
+		Drawable comp = getAxisComponent(axisName);
+		AxisRenderer renderer = getAxisRenderer(axisName);
+		if (comp == null || renderer == null) {
+			return;
+		}
+
+		String nameSecondary;
+		if (orientation == Orientation.HORIZONTAL) {
+			nameSecondary = AXIS_Y;
+		} else {
+			nameSecondary = AXIS_X;
+		}
+		Axis axisSecondary = getAxis(nameSecondary);
+		AxisRenderer rendererSecondary = getAxisRenderer(nameSecondary);
+		if (axisSecondary == null || !axisSecondary.isValid() ||
+				rendererSecondary == null) {
+			return;
+		}
+
+		Number intersection =
+			renderer.<Number>getSetting(AxisRenderer.INTERSECTION);
+		PointND<Double> pos = rendererSecondary.getPosition(
+			axisSecondary, intersection, false, false);
+
+		if (pos == null) {
+			pos = new PointND<Double>(0.0, 0.0);
+		}
+
+		Rectangle2D plotBounds = getPlotArea().getBounds();
+		Dimension2D size = comp.getPreferredSize();
+
+		if (orientation == Orientation.HORIZONTAL) {
+			comp.setBounds(
+				plotBounds.getMinX(),
+				pos.get(1) + plotBounds.getMinY(),
+				plotBounds.getWidth(),
+				size.getHeight()
+			);
+		} else {
+			comp.setBounds(
+				plotBounds.getMinX() - size.getWidth() + pos.get(0),
 				plotBounds.getMinY(),
-				axisY2Size.getWidth(),
+				size.getWidth(),
 				plotBounds.getHeight()
 			);
 		}
