@@ -29,7 +29,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.text.Format;
@@ -38,7 +37,9 @@ import java.text.NumberFormat;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -136,35 +137,12 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		label.setSetting(Label.FONT, font);
 
 		Rectangle2D boundsPoint = point.getBounds2D();
-		Dimension2D boundsLabel = label.getPreferredSize();
+		DrawableContainer labelContainer =
+			new DrawableContainer(new OuterEdgeLayout(distance));
+		labelContainer.add(label, location);
 
-		// Horizontal layout
-		double x, w = boundsLabel.getWidth();
-		if (location == Location.NORTH_EAST || location == Location.EAST
-				|| location == Location.SOUTH_EAST) {
-			x = boundsPoint.getMinX() - distance - boundsLabel.getWidth();
-		} else if (location == Location.NORTH_WEST || location == Location.WEST
-				|| location == Location.SOUTH_WEST) {
-			x = boundsPoint.getMaxX() + distance + boundsLabel.getWidth();
-		} else {
-			x = boundsPoint.getX() + distance;
-			w = boundsPoint.getWidth() - 2.0*distance;
-		}
-		// Vertical layout
-		double y, h = boundsLabel.getHeight();
-		if (location == Location.NORTH_EAST || location == Location.NORTH
-				|| location == Location.NORTH_WEST) {
-			y = boundsPoint.getMinY() - distance - boundsLabel.getHeight();
-		} else if (location == Location.SOUTH_EAST || location == Location.SOUTH
-				|| location == Location.SOUTH_WEST) {
-			y = boundsPoint.getMaxY() + distance + boundsLabel.getHeight();
-		} else {
-			y = boundsPoint.getY() + distance;
-			h = boundsPoint.getHeight() - 2.0*distance;
-		}
-
-		label.setBounds(x, y, w, h);
-		label.draw(context);
+		labelContainer.setBounds(boundsPoint);
+		labelContainer.draw(context);
 	}
 
 	/**

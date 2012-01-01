@@ -158,6 +158,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 		Paint paint = getSetting(COLOR);
 		GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
 
+
 		// Restore previous state
 		graphics.setTransform(txOld);
 	}
