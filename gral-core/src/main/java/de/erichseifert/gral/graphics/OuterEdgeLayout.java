@@ -163,14 +163,16 @@ public class OuterEdgeLayout implements Layout {
 		Map<Location, Drawable> comps = getComponentsByLocation(container);
 		Drawable center = comps.get(Location.CENTER);
 
+
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
 		if (insets == null) {
 			insets = new Insets2D.Double();
 		}
 
-		double width = center.getWidth() + insets.getHorizontal() + 2.0*gap;
-		double height = center.getHeight() + insets.getVertical() + 2.0*gap;
+		double gap2 = 2.0*gap;
+		double width = center.getWidth() + insets.getHorizontal() + gap2;
+		double height = center.getHeight() + insets.getVertical() + gap2;
 
 		return new de.erichseifert.gral.util.Dimension2D.Double(
 			width, height

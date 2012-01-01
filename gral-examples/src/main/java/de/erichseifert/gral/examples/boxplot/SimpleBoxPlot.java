@@ -32,7 +32,7 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
-import de.erichseifert.gral.plots.XYPlot.NavigationDirection;
+import de.erichseifert.gral.plots.XYPlot.XYNavigationDirection;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.plots.colors.ScaledContinuousColorMapper;
@@ -88,7 +88,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_COLOR, COLOR1);
 		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BAR_CENTER_COLOR, COLOR1);
 
-		plot.getNavigator().setDirection(NavigationDirection.VERTICAL);
+		plot.getNavigator().setDirection(XYNavigationDirection.VERTICAL);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

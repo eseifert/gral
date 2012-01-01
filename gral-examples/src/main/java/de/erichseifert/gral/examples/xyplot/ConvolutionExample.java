@@ -40,7 +40,6 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
 
 /**
@@ -92,10 +91,10 @@ public class ConvolutionExample extends ExamplePanel {
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		plot.setSetting(Plot.LEGEND, true);
-		plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
 
 		// Format legend
 		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
+		plot.getLegend().setSetting(Legend.ALIGNMENT_Y, 1.0);
 
 		// Format data series as lines of different colors
 		formatLine(plot, ds, Color.BLACK);

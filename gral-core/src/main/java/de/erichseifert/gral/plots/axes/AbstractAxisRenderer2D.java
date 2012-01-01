@@ -266,7 +266,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					axisLabel.setSetting(Label.COLOR,
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
-					// FIXME Use tick label height instead of constant value
 					double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
 						.doubleValue()*fontSize;
 					double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)

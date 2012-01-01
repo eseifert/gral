@@ -48,10 +48,10 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EdgeLayout;
+import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.SettingChangeEvent;
 import de.erichseifert.gral.util.SettingsListener;
@@ -103,7 +103,7 @@ public abstract class AbstractPlot extends DrawableContainer
 		title = new Label(); //$NON-NLS-1$
 		title.setSetting(Label.FONT, Font.decode(null).deriveFont(18f));
 
-		legendContainer = new DrawableContainer(new EdgeLayout(0.0, 0.0));
+		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
 
 		dataVisible = new HashSet<DataSource>();
 
@@ -128,8 +128,8 @@ public abstract class AbstractPlot extends DrawableContainer
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ANTIALISING, true);
 		setSettingDefault(LEGEND, false);
-		setSettingDefault(LEGEND_LOCATION, Location.NORTH_WEST);
-		setSettingDefault(LEGEND_MARGIN, new Insets2D.Double(20.0));
+		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
+		setSettingDefault(LEGEND_DISTANCE, 2.0);
 
 		add(title, Location.NORTH);
 	}
@@ -388,9 +388,15 @@ public abstract class AbstractPlot extends DrawableContainer
 				legendContainer.remove(legend);
 				legendContainer.add(legend, constraints);
 			}
-		} else if (LEGEND_MARGIN.equals(key)) {
-			Insets2D margin = getSetting(LEGEND_MARGIN);
-			legendContainer.setInsets(margin);
+		} else if (LEGEND_DISTANCE.equals(key)) {
+			// TODO Use real font size instead of fixed value
+			final double fontSize = 10.0;
+
+			Number distanceObj = getSetting(LEGEND_DISTANCE);
+			double distance = distanceObj.doubleValue()*fontSize;
+
+			OuterEdgeLayout layout = new OuterEdgeLayout(distance);
+			legendContainer.setLayout(layout);
 		}
 	}
 

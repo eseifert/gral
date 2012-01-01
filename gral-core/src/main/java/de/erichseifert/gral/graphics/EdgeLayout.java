@@ -97,7 +97,7 @@ public class EdgeLayout implements Layout {
 		}
 
 		double xWest   = bounds.getMinX() + insets.getLeft();
-		double xCenter = xWest + widthWest + gapEast;
+		double xCenter = xWest + widthWest + gapWest;
 		double xEast   = bounds.getMaxX() - insets.getRight() - widthEast;
 		double yNorth  = bounds.getMinY() + insets.getTop();
 		double yCenter = yNorth + heightNorth + gapNorth;

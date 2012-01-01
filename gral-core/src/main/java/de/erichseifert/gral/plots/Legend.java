@@ -74,14 +74,28 @@ public abstract class Legend extends DrawableContainer
 	 fill the border of the legend. */
 	public static final Key COLOR =
 		new Key("legend.color"); //$NON-NLS-1$
-	/** Key for specifying the orientation of the legend using a
-	 {@link de.erichseifert.gral.util.Orientation} value. */
+	/** Key for specifying a {@link de.erichseifert.gral.util.Orientation}
+	instance defining the direction of the legend's items. */
 	public static final Key ORIENTATION =
 		new Key("legend.orientation"); //$NON-NLS-1$
-	/** Key for specifying the gap between items. */
+	/** Key for specifying a {@link Number} value describing the horizontal
+	alignment of the legend relative to the plot area. {@code 0.0} means left,
+	{@code 0.5} means centered, and {@code 1.0} means right. */
+	public static final Key ALIGNMENT_X =
+		new Key("legend.alignment.x"); //$NON-NLS-1$
+	/** Key for specifying a {@link Number} value describing the vertical
+	alignment of the legend relative to the plot area. {@code 0.0} means top,
+	{@code 0.5} means centered, and {@code 1.0} means bottom. */
+	public static final Key ALIGNMENT_Y =
+		new Key("legend.alignment.x"); //$NON-NLS-1$
+	/** Key for specifying a {@link java.awt.Insets2D} instance defining the
+	horizontal and vertical gap between items. The gap size is defined
+	relative to the font height of the legend. */
 	public static final Key GAP =
 		new Key("legend.gap"); //$NON-NLS-1$
-	/** Key for specifying the gap between items. */
+	/** Key for specifying a {@link java.awt.Insets2D} instance defining the
+	size of the legend's symbols. The symbol size is defined relative to the
+	font height of the legend. */
 	public static final Key SYMBOL_SIZE =
 		new Key("legend.symbol.size"); //$NON-NLS-1$
 
@@ -105,7 +119,9 @@ public abstract class Legend extends DrawableContainer
 		 * @param labelText Description text.
 		 */
 		public Item(final DataSource data, final String labelText) {
-			super(new EdgeLayout(10.0, 0.0));
+			double fontSize =
+				Legend.this.<Font>getSetting(FONT).getSize2D();
+			setLayout(new EdgeLayout(fontSize, 0.0));
 			this.data = data;
 
 			symbol = new AbstractDrawable() {
@@ -125,18 +141,13 @@ public abstract class Legend extends DrawableContainer
 					return size;
 				}
 			};
+			add(symbol, Location.WEST);
+
 			label = new Label(labelText);
 			label.setSetting(Label.FONT, Legend.this.<Font>getSetting(FONT));
 			label.setSetting(Label.ALIGNMENT_X, 0.0);
 			label.setSetting(Label.ALIGNMENT_Y, 0.5);
-
-			add(symbol, Location.WEST);
 			add(label, Location.CENTER);
-		}
-
-		@Override
-		public Dimension2D getPreferredSize() {
-			return getLayout().getPreferredSize(this);
 		}
 
 		/**
@@ -149,8 +160,9 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Initializes a new instance with a default background color, a border, an
-	 * orientation and a gap between the items.
+	 * Initializes a new instance with a default background color, a border,
+	 * vertical orientation and a gap between the items. The default alignment
+	 * is set to top-left.
 	 */
 	public Legend() {
 		components = new HashMap<DataSource, Drawable>();
@@ -162,7 +174,9 @@ public abstract class Legend extends DrawableContainer
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
-		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(20.0, 5.0));
+		setSettingDefault(ALIGNMENT_X, 0.0);
+		setSettingDefault(ALIGNMENT_Y, 0.0);
+		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
 		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
 	}
 
@@ -174,14 +188,14 @@ public abstract class Legend extends DrawableContainer
 	}
 
 	/**
-	 * Draws the background of this legend with the specified
-	 * {@code Graphics2D} object.
+	 * Draws the background of this legend with the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
 		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
-			GraphicsUtils.fillPaintedShape(context.getGraphics(), getBounds(), bg, null);
+			GraphicsUtils.fillPaintedShape(
+				context.getGraphics(), getBounds(), bg, null);
 		}
 	}
 
@@ -193,7 +207,8 @@ public abstract class Legend extends DrawableContainer
 		Stroke stroke = getSetting(BORDER);
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
-			GraphicsUtils.drawPaintedShape(context.getGraphics(), getBounds(), fg, null, stroke);
+			GraphicsUtils.drawPaintedShape(
+				context.getGraphics(), getBounds(), fg, null, stroke);
 		}
 	}
 
@@ -265,6 +280,10 @@ public abstract class Legend extends DrawableContainer
 		if (ORIENTATION.equals(key) || GAP.equals(key)) {
 			Orientation orientation = getSetting(ORIENTATION);
 			Dimension2D gap = getSetting(GAP);
+			if (GAP.equals(key) && gap != null) {
+				double fontSize = this.<Font>getSetting(FONT).getSize2D();
+				gap.setSize(gap.getWidth()*fontSize, gap.getHeight()*fontSize);
+			}
 			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
 		} else if (FONT.equals(key)) {
@@ -273,9 +292,21 @@ public abstract class Legend extends DrawableContainer
 					continue;
 				}
 				((Item) item).label.setSetting(Label.FONT,
-					Legend.this.<Font>getSetting(FONT));
+					this.<Font>getSetting(FONT));
 			}
 		}
 	}
 
+	@Override
+	public void setBounds(double x, double y, double width, double height) {
+		Dimension2D size = getPreferredSize();
+		double alignX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
+		super.setBounds(
+			x + alignX*(width - size.getWidth()),
+			y + alignY*(height - size.getHeight()),
+			size.getWidth(),
+			size.getHeight()
+		);
+	}
 }

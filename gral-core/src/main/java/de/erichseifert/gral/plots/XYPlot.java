@@ -40,6 +40,7 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.navigation.Navigable;
@@ -679,8 +680,9 @@ public class XYPlot extends AbstractPlot implements Navigable {
 		if (getPlotArea() == null) {
 			return;
 		}
+		Container legendContainer = getLegendContainer();
 		Rectangle2D plotBounds = getPlotArea().getBounds();
-		getLegendContainer().setBounds(plotBounds);
+		legendContainer.setBounds(plotBounds);
 	}
 
 	/**
