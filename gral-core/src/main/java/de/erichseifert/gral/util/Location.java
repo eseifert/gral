@@ -2,7 +2,7 @@
  * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2012 Erich Seifert <dev[at]erichseifert.de>,
- * Michael Seifert <michael.seifert[at]gmx.net>
+ * Michael Seifert <michael[at]erichseifert.de>
  *
  * This file is part of GRAL.
  *
@@ -21,10 +21,9 @@
  */
 package de.erichseifert.gral.util;
 
-import de.erichseifert.gral.graphics.Drawable;
 
 /**
- * Indicates the location of {@link Drawable} instances or other elements.
+ * Indicates the location of components.
  */
 public enum Location {
 	/** Central location. */

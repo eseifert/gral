@@ -2,7 +2,7 @@
  * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2012 Erich Seifert <dev[at]erichseifert.de>,
- * Michael Seifert <michael.seifert[at]gmx.net>
+ * Michael Seifert <michael[at]erichseifert.de>
  *
  * This file is part of GRAL.
  *
@@ -43,7 +43,7 @@ import de.erichseifert.gral.util.PointND;
  *
  * Additionally, the actions can also be bound to a certain direction by
  * defining a more restricted set of axes. The methods {@link #getDirection()}
- * and {@link #setDirection(de.erichseifert.gral.Navigator.NavigationDirection)}
+ * and {@link #setDirection(de.erichseifert.gral.navigation.Navigator.NavigationDirection)}
  * provide a convenient way for setting predefined sets of axes.
  */
 public abstract class PlotNavigator extends AbstractNavigator {

@@ -103,7 +103,7 @@
             <owner1>Erich Seifert</owner1>
             <email1>dev[at]erichseifert.de</email1>
             <owner2>Michael Seifert</owner2>
-            <email2>michael.seifert[at]gmx.net</email2>
+            <email2>michael[at]erichseifert.de</email2>
           </properties>
           <excludes>
             <exclude>**/main/resources/**</exclude>

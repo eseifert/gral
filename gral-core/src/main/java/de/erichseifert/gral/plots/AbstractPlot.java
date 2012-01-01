@@ -2,7 +2,7 @@
  * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2012 Erich Seifert <dev[at]erichseifert.de>,
- * Michael Seifert <michael.seifert[at]gmx.net>
+ * Michael Seifert <michael[at]erichseifert.de>
  *
  * This file is part of GRAL.
  *
@@ -181,15 +181,20 @@ public abstract class AbstractPlot extends DrawableContainer
 		legend.draw(context);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getAxis(java.lang.String)
+	/**
+	 * Returns the axis with the specified name.
+	 * @param name Name of the axis.
+	 * @return Axis.
 	 */
 	public Axis getAxis(String name) {
 		return axes.get(name);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#setAxis(java.lang.String, de.erichseifert.gral.plots.axes.Axis)
+	/**
+	 * Sets the axis with the specified name and the associated
+	 * {@code AxisRenderer}.
+	 * @param name Name of the axis.
+	 * @param axis Axis.
 	 */
 	public void setAxis(String name, Axis axis) {
 		if (axis == null) {
@@ -199,8 +204,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#removeAxis(java.lang.String)
+	/**
+	 * Removes the axis with the specified name.
+	 * @param name Name of the axis to be removed.
 	 */
 	public void removeAxis(String name) {
 		axes.remove(name);
@@ -208,8 +214,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		axisDrawables.remove(name);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getAxesNames()
+	/**
+	 * Returns a collection of all names of the axes stored in this plot.
+	 * @return The names of all axes stored in this plot.
 	 */
 	public Collection<String> getAxesNames() {
 		return axes.keySet();
@@ -247,15 +254,19 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getAxisRenderer(java.lang.String)
+	/**
+	 * Returns the renderer for the axis with the specified name.
+	 * @param axisName Axis name.
+	 * @return Instance that renders the axis.
 	 */
 	public AxisRenderer getAxisRenderer(String axisName) {
 		return axisRenderers.get(axisName);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#setAxisRenderer(java.lang.String, de.erichseifert.gral.plots.axes.AxisRenderer)
+	/**
+	 * Sets the renderer for the axis with the specified name.
+	 * @param axisName Name of the axis to be rendered.
+	 * @param renderer Instance to render the axis.
 	 */
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
 		Drawable comp = null;
@@ -292,8 +303,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getPlotArea()
+	/**
+	 * Returns the drawing area of this plot.
+	 * @return {@code PlotArea2D}.
 	 */
 	public PlotArea getPlotArea() {
 		return plotArea;
@@ -313,8 +325,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getTitle()
+	/**
+	 * Returns the title component of this plot.
+	 * @return Label representing the title.
 	 */
 	public Label getTitle() {
 		return title;
@@ -328,8 +341,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		return legendContainer;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getLegend()
+	/**
+	 * Returns the legend component.
+	 * @return Legend.
 	 */
 	public Legend getLegend() {
 		return legend;
@@ -380,22 +394,30 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#add(de.erichseifert.gral.data.DataSource)
+	/**
+	 * Adds a new data series to the plot which is visible by default.
+	 * @param source Data series.
 	 */
 	public void add(DataSource source) {
 		add(source, true);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#add(de.erichseifert.gral.data.DataSource, boolean)
+	/**
+	 * Adds a new data series to the plot.
+	 * @param source Data series.
+	 * @param visible {@code true} if the series should be displayed,
+	 *        {@code false} otherwise.
 	 */
 	public void add(DataSource source, boolean visible) {
 		add(data.size(), source, visible);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#add(int, de.erichseifert.gral.data.DataSource, boolean)
+	/**
+	 * Inserts the specified data series to the plot at a specified position.
+	 * @param index Position.
+	 * @param source Data series.
+	 * @param visible {@code true} if the series should be displayed,
+	 *        {@code false} otherwise.
 	 */
 	public void add(int index, DataSource source, boolean visible) {
 		data.add(index, source);
@@ -410,22 +432,30 @@ public abstract class AbstractPlot extends DrawableContainer
 		invalidate();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#contains(de.erichseifert.gral.data.DataSource)
+	/**
+	 * Returns whether the plot contains the specified data series.
+	 * @param source Data series.
+	 * @return {@code true} if the specified element is stored in the
+	 *         plot, otherwise {@code false}
 	 */
 	public boolean contains(DataSource source) {
 		return data.contains(source);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#get(int)
+	/**
+	 * Returns the data series at a specified index.
+	 * @param index Position of the data series.
+	 * @return Instance of the data series.
 	 */
 	public DataSource get(int index) {
 		return data.get(index);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#remove(de.erichseifert.gral.data.DataSource)
+	/**
+	 * Deletes the specified data series from the plot.
+	 * @param source Data series.
+	 * @return {@code true} if the series existed,
+	 *         otherwise {@code false}.
 	 */
 	public boolean remove(DataSource source) {
 		source.removeDataListener(this);
@@ -438,8 +468,8 @@ public abstract class AbstractPlot extends DrawableContainer
 		return existed;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#clear()
+	/**
+	 * Removes all data series from this plot.
 	 */
 	public void clear() {
 		for (DataSource source : data) {
@@ -469,8 +499,14 @@ public abstract class AbstractPlot extends DrawableContainer
 		return axisName;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getMapping(de.erichseifert.gral.data.DataSource)
+	/**
+	 * Returns the mapping of data source columns to axis names. The elements
+	 * of returned array equal the column indexes, i.e. the first element (axis
+	 * name) matches the first column of {@code source}. If no mapping exists
+	 * {@code null} will be stored in the array.
+	 * @param source Data source.
+	 * @return Array containing axis names in the order of the columns,
+	 *         or {@code null} if no mapping exists for the column.
 	 */
 	public String[] getMapping(DataSource source) {
 		String[] mapping = new String[source.getColumnCount()];
@@ -480,8 +516,13 @@ public abstract class AbstractPlot extends DrawableContainer
 		return mapping;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#setMapping(de.erichseifert.gral.data.DataSource, java.lang.String)
+	/**
+	 * Sets the mapping of data source columns to axis names. The column index
+	 * is taken from the order of the axis names, i.e. the first column of
+	 * {@code source} will be mapped to first element of {@code axisNames}.
+	 * Axis names with value {@code null} will be ignored.
+	 * @param source Data source.
+	 * @param axisNames Sequence of axis names in the order of the columns.
 	 */
 	public void setMapping(DataSource source, String... axisNames) {
 		if (!contains(source)) {
@@ -538,15 +579,17 @@ public abstract class AbstractPlot extends DrawableContainer
 		return max;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getData()
+	/**
+	 * Returns a list of all data series stored in the plot.
+	 * @return List of all data series.
 	 */
 	public List<DataSource> getData() {
 		return Collections.unmodifiableList(data);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#getVisibleData()
+	/**
+	 * Returns a list of all visible data series stored in the plot.
+	 * @return List of all visible data series.
 	 */
 	public List<DataSource> getVisibleData() {
 		List<DataSource> visible = new LinkedList<DataSource>();
@@ -558,15 +601,20 @@ public abstract class AbstractPlot extends DrawableContainer
 		return visible;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#isVisible(de.erichseifert.gral.data.DataSource)
+	/**
+	 * Returns whether the specified data series is drawn.
+	 * @param source Data series.
+	 * @return {@code true} if visible, {@code false} otherwise.
 	 */
 	public boolean isVisible(DataSource source) {
 		return dataVisible.contains(source);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.erichseifert.gral.plots.Plot#setVisible(de.erichseifert.gral.data.DataSource, boolean)
+	/**
+	 * Changes the visibility of the specified data series.
+	 * @param source Data series.
+	 * @param visible {@code true} if the series should be visible,
+	 *        {@code false} otherwise.
 	 */
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {

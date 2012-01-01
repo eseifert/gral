@@ -2,7 +2,7 @@
  * GRAL: GRAphing Library for Java(R)
  *
  * (C) Copyright 2009-2012 Erich Seifert <dev[at]erichseifert.de>,
- * Michael Seifert <michael.seifert[at]gmx.net>
+ * Michael Seifert <michael[at]erichseifert.de>
  *
  * This file is part of GRAL.
  *
@@ -116,13 +116,13 @@ public interface Plot {
 	PlotArea getPlotArea();
 
 	/**
-	 * Returns the title of this plot.
+	 * Returns the title component of this plot.
 	 * @return Label representing the title.
 	 */
 	Label getTitle();
 
 	/**
-	 * Returns the legend.
+	 * Returns the legend component.
 	 * @return Legend.
 	 */
 	Legend getLegend();
@@ -225,5 +225,4 @@ public interface Plot {
 	 *        {@code false} otherwise.
 	 */
 	void setVisible(DataSource source, boolean visible);
-
 }
