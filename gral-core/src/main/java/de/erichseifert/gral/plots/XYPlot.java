@@ -43,6 +43,7 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.NavigationDirection;
 import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -99,7 +100,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	/**
 	 * Constants which determine the direction of zoom and pan actions.
 	 */
-	public static enum NavigationDirection implements Navigator.NavigationDirection {
+	public static enum XYNavigationDirection implements NavigationDirection {
 		/** Value for zooming and panning horizontally. */
 		HORIZONTAL(XYPlot.AXIS_X, XYPlot.AXIS_X2),
 		/** Value for zooming and panning vertically. */
@@ -115,7 +116,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 		 * same direction.
 		 * @param axesNames Names of the axes that have the same direction.
 		 */
-		private NavigationDirection(String... axesNames) {
+		private XYNavigationDirection(String... axesNames) {
 			this.axesNames = axesNames;
 		}
 
@@ -139,7 +140,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 		 * @param plot Two-dimensional plot that should be controlled.
 		 */
 		public XYPlotNavigator(XYPlot plot) {
-			super(plot, XYPlot.NavigationDirection.ARBITRARY.getAxesNames());
+			super(plot, XYNavigationDirection.ARBITRARY.getAxesNames());
 		}
 
 		@Override
@@ -147,10 +148,10 @@ public class XYPlot extends AbstractPlot implements Navigable {
 			if (direction == getDirection()) {
 				return;
 			}
-			if (!(direction instanceof XYPlot.NavigationDirection)) {
+			if (!(direction instanceof XYNavigationDirection)) {
 				throw new IllegalArgumentException("Unknown direction.");
 			}
-			String[] axesNames = ((XYPlot.NavigationDirection)direction).getAxesNames();
+			String[] axesNames = ((XYNavigationDirection)direction).getAxesNames();
 			setAxes(axesNames);
 			super.setDirection(direction);
 		}

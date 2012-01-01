@@ -48,11 +48,6 @@ import de.erichseifert.gral.util.PointND;
  * for this use case.
  */
 public interface Navigator extends NavigationListener {
-	/** Marker interface for implementation specific navigation direction,
-	such as horizontal, vertical for two dimensional objects. */
-	interface NavigationDirection {
-	}
-
 	/**
 	 * Returns whether the associated object can be zoomed.
 	 * @return {@code true} if the object can be zoomed,

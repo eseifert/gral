@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.navigation.AbstractNavigator;
+import de.erichseifert.gral.navigation.NavigationDirection;
 import de.erichseifert.gral.navigation.NavigationEvent;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -43,8 +44,8 @@ import de.erichseifert.gral.util.PointND;
  *
  * Additionally, the actions can also be bound to a certain direction by
  * defining a more restricted set of axes. The methods {@link #getDirection()}
- * and {@link #setDirection(de.erichseifert.gral.navigation.Navigator.NavigationDirection)}
- * provide a convenient way for setting predefined sets of axes.
+ * and {@link #setDirection(NavigationDirection)} provide a convenient way for
+ * setting predefined sets of axes.
  */
 public abstract class PlotNavigator extends AbstractNavigator {
 	/** AbstractPlot that will be navigated. */
