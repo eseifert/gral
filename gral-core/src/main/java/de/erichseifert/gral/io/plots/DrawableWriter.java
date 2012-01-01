@@ -1,7 +1,7 @@
 /*
  * GRAL: GRAphing Library for Java(R)
  *
- * (C) Copyright 2009-2011 Erich Seifert <dev[at]erichseifert.de>,
+ * (C) Copyright 2009-2012 Erich Seifert <dev[at]erichseifert.de>,
  * Michael Seifert <michael.seifert[at]gmx.net>
  *
  * This file is part of GRAL.
