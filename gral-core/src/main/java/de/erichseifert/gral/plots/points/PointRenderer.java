@@ -46,8 +46,8 @@ public interface PointRenderer extends SettingsStorage {
 	static final Key SHAPE =
 		new Key("point"); //$NON-NLS-1$
 	/** Key for specifying an instance either of
-	{@link de.erichseifert.gral.colors.ColorMapper} or {@link java.awt.Paint}
-	that will be used to paint the point shapes. */
+	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
+	{@link java.awt.Paint} that will be used to paint the point shapes. */
 	static final Key COLOR =
 		new Key("point.color"); //$NON-NLS-1$
 
@@ -89,8 +89,8 @@ public interface PointRenderer extends SettingsStorage {
 	static final Key VALUE_COLOR =
 		new Key("point.value.paint"); //$NON-NLS-1$
 	/** Key for specifying an instance either of
-	{@link de.erichseifert.gral.colors.ColorMapper} or {@link java.awt.Paint}
-	that will be used to paint the value text. */
+	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
+	{@link java.awt.Paint} that will be used to paint the value text. */
 	static final Key VALUE_FONT =
 		new Key("point.value.font"); //$NON-NLS-1$
 
@@ -111,8 +111,8 @@ public interface PointRenderer extends SettingsStorage {
 	static final Key ERROR_COLOR =
 		new Key("point.error.paint"); //$NON-NLS-1$
 	/** Key for specifying an instance either of
-	{@link de.erichseifert.gral.colors.ColorMapper} or {@link java.awt.Paint}
-	that will be used to paint the error bars. */
+	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
+	{@link java.awt.Paint} that will be used to paint the error bars. */
 	static final Key ERROR_SHAPE =
 		new Key("point.error.shape"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance defining the
