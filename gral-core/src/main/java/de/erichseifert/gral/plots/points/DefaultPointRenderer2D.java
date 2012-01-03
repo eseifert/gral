@@ -22,7 +22,6 @@
 package de.erichseifert.gral.plots.points;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -43,6 +42,7 @@ import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -67,8 +67,12 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		Drawable drawable = new AbstractDrawable() {
 			public void draw(DrawingContext context) {
 				PointRenderer renderer = DefaultPointRenderer2D.this;
-				Paint paint = renderer.getSetting(COLOR);
+
 				Shape point = getPointPath(row);
+
+				ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
+				Paint paint = colors.get(row.getIndex());
+
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), point, paint, null);
 
@@ -113,7 +117,8 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		String text = (format != null) ? format.format(value) : value.toString();
 
 		// Visual settings
-		Color color = getSetting(VALUE_COLOR);
+		ColorMapper colors = getSetting(VALUE_COLOR);
+		Paint paint = colors.get(row.getIndex());
 		Font font = getSetting(VALUE_FONT);
 		double fontSize = font.getSize2D();
 
@@ -133,7 +138,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		label.setSetting(Label.ALIGNMENT_X, alignX);
 		label.setSetting(Label.ALIGNMENT_Y, alignY);
 		label.setSetting(Label.ROTATION, rotation);
-		label.setSetting(Label.COLOR, color);
+		label.setSetting(Label.COLOR, paint);
 		label.setSetting(Label.FONT, font);
 
 		Rectangle2D boundsPoint = point.getBounds2D();
@@ -197,7 +202,8 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 		// Draw the error bar
 		Line2D errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
-		Paint errorPaint = getSetting(ERROR_COLOR);
+		ColorMapper colors = getSetting(ERROR_COLOR);
+		Paint errorPaint = colors.get(row.getIndex());
 		Stroke errorStroke = getSetting(ERROR_STROKE);
 		GraphicsUtils.drawPaintedShape(
 			graphics, errorBar, errorPaint, null, errorStroke);

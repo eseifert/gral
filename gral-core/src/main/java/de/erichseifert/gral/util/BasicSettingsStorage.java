@@ -83,9 +83,7 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param value Value to be set.
 	 */
 	public <T> void setSetting(Key key, T value) {
-		Object valueOld = settings.get(key);
-		settings.put(key, value);
-		notifySettingChanged(key, valueOld, value, false);
+		setSetting(key, value, false);
 	}
 
 	/**
@@ -93,8 +91,9 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param <T> Type of setting.
 	 * @param key Key.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> void removeSetting(Key key) {
-		Object valueOld = settings.get(key);
+		T valueOld = (T) settings.get(key);
 		settings.remove(key);
 		notifySettingChanged(key, valueOld, null, false);
 	}
@@ -117,9 +116,7 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param value Value to be set.
 	 */
 	public <T> void setSettingDefault(Key key, T value) {
-		Object valueOld = defaults.get(key);
-		defaults.put(key, value);
-		notifySettingChanged(key, valueOld, value, true);
+		setSetting(key, value, true);
 	}
 
 	/**
@@ -127,10 +124,28 @@ public class BasicSettingsStorage implements SettingsStorage {
 	 * @param <T> value type
 	 * @param key key of the setting
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> void removeSettingDefault(Key key) {
-		Object valueOld = defaults.get(key);
+		T valueOld = (T) defaults.get(key);
 		defaults.remove(key);
 		notifySettingChanged(key, valueOld, null, true);
+	}
+
+	/**
+	 * Sets the setting or default setting with the specified key to a new
+	 * value.
+	 * @param <T> Type of setting.
+	 * @param key Key.
+	 * @param value Value to be set.
+	 * @param isDefault {@code true} when the value should be the default,
+	 *        otherwise {@code false}
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> void setSetting(Key key, T value, boolean isDefault) {
+		Map<Key, Object> map = isDefault ? defaults : this.settings;
+		T valueOld = (T) defaults.get(key);
+		map.put(key, value);
+		notifySettingChanged(key, valueOld, value, true);
 	}
 
 	/**

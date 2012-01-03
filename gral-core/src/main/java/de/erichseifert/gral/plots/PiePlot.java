@@ -22,7 +22,6 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -543,7 +542,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			String text = (format != null) ? format.format(value) : value.toString();
 
 			// Visual settings
-			Color color = getSetting(VALUE_COLOR);
+			ColorMapper colors = getSetting(VALUE_COLOR);
+			Paint paint = colors.get(row.getIndex());
 			Font font = getSetting(VALUE_FONT);
 			double fontSize = font.getSize2D();
 
@@ -612,7 +612,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			label.setSetting(Label.ALIGNMENT_X, 1.0 - 0.5*dirX - 0.5);
 			label.setSetting(Label.ALIGNMENT_Y, 0.5*dirY + 0.5);
 			label.setSetting(Label.ROTATION, rotation);
-			label.setSetting(Label.COLOR, color);
+			label.setSetting(Label.COLOR, paint);
 			label.setSetting(Label.FONT, font);
 
 			// Calculate label position

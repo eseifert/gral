@@ -24,9 +24,11 @@ package de.erichseifert.gral.plots.points;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Paint;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.util.BasicSettingsStorage;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.SettingChangeEvent;
@@ -46,7 +48,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		setSettingDefault(SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
-		setSettingDefault(COLOR, Color.BLACK);
+		setSettingDefault(COLOR, new SingleColor(Color.BLACK));
 
 		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(VALUE_COLUMN, 1);
@@ -55,13 +57,13 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
 		setSettingDefault(VALUE_ROTATION, 0.0);
 		setSettingDefault(VALUE_DISTANCE, 1.0);
-		setSettingDefault(VALUE_COLOR, Color.BLACK);
+		setSettingDefault(VALUE_COLOR, new SingleColor(Color.BLACK));
 		setSettingDefault(VALUE_FONT, Font.decode(null));
 
 		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(ERROR_COLUMN_TOP, 2);
 		setSettingDefault(ERROR_COLUMN_BOTTOM, 3);
-		setSettingDefault(ERROR_COLOR, Color.BLACK);
+		setSettingDefault(ERROR_COLOR, new SingleColor(Color.BLACK));
 		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
 		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
 	}
@@ -72,4 +74,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 */
 	public void settingChanged(SettingChangeEvent event) {
 	}
+
+	@Override
+	protected <T> void setSetting(Key key, T value, boolean isDefault) {
+		// Be nice and automatically convert colors to color mappers
+		if (value instanceof Paint && (COLOR.equals(key) ||
+				VALUE_COLOR.equals(key) || ERROR_COLOR.equals(key))) {
+			super.setSetting(key, new SingleColor((Paint) value), isDefault);
+		} else {
+			super.setSetting(key, value, isDefault);
+		}
+	};
 }

@@ -37,6 +37,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -109,15 +110,18 @@ public class BarPlot extends XYPlot {
 		 * @param col Index of the column that will be projected on the axis.
 		 * @return Component that can be used to draw the point
 		 */
+		@Override
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = BarRenderer.this;
 					Shape point = getPointPath(row);
-					Paint paint = renderer.<Paint>getSetting(COLOR);
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
+
+					ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
+					Paint paint = colors.get(row.getIndex());
 
 					if (plot.<Boolean>getSetting(PAINT_ALL_BARS)) {
 						AffineTransform txOld = graphics.getTransform();
@@ -153,6 +157,7 @@ public class BarPlot extends XYPlot {
 		 * @param row Data row containing the point.
 		 * @return Outline that describes the point's shape.
 		 */
+		@Override
 		public Shape getPointPath(Row row) {
 			int colX = 0;
 			int colY = 1;
@@ -215,9 +220,22 @@ public class BarPlot extends XYPlot {
 				}
 			}
 
-			Shape shape = new Rectangle2D.Double(
+			Shape shape = getBarShape(
 				barXMin - barX, barY, barWidth, barHeight);
 			return shape;
+		}
+
+		/**
+		 * Returns the shape for a bar. The default shape is a rectangle, but
+		 * different shapes may be used by overriding this method.
+		 * @param x Distance from the left in view units (e.g. pixels).
+		 * @param y Distance from the top in view units (e.g. pixels).
+		 * @param width Width of the shape in view units (e.g. pixels).
+		 * @param height Height of the shape in view units (e.g. pixels).
+		 * @return A geometric shape for displaying a bar in bar plot.
+		 */
+		protected Shape getBarShape(double x, double y, double width, double height) {
+			return new Rectangle2D.Double(x, y, width, height);
 		}
 	}
 

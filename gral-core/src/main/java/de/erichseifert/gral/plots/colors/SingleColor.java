@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.plots.colors;
 
-import java.awt.Color;
 import java.awt.Paint;
 
 /**
@@ -29,13 +28,13 @@ import java.awt.Paint;
  */
 public class SingleColor extends IndexedColorMapper {
 	/** The color that will be returned in any case. */
-	private Color color;
+	private Paint color;
 
 	/**
 	 * Creates a new instance with the specified color.
 	 * @param color Color to use.
 	 */
-	public SingleColor(Color color) {
+	public SingleColor(Paint color) {
 		this.color = color;
 	}
 
@@ -53,7 +52,7 @@ public class SingleColor extends IndexedColorMapper {
 	 * Returns the color of this ColorMapper.
 	 * @return Color.
 	 */
-	public Color getColor() {
+	public Paint getColor() {
 		return color;
 	}
 
@@ -61,7 +60,7 @@ public class SingleColor extends IndexedColorMapper {
 	 * Sets the color of this ColorMapper.
 	 * @param color Color to be set.
 	 */
-	public void setColor(Color color) {
+	public void setColor(Paint color) {
 		this.color = color;
 	}
 }
