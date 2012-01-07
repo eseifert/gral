@@ -781,8 +781,8 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	@Override
 	public void draw(DrawingContext context) {
 		super.draw(context);
-		if (!navigatorInitialized && navigator != null) {
-			navigator.setDefaultState();
+		if (!navigatorInitialized) {
+			getNavigator().setDefaultState();
 			navigatorInitialized = true;
 		}
 	}
