@@ -65,6 +65,7 @@ public class ImageReaderTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testReader() throws IOException, ParseException {
 		DataReader reader = DataReaderFactory.getInstance().get("image/png");
 		DataSource data = reader.read(imageData);

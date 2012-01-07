@@ -79,7 +79,7 @@ public class Resize extends Filter {
 		return super.get(col, row);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void filter() {
 		clear();

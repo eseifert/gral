@@ -96,7 +96,7 @@ public class ImageReader extends AbstractDataReader {
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
 			throws IOException {
 		BufferedImage image = ImageIO.read(input);

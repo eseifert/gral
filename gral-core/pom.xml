@@ -6,9 +6,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.erichseifert.gral</groupId>
   <artifactId>gral-core</artifactId>
-  <version>0.9-SNAPSHOT</version>
 
   <name>GRAL core</name>
 
