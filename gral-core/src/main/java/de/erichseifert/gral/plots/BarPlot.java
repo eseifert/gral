@@ -226,8 +226,9 @@ public class BarPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns the shape for a bar. The default shape is a rectangle, but
-		 * different shapes may be used by overriding this method.
+		 * Returns the shape for a bar. The default shape is defined in the
+		 * settings, but more complex shapes may be implemented by overriding
+		 * this method.
 		 * @param x Distance from the left in view units (e.g. pixels).
 		 * @param y Distance from the top in view units (e.g. pixels).
 		 * @param width Width of the shape in view units (e.g. pixels).
@@ -235,7 +236,16 @@ public class BarPlot extends XYPlot {
 		 * @return A geometric shape for displaying a bar in bar plot.
 		 */
 		protected Shape getBarShape(double x, double y, double width, double height) {
-			return new Rectangle2D.Double(x, y, width, height);
+			Shape shape = getSetting(SHAPE);
+			Rectangle2D shapeBounds = shape.getBounds2D();
+
+			AffineTransform tx = new AffineTransform();
+			tx.translate(x, y);
+			tx.scale(width/shapeBounds.getWidth(), height/shapeBounds.getHeight());
+			tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
+
+			Shape shapeTransformed = tx.createTransformedShape(shape);
+			return shapeTransformed;
 		}
 	}
 
