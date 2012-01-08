@@ -51,7 +51,7 @@ public class PlotTest {
 	private static final double DELTA = 1e-15;
 	private static DataTable table;
 	private static DataSeries series1, series2;
-	private MockPlot plot;
+	private Plot plot;
 
 	private static class MockPlot extends AbstractPlot  {
 		public boolean drawn;
@@ -178,7 +178,7 @@ public class PlotTest {
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
-		assertTrue(plot.isDrawn());
+		assertTrue(((MockPlot) plot).isDrawn());
 		assertNotEmpty(image);
 	}
 

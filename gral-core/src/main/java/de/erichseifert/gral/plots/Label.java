@@ -207,7 +207,7 @@ public class Label extends StylableDrawable {
 		double alignment = this.<Number>getSetting(
 			ALIGNMENT_TEXT).doubleValue();
 		Shape outline = GraphicsUtils.getOutline(
-			text, font, wrappingWidth, alignment);
+			getText(), font, wrappingWidth, alignment);
 		return outline;
 	}
 
@@ -217,7 +217,7 @@ public class Label extends StylableDrawable {
 	 * @return An instance of the outline shape for this label.
 	 */
 	protected Shape getCachedOutline(boolean wordWrap) {
-		if (!isValid() && text != null && !text.isEmpty()) {
+		if (!isValid() && getText() != null && !getText().isEmpty()) {
 			outlineWrapped = getOutline(true);
 			outlineUnwrapped = getOutline(false);
 		}

@@ -38,8 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import de.erichseifert.gral.plots.DataPoint;
-
 /**
  * Abstract class that represents a collection of utility functions
  * concerning geometry.
@@ -220,33 +218,29 @@ public abstract class GeometryUtils {
     }
 
     /**
-     * Subtract all shapes of data points from another shape to yield gaps.
-     * @param shape Shape from which to subtract.
+     * Subtract a specified geometric area of data points from another shape to yield gaps.
+     * @param shapeArea Shape from which to subtract.
      * @param gap Size of the gap.
      * @param rounded Gap corners will be rounded if {@code true}.
-     * @param dataPoints Collection of data points
+     * @param pointPos Position of the data point
+     * @param pointShape Shape of the data point
      * @return Shape with punched holes
      */
-    public static Area punch(Shape shape, double gap, boolean rounded,
-    		Iterable<DataPoint> dataPoints) {
-    	Area shapeArea = new Area(shape);
-		if (gap > 1e-10) {
-			int gapJoin = rounded ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
-			Area gapsArea = new Area();
-			for (DataPoint p : dataPoints) {
-				Shape point = p.getPoint();
-				if (point == null) {
-					continue;
-				}
-				Point2D pos = p.getPosition().getPoint2D();
-				AffineTransform tx = AffineTransform.getTranslateInstance(
-						pos.getX(), pos.getY());
-				Area gapArea = GeometryUtils.grow(
-						tx.createTransformedShape(point), gap, gapJoin, 10f);
-				gapsArea.add(gapArea);
-			}
-			shapeArea.subtract(gapsArea);
+    public static Area punch(Area shapeArea, double gap, boolean rounded,
+    		Point2D pointPos, Shape pointShape) {
+		if (gap <= 1e-10 || pointPos == null || pointShape == null) {
+			return shapeArea;
 		}
+
+		AffineTransform tx = AffineTransform.getTranslateInstance(
+			pointPos.getX(), pointPos.getY());
+
+		int gapJoin = rounded ? BasicStroke.JOIN_ROUND : BasicStroke.JOIN_MITER;
+		Area gapArea = GeometryUtils.grow(
+			tx.createTransformedShape(pointShape), gap, gapJoin, 10f);
+
+		shapeArea.subtract(gapArea);
+
 		return shapeArea;
     }
 

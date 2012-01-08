@@ -79,9 +79,13 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		}
 
 		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+
 		// Subtract shapes of data points from the line to yield gaps.
-		Area punched = GeometryUtils.punch(
-				lineShape, size, rounded, dataPoints);
+		Area punched = new Area(lineShape);
+		for (DataPoint p : dataPoints) {
+			punched = GeometryUtils.punch(punched, size, rounded,
+				p.getPosition().getPoint2D(), p.getPoint());
+		}
 		return punched;
 	}
 

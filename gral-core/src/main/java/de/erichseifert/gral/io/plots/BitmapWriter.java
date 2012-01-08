@@ -164,7 +164,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 			new DrawingContext((Graphics2D) image.getGraphics());
 
 		Iterator<ImageWriter> writers =
-			ImageIO.getImageWritersByMIMEType(mimeType);
+			ImageIO.getImageWritersByMIMEType(getMimeType());
 		while (writers.hasNext()) {
 			ImageWriter writer = writers.next();
 			ImageOutputStream ios =

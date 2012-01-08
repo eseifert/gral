@@ -85,7 +85,7 @@ public class ExportDialog extends JDialog {
 
 		documentBounds = new Rectangle2D.Double();
 		documentBounds.setFrame(drawable.getBounds());
-		userAction = UserAction.CANCEL;
+		setUserAction(UserAction.CANCEL);
 
 		JPanel cp = new JPanel(new BorderLayout());
 		cp.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -127,7 +127,7 @@ public class ExportDialog extends JDialog {
 				Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
 		buttonConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userAction = UserAction.APPROVE;
+				setUserAction(UserAction.APPROVE);
 				dispose();
 			}
 		});
@@ -137,7 +137,7 @@ public class ExportDialog extends JDialog {
 				Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
 		buttonCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userAction = UserAction.CANCEL;
+				setUserAction(UserAction.CANCEL);
 				dispose();
 			}
 		});
@@ -208,5 +208,14 @@ public class ExportDialog extends JDialog {
 	 */
 	public UserAction getUserAction() {
 		return userAction;
+	}
+
+	/**
+	 * Sets the type of action the user executed. The value can later be used
+	 * to determine whether the user approved or canceled the dialog.
+	 * @param Type of user action.
+	 */
+	private void setUserAction(UserAction userAction) {
+		this.userAction = userAction;
 	}
 }

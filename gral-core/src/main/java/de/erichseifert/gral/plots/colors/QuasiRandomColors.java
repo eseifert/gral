@@ -69,6 +69,7 @@ public class QuasiRandomColors extends IndexedColorMapper {
 		if (colorCache.containsKey(key)) {
 			return colorCache.get(key);
 		}
+		float[] colorVariance = getColorVariance();
 		float hue = colorVariance[0] + colorVariance[1]*seqHue.next().floatValue();
 		float saturation = colorVariance[2] + colorVariance[3]*seqSat.next().floatValue();
 		float brightness = colorVariance[4] + colorVariance[5]*seqBrightness.next().floatValue();

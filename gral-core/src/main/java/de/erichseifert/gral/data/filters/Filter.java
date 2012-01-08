@@ -121,13 +121,13 @@ public abstract class Filter extends AbstractDataSource
 	protected Comparable<?> getOriginal(int col, int row) {
 		int rowLast = original.getRowCount() - 1;
 		if (row < 0 || row > rowLast) {
-			if (Mode.OMIT.equals(mode)) {
+			if (getMode() == Mode.OMIT) {
 				return Double.NaN;
-			} else if (Mode.ZERO.equals(mode)) {
+			} else if (getMode() == Mode.ZERO) {
 				return 0.0;
-			} else if (Mode.REPEAT.equals(mode)) {
+			} else if (getMode() == Mode.REPEAT) {
 				row = MathUtils.limit(row, 0, rowLast);
-			} else if (Mode.MIRROR.equals(mode)) {
+			} else if (getMode() == Mode.MIRROR) {
 				int rem = Math.abs(row) / rowLast;
 				int mod = Math.abs(row) % rowLast;
 				if ((rem & 1) == 0) {
@@ -135,7 +135,7 @@ public abstract class Filter extends AbstractDataSource
 				} else {
 					row = rowLast - mod;
 				}
-			} else if (Mode.CIRCULAR.equals(mode)) {
+			} else if (getMode() == Mode.CIRCULAR) {
 				if (row >= 0) {
 					row = row % (rowLast + 1);
 				} else {

@@ -45,7 +45,7 @@ public class SingleColor extends IndexedColorMapper {
 	 */
 	@Override
 	public Paint get(int value) {
-		return color;
+		return getColor();
 	}
 
 	/**

@@ -113,6 +113,7 @@ public class RandomColors extends IndexedColorMapper {
 	 * @return Color.
 	 */
 	private Color getRandomColor() {
+		float[] colorVariance = getColorVariance();
 		float hue = colorVariance[0] + colorVariance[1]*random.nextFloat();
 		float saturation = colorVariance[2] + colorVariance[3]*random.nextFloat();
 		float brightness = colorVariance[4] + colorVariance[5]*random.nextFloat();

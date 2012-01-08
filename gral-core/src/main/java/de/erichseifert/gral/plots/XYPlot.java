@@ -457,7 +457,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	 */
 	public static class XYLegend extends Legend {
 		/** Source for dummy data. */
-		private final DataSource DUMMY_DATA = new DummyData(1, 1, 0.5);
+		private final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 
 		private final XYPlot plot;
 

@@ -72,13 +72,14 @@ public class StackedLayout implements Layout {
 		Dimension2D size = getPreferredSize(container);
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
+		Dimension2D gap = getGap();
 
 		double x = bounds.getMinX() + insets.getLeft();
 		double y = bounds.getMinY() + insets.getTop();
 		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
-		if (Orientation.HORIZONTAL.equals(orientation)) {
+		if (getOrientation() == Orientation.HORIZONTAL) {
 			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
@@ -88,7 +89,7 @@ public class StackedLayout implements Layout {
 				component.setBounds(x, y, compBounds.getWidth(), height);
 				x += compBounds.getWidth();
 			}
-		} else if (Orientation.VERTICAL.equals(orientation)) {
+		} else if (getOrientation() == Orientation.VERTICAL) {
 			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
 			for (Drawable component : container) {
 				if (count++ > 0) {
@@ -108,11 +109,12 @@ public class StackedLayout implements Layout {
 	 */
 	public Dimension2D getPreferredSize(Container container) {
 		Insets2D insets = container.getInsets();
+		Dimension2D gap = getGap();
 
 		double width = insets.getLeft();
 		double height = insets.getTop();
 		int count = 0;
-		if (Orientation.HORIZONTAL.equals(orientation)) {
+		if (getOrientation() == Orientation.HORIZONTAL) {
 			double h = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {
@@ -123,7 +125,7 @@ public class StackedLayout implements Layout {
 				h = Math.max(height, itemBounds.getHeight());
 			}
 			height += h;
-		} else if (Orientation.VERTICAL.equals(orientation)) {
+		} else if (getOrientation() == Orientation.VERTICAL) {
 			double w = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {

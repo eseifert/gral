@@ -39,7 +39,7 @@ public class PlotNavigatorTest {
 	private static DataTable table;
 	private static DataSeries series1, series2;
 
-	private AbstractPlot plot;
+	private Plot plot;
 	private PlotNavigator nav;
 
 	@BeforeClass

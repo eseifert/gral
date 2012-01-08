@@ -71,9 +71,13 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		}
 
 		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+
 		// Subtract shapes of data points from the area to yield gaps.
-		Area punched = GeometryUtils.punch(
-			area, size, rounded, dataPoints);
+		Area punched = new Area(area);
+		for (DataPoint p : dataPoints) {
+			punched = GeometryUtils.punch(punched, size, rounded,
+				p.getPosition().getPoint2D(), p.getPoint());
+		}
 		return punched;
 	}
 
