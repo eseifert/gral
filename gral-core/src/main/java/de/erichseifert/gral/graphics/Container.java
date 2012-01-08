@@ -66,6 +66,11 @@ public interface Container extends Iterable<Drawable> {
 	Layout getLayout();
 
 	/**
+	 * Recalculates this container's layout.
+	 */
+	void layout();
+
+	/**
 	 * Sets the layout associated with this container.
 	 * @param layout Layout to be set.
 	 */

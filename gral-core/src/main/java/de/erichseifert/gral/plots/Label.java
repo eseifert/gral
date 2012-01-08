@@ -30,12 +30,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 
 /**
@@ -43,7 +42,7 @@ import de.erichseifert.gral.util.SettingsListener;
  * A Label is able to manage its settings and to set and get the
  * displayed text, as well as calculating its bounds.
  */
-public class Label extends AbstractDrawable implements SettingsListener {
+public class Label extends StylableDrawable {
 	/** Key for specifying a {@link Number} value for the horizontal alignment
 	within the bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X =
@@ -93,7 +92,6 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 * @param text Text to be displayed.
 	 */
 	public Label(String text) {
-		addSettingsListener(this);
 		this.text = text;
 
 		setSettingDefault(ALIGNMENT_X, 0.5);
@@ -282,6 +280,7 @@ public class Label extends AbstractDrawable implements SettingsListener {
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
 	 */
+	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (ROTATION.equals(key) || FONT.equals(key) ||

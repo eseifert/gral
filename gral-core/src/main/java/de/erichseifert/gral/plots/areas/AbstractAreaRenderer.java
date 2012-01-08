@@ -26,11 +26,11 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 /**
  * <p>Abstract class that renders an area in two-dimensional space.</p>

@@ -19,15 +19,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.plots.settings;
+
+import java.io.Serializable;
 
 /**
- * Interface providing a function to listen to changes of settings.
+ * A settings key storing a name.
  */
-public interface SettingsListener {
+public final class Key implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1L;
+	/** Path-like formatted name to identify the setting. */
+	private final String name;
+
 	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
+	 * Constructor that initializes the instance with a name.
+	 * @param name Name associated with this key.
 	 */
-	void settingChanged(SettingChangeEvent event);
+	public Key(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Returns the name associated with this key.
+	 * @return Name of the settings key.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

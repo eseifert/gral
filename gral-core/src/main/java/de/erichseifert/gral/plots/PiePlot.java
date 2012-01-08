@@ -59,13 +59,14 @@ import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SettingChangeEvent;
 
 
 /**
@@ -170,7 +171,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 */
 		public PointND<? extends Number> getCenter() {
 			Point2D center = plot.<Point2D>getSetting(PiePlot.CENTER);
-			return new PointND<Double>(center.getX(), center.getY());
+			return new PointND<Number>(center.getX(), center.getY());
 		}
 
 		/**
@@ -193,7 +194,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@SuppressWarnings("unchecked")
 		public void pan(PointND<? extends Number> deltas) {
 			PlotArea plotArea = plot.getPlotArea();
-			PointND<Double> center = (PointND<Double>) getCenter();
+			PointND<Number> center = (PointND<Number>) getCenter();
 			double x = center.get(0).doubleValue();
 			x += deltas.get(0).doubleValue()/plotArea.getWidth();
 			double y = center.get(1).doubleValue();
@@ -281,6 +282,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			// Move to center, so origin for point renderers will be (0, 0)
 			Point2D center = plot.<Point2D>getSetting(PiePlot.CENTER);
+			if (center == null) {
+				center = new Point2D.Double(0.5, 0.5);
+			}
 			graphics.translate(
 				center.getX()*bounds.getWidth(),
 				center.getY()*bounds.getHeight()
@@ -415,11 +419,18 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double fontSize = font.getSize2D();
 
 					double plotAreaSize = Math.min(getWidth(), getHeight())/2.0;
-					double radiusRel = plot.<Number>getSetting(
-						PiePlot.RADIUS).doubleValue();
-					double radiusRelOuter = renderer.<Number>getSetting(
-						PieSliceRenderer.RADIUS_OUTER).doubleValue();
+					double radiusRel = 1.0;
+					Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
+					if (radiusRelObj != null) {
+						radiusRel = radiusRelObj.doubleValue();
+					}
 					double radius = plotAreaSize*radiusRel;
+					double radiusRelOuter = 1.0;
+					Number radiusRelOuterObj = renderer.getSetting(
+						PieSliceRenderer.RADIUS_OUTER);
+					if (radiusRelOuterObj != null) {
+						radiusRelOuter = radiusRelOuterObj.doubleValue();
+					}
 					double radiusOuter = radius*radiusRelOuter;
 
 					// Construct slice
@@ -437,14 +448,16 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double sliceStartRel = slice.start/sum;
 					double sliceEndRel = slice.end/sum;
 
-					double start = plot.<Number>getSetting(
-						PiePlot.START).doubleValue();
+					double start = 0.0;
+					Number startObj = plot.getSetting(PiePlot.START);
+					if (startObj != null) {
+						start = startObj.doubleValue();
+					}
 
-					boolean clockwise = plot.<Boolean>getSetting(
-						PiePlot.CLOCKWISE);
+					Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
 					double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
 					double sliceStart;
-					if (clockwise) {
+					if (clockwise != null && clockwise.booleanValue()) {
 						sliceStart = start - sliceEndRel*360.0;
 					} else {
 						sliceStart = start + sliceStartRel*360.0;
@@ -562,7 +575,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double radiusRelOuter = this.<Number>getSetting(
 				RADIUS_OUTER).doubleValue();
 			double radiusRelInner = this.<Number>getSetting(
-					RADIUS_INNER).doubleValue();
+				RADIUS_INNER).doubleValue();
 			double radiusOuter = radius*radiusRelOuter;
 			double radiusInner = radius*radiusRelInner;
 			double distanceV = distance;
@@ -597,10 +610,17 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			}
 			double labelPosRelH = sliceStartRel + distanceRelH +
 				alignX*(sliceWidthRel - 2.0*distanceRelH);
-			double angleStart = Math.toRadians(-plot.<Number>getSetting(
-				PiePlot.START).doubleValue());
+
+			Number startObj = plot.getSetting(PiePlot.START);
+			double start = 0.0;
+			if (startObj != null) {
+				start = startObj.doubleValue();
+			}
+
+			double angleStart = Math.toRadians(-start);
 			double direction = 1.0;
-			if (!plot.<Boolean>getSetting(PiePlot.CLOCKWISE)) {
+			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
+			if (clockwise != null && !clockwise.booleanValue()) {
 				direction = -1.0;
 			}
 			double angle = angleStart + direction*labelPosRelH*2.0*Math.PI;

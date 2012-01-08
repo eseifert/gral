@@ -24,8 +24,9 @@ package de.erichseifert.gral.plots.axes;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SettingsStorage;
 
 /**
  * Interface for generic renderers of axes.

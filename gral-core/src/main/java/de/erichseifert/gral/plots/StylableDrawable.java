@@ -19,45 +19,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.plots;
 
-import java.io.Serializable;
+import de.erichseifert.gral.graphics.AbstractDrawable;
+import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.plots.settings.SettingsListener;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 
 /**
- * Interface providing functions to store and retrieve settings for an
- * object.
+ * Abstract class that represents a drawable object which can be styled using
+ * settings.
  */
-public interface SettingsStorage {
+public abstract class StylableDrawable extends AbstractDrawable
+		implements SettingsStorage, SettingsListener {
+	private final BasicSettingsStorage settings;
+
 	/**
-	 * A settings key storing a name.
+	 * Initializes a new instance.
 	 */
-	public static final class Key implements Serializable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1L;
-		/** Path-like formatted name to identify the setting. */
-		private final String name;
+	public StylableDrawable() {
+		settings = new BasicSettingsStorage();
+		settings.addSettingsListener(this);
+	}
 
-		/**
-		 * Constructor that initializes the instance with a name.
-		 * @param name Name associated with this key.
-		 */
-		public Key(String name) {
-			this.name = name;
-		}
-
-		/**
-		 * Returns the name associated with this key.
-		 * @return Name of the settings key.
-		 */
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
+	/**
+	 * Invoked if a setting has changed.
+	 * @param event Event containing information about the changed setting.
+	 */
+	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	/**
@@ -67,7 +59,9 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @return Setting.
 	 */
-	<T> T getSetting(Key key);
+	public <T> T getSetting(Key key) {
+		return settings.getSetting(key);
+	}
 
 	/**
 	 * Sets the setting with the specified key to the specified value.
@@ -75,14 +69,18 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @param value Value to be set.
 	 */
-	<T> void setSetting(Key key, T value);
+	public <T> void setSetting(Key key, T value) {
+		settings.setSetting(key, value);
+	}
 
 	/**
 	 * Removes the setting with the specified key.
 	 * @param <T> Type of setting.
 	 * @param key Key.
 	 */
-	<T> void removeSetting(Key key);
+	public <T> void removeSetting(Key key) {
+		settings.removeSetting(key);
+	}
 
 	/**
 	 * Sets a default value for the setting with the specified key.
@@ -90,12 +88,16 @@ public interface SettingsStorage {
 	 * @param key Key.
 	 * @param value Value to be set.
 	 */
-	<T> void setSettingDefault(Key key, T value);
+	public <T> void setSettingDefault(Key key, T value) {
+		settings.setSettingDefault(key, value);
+	}
 
 	/**
 	 * Removes the default setting with the specified key.
 	 * @param <T> Type of setting.
 	 * @param key Key.
 	 */
-	<T> void removeSettingDefault(Key key);
+	public <T> void removeSettingDefault(Key key) {
+		settings.removeSettingDefault(key);
+	}
 }

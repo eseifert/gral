@@ -25,6 +25,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.MathUtils;
 
 

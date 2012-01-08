@@ -29,10 +29,11 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.plots.colors.SingleColor;
-import de.erichseifert.gral.util.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.Location;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 
 /**

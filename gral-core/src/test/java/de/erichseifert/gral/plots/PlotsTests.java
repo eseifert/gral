@@ -30,10 +30,12 @@ import de.erichseifert.gral.plots.axes.AxesTests;
 import de.erichseifert.gral.plots.colors.ColorsTests;
 import de.erichseifert.gral.plots.lines.LinesTests;
 import de.erichseifert.gral.plots.points.PointsTests;
+import de.erichseifert.gral.plots.settings.SettingsTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	// Tests for sub-packages
+	SettingsTests.class,
 	AxesTests.class,
 	ColorsTests.class,
 	AreasTests.class,

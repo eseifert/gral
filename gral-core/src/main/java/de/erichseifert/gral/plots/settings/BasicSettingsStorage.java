@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.plots.settings;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,17 +35,17 @@ public class BasicSettingsStorage implements SettingsStorage {
 	/** Set of listener objects that will notified on changes. */
 	private final Set<SettingsListener> settingsListeners;
 	/** Map of user defined settings as (key, value) pairs. */
-	private final Map<SettingsStorage.Key, Object> settings;
+	private final Map<Key, Object> settings;
 	/** Map of default settings as (key, value) pairs. */
-	private final Map<SettingsStorage.Key, Object> defaults;
+	private final Map<Key, Object> defaults;
 
 	/**
 	 * Initializes an empty storage.
 	 */
 	public BasicSettingsStorage() {
 		settingsListeners = new HashSet<SettingsListener>();
-		settings = new HashMap<SettingsStorage.Key, Object>();
-		defaults = new HashMap<SettingsStorage.Key, Object>();
+		settings = new HashMap<Key, Object>();
+		defaults = new HashMap<Key, Object>();
 	}
 
 	/**

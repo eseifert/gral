@@ -44,6 +44,7 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 

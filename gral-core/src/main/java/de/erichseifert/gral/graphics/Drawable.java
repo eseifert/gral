@@ -83,8 +83,7 @@ public interface Drawable {
 	Dimension2D getPreferredSize();
 
 	/**
-	 * Draws the {@code Drawable} with the specified
-	 * {@code Graphics2D} object.
+	 * Draws the {@code Drawable} with the specified drawing context.
 	 * @param context Environment used for drawing
 	 */
 	void draw(DrawingContext context);

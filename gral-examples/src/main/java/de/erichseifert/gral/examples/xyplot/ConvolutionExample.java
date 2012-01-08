@@ -116,12 +116,12 @@ public class ConvolutionExample extends ExamplePanel {
 
 	@Override
 	public String getTitle() {
-		return "Convolution area plot";
+		return "Convolution filtering";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Area plot showing various ways of filtering data with convolution";
+		return "Line plot showing various ways of filtering data with convolution";
 	}
 
 	public static void main(String[] args) {

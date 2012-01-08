@@ -40,6 +40,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -123,7 +124,8 @@ public class BarPlot extends XYPlot {
 					ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
 					Paint paint = colors.get(row.getIndex());
 
-					if (plot.<Boolean>getSetting(PAINT_ALL_BARS)) {
+					Boolean paintAllBars = plot.getSetting(PAINT_ALL_BARS);
+					if (paintAllBars != null && paintAllBars.booleanValue()) {
 						AffineTransform txOld = graphics.getTransform();
 						Rectangle2D shapeBounds = point.getBounds2D();
 						paintBoundaries = plot.getPlotArea().getBounds();
@@ -174,8 +176,11 @@ public class BarPlot extends XYPlot {
 			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 			double axisYOrigin = 0.0;
 
-			double barWidthRel =
-				plot.<Number>getSetting(BarPlot.BAR_WIDTH).doubleValue();
+			double barWidthRel = 1.0;
+			Number barWidthRelObj = plot.<Number>getSetting(BarPlot.BAR_WIDTH);
+			if (barWidthRelObj != null) {
+				barWidthRel = barWidthRelObj.doubleValue();
+			}
 			double barAlign = 0.5;
 
 			// Sanity checks

@@ -25,7 +25,8 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.util.SettingsStorage;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 /**
  * Interface for renderers that display areas in plots.

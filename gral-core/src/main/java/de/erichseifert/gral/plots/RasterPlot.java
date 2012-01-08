@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -41,6 +42,7 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.Grayscale;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -180,9 +182,11 @@ public class RasterPlot extends XYPlot {
 					if (colorMapper instanceof ContinuousColorMapper) {
 						paint = ((ContinuousColorMapper) colorMapper)
 							.get(value.doubleValue());
-					} else {
+					} else if (colorMapper != null) {
 						Integer index = value.intValue();
 						paint = colorMapper.get(index);
+					} else {
+						paint = Color.BLACK;
 					}
 					GraphicsUtils.fillPaintedShape(
 						graphics, pixel, paint, pixel.getBounds2D());

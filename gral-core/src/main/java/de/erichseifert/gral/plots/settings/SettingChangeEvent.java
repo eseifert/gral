@@ -19,11 +19,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.plots.settings;
 
 import java.util.EventObject;
 
-import de.erichseifert.gral.util.SettingsStorage.Key;
 
 /**
  * Class for handling event data of settings.

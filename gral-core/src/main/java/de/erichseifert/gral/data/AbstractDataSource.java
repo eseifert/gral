@@ -210,6 +210,9 @@ public abstract class AbstractDataSource implements DataSource {
 	 * @return {@code true} if the column is numeric, otherwise {@code false}.
 	 */
 	public boolean isColumnNumeric(int columnIndex) {
+		if (columnIndex < 0 || columnIndex >= types.length) {
+			return false;
+		}
 		Class<?> columnType = types[columnIndex];
 		return Number.class.isAssignableFrom(columnType);
 	}

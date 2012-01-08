@@ -19,25 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import de.erichseifert.gral.util.SettingsStorage.Key;
-
-public class SettingChangeEventTest {
-	@Test
-	public void testCreation() {
-		final Key KEY = new Key("test");
-		SettingChangeEvent e = new SettingChangeEvent(this, KEY, 0.0, 1.0, true);
-		assertEquals(this, e.getSource());
-		assertEquals(KEY, e.getKey());
-		assertEquals(0.0, e.getValOld());
-		assertEquals(1.0, e.getValNew());
-		assertTrue(e.isDefaultSetting());
-	}
-
-}
+/**
+ * Classes for managing user-defined settings.
+ */
+package de.erichseifert.gral.plots.settings;

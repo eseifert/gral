@@ -26,12 +26,11 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
 
-import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 
 /**
@@ -39,8 +38,7 @@ import de.erichseifert.gral.util.SettingsListener;
  * It serves as base for specialized implementations for different plot types.
  * Derived classes have to implement how the actual drawing is done.
  */
-public abstract class PlotArea extends AbstractDrawable
-		implements SettingsListener {
+public abstract class PlotArea extends StylableDrawable {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot area. */
 	public static final Key BACKGROUND =
@@ -65,7 +63,6 @@ public abstract class PlotArea extends AbstractDrawable
 	 * Initializes a new instance with default background color and border.
 	 */
 	public PlotArea() {
-		addSettingsListener(this);
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(COLOR, Color.BLACK);
@@ -111,6 +108,7 @@ public abstract class PlotArea extends AbstractDrawable
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
 	 */
+	@Override
 	public void settingChanged(SettingChangeEvent event) {
 	}
 }

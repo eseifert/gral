@@ -29,6 +29,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 

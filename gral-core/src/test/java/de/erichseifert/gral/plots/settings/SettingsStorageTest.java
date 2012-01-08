@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.plots.settings;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.util.SettingsStorage.Key;
+import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 
 public class SettingsStorageTest {
 	private static final Key KEY1 = new Key("1");

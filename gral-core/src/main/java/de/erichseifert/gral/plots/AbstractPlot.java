@@ -35,8 +35,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
@@ -51,10 +51,10 @@ import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 import de.erichseifert.gral.util.Tuple;
 
 
@@ -62,8 +62,8 @@ import de.erichseifert.gral.util.Tuple;
  * Basic implementation of a plot that can listen to changes of data sources
  * and settings.
  */
-public abstract class AbstractPlot extends DrawableContainer
-		implements DataListener, SettingsListener, Plot {
+public abstract class AbstractPlot extends StylableContainer
+		implements Plot, DataListener {
 	/** Data sources. */
 	private final List<DataSource> data;
 	/** Set of all data sources that are visible (not hidden). */
@@ -120,7 +120,6 @@ public abstract class AbstractPlot extends DrawableContainer
 			add(source);
 		}
 
-		addSettingsListener(this);
 		setSettingDefault(TITLE, null);
 		setSettingDefault(TITLE_FONT, Font.decode(null).deriveFont(18f));
 		setSettingDefault(BACKGROUND, null);
@@ -134,11 +133,18 @@ public abstract class AbstractPlot extends DrawableContainer
 		add(title, Location.NORTH);
 	}
 
+	/**
+	 * Draws the {@code Drawable} with the specified drawing context.
+	 * @param context Environment used for drawing
+	 */
 	@Override
 	public void draw(DrawingContext context) {
 		Graphics2D graphics = context.getGraphics();
+
+		Boolean antialiasing = getSetting(ANTIALISING);
+
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				this.<Boolean>getSetting(ANTIALISING)
+				(antialiasing != null && antialiasing.booleanValue())
 					? RenderingHints.VALUE_ANTIALIAS_ON
 					: RenderingHints.VALUE_ANTIALIAS_OFF);
 
@@ -174,8 +180,8 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawLegend(DrawingContext context) {
-		boolean isVisible = this.<Boolean>getSetting(LEGEND);
-		if (!isVisible || legend == null) {
+		Boolean isVisible = this.<Boolean>getSetting(LEGEND);
+		if (isVisible == null || !isVisible.booleanValue() || legend == null) {
 			return;
 		}
 		legend.draw(context);
@@ -368,6 +374,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
 	 */
+	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (TITLE.equals(key)) {
@@ -671,13 +678,16 @@ public abstract class AbstractPlot extends DrawableContainer
 	}
 
 	/**
-	 * Causes the plot data to be be updated.
+	 * Causes cached plot data to be be updated.
 	 */
 	private void invalidate() {
 		axisMin.clear();
 		axisMax.clear();
 	}
 
+	/**
+	 * Rebuilds cached plot data.
+	 */
 	private void revalidate() {
 		synchronized (this) {
 			for (Entry<Tuple, String> entry : mapping.entrySet()) {

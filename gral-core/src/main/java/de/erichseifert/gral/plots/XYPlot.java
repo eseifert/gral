@@ -56,6 +56,7 @@ import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
@@ -570,7 +571,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	}
 
 	@Override
-	protected void layout() {
+	public void layout() {
 		super.layout();
 		layoutAxes();
 		layoutLegend();

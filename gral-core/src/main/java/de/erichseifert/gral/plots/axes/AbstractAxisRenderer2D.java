@@ -46,13 +46,14 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
-import de.erichseifert.gral.util.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 
 /**

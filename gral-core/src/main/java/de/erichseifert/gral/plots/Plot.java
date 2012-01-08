@@ -25,9 +25,12 @@ import java.util.Collection;
 import java.util.List;
 
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.graphics.Container;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.util.SettingsStorage.Key;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 /**
  * <p>Interface for classes that display data in a plot.</p>
@@ -39,7 +42,7 @@ import de.erichseifert.gral.util.SettingsStorage.Key;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public interface Plot {
+public interface Plot extends Drawable, Container, SettingsStorage {
 	/** Key for specifying the {@link String} instance for the title of the
 	plot. */
 	public static final Key TITLE =

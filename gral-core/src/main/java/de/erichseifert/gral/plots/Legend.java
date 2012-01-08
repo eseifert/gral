@@ -39,12 +39,12 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
-import de.erichseifert.gral.util.SettingChangeEvent;
-import de.erichseifert.gral.util.SettingsListener;
 
 
 /**
@@ -56,8 +56,7 @@ import de.erichseifert.gral.util.SettingsListener;
  * are displayed. The actual rendering of symbols has to be implemented by
  * derived classes.</p>
  */
-public abstract class Legend extends DrawableContainer
-		implements SettingsListener {
+public abstract class Legend extends StylableContainer {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the background. */
 	public static final Key BACKGROUND =
@@ -165,10 +164,10 @@ public abstract class Legend extends DrawableContainer
 	 * is set to top-left.
 	 */
 	public Legend() {
-		components = new HashMap<DataSource, Drawable>();
 		setInsets(new Insets2D.Double(10.0));
 
-		addSettingsListener(this);
+		components = new HashMap<DataSource, Drawable>();
+
 		setSettingDefault(BACKGROUND, Color.WHITE);
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(FONT, Font.decode(null));
@@ -180,6 +179,10 @@ public abstract class Legend extends DrawableContainer
 		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
 	}
 
+	/**
+	 * Draws the {@code Drawable} with the specified drawing context.
+	 * @param context Environment used for drawing
+	 */
 	@Override
 	public void draw(DrawingContext context) {
 		drawBackground(context);
@@ -275,6 +278,7 @@ public abstract class Legend extends DrawableContainer
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
 	 */
+	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
 		if (ORIENTATION.equals(key) || GAP.equals(key)) {
