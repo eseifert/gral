@@ -194,9 +194,7 @@ public class Kernel {
 	 * @return Negated Kernel.
 	 */
 	public Kernel negate() {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = -values[i];
-		}
+		mul(-1.0);
 		return this;
 	}
 

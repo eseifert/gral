@@ -78,6 +78,7 @@ public class Convolution extends Filter {
 	 * @return Convolved value using the set kernel.
 	 */
 	private double convolve(int col, int row) {
+		Kernel kernel = getKernel();
 		if (kernel == null) {
 			Comparable<?> original = getOriginal(col, row);
 			Number originalNumber = (Number) original;
