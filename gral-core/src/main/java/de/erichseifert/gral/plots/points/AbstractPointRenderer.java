@@ -41,6 +41,9 @@ import de.erichseifert.gral.util.Location;
  */
 public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		implements PointRenderer, SettingsListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -408976260196287753L;
+
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.

@@ -30,8 +30,8 @@ import java.util.EventObject;
  * @see DataSource
  */
 public class DataChangeEvent extends EventObject {
-	/** Version number for serialization. */
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3791650088885473144L;
 
 	/** Column of the value that has changed. */
 	private final int col;

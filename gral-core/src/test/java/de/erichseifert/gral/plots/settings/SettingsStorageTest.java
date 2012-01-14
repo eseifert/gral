@@ -22,12 +22,14 @@
 package de.erichseifert.gral.plots.settings;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
+import de.erichseifert.gral.TestUtils;
 
 public class SettingsStorageTest {
 	private static final Key KEY1 = new Key("1");
@@ -40,9 +42,9 @@ public class SettingsStorageTest {
 	@Before
 	public void setUp() {
 		settings = new BasicSettingsStorage();
-		settings.setSetting(KEY1, "v1");
 		settings.setSettingDefault(KEY1, "v1Default");
 		settings.setSettingDefault(KEY2, "v2Default");
+		settings.setSetting(KEY1, "v1");
 		settings.setSetting(KEY3, "v3");
 	}
 
@@ -100,16 +102,17 @@ public class SettingsStorageTest {
 	}
 
 	@Test
-	public void testKey() {
-		Key k1a = new Key("test1");
-		Key k1b = new Key("test1");
-		Key k2 = new Key("test2");
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		BasicSettingsStorage original = settings;
+		BasicSettingsStorage deserialized = TestUtils.serializeAndDeserialize(original);
 
-		// Name
-		assertEquals(k1a.getName(), k1b.getName());
-		assertFalse(k2.getName().equals(k1a.getName()));
-		// Equality
-		assertFalse(k1a.equals(k1b));
-		assertFalse(k1a.equals(k2));
-	}
+	    int i = 1;
+	    for (Key k : Arrays.asList(KEY1, KEY2, KEY3, KEY4)) {
+	    	assertEquals(
+    			String.format("Error getting setting %d.", i),
+    			original.getSetting(k), deserialized.getSetting(k)
+			);
+	    	i++;
+	    }
+    }
 }

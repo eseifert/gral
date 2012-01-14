@@ -23,10 +23,13 @@ package de.erichseifert.gral.data.comparators;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 
 public class ComparatorTest {
@@ -53,13 +56,15 @@ public class ComparatorTest {
 
 	@Test
 	public void testColumn() {
-		DataComparator comparator = new Ascending(0);
+		DataComparator comparator;
+
+		comparator = new Ascending(0);
 		assertEquals(0, comparator.getColumn());
 
-		comparator.setColumn(1);
+		comparator = new Ascending(1);
 		assertEquals(1, comparator.getColumn());
 
-		comparator.setColumn(2);
+		comparator = new Ascending(2);
 		assertEquals(2, comparator.getColumn());
 	}
 
@@ -107,4 +112,17 @@ public class ComparatorTest {
 		}
 	}
 
+	@Test
+	public void testAscendingSerialization() throws IOException, ClassNotFoundException {
+		DataComparator original = new Ascending(0);
+		DataComparator deserialized = TestUtils.serializeAndDeserialize(original);
+		assertEquals(original.getColumn(), deserialized.getColumn());
+    }
+
+	@Test
+	public void testDescendingSerialization() throws IOException, ClassNotFoundException {
+		DataComparator original = new Descending(0);
+		DataComparator deserialized = TestUtils.serializeAndDeserialize(original);
+		assertEquals(original.getColumn(), deserialized.getColumn());
+    }
 }

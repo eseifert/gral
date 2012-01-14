@@ -32,9 +32,10 @@ import java.util.Comparator;
  */
 public abstract class DataComparator implements Comparator<Comparable<?>[]>, Serializable {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -982173906879554838L;
+
 	/** Column that should be used for comparing. */
-	private int column;
+	private final int column;
 
 	/**
 	 * Constructor.
@@ -50,13 +51,5 @@ public abstract class DataComparator implements Comparator<Comparable<?>[]>, Ser
 	 */
 	public int getColumn() {
 		return column;
-	}
-
-	/**
-	 * Sets the column to be compared to the specified index.
-	 * @param col column index
-	 */
-	public void setColumn(int col) {
-		this.column = col;
 	}
 }

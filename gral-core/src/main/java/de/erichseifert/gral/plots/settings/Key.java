@@ -28,9 +28,12 @@ import java.io.Serializable;
  */
 public final class Key implements Serializable {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2236083523816239316L;
+
 	/** Path-like formatted name to identify the setting. */
 	private final String name;
+	/** Number used for hashing. */
+	private final int hashCode;
 
 	/**
 	 * Constructor that initializes the instance with a name.
@@ -38,6 +41,7 @@ public final class Key implements Serializable {
 	 */
 	public Key(String name) {
 		this.name = name;
+		this.hashCode = name.hashCode();
 	}
 
 	/**
@@ -51,5 +55,18 @@ public final class Key implements Serializable {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Key)) {
+			return false;
+		}
+		return ((Key) obj).hashCode == hashCode;
 	}
 }

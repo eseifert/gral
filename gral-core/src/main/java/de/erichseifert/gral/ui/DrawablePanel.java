@@ -37,8 +37,9 @@ import de.erichseifert.gral.graphics.DrawingContext;
  * and Swing. It displays a single {@code Drawable} in a {@code JPanel}.
  */
 public class DrawablePanel extends JPanel {
-	/** Unique id for serialization. */
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1036506991203257170L;
+
 	/** Drawable that should be displayed. */
 	private final Drawable drawable;
 

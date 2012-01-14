@@ -21,11 +21,19 @@
  */
 package de.erichseifert.gral;
 
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 public class TestUtils {
 	/** Default precision for unit tests. **/
@@ -176,5 +184,24 @@ public class TestUtils {
 			}
 		}
 		return true;
+	}
+
+	public static <T extends Serializable> T serializeAndDeserialize(T original)
+			throws IOException, ClassNotFoundException {
+		// Serialize
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(out);
+		oos.writeObject(original);
+		oos.close();
+		assertTrue("Serialization failed.", out.size() > 0);
+
+		// Deserialize
+	    byte[] serializedData = out.toByteArray();
+	    InputStream in = new ByteArrayInputStream(serializedData);
+	    ObjectInputStream ois = new ObjectInputStream(in);
+	    Object o = ois.readObject();
+	    assertNotSame(original, o);
+
+	    return (T) o;
 	}
 }

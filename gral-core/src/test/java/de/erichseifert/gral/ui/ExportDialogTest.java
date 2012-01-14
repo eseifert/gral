@@ -39,7 +39,7 @@ public class ExportDialogTest {
 
 	private static final class TestExportDialog extends ExportDialog {
 		/** Version id for serialization. */
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -610141271038116119L;
 
 		public TestExportDialog(Component parent, Drawable drawable) {
 			super(parent, drawable);

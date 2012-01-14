@@ -119,7 +119,7 @@ public class BoxPlot extends XYPlot {
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the border of the box and the lines of bars. */
 		public static final Key BOX_COLOR =
-			new Key("boxplot.box.background"); //$NON-NLS-1$
+			new Key("boxplot.box.color"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Stroke} instance to be used
 		to paint the border of the box and the lines of the bars. */
 		public static final Key BOX_BORDER =
@@ -162,7 +162,7 @@ public class BoxPlot extends XYPlot {
 			setSettingDefault(COLUMN_BOX_TOP, 4);
 			setSettingDefault(COLUMN_BAR_TOP, 5);
 			setSettingDefault(BOX_WIDTH, 0.75);
-			setSettingDefault(BOX_BACKGROUND, new SingleColor(Color.WHITE));
+			setSettingDefault(BOX_BACKGROUND, Color.WHITE);
 			setSettingDefault(BOX_COLOR, Color.BLACK);
 			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
 			setSettingDefault(WHISKER_COLOR, Color.BLACK);
@@ -333,6 +333,16 @@ public class BoxPlot extends XYPlot {
 		public Shape getPointPath(Row row) {
 			return null;
 		}
+
+		@Override
+		protected <T> void setSetting(Key key, T value, boolean isDefault) {
+			// Be nice and automatically convert colors to color mappers
+			if (value instanceof Paint && BOX_BACKGROUND.equals(key)) {
+				super.setSetting(key, new SingleColor((Paint) value), isDefault);
+			} else {
+				super.setSetting(key, value, isDefault);
+			}
+		};
 	}
 
 	/**

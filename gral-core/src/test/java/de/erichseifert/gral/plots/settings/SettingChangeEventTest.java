@@ -22,22 +22,51 @@
 package de.erichseifert.gral.plots.settings;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.TestUtils;
 
 public class SettingChangeEventTest {
-	@Test
-	public void testCreation() {
-		final Key KEY = new Key("test");
-		SettingChangeEvent e = new SettingChangeEvent(this, KEY, 0.0, 1.0, true);
-		assertEquals(this, e.getSource());
-		assertEquals(KEY, e.getKey());
-		assertEquals(0.0, e.getValOld());
-		assertEquals(1.0, e.getValNew());
-		assertTrue(e.isDefaultSetting());
+	private static final Object SOURCE = "foobar";
+	private static final Key KEY = new Key("test");
+	private SettingChangeEvent event;
+
+	@Before
+	public void setUp() {
+		event = new SettingChangeEvent(SOURCE, KEY, 0.0, 1.0, true);
+		assertEquals(SOURCE, event.getSource());
+		assertEquals(KEY, event.getKey());
+		assertEquals(0.0, event.getValOld());
+		assertEquals(1.0, event.getValNew());
+		assertTrue(event.isDefaultSetting());
 	}
 
+	@Test
+	public void testCreation() {
+		assertEquals(SOURCE, event.getSource());
+		assertEquals(KEY, event.getKey());
+		assertEquals(0.0, event.getValOld());
+		assertEquals(1.0, event.getValNew());
+		assertTrue(event.isDefaultSetting());
+	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		SettingChangeEvent original = event;
+		SettingChangeEvent deserialized = TestUtils.serializeAndDeserialize(original);
+
+		// Source is transient and should be null after serialization process
+		assertNull(deserialized.getSource());
+		// All other values should be restored
+		assertEquals(original.getKey(), deserialized.getKey());
+		assertEquals(original.getValOld(), deserialized.getValOld());
+		assertEquals(original.getValNew(), deserialized.getValNew());
+		assertEquals(original.isDefaultSetting(), deserialized.isDefaultSetting());
+    }
 }

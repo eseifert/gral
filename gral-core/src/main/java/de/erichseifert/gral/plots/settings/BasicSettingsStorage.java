@@ -21,6 +21,9 @@
  */
 package de.erichseifert.gral.plots.settings;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,9 +34,12 @@ import java.util.Set;
  * It provides support for class which register as a listener to listen
  * for setting changes.
  */
-public class BasicSettingsStorage implements SettingsStorage {
+public class BasicSettingsStorage implements SettingsStorage, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 6918096150217655364L;
+
 	/** Set of listener objects that will notified on changes. */
-	private final Set<SettingsListener> settingsListeners;
+	private transient Set<SettingsListener> settingsListeners;
 	/** Map of user defined settings as (key, value) pairs. */
 	private final Map<Key, Object> settings;
 	/** Map of default settings as (key, value) pairs. */
@@ -182,4 +188,14 @@ public class BasicSettingsStorage implements SettingsStorage {
 			listener.settingChanged(event);
 		}
 	}
+
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		settingsListeners = new HashSet<SettingsListener>();
+	}
+
 }

@@ -68,7 +68,7 @@ import de.erichseifert.gral.util.PointND;
  */
 public class InteractivePanel extends DrawablePanel implements Printable {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 9084883142053148090L;
 
 	// FIXME Find better method to adjust resolution
 	/** Constant that can be used to convert from millimeters to points
@@ -109,19 +109,21 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	 */
 	private final static class MouseZoomListener extends MouseAdapter
 			implements MouseWheelListener, Serializable {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -7323541053291673122L;
+
 		private final InteractivePanel panel;
 
 		public MouseZoomListener(InteractivePanel panel) {
 			this.panel = panel;
 		}
 
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1L;
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			Point2D point = e.getPoint();
 			panel.zoom(point, -e.getWheelRotation());
 		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (SwingUtilities.isLeftMouseButton(e) &&

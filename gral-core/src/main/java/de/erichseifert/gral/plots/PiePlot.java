@@ -85,7 +85,7 @@ import de.erichseifert.gral.util.PointND;
  */
 public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
-	public static String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
+	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
 	/** Key for specifying {@link java.awt.Point2D} instance defining the
 	center of the pie. The coordinates must be relative to the plot area
@@ -357,7 +357,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		/** Key for specifying a {@link Number} value for the outer radius of
 		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_OUTER =
-			new Key("pieplot.radius.inner"); //$NON-NLS-1$
+			new Key("pieplot.radius.outer"); //$NON-NLS-1$
 		/** Key for specifying a {@link Number} value for the inner radius of
 		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_INNER =

@@ -49,7 +49,7 @@ import de.erichseifert.gral.util.Messages;
  */
 public class ExportDialog extends JDialog {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1344719157074981540L;
 
 	/** Type of user feedback. */
 	public static enum UserAction {

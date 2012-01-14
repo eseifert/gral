@@ -29,11 +29,16 @@ import java.util.EventObject;
  * @see SettingsListener
  */
 public class SettingChangeEvent extends EventObject {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4379672181117442950L;
 
+	/** The key of the value that has been modified. */
 	private final Key key;
+	/** The value before it has been modified. */
 	private final Object valOld;
+	/** The value after modification. */
 	private final Object valNew;
+	/** Indicates whether a default value of a setting was changed. */
 	private final boolean defaultSetting;
 
 	/**

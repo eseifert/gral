@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	SettingsKeyTest.class,
 	SettingsStorageTest.class,
 	SettingChangeEventTest.class
 })

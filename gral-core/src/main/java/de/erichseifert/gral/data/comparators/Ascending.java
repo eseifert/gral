@@ -28,7 +28,7 @@ package de.erichseifert.gral.data.comparators;
  */
 public class Ascending extends DataComparator {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5206241300478408303L;
 
 	/**
 	 * Creates a new Ascending object for sorting according to the specified

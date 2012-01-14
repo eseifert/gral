@@ -32,7 +32,7 @@ import de.erichseifert.gral.io.IOCapabilities;
  */
 public class ExportChooser extends JFileChooser {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7885235526259131711L;
 
 	/**
 	 * Creates a new instance and initializes it with an array of
