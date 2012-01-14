@@ -25,7 +25,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class Insets2DTest {
 	public static final double DELTA = 1e-15;
@@ -100,4 +104,14 @@ public class Insets2DTest {
 		assertEquals(insets1.hashCode(), insets2.hashCode());
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Insets2D original = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		Insets2D deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getTop(), deserialized.getTop(), DELTA);
+		assertEquals(original.getLeft(), deserialized.getLeft(), DELTA);
+		assertEquals(original.getBottom(), deserialized.getBottom(), DELTA);
+		assertEquals(original.getRight(), deserialized.getRight(), DELTA);
+	}
 }

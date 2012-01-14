@@ -168,7 +168,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 * @param insets Insets to be set.
 	 */
 	public void setInsets(Insets2D insets) {
-		if (insets == this.insets) {
+		if (insets == this.insets || this.insets.equals(insets)) {
 			return;
 		}
 		this.insets.setInsets(insets);

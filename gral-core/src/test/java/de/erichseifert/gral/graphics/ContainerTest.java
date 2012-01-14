@@ -26,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.util.Insets2D;
 
 
 public class ContainerTest {
@@ -66,6 +68,8 @@ public class ContainerTest {
 	public void testCreate() {
 		assertEquals(new Rectangle2D.Double(), container.getBounds());
 		assertEquals(new de.erichseifert.gral.util.Dimension2D.Double(), container.getPreferredSize());
+		assertEquals(new Insets2D.Double(), container.getInsets());
+		assertEquals(null, container.getLayout());
 	}
 
 	@Test
@@ -118,11 +122,63 @@ public class ContainerTest {
 	}
 
 	@Test
+	public void testInsets() {
+		assertEquals(new Insets2D.Double(), container.getInsets());
+		Insets2D insets = new Insets2D.Double(1.2, 3.4, 5.6, 7.8);
+		container.setInsets(insets);
+		assertEquals(insets, container.getInsets());
+		container.setInsets(insets);
+		assertEquals(insets, container.getInsets());
+	}
+
+	@Test
+	public void testLayout() {
+		assertEquals(null, container.getLayout());
+
+		Layout layout = new EdgeLayout();
+		container.setLayout(layout);
+		assertEquals(layout, container.getLayout());
+	}
+
+	@Test
+	public void testGetDrawableAt() {
+		Point2D[] points = {
+			new Point2D.Double(-0.5, -0.5),
+			new Point2D.Double(0.0, 0.0),
+			new Point2D.Double(0.5, 0.5),
+			new Point2D.Double(1.0, 1.0),
+			new Point2D.Double(1.5, 1.5)
+		};
+
+		for (Point2D point : points) {
+			assertEquals(null, container.getDrawableAt(point));
+		}
+
+		MockDrawable d = new MockDrawable();
+		d.setBounds(0.0, 0.0, 1.0, 1.0);
+		container.add(d);
+
+		Drawable[] expected = {
+			null,
+			d,
+			d,
+			null,
+			null
+		};
+		for (int i = 0; i < points.length; i++) {
+			assertEquals(String.format("Unexpected result at %s:", points[i]),
+				expected[i], container.getDrawableAt(points[i]));
+		}
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		DrawableContainer original = container;
 		DrawableContainer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.size(), deserialized.size());
 		assertEquals(original.getPreferredSize(), deserialized.getPreferredSize());
+		assertEquals(original.getInsets(), deserialized.getInsets());
+		assertEquals(original.getLayout(), deserialized.getLayout());
 	}
 }

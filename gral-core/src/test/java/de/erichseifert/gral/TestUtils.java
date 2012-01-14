@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 public class TestUtils {
 	/** Default precision for unit tests. **/
@@ -187,7 +186,7 @@ public class TestUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Serializable> T serializeAndDeserialize(T original)
+	public static <T> T serializeAndDeserialize(T original)
 			throws IOException, ClassNotFoundException {
 		// Serialize
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
