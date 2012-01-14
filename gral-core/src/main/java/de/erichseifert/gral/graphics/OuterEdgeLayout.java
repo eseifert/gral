@@ -37,6 +37,9 @@ import de.erichseifert.gral.util.Location;
  * container.
  */
 public class OuterEdgeLayout implements Layout {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -2238929452967312857L;
+
 	/** Spacing between the container's edges and the components. */
 	private final double gap;
 

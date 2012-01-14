@@ -34,6 +34,9 @@ import de.erichseifert.gral.util.MathUtils;
  * the data.
  */
 public class SizeablePointRenderer extends DefaultPointRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 3276439387457161307L;
+
 	/** Key for specifying the {@link Integer} which specifies the index of the
 	column that is used for point sizes. */
 	public static final Key COLUMN =

@@ -40,7 +40,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SpiralPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 995084910079463763L;
 
 	@SuppressWarnings("unchecked")
 	public SpiralPlot() {

@@ -39,6 +39,9 @@ import de.erichseifert.gral.util.Insets2D;
  * Derived classes have to implement how the actual drawing is done.
  */
 public abstract class PlotArea extends StylableDrawable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 2745982325709470005L;
+
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot area. */
 	public static final Key BACKGROUND =

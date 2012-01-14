@@ -42,6 +42,9 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		implements AreaRenderer, SettingsListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -9064749128190128428L;
+
 	/**
 	 * Initializes a new instance with default settings.
 	 */

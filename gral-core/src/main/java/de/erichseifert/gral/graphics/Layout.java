@@ -22,13 +22,14 @@
 package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
+import java.io.Serializable;
 
 /**
  * Interface that provides basic functions for arranging a layout.
  * Functionality includes the arrangement of components and returning the
  * preferred size of a specified container using this layout.
  */
-public interface Layout {
+public interface Layout extends Serializable {
 
 	/**
 	 * Arranges the components of the specified container according to this

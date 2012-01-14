@@ -45,6 +45,9 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		implements LineRenderer, SettingsListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4172505541305453796L;
+
 	/**
 	 * Initializes a new {@code AbstractLineRenderer2D} instance with
 	 * default settings.

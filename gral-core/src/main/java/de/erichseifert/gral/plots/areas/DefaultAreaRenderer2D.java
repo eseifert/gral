@@ -41,6 +41,9 @@ import de.erichseifert.gral.util.PointND;
  * interface.
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -202003022764142849L;
+
 	/**
 	 * Returns the graphical representation to be drawn for the specified
 	 * data points.
@@ -55,6 +58,9 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 		final Shape area = punch(path, points);
 
 		return new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -3659798228877496727L;
+
 			public void draw(DrawingContext context) {
 				Paint paint = DefaultAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),

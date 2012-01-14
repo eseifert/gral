@@ -21,12 +21,16 @@
  */
 package de.erichseifert.gral.util;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * Class that calculates the values of the Halton sequence.
  */
-public class HaltonSequence implements Iterator<Double> {
+public class HaltonSequence implements Iterator<Double>, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 7466395251522942013L;
+
 	/** Base. */
 	private final int base;
 	/** Current count. */

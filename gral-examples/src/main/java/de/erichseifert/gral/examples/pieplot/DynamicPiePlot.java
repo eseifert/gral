@@ -33,18 +33,20 @@ import javax.swing.event.ChangeListener;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
+import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
 
 public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 6216017404657972412L;
+
 	private static final int SAMPLE_COUNT = 5;
 	/** Instance to generate random data values. */
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	private final DataTable data;
 	private final PiePlot plot;

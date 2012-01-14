@@ -84,6 +84,9 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class PiePlot extends AbstractPlot implements Navigable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5486418164040578150L;
+
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
@@ -226,6 +229,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * Class that represents the drawing area of a {@code PiePlot}.
 	 */
 	public static class PiePlotArea2D extends PlotArea {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 5646816099037852271L;
+
 		/** Pie plot that this renderer is associated to. */
 		private final PiePlot plot;
 
@@ -354,6 +360,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * A point renderer for a single slice in a pie plot.
 	 */
 	public static class PieSliceRenderer extends AbstractPointRenderer {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1135636437801090607L;
+
 		/** Key for specifying a {@link Number} value for the outer radius of
 		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_OUTER =
@@ -404,6 +413,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
 				final Row row, final int col) {
 			return new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -1783451355453643712L;
+
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = PieSliceRenderer.this;
 

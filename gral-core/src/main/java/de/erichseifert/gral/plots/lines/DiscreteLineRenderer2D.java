@@ -39,6 +39,9 @@ import de.erichseifert.gral.util.Orientation;
  * Class that connects {@code DataPoint}s with a stair-like line.
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4648286099838467355L;
+
 	/** Key for specifying an instance of
 	{@link de.erichseifert.gral.util.Orientation} which indicates the primary
     direction of the "steps". */
@@ -66,6 +69,9 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -1686744943386843195L;
+
 			public void draw(DrawingContext context) {
 				Orientation dir = DiscreteLineRenderer2D.this
 					.getSetting(ASCENT_DIRECTION);

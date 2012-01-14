@@ -77,14 +77,17 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class XYPlot extends AbstractPlot implements Navigable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4501074701747572783L;
+
 	/** Key for specifying the x-axis of an xy-plot. */
-	public static String AXIS_X = "x"; //$NON-NLS-1$
+	public static final String AXIS_X = "x"; //$NON-NLS-1$
 	/** Key for specifying the secondary x-axis of an xy-plot. */
-	public static String AXIS_X2 = "x2"; //$NON-NLS-1$
+	public static final String AXIS_X2 = "x2"; //$NON-NLS-1$
 	/** Key for specifying the y-axis of an xy-plot. */
-	public static String AXIS_Y = "y"; //$NON-NLS-1$
+	public static final String AXIS_Y = "y"; //$NON-NLS-1$
 	/** Key for specifying the secondary y-axis of an xy-plot. */
-	public static String AXIS_Y2 = "y2"; //$NON-NLS-1$
+	public static final String AXIS_Y2 = "y2"; //$NON-NLS-1$
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
@@ -177,6 +180,9 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	 * Class that represents the drawing area of an {@code XYPlot}.
 	 */
 	public static class XYPlotArea2D extends PlotArea {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -3673157774425536428L;
+
 		/** Key for specifying a {@link Boolean} value which decides whether
 		horizontal grid lines at major ticks along x-axis are drawn. */
 		public static final Key GRID_MAJOR_X =
@@ -456,6 +462,9 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	 * Class that displays a legend in an {@code XYPlot}.
 	 */
 	public static class XYLegend extends Legend {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -4629928754001372002L;
+
 		/** Source for dummy data. */
 		private final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 

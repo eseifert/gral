@@ -37,6 +37,8 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * Class that connects two dimensional data points with a straight line.
  */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -1728830281555843667L;
 	/** Number of line segments which will be reserved to avoid unnecessary
 	copying of array data. */
 	private static final int INITIAL_LINE_CAPACITY = 10000;
@@ -55,6 +57,9 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Drawable getLine(final Iterable<DataPoint> points) {
 		Drawable d = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = 7995515716470892483L;
+
 			public void draw(DrawingContext context) {
 				// Construct shape
 				Path2D line = new Path2D.Double(

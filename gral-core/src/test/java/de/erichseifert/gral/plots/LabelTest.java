@@ -43,6 +43,9 @@ public class LabelTest {
 	private static final double DELTA = TestUtils.DELTA;
 
 	private static class MockLabel extends Label {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 7291791651477766692L;
+
 		public boolean isDrawn;
 
 		public MockLabel() {

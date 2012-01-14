@@ -137,7 +137,9 @@ final class UpdateTask implements ActionListener {
 }
 
 public class MemoryUsage extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5914124874301980251L;
+
 	/** Size of the data buffer in no. of element. */
 	private static final int BUFFER_SIZE = 400;
 	/** Update interval in milliseconds */

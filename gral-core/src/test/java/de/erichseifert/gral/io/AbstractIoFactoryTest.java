@@ -43,13 +43,9 @@ public class AbstractIoFactoryTest {
 	};
 
 
-	@Test
-	public void testCreation() {
-		try {
-			new TestIOFactory("fail");
-			fail("Expected IOException.");
-		} catch (IOException e) {
-		}
+	@Test(expected=IOException.class)
+	public void testCreation() throws IOException {
+		new TestIOFactory("fail");
 	}
 
 	@Test

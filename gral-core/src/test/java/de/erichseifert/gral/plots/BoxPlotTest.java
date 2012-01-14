@@ -45,6 +45,9 @@ public class BoxPlotTest {
 	private MockBoxPlot plot;
 
 	private static final class MockBoxPlot extends BoxPlot {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 4497026503195874443L;
+
 		public boolean isDrawn;
 
 		public MockBoxPlot(DataSource data) {

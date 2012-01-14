@@ -49,7 +49,9 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class SimpleXYPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -5263057758564264676L;
+
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 

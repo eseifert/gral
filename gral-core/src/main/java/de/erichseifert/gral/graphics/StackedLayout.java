@@ -32,6 +32,9 @@ import de.erichseifert.gral.util.Orientation;
  * as horizontal or vertical stacks.
  */
 public class StackedLayout implements Layout {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3183337606556363756L;
+
 	/** Orientation in which elements should be laid out. */
 	private final Orientation orientation;
 	/** Spacing of components. */

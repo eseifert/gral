@@ -50,6 +50,9 @@ public class InteractivePanelTest {
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		drawable = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = 243601807224242703L;
+
 			public void draw(DrawingContext context) {
 				Graphics2D g = context.getGraphics();
 				g.draw(new Line2D.Double(0.0, 0.0, 0.0, 0.0));

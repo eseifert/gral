@@ -79,10 +79,16 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class BoxPlot extends XYPlot {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3069831535208696337L;
+
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	public static class BoxWhiskerRenderer extends AbstractPointRenderer {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 2944482729753981341L;
+
 		/** Key for specifying the {@link Integer} value which specifies the
 		index of the column that is used for the horizontal position of a box. */
 		public static final Key COLUMN_POSITION =
@@ -185,6 +191,9 @@ public class BoxPlot extends XYPlot {
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 2765031432328349977L;
+
 				public void draw(DrawingContext context) {
 					Axis axisX = plot.getAxis(AXIS_X);
 					Axis axisY = plot.getAxis(AXIS_Y);

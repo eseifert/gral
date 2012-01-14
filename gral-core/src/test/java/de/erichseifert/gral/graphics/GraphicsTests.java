@@ -28,6 +28,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	// Tests for classes
+	DrawableTest.class,
+	ContainerTest.class,
 	EdgeLayoutTest.class,
 	StackedLayoutTest.class,
 	TableLayoutTest.class

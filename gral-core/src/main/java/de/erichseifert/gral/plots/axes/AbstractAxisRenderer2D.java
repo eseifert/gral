@@ -68,6 +68,8 @@ import de.erichseifert.gral.util.PointND;
  */
 public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		implements AxisRenderer, SettingsListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5623525683845512624L;
 	/** Line segments approximating the shape of the axis. */
 	private Line2D[] shapeLines;
 	/** Normals of the line segments approximating the axis. */
@@ -133,6 +135,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 */
 	public Drawable getRendererComponent(final Axis axis) {
 		final Drawable component = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = 3605211198378801694L;
+
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

@@ -38,6 +38,9 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * values.
  */
 public class LabelPointRenderer extends DefaultPointRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -2612520977245369774L;
+
 	/** Key for specifying the {@link Integer} which specifies the index of the
 	column that is used for point sizes. */
 	public static final Key COLUMN =

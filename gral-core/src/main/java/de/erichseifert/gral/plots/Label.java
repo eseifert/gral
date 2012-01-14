@@ -43,6 +43,9 @@ import de.erichseifert.gral.util.MathUtils;
  * displayed text, as well as calculating its bounds.
  */
 public class Label extends StylableDrawable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 374045708533704103L;
+
 	/** Key for specifying a {@link Number} value for the horizontal alignment
 	within the bounding rectangle. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X =

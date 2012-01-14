@@ -43,8 +43,8 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimpleBoxPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
-
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5228891435595348789L;
 	private static final int SAMPLE_COUNT = 50;
 	private static final Random random = new Random();
 

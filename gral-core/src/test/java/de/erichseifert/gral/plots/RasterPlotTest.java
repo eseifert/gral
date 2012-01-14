@@ -44,6 +44,9 @@ public class RasterPlotTest {
 	private MockRasterPlot plot;
 
 	private static final class MockRasterPlot extends RasterPlot {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1043958957664771847L;
+
 		public boolean isDrawn;
 
 		public MockRasterPlot(DataSource data) {

@@ -53,6 +53,9 @@ import de.erichseifert.gral.util.PointND;
  * Class that creates {@code Drawable}s for a row of data.
  */
 public class DefaultPointRenderer2D extends AbstractPointRenderer {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -895832597380598383L;
+
 	/**
 	 * Returns the graphical representation to be drawn for the specified data
 	 * value.
@@ -65,6 +68,9 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	public Drawable getPoint(final Axis axis,
 			final AxisRenderer axisRenderer, final Row row, final int col) {
 		Drawable drawable = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = 1915778739867091906L;
+
 			public void draw(DrawingContext context) {
 				PointRenderer renderer = DefaultPointRenderer2D.this;
 

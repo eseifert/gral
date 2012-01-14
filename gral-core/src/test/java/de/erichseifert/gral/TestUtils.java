@@ -186,6 +186,7 @@ public class TestUtils {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends Serializable> T serializeAndDeserialize(T original)
 			throws IOException, ClassNotFoundException {
 		// Serialize

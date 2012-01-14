@@ -44,6 +44,9 @@ public class PiePlotTest {
 	private MockPiePlot plot;
 
 	private static final class MockPiePlot extends PiePlot {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -4466331273825538939L;
+
 		public boolean isDrawn;
 
 		public MockPiePlot(DataSource data) {

@@ -46,7 +46,9 @@ import de.erichseifert.gral.util.Orientation;
  * Example that shows how to use convultion filtering.
  */
 public class ConvolutionExample extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5084898568751883516L;
+
 	private static final int SAMPLE_COUNT = 200;
 
 	@SuppressWarnings("unchecked")

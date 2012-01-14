@@ -33,7 +33,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class ScatterPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -412699430625953887L;
+
 	private static final int SAMPLE_COUNT = 100000;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();

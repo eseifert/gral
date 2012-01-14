@@ -54,6 +54,9 @@ public class PlotTest {
 	private Plot plot;
 
 	private static class MockPlot extends AbstractPlot  {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -6303533550164303679L;
+
 		public boolean drawn;
 
 		public MockPlot(DataSource... data) {

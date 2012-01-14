@@ -32,8 +32,9 @@ import javax.swing.JPanel;
  * Abstract base class for all visual examples.
  */
 public abstract class ExamplePanel extends JPanel {
-	/** Version information for serialization. */
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 8221256658243821951L;
+
 	/** First corporate color used for normal coloring.*/
 	protected static final Color COLOR1 = new Color( 55, 170, 200);
 	/** Second corporate color used as signal color */

@@ -23,6 +23,7 @@ package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 
 /**
@@ -30,7 +31,10 @@ import java.awt.geom.Rectangle2D;
  * This class implements common functionality like the different ways for
  * getting and setting the bounding rectangle of the drawable object.
  */
-public abstract class AbstractDrawable implements Drawable {
+public abstract class AbstractDrawable implements Drawable, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -684598008467326484L;
+
 	/** Boundaries of the drawable object. */
 	private final Rectangle2D bounds;
 

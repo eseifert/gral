@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -28,7 +29,9 @@ import java.util.Locale;
  * <p>Please use this instead of java.awt.Insets, as the java class does not
  * support double values.</p>
  */
-public abstract class Insets2D {
+public abstract class Insets2D implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 8685228413052838087L;
 
 	/**
 	 * Creates a new Insets2D object.
@@ -96,6 +99,9 @@ public abstract class Insets2D {
 	 * Class that stores insets as double values.
 	 */
 	public static class Double extends Insets2D {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -6637052175330595647L;
+
 		/** Top. */
 		private double top;
 		/** Left. */

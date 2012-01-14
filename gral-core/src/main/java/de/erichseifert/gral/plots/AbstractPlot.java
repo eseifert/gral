@@ -64,6 +64,9 @@ import de.erichseifert.gral.util.Tuple;
  */
 public abstract class AbstractPlot extends StylableContainer
 		implements Plot, DataListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -6609155385940228771L;
+
 	/** Data sources. */
 	private final List<DataSource> data;
 	/** Set of all data sources that are visible (not hidden). */

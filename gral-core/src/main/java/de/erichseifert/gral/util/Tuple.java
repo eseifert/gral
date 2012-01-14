@@ -21,12 +21,16 @@
  */
 package de.erichseifert.gral.util;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Immutable class for storing n-dimensional tuples.
  */
-public class Tuple {
+public class Tuple implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4946415830302551257L;
+
 	/** Elements of the tuple. **/
 	private final Object[] elements;
 

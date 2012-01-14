@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -29,7 +30,10 @@ import java.util.Arrays;
  * Class for storing n-dimensional points.
  * @param <T> Data type of the coordinates.
  */
-public class PointND <T extends Number> {
+public class PointND<T extends Number> implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 3552680202450906771L;
+
 	/** Constant for accessing x-coordinate. */
 	public static final int X = 0;
 	/** Constant for accessing y-coordinate. */

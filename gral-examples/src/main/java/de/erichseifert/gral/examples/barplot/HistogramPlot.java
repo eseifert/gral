@@ -40,7 +40,8 @@ import de.erichseifert.gral.util.Orientation;
 
 
 public class HistogramPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4458280577519421950L;
 
 	private static final int SAMPLE_COUNT = 1000;
 

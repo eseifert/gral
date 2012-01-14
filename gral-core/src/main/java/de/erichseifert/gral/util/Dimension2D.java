@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -28,7 +29,10 @@ import java.util.Locale;
  * <p>This implementation adds support of double values to
  * {@code java.awt.geom.Dimension2D}.</p>
  */
-public abstract class Dimension2D extends java.awt.geom.Dimension2D {
+public abstract class Dimension2D extends java.awt.geom.Dimension2D
+		implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 6961198271520384282L;
 
 	/**
 	 * Creates a new Dimension2D object.
@@ -40,6 +44,9 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 	 * Class that stores double values.
 	 */
 	public static class Double extends Dimension2D {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -4341712269787906650L;
+
 		/** Horizontal extension. */
 		private double width;
 		/** Vertical extension. */

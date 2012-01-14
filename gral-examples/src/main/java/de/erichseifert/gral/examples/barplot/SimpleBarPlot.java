@@ -37,7 +37,8 @@ import de.erichseifert.gral.util.Location;
 
 
 public class SimpleBarPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -2793954497895054530L;
 
 	@SuppressWarnings("unchecked")
 	public SimpleBarPlot() {

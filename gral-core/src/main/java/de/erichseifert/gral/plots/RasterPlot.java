@@ -70,6 +70,9 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class RasterPlot extends XYPlot {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5844862286358250831L;
+
 	/** Key for specifying a {@link java.awt.geom.Point2D} instance which defines
 	the horizontal and vertical offset of the raster from the origin. */
 	public static final Key OFFSET =
@@ -88,6 +91,9 @@ public class RasterPlot extends XYPlot {
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	protected static class RasterRenderer extends AbstractPointRenderer {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1266585364126459761L;
+
 		/** Bar plot this renderer is associated to. */
 		private final RasterPlot plot;
 		/** Key for specifying the {@link Integer} which specifies the
@@ -128,6 +134,9 @@ public class RasterPlot extends XYPlot {
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -1136689797647794969L;
+
 				private final Rectangle2D pixel = new Rectangle2D.Double();
 				private final Axis axisX = plot.getAxis(AXIS_X);
 				private final Axis axisY = plot.getAxis(AXIS_Y);

@@ -35,7 +35,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimpleRasterPlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -2515812178479580541L;
+
 	private static final int SIZE = 64;
 	private static final double ZOOM = 0.3;
 

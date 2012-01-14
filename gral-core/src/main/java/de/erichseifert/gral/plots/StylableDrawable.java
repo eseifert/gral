@@ -35,6 +35,10 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  */
 public abstract class StylableDrawable extends AbstractDrawable
 		implements SettingsStorage, SettingsListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 8679795250803282234L;
+
+	/** Object to store settings. */
 	private final BasicSettingsStorage settings;
 
 	/**

@@ -41,6 +41,9 @@ public class PlotAreaTest {
 	private TestPlotArea2D plotArea;
 
 	private static final class TestPlotArea2D extends PlotArea {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 9136184486930965257L;
+
 		public boolean isDrawn;
 
 		public void draw(DrawingContext context) {
@@ -48,6 +51,7 @@ public class PlotAreaTest {
 			drawBorder(context);
 			drawPlot(context);
 		}
+
 		@Override
 		protected void drawPlot(DrawingContext context) {
 			isDrawn = true;

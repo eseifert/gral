@@ -42,9 +42,10 @@ import de.erichseifert.gral.util.Insets2D;
 
 public class StackedPlots extends ExamplePanel {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6832343098989019088L;
+
 	/** Instance to generate random data values. */
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	@SuppressWarnings("unchecked")
 	public StackedPlots() {

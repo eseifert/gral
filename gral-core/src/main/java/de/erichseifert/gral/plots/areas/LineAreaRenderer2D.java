@@ -44,6 +44,9 @@ import de.erichseifert.gral.util.PointND;
  * that draws lines from data points to the main axis.
  */
 public class LineAreaRenderer2D extends AbstractAreaRenderer {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -8396097579938931392L;
+
 	/** Key for specifying the {@link java.awt.Stroke} instance that is used
 	draw the lines from the data points to the axis. */
 	public static final Key STROKE = new Key("linearea.stroke"); //$NON-NLS-1$
@@ -70,6 +73,9 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		final Shape area = punch(stroke.createStrokedShape(path), points);
 
 		return new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = 5492321759151727458L;
+
 			public void draw(DrawingContext context) {
 				Paint paint = LineAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),

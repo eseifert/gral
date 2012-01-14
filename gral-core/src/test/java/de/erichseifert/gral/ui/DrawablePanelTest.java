@@ -49,6 +49,9 @@ public class DrawablePanelTest {
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		drawable = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -5709607259454319253L;
+
 			public void draw(DrawingContext context) {
 				Graphics2D g = context.getGraphics();
 				g.draw(new Line2D.Double(0.0, 0.0, 0.0, 0.0));

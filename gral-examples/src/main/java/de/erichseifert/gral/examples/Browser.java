@@ -45,10 +45,12 @@ import de.erichseifert.gral.examples.xyplot.SpiralPlot;
 import de.erichseifert.gral.examples.xyplot.StackedPlots;
 
 public class Browser extends JFrame implements ListSelectionListener {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3734045121668893200L;
 
 	private static class ExamplesList extends JList {
-		private static final long serialVersionUID = 1L;
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -5904920699472899791L;
 
 		public ExamplesList(ExamplePanel[] examples) {
 			super(examples);

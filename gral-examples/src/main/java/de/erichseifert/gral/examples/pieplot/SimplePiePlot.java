@@ -36,7 +36,9 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class SimplePiePlot extends ExamplePanel {
-	private static final long serialVersionUID = 1L;
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3039317265508932299L;
+
 	private static final int SAMPLE_COUNT = 10;
 	/** Instance to generate random data values. */
 	private static Random random = new Random();

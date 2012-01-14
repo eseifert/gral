@@ -40,6 +40,9 @@ public class BarPlotTest {
 	private MockBarPlot plot;
 
 	private static final class MockBarPlot extends BarPlot {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -6215127935611125964L;
+
 		public boolean isDrawn;
 
 		public MockBarPlot(DataSource... data) {

@@ -57,6 +57,9 @@ import de.erichseifert.gral.util.Orientation;
  * derived classes.</p>
  */
 public abstract class Legend extends StylableContainer {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -1561976879958765700L;
+
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	 paint the background. */
 	public static final Key BACKGROUND =
@@ -105,6 +108,9 @@ public abstract class Legend extends StylableContainer {
 	 * Class that displays a specific data source as an item of a legend.
 	 */
 	protected class Item extends DrawableContainer {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 3401141040936913098L;
+
 		/** Data source that is related to this item. */
 		private final DataSource data;
 		/** Symbol that should be drawn. */
@@ -124,6 +130,9 @@ public abstract class Legend extends StylableContainer {
 			this.data = data;
 
 			symbol = new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -8342826016352506818L;
+
 				public void draw(DrawingContext context) {
 					drawSymbol(context, this, Item.this.data);
 				}

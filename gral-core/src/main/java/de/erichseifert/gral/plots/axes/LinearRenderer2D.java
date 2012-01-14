@@ -31,6 +31,8 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that renders axes with a linear scale in two dimensional space.
  */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -1257582880797196423L;
 
 	/**
 	 * Creates a new renderer for linear axes in two-dimensional space.

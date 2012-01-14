@@ -62,6 +62,9 @@ import de.erichseifert.gral.util.PointND;
  * </pre>
  */
 public class BarPlot extends XYPlot {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 3177733647455649147L;
+
 	/** Key for specifying a {@link Number} value for the  width of the bars in
 	axis coordinates. */
 	public static final Key BAR_WIDTH =
@@ -80,6 +83,8 @@ public class BarPlot extends XYPlot {
 	 * Class that renders a bar in a bar plot.
 	 */
 	public static class BarRenderer extends DefaultPointRenderer2D {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 2183638342305398522L;
 		/** Key for specifying a {@link java.awt.Stroke} instance used to paint
 		the outline of the point shape. */
 		public static final Key STROKE = new Key("barplot.bar.stroke"); //$NON-NLS-1$
@@ -115,6 +120,9 @@ public class BarPlot extends XYPlot {
 		public Drawable getPoint(final Axis axis,
 				final AxisRenderer axisRenderer, final Row row, final int col) {
 			return new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -3145112034673683520L;
+
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = BarRenderer.this;
 					Shape point = getPointPath(row);

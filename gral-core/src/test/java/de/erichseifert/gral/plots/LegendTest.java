@@ -48,6 +48,9 @@ public class LegendTest {
 	@Before
 	public void setUp() {
 		legend = new Legend() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -6346805783823892711L;
+
 			@Override
 			protected void drawSymbol(DrawingContext context,
 					Drawable symbol, DataSource data) {

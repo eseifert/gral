@@ -45,6 +45,9 @@ public class XYPlotTest {
 	private List<MockXYPlot> plots;
 
 	private static class MockXYPlot extends XYPlot {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -4211015243684983841L;
+
 		private boolean drawn;
 
 		public MockXYPlot(DataSource... data) {

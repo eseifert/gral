@@ -36,6 +36,9 @@ import de.erichseifert.gral.util.Insets2D;
  * different dimensions.
  */
 public class TableLayout implements Layout {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -6738742507926295041L;
+
 	/** Number of columns. */
 	private final int cols;
 	/** Horizontal spacing. */
@@ -238,6 +241,14 @@ public class TableLayout implements Layout {
 			new de.erichseifert.gral.util.Dimension2D.Double();
 		gap.setSize(gapH, gapV);
 		return gap;
+	}
+
+	/**
+	 * Returns the number of desired columns.
+	 * @return Number of desired columns.
+	 */
+	public int getColumns() {
+		return cols;
 	}
 
 	/**

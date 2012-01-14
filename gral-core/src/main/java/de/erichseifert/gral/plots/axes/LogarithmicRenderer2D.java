@@ -31,6 +31,8 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that renders axes with a logarithmic scale in two dimensional space.
  */
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 6360029510782348529L;
 
 	/**
 	 * Creates a new renderer for logarithmic scaled axes in two-dimensional

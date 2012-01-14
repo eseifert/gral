@@ -37,6 +37,9 @@ import de.erichseifert.gral.util.Location;
  * each of the corners.
  */
 public class EdgeLayout implements Layout {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 3661169796145433549L;
+
 	/** Horizontal spacing. */
 	private final double gapH;
 	/** Vertical spacing. */

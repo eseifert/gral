@@ -78,9 +78,13 @@ public class AbstractPointRendererTest {
 	}
 
 	private static final class MockPointRenderer extends AbstractPointRenderer {
+		private static final long serialVersionUID = -3361506388079000948L;
+
 		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
 				final Row row, final int col) {
 			return new AbstractDrawable() {
+				private static final long serialVersionUID = 8239109584500117586L;
+
 				public void draw(DrawingContext context) {
 					MockPointRenderer renderer = MockPointRenderer.this;
 					Graphics2D g = context.getGraphics();

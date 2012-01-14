@@ -42,6 +42,9 @@ import de.erichseifert.gral.util.Insets2D;
  * @see Container
  */
 public class DrawableContainer extends AbstractDrawable implements Container {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 3741045651357559308L;
+
 	/** Empty margins that should be preserved around the contents of this
 	    container. */
 	private final Insets2D insets;

@@ -25,16 +25,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.graphics.AbstractDrawable;
-import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.graphics.DrawableContainer;
-import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.graphics.Layout;
-import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.util.Orientation;
 
 
@@ -48,8 +44,12 @@ public class StackedLayoutTest {
 	private Drawable a, b, c;
 
 	private static final class TestDrawable extends AbstractDrawable {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -5549638074327301904L;
+
 		public void draw(DrawingContext context) {
 		}
+
 		@Override
 		public Dimension2D getPreferredSize() {
 			Dimension2D size = super.getPreferredSize();
@@ -162,4 +162,12 @@ public class StackedLayoutTest {
 		assertEquals(GAP, layout.getGap());
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		StackedLayout original = new StackedLayout(Orientation.VERTICAL, GAP);
+		StackedLayout deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getOrientation(), deserialized.getOrientation());
+		assertEquals(original.getGap(), deserialized.getGap());
+	}
 }
