@@ -23,11 +23,14 @@ package de.erichseifert.gral.plots.settings;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import de.erichseifert.gral.util.SerializationUtils;
 
 /**
  * Class that stores a specific and a default setting for a certain key.
@@ -41,9 +44,9 @@ public class BasicSettingsStorage implements SettingsStorage, Serializable {
 	/** Set of listener objects that will notified on changes. */
 	private transient Set<SettingsListener> settingsListeners;
 	/** Map of user defined settings as (key, value) pairs. */
-	private final Map<Key, Object> settings;
+	private Map<Key, Object> settings;
 	/** Map of default settings as (key, value) pairs. */
-	private final Map<Key, Object> defaults;
+	private Map<Key, Object> defaults;
 
 	/**
 	 * Initializes an empty storage.
@@ -189,13 +192,56 @@ public class BasicSettingsStorage implements SettingsStorage, Serializable {
 		}
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the input stream.
+	 */
+	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
-		in.defaultReadObject();
-
-		// Handle transient fields
 		settingsListeners = new HashSet<SettingsListener>();
+		settings = unwrappedCopy((Map<Key, Serializable>) in.readObject());
+		defaults = unwrappedCopy((Map<Key, Serializable>) in.readObject());
 	}
 
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a deserialized class does not exist.
+	 * @throws IOException if there is an error while writing data to the output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		out.writeObject(wrappedCopy(settings));
+		out.writeObject(wrappedCopy(defaults));
+	}
+
+	/**
+	 * Returns a map with serializable values. If a value isn't serializable,
+	 * a serializable wrapper will be used.
+	 * @param map A map with potentially unserialiazable values.
+	 * @return A map with serialiazable values.
+	 */
+	private static Map<Key, Serializable> wrappedCopy(Map<Key, Object> map) {
+		Map<Key, Serializable> copy = new HashMap<Key, Serializable>();
+		for (Map.Entry<Key, Object> entry : map.entrySet()) {
+			copy.put(entry.getKey(), SerializationUtils.wrap(entry.getValue()));
+		}
+		return copy;
+	}
+
+	/**
+	 * Returns a map with values where all wrappers have been removed.
+	 * @param map A map with serialiazable values.
+	 * @return A map with unwrapped values.
+	 */
+	private static Map<Key, Object> unwrappedCopy(Map<Key, Serializable> map) {
+		Map<Key, Object> copy = new HashMap<Key, Object>();
+		for (Map.Entry<Key, Serializable> entry : map.entrySet()) {
+			copy.put(entry.getKey(), SerializationUtils.unwrap(entry.getValue()));
+		}
+		return copy;
+	}
 }

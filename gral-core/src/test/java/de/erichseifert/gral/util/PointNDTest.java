@@ -27,8 +27,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class PointNDTest {
 	public static final double DELTA = 1e-15;
@@ -111,4 +114,15 @@ public class PointNDTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		PointND<Double> original = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
+		PointND<Double> deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getDimensions(), deserialized.getDimensions());
+		for (int i = 0; i < original.getDimensions(); i++) {
+			assertEquals(String.format("Serialized points differ at dimension %d.", i),
+				original.get(i), deserialized.get(i), DELTA);
+		}
+	}
 }

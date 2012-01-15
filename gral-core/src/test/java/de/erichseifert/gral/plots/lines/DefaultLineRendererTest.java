@@ -29,11 +29,13 @@ import static org.junit.Assert.assertNotNull;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
@@ -103,4 +105,12 @@ public class DefaultLineRendererTest {
 			}
 		}
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		LineRenderer original = new DefaultLineRenderer2D();
+		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

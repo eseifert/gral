@@ -28,18 +28,20 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LogarithmicRenderer2DTest {
 	private static final double DELTA = 1e-14;
 	private Axis axis;
-	private LogarithmicRenderer2D renderer;
+	private AxisRenderer renderer;
 
 	@Before
 	public void setUp() {
@@ -119,4 +121,11 @@ public class LogarithmicRenderer2DTest {
 		assertEquals(36, ticks.size());  // 18 major ticks, 18 minor ticks
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		AxisRenderer original = renderer;
+		AxisRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

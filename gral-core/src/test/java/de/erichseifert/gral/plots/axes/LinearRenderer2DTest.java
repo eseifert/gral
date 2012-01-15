@@ -28,17 +28,19 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LinearRenderer2DTest {
 	private static final double DELTA = 1e-15;
 	private Axis axis;
-	private LinearRenderer2D renderer;
+	private AxisRenderer renderer;
 
 	@Before
 	public void setUp() {
@@ -109,4 +111,11 @@ public class LinearRenderer2DTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		AxisRenderer original = renderer;
+		AxisRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.ByteArrayInputStream;
@@ -33,6 +34,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Map;
+
+import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
+import de.erichseifert.gral.plots.settings.SettingsUtils;
 
 public class TestUtils {
 	/** Default precision for unit tests. **/
@@ -203,5 +209,27 @@ public class TestUtils {
 	    assertNotSame(original, o);
 
 	    return (T) o;
+	}
+
+	public static void assertEquals(String message, Line2D expected, Line2D actual) {
+		org.junit.Assert.assertEquals(message, expected.getP1(), actual.getP1());
+		org.junit.Assert.assertEquals(message, expected.getP2(), actual.getP2());
+	}
+
+	public static <T extends SettingsStorage> void assertSettings(T expected, T actual) {
+		Map<String, Key> keys = SettingsUtils.getKeys(expected.getClass());
+
+		for (Map.Entry<String, Key> entry : keys.entrySet()) {
+			String name = entry.getKey();
+			Key key = entry.getValue();
+			if (expected.getSetting(key) instanceof Line2D) {
+				TestUtils.assertEquals(String.format("Error serializing Line2D '%s'.", name),
+					expected.<Line2D>getSetting(key), actual.<Line2D>getSetting(key));
+			} else {
+				org.junit.Assert.assertEquals(
+					String.format("Error serializing setting '%s'.", name),
+					expected.getSetting(key), actual.getSetting(key));
+			}
+		}
 	}
 }

@@ -24,7 +24,11 @@ package de.erichseifert.gral.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class HaltonSequenceTest {
 	private static final double DELTA = 1e-15;
@@ -80,5 +84,15 @@ public class HaltonSequenceTest {
 		assertEquals(0.64, seq.next(), DELTA);
 		assertEquals(0.84, seq.next(), DELTA);
 		assertEquals(0.08, seq.next(), DELTA);
+	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		HaltonSequence original = new HaltonSequence(3);
+		HaltonSequence deserialized = TestUtils.serializeAndDeserialize(original);
+
+		for (int i = 0; i < 10; i++) {
+			assertEquals(original.next(), deserialized.next(), DELTA);
+		}
 	}
 }

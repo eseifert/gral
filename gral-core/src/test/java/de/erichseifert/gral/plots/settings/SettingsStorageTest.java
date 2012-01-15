@@ -23,6 +23,8 @@ package de.erichseifert.gral.plots.settings;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.BasicStroke;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -108,6 +110,29 @@ public class SettingsStorageTest {
 
 	    int i = 1;
 	    for (Key k : Arrays.asList(KEY1, KEY2, KEY3, KEY4)) {
+	    	assertEquals(
+    			String.format("Error getting setting %d.", i),
+    			original.getSetting(k), deserialized.getSetting(k)
+			);
+	    	i++;
+	    }
+    }
+
+	@Test
+	public void testSerializationWrappers() throws IOException, ClassNotFoundException {
+		Key keyPoint2Df = new Key("Point2D.Float");
+		Key keyPoint2Dd = new Key("Point2D.Double");
+		Key keyBasicStroke = new Key("BasicStroke");
+
+		BasicSettingsStorage original = new BasicSettingsStorage();
+		original.setSetting(keyPoint2Df, new Point2D.Float(1.23f, 4.56f));
+		original.setSetting(keyPoint2Dd, new Point2D.Double(1.23, 4.56));
+		original.setSetting(keyBasicStroke, new BasicStroke());
+
+		BasicSettingsStorage deserialized = TestUtils.serializeAndDeserialize(original);
+
+	    int i = 1;
+	    for (Key k : Arrays.asList(keyPoint2Df, keyPoint2Dd, keyBasicStroke)) {
 	    	assertEquals(
     			String.format("Error getting setting %d.", i),
     			original.getSetting(k), deserialized.getSetting(k)
