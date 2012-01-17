@@ -31,16 +31,18 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class PlotAreaTest {
-	private TestPlotArea2D plotArea;
+	private MockPlotArea2D plotArea;
 
-	private static final class TestPlotArea2D extends PlotArea {
+	private static final class MockPlotArea2D extends PlotArea {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 9136184486930965257L;
 
@@ -60,7 +62,7 @@ public class PlotAreaTest {
 
 	@Before
 	public void setUp() {
-		plotArea = new TestPlotArea2D();
+		plotArea = new MockPlotArea2D();
 	}
 
 	@Test
@@ -88,4 +90,11 @@ public class PlotAreaTest {
 		assertNotEmpty(image);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		MockPlotArea2D original = plotArea;
+		MockPlotArea2D deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

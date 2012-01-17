@@ -23,11 +23,15 @@ package de.erichseifert.gral.plots.axes;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
+
 public class AxisTest {
-	private static final double DELTA = 1e-15;
+	private static final double DELTA = TestUtils.DELTA;
 	private Axis axis;
 
 	@Before
@@ -94,4 +98,13 @@ public class AxisTest {
 		assertEquals(1.0, l.max.doubleValue(), DELTA);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Axis original = axis;
+		Axis deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMin(), deserialized.getMin());
+		assertEquals(original.getMax(), deserialized.getMax());
+		assertEquals(original.getRange(), deserialized.getRange(), DELTA);
+    }
 }

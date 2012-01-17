@@ -76,7 +76,7 @@ import de.erichseifert.gral.util.PointND;
  * XYPlot plot = new XYPlot(data);
  * </pre>
  */
-public class XYPlot extends AbstractPlot implements Navigable {
+public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 4501074701747572783L;
 
@@ -97,10 +97,10 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	private final Map<DataSource, AreaRenderer> areaRenderers;
 
 	/** Cache for the {@code Navigator} implementation. */
-	private XYPlotNavigator navigator;
+	private transient XYPlotNavigator navigator;
 	/** A flag that shows whether the navigator has been properly
 	initialized. */
-	private boolean navigatorInitialized;
+	private transient boolean navigatorInitialized;
 
 	/**
 	 * Constants which determine the direction of zoom and pan actions.
@@ -403,11 +403,11 @@ public class XYPlot extends AbstractPlot implements Navigable {
 					Number valueY = (Number) row.get(colY);
 
 					PointND<Double> axisPosX = (axisXRenderer != null)
-							? axisXRenderer.getPosition(axisX, valueX, true, false)
-							: new PointND<Double>(0.0, 0.0);
+						? axisXRenderer.getPosition(axisX, valueX, true, false)
+						: new PointND<Double>(0.0, 0.0);
 					PointND<Double> axisPosY = (axisYRenderer != null)
-							? axisYRenderer.getPosition(axisY, valueY, true, false)
-							: new PointND<Double>(0.0, 0.0);
+						? axisYRenderer.getPosition(axisY, valueY, true, false)
+						: new PointND<Double>(0.0, 0.0);
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
@@ -466,7 +466,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 		private static final long serialVersionUID = -4629928754001372002L;
 
 		/** Source for dummy data. */
-		private final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
+		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 
 		private final XYPlot plot;
 
@@ -523,7 +523,6 @@ public class XYPlot extends AbstractPlot implements Navigable {
 				graphics.setTransform(txOrig);
 			}
 		}
-
 	}
 
 	/**
@@ -534,7 +533,7 @@ public class XYPlot extends AbstractPlot implements Navigable {
 	public XYPlot(DataSource... data) {
 		super();
 
-		pointRenderers = new HashMap<DataSource, PointRenderer>();
+		pointRenderers = new HashMap<DataSource, PointRenderer>(data.length);
 		lineRenderers = new HashMap<DataSource, LineRenderer>(data.length);
 		areaRenderers = new HashMap<DataSource, AreaRenderer>(data.length);
 
@@ -551,13 +550,8 @@ public class XYPlot extends AbstractPlot implements Navigable {
 		createDefaultAxisRenderers();
 
 		// Listen for changes of the axis range
-		AxisListener axisListener = new AxisListener() {
-			public void rangeChanged(Axis axis, Number min, Number max) {
-				layoutAxes();
-			}
-		};
 		for (String axisName : getAxesNames()) {
-			getAxis(axisName).addAxisListener(axisListener);
+			getAxis(axisName).addAxisListener(this);
 		}
 	}
 
@@ -795,5 +789,15 @@ public class XYPlot extends AbstractPlot implements Navigable {
 			getNavigator().setDefaultState();
 			navigatorInitialized = true;
 		}
+	}
+
+	/**
+	 * Notified if the range of an axis has changed.
+	 * @param axis Axis instance that has changed.
+	 * @param min New minimum value.
+	 * @param max New maximum value.
+	 */
+	public void rangeChanged(Axis axis, Number min, Number max) {
+		layoutAxes();
 	}
 }

@@ -22,6 +22,8 @@
 package de.erichseifert.gral.util;
 
 import java.awt.BasicStroke;
+import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
@@ -59,6 +61,16 @@ public abstract class SerializationUtils {
 		if ((o instanceof Point2D.Double) || (o instanceof Point2D.Float)) {
 			Point2D point = (Point2D) o;
 			return new SerializablePoint2D(point);
+		}
+
+		if (o instanceof Area) {
+			Area area = (Area) o;
+			return new SerializableArea(area);
+		}
+
+		if (o instanceof Shape) {
+			Shape shape = (Shape) o;
+			return new SerializableShape(shape);
 		}
 
 		throw new IllegalArgumentException(String.format(

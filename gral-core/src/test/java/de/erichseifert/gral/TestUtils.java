@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -32,13 +33,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.plots.settings.SettingsUtils;
+import de.erichseifert.gral.util.GeometryUtils;
+import de.erichseifert.gral.util.GeometryUtils.PathSegment;
 
 public class TestUtils {
 	/** Default precision for unit tests. **/
@@ -197,8 +202,13 @@ public class TestUtils {
 		// Serialize
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(out);
-		oos.writeObject(original);
-		oos.close();
+		try {
+			oos.writeObject(original);
+		} catch(NotSerializableException e) {
+			e.printStackTrace();
+		} finally {
+			oos.close();
+		}
 		assertTrue("Serialization failed.", out.size() > 0);
 
 		// Deserialize
@@ -223,16 +233,40 @@ public class TestUtils {
 			String name = entry.getKey();
 			Key key = entry.getValue();
 
-			// Line2D instances can't be compared. See Java bug 5057070
-			// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
-			if (expected.getSetting(key) instanceof Line2D) {
-				TestUtils.assertEquals(String.format("Error serializing Line2D '%s'.", name),
-					expected.<Line2D>getSetting(key), actual.<Line2D>getSetting(key));
-			} else {
-				org.junit.Assert.assertEquals(
-					String.format("Error serializing setting '%s'.", name),
-					expected.getSetting(key), actual.getSetting(key));
+			Object valueExpected = expected.getSetting(key);
+			Object valueActual = actual.getSetting(key);
+
+			assertSetting(String.format("Setting '%s' differs.", name),
+				valueExpected, valueActual);
+		}
+	}
+
+	public static <T> void assertSetting(String message, T expected, T actual) {
+		// Line2D instances can't be compared. See Java bug 5057070
+		// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
+		if (expected instanceof Line2D) {
+			assertEquals(message, (Line2D) expected, (Line2D) actual);
+		} else if (expected instanceof Shape) {
+			List<PathSegment> segsExpected =
+				GeometryUtils.getSegments((Shape) expected);
+			List<PathSegment> segsActual =
+				GeometryUtils.getSegments((Shape) actual);
+			org.junit.Assert.assertEquals(message,
+				segsExpected.size(), segsActual.size());
+			for (int i = 0; i < segsExpected.size(); i++) {
+				PathSegment segExpected = segsExpected.get(i);
+				PathSegment segActual = segsActual.get(i);
+				org.junit.Assert.assertEquals(message,
+					segExpected.type, segActual.type);
+				org.junit.Assert.assertEquals(message,
+					segExpected.start, segActual.start);
+				org.junit.Assert.assertEquals(message,
+					segExpected.end, segActual.end);
+				org.junit.Assert.assertArrayEquals(message,
+					segExpected.coords, segActual.coords, DELTA);
 			}
+		} else {
+			org.junit.Assert.assertEquals(message, expected, actual);
 		}
 	}
 }

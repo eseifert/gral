@@ -34,12 +34,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -271,4 +273,12 @@ public class PlotTest {
 		assertEquals(visible.size() - 1, plot.getVisibleData().size());
 		assertEquals(all.get(1), plot.getVisibleData().get(0));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Plot original = plot;
+		Plot deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

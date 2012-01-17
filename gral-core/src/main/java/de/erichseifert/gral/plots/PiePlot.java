@@ -34,6 +34,8 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -113,9 +115,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	/** Slice objects with start and end position for each visible data source. */
-	private final Map<DataSource, List<Slice>> slices;
+	private transient Map<DataSource, List<Slice>> slices;
 	/** Cache for the {@code Navigator} implementation. */
-	private PiePlotNavigator navigator;
+	private transient PiePlotNavigator navigator;
 
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
@@ -910,5 +912,26 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		super.dataRemoved(source, events);
 		revalidate(source);
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		slices = new HashMap<DataSource, List<Slice>>();
+
+		// Update caches
+		for (DataSource source : getData()) {
+			dataUpdated(source);
+		}
 	}
 }

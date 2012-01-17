@@ -31,6 +31,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -247,8 +248,11 @@ public abstract class GeometryUtils {
     /**
      * Utility data class for the values of the segments in a geometric shape.
      */
-    public static final class PathSegment {
-    	/** Segment type id as defined in {@link PathIterator}. */
+    public static final class PathSegment implements Serializable {
+    	/** Version id for serialization. */
+		private static final long serialVersionUID = 526444553637955799L;
+
+		/** Segment type id as defined in {@link PathIterator}. */
     	public final int type;
     	/** Starting point. */
     	public final Point2D start;
@@ -308,6 +312,82 @@ public abstract class GeometryUtils {
     }
 
     /**
+     * Constructs a geometric shape from a list of path segments.
+     * @param segments List of path segments.
+     * @param isDouble {@code true} if the shape contents should be stored with
+     *        double values, {@code false} if they should be stored as float.
+     * @return A geometric shape.
+     */
+    public static Shape getShape(List<PathSegment> segments, boolean isDouble) {
+    	if (isDouble) {
+    		return getShapeDouble(segments);
+    	} else {
+    		return getShapeFloat(segments);
+    	}
+    }
+
+    /**
+     * Constructs a geometric shape with double precision from a list of path
+     * segments.
+     * @param segments List of path segments.
+     * @return A geometric shape.
+     */
+    private static Shape getShapeDouble(List<PathSegment> segments) {
+		Path2D.Double path =
+			new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
+		for (PathSegment segment : segments) {
+			double[] coords = segment.coords;
+			if (segment.type == PathIterator.SEG_MOVETO) {
+				path.moveTo(coords[0], coords[1]);
+			} else if (segment.type == PathIterator.SEG_LINETO) {
+				path.lineTo(coords[0], coords[1]);
+			} else if (segment.type == PathIterator.SEG_QUADTO) {
+				path.quadTo(coords[0], coords[1],
+					coords[2], coords[3]);
+			} else if (segment.type == PathIterator.SEG_CUBICTO) {
+				path.curveTo(coords[0], coords[1],
+					coords[2], coords[3],
+					coords[4], coords[5]);
+			} else if (segment.type == PathIterator.SEG_CLOSE) {
+				path.closePath();
+			}
+		}
+		return path;
+	}
+
+    /**
+     * Constructs a geometric shape with single precision from a list of path
+     * segments.
+     * @param segments List of path segments.
+     * @return A geometric shape.
+     */
+	private static Shape getShapeFloat(List<PathSegment> segments) {
+		Path2D.Float path =
+			new Path2D.Float(Path2D.WIND_NON_ZERO, segments.size());
+		for (PathSegment segment : segments) {
+			float[] coords = new float[segment.coords.length];
+			for (int i = 0; i < coords.length; i++) {
+				coords[i] = (float) segment.coords[i];
+			}
+			if (segment.type == PathIterator.SEG_MOVETO) {
+				path.moveTo(coords[0], coords[1]);
+			} else if (segment.type == PathIterator.SEG_LINETO) {
+				path.lineTo(coords[0], coords[1]);
+			} else if (segment.type == PathIterator.SEG_QUADTO) {
+				path.quadTo(coords[0], coords[1],
+					coords[2], coords[3]);
+			} else if (segment.type == PathIterator.SEG_CUBICTO) {
+				path.curveTo(coords[0], coords[1],
+					coords[2], coords[3],
+					coords[4], coords[5]);
+			} else if (segment.type == PathIterator.SEG_CLOSE) {
+				path.closePath();
+			}
+		}
+		return path;
+	}
+
+	/**
      * Returns a clone of a specified shape which  has a reversed order of the
      * points, lines and curves.
      * @param shape Original shape.
@@ -317,8 +397,10 @@ public abstract class GeometryUtils {
     	List<PathSegment> segments = getSegments(shape);
 
 		boolean closed = false;
-		Path2D reversed = new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
-		for (ListIterator<PathSegment> i = segments.listIterator(segments.size()); i.hasPrevious();) {
+		Path2D reversed =
+			new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
+		ListIterator<PathSegment> i = segments.listIterator(segments.size());
+		while (i.hasPrevious()) {
 			PathSegment segment = i.previous();
 
 			if (segment.type == PathIterator.SEG_CLOSE) {

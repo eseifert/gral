@@ -32,31 +32,36 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LegendTest {
-	private Legend legend;
-	private boolean isDrawn;
+	private MockLegend legend;
+
+	private static class MockLegend extends Legend {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -6681407860400756446L;
+
+		private boolean isDrawn;
+
+		@Override
+		protected void drawSymbol(DrawingContext context,
+				Drawable symbol, DataSource data) {
+			isDrawn = true;
+		}
+	};
 
 	@Before
 	public void setUp() {
-		legend = new Legend() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID = -6346805783823892711L;
-
-			@Override
-			protected void drawSymbol(DrawingContext context,
-					Drawable symbol, DataSource data) {
-				isDrawn = true;
-			}
-		};
+		legend = new MockLegend();
 	}
 
 	@Test
@@ -93,8 +98,15 @@ public class LegendTest {
 		legend.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		legend.draw(context);
-		assertTrue(isDrawn);
+		assertTrue(legend.isDrawn);
 		assertNotEmpty(image);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Legend original = legend;
+		Legend deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

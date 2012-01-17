@@ -79,9 +79,9 @@ public class Label extends StylableDrawable {
 	private String text;
 
 	/** Cached outline of the label text with word wrapping. */
-	private Shape outlineWrapped;
+	private transient Shape outlineWrapped;
 	/** Cached outline of the label text without word wrapping. */
-	private Shape outlineUnwrapped;
+	private transient Shape outlineUnwrapped;
 
 	/**
 	 * Initializes a new empty {@code Label} instance.

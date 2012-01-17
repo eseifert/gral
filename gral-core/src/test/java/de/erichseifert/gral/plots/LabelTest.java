@@ -31,6 +31,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -124,4 +125,11 @@ public class LabelTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Label original = new MockLabel("foobar");
+		Label deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

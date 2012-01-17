@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,10 @@ import de.erichseifert.gral.util.MathUtils;
  *   <li>Administration of {@link AxisListener AxisListeners}</li>
  * </ul>
  */
-public class Axis {
+public class Axis implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5355772833362614591L;
+
 	/** Objects that will be notified when axis settings are changing. */
 	private final Set<AxisListener> axisListeners;
 

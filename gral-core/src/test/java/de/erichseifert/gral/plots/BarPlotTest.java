@@ -28,10 +28,12 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
@@ -87,4 +89,11 @@ public class BarPlotTest {
 		assertTrue(plot.isDrawn);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Plot original = plot;
+		Plot deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

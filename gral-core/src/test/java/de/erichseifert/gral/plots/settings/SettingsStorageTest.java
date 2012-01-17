@@ -24,6 +24,8 @@ package de.erichseifert.gral.plots.settings;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.BasicStroke;
+import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Arrays;
@@ -125,9 +127,11 @@ public class SettingsStorageTest {
 		Object[] values = {
 			new Point2D.Float(1.23f, 4.56f),
 			new Point2D.Double(1.23, 4.56),
-			new BasicStroke()
+			new BasicStroke(),
+			new Path2D.Float(),
+			new Path2D.Double(),
+			new Area()
 		};
-		// TODO Test Path2D.Float, Path2D.Double, Area, and others
 
 		Key[] keys = new Key[values.length];
 		for (int i = 0; i < values.length; i++) {
@@ -139,7 +143,7 @@ public class SettingsStorageTest {
 
 	    int i = 0;
 	    for (Key key : keys) {
-	    	assertEquals(
+	    	TestUtils.assertSetting(
     			String.format("Expected different value for '%s' (index %d).", key, i),
     			original.getSetting(key), deserialized.getSetting(key)
 			);

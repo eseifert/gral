@@ -72,6 +72,14 @@ public class SingleColor extends IndexedColorMapper {
 		if (!(obj instanceof SingleColor)) {
 			return false;
 		}
-		return color.equals(((SingleColor) obj).color);
+		SingleColor cm = (SingleColor) obj;
+		return color.equals(cm.color) && getMode() == cm.getMode();
+	}
+
+	@Override
+	public int hashCode() {
+		long bits = getColor().hashCode();
+		bits ^= getMode().hashCode() * 31;
+		return ((int) bits) ^ ((int) (bits >> 32));
 	}
 }

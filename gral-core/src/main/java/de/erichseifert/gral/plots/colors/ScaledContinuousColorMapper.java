@@ -106,4 +106,21 @@ public abstract class ScaledContinuousColorMapper
 	protected Double scale(double value) {
 		return (value - getOffset())/getScale();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ScaledContinuousColorMapper)) {
+			return false;
+		}
+		ScaledContinuousColorMapper cm = (ScaledContinuousColorMapper) obj;
+		return getOffset() == cm.getOffset() && getScale() == cm.getScale()
+			&& getMode() == cm.getMode();
+	}
+
+	@Override
+	public int hashCode() {
+		long bits = Double.doubleToLongBits(getOffset());
+		bits ^= Double.doubleToLongBits(getScale()) * 31;
+		return ((int) bits) ^ ((int) (bits >> 32));
+	}
 }
