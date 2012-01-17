@@ -36,6 +36,9 @@ package de.erichseifert.gral.data;
  * @see DataSource
  */
 public class EnumeratedData extends AbstractDataSource {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4952487410608980063L;
+
 	/** Data source which will be used as base for enumeration. */
 	private final DataSource original;
 	/** Value to start counting from. */

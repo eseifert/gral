@@ -27,10 +27,12 @@ import static org.junit.Assert.assertNull;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
@@ -110,4 +112,12 @@ public class SizeablePointsRendererTest {
 		path = r.getPointPath(new Row(table, 0));
 		assertEquals(shape, path);
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		PointRenderer original = new SizeablePointRenderer();
+		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

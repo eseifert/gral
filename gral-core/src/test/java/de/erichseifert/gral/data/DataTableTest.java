@@ -21,16 +21,23 @@
  */
 package de.erichseifert.gral.data;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
+import de.erichseifert.gral.data.statistics.Statistics;
 
 public class DataTableTest {
+	private static final double DELTA = TestUtils.DELTA;
+
 	private DataTable table;
 
 	@Before
@@ -203,4 +210,32 @@ public class DataTableTest {
 		assertEquals(0, table.getRowCount());
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		DataSource original = table;
+		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
+
+    	// Test metadata
+    	assertArrayEquals(original.getColumnTypes(), deserialized.getColumnTypes());
+    	assertEquals(original.getColumnCount(), deserialized.getColumnCount());
+    	assertEquals(original.getRowCount(), deserialized.getRowCount());
+
+		// Test values
+    	for (int row = 0; row < original.getRowCount(); row++) {
+        	for (int col = 0; col < original.getColumnCount(); col++) {
+            	assertEquals(
+        			String.format("Wrong data at col=%d, row=%d.", col, row),
+        			original.get(col, row), deserialized.get(col, row));
+        	}
+    	}
+
+    	// Test statistics
+    	String[] stats = { Statistics.N, Statistics.SUM, Statistics.MEAN, Statistics.VARIANCE };
+    	for (String stat : stats) {
+    		assertEquals(
+				original.getStatistics().get(stat),
+				deserialized.getStatistics().get(stat),
+				DELTA);
+		}
+    }
 }

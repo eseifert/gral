@@ -27,6 +27,9 @@ import java.awt.Paint;
  * Class that represents a ColorMapper with a single color.
  */
 public class SingleColor extends IndexedColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -3377452532555792998L;
+
 	/** The color that will be returned in any case. */
 	private Paint color;
 
@@ -62,5 +65,13 @@ public class SingleColor extends IndexedColorMapper {
 	 */
 	public void setColor(Paint color) {
 		this.color = color;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof SingleColor)) {
+			return false;
+		}
+		return color.equals(((SingleColor) obj).color);
 	}
 }

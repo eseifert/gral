@@ -34,6 +34,9 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that generates pseudo-random colors for specified index values.
  */
 public class RandomColors extends IndexedColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4518470000665474457L;
+
 	/** Number of comparisons that will be done before accepting two similar
 	random values. */
 	private static final int NUM_COMPARISONS = 4;

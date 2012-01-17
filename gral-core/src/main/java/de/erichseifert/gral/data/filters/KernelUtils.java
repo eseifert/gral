@@ -29,7 +29,6 @@ import java.util.Arrays;
  * kernels.
  */
 public abstract class KernelUtils {
-
 	/**
 	 * Returns a Kernel of specified variance with binomial coefficients.
 	 * @param variance Variance.

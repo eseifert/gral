@@ -222,6 +222,9 @@ public class TestUtils {
 		for (Map.Entry<String, Key> entry : keys.entrySet()) {
 			String name = entry.getKey();
 			Key key = entry.getValue();
+
+			// Line2D instances can't be compared. See Java bug 5057070
+			// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
 			if (expected.getSetting(key) instanceof Line2D) {
 				TestUtils.assertEquals(String.format("Error serializing Line2D '%s'.", name),
 					expected.<Line2D>getSetting(key), actual.<Line2D>getSetting(key));

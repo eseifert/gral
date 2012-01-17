@@ -29,11 +29,14 @@ import java.util.List;
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5568085894125740972L;
+
 	/** Data source that provides the columns for this data series. */
 	private final DataSource data;
 	/** Columns that should be mapped to the series. */
 	private final List<Integer> cols;
-	/** NAme of the data series. */
+	/** Name of the data series. */
 	private String name;
 
 	/**

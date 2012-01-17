@@ -23,7 +23,11 @@ package de.erichseifert.gral.data.filters;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class KernelTest {
 	private static final double DELTA = 1e-15;
@@ -107,4 +111,17 @@ public class KernelTest {
 		assertEquals(-1.0, k.get( 0), DELTA);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Kernel original = new Kernel(1.0, 2.0, 3.0, 4.0);
+		Kernel deserialized = TestUtils.serializeAndDeserialize(original);
+
+    	assertEquals(original.getOffset(), deserialized.getOffset());
+    	assertEquals(original.size(), deserialized.size());
+    	for (int i = 0; i < original.size(); i++) {
+    		assertEquals(
+				String.format("Wrong value at index %d.", i),
+				original.get(i), deserialized.get(i), DELTA);
+		}
+    }
 }

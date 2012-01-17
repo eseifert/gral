@@ -51,7 +51,7 @@ public abstract class GeometryUtils {
 	/**
 	 * Default constructor that prevents creation of class.
 	 */
-	protected GeometryUtils() {
+	private GeometryUtils() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -246,9 +246,8 @@ public abstract class GeometryUtils {
 
     /**
      * Utility data class for the values of the segments in a geometric shape.
-     * This is only used by {@link GeometryUtils#reverse(Shape)} at the moment.
      */
-    private static final class PathSegment {
+    public static final class PathSegment {
     	/** Segment type id as defined in {@link PathIterator}. */
     	public final int type;
     	/** Starting point. */
@@ -276,12 +275,12 @@ public abstract class GeometryUtils {
     }
 
     /**
-     * Returns a clone of a specified shape which  has a reversed order of the
-     * points, lines and curves.
-     * @param shape Original shape.
-     * @return Shape with reversed direction.
+     * Returns a list of a shape's segments as they are returned by its path
+     * iterator.
+     * @param shape Shape to be iterated.
+     * @return A list of path segment objects.
      */
-    public static Shape reverse(Shape shape) {
+    public static List<PathSegment> getSegments(Shape shape) {
     	PathIterator path =  shape.getPathIterator(null);
 
     	Point2D pointStart = null, pointEnd = null;
@@ -304,6 +303,18 @@ public abstract class GeometryUtils {
 			pointStart = pointEnd;
 			path.next();
 		}
+
+		return segments;
+    }
+
+    /**
+     * Returns a clone of a specified shape which  has a reversed order of the
+     * points, lines and curves.
+     * @param shape Original shape.
+     * @return Shape with reversed direction.
+     */
+    public static Shape reverse(Shape shape) {
+    	List<PathSegment> segments = getSegments(shape);
 
 		boolean closed = false;
 		Path2D reversed = new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());

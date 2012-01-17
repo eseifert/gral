@@ -25,10 +25,33 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.data.statistics.Statistics;
+
 public class RowSubsetTest {
+	private static final double DELTA = TestUtils.DELTA;
+
+	private static final class MockRowSubset extends RowSubset {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -601722212974379219L;
+
+		public MockRowSubset(DataSource original) {
+			super(original);
+		}
+
+		@Override
+		public boolean accept(Row row) {
+			Comparable<?> cell = row.get(0);
+			return (cell instanceof Number) &&
+				(((Number) cell).doubleValue() % 2.0) == 0.0;
+		}
+	};
+
 	private DataTable table;
 	private RowSubset data;
 
@@ -45,14 +68,7 @@ public class RowSubsetTest {
 		table.add(7, 9); // 6
 		table.add(8, 11); // 7
 
-		data = new RowSubset(table) {
-			@Override
-			public boolean accept(Row row) {
-				Comparable<?> cell = row.get(0);
-				return (cell instanceof Number) &&
-					(((Number) cell).doubleValue() % 2.0) == 0.0;
-			}
-		};
+		data = new MockRowSubset(table);
 	}
 
 	@Test
@@ -113,4 +129,33 @@ public class RowSubsetTest {
 		table.remove(1);
 		assertTrue(data.getRowCount() < sizeBefore);
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		DataSource original = data;
+		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
+
+    	// Test metadata
+    	assertArrayEquals(original.getColumnTypes(), deserialized.getColumnTypes());
+    	assertEquals(original.getColumnCount(), deserialized.getColumnCount());
+    	assertEquals(original.getRowCount(), deserialized.getRowCount());
+
+		// Test values
+    	for (int row = 0; row < original.getRowCount(); row++) {
+        	for (int col = 0; col < original.getColumnCount(); col++) {
+            	assertEquals(
+        			String.format("Wrong data at col=%d, row=%d.", col, row),
+        			original.get(col, row), deserialized.get(col, row));
+        	}
+    	}
+
+    	// Test statistics
+    	String[] stats = { Statistics.N, Statistics.SUM, Statistics.MEAN, Statistics.VARIANCE };
+    	for (String stat : stats) {
+    		assertEquals(
+				original.getStatistics().get(stat),
+				deserialized.getStatistics().get(stat),
+				DELTA);
+		}
+    }
 }

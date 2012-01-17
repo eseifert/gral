@@ -24,6 +24,7 @@ package de.erichseifert.gral.data;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
@@ -33,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.DummyJdbc;
+import de.erichseifert.gral.TestUtils;
 
 public class JdbcDataTest {
 	private Connection connection;
@@ -88,4 +90,11 @@ public class JdbcDataTest {
 	@Test
 	public void testXyz() {
 	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	@SuppressWarnings("unused")
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		DataSource original = new JdbcData(connection, "foobar");
+		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
+    }
 }

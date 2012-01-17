@@ -21,7 +21,11 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
@@ -36,15 +40,18 @@ import de.erichseifert.gral.data.statistics.Statistics;
  * administration and notification of listeners and supports
  * iteration of data values.
  */
-public abstract class AbstractDataSource implements DataSource {
+public abstract class AbstractDataSource implements DataSource, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 9139975565475816812L;
+
 	/** Number of columns. */
 	private int columnCount;
 	/** Data types that are allowed in the respective columns. */
 	private Class<? extends Comparable<?>>[] types;
 	/** Set of objects that will be notified of changes to the data values. */
-	private final Set<DataListener> dataListeners;
+	private transient Set<DataListener> dataListeners;
 	/** Statistical description of the data values. */
-	private Statistics statistics;
+	private transient Statistics statistics;
 
 	/**
 	 * Iterator that returns each row of the DataSource.
@@ -234,5 +241,22 @@ public abstract class AbstractDataSource implements DataSource {
 	 */
 	public Row getRow(int row) {
 		return new Row(this, row);
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		dataListeners = new HashSet<DataListener>();
+		// Statistics can be omitted. It's created using a lazy getter.
 	}
 }

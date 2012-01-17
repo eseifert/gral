@@ -29,6 +29,9 @@ package de.erichseifert.gral.plots.colors;
  */
 public abstract class ScaledContinuousColorMapper
 		extends ContinuousColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 323911118647457851L;
+
 	/** Offset. **/
 	private double offset;
 	/** Scaling factor. **/

@@ -83,9 +83,9 @@ public class DataTableConcurrencyTest {
 	}
 
 	private static class DataTableConsumer extends Thread {
-		private final DataTable table;
+		private final DataSink table;
 
-		public DataTableConsumer(DataTable table) {
+		public DataTableConsumer(DataSink table) {
 			this.table = table;
 		}
 

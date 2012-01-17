@@ -25,10 +25,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 public class ScaledColorMapperTest {
@@ -36,6 +38,9 @@ public class ScaledColorMapperTest {
 	private ScaledContinuousColorMapper cm;
 
 	private static final class ScaledContinuousColorMapperMock extends ScaledContinuousColorMapper {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -3693380550336601398L;
+
 		@Override
 		public Paint get(double value) {
 			double v = scale(value);
@@ -86,4 +91,17 @@ public class ScaledColorMapperTest {
 			assertColor((x - 0.25)/0.5, cm.get(x));
 		}
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		ScaledContinuousColorMapper original = cm;
+		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		assertEquals(original.getOffset(), deserialized.getOffset(), DELTA);
+		assertEquals(original.getScale(), deserialized.getScale(), DELTA);
+		for (double x=0.0; x<=1.0; x+=0.5) {
+			assertEquals(original.get(x), deserialized.get(x));
+		}
+    }
 }

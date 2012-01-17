@@ -20,6 +20,7 @@
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 package de.erichseifert.gral.data;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,18 +31,17 @@ import java.util.List;
 
 import de.erichseifert.gral.data.comparators.DataComparator;
 
-
 /**
- * <p>A writable implementation of a data source. Additionally to the standard
- * functionality of {@code DataSource} it allows for adding and deleting
- * rows. Additionally, all data in the table can be deleted.</p>
- * <p>The data in the table can be sorted row-wise with the method
- * {@code sort(DataComparator...)}. For example, this way column 1 could
- * be sorted ascending and column 3 descending.</p>
+ * An in-memory, random access implementation of data source and data sink
+ * using arrays.
  *
  * @see DataSource
+ * @see DataSink
  */
-public class DataTable extends AbstractDataSource {
+public class DataTable extends AbstractDataSource implements DataSink {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 535236774042654449L;
+
 	/** All values stored as rows of column arrays. */
 	private final List<Comparable<?>[]> rows;
 	/** Number of rows. */

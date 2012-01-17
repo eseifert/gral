@@ -62,7 +62,7 @@ public abstract class SerializationUtils {
 		}
 
 		throw new IllegalArgumentException(String.format(
-			"Can't prepare value of type %s for serialization.",
+			"Failed to make value of type %s serializable.",
 			o.getClass().getName()
 		));
 	}

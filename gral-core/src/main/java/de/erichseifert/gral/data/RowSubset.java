@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +43,13 @@ import java.util.List;
  */
 public abstract class RowSubset extends AbstractDataSource
 		implements DataListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -5396152732545986903L;
+
 	/** Original data source. */
 	private final DataSource original;
-	/** List of column indexes that are stored in this filtered data source. */
-	private final List<Integer> accepted;
+	/** List of row indexes that are stored in this filtered data source. */
+	private transient List<Integer> accepted;
 
 	/**
 	 * Creates a new instance with the specified data source.
@@ -151,4 +156,24 @@ public abstract class RowSubset extends AbstractDataSource
 	 * @return True if the row should be kept.
 	 */
 	public abstract boolean accept(Row row);
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		accepted = new ArrayList<Integer>();
+
+		// Update caches
+		original.addDataListener(this);
+		dataUpdated(original);
+	}
 }

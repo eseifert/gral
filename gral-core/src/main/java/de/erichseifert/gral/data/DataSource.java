@@ -24,7 +24,9 @@ package de.erichseifert.gral.data;
 import de.erichseifert.gral.data.statistics.Statistics;
 
 /**
- * Immutable view on a source for tabular data.
+ * Interface for an immutable access to tabular data.
+ *
+ * @see DataSink
  */
 public interface DataSource extends Iterable<Comparable<?>> {
 	/**

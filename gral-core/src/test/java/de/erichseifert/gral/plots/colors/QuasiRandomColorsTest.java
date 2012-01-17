@@ -21,14 +21,21 @@
  */
 package de.erichseifert.gral.plots.colors;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Paint;
+import java.io.IOException;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
+
 public class QuasiRandomColorsTest {
+	private static final float DELTA_FLOAT = 1e-7f;
+
 	@Test
 	public void testGet() {
 		QuasiRandomColors c = new QuasiRandomColors();
@@ -43,4 +50,12 @@ public class QuasiRandomColorsTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		QuasiRandomColors original = new QuasiRandomColors();
+		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		assertArrayEquals(original.getColorVariance(), deserialized.getColorVariance(), DELTA_FLOAT);
+    }
 }

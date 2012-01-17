@@ -21,6 +21,9 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -32,6 +35,9 @@ import de.erichseifert.gral.util.MathUtils;
  * </ul>
  */
 public class Convolution extends Filter {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 7155205321415314271L;
+
 	/** Kernel that provides the values to convolve the data source. */
 	private final Kernel kernel;
 
@@ -98,4 +104,19 @@ public class Convolution extends Filter {
 		return sum;
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Update caches
+		dataUpdated(this);
+	}
 }

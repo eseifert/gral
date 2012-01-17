@@ -210,7 +210,8 @@ public class BasicSettingsStorage implements SettingsStorage, Serializable {
 	 * Custom serialization method.
 	 * @param out Output stream.
 	 * @throws ClassNotFoundException if a deserialized class does not exist.
-	 * @throws IOException if there is an error while writing data to the output stream.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
 	 */
 	private void writeObject(ObjectOutputStream out)
 			throws ClassNotFoundException, IOException {

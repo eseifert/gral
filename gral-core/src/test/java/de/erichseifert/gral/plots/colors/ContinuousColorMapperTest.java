@@ -26,15 +26,20 @@ import static org.junit.Assert.assertNull;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.io.IOException;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.plots.colors.ColorMapper.Mode;
 import de.erichseifert.gral.util.MathUtils;
 
 public class ContinuousColorMapperTest {
 	private static final class MockContinuousColorMapper
 			extends ContinuousColorMapper {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 2862456675214994497L;
+
 		@Override
 		public Paint get(double value) {
 			Double v = applyMode(value, 0.0, 1.0);
@@ -84,4 +89,15 @@ public class ContinuousColorMapperTest {
 		assertEquals(new Color(255, 255, 255), c.get( 1.0));
 		assertEquals(new Color(128, 128, 128), c.get( 1.5));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		MockContinuousColorMapper original = new MockContinuousColorMapper();
+		MockContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		for (double x = -0.5; x <= 1.5; x += 0.5) {
+			assertEquals(original.get(x), deserialized.get(x));
+		}
+    }
 }

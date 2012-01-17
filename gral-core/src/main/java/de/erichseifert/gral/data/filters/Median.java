@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,13 @@ import de.erichseifert.gral.util.MathUtils;
  * </ul>
  */
 public class Median extends Filter {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -1645928908580026536L;
+
+	/** Number of values in the window that will be used to calculate the
+	median. */
 	private int windowSize;
+	/** Start of the window. */
 	private int offset;
 
 	/**
@@ -70,7 +78,7 @@ public class Median extends Filter {
 			int colIndexOriginal = getIndexOriginal(colIndex);
 			List<Double> window = new ArrayList<Double>(getWindowSize());
 			colWindows.add(window);
-			// Prefill window
+			// Pre-fill window
 			for (int rowIndex = getOffset() - getWindowSize(); rowIndex < 0; rowIndex++) {
 				Comparable<?> vOrig = getOriginal(colIndexOriginal, rowIndex);
 				double v = ((Number) vOrig).doubleValue();
@@ -159,4 +167,19 @@ public class Median extends Filter {
 		dataUpdated(this);
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Update caches
+		dataUpdated(this);
+	}
 }

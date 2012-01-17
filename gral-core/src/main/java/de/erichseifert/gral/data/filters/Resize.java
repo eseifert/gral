@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Arrays;
 
 import de.erichseifert.gral.data.Column;
@@ -35,6 +37,9 @@ import de.erichseifert.gral.data.Row;
  * will be thrown. The values of the scaled result are created by averaging.
  */
 public class Resize extends Filter {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -5601162872352170735L;
+
 	/** Number of columns. */
 	private final int cols;
 	/** Number of rows. */
@@ -72,8 +77,8 @@ public class Resize extends Filter {
 
 	@Override
 	public Comparable<?> get(int col, int row) {
-		if ((cols <= 0 || cols == original.getColumnCount()) &&
-			(rows <= 0 || rows == original.getRowCount())) {
+		if ((cols <= 0 || cols == getOriginal().getColumnCount()) &&
+			(rows <= 0 || rows == getOriginal().getRowCount())) {
 			return getOriginal(col, row);
 		}
 		return super.get(col, row);
@@ -83,6 +88,7 @@ public class Resize extends Filter {
 	@Override
 	protected void filter() {
 		clear();
+		DataSource original = getOriginal();
 		if ((getRowCount() == original.getRowCount())
 				&& (getColumnCount() == original.getColumnCount())) {
 			return;
@@ -176,4 +182,19 @@ public class Resize extends Filter {
 		return sum / (end - start);
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Update caches
+		dataUpdated(this);
+	}
 }

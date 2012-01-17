@@ -26,15 +26,20 @@ import static org.junit.Assert.assertNull;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.io.IOException;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.plots.colors.ColorMapper.Mode;
 import de.erichseifert.gral.util.MathUtils;
 
 public class IndexedColorMapperTest {
 	private static final class MockIndexedColorMapper
 			extends IndexedColorMapper {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = -516834950305649435L;
+
 		@Override
 		public Paint get(int value) {
 			Integer i = applyMode(value, 0, 255);
@@ -85,4 +90,14 @@ public class IndexedColorMapperTest {
 		assertEquals(new Color(128, 128, 128), c.get(384));
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		MockIndexedColorMapper original = new MockIndexedColorMapper();
+		MockIndexedColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		for (int i = -128; i <= 384; i += 128) {
+			assertEquals(original.get(i), deserialized.get(i));
+		}
+    }
 }

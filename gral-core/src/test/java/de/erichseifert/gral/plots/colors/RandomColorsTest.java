@@ -21,16 +21,21 @@
  */
 package de.erichseifert.gral.plots.colors;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Paint;
+import java.io.IOException;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
+
 public class RandomColorsTest {
-	private static final double DELTA = 1e-7;
+	private static final float DELTA_FLOAT = 1e-7f;
+
 
 	@Test
 	public void testCreation() {
@@ -43,7 +48,7 @@ public class RandomColorsTest {
 		float[] actual = c.getColorVariance();
 		assertEquals(expected.length, actual.length);
 		for (int i = 0; i < actual.length; i++) {
-			assertEquals(expected[i], actual[i], DELTA);
+			assertEquals(expected[i], actual[i], DELTA_FLOAT);
 		}
 	}
 
@@ -80,4 +85,12 @@ public class RandomColorsTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		QuasiRandomColors original = new QuasiRandomColors();
+		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		assertArrayEquals(original.getColorVariance(), deserialized.getColorVariance(), DELTA_FLOAT);
+    }
 }

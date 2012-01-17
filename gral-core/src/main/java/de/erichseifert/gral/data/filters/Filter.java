@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +46,15 @@ import de.erichseifert.gral.util.MathUtils;
  * </ul>
  *
  * <p>Values of filtered columns are buffered. Access to unfiltered columns is
- * delegated to the original data source.</p>
+ * delegated to the original data source. Derived classes must make sure the
+ * caches are updated when deserialization is done. This can be done by calling
+ * {@code dataUpdated(this)} in a custom deserialization method.</p>
  */
 public abstract class Filter extends AbstractDataSource
 		implements DataListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -5004453681128601437L;
+
 	/** Type to define the behavior when engaging the borders of a column, i.e.
 	the filter would need more data values than available. */
 	public static enum Mode {
@@ -64,12 +71,12 @@ public abstract class Filter extends AbstractDataSource
 	};
 
 	/** Original data source. */
-	protected final DataSource original;
+	private final DataSource original;
 
 	/** Columns that should be filtered. */
 	private final int[] cols;
 	/** Data that was produced by the filter. */
-	private final ArrayList<Double[]> rows;
+	private transient ArrayList<Double[]> rows;
 	/** Mode for handling. */
 	private Mode mode;
 
@@ -113,7 +120,16 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	/**
-	 * Returns the value of the DataSource at the specified column and row.
+	 * Returns the original data source that is filtered.
+	 * @return Original data source.
+	 */
+	protected DataSource getOriginal() {
+		return original;
+	}
+
+	/**
+	 * Returns the value of the original data source at the specified column
+	 * and row.
 	 * @param col Column index.
 	 * @param row Row index.
 	 * @return Original value.
@@ -335,4 +351,22 @@ public abstract class Filter extends AbstractDataSource
 		dataUpdated(this);
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		rows = new ArrayList<Double[]>();
+
+		// Update caches
+		original.addDataListener(this);
+	}
 }

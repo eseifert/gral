@@ -34,6 +34,9 @@ import de.erichseifert.gral.util.MathUtils;
  * Linearly blends different colors for values between 0.0 and 1.0.
  */
 public class LinearGradient extends ScaledContinuousColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4256873420364549677L;
+
 	/** Colors that will be used for blending. **/
 	private final List<Color> colors;
 

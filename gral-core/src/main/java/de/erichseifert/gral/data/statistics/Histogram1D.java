@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data.statistics;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +43,9 @@ import de.erichseifert.gral.util.Orientation;
  * <p>For ease of use the histogram is a data source itself.</p>
  */
 public class Histogram1D extends Histogram {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4841658606362408312L;
+
 	/** Direction in which all values will be aggregated. */
 	private final Orientation orientation;
 
@@ -50,9 +55,9 @@ public class Histogram1D extends Histogram {
 	private final List<long[]> cellList;
 
 	/** Minimum values for cells. */
-	private final Map<Integer, Long> cacheMin;
+	private transient Map<Integer, Long> cacheMin;
 	/** Maximum values for cells. */
-	private final Map<Integer, Long> cacheMax;
+	private transient Map<Integer, Long> cacheMax;
 
 	private Histogram1D(DataSource data, Orientation orientation) {
 		super(data);
@@ -227,5 +232,22 @@ public class Histogram1D extends Histogram {
 		Class<? extends Comparable<?>>[] types = new Class[getColumnCount()];
 		Arrays.fill(types, Long.class);
 		return types;
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		cacheMin = new HashMap<Integer, Long>();
+		cacheMax = new HashMap<Integer, Long>();
 	}
 }

@@ -24,11 +24,16 @@ package de.erichseifert.gral.plots.colors;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
+
 public class MultiColorTest {
+	private static final double DELTA = TestUtils.DELTA;
+
 	@Test
 	public void testCreation() {
 		LinearGradient c = new LinearGradient(Color.WHITE, Color.BLACK);
@@ -49,4 +54,17 @@ public class MultiColorTest {
 		assertEquals(new Color(  0, 128, 128), c.get(0.75));
 		assertEquals(new Color(  0,   0, 255), c.get(1.00));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		ScaledContinuousColorMapper original = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
+		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		assertEquals(original.getOffset(), deserialized.getOffset(), DELTA);
+		assertEquals(original.getScale(), deserialized.getScale(), DELTA);
+		for (double x=0.0; x<=1.0; x+=0.25) {
+			assertEquals(original.get(x), deserialized.get(x));
+		}
+    }
 }

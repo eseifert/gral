@@ -10,6 +10,9 @@ import de.erichseifert.gral.util.MathUtils;
  */
 public abstract class IndexedColorMapper
 		extends AbstractColorMapper<Integer> {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 553890535328678411L;
+
 	/**
 	 * Returns the Paint object according to the specified index.
 	 * @param value Numeric index.

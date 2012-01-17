@@ -30,6 +30,9 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that generates the colors of a rainbow.
  */
 public class RainbowColors extends ScaledContinuousColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 6096507341747323265L;
+
 	/**
 	 * Returns the Paint according to the specified value.
 	 * @param value Value of color.

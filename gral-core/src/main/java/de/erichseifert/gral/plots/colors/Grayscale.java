@@ -31,6 +31,9 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that generates shades of gray for values between 0.0 and 1.0.
  */
 public class Grayscale extends ScaledContinuousColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -1005712209663359529L;
+
 	/**
 	 * Returns the Paint object according to the specified value.
 	 * @param value Value of color.

@@ -24,8 +24,11 @@ package de.erichseifert.gral.plots.colors;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
+import java.io.IOException;
 
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class HeatMapTest {
 	@Test
@@ -37,4 +40,15 @@ public class HeatMapTest {
 		assertEquals(new Color(242, 188,  93), c.get(0.75));
 		assertEquals(new Color(255, 255, 255), c.get(1.00));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		ScaledContinuousColorMapper original = new HeatMap();
+		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		for (double x=0.0; x<=1.0; x+=0.5) {
+			assertEquals(original.get(x), deserialized.get(x));
+		}
+    }
 }

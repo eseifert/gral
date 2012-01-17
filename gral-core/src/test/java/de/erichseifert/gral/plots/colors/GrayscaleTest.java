@@ -24,8 +24,11 @@ package de.erichseifert.gral.plots.colors;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
+import java.io.IOException;
 
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class GrayscaleTest {
 	@Test
@@ -35,4 +38,15 @@ public class GrayscaleTest {
 		assertEquals(new Color(119, 119, 119), c.get(0.5));
 		assertEquals(new Color(255, 255, 255), c.get(1.0));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		ScaledContinuousColorMapper original = new Grayscale();
+		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getMode(), deserialized.getMode());
+		for (double x=0.0; x<=1.0; x+=0.5) {
+			assertEquals(original.get(x), deserialized.get(x));
+		}
+    }
 }

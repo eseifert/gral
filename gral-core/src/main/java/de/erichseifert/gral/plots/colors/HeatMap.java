@@ -30,6 +30,9 @@ import de.erichseifert.gral.util.MathUtils;
  * Class that generates different color shades for values between 0.0 and 1.0.
  */
 public class HeatMap extends ScaledContinuousColorMapper {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -5398973874608239179L;
+
 	private static final Color[] COLORS = {
 	    new Color(0.0f, 0.0f, 0.0f),
 	    new Color(0.0f, 0.0f, 1.0f),

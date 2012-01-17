@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -34,8 +35,13 @@ import java.util.Arrays;
  *   <li>Negation</li>
  * </ul>
  */
-public class Kernel {
+public class Kernel implements Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 7721293471122850684L;
+
+	/** Kernel values. */
 	private final double[] values;
+	/** Index of the kernel's center value. */
 	private final int offset;
 
 	/**

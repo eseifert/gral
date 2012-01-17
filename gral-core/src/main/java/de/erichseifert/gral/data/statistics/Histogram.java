@@ -34,6 +34,9 @@ import de.erichseifert.gral.data.DataSource;
  */
 public abstract class Histogram extends AbstractDataSource
 		implements DataListener {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5031290498142366257L;
+
 	/** Data source that is used to build the histogram. */
 	private final DataSource data;
 

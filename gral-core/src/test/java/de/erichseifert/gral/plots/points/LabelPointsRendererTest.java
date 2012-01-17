@@ -25,10 +25,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.awt.Shape;
+import java.io.IOException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
@@ -67,4 +69,12 @@ public class LabelPointsRendererTest {
 		Shape path = r.getPointPath(row);
 		assertNull(path);
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		PointRenderer original = new LabelPointRenderer();
+		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

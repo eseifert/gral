@@ -34,11 +34,13 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -166,4 +168,12 @@ public class AbstractPointRendererTest {
 		assertTrue(r.getSetting(PointRenderer.COLOR) instanceof ColorMapper);
 		assertEquals(Color.BLACK, r.<ColorMapper>getSetting(PointRenderer.COLOR).get(0));
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		PointRenderer original = r;
+		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

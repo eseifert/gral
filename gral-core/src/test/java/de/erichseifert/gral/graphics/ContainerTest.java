@@ -38,8 +38,6 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class ContainerTest {
-	private static final double DELTA = TestUtils.DELTA;
-
 	private DrawableContainer container;
 
 	private static final class MockDrawable extends AbstractDrawable {

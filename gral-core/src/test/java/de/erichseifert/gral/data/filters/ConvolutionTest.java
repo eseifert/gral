@@ -21,17 +21,23 @@
  */
 package de.erichseifert.gral.data.filters;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.statistics.Statistics;
 
 public class ConvolutionTest {
-	private static final double DELTA = 1e-15;
+	private static final double DELTA = TestUtils.DELTA;
+
 	private static DataTable table;
 	private static Kernel kernel;
 
@@ -158,4 +164,35 @@ public class ConvolutionTest {
 		assertEquals( 3.0, ((Number) filter.get(1, 1)).doubleValue(), DELTA);
 		assertEquals( 3.0, ((Number) filter.get(1, 7)).doubleValue(), DELTA);
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		Convolution original = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
+		Convolution deserialized = TestUtils.serializeAndDeserialize(original);
+
+    	// Test metadata
+    	assertEquals(original.getKernel().size(), deserialized.getKernel().size());
+    	assertEquals(original.getMode(), deserialized.getMode());
+    	assertArrayEquals(original.getColumnTypes(), deserialized.getColumnTypes());
+    	assertEquals(original.getColumnCount(), deserialized.getColumnCount());
+    	assertEquals(original.getRowCount(), deserialized.getRowCount());
+
+		// Test values
+    	for (int row = 0; row < original.getRowCount(); row++) {
+        	for (int col = 0; col < original.getColumnCount(); col++) {
+            	assertEquals(
+        			String.format("Wrong data at col=%d, row=%d.", col, row),
+        			original.get(col, row), deserialized.get(col, row));
+        	}
+    	}
+
+    	// Test statistics
+    	String[] stats = { Statistics.N, Statistics.SUM, Statistics.MEAN, Statistics.VARIANCE };
+    	for (String stat : stats) {
+    		assertEquals(
+				original.getStatistics().get(stat),
+				deserialized.getStatistics().get(stat),
+				DELTA);
+		}
+    }
 }

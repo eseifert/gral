@@ -120,22 +120,28 @@ public class SettingsStorageTest {
 
 	@Test
 	public void testSerializationWrappers() throws IOException, ClassNotFoundException {
-		Key keyPoint2Df = new Key("Point2D.Float");
-		Key keyPoint2Dd = new Key("Point2D.Double");
-		Key keyBasicStroke = new Key("BasicStroke");
-
 		BasicSettingsStorage original = new BasicSettingsStorage();
-		original.setSetting(keyPoint2Df, new Point2D.Float(1.23f, 4.56f));
-		original.setSetting(keyPoint2Dd, new Point2D.Double(1.23, 4.56));
-		original.setSetting(keyBasicStroke, new BasicStroke());
+
+		Object[] values = {
+			new Point2D.Float(1.23f, 4.56f),
+			new Point2D.Double(1.23, 4.56),
+			new BasicStroke()
+		};
+		// TODO Test Path2D.Float, Path2D.Double, Area, and others
+
+		Key[] keys = new Key[values.length];
+		for (int i = 0; i < values.length; i++) {
+			keys[i] = new Key(values[i].getClass().getName());
+			original.setSetting(keys[i], values[i]);
+		}
 
 		BasicSettingsStorage deserialized = TestUtils.serializeAndDeserialize(original);
 
-	    int i = 1;
-	    for (Key k : Arrays.asList(keyPoint2Df, keyPoint2Dd, keyBasicStroke)) {
+	    int i = 0;
+	    for (Key key : keys) {
 	    	assertEquals(
-    			String.format("Error getting setting %d.", i),
-    			original.getSetting(k), deserialized.getSetting(k)
+    			String.format("Expected different value for '%s' (index %d).", key, i),
+    			original.getSetting(key), deserialized.getSetting(key)
 			);
 	    	i++;
 	    }

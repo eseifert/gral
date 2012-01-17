@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.colors;
 
+import java.io.Serializable;
+
 
 /**
  * Interface that maps numbers to Paint objects. This can be used to generate
@@ -29,7 +31,10 @@ package de.erichseifert.gral.plots.colors;
  * @param <T> Data type of input values.
  */
 public abstract class AbstractColorMapper<T extends Number>
-		implements ColorMapper {
+		implements ColorMapper, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 8456831369409589441L;
+
 	/** Handling of values that are outside the mapping range. */
 	private Mode mode;
 

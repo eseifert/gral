@@ -33,6 +33,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
@@ -257,4 +259,12 @@ public class DefaultPointRenderer2DTest {
 		point.draw(context);
 		assertEmpty(image);
 	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		PointRenderer original = r;
+		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+
+		TestUtils.assertSettings(original, deserialized);
+    }
 }

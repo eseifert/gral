@@ -29,6 +29,9 @@ import java.util.Arrays;
  * It can be used for test purposes or for efficiently creating constant data.
  */
 public class DummyData extends AbstractDataSource {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5780257823757438260L;
+
 	/** Value that will be returned for all positions in this data source. */
 	private final Comparable<?> value;
 	/** Number of columns. */

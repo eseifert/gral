@@ -24,8 +24,11 @@ package de.erichseifert.gral.plots.colors;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
+import java.io.IOException;
 
 import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
 
 public class SingleColorTest {
 
@@ -53,4 +56,14 @@ public class SingleColorTest {
 		}
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		SingleColor original = new SingleColor(new Color(0.12f, 0.34f, 0.56f, 0.78f));
+		SingleColor deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getColor(), deserialized.getColor());
+		for (int i = 0; i < 5; i++) {
+			assertEquals(original.get(i), deserialized.get(i));
+		}
+    }
 }

@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -36,6 +38,9 @@ import java.util.Arrays;
  * Data source for database tables accessed through a JDBC connection.
  */
 public class JdbcData extends AbstractDataSource {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 5196527358266585129L;
+
 	/** The data types of all columns. */
 	private Class<? extends Comparable<?>>[] types;
 	/** The JDBC connection. */
@@ -277,5 +282,17 @@ public class JdbcData extends AbstractDataSource {
 		this.bufferedRowCount = -1;
 		this.bufferedQuery = null;
 		this.bufferedQueryRow = -1;
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a deserialized class does not exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		throw new UnsupportedOperationException("JDBC data sources cannot be serialized.");
 	}
 }

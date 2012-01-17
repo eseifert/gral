@@ -9,6 +9,9 @@ import de.erichseifert.gral.util.MathUtils;
  * colors or gradients for various elements in a plot, e.g. lines, areas, etc.
  */
 public abstract class ContinuousColorMapper extends AbstractColorMapper<Double> {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 4616781244057993699L;
+
 	/**
 	 * Returns the Paint object according to the specified value.
 	 * @param value Numeric value.
