@@ -173,7 +173,9 @@ public abstract class RowSubset extends AbstractDataSource
 		accepted = new ArrayList<Integer>();
 
 		// Update caches
-		original.addDataListener(this);
 		dataUpdated(original);
+
+		// Restore listeners
+		original.addDataListener(this);
 	}
 }

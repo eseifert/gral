@@ -26,6 +26,8 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Area;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
@@ -97,5 +99,21 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	 * @param event Event containing information about the changed setting.
 	 */
 	public void settingChanged(SettingChangeEvent event) {
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		addSettingsListener(this);
 	}
 }

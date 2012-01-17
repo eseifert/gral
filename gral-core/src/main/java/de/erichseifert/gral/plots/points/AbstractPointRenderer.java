@@ -27,6 +27,8 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
@@ -89,4 +91,20 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 			super.setSetting(key, value, isDefault);
 		}
 	};
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		addSettingsListener(this);
+	}
 }

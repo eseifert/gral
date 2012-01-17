@@ -31,6 +31,8 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -799,5 +801,23 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 */
 	public void rangeChanged(Axis axis, Number min, Number max) {
 		layoutAxes();
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		for (String axisName : getAxesNames()) {
+			getAxis(axisName).addAxisListener(this);
+		}
 	}
 }

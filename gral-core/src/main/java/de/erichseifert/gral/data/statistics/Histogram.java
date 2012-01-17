@@ -21,6 +21,9 @@
  */
 package de.erichseifert.gral.data.statistics;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
@@ -102,4 +105,19 @@ public abstract class Histogram extends AbstractDataSource
 		return data;
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		data.addDataListener(this);
+	}
 }

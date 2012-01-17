@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +42,7 @@ public class Axis implements Serializable {
 	private static final long serialVersionUID = 5355772833362614591L;
 
 	/** Objects that will be notified when axis settings are changing. */
-	private final Set<AxisListener> axisListeners;
+	private transient Set<AxisListener> axisListeners;
 
 	/** Minimal value on axis. */
 	private Number min;
@@ -192,5 +194,21 @@ public class Axis implements Serializable {
 	 */
 	public boolean isValid() {
 		return MathUtils.isCalculatable(min) && MathUtils.isCalculatable(max);
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Handle transient fields
+		axisListeners = new HashSet<AxisListener>();
 	}
 }

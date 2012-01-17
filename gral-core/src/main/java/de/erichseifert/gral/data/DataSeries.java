@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,5 +172,21 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		data.addDataListener(this);
 	}
 }

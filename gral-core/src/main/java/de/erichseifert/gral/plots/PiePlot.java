@@ -698,7 +698,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		createDefaultAxisRenderers();
 
 		dataUpdated(data);
-		data.addDataListener(this);
 	}
 
 	@Override

@@ -106,6 +106,11 @@ public class EdgeLayout implements Layout {
 		double yCenter = yNorth + heightNorth + gapNorth;
 		double ySouth  = bounds.getMaxY() - insets.getBottom() - heightSouth;
 
+		double widthAll = widthWest + widthEast;
+		double heightAll = heightNorth + heightSouth;
+		double gapHAll = gapWest + gapEast;
+		double gapVAll = gapNorth - gapSouth;
+
 		layoutComponent(northWest,
 			xWest, yNorth,
 			widthWest, heightNorth
@@ -113,7 +118,7 @@ public class EdgeLayout implements Layout {
 
 		layoutComponent(north,
 			xCenter, yNorth,
-			bounds.getWidth() - insets.getHorizontal() - widthWest - widthEast - gapWest - gapEast,
+			bounds.getWidth() - insets.getHorizontal() - widthAll - gapHAll,
 			heightNorth
 		);
 
@@ -125,7 +130,7 @@ public class EdgeLayout implements Layout {
 		layoutComponent(east,
 			xEast, yCenter,
 			widthEast,
-			bounds.getHeight() - insets.getVertical() - heightNorth - heightSouth - gapNorth - gapSouth
+			bounds.getHeight() - insets.getVertical() - heightAll - gapVAll
 		);
 
 		layoutComponent(southEast,
@@ -136,7 +141,7 @@ public class EdgeLayout implements Layout {
 
 		layoutComponent(south,
 			xCenter, ySouth,
-			bounds.getWidth() - insets.getHorizontal() - widthWest - widthEast - gapWest - gapEast,
+			bounds.getWidth() - insets.getHorizontal() - widthAll - gapHAll,
 			heightSouth
 		);
 
@@ -149,17 +154,17 @@ public class EdgeLayout implements Layout {
 		layoutComponent(west,
 			xWest, yCenter,
 			widthWest,
-			bounds.getHeight() - insets.getVertical() - heightNorth - heightSouth - gapNorth - gapSouth
+			bounds.getHeight() - insets.getVertical() - heightAll - gapVAll
 		);
 
 		layoutComponent(center,
 			xCenter, yCenter,
 				bounds.getWidth()
-					- insets.getLeft() - widthWest - widthEast
-					- insets.getRight() - gapEast - gapWest,
+					- insets.getLeft() - widthAll
+					- insets.getRight() - gapHAll,
 				bounds.getHeight()
-					- insets.getTop() - heightNorth - heightSouth
-					- insets.getBottom() - gapNorth - gapSouth
+					- insets.getTop() - heightAll
+					- insets.getBottom() - gapVAll
 		);
 	}
 

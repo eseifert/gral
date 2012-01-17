@@ -27,6 +27,8 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -711,6 +713,24 @@ public abstract class AbstractPlot extends StylableContainer
 				axisMin.put(axisName, min);
 				axisMax.put(axisName, max);
 			}
+		}
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		for (DataSource source : getData()) {
+			source.addDataListener(this);
 		}
 	}
 }

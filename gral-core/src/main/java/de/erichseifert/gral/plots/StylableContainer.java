@@ -21,6 +21,9 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
@@ -113,5 +116,21 @@ public abstract class StylableContainer extends DrawableContainer
 	 */
 	public <T> void removeSettingDefault(Key key) {
 		settings.removeSettingDefault(key);
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the
+	 *         input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// Normal deserialization
+		in.defaultReadObject();
+
+		// Restore listeners
+		settings.addSettingsListener(this);
 	}
 }
