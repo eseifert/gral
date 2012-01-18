@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
 import de.erichseifert.gral.data.DataTests;
 import de.erichseifert.gral.graphics.GraphicsTests;
 import de.erichseifert.gral.io.IoTests;
+import de.erichseifert.gral.navigation.NavigationTests;
 import de.erichseifert.gral.plots.PlotsTests;
 import de.erichseifert.gral.ui.UiTests;
 import de.erichseifert.gral.util.UtilTests;
@@ -38,6 +39,7 @@ import de.erichseifert.gral.util.UtilTests;
 	UtilTests.class,
 	DataTests.class,
 	GraphicsTests.class,
+	NavigationTests.class,
 	PlotsTests.class,
 	IoTests.class,
 	UiTests.class

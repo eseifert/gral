@@ -70,17 +70,25 @@ public interface Navigator extends NavigationListener {
 
 	/**
 	 * Sets the zoom level of the associated object to the specified value.
-	 * @param zoomNew New zoom level.
+	 * @param zoom New zoom level.
 	 */
-	void setZoom(double zoomNew);
+	void setZoom(double zoom);
 
 	/**
 	 * Increases the current zoom level by the specified zoom factor.
+	 * The zoom will only be changed if the navigator is zoomable.
+	 *
+	 * @see #isZoomable()
+	 * @see #setZoomable(boolean)
 	 */
 	void zoomIn();
 
 	/**
 	 * Decreases the current zoom level by the specified zoom factor.
+	 * The zoom will only be changed if the navigator is zoomable.
+	 *
+	 * @see #isZoomable()
+	 * @see #setZoomable(boolean)
 	 */
 	void zoomOut();
 
@@ -107,14 +115,20 @@ public interface Navigator extends NavigationListener {
 
 	/**
 	 * Sets a new center point. The values of the point are in world units.
+	 * The center point will only be changed if the navigator is pannable.
 	 * @param center New center point in world units.
+	 * @see #isPannable()
+	 * @see #setPannable(boolean)
 	 */
 	void setCenter(PointND<? extends Number> center);
 
 	/**
 	 * Moves the center by the relative values of the specified point.
 	 * The values of the point are in screen units.
+	 * The center point will only be changed if the navigator is pannable.
 	 * @param deltas Relative values to use for panning.
+	 * @see #isPannable()
+	 * @see #setPannable(boolean)
 	 */
 	void pan(PointND<? extends Number> deltas);
 
