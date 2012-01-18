@@ -5,8 +5,9 @@ import java.awt.Paint;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Interface that maps numbers to Paint objects. This can be used to generate
- * colors or gradients for various elements in a plot, e.g. lines, areas, etc.
+ * Class that maps integer numbers to Paint objects. This can be used to
+ * generate colors or gradients for various elements in a plot, e.g. lines,
+ * areas, etc.
  */
 public abstract class IndexedColorMapper
 		extends AbstractColorMapper<Integer> {
