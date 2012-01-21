@@ -29,8 +29,11 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 
+import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -41,11 +44,13 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
@@ -357,11 +362,116 @@ public class BoxPlot extends XYPlot {
 		};
 	}
 
+	public static class BoxPlotLegend extends ValueLegend {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1517792984459627757L;
+		/** Source for dummy data. */
+		@SuppressWarnings("unchecked")
+		private static final DataSource DUMMY_DATA = new AbstractDataSource(
+				Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -8233716728143117368L;
+
+			/** Positions of x position, center bar, bottom bar, box bottom,
+			box top, and top bar. */
+			private final Double[] values = { 0.5, 0.0, 0.0, 1.0, 1.0 };
+
+			public int getRowCount() {
+				return 1;
+			}
+			public Comparable<?> get(int col, int row) {
+				if (col == 0) {
+					return Double.valueOf(row + 1);
+				}
+				return values[col - 1];
+			}
+		};
+
+		/** Associated plot. */
+		private final BoxPlot plot;
+
+		/**
+		 * Initializes a new instance with the specified plot.
+		 * @param plot Associated plot.
+		 */
+		public BoxPlotLegend(BoxPlot plot) {
+			this.plot = plot;
+		}
+
+		/**
+		 * Returns a symbol for rendering a legend item.
+		 * @param row Data row.
+		 * @return A drawable object that can be used to display the symbol.
+		 */
+		public Drawable getSymbol(final Row row) {
+			return new AbstractSymbol(this) {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 1906894939358065143L;
+
+				/**
+				 * Draws the {@code Drawable} with the specified drawing context.
+				 * @param context Environment used for drawing
+				 */
+				public void draw(DrawingContext context) {
+					DataSource data = row.getSource();
+
+					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					if (pointRenderer == null) {
+						return;
+					}
+
+					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Rectangle2D bounds = getBounds();
+
+					Number boxWidthRelObj = pointRenderer.<Number>getSetting(
+						BoxWhiskerRenderer.BOX_WIDTH);
+					double boxWidthRel = 1.0;
+					if (boxWidthRelObj != null) {
+						boxWidthRel = boxWidthRelObj.doubleValue();
+					}
+
+					double posX = ((Number) row.get(0)).doubleValue();
+					Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
+					AxisRenderer axisRendererX = new LinearRenderer2D();
+					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+							bounds.getMinX(), bounds.getMaxY(),
+							bounds.getMaxX(), bounds.getMaxY()));
+					Axis axisY = new Axis(1.0, 2.0);
+					AxisRenderer axisRendererY = new LinearRenderer2D();
+					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+							bounds.getMinX(), bounds.getMaxY(),
+							bounds.getMinX(), bounds.getMinY()));
+
+					PointData pointData = new PointData(
+						Arrays.asList(axisX, axisY),
+						Arrays.asList(axisRendererX, axisRendererY),
+						symbolRow, 0);
+					Shape shape = pointRenderer.getPointShape(pointData);
+					Drawable drawable = pointRenderer.getPoint(pointData, shape);
+
+					DataPoint point = new DataPoint(
+						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
+						drawable, shape);
+
+					Graphics2D graphics = context.getGraphics();
+					graphics.draw(bounds);
+					Point2D pos = point.position.getPoint2D();
+					AffineTransform txOrig = graphics.getTransform();
+					graphics.translate(pos.getX(), pos.getY());
+					point.drawable.draw(context);
+					graphics.setTransform(txOrig);
+				}
+			};
+		}
+	}
+
 	/**
 	 * Initializes a new box-and-whisker plot with the specified data source.
 	 * @param data Data to be displayed.
 	 */
 	public BoxPlot(DataSource data) {
+		setLegend(new BoxPlotLegend(this));
+
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 1.0);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
@@ -396,6 +506,9 @@ public class BoxPlot extends XYPlot {
 		// Generate statistical values for each column
 		for (int c = 0; c < data.getColumnCount(); c++) {
 			Column col = data.getColumn(c);
+			if (!col.isNumeric()) {
+				continue;
+			}
 			stats.add(
 				c + 1,
 				col.getStatistics(Statistics.MEDIAN),

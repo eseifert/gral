@@ -31,7 +31,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.erichseifert.gral.data.DataSource;
@@ -288,21 +287,6 @@ public class BarPlot extends XYPlot {
 			this.plot = plot;
 		}
 
-		@Override
-		protected Iterable<Row> getEntries(DataSource source) {
-			List<Row> items = new LinkedList<Row>();
-			for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
-				Row row = new Row(source, rowIndex);
-				items.add(row);
-			}
-			return items;
-		}
-
-		@Override
-		protected String getLabel(Row row) {
-			return String.format("%d", row.getIndex());
-		}
-
 		/**
 		 * Returns a symbol for rendering a legend item.
 		 * @param row Data row.
@@ -333,8 +317,8 @@ public class BarPlot extends XYPlot {
 					Axis axisY = new Axis(0.0, 0.5);
 					AxisRenderer axisRendererY = new LinearRenderer2D();
 					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
-							bounds.getMaxX(), bounds.getMaxY(),
-							bounds.getMaxX(), bounds.getMinY()));
+							bounds.getMinX(), bounds.getMaxY(),
+							bounds.getMinX(), bounds.getMinY()));
 
 					PointRenderer pointRenderer = plot.getPointRenderer(data);
 					Shape shape = null;

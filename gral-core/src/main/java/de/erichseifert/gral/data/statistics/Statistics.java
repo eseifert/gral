@@ -214,6 +214,10 @@ public class Statistics implements DataListener {
 			}
 		}
 
+		if (values.size() <= 0) {
+			return;
+		}
+
 		stats.put(QUARTILE_1, MathUtils.quantile(values, 0.25));
 		stats.put(QUARTILE_2, MathUtils.quantile(values, 0.50));
 		stats.put(QUARTILE_3, MathUtils.quantile(values, 0.75));
