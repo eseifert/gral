@@ -21,33 +21,30 @@
  */
 package de.erichseifert.gral.plots;
 
-import java.awt.Shape;
+import java.util.LinkedList;
+import java.util.List;
 
-import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.PointND;
-
+import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.Row;
 
 /**
- * Class for storing points of a plot.
+ * A legend implementation that displays an item for each data series that are
+ * added to the legend.
  */
-public class DataPoint {
-	/** Position of the data point (n-dimensional). */
-	public final PointND<Double> position;
-	/** Drawable that will be used to render the data point. */
-	public final Drawable drawable;
-	/** Shape describing the data point. */
-	public final Shape shape;
+public abstract class SeriesLegend extends AbstractLegend {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 1092110896986707546L;
 
-	/**
-	 * Creates a new {@code DataPoint} object with the specified position,
-	 * {@code Drawable}, and shape.
-	 * @param position Coordinates in view/screen units.
-	 * @param drawable Visual representation.
-	 * @param shape Geometric shape of the point.
-	 */
-	public DataPoint(PointND<Double> position, Drawable drawable, Shape shape) {
-		this.position = position;
-		this.drawable = drawable;
-		this.shape = shape;
+	@Override
+	protected Iterable<Row> getEntries(DataSource source) {
+		List<Row> items = new LinkedList<Row>();
+		Row row = new Row(source, 0);
+		items.add(row);
+		return items;
+	}
+
+	@Override
+	protected String getLabel(Row row) {
+		return row.getSource().toString();
 	}
 }

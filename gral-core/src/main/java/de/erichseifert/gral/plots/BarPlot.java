@@ -27,20 +27,28 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -92,16 +100,16 @@ public class BarPlot extends XYPlot {
 		the point shape. */
 		public static final Key STROKE_COLOR = new Key("barplot.bar.stroke.color"); //$NON-NLS-1$
 
-		/** Bar plot this renderer is associated to. */
-		private final BarPlot plot;
+		/** Settings of the plot. */
+		private final SettingsStorage plotSettings;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
-		 * @param plot Data provider.
+		 * @param plotSettings The settings of the associated plot.
 		 */
-		public BarRenderer(BarPlot plot) {
-			this.plot = plot;
+		public BarRenderer(SettingsStorage plotSettings) {
+			this.plotSettings = plotSettings;
 			setSettingDefault(VALUE_LOCATION, Location.NORTH);
 			setSettingDefault(STROKE, null);
 			setSettingDefault(STROKE_COLOR, Color.BLACK);
@@ -110,33 +118,32 @@ public class BarPlot extends XYPlot {
 		/**
 		 * Returns the graphical representation to be drawn for the specified data
 		 * value.
-		 * @param axis that is used to project the point.
-		 * @param axisRenderer Renderer for the axis.
-		 * @param row Data row containing the point.
-		 * @param col Index of the column that will be projected on the axis.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the point's shape.
 		 * @return Component that can be used to draw the point
 		 */
 		@Override
-		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row, final int col) {
+		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = -3145112034673683520L;
 
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = BarRenderer.this;
-					Shape point = getPointPath(row);
+
+					Row row = data.row;
+
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 
 					ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
 					Paint paint = colors.get(row.getIndex());
 
-					Boolean paintAllBars = plot.getSetting(PAINT_ALL_BARS);
+					Boolean paintAllBars = plotSettings.getSetting(PAINT_ALL_BARS);
 					if (paintAllBars != null && paintAllBars.booleanValue()) {
 						AffineTransform txOld = graphics.getTransform();
-						Rectangle2D shapeBounds = point.getBounds2D();
-						paintBoundaries = plot.getPlotArea().getBounds();
+						Rectangle2D shapeBounds = shape.getBounds2D();
+						paintBoundaries = new Rectangle2D.Double();//plot.getPlotArea().getBounds();
 						paintBoundaries = new Rectangle2D.Double(
 							shapeBounds.getX(), paintBoundaries.getY() - txOld.getTranslateY(),
 							shapeBounds.getWidth(), paintBoundaries.getHeight()
@@ -144,33 +151,39 @@ public class BarPlot extends XYPlot {
 					}
 
 					GraphicsUtils.fillPaintedShape(
-						graphics, point, paint, paintBoundaries);
+						graphics, shape, paint, paintBoundaries);
 
 					Stroke stroke = renderer.<Stroke>getSetting(STROKE);
 					Paint strokePaint = renderer.<Paint>getSetting(STROKE_COLOR);
 					if (stroke != null && strokePaint != null) {
 						GraphicsUtils.drawPaintedShape(
-							graphics, point, strokePaint, null, stroke);
+							graphics, shape, strokePaint, null, stroke);
 					}
 
 					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
 						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-						drawValueLabel(context, point, row, colValue);
+						drawValueLabel(context, shape, row, colValue);
 					}
 				}
 			};
 		}
 
 		/**
-		 * Returns a {@code Shape} instance that can be used
-		 * for further calculations.
-		 * @param row Data row containing the point.
+		 * Returns a {@code Shape} instance that can be used for further
+		 * calculations.
+		 * @param data Information on axes, renderers, and values.
 		 * @return Outline that describes the point's shape.
 		 */
 		@Override
-		public Shape getPointPath(Row row) {
+		public Shape getPointShape(PointData data) {
 			int colX = 0;
 			int colY = 1;
+
+			Axis axisX = data.axes.get(0);
+			Axis axisY = data.axes.get(1);
+			AxisRenderer axisXRenderer = data.axisRenderers.get(0);
+			AxisRenderer axisYRenderer = data.axisRenderers.get(1);
+			Row row = data.row;
 
 			if (!row.isColumnNumeric(colX) || !row.isColumnNumeric(colY)) {
 				return null;
@@ -178,23 +191,14 @@ public class BarPlot extends XYPlot {
 
 			double valueX = ((Number) row.get(colX)).doubleValue();
 			double valueY = ((Number) row.get(colY)).doubleValue();
-			Axis axisX = plot.getAxis(AXIS_X);
-			Axis axisY = plot.getAxis(AXIS_Y);
-			AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
-			AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 			double axisYOrigin = 0.0;
 
 			double barWidthRel = 1.0;
-			Number barWidthRelObj = plot.<Number>getSetting(BarPlot.BAR_WIDTH);
+			Number barWidthRelObj = plotSettings.<Number>getSetting(BarPlot.BAR_WIDTH);
 			if (barWidthRelObj != null) {
-				barWidthRel = barWidthRelObj.doubleValue();
+				barWidthRel = Math.max(barWidthRelObj.doubleValue(), 0.0);
 			}
 			double barAlign = 0.5;
-
-			// Sanity checks
-			if (barWidthRel<0.0) {
-				barWidthRel=0.0;
-			}
 
 			double barXMin = axisXRenderer
 				.getPosition(axisX, valueX - barWidthRel*barAlign, true, false)
@@ -221,7 +225,7 @@ public class BarPlot extends XYPlot {
 			boolean barAboveAxis = barYMax == barYOrigin;
 			double barY = barAboveAxis ? 0.0 : -barHeight;
 
-			Number barHeightMinObj = plot.<Number>getSetting(BAR_HEIGHT_MIN);
+			Number barHeightMinObj = plotSettings.<Number>getSetting(BAR_HEIGHT_MIN);
 			if (barHeightMinObj != null) {
 				double barHeightMin = barHeightMinObj.doubleValue();
 				if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
@@ -263,6 +267,103 @@ public class BarPlot extends XYPlot {
 	}
 
 	/**
+	 * A legend implementation for bar plots that displays all values of the
+	 * data source as items.
+	 */
+	public static class BarPlotLegend extends ValueLegend {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 4752278896167602641L;
+		/** Source for dummy data. */
+		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
+
+		/** Plot that contains settings and renderers. */
+		private final BarPlot plot;
+
+		/**
+		 * Constructor that initializes the instance with a plot acting as a
+		 * provider for settings and renderers.
+		 * @param plot Plot.
+		 */
+		public BarPlotLegend(BarPlot plot) {
+			this.plot = plot;
+		}
+
+		@Override
+		protected Iterable<Row> getEntries(DataSource source) {
+			List<Row> items = new LinkedList<Row>();
+			for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
+				Row row = new Row(source, rowIndex);
+				items.add(row);
+			}
+			return items;
+		}
+
+		@Override
+		protected String getLabel(Row row) {
+			return String.format("%d", row.getIndex());
+		}
+
+		/**
+		 * Returns a symbol for rendering a legend item.
+		 * @param row Data row.
+		 * @return A drawable object that can be used to display the symbol.
+		 */
+		public Drawable getSymbol(final Row row) {
+			return new AbstractSymbol(this) {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 5744026898590787285L;
+
+				public void draw(DrawingContext context) {
+					DataSource data = row.getSource();
+
+					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Rectangle2D bounds = getBounds();
+
+					Number barWidthRelObj = plot.<Number>getSetting(BarPlot.BAR_WIDTH);
+					double barWidthRel = 1.0;
+					if (barWidthRelObj != null) {
+						barWidthRel = barWidthRelObj.doubleValue();
+					}
+
+					Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
+					AxisRenderer axisRendererX = new LinearRenderer2D();
+					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+							bounds.getMinX(), bounds.getMaxY(),
+							bounds.getMaxX(), bounds.getMaxY()));
+					Axis axisY = new Axis(0.0, 0.5);
+					AxisRenderer axisRendererY = new LinearRenderer2D();
+					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+							bounds.getMaxX(), bounds.getMaxY(),
+							bounds.getMaxX(), bounds.getMinY()));
+
+					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					Shape shape = null;
+					Drawable drawable = null;
+					if (pointRenderer != null) {
+						PointData pointData = new PointData(
+							Arrays.asList(axisX, axisY),
+							Arrays.asList(axisRendererX, axisRendererY),
+							symbolRow, 0);
+						shape = pointRenderer.getPointShape(pointData);
+						drawable = pointRenderer.getPoint(pointData, shape);
+					}
+
+					DataPoint point = new DataPoint(
+						new PointND<Double>(bounds.getCenterX(), bounds.getMinY()),
+						drawable, shape);
+
+					Graphics2D graphics = context.getGraphics();
+					Point2D pos = point.position.getPoint2D();
+					AffineTransform txOrig = graphics.getTransform();
+					graphics.translate(pos.getX(), pos.getY());
+					point.drawable.draw(context);
+					graphics.setTransform(txOrig);
+				}
+			};
+		}
+	}
+
+	/**
 	 * Creates a new instance and initializes it with the specified
 	 * data sources.
 	 * @param data Data to be displayed.
@@ -277,9 +378,12 @@ public class BarPlot extends XYPlot {
 
 		PointRenderer pointRenderer = new BarRenderer(this);
 		for (DataSource s : data) {
-			setLineRenderer(s, null);
 			setPointRenderer(s, pointRenderer);
+			setLineRenderer(s, null);
+			setAreaRenderer(s, null);
 		}
+
+		setLegend(new BarPlotLegend(this));
 	}
 
 	@Override

@@ -45,41 +45,32 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
 public interface Plot extends Drawable, Container, SettingsStorage {
 	/** Key for specifying the {@link String} instance for the title of the
 	plot. */
-	public static final Key TITLE =
-		new Key("plot.title"); //$NON-NLS-1$
+	Key TITLE = new Key("plot.title"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance that is used to
 	display the title of the plot. */
-	public static final Key TITLE_FONT =
-		new Key("plot.title.font"); //$NON-NLS-1$
+	Key TITLE_FONT = new Key("plot.title.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot. */
-	public static final Key BACKGROUND =
-		new Key("plot.background"); //$NON-NLS-1$
+	Key BACKGROUND = new Key("plot.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	paint the border of the plot. */
-	public static final Key BORDER =
-		new Key("plot.border"); //$NON-NLS-1$
+	Key BORDER = new Key("plot.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot. */
-	public static final Key COLOR =
-		new Key("plot.color"); //$NON-NLS-1$
+	Key COLOR = new Key("plot.color"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value to set whether anti-aliasing
 	should used for drawing ({@code true}) or not ({@code false}). */
-	public static final Key ANTIALISING =
-		new Key("plot.antialiasing"); //$NON-NLS-1$
+	Key ANTIALISING = new Key("plot.antialiasing"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value to set whether the legend
 	should be shown. */
-	public static final Key LEGEND =
-		new Key("plot.legend"); //$NON-NLS-1$
+	Key LEGEND = new Key("plot.legend"); //$NON-NLS-1$
 	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
 	the positioning of the legend. */
-	public static final Key LEGEND_LOCATION =
-		new Key("plot.legend.location"); //$NON-NLS-1$
+	Key LEGEND_LOCATION = new Key("plot.legend.location"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value that defines the spacing
 	between the plot area and the legend. The distance is defined in font
 	height. */
-	public static final Key LEGEND_DISTANCE =
-		new Key("plot.legend.distance"); //$NON-NLS-1$
+	Key LEGEND_DISTANCE = new Key("plot.legend.distance"); //$NON-NLS-1$
 
 	/**
 	 * Returns the axis with the specified name.

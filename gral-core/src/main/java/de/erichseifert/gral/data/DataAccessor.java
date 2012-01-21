@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Locale;
@@ -31,7 +32,11 @@ import java.util.Locale;
  * for statistics and array conversion.
  * @see DataSource
  */
-public abstract class DataAccessor implements Iterable<Comparable<?>> {
+public abstract class DataAccessor
+		implements Iterable<Comparable<?>>, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -6977184455447753502L;
+
 	/** Data source that provides the values that should be accessed. */
 	private final DataSource source;
 	/** Index of current column or row. */

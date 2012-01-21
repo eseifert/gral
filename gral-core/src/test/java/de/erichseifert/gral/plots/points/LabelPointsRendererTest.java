@@ -25,7 +25,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.awt.Shape;
+import java.awt.geom.Line2D;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,9 +35,16 @@ import org.junit.Test;
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class LabelPointsRendererTest {
 	private static DataTable table;
+	private static Row row;
+	private static Axis axis;
+	private static AxisRenderer axisRenderer;
+	private static PointData data;
 
 	@BeforeClass
 	@SuppressWarnings("unchecked")
@@ -43,12 +52,21 @@ public class LabelPointsRendererTest {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
 		table.add(1, 3, 1);              // 0
 		table.add(2, (Integer) null, 2); // 1
+
+		row = new Row(table, 0);
+
+		axis = new Axis(-1.0, 1.0);
+		axisRenderer = new LinearRenderer2D();
+		axisRenderer.setSetting(AxisRenderer.SHAPE,
+			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+
+		data = new PointData(Arrays.asList(axis), Arrays.asList(axisRenderer), row, 0);
 	}
 
 	@Test
 	public void testPointPath() {
 		PointRenderer r = new LabelPointRenderer();
-		Shape path = r.getPointPath(new Row(table, 0));
+		Shape path = r.getPointShape(data);
 		assertNotNull(path);
 	}
 
@@ -56,7 +74,7 @@ public class LabelPointsRendererTest {
 	public void testInvalidColumn() {
 		PointRenderer r = new LabelPointRenderer();
 		r.setSetting(LabelPointRenderer.COLUMN, table.getColumnCount());
-		Shape path = r.getPointPath(new Row(table, 0));
+		Shape path = r.getPointShape(data);
 		assertNull(path);
 	}
 
@@ -64,9 +82,10 @@ public class LabelPointsRendererTest {
 	public void testNullLabel() {
 		PointRenderer r = new LabelPointRenderer();
 		r.setSetting(LabelPointRenderer.COLUMN, 1);
-		Row row = new Row(table, 1);
-		assertNull(row.get(1));
-		Shape path = r.getPointPath(row);
+		Row row2 = new Row(table, 1);
+		assertNull(row2.get(1));
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 

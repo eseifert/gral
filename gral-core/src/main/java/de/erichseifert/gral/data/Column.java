@@ -38,6 +38,9 @@ import de.erichseifert.gral.util.Orientation;
  * @see DataSource
  */
 public class Column extends DataAccessor {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 7380420622890027262L;
+
 	/**
 	 * Initializes a new instance with the specified data source and column
 	 * index.

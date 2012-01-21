@@ -39,6 +39,7 @@ import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,7 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
@@ -254,24 +256,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			drawBackground(context);
 			drawBorder(context);
 			drawPlot(context);
+			plot.drawLegend(context);
 		}
 
 		@Override
 		protected void drawPlot(DrawingContext context) {
 			Graphics2D graphics = context.getGraphics();
-			AffineTransform txOrig = graphics.getTransform();
-			graphics.translate(getX(), getY());
-
-			// TODO Use real font size instead of fixed value
-			final double fontSize = 10.0;
 
 			Shape clipBoundsOld = graphics.getClip();
 			Insets2D clipOffset = getSetting(CLIPPING);
 			if (clipOffset != null) {
+				// TODO Use real font size instead of fixed value
+				final double fontSize = 10.0;
+
 				// Perform clipping
 				Shape clipBounds = new Rectangle2D.Double(
-					clipOffset.getLeft()*fontSize,
-					clipOffset.getTop()*fontSize,
+					getX() + clipOffset.getLeft()*fontSize,
+					getY() + clipOffset.getTop()*fontSize,
 					getWidth() - clipOffset.getHorizontal()*fontSize,
 					getHeight() - clipOffset.getVertical()*fontSize
 				);
@@ -284,6 +285,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				}
 				graphics.setClip(clipBounds);
 			}
+
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
 
 			// Get width and height of the plot area for relative sizes
 			Rectangle2D bounds = getBounds();
@@ -314,27 +318,32 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				PointRenderer pointRenderer = plot.getPointRenderer(s);
 
 				String[] axisNames = plot.getMapping(s);
+				// TODO Use loop to get all axes instead of direct access
 				Axis axis = plot.getAxis(axisNames[0]);
 				if (!axis.isValid()) {
 					continue;
 				}
 				AxisRenderer axisRenderer = plot.getAxisRenderer(axisNames[0]);
 
+				List<Axis> axes = Arrays.asList(axis);
+				List<AxisRenderer> axisRenderers = Arrays.asList(axisRenderer);
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
-					Drawable point = pointRenderer.getPoint(
-						axis, axisRenderer, row, colIndex);
+					PointData pointData = new PointData(
+						axes, axisRenderers, row, 0);
+					Shape shape = pointRenderer.getPointShape(pointData);
+					Drawable point = pointRenderer.getPoint(pointData, shape);
 					point.setBounds(bounds);
 					point.draw(context);
 				}
 			}
 
+			graphics.setTransform(txOrig);
+
 			if (clipOffset != null) {
 				// Reset clipping
 				graphics.setClip(clipBoundsOld);
 			}
-
-			graphics.setTransform(txOrig);
 		}
 	}
 
@@ -373,11 +382,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		the pie relative to the radius set in the plot. */
 		public static final Key RADIUS_INNER =
 			new Key("pieplot.radius.inner"); //$NON-NLS-1$
-		/** Key for specifying an instance of
-		{@link de.erichseifert.gral.plots.colors.ColorMapper} used for coloring
-		the segments. */
-		public static final Key COLORS =
-			new Key("pieplot.colorlist"); //$NON-NLS-1$
 		/** Key for specifying a {@link Number} value for the width of gaps
 		between the segments. */
 		public static final Key GAP =
@@ -399,21 +403,18 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			setSettingDefault(RADIUS_OUTER, 1.0);
 			setSettingDefault(RADIUS_INNER, 0.0);
-			setSettingDefault(COLORS, new QuasiRandomColors());
+			setSettingDefault(COLOR, new QuasiRandomColors());
 			setSettingDefault(GAP, 0.0);
 		}
 
 		/**
 		 * Returns the graphical representation to be drawn for the specified data
 		 * value.
-		 * @param axis that is used to project the point.
-		 * @param axisRenderer Renderer for the axis.
-		 * @param row Data row containing the point.
-		 * @param col Index of the column that will be projected on the axis.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the point's shape.
 		 * @return Component that can be used to draw the point.
 		 */
-		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
-				final Row row, final int col) {
+		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = -1783451355453643712L;
@@ -421,35 +422,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = PieSliceRenderer.this;
 
-					int col = 0; //this.<Number>getSetting(PiePlot.COLUMN).intValue();
-					Number valueObj = (Number) row.get(col);
-					if (!MathUtils.isCalculatable(valueObj) ||
-							valueObj.doubleValue() <= 0.0) {
-						return;
-					}
-
-					Font font = renderer.<Font>getSetting(
-						PieSliceRenderer.VALUE_FONT);
-					double fontSize = font.getSize2D();
-
-					double plotAreaSize = Math.min(getWidth(), getHeight())/2.0;
-					double radiusRel = 1.0;
-					Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
-					if (radiusRelObj != null) {
-						radiusRel = radiusRelObj.doubleValue();
-					}
-					double radius = plotAreaSize*radiusRel;
-					double radiusRelOuter = 1.0;
-					Number radiusRelOuterObj = renderer.getSetting(
-						PieSliceRenderer.RADIUS_OUTER);
-					if (radiusRelOuterObj != null) {
-						radiusRelOuter = radiusRelOuterObj.doubleValue();
-					}
-					double radiusOuter = radius*radiusRelOuter;
-
-					// Construct slice
-					double sum = plot.getSum(row.getSource());
-					if (sum == 0.0) {
+					Row row = data.row;
+					if (shape == null) {
 						return;
 					}
 
@@ -459,60 +433,28 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					double sliceStartRel = slice.start/sum;
-					double sliceEndRel = slice.end/sum;
-
-					double start = 0.0;
-					Number startObj = plot.getSetting(PiePlot.START);
-					if (startObj != null) {
-						start = startObj.doubleValue();
+					PlotArea plotArea = plot.getPlotArea();
+					double plotAreaSize = Math.min(
+						plotArea.getWidth(), plotArea.getHeight())/2.0;
+					double radiusRel = 1.0;
+					Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
+					if (radiusRelObj != null) {
+						radiusRel = radiusRelObj.doubleValue();
 					}
-
-					Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
-					double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
-					double sliceStart;
-					if (clockwise != null && clockwise.booleanValue()) {
-						sliceStart = start - sliceEndRel*360.0;
-					} else {
-						sliceStart = start + sliceStartRel*360.0;
-					}
-					start = MathUtils.normalizeDegrees(start);
-
-					Arc2D pieSlice = new Arc2D.Double(
-						-radiusOuter, -radiusOuter,
-						2.0*radiusOuter, 2.0*radiusOuter,
-						sliceStart, sliceSpan,
-						Arc2D.PIE
-					);
-					Area doughnutSlice = new Area(pieSlice);
-
-					double gap = renderer.<Number>getSetting(
-						PieSliceRenderer.GAP).doubleValue();
-					if (gap > 0.0) {
-						Stroke sliceStroke =
-							new BasicStroke((float) (gap*fontSize));
-						Area sliceContour =
-							new Area(sliceStroke.createStrokedShape(pieSlice));
-						doughnutSlice.subtract(sliceContour);
-					}
-
-					double radiusRelInner = renderer.<Number>getSetting(
-						PieSliceRenderer.RADIUS_INNER).doubleValue();
-					if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
-						double radiusInner = radius*radiusRelInner;
-						Ellipse2D inner = new Ellipse2D.Double(
-							-radiusInner, -radiusInner,
-							2.0*radiusInner, 2.0*radiusInner
-						);
-						Area hole = new Area(inner);
-						doughnutSlice.subtract(hole);
-					}
+					double radius = plotAreaSize*radiusRel;
 
 					// Paint slice
 					ColorMapper colorMapper = renderer.<ColorMapper>getSetting(
-						PieSliceRenderer.COLORS);
+						PieSliceRenderer.COLOR);
 					Paint paint;
 					if (colorMapper instanceof ContinuousColorMapper) {
+						double sum = plot.getSum(row.getSource());
+						if (sum == 0.0) {
+							return;
+						}
+						double sliceStartRel = slice.start/sum;
+						double sliceEndRel = slice.end/sum;
+
 						double coloringRel = 0.0;
 						int rows = row.getSource().getRowCount();
 						if (rows > 1) {
@@ -526,9 +468,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						paint = colorMapper.get(row.getIndex());
 					}
 					GraphicsUtils.fillPaintedShape(
-						context.getGraphics(), doughnutSlice, paint, null);
+						context.getGraphics(), shape, paint, null);
 
-					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+					boolean valueDisplayed = renderer.<Boolean>getSetting(
+						VALUE_DISPLAYED);
+					if (valueDisplayed) {
 						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
 						drawValueLabel(context, slice, radius, row, colValue);
 					}
@@ -539,12 +483,98 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		/**
 		 * Returns a {@code Shape} instance that can be used for further
 		 * calculations.
-		 * @param row Data row containing the point.
+		 * @param data Information on axes, renderers, and values.
 		 * @return Outline that describes the point's shape.
 		 */
-		public Shape getPointPath(Row row) {
-			throw new UnsupportedOperationException(
-				"Not available for pie plots."); //$NON-NLS-1$
+		public Shape getPointShape(PointData data) {
+			Row row = data.row;
+			int col = data.col;
+			Number valueObj = (Number) row.get(col);
+			if (!MathUtils.isCalculatable(valueObj) ||
+					valueObj.doubleValue() <= 0.0) {
+				return null;
+			}
+
+			Font font = this.<Font>getSetting(PieSliceRenderer.VALUE_FONT);
+			double fontSize = font.getSize2D();
+
+			PlotArea plotArea = plot.getPlotArea();
+			double plotAreaSize = Math.min(
+				plotArea.getWidth(), plotArea.getHeight())/2.0;
+			double radiusRel = 1.0;
+			Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
+			if (radiusRelObj != null) {
+				radiusRel = radiusRelObj.doubleValue();
+			}
+			double radius = plotAreaSize*radiusRel;
+			double radiusRelOuter = 1.0;
+			Number radiusRelOuterObj = this.getSetting(
+				PieSliceRenderer.RADIUS_OUTER);
+			if (radiusRelOuterObj != null) {
+				radiusRelOuter = radiusRelOuterObj.doubleValue();
+			}
+			double radiusOuter = radius*radiusRelOuter;
+
+			// Construct slice
+			double sum = plot.getSum(row.getSource());
+			if (sum == 0.0) {
+				return null;
+			}
+			Slice slice = plot.getSlice(
+				row.getSource(), row.getIndex());
+			if (slice == null) {
+				return null;
+			}
+			double sliceStartRel = slice.start/sum;
+			double sliceEndRel = slice.end/sum;
+
+			double start = 0.0;
+			Number startObj = plot.getSetting(PiePlot.START);
+			if (startObj != null) {
+				start = startObj.doubleValue();
+			}
+
+			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
+			double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
+			double sliceStart;
+			if (clockwise != null && clockwise.booleanValue()) {
+				sliceStart = start - sliceEndRel*360.0;
+			} else {
+				sliceStart = start + sliceStartRel*360.0;
+			}
+			start = MathUtils.normalizeDegrees(start);
+
+			Arc2D pieSlice = new Arc2D.Double(
+				-radiusOuter, -radiusOuter,
+				2.0*radiusOuter, 2.0*radiusOuter,
+				sliceStart, sliceSpan,
+				Arc2D.PIE
+			);
+			Area doughnutSlice = new Area(pieSlice);
+
+			double gap = this.<Number>getSetting(
+				PieSliceRenderer.GAP).doubleValue();
+			if (gap > 0.0) {
+				Stroke sliceStroke =
+					new BasicStroke((float) (gap*fontSize));
+				Area sliceContour =
+					new Area(sliceStroke.createStrokedShape(pieSlice));
+				doughnutSlice.subtract(sliceContour);
+			}
+
+			double radiusRelInner = this.<Number>getSetting(
+				PieSliceRenderer.RADIUS_INNER).doubleValue();
+			if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
+				double radiusInner = radius*radiusRelInner;
+				Ellipse2D inner = new Ellipse2D.Double(
+					-radiusInner, -radiusInner,
+					2.0*radiusInner, 2.0*radiusInner
+				);
+				Area hole = new Area(inner);
+				doughnutSlice.subtract(hole);
+			}
+
+			return doughnutSlice;
 		}
 
 		/**
@@ -674,6 +704,61 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	/**
+	 * A legend implementation for pie plots that displays items for each data
+	 * value of a data source.
+	 */
+	public static class PiePlotLegend extends ValueLegend {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 309673490751330686L;
+
+		/** Plot that contains settings and renderers. */
+		private final PiePlot plot;
+
+		/**
+		 * Initializes a new instance with a specified plot.
+		 * @param plot Plot.
+		 */
+		public PiePlotLegend(PiePlot plot) {
+			this.plot = plot;
+		}
+
+		/**
+		 * Returns a symbol for rendering a legend item.
+		 * @param row Data row.
+		 * @return A drawable object that can be used to display the symbol.
+		 */
+		public Drawable getSymbol(final Row row) {
+			return new AbstractSymbol(this) {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -5460249256507481057L;
+
+				/**
+				 * Draws the {@code Drawable} with the specified drawing context.
+				 * @param context Environment used for drawing
+				 */
+				public void draw(DrawingContext context) {
+					DataSource data = row.getSource();
+
+					Rectangle2D bounds = getBounds();
+
+					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					Shape shape = bounds;
+					Drawable drawable = null;
+					if (pointRenderer != null) {
+						PointData pointData = new PointData(
+							Arrays.asList((Axis) null),
+							Arrays.asList((AxisRenderer) null),
+							row, 0);
+						drawable = pointRenderer.getPoint(pointData, shape);
+					}
+
+					drawable.draw(context);
+				}
+			};
+		}
+	}
+
+	/**
 	 * Initializes a new pie plot with the specified data source.
 	 * @param data Data to be displayed.
 	 */
@@ -689,8 +774,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		slices = new HashMap<DataSource, List<Slice>>();
 
 		setPlotArea(new PiePlotArea2D(this));
-		// TODO Implement legend for pie plot
-		// setLegend(new PiePlotLegend(this));
+		setLegend(new PiePlotLegend(this));
 
 		add(data);
 

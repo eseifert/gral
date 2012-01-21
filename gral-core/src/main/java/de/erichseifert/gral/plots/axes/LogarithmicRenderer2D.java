@@ -151,7 +151,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 					tickType = TickType.MAJOR;
 				}
 				Tick tick = getTick(tickType, axis, tickPositionWorld);
-				if (tick.getPosition() != null
+				if (tick.position != null
 						&& !tickPositions.contains(tickPositionWorld)) {
 					ticks.add(tick);
 					tickPositions.add(tickPositionWorld);

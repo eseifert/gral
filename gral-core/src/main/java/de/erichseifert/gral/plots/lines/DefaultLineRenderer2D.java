@@ -65,7 +65,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				Path2D line = new Path2D.Double(
 					Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
 				for (DataPoint point : points) {
-					Point2D pos = point.getPosition().getPoint2D();
+					Point2D pos = point.position.getPoint2D();
 					if (line.getCurrentPoint() == null) {
 						line.moveTo(pos.getX(), pos.getY());
 					} else {

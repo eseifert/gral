@@ -98,7 +98,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 		double y = 0.0;
 
 		for (DataPoint p: points) {
-			Point2D pos = p.getPosition().getPoint2D();
+			Point2D pos = p.position.getPoint2D();
 			x = pos.getX();
 			y = pos.getY();
 			if (path.getCurrentPoint() == null) {

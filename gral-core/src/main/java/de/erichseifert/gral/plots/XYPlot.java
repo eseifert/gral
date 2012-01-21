@@ -42,7 +42,6 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.navigation.Navigable;
@@ -57,6 +56,7 @@ import de.erichseifert.gral.plots.axes.Tick;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -279,17 +279,17 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						bounds.getHeight() - shapeBoundsX.getMinY()
 					);
 					for (Tick tick : ticksX) {
-						if ((TickType.MAJOR.equals(tick.getType()) && !isGridMajorX) ||
-								(TickType.MINOR.equals(tick.getType()) && !isGridMinorX)) {
+						if ((tick.type == TickType.MAJOR && !isGridMajorX) ||
+								(tick.type == TickType.MINOR && !isGridMinorX)) {
 							continue;
 						}
-						Point2D tickPoint = tick.getPosition().getPoint2D();
+						Point2D tickPoint = tick.position.getPoint2D();
 						if (tickPoint == null) {
 							continue;
 						}
 
 						Paint paint = getSetting(GRID_MAJOR_COLOR);
-						if (TickType.MINOR.equals(tick.getType())) {
+						if (tick.type == TickType.MINOR) {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
@@ -313,19 +313,19 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 					);
 					for (Tick tick : ticksY) {
-						boolean isMajorTick = tick.getType() == TickType.MAJOR;
-						boolean isMinorTick = tick.getType() == TickType.MINOR;
+						boolean isMajorTick = tick.type == TickType.MAJOR;
+						boolean isMinorTick = tick.type == TickType.MINOR;
 						if ((isMajorTick && !isGridMajorY) ||
 								(isMinorTick && !isGridMinorY)) {
 							continue;
 						}
-						Point2D tickPoint = tick.getPosition().getPoint2D();
+						Point2D tickPoint = tick.position.getPoint2D();
 						if (tickPoint == null) {
 							continue;
 						}
 
 						Paint paint = getSetting(GRID_MAJOR_COLOR);
-						if (tick.getType() == TickType.MINOR) {
+						if (isMinorTick) {
 							paint = getSetting(GRID_MINOR_COLOR);
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
@@ -342,20 +342,17 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		@Override
 		protected void drawPlot(DrawingContext context) {
 			Graphics2D graphics = context.getGraphics();
-			AffineTransform txOrig = graphics.getTransform();
-			graphics.translate(getX(), getY());
-			AffineTransform txOffset = graphics.getTransform();
-
-			// TODO Use real font size instead of fixed value
-			final double fontSize = 10.0;
 
 			Shape clipBoundsOld = graphics.getClip();
 			Insets2D clipOffset = getSetting(CLIPPING);
 			if (clipOffset != null) {
+				// TODO Use real font size instead of fixed value
+				final double fontSize = 10.0;
+
 				// Perform clipping
 				Shape clipBounds = new Rectangle2D.Double(
-					clipOffset.getLeft()*fontSize,
-					clipOffset.getTop()*fontSize,
+					getX() + clipOffset.getLeft()*fontSize,
+					getY() + clipOffset.getTop()*fontSize,
 					getWidth() - clipOffset.getHorizontal()*fontSize,
 					getHeight() - clipOffset.getVertical()*fontSize
 				);
@@ -368,6 +365,11 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				}
 				graphics.setClip(clipBounds);
 			}
+
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
+			AffineTransform txOffset = graphics.getTransform();
+
 
 			// Paint points and lines
 			for (DataSource s : plot.getVisibleData()) {
@@ -417,20 +419,27 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					PointND<Double> pos = new PointND<Double>(
 						axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
 
+					Shape shape = null;
 					Drawable drawable = null;
-					Shape point = null;
 					if (pointRenderer != null) {
+						PointData pointData = new PointData(
+							Arrays.asList(axisX, axisY),
+							Arrays.asList(axisXRenderer, axisYRenderer),
+							row, colY);
+
+						shape = pointRenderer.getPointShape(
+							pointData);
+
 						drawable = pointRenderer.getPoint(
-							axisY, axisYRenderer, row, colY);
-						point = pointRenderer.getPointPath(row);
+							pointData, shape);
 					}
-					DataPoint dataPoint = new DataPoint(pos, drawable, point);
+					DataPoint dataPoint = new DataPoint(pos, drawable, shape);
 					dataPoints.add(dataPoint);
 				}
 
 				if (areaRenderer != null) {
 					Drawable drawable = areaRenderer.getArea(
-							axisY, axisYRenderer, dataPoints);
+						axisY, axisYRenderer, dataPoints);
 					drawable.draw(context);
 				}
 				if (lineRenderer != null) {
@@ -439,91 +448,116 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				}
 				if (pointRenderer != null) {
 					for (DataPoint point : dataPoints) {
-						PointND<Double> pos = point.getPosition();
+						PointND<Double> pos = point.position;
 						double pointX = pos.get(PointND.X);
 						double pointY = pos.get(PointND.Y);
 						graphics.translate(pointX, pointY);
-						Drawable drawable = point.getDrawable();
+						Drawable drawable = point.drawable;
 						drawable.draw(context);
 						graphics.setTransform(txOffset);
 					}
 				}
 			}
 
+			// Reset transformation (offset)
+			graphics.setTransform(txOrig);
+
 			if (clipOffset != null) {
 				// Reset clipping
 				graphics.setClip(clipBoundsOld);
 			}
-
-			// Reset transformation (offset)
-			graphics.setTransform(txOrig);
 		}
 	}
 
 	/**
 	 * Class that displays a legend in an {@code XYPlot}.
 	 */
-	public static class XYLegend extends Legend {
+	public static class XYLegend extends SeriesLegend {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = -4629928754001372002L;
 
 		/** Source for dummy data. */
-		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
+		private static final DataSource DUMMY_DATA = new DummyData(2, Integer.MAX_VALUE, 0.5);
 
+		/** Plot that contains settings and renderers. */
 		private final XYPlot plot;
 
 		/**
-		 * Constructor that initializes the instance with a plot acting as data
-		 * provider.
-		 * @param plot Data provider.
+		 * Constructor that initializes the instance with a plot acting as a
+		 * provider for settings and renderers.
+		 * @param plot Plot.
 		 */
 		public XYLegend(XYPlot plot) {
 			this.plot = plot;
 		}
 
-		@Override
-		protected void drawSymbol(DrawingContext context,
-				Drawable symbol, DataSource data) {
-			PointRenderer pointRenderer = plot.getPointRenderer(data);
-			LineRenderer lineRenderer = plot.getLineRenderer(data);
-			AreaRenderer areaRenderer = plot.getAreaRenderer(data);
+		/**
+		 * Returns a symbol for rendering a legend item.
+		 * @param row Data row.
+		 * @return A drawable object that can be used to display the symbol.
+		 */
+		public Drawable getSymbol(final Row row) {
+			return new AbstractSymbol(this) {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 5744026898590787285L;
 
-			Row row = new Row(DUMMY_DATA, 0);
-			Rectangle2D bounds = symbol.getBounds();
+				public void draw(DrawingContext context) {
+					DataSource data = row.getSource();
+					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					LineRenderer lineRenderer = plot.getLineRenderer(data);
+					AreaRenderer areaRenderer = plot.getAreaRenderer(data);
 
-			DataPoint p1 = new DataPoint(
-				new PointND<Double>(bounds.getMinX(), bounds.getCenterY()), null, null
-			);
-			DataPoint p2 = new DataPoint(
-				new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
-				null, (pointRenderer != null) ? pointRenderer.getPointPath(row) : null
-			);
-			DataPoint p3 = new DataPoint(
-				new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()), null, null
-			);
-			List<DataPoint> dataPoints = Arrays.asList(p1, p2, p3);
+					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Rectangle2D bounds = getBounds();
 
-			Axis axis = new Axis();
-			axis.setRange(0.0, 1.0);
-			LinearRenderer2D axisRenderer = new LinearRenderer2D();
-			axisRenderer.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
-					bounds.getCenterX(), bounds.getMaxY(),
-					bounds.getCenterX(), bounds.getMinY()));
+					Axis axisX = new Axis(0.0, 1.0);
+					AxisRenderer axisRendererX = new LinearRenderer2D();
+					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+						bounds.getMinX(), bounds.getCenterY(),
+						bounds.getMaxX(), bounds.getCenterY()));
+					Axis axisY = new Axis(0.0, 1.0);
+					AxisRenderer axisRendererY = new LinearRenderer2D();
+					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+						bounds.getCenterX(), bounds.getMaxY(),
+						bounds.getCenterX(), bounds.getMinY()));
 
-			if (areaRenderer != null) {
-				areaRenderer.getArea(axis, axisRenderer, dataPoints).draw(context);
-			}
-			if (lineRenderer != null) {
-				lineRenderer.getLine(dataPoints).draw(context);
-			}
-			if (pointRenderer != null) {
-				Graphics2D graphics = context.getGraphics();
-				Point2D pos = p2.getPosition().getPoint2D();
-				AffineTransform txOrig = graphics.getTransform();
-				graphics.translate(pos.getX(), pos.getY());
-				pointRenderer.getPoint(axis, axisRenderer, row, 0).draw(context);
-				graphics.setTransform(txOrig);
-			}
+					PointData pointData = new PointData(
+						Arrays.asList(axisX, axisY),
+						Arrays.asList(axisRendererX, axisRendererY),
+						symbolRow, 0);
+
+					Shape shape = null;
+					if (pointRenderer != null) {
+						shape = pointRenderer.getPointShape(pointData);
+					}
+
+					DataPoint p1 = new DataPoint(
+						new PointND<Double>(bounds.getMinX(), bounds.getCenterY()),
+						null, null);
+					DataPoint p2 = new DataPoint(
+						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
+						null, shape);
+					DataPoint p3 = new DataPoint(
+						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()),
+						null, null);
+					List<DataPoint> dataPoints = Arrays.asList(p1, p2, p3);
+
+					if (areaRenderer != null) {
+						areaRenderer.getArea(axisY, axisRendererY, dataPoints).draw(context);
+					}
+					if (lineRenderer != null) {
+						lineRenderer.getLine(dataPoints).draw(context);
+					}
+					if (pointRenderer != null) {
+						Graphics2D graphics = context.getGraphics();
+						Point2D pos = p2.position.getPoint2D();
+						AffineTransform txOrig = graphics.getTransform();
+						graphics.translate(pos.getX(), pos.getY());
+						pointRenderer.getPoint(pointData, p2.shape).draw(context);
+						graphics.setTransform(txOrig);
+					}
+				}
+			};
 		}
 	}
 
@@ -576,15 +610,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	@Override
-	public void layout() {
-		super.layout();
-		layoutAxes();
-		layoutLegend();
-	}
-
-	/**
-	 * Calculates the bounds of the axes.
-	 */
 	protected void layoutAxes() {
 		if (getPlotArea() == null) {
 			return;
@@ -677,18 +702,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				plotBounds.getHeight()
 			);
 		}
-	}
-
-	/**
-	 * Calculates the bounds of the legend component.
-	 */
-	protected void layoutLegend() {
-		if (getPlotArea() == null) {
-			return;
-		}
-		Container legendContainer = getLegendContainer();
-		Rectangle2D plotBounds = getPlotArea().getBounds();
-		legendContainer.setBounds(plotBounds);
 	}
 
 	/**

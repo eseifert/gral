@@ -105,7 +105,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		double x = 0.0;
 		double y = 0.0;
 		for (DataPoint p : points) {
-			Point2D pos = p.getPosition().getPoint2D();
+			Point2D pos = p.position.getPoint2D();
 			x = pos.getX();
 			y = pos.getY();
 			path.moveTo(x, y);

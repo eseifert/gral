@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -42,7 +43,9 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.Grayscale;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -94,8 +97,6 @@ public class RasterPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1266585364126459761L;
 
-		/** Bar plot this renderer is associated to. */
-		private final RasterPlot plot;
 		/** Key for specifying the {@link Integer} which specifies the
 		index of the column that is used for the x coordinate of a point. */
 		public static final Key COLUMN_X =
@@ -109,14 +110,17 @@ public class RasterPlot extends XYPlot {
 		public static final Key COLUMN_VALUE =
 			new Key("rasterplot.columnValue"); //$NON-NLS-1$
 
+		/** Plot specific settings. */
+		private final SettingsStorage plotSettings;
+
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider. The default columns for (x, y, value) are set
 		 * to (0, 1, 2)
-		 * @param plot Data provider.
+		 * @param plotSettings Plot specific settings.
 		 */
-		public RasterRenderer(RasterPlot plot) {
-			this.plot = plot;
+		public RasterRenderer(SettingsStorage plotSettings) {
+			this.plotSettings = plotSettings;
 			setSettingDefault(COLUMN_X, 0);
 			setSettingDefault(COLUMN_Y, 1);
 			setSettingDefault(COLUMN_VALUE, 2);
@@ -125,28 +129,24 @@ public class RasterPlot extends XYPlot {
 		/**
 		 * Returns the graphical representation to be drawn for the specified data
 		 * value.
-		 * @param axis that is used to project the point.
-		 * @param axisRenderer Renderer for the axis.
-		 * @param row Data row containing the point.
-		 * @param col Index of the column that will be projected on the axis.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the point's shape.
 		 * @return Component that can be used to draw the point
 		 */
-		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row, final int col) {
+		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = -1136689797647794969L;
 
-				private final Rectangle2D pixel = new Rectangle2D.Double();
-				private final Axis axisX = plot.getAxis(AXIS_X);
-				private final Axis axisY = plot.getAxis(AXIS_Y);
-				private final AxisRenderer axisXRenderer =
-					plot.getAxisRenderer(AXIS_X);
-				private final AxisRenderer axisYRenderer =
-					plot.getAxisRenderer(AXIS_Y);
-
 				public void draw(DrawingContext context) {
 					RasterRenderer renderer = RasterRenderer.this;
+
+					Axis axisX = data.axes.get(0);
+					Axis axisY = data.axes.get(1);
+					AxisRenderer axisXRenderer = data.axisRenderers.get(0);
+					AxisRenderer axisYRenderer = data.axisRenderers.get(1);
+					Row row = data.row;
+
 					int colX = renderer.<Integer>getSetting(COLUMN_X);
 					if (colX < 0 || colX >= row.size() || !row.isColumnNumeric(colX)) {
 						return;
@@ -180,13 +180,17 @@ public class RasterPlot extends XYPlot {
 						.get(PointND.Y);
 					double height = Math.abs(yMax - yMin) + 1.0;
 
-					// Create shapes
+					// Create shape for pixel
 					// The origin of all shapes is (boxX, boxY)
-					pixel.setFrame(0.0, 0.0, width, height);
+					Rectangle2D shapeBounds = shape.getBounds2D();
+					AffineTransform tx = new AffineTransform();
+					tx.scale(width/shapeBounds.getWidth(), height/shapeBounds.getHeight());
+					tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
+					Shape pixel = tx.createTransformedShape(shape);
 
 					// Paint pixel
 					Graphics2D graphics = context.getGraphics();
-					ColorMapper colorMapper = plot.getSetting(COLORS);
+					ColorMapper colorMapper = plotSettings.getSetting(COLORS);
 					Paint paint;
 					if (colorMapper instanceof ContinuousColorMapper) {
 						paint = ((ContinuousColorMapper) colorMapper)
@@ -204,13 +208,13 @@ public class RasterPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns a {@code Shape} instance that can be used
-		 * for further calculations.
-		 * @param row Data row containing the point.
+		 * Returns a {@code Shape} instance that can be used for further
+		 * calculations.
+		 * @param data Information on axes, renderers, and values.
 		 * @return Outline that describes the point's shape.
 		 */
-		public Shape getPointPath(Row row) {
-			return null;
+		public Shape getPointShape(PointData data) {
+			return getSetting(SHAPE);
 		}
 	}
 

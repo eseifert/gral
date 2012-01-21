@@ -40,22 +40,29 @@ import org.junit.Test;
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
+import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LegendTest {
 	private MockLegend legend;
 
-	private static class MockLegend extends Legend {
+	private static class MockLegend extends SeriesLegend {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = -6681407860400756446L;
 
 		private boolean isDrawn;
 
-		@Override
-		protected void drawSymbol(DrawingContext context,
-				Drawable symbol, DataSource data) {
-			isDrawn = true;
+		public Drawable getSymbol(Row data) {
+			return new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 7336075728956564691L;
+
+				public void draw(DrawingContext context) {
+					isDrawn = true;
+				}
+			};
 		}
 	};
 

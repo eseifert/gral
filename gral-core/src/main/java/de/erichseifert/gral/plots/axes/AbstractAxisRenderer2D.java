@@ -195,18 +195,18 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 					for (Tick tick : ticks) {
 						// Draw tick
-						if ((tick.getPosition() == null)
-								|| (tick.getNormal() == null)) {
+						if ((tick.position == null)
+								|| (tick.normal == null)) {
 							continue;
 						}
-						Point2D tickPoint = tick.getPosition().getPoint2D();
-						Point2D tickNormal = tick.getNormal().getPoint2D();
+						Point2D tickPoint = tick.position.getPoint2D();
+						Point2D tickNormal = tick.normal.getPoint2D();
 
 						double tickLength;
 						double tickAlignment;
 						Paint tickPaint;
 						Stroke tickStroke;
-						if (TickType.MINOR.equals(tick.getType())) {
+						if (TickType.MINOR.equals(tick.type)) {
 							tickLength =
 								renderer.<Number>getSetting(TICKS_MINOR_LENGTH)
 								.doubleValue()*fontSize;
@@ -233,9 +233,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						double tickLengthInner = tickLength*tickAlignment;
 						double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 
-						if ((drawTicksMajor && (TickType.MAJOR.equals(tick.getType())) ||
-								TickType.CUSTOM.equals(tick.getType())) || (drawTicksMinor &&
-								TickType.MINOR.equals(tick.getType()))) {
+						if ((drawTicksMajor && (tick.type == TickType.MAJOR) ||
+								tick.type == TickType.CUSTOM) || (drawTicksMinor &&
+								tick.type == TickType.MINOR)) {
 							tickShape.setLine(
 								tickPoint.getX() - tickNormal.getX()*tickLengthInner,
 								tickPoint.getY() - tickNormal.getY()*tickLengthInner,
@@ -247,9 +247,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						}
 
 						// Draw label
-						if (isTickLabelVisible && (TickType.MAJOR.equals(tick.getType()) ||
-								TickType.CUSTOM.equals(tick.getType()))) {
-							String tickLabelText = tick.getLabel();
+						if (isTickLabelVisible && (tick.type == TickType.MAJOR ||
+								tick.type == TickType.CUSTOM)) {
+							String tickLabelText = tick.label;
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
 								tickLabel.setSetting(Label.FONT,

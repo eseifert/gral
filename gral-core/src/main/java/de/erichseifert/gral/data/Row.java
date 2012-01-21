@@ -37,6 +37,9 @@ import de.erichseifert.gral.util.Orientation;
  * @see DataSource
  */
 public class Row extends DataAccessor {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = 2725146484866525573L;
+
 	/**
 	 * Initializes a new instances with the specified data source and
 	 * row index.

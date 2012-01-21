@@ -48,7 +48,6 @@ import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
-
 /**
  * Class that creates {@code Drawable}s for a row of data.
  */
@@ -59,14 +58,11 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	/**
 	 * Returns the graphical representation to be drawn for the specified data
 	 * value.
-	 * @param axis that is used to project the point.
-	 * @param axisRenderer Renderer for the axis.
-	 * @param row Data row containing the point.
-	 * @param col Index of the column that will be projected on the axis.
+	 * @param data Information on axes, renderers, and values.
+	 * @param shape Outline that describes the point's shape.
 	 * @return Component that can be used to draw the point
 	 */
-	public Drawable getPoint(final Axis axis,
-			final AxisRenderer axisRenderer, final Row row, final int col) {
+	public Drawable getPoint(final PointData data, final Shape shape) {
 		Drawable drawable = new AbstractDrawable() {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = 1915778739867091906L;
@@ -74,17 +70,20 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 			public void draw(DrawingContext context) {
 				PointRenderer renderer = DefaultPointRenderer2D.this;
 
-				Shape point = getPointPath(row);
+				Axis axisY = data.axes.get(1);
+				AxisRenderer axisRendererY = data.axisRenderers.get(1);
+				Row row = data.row;
+				int col = data.col;
 
 				ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
 				Paint paint = colors.get(row.getIndex());
 
 				GraphicsUtils.fillPaintedShape(
-					context.getGraphics(), point, paint, null);
+					context.getGraphics(), shape, paint, null);
 
 				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
 					int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-					drawValueLabel(context, point, row, colValue);
+					drawValueLabel(context, shape, row, colValue);
 				}
 
 				if (renderer.<Boolean>getSetting(ERROR_DISPLAYED)) {
@@ -92,9 +91,9 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 						renderer.<Integer>getSetting(ERROR_COLUMN_TOP);
 					int colErrorBottom =
 						renderer.<Integer>getSetting(ERROR_COLUMN_BOTTOM);
-					drawErrorBars(context, point,
+					drawErrorBars(context, shape,
 						row, col, colErrorTop, colErrorBottom,
-						axis, axisRenderer);
+						axisY, axisRendererY);
 				}
 			}
 		};
@@ -196,14 +195,15 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		// Calculate positions
 		PointND<Double> pointValue = axisRenderer.getPosition(axis,
 			value, true, false);
-		double posY = pointValue.get(PointND.Y);
-
 		PointND<Double> pointTop = axisRenderer.getPosition(axis,
-			value.doubleValue() + errorTop.doubleValue(), true, false);
+				value.doubleValue() + errorTop.doubleValue(), true, false);
+			PointND<Double> pointBottom = axisRenderer.getPosition(axis,
+					value.doubleValue() - errorBottom.doubleValue(), true, false);
+		if (pointValue == null || pointTop == null || pointBottom == null) {
+			return;
+		}
+		double posY = pointValue.get(PointND.Y);
 		double posYTop = pointTop.get(PointND.Y) - posY;
-
-		PointND<Double> pointBottom = axisRenderer.getPosition(axis,
-			value.doubleValue() - errorBottom.doubleValue(), true, false);
 		double posYBottom = pointBottom.get(PointND.Y) - posY;
 
 		// Draw the error bar
@@ -228,12 +228,12 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	}
 
 	/**
-	 * Returns a {@code Shape} instance that can be used
-	 * for further calculations.
-	 * @param row Data row containing the point.
+	 * Returns a {@code Shape} instance that can be used for further
+	 * calculations.
+	 * @param data Information on axes, renderers, and values.
 	 * @return Outline that describes the point's shape.
 	 */
-	public Shape getPointPath(Row row) {
+	public Shape getPointShape(PointData data) {
 		Shape shape = getSetting(SHAPE);
 		return shape;
 	}

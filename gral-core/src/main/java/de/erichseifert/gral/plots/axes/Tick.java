@@ -43,11 +43,11 @@ public class Tick extends DataPoint {
 	};
 
 	/** The type of tick mark (major/minor/custom). */
-	private final TickType type;
+	public final TickType type;
 	/** The normal of the tick mark. */
-	private final PointND<Double> normal;
+	public final PointND<Double> normal;
 	/** Label text associated with this tick mark. */
-	private final String label;
+	public final String label;
 
 	/**
 	 * Creates a new instance with the specified position, normal,
@@ -66,29 +66,4 @@ public class Tick extends DataPoint {
 		this.normal = normal;
 		this.label = label;
 	}
-
-	/**
-	 * Returns the kind of tick this object represents.
-	 * @return Tick type
-	 */
-	public TickType getType() {
-		return type;
-	}
-
-	/**
-	 * Returns the normal vector of this tick mark.
-	 * @return Normal.
-	 */
-	public PointND<Double> getNormal() {
-		return normal;
-	}
-
-	/**
-	 * Returns the label of this tick mark.
-	 * @return Label.
-	 */
-	public String getLabel() {
-		return label;
-	}
-
 }

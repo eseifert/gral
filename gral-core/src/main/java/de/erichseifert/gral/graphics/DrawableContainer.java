@@ -77,7 +77,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 
 	/**
 	 * Draws the {@code Drawable} with the specified drawing context.
-	 * @param context Environment used for drawing
+	 * @param context Environment used for drawing.
 	 */
 	public void draw(DrawingContext context) {
 		drawComponents(context);
@@ -117,19 +117,20 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Returns the component at the specified point. If no component could be
-	 * found {@code null} will be returned.
+	 * Returns the top-most component at the specified point. If no component
+	 * could be found {@code null} will be returned.
 	 * @param point Two-dimensional point.
 	 * @return Component at the specified point, or {@code null} if no
 	 *         component could be found.
 	 */
 	public Drawable getDrawableAt(Point2D point) {
+		Drawable drawable = null;
 		for (Drawable component : components) {
 			if (component != null && component.getBounds().contains(point)) {
-				return component;
+				drawable = component;
 			}
 		}
-		return null;
+		return drawable;
 	}
 
 	/**

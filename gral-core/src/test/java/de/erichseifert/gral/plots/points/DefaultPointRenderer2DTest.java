@@ -58,6 +58,8 @@ public class DefaultPointRenderer2DTest {
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
+	private static AxisRenderer axisRenderer;
+	private static PointData data;
 	private PointRenderer r;
 
 	@BeforeClass
@@ -75,8 +77,17 @@ public class DefaultPointRenderer2DTest {
 
 		row = new Row(table, 4);
 
-		axis = new Axis();
-		axis.setRange(0.0, 10.0);
+		axis = new Axis(0.0, 10.0);
+
+		axisRenderer = new LinearRenderer2D();
+		axisRenderer.setSetting(AxisRenderer.SHAPE,
+			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+
+		data = new PointData(
+			Arrays.asList((Axis) null, axis),
+			Arrays.asList((AxisRenderer) null, axisRenderer),
+			row, 0);
+
 	}
 
 	@Before
@@ -94,7 +105,7 @@ public class DefaultPointRenderer2DTest {
 
 	private static void assertPointRenderer(PointRenderer r) {
 		// Get point
-		Drawable point = r.getPoint(null, null, row, 1);
+		Drawable point = r.getPoint(data, r.getPointShape(data));
 		assertNotNull(point);
 
 		// Draw point
@@ -126,8 +137,6 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueDisplayed() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		DrawingContext context;
 		Drawable point;
 
@@ -136,7 +145,7 @@ public class DefaultPointRenderer2DTest {
 		context = new DrawingContext((Graphics2D) unset.getGraphics());
 		layout(unset, axisRenderer);
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, false);
-		point = r.getPoint(axis, axisRenderer, row, 0);
+		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 
 		// Draw with value labels
@@ -144,7 +153,7 @@ public class DefaultPointRenderer2DTest {
 		context = new DrawingContext((Graphics2D) set.getGraphics());
 		layout(set, axisRenderer);
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		point = r.getPoint(axis, axisRenderer, row, 0);
+		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 
 		assertNotEquals(unset, set);
@@ -152,16 +161,13 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueFormat() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		List<Format> formats = Arrays.asList(
 			(Format) null, NumberFormat.getInstance());
 
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		for (Format format : formats) {
 			r.setSetting(PointRenderer.VALUE_FORMAT, format);
-			int colIndex = 0;
-			Drawable point = r.getPoint(axis, axisRenderer, row, colIndex);
+			Drawable point = r.getPoint(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
@@ -173,8 +179,6 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueDistance() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		List<Double> distances = Arrays.asList(
 			(Double) null, Double.NaN,
 			Double.valueOf(0.0), Double.valueOf(1.0));
@@ -182,7 +186,7 @@ public class DefaultPointRenderer2DTest {
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		for (Double distance : distances) {
 			r.setSetting(PointRenderer.VALUE_DISTANCE, distance);
-			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
+			Drawable point = r.getPoint(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
@@ -194,15 +198,13 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueLocation() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		Location[] locations = new Location[Location.values().length + 1];
 		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
 
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		for (Location location : locations) {
 			r.setSetting(PointRenderer.VALUE_LOCATION, location);
-			Drawable point = r.getPoint(axis, axisRenderer, row, 0);
+			Drawable point = r.getPoint(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
@@ -217,8 +219,6 @@ public class DefaultPointRenderer2DTest {
 		r.setSetting(PointRenderer.ERROR_COLUMN_TOP, 1);
 		r.setSetting(PointRenderer.ERROR_COLUMN_BOTTOM, 1);
 
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		DrawingContext context;
 		Drawable point;
 
@@ -227,7 +227,7 @@ public class DefaultPointRenderer2DTest {
 		BufferedImage unset = createTestImage();
 		context = new DrawingContext((Graphics2D) unset.getGraphics());
 		layout(unset, axisRenderer);
-		point = r.getPoint(axis, axisRenderer, row, 0);
+		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 
 		// Draw with error bars
@@ -235,7 +235,7 @@ public class DefaultPointRenderer2DTest {
 		BufferedImage set = createTestImage();
 		context = new DrawingContext((Graphics2D) set.getGraphics());
 		layout(set, axisRenderer);
-		point = r.getPoint(axis, axisRenderer, row, 0);
+		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 
 		assertNotEquals(unset, set);
@@ -245,8 +245,6 @@ public class DefaultPointRenderer2DTest {
 	public void testErrorNoAxisRenderer() {
 		r.setSetting(PointRenderer.SHAPE, null);
 
-		AxisRenderer axisRenderer = new LinearRenderer2D();
-
 		DrawingContext context;
 		Drawable point;
 
@@ -255,7 +253,7 @@ public class DefaultPointRenderer2DTest {
 		BufferedImage image = createTestImage();
 		context = new DrawingContext((Graphics2D) image.getGraphics());
 		layout(image, axisRenderer);
-		point = r.getPoint(axis, null, row, 0);
+		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 		assertEmpty(image);
 	}

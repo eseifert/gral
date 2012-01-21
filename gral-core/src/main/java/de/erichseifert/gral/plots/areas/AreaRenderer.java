@@ -51,6 +51,6 @@ public interface AreaRenderer extends SettingsStorage {
 	 * @return Representation of the area.
 	 */
 	Drawable getArea(Axis axis, AxisRenderer axisRenderer,
-			Iterable<DataPoint> points);
+		Iterable<DataPoint> points);
 
 }

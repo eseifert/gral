@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
@@ -44,6 +45,7 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
@@ -151,16 +153,11 @@ public class BoxPlot extends XYPlot {
 		public static final Key BAR_CENTER_STROKE =
 			new Key("boxplot.bar.center.stroke"); //$NON-NLS-1$
 
-		/** Bar plot this renderer is associated to. */
-		private final BoxPlot plot;
-
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
-		 * @param plot Data provider.
 		 */
-		public BoxWhiskerRenderer(BoxPlot plot) {
-			this.plot = plot;
+		public BoxWhiskerRenderer() {
 			setSettingDefault(COLUMN_POSITION, 0);
 			setSettingDefault(COLUMN_BAR_CENTER, 1);
 			setSettingDefault(COLUMN_BAR_BOTTOM, 2);
@@ -182,23 +179,21 @@ public class BoxPlot extends XYPlot {
 		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
-		 * @param axis that is used to project the point.
-		 * @param axisRenderer Renderer for the axis.
-		 * @param row Data row containing the point.
-		 * @param col Index of the column that will be projected on the axis.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the point's shape.
 		 * @return Component that can be used to draw the point
 		 */
-		public Drawable getPoint(final Axis axis,
-				final AxisRenderer axisRenderer, final Row row, final int col) {
+		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = 2765031432328349977L;
 
 				public void draw(DrawingContext context) {
-					Axis axisX = plot.getAxis(AXIS_X);
-					Axis axisY = plot.getAxis(AXIS_Y);
-					AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
-					AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
+					Axis axisX = data.axes.get(0);
+					Axis axisY = data.axes.get(1);
+					AxisRenderer axisXRenderer = data.axisRenderers.get(0);
+					AxisRenderer axisYRenderer = data.axisRenderers.get(1);
+					Row row = data.row;
 
 					// Get the values from data columns
 					BoxWhiskerRenderer renderer =  BoxWhiskerRenderer.this;
@@ -258,9 +253,17 @@ public class BoxPlot extends XYPlot {
 
 					// Create shapes
 					// The origin of all shapes is (boxX, boxY)
-					Rectangle2D box = new Rectangle2D.Double(
+					Rectangle2D boxBounds = new Rectangle2D.Double(
 						boxXMin - boxX, boxYTop - barYCenter,
 						boxWidth, Math.abs(boxYTop - boxYBottom));
+					Rectangle2D shapeBounds = shape.getBounds2D();
+					AffineTransform tx = new AffineTransform();
+					tx.translate(boxBounds.getX(), boxBounds.getY());
+					tx.scale(boxBounds.getWidth()/shapeBounds.getWidth(),
+						boxBounds.getHeight()/shapeBounds.getHeight());
+					tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
+					Shape box = tx.createTransformedShape(shape);
+
 					Line2D whiskerMax = new Line2D.Double(
 						0.0, boxYTop - barYCenter,
 						0.0, barYTop - barYCenter
@@ -334,13 +337,13 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
-		 * Returns a {@code Shape} instance that can be used
-		 * for further calculations.
-		 * @param row Data row containing the point.
+		 * Returns a {@code Shape} instance that can be used for further
+		 * calculations.
+		 * @param data Information on axes, renderers, and values.
 		 * @return Outline that describes the point's shape.
 		 */
-		public Shape getPointPath(Row row) {
-			return null;
+		public Shape getPointShape(PointData data) {
+			return getSetting(SHAPE);
 		}
 
 		@Override
@@ -413,7 +416,7 @@ public class BoxPlot extends XYPlot {
 		}
 		super.add(index, source, visible);
 		setLineRenderer(source, null);
-		setPointRenderer(source, new BoxWhiskerRenderer(this));
+		setPointRenderer(source, new BoxWhiskerRenderer());
 	}
 
 	@Override

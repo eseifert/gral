@@ -26,13 +26,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.statistics.Statistics;
 
-public class DataAccessorTest {
-	private static final double DELTA = 1e-10;
+public class RowTest {
+	private static final double DELTA = TestUtils.DELTA;
 	private static DataTable table;
 
 	@BeforeClass
@@ -60,16 +63,6 @@ public class DataAccessorTest {
 		assertEquals(table, row2.getSource());
 		assertEquals(1, row2.getIndex());
 		assertEquals(table.getColumnCount(), row2.size());
-
-		Column col1 = new Column(table, 0);
-		assertEquals(table, col1.getSource());
-		assertEquals(0, col1.getIndex());
-		assertEquals(table.getRowCount(), col1.size());
-
-		Column col2 = new Column(table, 1);
-		assertEquals(table, col2.getSource());
-		assertEquals(1, col2.getIndex());
-		assertEquals(table.getRowCount(), col2.size());
 	}
 
 	@Test
@@ -81,14 +74,6 @@ public class DataAccessorTest {
 		Row row2 = new Row(null, 1);
 		assertEquals(null, row2.get(0));
 		assertEquals(null, row2.get(1));
-
-		Column col1 = new Column(table, 0);
-		assertEquals(table.get(0, 0), col1.get(0));
-		assertEquals(table.get(0, 1), col1.get(1));
-
-		Column col2 = new Column(null, 1);
-		assertEquals(null, col2.get(0));
-		assertEquals(null, col2.get(1));
 	}
 
 	@Test
@@ -118,8 +103,6 @@ public class DataAccessorTest {
 		DataTable table3 = new DataTable(Integer.class, Double.class);
 		table3.add(2, 3.0);
 		assertFalse(row1.equals(new Row(table3, 0)));
-
-		// TODO Test column equality
 	}
 
 	@Test
@@ -129,12 +112,6 @@ public class DataAccessorTest {
 		assertNotNull(row1.toString());
 		assertFalse(row1.toString().isEmpty());
 		assertEquals(row1.toString(), row2.toString());
-
-		Column col1 = new Column(table, 1);
-		Column col2 = new Column(table, 1);
-		assertNotNull(col1.toString());
-		assertFalse(col1.toString().isEmpty());
-		assertEquals(col1.toString(), col2.toString());
 	}
 
 	@Test
@@ -144,12 +121,15 @@ public class DataAccessorTest {
 		assertEquals( 2.0, row1.getStatistics(Statistics.MIN), DELTA);
 		assertEquals( 3.0, row1.getStatistics(Statistics.MAX), DELTA);
 		assertEquals( 5.0, row1.getStatistics(Statistics.SUM), DELTA);
-
-		Column col1 = new Column(table, 1);
-		assertEquals( 8.0, col1.getStatistics(Statistics.N),   DELTA);
-		assertEquals( 1.0, col1.getStatistics(Statistics.MIN), DELTA);
-		assertEquals(11.0, col1.getStatistics(Statistics.MAX), DELTA);
-		assertEquals(44.0, col1.getStatistics(Statistics.SUM), DELTA);
 	}
 
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		DataAccessor original = new Row(table, 1);
+		DataAccessor deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(table.getColumnCount(), deserialized.getSource().getColumnCount());
+		assertEquals(table.getRowCount(), deserialized.getSource().getRowCount());
+		assertEquals(1, deserialized.getIndex());
+	}
 }

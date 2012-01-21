@@ -135,7 +135,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 				tickType = TickType.MAJOR;
 			}
 			Tick tick = getTick(tickType, axis, tickPositionWorld);
-			if (tick.getPosition() != null) {
+			if (tick.position != null) {
 				ticks.add(tick);
 				tickPositions.add(tickPositionWorld);
 			}

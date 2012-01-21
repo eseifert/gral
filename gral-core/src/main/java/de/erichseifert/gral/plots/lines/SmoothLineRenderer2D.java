@@ -81,7 +81,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 					if (point == null) {
 						continue;
 					}
-					p3 = point.getPosition().getPoint2D();
+					p3 = point.position.getPoint2D();
 
 					addCurve(line, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
 

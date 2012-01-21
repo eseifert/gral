@@ -50,9 +50,11 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 	}
 
 	@Override
-	public Shape getPointPath(Row row) {
+	public Shape getPointShape(PointData data) {
+		Row row = data.row;
 		Shape shape = this.<Shape>getSetting(SHAPE);
 		int colSize = this.<Integer>getSetting(COLUMN);
+
 		if (colSize >= row.size() || colSize < 0 || !row.isColumnNumeric(colSize)) {
 			return shape;
 		}

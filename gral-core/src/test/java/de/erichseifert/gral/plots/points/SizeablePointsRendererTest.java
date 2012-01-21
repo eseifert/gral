@@ -26,8 +26,10 @@ import static org.junit.Assert.assertNull;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,9 +37,16 @@ import org.junit.Test;
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class SizeablePointsRendererTest {
 	private static DataTable table;
+	private static Row row;
+	private static Axis axis;
+	private static AxisRenderer axisRenderer;
+	private static PointData data;
 	private static Shape shape;
 
 	@BeforeClass
@@ -50,6 +59,18 @@ public class SizeablePointsRendererTest {
 		table.add(4, 1, 0);              // 3
 		table.add(5, 4, (Integer) null); // 4
 
+		row = new Row(table, 0);
+
+		axis = new Axis(-1.0, 1.0);
+		axisRenderer = new LinearRenderer2D();
+		axisRenderer.setSetting(AxisRenderer.SHAPE,
+			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+
+		data = new PointData(
+			Arrays.asList((Axis) null, axis),
+			Arrays.asList((AxisRenderer) null, axisRenderer),
+			row, 0);
+
 		shape = new Rectangle2D.Double(-5.0, -5.0, 10.0, 10.0);
 	}
 
@@ -58,7 +79,7 @@ public class SizeablePointsRendererTest {
 		PointRenderer r = new SizeablePointRenderer();
 		r.setSetting(PointRenderer.SHAPE, shape);
 		Shape expected = shape;
-		Shape path = r.getPointPath(new Row(table, 0));
+		Shape path = r.getPointShape(data);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}
 
@@ -67,8 +88,10 @@ public class SizeablePointsRendererTest {
 		PointRenderer r = new SizeablePointRenderer();
 		r.setSetting(PointRenderer.SHAPE, shape);
 		Shape expected = AffineTransform.getScaleInstance(2.0, 2.0)
-				.createTransformedShape(shape);
-		Shape path = r.getPointPath(new Row(table, 1));
+			.createTransformedShape(shape);
+		Row row2 = new Row(table, 1);
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		Shape path = r.getPointShape(data2);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}
 
@@ -76,15 +99,18 @@ public class SizeablePointsRendererTest {
 	public void testNegativeSize() {
 		PointRenderer r = new SizeablePointRenderer();
 		r.setSetting(PointRenderer.SHAPE, shape);
-		Shape path = r.getPointPath(new Row(table, 2));
+		Row row2 = new Row(table, 2);
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
 	@Test
 	public void testZeroSize() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
-		Shape path = r.getPointPath(new Row(table, 3));
+		Row row2 = new Row(table, 3);
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
@@ -92,7 +118,9 @@ public class SizeablePointsRendererTest {
 	public void testNullSize() {
 		PointRenderer r = new SizeablePointRenderer();
 		r.setSetting(PointRenderer.SHAPE, shape);
-		Shape path = r.getPointPath(new Row(table, 4));
+		Row row2 = new Row(table, 4);
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
@@ -104,12 +132,12 @@ public class SizeablePointsRendererTest {
 
 		// Column index too big
 		r.setSetting(SizeablePointRenderer.COLUMN, table.getColumnCount());
-		path = r.getPointPath(new Row(table, 0));
+		path = r.getPointShape(data);
 		assertEquals(shape, path);
 
 		// Column index too small
 		r.setSetting(SizeablePointRenderer.COLUMN, -1);
-		path = r.getPointPath(new Row(table, 0));
+		path = r.getPointShape(data);
 		assertEquals(shape, path);
 	}
 

@@ -81,7 +81,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		Area punched = new Area(area);
 		for (DataPoint p : dataPoints) {
 			punched = GeometryUtils.punch(punched, size, rounded,
-				p.getPosition().getPoint2D(), p.getPoint());
+				p.position.getPoint2D(), p.shape);
 		}
 		return punched;
 	}

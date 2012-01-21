@@ -35,6 +35,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -58,6 +59,8 @@ public class AbstractPointRendererTest {
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
+	private static AxisRenderer axisRenderer;
+	private static PointData data;
 	private MockPointRenderer r;
 
 	@BeforeClass
@@ -75,15 +78,22 @@ public class AbstractPointRendererTest {
 
 		row = new Row(table, 4);
 
-		axis = new Axis();
-		axis.setRange(0.0, 10.0);
+		axis = new Axis(0.0, 10.0);
+
+		axisRenderer = new LinearRenderer2D();
+		axisRenderer.setSetting(AxisRenderer.SHAPE,
+			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+
+		data = new PointData(
+			Arrays.asList((Axis) null, axis),
+			Arrays.asList((AxisRenderer) null, axisRenderer),
+			row, 0);
 	}
 
 	private static final class MockPointRenderer extends AbstractPointRenderer {
 		private static final long serialVersionUID = -3361506388079000948L;
 
-		public Drawable getPoint(final Axis axis, final AxisRenderer axisRenderer,
-				final Row row, final int col) {
+		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				private static final long serialVersionUID = 8239109584500117586L;
 
@@ -91,8 +101,9 @@ public class AbstractPointRendererTest {
 					MockPointRenderer renderer = MockPointRenderer.this;
 					Graphics2D g = context.getGraphics();
 
-					Shape point = getPointPath(row);
-					Comparable<?> cell = row.get(0);
+					Axis axis = data.axes.get(1);
+					AxisRenderer axisRenderer = data.axisRenderers.get(1);
+					Comparable<?> cell = data.row.get(0);
 					Number valueObj = (Number) cell;
 					double value = valueObj.doubleValue();
 
@@ -110,7 +121,7 @@ public class AbstractPointRendererTest {
 						ColorMapper colors =
 							renderer.<ColorMapper>getSetting(PointRenderer.COLOR);
 						Paint paint = colors.get(row.getIndex());
-						GraphicsUtils.fillPaintedShape(g, point, paint, null);
+						GraphicsUtils.fillPaintedShape(g, shape, paint, null);
 					}
 
 					if (axisRenderer != null) {
@@ -120,7 +131,7 @@ public class AbstractPointRendererTest {
 			};
 		}
 
-		public Shape getPointPath(Row row) {
+		public Shape getPointShape(PointData data) {
 			return new Rectangle2D.Double(-1.3, -1.3, 3.0, 3.0);
 		}
 	}
@@ -143,7 +154,7 @@ public class AbstractPointRendererTest {
 		AxisRenderer axisRenderer = new LinearRenderer2D();
 
 		// Get point
-		Drawable point = r.getPoint(axis, axisRenderer, row, 0);
+		Drawable point = r.getPoint(data, r.getPointShape(data));
 		assertNotNull(point);
 
 		// Draw point

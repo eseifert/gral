@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.MessageFormat;
@@ -186,10 +187,35 @@ public abstract class AbstractPlot extends StylableContainer
 	 */
 	protected void drawLegend(DrawingContext context) {
 		Boolean isVisible = this.<Boolean>getSetting(LEGEND);
-		if (isVisible == null || !isVisible.booleanValue() || legend == null) {
+		if (isVisible == null || !isVisible.booleanValue() || getLegend() == null) {
 			return;
 		}
-		legend.draw(context);
+		getLegend().draw(context);
+	}
+
+	@Override
+	public void layout() {
+		super.layout();
+		layoutAxes();
+		layoutLegend();
+	}
+
+	/**
+	 * Calculates the bounds of the axes.
+	 */
+	protected void layoutAxes() {
+	}
+
+	/**
+	 * Calculates the bounds of the legend component.
+	 */
+	protected void layoutLegend() {
+		if (getPlotArea() == null) {
+			return;
+		}
+		Container legendContainer = getLegendContainer();
+		Rectangle2D plotBounds = getPlotArea().getBounds();
+		legendContainer.setBounds(plotBounds);
 	}
 
 	/**
@@ -372,6 +398,9 @@ public abstract class AbstractPlot extends StylableContainer
 		if (this.legend != null) {
 			Location constraints = getSetting(LEGEND_LOCATION);
 			legendContainer.add(legend, constraints);
+			for (DataSource source : getVisibleData()) {
+				legend.add(source);
+			}
 		}
 	}
 

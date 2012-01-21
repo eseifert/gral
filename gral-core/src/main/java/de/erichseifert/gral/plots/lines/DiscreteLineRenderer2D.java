@@ -73,20 +73,19 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 			private static final long serialVersionUID = -1686744943386843195L;
 
 			public void draw(DrawingContext context) {
-				Orientation dir = DiscreteLineRenderer2D.this
-					.getSetting(ASCENT_DIRECTION);
-				double ascendingPoint = DiscreteLineRenderer2D.this
-					.<Number>getSetting(ASCENDING_POINT).doubleValue();
+				DiscreteLineRenderer2D renderer = DiscreteLineRenderer2D.this;
+				Orientation dir = renderer.getSetting(ASCENT_DIRECTION);
+				double ascendingPoint = renderer.<Number>getSetting(ASCENDING_POINT).doubleValue();
 
 				// Construct shape
 				Path2D line = new Path2D.Double();
 				for (DataPoint point : points) {
-					Point2D pos = point.getPosition().getPoint2D();
+					Point2D pos = point.position.getPoint2D();
 					if (line.getCurrentPoint() == null) {
 						line.moveTo(pos.getX(), pos.getY());
 					} else {
 						Point2D posPrev = line.getCurrentPoint();
-						if (Orientation.HORIZONTAL.equals(dir)) {
+						if (dir == Orientation.HORIZONTAL) {
 							double ascendingX = posPrev.getX() +
 								(pos.getX() - posPrev.getX()) * ascendingPoint;
 							line.lineTo(ascendingX,  posPrev.getY());

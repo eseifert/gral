@@ -70,7 +70,7 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLORS, colors);
+		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLOR, colors);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

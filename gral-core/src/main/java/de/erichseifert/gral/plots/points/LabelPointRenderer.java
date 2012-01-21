@@ -76,7 +76,8 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	}
 
 	@Override
-	public Shape getPointPath(Row row) {
+	public Shape getPointShape(PointData data) {
+		Row row = data.row;
 		int colLabel = this.<Number>getSetting(COLUMN).intValue();
 		if (colLabel >= row.size()) {
 			return null;
