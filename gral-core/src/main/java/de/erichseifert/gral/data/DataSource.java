@@ -26,7 +26,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
 /**
  * Interface for an immutable access to tabular data.
  *
- * @see DataSink
+ * @see MutableDataSource
  */
 public interface DataSource extends Iterable<Comparable<?>> {
 	/**

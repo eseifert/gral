@@ -34,7 +34,7 @@ import de.erichseifert.gral.data.comparators.DataComparator;
  *
  * @see DataSource
  */
-public interface DataSink {
+public interface MutableDataSource extends DataSource {
 	/**
 	 * Adds a row with the specified comparable values. The values are added in
 	 * the order they are specified. If the types of the data sink columns and

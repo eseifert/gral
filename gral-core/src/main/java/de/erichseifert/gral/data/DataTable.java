@@ -32,13 +32,13 @@ import java.util.List;
 import de.erichseifert.gral.data.comparators.DataComparator;
 
 /**
- * An in-memory, random access implementation of data source and data sink
- * using arrays.
+ * An in-memory, random access implementation of a mutable data source using
+ * arrays to store its values.
  *
  * @see DataSource
- * @see DataSink
+ * @see MutableDataSource
  */
-public class DataTable extends AbstractDataSource implements DataSink {
+public class DataTable extends AbstractDataSource implements MutableDataSource {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 535236774042654449L;
 

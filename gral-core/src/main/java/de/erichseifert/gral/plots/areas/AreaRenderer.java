@@ -44,6 +44,13 @@ public interface AreaRenderer extends SettingsStorage {
 	Key COLOR = new Key("area.color"); //$NON-NLS-1$
 
 	/**
+	 * Returns the shape used for rendering the area of a data points.
+	 * @param points Data points.
+	 * @return Geometric shape for the area of the specified data points.
+	 */
+	Shape getAreaShape(List<DataPoint> points);
+
+	/**
 	 * Returns the graphical representation to be drawn for the specified data
 	 * points.
 	 * @param points Points that define the shape of the area.
@@ -51,11 +58,4 @@ public interface AreaRenderer extends SettingsStorage {
 	 * @return Representation of the area.
 	 */
 	Drawable getArea(List<DataPoint> points, Shape shape);
-
-	/**
-	 * Returns the shape used for rendering the area of a data points.
-	 * @param points Data points.
-	 * @return Geometric shape for the area of the specified data points.
-	 */
-	Shape getAreaShape(List<DataPoint> points);
 }

@@ -55,6 +55,13 @@ public interface LineRenderer extends SettingsStorage {
 	Key COLOR = new Key("line.color"); //$NON-NLS-1$
 
 	/**
+	 * Returns the geometric shape for this line.
+	 * @param points Points used for creating the line.
+	 * @return Geometric shape for this line.
+	 */
+	Shape getLineShape(List<DataPoint> points);
+
+	/**
 	 * Returns a graphical representation for the line defined by
 	 * {@code points}.
 	 * @param points Points to be used for creating the line.
@@ -62,11 +69,4 @@ public interface LineRenderer extends SettingsStorage {
 	 * @return Representation of the line.
 	 */
 	Drawable getLine(List<DataPoint> points, Shape shape);
-
-	/**
-	 * Returns the geometric shape for this line.
-	 * @param points Points used for creating the line.
-	 * @return Geometric shape for this line.
-	 */
-	Shape getLineShape(List<DataPoint> points);
 }
