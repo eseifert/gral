@@ -25,6 +25,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -60,46 +61,58 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	 * Returns a graphical representation for the line defined by
 	 * {@code points}.
 	 * @param points Points to be used for creating the line.
+	 * @param shape Geometric shape for this line.
 	 * @return Representation of the line.
 	 */
-	public Drawable getLine(final Iterable<DataPoint> points) {
+	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		Drawable d = new AbstractDrawable() {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = 3641589240264518755L;
 
+			/**
+			 * Draws the {@code Drawable} with the specified drawing context.
+			 * @param context Environment used for drawing
+			 */
 			public void draw(DrawingContext context) {
-				double smoothness = SmoothLineRenderer2D.this.
-					<Number>getSetting(SMOOTHNESS).doubleValue();
-
-				// Construct shape
-				Path2D line = new Path2D.Double();
-
-				Point2D p0 = null, p1 = null, p2 = null, p3 = null;
-				Point2D ctrl1 = new Point2D.Double();
-				Point2D ctrl2 = new Point2D.Double();
-				for (DataPoint point : points) {
-					if (point == null) {
-						continue;
-					}
-					p3 = point.position.getPoint2D();
-
-					addCurve(line, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
-
-					p0 = p1;
-					p1 = p2;
-					p2 = p3;
-				}
-				addCurve(line, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
-
 				// Draw path
-				Shape lineShape = punch(line, points);
 				Paint paint = SmoothLineRenderer2D.this
 					.getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(
-					context.getGraphics(), lineShape, paint, null);
+					context.getGraphics(), shape, paint, null);
 			}
 		};
 		return d;
+	}
+
+	/**
+	 * Returns the geometric shape for this line.
+	 * @param points Points used for creating the line.
+	 * @return Geometric shape for this line.
+	 */
+	public Shape getLineShape(List<DataPoint> points) {
+		double smoothness = this.<Number>getSetting(SMOOTHNESS).doubleValue();
+
+		// Construct shape
+		Path2D shape = new Path2D.Double();
+
+		Point2D p0 = null, p1 = null, p2 = null, p3 = null;
+		Point2D ctrl1 = new Point2D.Double();
+		Point2D ctrl2 = new Point2D.Double();
+		for (DataPoint point : points) {
+			if (point == null) {
+				continue;
+			}
+			p3 = point.position.getPoint2D();
+
+			addCurve(shape, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
+
+			p0 = p1;
+			p1 = p2;
+			p2 = p3;
+		}
+		addCurve(shape, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
+
+		return punch(shape, points);
 	}
 
 	/**

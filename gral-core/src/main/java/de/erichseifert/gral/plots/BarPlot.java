@@ -320,21 +320,22 @@ public class BarPlot extends XYPlot {
 							bounds.getMinX(), bounds.getMaxY(),
 							bounds.getMinX(), bounds.getMinY()));
 
+					PointData pointData = new PointData(
+						Arrays.asList(axisX, axisY),
+						Arrays.asList(axisRendererX, axisRendererY),
+						symbolRow, 0);
+
 					PointRenderer pointRenderer = plot.getPointRenderer(data);
 					Shape shape = null;
 					Drawable drawable = null;
 					if (pointRenderer != null) {
-						PointData pointData = new PointData(
-							Arrays.asList(axisX, axisY),
-							Arrays.asList(axisRendererX, axisRendererY),
-							symbolRow, 0);
 						shape = pointRenderer.getPointShape(pointData);
 						drawable = pointRenderer.getPoint(pointData, shape);
 					}
 
-					DataPoint point = new DataPoint(
-						new PointND<Double>(bounds.getCenterX(), bounds.getMinY()),
-						drawable, shape);
+					DataPoint point = new DataPoint(pointData,
+						new PointND<Double>(bounds.getCenterX(),
+						bounds.getMinY()), drawable, shape);
 
 					Graphics2D graphics = context.getGraphics();
 					Point2D pos = point.position.getPoint2D();

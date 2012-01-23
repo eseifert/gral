@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,17 +44,22 @@ import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class LineAreaRendererTest {
-	private Axis axis;
-	private AxisRenderer axisRenderer;
+	private PointData data;
 
 	@Before
 	public void setUp() {
-		axis = new Axis();
-		axis.setRange(-5.0, 5.0);
-		axisRenderer = new LinearRenderer2D();
+		Axis axisX = new Axis(-5.0, 5.0);
+		Axis axisY = new Axis(-5.0, 5.0);
+		AxisRenderer axisRendererX = new LinearRenderer2D();
+		AxisRenderer axisRendererY = new LinearRenderer2D();
+		data = new PointData(
+			Arrays.asList(axisX, axisY),
+			Arrays.asList(axisRendererX, axisRendererY),
+			null, 0);
 	}
 
 	@Test
@@ -61,10 +67,11 @@ public class LineAreaRendererTest {
 		// Get line
 		AreaRenderer r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
-		Drawable area = r.getArea(axis, axisRenderer, points);
+		Shape shape = r.getAreaShape(points);
+		Drawable area = r.getArea(points, shape);
 		assertNotNull(area);
 
 		// Draw area

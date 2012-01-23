@@ -21,10 +21,11 @@
  */
 package de.erichseifert.gral.plots.areas;
 
+import java.awt.Shape;
+import java.util.List;
+
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 
@@ -45,12 +46,16 @@ public interface AreaRenderer extends SettingsStorage {
 	/**
 	 * Returns the graphical representation to be drawn for the specified data
 	 * points.
-	 * @param axis Reference axis for the specified data points.
-	 * @param axisRenderer Renderer of the reference axis.
-	 * @param points Points to be used for creating the area.
+	 * @param points Points that define the shape of the area.
+	 * @param Geometric shape of the area.
 	 * @return Representation of the area.
 	 */
-	Drawable getArea(Axis axis, AxisRenderer axisRenderer,
-		Iterable<DataPoint> points);
+	Drawable getArea(List<DataPoint> points, Shape shape);
 
+	/**
+	 * Returns the shape used for rendering the area of a data points.
+	 * @param points Data points.
+	 * @return Geometric shape for the area of the specified data points.
+	 */
+	Shape getAreaShape(List<DataPoint> points);
 }

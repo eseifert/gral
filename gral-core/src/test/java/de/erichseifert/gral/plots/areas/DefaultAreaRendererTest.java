@@ -29,6 +29,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,17 +45,22 @@ import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class DefaultAreaRendererTest {
-	private Axis axis;
-	private AxisRenderer axisRenderer;
+	private PointData data;
 
 	@Before
 	public void setUp() {
-		axis = new Axis();
-		axis.setRange(-5.0, 5.0);
-		axisRenderer = new LinearRenderer2D();
+		Axis axisX = new Axis(-5.0, 5.0);
+		Axis axisY = new Axis(-5.0, 5.0);
+		AxisRenderer axisRendererX = new LinearRenderer2D();
+		AxisRenderer axisRendererY = new LinearRenderer2D();
+		data = new PointData(
+			Arrays.asList(axisX, axisY),
+			Arrays.asList(axisRendererX, axisRendererY),
+			null, 0);
 	}
 
 	@Test
@@ -62,10 +68,11 @@ public class DefaultAreaRendererTest {
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
-		Drawable area = r.getArea(axis, axisRenderer, points);
+		Shape shape = r.getAreaShape(points);
+		Drawable area = r.getArea(points, shape);
 		assertNotNull(area);
 
 		// Draw area
@@ -77,13 +84,19 @@ public class DefaultAreaRendererTest {
 
 	@Test
 	public void testNullRenderer() {
+		PointData data2 = new PointData(
+			data.axes,
+			Arrays.asList((AxisRenderer) null, null),
+			null, 0);
+
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data2, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data2, new PointND<Double>(1.0, 1.0), null, null)
 		);
-		Drawable area = r.getArea(axis, null, points);
+		Shape shape = r.getAreaShape(points);
+		Drawable area = r.getArea(points, shape);
 		assertNotNull(area);
 
 		// Draw area
@@ -98,7 +111,7 @@ public class DefaultAreaRendererTest {
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList();
-		Drawable area = r.getArea(axis, null, points);
+		Drawable area = r.getArea(points, null);
 		assertNotNull(area);
 
 		// Draw area
@@ -113,7 +126,8 @@ public class DefaultAreaRendererTest {
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList((DataPoint) null);
-		Drawable area = r.getArea(axis, null, points);
+		Shape shape = r.getAreaShape(points);
+		Drawable area = r.getArea(points, shape);
 		assertNotNull(area);
 
 		// Draw area
@@ -140,8 +154,8 @@ public class DefaultAreaRendererTest {
 	public void testGap() {
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
 
 		List<Double> gaps = Arrays.asList(
@@ -157,7 +171,8 @@ public class DefaultAreaRendererTest {
 			for (Boolean rounded : roundeds) {
 				r.setSetting(AreaRenderer.GAP_ROUNDED, rounded);
 
-				Drawable area = r.getArea(axis, axisRenderer, points);
+				Shape shape = r.getAreaShape(points);
+				Drawable area = r.getArea(points, shape);
 				assertNotNull(area);
 
 				BufferedImage image = createTestImage();

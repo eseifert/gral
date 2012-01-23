@@ -24,6 +24,7 @@ package de.erichseifert.gral.plots;
 import java.awt.Shape;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -31,6 +32,7 @@ import de.erichseifert.gral.util.PointND;
  * Class for storing points of a plot.
  */
 public class DataPoint {
+	public final PointData data;
 	/** Position of the data point (n-dimensional). */
 	public final PointND<Double> position;
 	/** Drawable that will be used to render the data point. */
@@ -41,11 +43,13 @@ public class DataPoint {
 	/**
 	 * Creates a new {@code DataPoint} object with the specified position,
 	 * {@code Drawable}, and shape.
+	 * @param data Data that this point was created from.
 	 * @param position Coordinates in view/screen units.
 	 * @param drawable Visual representation.
 	 * @param shape Geometric shape of the point.
 	 */
-	public DataPoint(PointND<Double> position, Drawable drawable, Shape shape) {
+	public DataPoint(PointData data, PointND<Double> position, Drawable drawable, Shape shape) {
+		this.data = data;
 		this.position = position;
 		this.drawable = drawable;
 		this.shape = shape;

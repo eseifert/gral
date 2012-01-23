@@ -25,6 +25,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -47,50 +48,53 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 	/**
 	 * Returns the graphical representation to be drawn for the specified
 	 * data points.
-	 * @param axis Reference axis for the specified data points.
-	 * @param axisRenderer Renderer of the reference axis.
 	 * @param points Points to be used for creating the area.
+	 * @param shape Geometric shape of the area.
 	 * @return Representation of the area.
 	 */
-	public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
-			Iterable<DataPoint> points) {
-		Shape path = getAreaShape(axis, axisRenderer, points);
-		final Shape area = punch(path, points);
-
+	public Drawable getArea(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = -3659798228877496727L;
 
+			/**
+			 * Draws the {@code Drawable} with the specified drawing context.
+			 * @param context Environment used for drawing
+			 */
 			public void draw(DrawingContext context) {
 				Paint paint = DefaultAreaRenderer2D.this.getSetting(COLOR);
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),
-						area, paint, area.getBounds2D());
+					shape, paint, null);
 			}
 		};
 	}
 
 	/**
 	 * Returns the shape used for rendering the area of a data points.
-	 * @param axis Axis the points are mapped on.
-	 * @param axisRenderer Renderer that is associated with the axis.
 	 * @param points Data points.
-	 * @return Area of the specified data points
+	 * @return Geometric shape for the area of the specified data points.
 	 */
-	private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer,
-			Iterable<DataPoint> points) {
-		double axisYMin = axis.getMin().doubleValue();
-		double axisYMax = axis.getMax().doubleValue();
+	public Shape getAreaShape(List<DataPoint> points) {
+		if (points.isEmpty() || points.get(0) == null) {
+			return null;
+		}
+
+		Axis axisY = points.get(0).data.axes.get(1);
+		AxisRenderer axisRendererY = points.get(0).data.axisRenderers.get(1);
+
+		double axisYMin = axisY.getMin().doubleValue();
+		double axisYMax = axisY.getMax().doubleValue();
 		double axisYOrigin = MathUtils.limit(0.0, axisYMin, axisYMax);
 
 		PointND<Double> posOrigin = null;
-		if (axisRenderer != null) {
-			posOrigin = axisRenderer.getPosition(
-					axis, axisYOrigin, true, false);
+		if (axisRendererY != null) {
+			posOrigin = axisRendererY.getPosition(
+					axisY, axisYOrigin, true, false);
 		}
 
-		Path2D path = new Path2D.Double();
+		Path2D shape = new Path2D.Double();
 		if (posOrigin == null) {
-			return path;
+			return shape;
 		}
 
 		double posYOrigin = posOrigin.get(PointND.Y);
@@ -101,17 +105,17 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			Point2D pos = p.position.getPoint2D();
 			x = pos.getX();
 			y = pos.getY();
-			if (path.getCurrentPoint() == null) {
-				path.moveTo(x, posYOrigin);
+			if (shape.getCurrentPoint() == null) {
+				shape.moveTo(x, posYOrigin);
 			}
-			path.lineTo(x, y);
+			shape.lineTo(x, y);
 		}
 
-		if (path.getCurrentPoint() != null) {
-			path.lineTo(x, posYOrigin);
-			path.closePath();
+		if (shape.getCurrentPoint() != null) {
+			shape.lineTo(x, posYOrigin);
+			shape.closePath();
 		}
 
-		return path;
+		return punch(shape, points);
 	}
 }

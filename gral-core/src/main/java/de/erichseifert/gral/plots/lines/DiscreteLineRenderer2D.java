@@ -25,6 +25,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -65,50 +66,62 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 * Returns a graphical representation for the line defined by
 	 * {@code points}.
 	 * @param points Points to be used for creating the line.
+	 * @param shape Geometric shape for this line.
 	 * @return Representation of the line.
 	 */
-	public Drawable getLine(final Iterable<DataPoint> points) {
+	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		Drawable d = new AbstractDrawable() {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = -1686744943386843195L;
 
+			/**
+			 * Draws the {@code Drawable} with the specified drawing context.
+			 * @param context Environment used for drawing
+			 */
 			public void draw(DrawingContext context) {
-				DiscreteLineRenderer2D renderer = DiscreteLineRenderer2D.this;
-				Orientation dir = renderer.getSetting(ASCENT_DIRECTION);
-				double ascendingPoint = renderer.<Number>getSetting(ASCENDING_POINT).doubleValue();
-
-				// Construct shape
-				Path2D line = new Path2D.Double();
-				for (DataPoint point : points) {
-					Point2D pos = point.position.getPoint2D();
-					if (line.getCurrentPoint() == null) {
-						line.moveTo(pos.getX(), pos.getY());
-					} else {
-						Point2D posPrev = line.getCurrentPoint();
-						if (dir == Orientation.HORIZONTAL) {
-							double ascendingX = posPrev.getX() +
-								(pos.getX() - posPrev.getX()) * ascendingPoint;
-							line.lineTo(ascendingX,  posPrev.getY());
-							line.lineTo(ascendingX,  pos.getY());
-						} else {
-							double ascendingY = posPrev.getY() +
-								(pos.getY() - posPrev.getY()) * ascendingPoint;
-							line.lineTo(posPrev.getX(), ascendingY);
-							line.lineTo(pos.getX(), ascendingY);
-						}
-						line.lineTo(pos.getX(), pos.getY());
-					}
-				}
-
 				// Draw path
-				Shape lineShape = punch(line, points);
 				Paint paint = DiscreteLineRenderer2D.this
 					.getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(
-					context.getGraphics(), lineShape, paint, null);
+					context.getGraphics(), shape, paint, null);
 			}
 		};
 		return d;
 	}
 
+	/**
+	 * Returns the geometric shape for this line.
+	 * @param points Points used for creating the line.
+	 * @return Geometric shape for this line.
+	 */
+	public Shape getLineShape(List<DataPoint> points) {
+		Orientation dir = getSetting(ASCENT_DIRECTION);
+		double ascendingPoint = this.<Number>getSetting(ASCENDING_POINT)
+			.doubleValue();
+
+		// Construct shape
+		Path2D shape = new Path2D.Double();
+		for (DataPoint point : points) {
+			Point2D pos = point.position.getPoint2D();
+			if (shape.getCurrentPoint() == null) {
+				shape.moveTo(pos.getX(), pos.getY());
+			} else {
+				Point2D posPrev = shape.getCurrentPoint();
+				if (dir == Orientation.HORIZONTAL) {
+					double ascendingX = posPrev.getX() +
+						(pos.getX() - posPrev.getX()) * ascendingPoint;
+					shape.lineTo(ascendingX,  posPrev.getY());
+					shape.lineTo(ascendingX,  pos.getY());
+				} else {
+					double ascendingY = posPrev.getY() +
+						(pos.getY() - posPrev.getY()) * ascendingPoint;
+					shape.lineTo(posPrev.getX(), ascendingY);
+					shape.lineTo(pos.getX(), ascendingY);
+				}
+				shape.lineTo(pos.getX(), pos.getY());
+			}
+		}
+
+		return punch(shape, points);
+	}
 }

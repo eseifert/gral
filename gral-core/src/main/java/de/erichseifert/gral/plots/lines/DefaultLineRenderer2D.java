@@ -25,6 +25,7 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -51,37 +52,48 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 
 	/**
 	 * Returns a graphical representation for the line defined by
-	 *{@code e points}.
-	 * @param points Points to be used for creating the line.
+	 * {@code e points}.
+	 * @param points Points used for creating the line.
+	 * @param shape Geometric shape for this line.
 	 * @return Representation of the line.
 	 */
-	public Drawable getLine(final Iterable<DataPoint> points) {
+	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		Drawable d = new AbstractDrawable() {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = 7995515716470892483L;
 
+			/**
+			 * Draws the {@code Drawable} with the specified drawing context.
+			 * @param context Environment used for drawing
+			 */
 			public void draw(DrawingContext context) {
-				// Construct shape
-				Path2D line = new Path2D.Double(
-					Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
-				for (DataPoint point : points) {
-					Point2D pos = point.position.getPoint2D();
-					if (line.getCurrentPoint() == null) {
-						line.moveTo(pos.getX(), pos.getY());
-					} else {
-						line.lineTo(pos.getX(), pos.getY());
-					}
-				}
-
 				// Draw line
-				Shape lineShape = punch(line, points);
 				Paint paint = DefaultLineRenderer2D.this
 					.getSetting(LineRenderer.COLOR);
 				GraphicsUtils.fillPaintedShape(
-					context.getGraphics(), lineShape, paint, null);
+					context.getGraphics(), shape, paint, null);
 			}
 		};
 		return d;
 	}
 
+	/**
+	 * Returns the geometric shape for this line.
+	 * @param points Points used for creating the line.
+	 * @return Geometric shape for this line.
+	 */
+	public Shape getLineShape(List<DataPoint> points) {
+		// Construct shape
+		Path2D shape = new Path2D.Double(
+			Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
+		for (DataPoint point : points) {
+			Point2D pos = point.position.getPoint2D();
+			if (shape.getCurrentPoint() == null) {
+				shape.moveTo(pos.getX(), pos.getY());
+			} else {
+				shape.lineTo(pos.getX(), pos.getY());
+			}
+		}
+		return punch(shape, points);
+	}
 }

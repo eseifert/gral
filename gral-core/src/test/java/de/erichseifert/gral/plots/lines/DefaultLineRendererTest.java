@@ -28,30 +28,50 @@ import static org.junit.Assert.assertNotNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LinearRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class DefaultLineRendererTest {
+	private PointData data;
+
+	@Before
+	public void setUp() {
+		Axis axisX = new Axis(-5.0, 5.0);
+		Axis axisY = new Axis(-5.0, 5.0);
+		AxisRenderer axisRendererX = new LinearRenderer2D();
+		AxisRenderer axisRendererY = new LinearRenderer2D();
+		data = new PointData(
+			Arrays.asList(axisX, axisY),
+			Arrays.asList(axisRendererX, axisRendererY),
+			null, 0);
+	}
 
 	@Test
 	public void testLine() {
 		// Get line
 		LineRenderer r = new DefaultLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
-		Drawable line = r.getLine(points);
+		Shape shape = r.getLineShape(points);
+		Drawable line = r.getLine(points, shape);
 		assertNotNull(line);
 
 		// Draw line
@@ -78,8 +98,8 @@ public class DefaultLineRendererTest {
 	public void testGap() {
 		LineRenderer r = new DefaultLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
 
 		List<Double> gaps = Arrays.asList(
@@ -95,7 +115,8 @@ public class DefaultLineRendererTest {
 			for (Boolean rounded : roundeds) {
 				r.setSetting(LineRenderer.GAP_ROUNDED, rounded);
 
-				Drawable line = r.getLine(points);
+				Shape shape = r.getLineShape(points);
+				Drawable line = r.getLine(points, shape);
 				assertNotNull(line);
 
 				BufferedImage image = createTestImage();

@@ -87,5 +87,4 @@ public interface Drawable {
 	 * @param context Environment used for drawing
 	 */
 	void draw(DrawingContext context);
-
 }

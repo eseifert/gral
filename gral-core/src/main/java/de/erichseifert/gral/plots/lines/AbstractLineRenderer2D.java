@@ -71,6 +71,9 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape line, Iterable<DataPoint> dataPoints) {
+		if (line == null) {
+			return null;
+		}
 		Stroke stroke = getSetting(LineRenderer.STROKE);
 		Shape lineShape = stroke.createStrokedShape(line);
 
