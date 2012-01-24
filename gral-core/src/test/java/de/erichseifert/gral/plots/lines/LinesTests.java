@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	AbstractLineRendererTest.class,
 	DefaultLineRendererTest.class,
 	DiscreteLineRendererTest.class,
 	SmoothLineRendererTest.class

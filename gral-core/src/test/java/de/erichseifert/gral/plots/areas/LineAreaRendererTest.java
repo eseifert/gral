@@ -25,6 +25,7 @@ import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,6 +33,7 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -79,6 +81,37 @@ public class LineAreaRendererTest {
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertNotEmpty(image);
+	}
+
+	@Test
+	public void testShapeNoPoints() {
+		AreaRenderer r = new LineAreaRenderer2D();
+		List<DataPoint> points = new LinkedList<DataPoint>();
+		Shape shape = r.getAreaShape(points);
+		assertNull(shape);
+	}
+
+	@Test
+	public void testShapeNullPoints() {
+		AreaRenderer r = new LineAreaRenderer2D();
+		List<DataPoint> points = Arrays.asList((DataPoint) null);
+		Shape shape = r.getAreaShape(points);
+		assertNull(shape);
+	}
+
+	@Test
+	public void testShapeNullRenderer() {
+		AreaRenderer r = new LineAreaRenderer2D();
+		PointData data2 = new PointData(
+			data.axes,
+			Arrays.asList((AxisRenderer) null, null),
+			null, 0);
+		List<DataPoint> points = Arrays.asList(
+			new DataPoint(data2, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data2, new PointND<Double>(1.0, 1.0), null, null)
+		);
+		Shape shape = r.getAreaShape(points);
+		assertNotNull(shape);
 	}
 
 	@Test
