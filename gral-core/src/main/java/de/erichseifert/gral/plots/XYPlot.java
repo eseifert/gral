@@ -787,13 +787,17 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
 		super.add(index, source, visible);
+
+		// Set axis mapping
+		setMapping(source, AXIS_X, AXIS_Y);
+
+		// Assign default renderers
 		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
 		setPointRenderer(source, pointRendererDefault);
 		setLineRenderer(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
-		setMapping(source, AXIS_X, AXIS_Y);
 	}
 
 	/**

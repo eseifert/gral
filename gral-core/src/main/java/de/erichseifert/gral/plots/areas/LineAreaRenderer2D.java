@@ -63,7 +63,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	 * Returns the graphical representation to be drawn for the specified data
 	 * points.
 	 * @param points Points that define the shape of the area.
-	 * @param Geometric shape of the area.
+	 * @param shape Geometric shape of the area.
 	 * @return Representation of the area.
 	 */
 	public Drawable getArea(final List<DataPoint> points, final Shape shape) {

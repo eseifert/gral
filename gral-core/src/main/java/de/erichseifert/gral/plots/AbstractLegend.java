@@ -28,11 +28,11 @@ import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -65,7 +65,9 @@ public abstract class AbstractLegend extends StylableContainer
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -1561976879958765700L;
 
-	/** Mapping of data sources to drawable components. */
+	/** List of data sources displayed in this legend. */
+	private final Set<DataSource> sources;
+	/** Mapping of data rows to drawable components. */
 	private final Map<Row, Drawable> components;
 
 	/**
@@ -152,6 +154,7 @@ public abstract class AbstractLegend extends StylableContainer
 	public AbstractLegend() {
 		setInsets(new Insets2D.Double(10.0));
 
+		sources = new LinkedHashSet<DataSource>();
 		components = new HashMap<Row, Drawable>();
 
 		setSettingDefault(BACKGROUND, Color.WHITE);
@@ -221,6 +224,7 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param source data source to be added.
 	 */
 	public void add(DataSource source) {
+		sources.add(source);
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
 			Font font = this.<Font>getSetting(FONT);
@@ -232,16 +236,12 @@ public abstract class AbstractLegend extends StylableContainer
 
 	/**
 	 * Returns whether the specified data source was added to the legend.
-	 * @param source Data source
-	 * @return {@code true} if legend contains the data source, otherwise {@code false}
+	 * @param source Data source.
+	 * @return {@code true} if legend contains the data source,
+	 *         otherwise {@code false}.
 	 */
 	public boolean contains(DataSource source) {
-		for (Row row : getEntries(source)) {
-			if (components.containsKey(row)) {
-				return true;
-			}
-		}
-		return false;
+		return sources.contains(source);
 	}
 
 	/**
@@ -249,7 +249,12 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param source Data source to be removed.
 	 */
 	public void remove(DataSource source) {
-		for (Row row : getEntries(source)) {
+		sources.remove(source);
+		Set<Row> rows = new HashSet<Row>(components.keySet());
+		for (Row row : rows) {
+			if (row.getSource() != source) {
+				continue;
+			}
 			Drawable item = components.remove(row);
 			if (item != null) {
 				remove(item);
@@ -261,33 +266,21 @@ public abstract class AbstractLegend extends StylableContainer
 	 * Removes all data sources from the legend.
 	 */
 	public void clear() {
-		for (Drawable item : components.values()) {
-			remove(item);
+		Set<DataSource> sources = new HashSet<DataSource>(this.sources);
+		for (DataSource source : sources) {
+			remove(source);
 		}
-		components.clear();
 	}
 
 	/**
-	 * Re-creates the items for all data sources stored  in this legend.
+	 * Updates the items for all data sources stored in this legend.
 	 */
-	protected void rebuildItems() {
-		Set<DataSource> sources = new LinkedHashSet<DataSource>();
-		for (Row row : components.keySet()) {
-			sources.add(row.getSource());
-		}
+	public void refresh() {
+		Set<DataSource> sources = new LinkedHashSet<DataSource>(this.sources);
 		clear();
 		for (DataSource source : sources) {
 			add(source);
 		}
-	}
-
-	/**
-	 * Notify all listeners that data has changed.
-	 * @param events Event objects describing the values that have changed.
-	 */
-	protected void notifyDataChanged(DataChangeEvent... events) {
-		// FIXME Is refreshing layout really necessary?
-		layout();
 	}
 
 	/**
@@ -307,12 +300,12 @@ public abstract class AbstractLegend extends StylableContainer
 			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
 		} else if (FONT.equals(key)) {
-			for (Drawable item : components.values()) {
-				if (!(item instanceof Item)) {
-					continue;
+			for (Drawable drawable : components.values()) {
+				if (drawable instanceof Item) {
+					Item item = (Item) drawable;
+					Font font = getSetting(FONT);
+					item.label.setSetting(Label.FONT, font);
 				}
-				((Item) item).label.setSetting(Label.FONT,
-					this.<Font>getSetting(FONT));
 			}
 		}
 	}

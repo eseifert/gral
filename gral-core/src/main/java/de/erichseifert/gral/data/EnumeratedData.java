@@ -35,7 +35,8 @@ package de.erichseifert.gral.data;
  *
  * @see DataSource
  */
-public class EnumeratedData extends AbstractDataSource {
+public class EnumeratedData extends AbstractDataSource
+		implements DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4952487410608980063L;
 
@@ -66,6 +67,8 @@ public class EnumeratedData extends AbstractDataSource {
 		System.arraycopy(typesOrig, 0, types, 1, typesOrig.length);
 		types[0] = Double.class;
 		setColumnTypes(types);
+
+		original.addDataListener(this);
 	}
 
 	/**
@@ -96,5 +99,61 @@ public class EnumeratedData extends AbstractDataSource {
 	 */
 	public int getRowCount() {
 		return original.getRowCount();
+	}
+
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * {@code DataListener}s and should not be called manually.
+	 * @param source Data source that has been changed.
+	 * @param events Optional event object describing the data values that
+	 *        have been added.
+	 */
+	public void dataAdded(DataSource source, DataChangeEvent... events) {
+		notifyDataAdded(acquireEvents(events));
+	}
+
+	/**
+	 * Method that is invoked when data has been updated.
+	 * This method is invoked by objects that provide support for
+	 * {@code DataListener}s and should not be called manually.
+	 * @param source Data source that has been changed.
+	 * @param events Optional event object describing the data values that
+	 *        have been updated.
+	 */
+	public void dataUpdated(DataSource source, DataChangeEvent... events) {
+		notifyDataUpdated(acquireEvents(events));
+	}
+
+	/**
+	 * Method that is invoked when data has been added.
+	 * This method is invoked by objects that provide support for
+	 * {@code DataListener}s and should not be called manually.
+	 * @param source Data source that has been changed.
+	 * @param events Optional event object describing the data values that
+	 *        have been removed.
+	 */
+	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		notifyDataRemoved(acquireEvents(events));
+	}
+
+	/**
+	 * Changes the source and the columns of the specified event objects to
+	 * make them look as if they originated from this data source.
+	 * @param events Original events.
+	 * @return Changed events.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private DataChangeEvent[] acquireEvents(DataChangeEvent[] events) {
+		DataChangeEvent[] eventsTx = new DataChangeEvent[events.length];
+		for (int i = 0; i < eventsTx.length; i++) {
+			DataChangeEvent event = events[i];
+			Comparable valOld = event.getOld();
+			Comparable valNew = event.getNew();
+			eventsTx[i] = new DataChangeEvent(
+				this, event.getCol() + 1, event.getRow(),
+				valOld, valNew);
+		}
+		return eventsTx;
 	}
 }

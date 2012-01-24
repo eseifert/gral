@@ -44,8 +44,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 
 	/** All values stored as rows of column arrays. */
 	private final List<Comparable<?>[]> rows;
-	/** Number of rows. */
-	private int rowCount;
 
 	/**
 	 * Comparator class for comparing two arrays containing row data using a
@@ -159,11 +157,11 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 						types[i], value.getClass()));
 				}
 				row[i] = value;
-				events[i] = new DataChangeEvent(this, i, this.rowCount, null, value);
+				events[i] = new DataChangeEvent(this, i, rows.size(), null, value);
 				i++;
 			}
 			rows.add(row);
-			rowCount = this.rowCount++;
+			rowCount = rows.size();
 		}
 		notifyDataAdded(events);
 		return rowCount;
@@ -201,7 +199,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
 			}
 			rows.remove(row);
-			rowCount--;
 		}
 		notifyDataRemoved(events);
 	}
@@ -219,7 +216,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
 			}
 			rows.remove(row);
-			rowCount--;
 		}
 		notifyDataRemoved(events);
 	}
@@ -230,7 +226,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	public void clear() {
 		synchronized (rows) {
 			rows.clear();
-			rowCount = 0;
 		}
 		// FIXME Give arguments to the following method invocation
 		notifyDataRemoved();
@@ -286,7 +281,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 * @return number of rows in the data source.
 	 */
 	public int getRowCount() {
-		return rowCount;
+		return rows.size();
 	}
 
 	/**

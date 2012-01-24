@@ -41,6 +41,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -722,6 +723,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			this.plot = plot;
 		}
 
+		@Override
+		protected Iterable<Row> getEntries(DataSource source) {
+			Iterable<Row> slicesAndGaps = super.getEntries(source);
+			List<Row> slices = new LinkedList<Row>();
+			for (Row row : slicesAndGaps) {
+				if (!row.isColumnNumeric(0)) {
+					continue;
+				}
+				Number value = (Number) row.get(0);
+				boolean isGap = value.doubleValue() < 0.0;
+				if (!isGap) {
+					slices.add(row);
+				}
+			}
+			return slices;
+		}
+
 		/**
 		 * Returns a symbol for rendering a legend item.
 		 * @param row Data row.
@@ -742,7 +760,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					Rectangle2D bounds = getBounds();
 
 					PointRenderer pointRenderer = plot.getPointRenderer(data);
-					Shape shape = bounds;
+					Shape shape = new Rectangle2D.Double(
+						0.0, 0.0, bounds.getWidth(), bounds.getHeight());
 					Drawable drawable = null;
 					if (pointRenderer != null) {
 						PointData pointData = new PointData(
@@ -752,7 +771,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						drawable = pointRenderer.getPoint(pointData, shape);
 					}
 
+					Graphics2D graphics = context.getGraphics();
+					AffineTransform txOrig = graphics.getTransform();
+					graphics.translate(bounds.getX(), bounds.getY());
 					drawable.draw(context);
+					graphics.setTransform(txOrig);
 				}
 			};
 		}
@@ -980,22 +1003,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	@Override
-	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		super.dataAdded(source, events);
+	protected void dataChanged(DataSource source, DataChangeEvent... events) {
+		super.dataChanged(source, events);
 		revalidate(source);
-	}
-
-	@Override
-	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		super.dataUpdated(source, events);
-		revalidate(source);
-	}
-
-	@Override
-	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		super.dataRemoved(source, events);
-		revalidate(source);
-	}
+	};
 
 	/**
 	 * Custom deserialization method.

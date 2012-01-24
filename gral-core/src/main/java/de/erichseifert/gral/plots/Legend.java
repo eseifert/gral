@@ -66,4 +66,9 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * Removes all data sources from the legend.
 	 */
 	void clear();
+
+	/**
+	 * Updates the items for all data sources stored in this legend.
+	 */
+	void refresh();
 }

@@ -50,7 +50,7 @@ public interface DataSource extends Iterable<Comparable<?>> {
 	Row getRow(int row);
 
 	/**
-	 * Returns the row with the specified index.
+	 * Returns the value with the specified row and column index.
 	 * @param col index of the column to return
 	 * @param row index of the row to return
 	 * @return the specified value of the data cell

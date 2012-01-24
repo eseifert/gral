@@ -30,9 +30,9 @@ public interface DataListener {
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been added.
 	 */
 	void dataAdded(DataSource source, DataChangeEvent... events);
 
@@ -40,9 +40,9 @@ public interface DataListener {
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been updated.
 	 */
 	void dataUpdated(DataSource source, DataChangeEvent... events);
 
@@ -50,9 +50,9 @@ public interface DataListener {
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been removed.
 	 */
 	void dataRemoved(DataSource source, DataChangeEvent... events);
 }

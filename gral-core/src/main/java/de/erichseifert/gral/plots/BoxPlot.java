@@ -362,13 +362,18 @@ public class BoxPlot extends XYPlot {
 		};
 	}
 
+	/**
+	 * A legend implementation for box-and-whisker plots that displays all
+	 * values of the data source as items.
+	 */
 	public static class BoxPlotLegend extends ValueLegend {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1517792984459627757L;
 		/** Source for dummy data. */
 		@SuppressWarnings("unchecked")
 		private static final DataSource DUMMY_DATA = new AbstractDataSource(
-				Double.class, Double.class, Double.class, Double.class, Double.class, Double.class) {
+				Double.class, Double.class, Double.class,
+				Double.class, Double.class, Double.class) {
 			/** Version id for serialization. */
 			private static final long serialVersionUID = -8233716728143117368L;
 
@@ -376,9 +381,20 @@ public class BoxPlot extends XYPlot {
 			box top, and top bar. */
 			private final Double[] values = { 0.5, 0.0, 0.0, 1.0, 1.0 };
 
+			/**
+			 * Returns the number of rows of the data source.
+			 * @return number of rows in the data source.
+			 */
 			public int getRowCount() {
 				return 1;
 			}
+
+			/**
+			 * Returns the value with the specified row and column index.
+			 * @param col index of the column to return
+			 * @param row index of the row to return
+			 * @return the specified value of the data cell
+			 */
 			public Comparable<?> get(int col, int row) {
 				if (col == 0) {
 					return Double.valueOf(row + 1);

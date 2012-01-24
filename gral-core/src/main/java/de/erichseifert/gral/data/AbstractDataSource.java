@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -158,7 +160,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been added.
 	 */
 	protected void notifyDataAdded(DataChangeEvent... events) {
-		for (DataListener dataListener : dataListeners) {
+		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		for (DataListener dataListener : listeners) {
 			dataListener.dataAdded(this, events);
 		}
 	}
@@ -168,7 +171,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been removed.
 	 */
 	protected void notifyDataRemoved(DataChangeEvent... events) {
-		for (DataListener dataListener : dataListeners) {
+		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		for (DataListener dataListener : listeners) {
 			dataListener.dataRemoved(this, events);
 		}
 	}
@@ -178,7 +182,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have changed.
 	 */
 	protected void notifyDataUpdated(DataChangeEvent... events) {
-		for (DataListener dataListener : dataListeners) {
+		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		for (DataListener dataListener : listeners) {
 			dataListener.dataUpdated(this, events);
 		}
 	}

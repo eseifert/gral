@@ -89,7 +89,7 @@ public abstract class ValueLegend extends AbstractLegend {
 		super.settingChanged(event);
 		Key key = event.getKey();
 		if (LABEL_COLUMN.equals(key) || LABEL_FORMAT.equals(key)) {
-			rebuildItems();
+			refresh();
 		}
 	}
 }

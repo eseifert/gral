@@ -393,6 +393,7 @@ public abstract class AbstractPlot extends StylableContainer
 	protected void setLegend(Legend legend) {
 		if (this.legend != null) {
 			legendContainer.remove(this.legend);
+			this.legend.clear();
 		}
 		this.legend = legend;
 		if (this.legend != null) {
@@ -679,36 +680,50 @@ public abstract class AbstractPlot extends StylableContainer
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been added.
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		invalidate();
+		dataChanged(source, events);
 	}
 
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been updated.
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		invalidate();
+		dataChanged(source, events);
 	}
 
 	/**
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been removed.
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		dataChanged(source, events);
+	}
+
+	/**
+	 * Method that is invoked when data has been added, updated, or removed.
+	 * @param source Data source that has been changed.
+	 * @param events Optional event object describing the data values that
+	 *        have been changed.
+	 */
+	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		invalidate();
+		if (getLegend() != null) {
+			getLegend().refresh();
+		}
+		layout();
 	}
 
 	/**

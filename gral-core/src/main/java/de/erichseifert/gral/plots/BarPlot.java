@@ -39,10 +39,12 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
@@ -361,13 +363,6 @@ public class BarPlot extends XYPlot {
 		setSettingDefault(BAR_HEIGHT_MIN, 0.0);
 		setSettingDefault(PAINT_ALL_BARS, false);
 
-		PointRenderer pointRenderer = new BarRenderer(this);
-		for (DataSource s : data) {
-			setPointRenderer(s, pointRenderer);
-			setLineRenderer(s, null);
-			setAreaRenderer(s, null);
-		}
-
 		setLegend(new BarPlotLegend(this));
 	}
 
@@ -387,5 +382,18 @@ public class BarPlot extends XYPlot {
 			double xMargin = (xMax - xMin)/data.get(0).getRowCount()/2.0;
 			axisX.setRange(xMin - xMargin, xMax + xMargin);
 		}
+	}
+
+	@Override
+	public void add(int index, DataSource source, boolean visible) {
+		super.add(index, source, visible);
+
+		// Assign default renderers
+		PointRenderer pointRendererDefault = new BarRenderer(this);
+		LineRenderer lineRendererDefault = null;
+		AreaRenderer areaRendererDefault = null;
+		setPointRenderer(source, pointRendererDefault);
+		setLineRenderer(source, lineRendererDefault);
+		setAreaRenderer(source, areaRendererDefault);
 	}
 }

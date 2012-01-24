@@ -54,7 +54,7 @@ public interface AreaRenderer extends SettingsStorage {
 	 * Returns the graphical representation to be drawn for the specified data
 	 * points.
 	 * @param points Points that define the shape of the area.
-	 * @param Geometric shape of the area.
+	 * @param shape Geometric shape of the area.
 	 * @return Representation of the area.
 	 */
 	Drawable getArea(List<DataPoint> points, Shape shape);

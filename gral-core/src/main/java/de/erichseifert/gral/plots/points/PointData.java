@@ -30,7 +30,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 
 /**
- * Class for storing information of a single data point in a plot.
+ * Class for storing data that will be used to create a data point in a plot.
  */
 public class PointData {
 	/** Axes that will be used to project the point. */

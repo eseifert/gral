@@ -32,6 +32,7 @@ import de.erichseifert.gral.util.PointND;
  * Class for storing points of a plot.
  */
 public class DataPoint {
+	/** Axes and data values that were used to create the data point. */
 	public final PointData data;
 	/** Position of the data point (n-dimensional). */
 	public final PointND<Double> position;
