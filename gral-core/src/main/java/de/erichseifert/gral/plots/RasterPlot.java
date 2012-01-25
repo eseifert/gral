@@ -240,23 +240,31 @@ public class RasterPlot extends XYPlot {
 		add(data);
 
 		// Adjust axes to the data series
-		autoScaleAxes();
+		autoscaleAxes();
 	}
 
 	@Override
-	protected void autoScaleAxes() {
-		Dimension2D dist = getSetting(DISTANCE);
-		// In case we get called before settings defaults have been set,
-		// just set distance to a sane default
-		if (dist == null) {
-			dist = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
+	public void autoscaleAxis(String axisName) {
+		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
+			Dimension2D dist = getSetting(DISTANCE);
+			// In case we get called before settings defaults have been set,
+			// just set distance to a sane default
+			if (dist == null) {
+				dist = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
+			}
+
+			if (AXIS_X.equals(axisName)) {
+				double xMin = getAxisMin(AXIS_X);
+				double xMax = getAxisMax(AXIS_X);
+				getAxis(AXIS_X).setRange(xMin, xMax + dist.getWidth());
+			} else if (AXIS_Y.equals(axisName)) {
+				double yMin = getAxisMin(AXIS_Y);
+				double yMax = getAxisMax(AXIS_Y);
+				getAxis(AXIS_Y).setRange(yMin - dist.getHeight(), yMax);
+			}
+		} else {
+			super.autoscaleAxis(axisName);
 		}
-		double xMin = getAxisMin(AXIS_X);
-		double xMax = getAxisMax(AXIS_X);
-		getAxis(AXIS_X).setRange(xMin, xMax + dist.getWidth());
-		double yMin = getAxisMin(AXIS_Y);
-		double yMax = getAxisMax(AXIS_Y);
-		getAxis(AXIS_Y).setRange(yMin - dist.getHeight(), yMax);
 	}
 
 	/**

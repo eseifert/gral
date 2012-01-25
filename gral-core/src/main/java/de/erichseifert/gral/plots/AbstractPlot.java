@@ -275,20 +275,30 @@ public abstract class AbstractPlot extends StylableContainer
 	 * Tries to automatically set the ranges of all axes that are set to auto-scale.
 	 * @see Axis#setAutoscaled(boolean)
 	 */
-	protected void autoScaleAxes() {
+	protected void autoscaleAxes() {
 		if (data.isEmpty()) {
 			return;
 		}
 		for (String axisName : getAxesNames()) {
-			Axis axis = getAxis(axisName);
-			if (axis == null || !axis.isAutoscaled()) {
-				continue;
-			}
-			double min = getAxisMin(axisName);
-			double max = getAxisMax(axisName);
-			double margin = 0.0*(max - min);
-			axis.setRange(min - margin, max + margin);
+			autoscaleAxis(axisName);
 		}
+	}
+
+	/**
+	 * Tries to automatically set the ranges of the axes specified by the name
+	 * if it is set to auto-scale.
+	 * @param axisName Name of the axis that should be scaled.
+	 * @see Axis#setAutoscaled(boolean)
+	 */
+	public void autoscaleAxis(String axisName) {
+		Axis axis = getAxis(axisName);
+		if (axis == null || !axis.isAutoscaled()) {
+			return;
+		}
+		double min = getAxisMin(axisName);
+		double max = getAxisMax(axisName);
+		double margin = 0.0*(max - min);
+		axis.setRange(min - margin, max + margin);
 	}
 
 	/**
@@ -472,12 +482,12 @@ public abstract class AbstractPlot extends StylableContainer
 		if (visible) {
 			dataVisible.add(source);
 		}
-		autoScaleAxes();
+		autoscaleAxes();
 		if (getLegend() != null) {
 			getLegend().add(source);
 		}
 		source.addDataListener(this);
-		invalidate();
+		invalidateAxisExtrema();
 	}
 
 	/**
@@ -512,7 +522,7 @@ public abstract class AbstractPlot extends StylableContainer
 			getLegend().remove(source);
 		}
 		boolean existed = data.remove(source);
-		invalidate();
+		invalidateAxisExtrema();
 		return existed;
 	}
 
@@ -528,7 +538,7 @@ public abstract class AbstractPlot extends StylableContainer
 			getLegend().clear();
 		}
 		data.clear();
-		invalidate();
+		invalidateAxisExtrema();
 	}
 
 	/**
@@ -589,7 +599,7 @@ public abstract class AbstractPlot extends StylableContainer
 				mapping.put(mapKey, axisName);
 			}
 		}
-		invalidate();
+		invalidateAxisExtrema();
 	}
 
 	/**
@@ -601,11 +611,11 @@ public abstract class AbstractPlot extends StylableContainer
 	protected Double getAxisMin(String axisName) {
 		Double min = axisMin.get(axisName);
 		if (min == null) {
-			revalidate();
+			revalidateAxisExtrema();
 			min = axisMin.get(axisName);
 		}
 		if (min == null) {
-			return 0.0;
+			min = 0.0;
 		}
 		return min;
 	}
@@ -618,7 +628,7 @@ public abstract class AbstractPlot extends StylableContainer
 	protected Double getAxisMax(String axisName) {
 		Double max = axisMax.get(axisName);
 		if (max == null) {
-			revalidate();
+			revalidateAxisExtrema();
 			max = axisMax.get(axisName);
 		}
 		if (max == null) {
@@ -667,11 +677,11 @@ public abstract class AbstractPlot extends StylableContainer
 	public void setVisible(DataSource source, boolean visible) {
 		if (visible) {
 			if (dataVisible.add(source)) {
-				invalidate();
+				invalidateAxisExtrema();
 			}
 		} else {
 			if (dataVisible.remove(source)) {
-				invalidate();
+				invalidateAxisExtrema();
 			}
 		}
 	}
@@ -701,7 +711,7 @@ public abstract class AbstractPlot extends StylableContainer
 	}
 
 	/**
-	 * Method that is invoked when data has been added.
+	 * Method that is invoked when data has been removed.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has been changed.
@@ -719,17 +729,18 @@ public abstract class AbstractPlot extends StylableContainer
 	 *        have been changed.
 	 */
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
-		invalidate();
+		invalidateAxisExtrema();
 		if (getLegend() != null) {
 			getLegend().refresh();
 		}
+		autoscaleAxes();
 		layout();
 	}
 
 	/**
 	 * Causes cached plot data to be be updated.
 	 */
-	private void invalidate() {
+	private void invalidateAxisExtrema() {
 		axisMin.clear();
 		axisMax.clear();
 	}
@@ -737,7 +748,7 @@ public abstract class AbstractPlot extends StylableContainer
 	/**
 	 * Rebuilds cached plot data.
 	 */
-	private void revalidate() {
+	private void revalidateAxisExtrema() {
 		synchronized (this) {
 			for (Entry<Tuple, String> entry : mapping.entrySet()) {
 				Tuple mapKey = entry.getKey();

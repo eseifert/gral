@@ -110,7 +110,7 @@ public class EnumeratedData extends AbstractDataSource
 	 *        have been added.
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		notifyDataAdded(acquireEvents(events));
+		notifyDataAdded(takeEvents(events));
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class EnumeratedData extends AbstractDataSource
 	 *        have been updated.
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		notifyDataUpdated(acquireEvents(events));
+		notifyDataUpdated(takeEvents(events));
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class EnumeratedData extends AbstractDataSource
 	 *        have been removed.
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		notifyDataRemoved(acquireEvents(events));
+		notifyDataRemoved(takeEvents(events));
 	}
 
 	/**
@@ -144,15 +144,31 @@ public class EnumeratedData extends AbstractDataSource
 	 * @return Changed events.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private DataChangeEvent[] acquireEvents(DataChangeEvent[] events) {
-		DataChangeEvent[] eventsTx = new DataChangeEvent[events.length];
+	private DataChangeEvent[] takeEvents(DataChangeEvent[] events) {
+		if (events == null || events.length == 0) {
+			return new DataChangeEvent[] {
+				new DataChangeEvent(this, 0, 0, null, null)
+			};
+		}
+		DataChangeEvent[] eventsTx = new DataChangeEvent[events.length + 1];
 		for (int i = 0; i < eventsTx.length; i++) {
-			DataChangeEvent event = events[i];
+			DataChangeEvent event;
+			int col, row;
+			if (i == 0) {
+				// Insert an event for the generated column
+				event = events[0];
+				col = 0;
+				row = event.getRow();
+			} else {
+				// Process the columns of the original source
+				event = events[i - 1];
+				col = event.getCol() + 1;
+				row = event.getRow();
+			}
 			Comparable valOld = event.getOld();
 			Comparable valNew = event.getNew();
 			eventsTx[i] = new DataChangeEvent(
-				this, event.getCol() + 1, event.getRow(),
-				valOld, valNew);
+				this, col, row, valOld, valNew);
 		}
 		return eventsTx;
 	}

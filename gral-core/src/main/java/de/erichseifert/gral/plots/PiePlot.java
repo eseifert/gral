@@ -815,7 +815,12 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	@Override
-	protected void autoScaleAxes() {
+	public void autoscaleAxis(String axisName) {
+		if (!AXIS_TANGENTIAL.equals(axisName)) {
+			super.autoscaleAxis(axisName);
+			return;
+		}
+
 		List<DataSource> sources = getVisibleData();
 		if (sources.isEmpty()) {
 			return;
@@ -831,13 +836,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			return;
 		}
 
-		for (String axisName : getAxesNames()) {
-			Axis axis = getAxis(axisName);
-			if (axis == null || !axis.isAutoscaled()) {
-				continue;
-			}
-			axis.setRange(0.0, sum);
+		Axis axis = getAxis(axisName);
+		if (axis == null || !axis.isAutoscaled()) {
+			return;
 		}
+		axis.setRange(0.0, sum);
 	}
 
 	@Override
@@ -974,7 +977,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 */
 	protected void revalidate(DataSource source) {
 		slices.remove(source);
-		autoScaleAxes();
+		autoscaleAxes();
 	}
 
 	@Override

@@ -367,20 +367,22 @@ public class BarPlot extends XYPlot {
 	}
 
 	@Override
-	protected void autoScaleAxes() {
-		List<DataSource> data = getData();
-		if (data.isEmpty()) {
-			return;
-		}
+	public void autoscaleAxis(String axisName) {
+		super.autoscaleAxis(axisName);
 
-		super.autoScaleAxes();
+		if (AXIS_X.equals(axisName)) {
+			List<DataSource> data = getData();
+			if (data.isEmpty()) {
+				return;
+			}
 
-		Axis axisX = getAxis(AXIS_X);
-		if (axisX != null) {
-			double xMin = getAxisMin(AXIS_X);
-			double xMax = getAxisMax(AXIS_X);
-			double xMargin = (xMax - xMin)/data.get(0).getRowCount()/2.0;
-			axisX.setRange(xMin - xMargin, xMax + xMargin);
+			Axis axisX = getAxis(AXIS_X);
+			if (axisX != null) {
+				double xMin = getAxisMin(AXIS_X);
+				double xMax = getAxisMax(AXIS_X);
+				double xMargin = (xMax - xMin)/data.get(0).getRowCount()/2.0;
+				axisX.setRange(xMin - xMargin, xMax + xMargin);
+			}
 		}
 	}
 

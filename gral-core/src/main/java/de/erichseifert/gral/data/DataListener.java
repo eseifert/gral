@@ -47,7 +47,7 @@ public interface DataListener {
 	void dataUpdated(DataSource source, DataChangeEvent... events);
 
 	/**
-	 * Method that is invoked when data has been added.
+	 * Method that is invoked when data has been removed.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
 	 * @param source Data source that has been changed.

@@ -69,6 +69,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private final Set<DataSource> sources;
 	/** Mapping of data rows to drawable components. */
 	private final Map<Row, Drawable> components;
+	/** Flag that tells whether the data in the legend is up-to-date. */
+	private transient boolean valid;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -235,6 +237,7 @@ public abstract class AbstractLegend extends StylableContainer
 			add(item);
 			components.put(row, item);
 		}
+		invalidate();
 	}
 
 	/**
@@ -263,6 +266,7 @@ public abstract class AbstractLegend extends StylableContainer
 				remove(item);
 			}
 		}
+		invalidate();
 	}
 
 	/**
@@ -276,14 +280,20 @@ public abstract class AbstractLegend extends StylableContainer
 	}
 
 	/**
-	 * Updates the items for all data sources stored in this legend.
+	 * Updates the items for all data sources stored in this legend. The update
+	 * is only performed if the legend is invalid.
+	 * @see #invalidate()
 	 */
 	public void refresh() {
+		if (isValid()) {
+			return;
+		}
 		Set<DataSource> sources = new LinkedHashSet<DataSource>(this.sources);
 		clear();
 		for (DataSource source : sources) {
 			add(source);
 		}
+		valid = true;
 	}
 
 	/**
@@ -324,5 +334,24 @@ public abstract class AbstractLegend extends StylableContainer
 			size.getWidth(),
 			size.getHeight()
 		);
+	}
+
+	/**
+	 * Returns whether this legend's values and layout are valid.
+	 * @return {@code true} if the values and the layout are valid,
+	 *         otherwise {@code false}.
+	 * @see #invalidate()
+	 */
+	protected boolean isValid() {
+		return valid;
+	}
+
+	/**
+	 * Marks this legend's values and layout as invalid. The legend will only
+	 * be refreshed if it's invalid.
+	 * @see #refresh()
+	 */
+	protected void invalidate() {
+		valid = false;
 	}
 }

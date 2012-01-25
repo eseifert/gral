@@ -497,7 +497,7 @@ public class BoxPlot extends XYPlot {
 			-Double.MAX_VALUE);
 
 		add(data);
-		autoScaleAxes();
+		autoscaleAxes();
 	}
 
 	/**
@@ -549,17 +549,23 @@ public class BoxPlot extends XYPlot {
 	}
 
 	@Override
-	protected void autoScaleAxes() {
-		for (DataSource data : getData()) {
-			// Adjust axes to generated data series
-			Column col0 = data.getColumn(0);
-			getAxis(AXIS_X).setRange(
-				col0.getStatistics(Statistics.MIN) - 0.5,
-				col0.getStatistics(Statistics.MAX) + 0.5);
-			double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
-			double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
-			double ySpacing = 0.05*(yMax - yMin);
-			getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
+	public void autoscaleAxis(String axisName) {
+		if (AXIS_X.equals(axisName)) {
+			for (DataSource data : getData()) {
+				Column col0 = data.getColumn(0);
+				getAxis(AXIS_X).setRange(
+					col0.getStatistics(Statistics.MIN) - 0.5,
+					col0.getStatistics(Statistics.MAX) + 0.5);
+			}
+		} else if (AXIS_Y.equals(axisName)) {
+			for (DataSource data : getData()) {
+				double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
+				double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
+				double ySpacing = 0.05*(yMax - yMin);
+				getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
+			}
+		} else {
+			super.autoscaleAxis(axisName);
 		}
 	}
 }

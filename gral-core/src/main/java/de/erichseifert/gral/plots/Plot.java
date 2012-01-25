@@ -100,6 +100,14 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	Collection<String> getAxesNames();
 
 	/**
+	 * Tries to automatically set the ranges of the axes specified by the name
+	 * if it is set to auto-scale.
+	 * @param axisName Name of the axis that should be scaled.
+	 * @see Axis#setAutoscaled(boolean)
+	 */
+	void autoscaleAxis(String axisName);
+
+	/**
 	 * Returns the renderer for the axis with the specified name.
 	 * @param axisName Axis name.
 	 * @return Instance that renders the axis.

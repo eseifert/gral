@@ -592,7 +592,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		}
 
 		createDefaultAxes();
-		autoScaleAxes();
+		autoscaleAxes();
 		createDefaultAxisRenderers();
 
 		// Listen for changes of the axis range

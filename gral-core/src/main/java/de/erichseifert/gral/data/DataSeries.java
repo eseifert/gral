@@ -137,9 +137,9 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been added.
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
 		notifyDataAdded(events);
@@ -149,21 +149,21 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been updated.
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
 		notifyDataUpdated(events);
 	}
 
 	/**
-	 * Method that is invoked when data has been added.
+	 * Method that is invoked when data has been removed.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been removed.
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
 		notifyDataRemoved(events);

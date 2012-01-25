@@ -265,7 +265,7 @@ public class Statistics implements DataListener {
 	/**
 	 * Returns the specified information for the specified column or row.
 	 * If the specified statistical value does not exist <i>NaN</i>
-	 * is returned
+	 * is returned.
 	 * @param data Data values.
 	 * @param stats {@code Map} with statistics.
 	 * @param key Requested information.
@@ -291,41 +291,47 @@ public class Statistics implements DataListener {
 	 * Method that is invoked when data has been added.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
 	 *        have been added
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		for (DataChangeEvent event : events) {
-			// Mark statistics as invalid
-			invalidate(event.getCol(), event.getRow());
-		}
+		dataChanged(source, events);
 	}
 
 	/**
 	 * Method that is invoked when data has been updated.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been updated.
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		for (DataChangeEvent event : events) {
-			// Mark statistics as invalid
-			invalidate(event.getCol(), event.getRow());
-		}
+		dataChanged(source, events);
 	}
 
 	/**
-	 * Method that is invoked when data has been added.
+	 * Method that is invoked when data has been removed.
 	 * This method is invoked by objects that provide support for
 	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed
+	 * @param source Data source that has been changed.
 	 * @param events Optional event object describing the data values that
-	 *        have been added
+	 *        have been removed.
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
+		dataChanged(source, events);
+	}
+
+	/**
+	 * Method that is invoked when data has been added, updated, or removed.
+	 * This method is invoked by objects that provide support for
+	 * {@code DataListener}s and should not be called manually.
+	 * @param source Data source that has changed.
+	 * @param events Optional event object describing the data values that
+	 *        have been removed.
+	 */
+	private void dataChanged(DataSource source, DataChangeEvent... events) {
 		for (DataChangeEvent event : events) {
 			// Mark statistics as invalid
 			invalidate(event.getCol(), event.getRow());
