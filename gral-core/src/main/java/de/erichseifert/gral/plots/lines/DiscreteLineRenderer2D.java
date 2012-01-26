@@ -96,8 +96,8 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Shape getLineShape(List<DataPoint> points) {
 		Orientation dir = getSetting(ASCENT_DIRECTION);
-		double ascendingPoint = this.<Number>getSetting(ASCENDING_POINT)
-			.doubleValue();
+		double ascendingPoint =
+			this.<Number>getSetting(ASCENDING_POINT).doubleValue();
 
 		// Construct shape
 		Path2D shape = new Path2D.Double();

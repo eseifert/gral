@@ -32,6 +32,7 @@ import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.plots.settings.SettingsListener;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -67,12 +68,9 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape shape, List<DataPoint> dataPoints) {
-		Number sizeObj = this.<Number>getSetting(GAP);
-		if (!MathUtils.isCalculatable(sizeObj)) {
-			return shape;
-		}
-		double size = sizeObj.doubleValue();
-		if (size == 0.0) {
+		double size = DataUtils.getValueOrDefault(
+			this.<Number>getSetting(GAP), 0.0);
+		if (!MathUtils.isCalculatable(size) || size == 0.0) {
 			return shape;
 		}
 

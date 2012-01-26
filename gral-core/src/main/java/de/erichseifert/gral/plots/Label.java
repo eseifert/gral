@@ -33,6 +33,7 @@ import java.awt.geom.Rectangle2D;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -121,21 +122,18 @@ public class Label extends StylableDrawable {
 		Rectangle2D textBounds = labelShape.getBounds2D();
 
 		// Rotate label text around its center point
-		Number rotationObj = this.<Number>getSetting(ROTATION);
+		double rotation = DataUtils.getValueOrDefault(
+			this.<Number>getSetting(ROTATION), 0.0);
 
-		if (MathUtils.isCalculatable(rotationObj)) {
-			double rotation =
-				MathUtils.normalizeDegrees(rotationObj.doubleValue());
-			if (rotation != 0.0) {
-				AffineTransform txLabelText =
-					AffineTransform.getRotateInstance(
-						Math.toRadians(-rotation),
-						textBounds.getCenterX(),
-						textBounds.getCenterY()
-					);
-				labelShape = txLabelText.createTransformedShape(labelShape);
-				textBounds = labelShape.getBounds2D();
-			}
+		if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
+			AffineTransform txLabelText =
+				AffineTransform.getRotateInstance(
+					Math.toRadians(-rotation),
+					textBounds.getCenterX(),
+					textBounds.getCenterY()
+				);
+			labelShape = txLabelText.createTransformedShape(labelShape);
+			textBounds = labelShape.getBounds2D();
 		}
 
 		// Get graphics instance and store state information
@@ -170,19 +168,16 @@ public class Label extends StylableDrawable {
 		if (getCachedOutline(false) != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
-			Number rotationObj = this.<Number>getSetting(ROTATION);
-			if (MathUtils.isCalculatable(rotationObj)) {
-				double rotation =
-					MathUtils.normalizeDegrees(rotationObj.doubleValue());
-				if (rotation != 0.0) {
-					AffineTransform txLabelText =
-						AffineTransform.getRotateInstance(
-							Math.toRadians(-rotation),
-							bounds.getCenterX(),
-							bounds.getCenterY()
-						);
-					shape = txLabelText.createTransformedShape(shape);
-				}
+			double rotation = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(ROTATION), 0.0);
+			if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
+				AffineTransform txLabelText =
+					AffineTransform.getRotateInstance(
+						Math.toRadians(-rotation),
+						bounds.getCenterX(),
+						bounds.getCenterY()
+					);
+				shape = txLabelText.createTransformedShape(shape);
 			}
 			d.setSize(
 				shape.getBounds2D().getWidth(),

@@ -43,6 +43,7 @@ import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -132,10 +133,12 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		Number alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X);
 		Number alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y);
 		Number rotation = this.<Number>getSetting(VALUE_ROTATION);
-		Number distanceObj = getSetting(VALUE_DISTANCE);
-		double distance = 0.0;
-		if (MathUtils.isCalculatable(distanceObj)) {
-			distance = distanceObj.doubleValue()*fontSize;
+		double distance = DataUtils.getValueOrDefault(
+			this.<Number>getSetting(VALUE_DISTANCE), Double.NaN);
+		if (MathUtils.isCalculatable(distance)) {
+			distance *= fontSize;
+		} else {
+			distance = 0.0;
 		}
 
 		// Create a label with the settings

@@ -154,7 +154,8 @@ DataSeries series3 = new DataSeries("Series 3", table, 1);
 RowSubset data = new RowSubset(table) {
     @Override
     public boolean accept(Row row) {
-        return (row.get(0).doubleValue() % 2.0) == 0.0;
+        Number n = (Number) row.get(0);
+        return (n.doubleValue() % 2.0) == 0.0;
     }
 };
 ]]></programlisting>

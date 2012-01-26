@@ -66,6 +66,7 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -437,11 +438,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					PlotArea plotArea = plot.getPlotArea();
 					double plotAreaSize = Math.min(
 						plotArea.getWidth(), plotArea.getHeight())/2.0;
-					double radiusRel = 1.0;
-					Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
-					if (radiusRelObj != null) {
-						radiusRel = radiusRelObj.doubleValue();
-					}
+					double radiusRel = DataUtils.getValueOrDefault(
+						plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
 					double radius = plotAreaSize*radiusRel;
 
 					// Paint slice
@@ -502,18 +500,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			PlotArea plotArea = plot.getPlotArea();
 			double plotAreaSize = Math.min(
 				plotArea.getWidth(), plotArea.getHeight())/2.0;
-			double radiusRel = 1.0;
-			Number radiusRelObj = plot.getSetting(PiePlot.RADIUS);
-			if (radiusRelObj != null) {
-				radiusRel = radiusRelObj.doubleValue();
-			}
+			double radiusRel = DataUtils.getValueOrDefault(
+				plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
 			double radius = plotAreaSize*radiusRel;
-			double radiusRelOuter = 1.0;
-			Number radiusRelOuterObj = this.getSetting(
-				PieSliceRenderer.RADIUS_OUTER);
-			if (radiusRelOuterObj != null) {
-				radiusRelOuter = radiusRelOuterObj.doubleValue();
-			}
+			double radiusRelOuter = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(PieSliceRenderer.RADIUS_OUTER), 1.0);
 			double radiusOuter = radius*radiusRelOuter;
 
 			// Construct slice
@@ -529,11 +520,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double sliceStartRel = slice.start/sum;
 			double sliceEndRel = slice.end/sum;
 
-			double start = 0.0;
-			Number startObj = plot.getSetting(PiePlot.START);
-			if (startObj != null) {
-				start = startObj.doubleValue();
-			}
+			double start = DataUtils.getValueOrDefault(
+				plot.<Number>getSetting(PiePlot.START), 0.0);
 
 			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
 			double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
@@ -553,8 +541,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			);
 			Area doughnutSlice = new Area(pieSlice);
 
-			double gap = this.<Number>getSetting(
-				PieSliceRenderer.GAP).doubleValue();
+			double gap = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(PieSliceRenderer.GAP), 0.0);
 			if (gap > 0.0) {
 				Stroke sliceStroke =
 					new BasicStroke((float) (gap*fontSize));
@@ -563,8 +551,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				doughnutSlice.subtract(sliceContour);
 			}
 
-			double radiusRelInner = this.<Number>getSetting(
-				PieSliceRenderer.RADIUS_INNER).doubleValue();
+			double radiusRelInner = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(PieSliceRenderer.RADIUS_INNER), 0.0);
 			if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
 				double radiusInner = radius*radiusRelInner;
 				Ellipse2D inner = new Ellipse2D.Double(
@@ -610,17 +598,19 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X).doubleValue();
 			double alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y).doubleValue();
 			Number rotation = this.<Number>getSetting(VALUE_ROTATION);
-			Number distanceObj = getSetting(VALUE_DISTANCE);
-			double distance = 0.0;
-			if (MathUtils.isCalculatable(distanceObj)) {
-				distance = distanceObj.doubleValue()*fontSize;
+			double distance = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(VALUE_DISTANCE), Double.NaN);
+			if (MathUtils.isCalculatable(distance)) {
+				distance *= fontSize;
+			} else {
+				distance = 0.0;
 			}
 
 			// Vertical layout
-			double radiusRelOuter = this.<Number>getSetting(
-				RADIUS_OUTER).doubleValue();
-			double radiusRelInner = this.<Number>getSetting(
-				RADIUS_INNER).doubleValue();
+			double radiusRelOuter = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(RADIUS_OUTER), 1.0);
+			double radiusRelInner = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(RADIUS_INNER), 0.0);
 			double radiusOuter = radius*radiusRelOuter;
 			double radiusInner = radius*radiusRelInner;
 			double distanceV = distance;
@@ -656,11 +646,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double labelPosRelH = sliceStartRel + distanceRelH +
 				alignX*(sliceWidthRel - 2.0*distanceRelH);
 
-			Number startObj = plot.getSetting(PiePlot.START);
-			double start = 0.0;
-			if (startObj != null) {
-				start = startObj.doubleValue();
-			}
+			double start = DataUtils.getValueOrDefault(
+				plot.<Number>getSetting(PiePlot.START), 0.0);
 
 			double angleStart = Math.toRadians(-start);
 			double direction = 1.0;

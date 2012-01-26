@@ -29,6 +29,7 @@ import java.util.Map;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.SortedList;
@@ -284,7 +285,7 @@ public class Statistics implements DataListener {
 		}
 
 		Double v = stats.get(key);
-		return (v != null) ? v : Double.NaN;
+		return DataUtils.getValueOrDefault(v, Double.NaN);
 	}
 
 	/**

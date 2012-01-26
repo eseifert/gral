@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
@@ -87,15 +88,13 @@ public class Convolution extends Filter {
 		Kernel kernel = getKernel();
 		if (kernel == null) {
 			Comparable<?> original = getOriginal(col, row);
-			Number originalNumber = (Number) original;
-			return (originalNumber != null) ? originalNumber.doubleValue() : Double.NaN;
+			return DataUtils.getValueOrDefault((Number) original, Double.NaN);
 		}
 		double sum = 0.0;
 		for (int k = kernel.getMinIndex(); k <= kernel.getMaxIndex(); k++) {
 			int r = row + k;
 			Comparable<?> original = getOriginal(col, r);
-			Number originalNumber = (Number) original;
-			double v = (originalNumber != null) ? originalNumber.doubleValue() : Double.NaN;
+			double v = DataUtils.getValueOrDefault((Number) original, Double.NaN);
 			if (!MathUtils.isCalculatable(v)) {
 				return v;
 			}

@@ -32,6 +32,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+import java.util.List;
 
 import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.Column;
@@ -52,6 +53,7 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -226,8 +228,9 @@ public class BoxPlot extends XYPlot {
 					double valueYBarTop = ((Number) row.get(colBarTop)).doubleValue();
 
 					// Calculate positions in screen units
-					double boxWidthRel = BoxWhiskerRenderer.this.
-						<Number>getSetting(BOX_WIDTH).doubleValue();
+					double boxWidthRel = DataUtils.getValueOrDefault(
+						BoxWhiskerRenderer.this.<Number>getSetting(BOX_WIDTH),
+						1.0);
 					double boxAlign = 0.5;
 					// Box X
 					double boxXMin = axisXRenderer
@@ -251,8 +254,9 @@ public class BoxPlot extends XYPlot {
 						axisY, valueYBarTop, true, false).get(PointND.Y);
 					double boxWidth = Math.abs(boxXMax - boxXMin);
 					// Bars
-					double barWidthRel = BoxWhiskerRenderer.this.
-						<Number>getSetting(BAR_WIDTH).doubleValue();
+					double barWidthRel = DataUtils.getValueOrDefault(
+						BoxWhiskerRenderer.this.<Number>getSetting(BAR_WIDTH),
+						1.0);
 					double barXMin = boxXMin + (1.0 - barWidthRel)*boxWidth/2.0;
 					double barXMax = boxXMax - (1.0 - barWidthRel)*boxWidth/2.0;
 
@@ -439,12 +443,9 @@ public class BoxPlot extends XYPlot {
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
 
-					Number boxWidthRelObj = pointRenderer.<Number>getSetting(
-						BoxWhiskerRenderer.BOX_WIDTH);
-					double boxWidthRel = 1.0;
-					if (boxWidthRelObj != null) {
-						boxWidthRel = boxWidthRelObj.doubleValue();
-					}
+					double boxWidthRel = DataUtils.getValueOrDefault(
+						pointRenderer.<Number>getSetting(
+							BoxWhiskerRenderer.BOX_WIDTH), 1.0);
 
 					double posX = ((Number) row.get(0)).doubleValue();
 					Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
@@ -550,19 +551,28 @@ public class BoxPlot extends XYPlot {
 
 	@Override
 	public void autoscaleAxis(String axisName) {
-		if (AXIS_X.equals(axisName)) {
-			for (DataSource data : getData()) {
+		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
+			Axis axis = getAxis(axisName);
+			if (axis == null || !axis.isAutoscaled()) {
+				return;
+			}
+
+			List<DataSource> sources = getData();
+			if (sources.isEmpty()) {
+				return;
+			}
+			DataSource data = getData().get(0);
+
+			if (AXIS_X.equals(axisName)) {
 				Column col0 = data.getColumn(0);
-				getAxis(AXIS_X).setRange(
+				axis.setRange(
 					col0.getStatistics(Statistics.MIN) - 0.5,
 					col0.getStatistics(Statistics.MAX) + 0.5);
-			}
-		} else if (AXIS_Y.equals(axisName)) {
-			for (DataSource data : getData()) {
+			} else if (AXIS_Y.equals(axisName)) {
 				double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
 				double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
 				double ySpacing = 0.05*(yMax - yMin);
-				getAxis(AXIS_Y).setRange(yMin - ySpacing, yMax + ySpacing);
+				axis.setRange(yMin - ySpacing, yMax + ySpacing);
 			}
 		} else {
 			super.autoscaleAxis(axisName);

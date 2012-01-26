@@ -56,8 +56,10 @@ import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.Tuple;
 
 
@@ -444,8 +446,13 @@ public abstract class AbstractPlot extends StylableContainer
 			// TODO Use real font size instead of fixed value
 			final double fontSize = 10.0;
 
-			Number distanceObj = getSetting(LEGEND_DISTANCE);
-			double distance = distanceObj.doubleValue()*fontSize;
+			double distance = DataUtils.getValueOrDefault(
+				this.<Number>getSetting(LEGEND_DISTANCE), Double.NaN);
+			if (MathUtils.isCalculatable(distance)) {
+				distance *= fontSize;
+			} else {
+				distance = 0.0;
+			}
 
 			OuterEdgeLayout layout = new OuterEdgeLayout(distance);
 			legendContainer.setLayout(layout);

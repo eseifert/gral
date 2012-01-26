@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.settings.Key;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 
@@ -51,21 +52,19 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 
 	@Override
 	public Shape getPointShape(PointData data) {
-		Row row = data.row;
 		Shape shape = this.<Shape>getSetting(SHAPE);
-		int colSize = this.<Integer>getSetting(COLUMN);
 
+		Row row = data.row;
+		int colSize = this.<Integer>getSetting(COLUMN);
 		if (colSize >= row.size() || colSize < 0 || !row.isColumnNumeric(colSize)) {
 			return shape;
 		}
-		Number sizeObj = (Number) row.get(colSize);
-		if (!MathUtils.isCalculatable(sizeObj)) {
+
+		double size = DataUtils.getValueOrDefault((Number) row.get(colSize), Double.NaN);
+		if (!MathUtils.isCalculatable(size) || size <= 0.0) {
 			return null;
 		}
-		double size = sizeObj.doubleValue();
-		if (size <= 0.0) {
-			return null;
-		}
+
 		if (size != 1.0) {
 			AffineTransform tx = AffineTransform.getScaleInstance(size, size);
 			shape = tx.createTransformedShape(shape);

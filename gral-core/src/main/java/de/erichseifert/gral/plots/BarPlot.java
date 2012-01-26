@@ -50,6 +50,7 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
+import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -194,11 +195,9 @@ public class BarPlot extends XYPlot {
 			double valueY = ((Number) row.get(colY)).doubleValue();
 			double axisYOrigin = 0.0;
 
-			double barWidthRel = 1.0;
-			Number barWidthRelObj = plotSettings.<Number>getSetting(BarPlot.BAR_WIDTH);
-			if (barWidthRelObj != null) {
-				barWidthRel = Math.max(barWidthRelObj.doubleValue(), 0.0);
-			}
+			double barWidthRel = DataUtils.getValueOrDefault(
+				plotSettings.<Number>getSetting(BarPlot.BAR_WIDTH), 1.0);
+			barWidthRel = Math.max(barWidthRel, 0.0);
 			double barAlign = 0.5;
 
 			double barXMin = axisXRenderer
@@ -226,16 +225,14 @@ public class BarPlot extends XYPlot {
 			boolean barAboveAxis = barYMax == barYOrigin;
 			double barY = barAboveAxis ? 0.0 : -barHeight;
 
-			Number barHeightMinObj = plotSettings.<Number>getSetting(BAR_HEIGHT_MIN);
-			if (barHeightMinObj != null) {
-				double barHeightMin = barHeightMinObj.doubleValue();
-				if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
-						barHeight < barHeightMin) {
-					if (barAboveAxis) {
-						barY += -barHeightMin + barHeight;
-					}
-					barHeight = barHeightMin;
+			double barHeightMin = DataUtils.getValueOrDefault(
+				plotSettings.<Number>getSetting(BAR_HEIGHT_MIN), Double.NaN);
+			if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
+					barHeight < barHeightMin) {
+				if (barAboveAxis) {
+					barY += -barHeightMin + barHeight;
 				}
+				barHeight = barHeightMin;
 			}
 
 			Shape shape = getBarShape(
@@ -305,11 +302,8 @@ public class BarPlot extends XYPlot {
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
 
-					Number barWidthRelObj = plot.<Number>getSetting(BarPlot.BAR_WIDTH);
-					double barWidthRel = 1.0;
-					if (barWidthRelObj != null) {
-						barWidthRel = barWidthRelObj.doubleValue();
-					}
+					double barWidthRel = DataUtils.getValueOrDefault(
+						plot.<Number>getSetting(BarPlot.BAR_WIDTH), 1.0);
 
 					Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
 					AxisRenderer axisRendererX = new LinearRenderer2D();
@@ -368,21 +362,34 @@ public class BarPlot extends XYPlot {
 
 	@Override
 	public void autoscaleAxis(String axisName) {
-		super.autoscaleAxis(axisName);
+		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
+			List<DataSource> sources = getData();
+			if (sources.isEmpty()) {
+				return;
+			}
+			DataSource data = sources.get(0);
 
-		if (AXIS_X.equals(axisName)) {
-			List<DataSource> data = getData();
-			if (data.isEmpty()) {
+			Axis axis = getAxis(axisName);
+			if (axis == null || !axis.isAutoscaled()) {
 				return;
 			}
 
-			Axis axisX = getAxis(AXIS_X);
-			if (axisX != null) {
-				double xMin = getAxisMin(AXIS_X);
-				double xMax = getAxisMax(AXIS_X);
-				double xMargin = (xMax - xMin)/data.get(0).getRowCount()/2.0;
-				axisX.setRange(xMin - xMargin, xMax + xMargin);
+			double min = getAxisMin(axisName);
+			double max = getAxisMax(axisName);
+			if (AXIS_X.equals(axisName)) {
+				// Add margin
+				double barWidth = DataUtils.getValueOrDefault(
+					this.<Number>getSetting(BAR_WIDTH), 1.0);
+				double margin = barWidth*(max - min)/data.getRowCount();
+				axis.setRange(min - margin/2.0, max + margin/2.0);
+			} else if (AXIS_Y.equals(axisName)) {
+				// Make sure 0 is always visible for y axis
+				min = Math.min(min, 0.0);
+				max = Math.max(max, 0.0);
+				axis.setRange(min, max);
 			}
+		} else {
+			super.autoscaleAxis(axisName);
 		}
 	}
 

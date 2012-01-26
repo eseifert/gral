@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * Abstract class that contains utility functions for creating data structures
- * and for working with data sources.
+ * and for working with data sources and values.
  */
 public abstract class DataUtils {
 	/**
@@ -58,5 +58,20 @@ public abstract class DataUtils {
 			map.put(key, value);
 		}
 		return map;
+	}
+
+	/**
+	 * Returns the double value of the {@code Number} object or the specified
+	 * default value if the object is {@code null}.
+	 * @param n Number object.
+	 * @param defaultValue Default value.
+	 * @return Double value of the {@code Number} object or the default value
+	 *         if the object is {@code null}
+	 */
+	public static double getValueOrDefault(Number n, double defaultValue) {
+		if (n == null) {
+			return defaultValue;
+		}
+		return n.doubleValue();
 	}
 }

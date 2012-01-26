@@ -253,14 +253,17 @@ public class RasterPlot extends XYPlot {
 				dist = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
 			}
 
+			Axis axis = getAxis(axisName);
+			if (axis == null || !axis.isAutoscaled()) {
+				return;
+			}
+
+			double min = getAxisMin(axisName);
+			double max = getAxisMax(axisName);
 			if (AXIS_X.equals(axisName)) {
-				double xMin = getAxisMin(AXIS_X);
-				double xMax = getAxisMax(AXIS_X);
-				getAxis(AXIS_X).setRange(xMin, xMax + dist.getWidth());
+				axis.setRange(min, max + dist.getWidth());
 			} else if (AXIS_Y.equals(axisName)) {
-				double yMin = getAxisMin(AXIS_Y);
-				double yMax = getAxisMax(AXIS_Y);
-				getAxis(AXIS_Y).setRange(yMin - dist.getHeight(), yMax);
+				axis.setRange(min - dist.getHeight(), max);
 			}
 		} else {
 			super.autoscaleAxis(axisName);
