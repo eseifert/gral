@@ -23,6 +23,8 @@ package de.erichseifert.gral.data;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -37,6 +39,24 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 public class DataTableTest {
 	private static final double DELTA = TestUtils.DELTA;
+
+	private static class MockDataListener implements DataListener {
+		private DataChangeEvent[] added;
+		private DataChangeEvent[] updated;
+		private DataChangeEvent[] removed;
+
+		public void dataAdded(DataSource source, DataChangeEvent... events) {
+			added = events;
+		}
+
+		public void dataUpdated(DataSource source, DataChangeEvent... events) {
+			updated = events;
+		}
+
+		public void dataRemoved(DataSource source, DataChangeEvent... events) {
+			removed = events;
+		}
+	}
 
 	private DataTable table;
 
@@ -91,8 +111,9 @@ public class DataTableTest {
 		int sizeBefore = table.getRowCount();
 		table.add(0, -1);
 		table.add(1, -2);
-		table.add(2, -3);
+		int rowIndex = table.add(2, -3);
 		assertEquals(sizeBefore + 3, table.getRowCount());
+		assertEquals(table.getRowCount() - 1, rowIndex);
 
 		// Wrong number of columns
 		try {
@@ -208,6 +229,100 @@ public class DataTableTest {
 	public void testClear() {
 		table.clear();
 		assertEquals(0, table.getRowCount());
+	}
+
+	@Test
+	public void testEventsAdd() {
+		table.add(12, 34);
+
+		MockDataListener listener = new MockDataListener();
+		table.addDataListener(listener);
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		int row = table.add(56, 78);
+		assertNotNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		assertEquals(2, listener.added.length);
+		assertEquals(0, listener.added[0].getCol());
+		assertEquals(row, listener.added[0].getRow());
+		assertNull(listener.added[0].getOld());
+		assertEquals(56, listener.added[0].getNew());
+		assertEquals(1, listener.added[1].getCol());
+		assertEquals(row, listener.added[1].getRow());
+		assertNull(listener.added[1].getOld());
+		assertEquals(78, listener.added[1].getNew());
+	}
+
+	@Test
+	public void testEventsUpdate() {
+		int row = table.add(12, 34);
+
+		MockDataListener listener = new MockDataListener();
+		table.addDataListener(listener);
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		Comparable<?> valueOld = table.set(1, row, 42);
+		assertNull(listener.added);
+		assertNotNull(listener.updated);
+		assertNull(listener.removed);
+
+		assertEquals(34, valueOld);
+
+		assertEquals(1, listener.updated.length);
+		assertEquals(1, listener.updated[0].getCol());
+		assertEquals(row, listener.updated[0].getRow());
+		assertEquals(34, listener.updated[0].getOld());
+		assertEquals(42, listener.updated[0].getNew());
+	}
+
+	@Test
+	public void testEventsRemove() {
+		int row = table.add(12, 34);
+
+		MockDataListener listener = new MockDataListener();
+		table.addDataListener(listener);
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		table.remove(row);
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNotNull(listener.removed);
+
+		assertEquals(2, listener.removed.length);
+		assertEquals(0, listener.removed[0].getCol());
+		assertEquals(row, listener.removed[0].getRow());
+		assertEquals(12, listener.removed[0].getOld());
+		assertNull(listener.removed[0].getNew());
+		assertEquals(1, listener.removed[1].getCol());
+		assertEquals(row, listener.removed[1].getRow());
+		assertEquals(34, listener.removed[1].getOld());
+		assertNull(listener.removed[1].getNew());
+	}
+
+	@Test
+	public void testEventsClear() {
+		MockDataListener listener = new MockDataListener();
+		table.addDataListener(listener);
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		int cols = table.getColumnCount();
+		int rows = table.getRowCount();
+		table.clear();
+		assertNull(listener.added);
+		assertNull(listener.updated);
+		assertNotNull(listener.removed);
+
+		assertEquals(cols*rows, listener.removed.length);
 	}
 
 	@Test

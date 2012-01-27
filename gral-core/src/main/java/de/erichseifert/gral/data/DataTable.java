@@ -138,33 +138,33 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 */
 	public int add(Collection<? extends Comparable<?>> values) {
 		DataChangeEvent[] events;
-		int rowCount;
-		synchronized (this) {
-			if (values.size() != getColumnCount()) {
-				throw new IllegalArgumentException(MessageFormat.format(
+		if (values.size() != getColumnCount()) {
+			throw new IllegalArgumentException(MessageFormat.format(
 					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
 					getColumnCount(), values.size()));
-			}
-			int i = 0;
-			Comparable<?>[] row = new Comparable<?>[values.size()];
-			events = new DataChangeEvent[row.length];
-			Class<? extends Comparable<?>>[] types = getColumnTypes();
+		}
+		Comparable<?>[] row = new Comparable<?>[values.size()];
+		events = new DataChangeEvent[row.length];
+		Class<? extends Comparable<?>>[] types = getColumnTypes();
+		int rowIndex = 0;
+		synchronized (rows) {
+			int colIndex = 0;
 			for (Comparable<?> value : values) {
 				if ((value != null)
-						&& !(types[i].isAssignableFrom(value.getClass()))) {
+						&& !(types[colIndex].isAssignableFrom(value.getClass()))) {
 					throw new IllegalArgumentException(MessageFormat.format(
 						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
-						types[i], value.getClass()));
+						types[colIndex], value.getClass()));
 				}
-				row[i] = value;
-				events[i] = new DataChangeEvent(this, i, rows.size(), null, value);
-				i++;
+				row[colIndex] = value;
+				events[colIndex] = new DataChangeEvent(this, colIndex, rows.size(), null, value);
+				colIndex++;
 			}
 			rows.add(row);
-			rowCount = rows.size();
+			rowIndex = rows.size();
 		}
 		notifyDataAdded(events);
-		return rowCount;
+		return rowIndex - 1;
 	}
 
 	/**
@@ -224,11 +224,20 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 * Deletes all rows this table contains.
 	 */
 	public void clear() {
-		synchronized (rows) {
-			rows.clear();
+		DataChangeEvent[] events;
+		synchronized (this) {
+			int cols = getColumnCount();
+			int rows = getRowCount();
+			events = new DataChangeEvent[cols*rows];
+			for (int row = 0; row < rows; row++) {
+				for (int col = 0; col < cols; col++) {
+					events[col*cols + row] = new DataChangeEvent(
+						this, col, row, get(col, row), null);
+				}
+			}
+			this.rows.clear();
 		}
-		// FIXME Give arguments to the following method invocation
-		notifyDataRemoved();
+		notifyDataRemoved(events);
 	}
 
 	/**
