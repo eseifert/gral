@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
 import de.erichseifert.gral.plots.areas.AreasTests;
 import de.erichseifert.gral.plots.axes.AxesTests;
 import de.erichseifert.gral.plots.colors.ColorsTests;
+import de.erichseifert.gral.plots.legends.LegendsTests;
 import de.erichseifert.gral.plots.lines.LinesTests;
 import de.erichseifert.gral.plots.points.PointsTests;
 import de.erichseifert.gral.plots.settings.SettingsTests;
@@ -41,10 +42,10 @@ import de.erichseifert.gral.plots.settings.SettingsTests;
 	AreasTests.class,
 	LinesTests.class,
 	PointsTests.class,
+	LegendsTests.class,
 	// Tests for classes
 	LabelTest.class,
 	PlotAreaTest.class,
-	LegendTest.class,
 	PlotTest.class,
 	XYPlotTest.class,
 	PiePlotTest.class,

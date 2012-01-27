@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.plots;
+package de.erichseifert.gral.plots.legends;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
@@ -44,6 +44,8 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.legends.Legend;
+import de.erichseifert.gral.plots.legends.SeriesLegend;
 
 public class LegendTest {
 	private MockLegend legend;

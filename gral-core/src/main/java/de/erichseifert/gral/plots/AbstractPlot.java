@@ -54,6 +54,7 @@ import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.DataUtils;

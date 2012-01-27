@@ -54,6 +54,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.axes.Tick;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
+import de.erichseifert.gral.plots.legends.SeriesLegend;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;

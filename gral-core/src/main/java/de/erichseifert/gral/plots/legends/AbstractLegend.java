@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.plots;
+package de.erichseifert.gral.plots.legends;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -42,6 +42,8 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.plots.StylableContainer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
