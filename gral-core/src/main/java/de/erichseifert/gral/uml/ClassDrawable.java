@@ -77,8 +77,8 @@ public class ClassDrawable extends DrawableContainer {
 		Graphics2D g2d = context.getGraphics();
 
 		Stroke strokeOld = g2d.getStroke();
-		Stroke borderStroke = getBorderStroke();
-		g2d.setStroke(borderStroke);
+		//Stroke borderStroke = getBorderStroke();
+		//g2d.setStroke(borderStroke);
 
 		g2d.draw(getBounds());
 

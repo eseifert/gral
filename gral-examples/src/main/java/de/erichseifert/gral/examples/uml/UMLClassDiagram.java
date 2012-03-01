@@ -24,28 +24,44 @@ package de.erichseifert.gral.examples.uml;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.JFrame;
 
+import metamodel.classes.NamedElement.VisibilityKind;
+import metamodel.classes.Package;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.ui.DrawablePanel;
-import de.erichseifert.gral.uml.ClassDrawable;
+import de.erichseifert.gral.uml.PackageDrawable;
 
 public class UMLClassDiagram extends JFrame {
-	private ClassDrawable clazz;
 
 	public UMLClassDiagram() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 
-		clazz = new ClassDrawable(UMLClassDiagram.class.getName());
+		Package kernel = new Package(null, VisibilityKind.PUBLIC, "Kernel", null);
+		Package associationClasses = new Package(null, VisibilityKind.PUBLIC, "AssociationClasses", null);
+		kernel.merge(associationClasses);
+		Package dependencies = new Package(null, VisibilityKind.PUBLIC, "Dependencies", null);
+		kernel.merge(dependencies);
+		Package powerTypes = new Package(null, VisibilityKind.PUBLIC, "PowerTypes", null);
+		kernel.merge(powerTypes);
+		Package interfaces = new Package(null, VisibilityKind.PUBLIC, "Interfaces", null);
+		dependencies.merge(interfaces);
+		Package basicBehaviours = new Package(null, VisibilityKind.PUBLIC, "BasicBehaviors", null);
+		basicBehaviours.merge(interfaces);
 
-		DrawablePanel panel = new DrawablePanel(clazz);
+		Drawable pkg = new PackageDrawable(kernel);
+
+		DrawablePanel panel = new DrawablePanel(pkg);
 		getContentPane().add(panel, BorderLayout.CENTER);
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		super.paint(g2d);
 	}
 
