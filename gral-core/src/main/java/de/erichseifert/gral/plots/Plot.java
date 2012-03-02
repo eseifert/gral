@@ -59,9 +59,6 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot. */
 	Key COLOR = new Key("plot.color"); //$NON-NLS-1$
-	/** Key for specifying a {@link Boolean} value to set whether anti-aliasing
-	should used for drawing ({@code true}) or not ({@code false}). */
-	Key ANTIALISING = new Key("plot.antialiasing"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value to set whether the legend
 	should be shown. */
 	Key LEGEND = new Key("plot.legend"); //$NON-NLS-1$

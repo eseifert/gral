@@ -54,7 +54,6 @@ public class ScatterPlot extends ExamplePanel {
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		plot.setSetting(XYPlot.TITLE, getDescription());
-		plot.setSetting(XYPlot.ANTIALISING, false);
 
 		// Format points
 		plot.getPointRenderer(data).setSetting(PointRenderer.COLOR, COLOR1);

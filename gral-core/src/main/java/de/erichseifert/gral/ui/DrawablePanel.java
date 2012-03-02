@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Dimension2D;
 
 import javax.swing.JPanel;
@@ -43,13 +44,18 @@ public class DrawablePanel extends JPanel {
 	/** Drawable that should be displayed. */
 	private final Drawable drawable;
 
+	/** Defines whether this panel uses antialiasing. */
+	private boolean antialiased;
+
 	/**
-	 * Creates a new DrawablePanel with the specified {@code Drawable}.
+	 * Initializes a new instance with the specified {@code Drawable}.
+	 * Antialiasing is enabled by default.
 	 * @param drawable {@code Drawable} to be displayed
 	 */
 	public DrawablePanel(Drawable drawable) {
 		this.drawable = drawable;
 		setOpaque(false);
+		antialiased = true;
 	}
 
 	/**
@@ -66,6 +72,10 @@ public class DrawablePanel extends JPanel {
 		super.paintComponent(g);
 		if (isVisible()) {
 			Graphics2D graphics = (Graphics2D) g;
+			if (isAntialiased()) {
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			}
+
 			getDrawable().draw(new DrawingContext(graphics));
 		}
 	}
@@ -93,5 +103,21 @@ public class DrawablePanel extends JPanel {
 	@Override
 	public Dimension getMinimumSize() {
 		return super.getPreferredSize();
+	}
+
+	/**
+	 * Returns whether antialiasing is applied.
+	 * @return {@code true} if the panel uses antialiasing, {@code false} otherwise.
+	 */
+	public boolean isAntialiased() {
+		return antialiased;
+	}
+
+	/**
+	 * Sets whether antialiasing should be applied.
+	 * @param antialiased {@code true} if the panel should use antialiasing, {@code false} otherwise.
+	 */
+	public void setAntialiased(boolean antialiased) {
+		this.antialiased = antialiased;
 	}
 }

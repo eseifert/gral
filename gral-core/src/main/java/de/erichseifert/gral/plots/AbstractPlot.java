@@ -25,7 +25,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -109,7 +108,7 @@ public abstract class AbstractPlot extends StylableContainer
 	public AbstractPlot(DataSource... series) {
 		super(new EdgeLayout(20.0, 20.0));
 
-		title = new Label(); //$NON-NLS-1$
+		title = new Label();
 		title.setSetting(Label.FONT, Font.decode(null).deriveFont(18f));
 
 		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
@@ -134,7 +133,6 @@ public abstract class AbstractPlot extends StylableContainer
 		setSettingDefault(BACKGROUND, null);
 		setSettingDefault(BORDER, null);
 		setSettingDefault(COLOR, Color.BLACK);
-		setSettingDefault(ANTIALISING, true);
 		setSettingDefault(LEGEND, false);
 		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
 		setSettingDefault(LEGEND_DISTANCE, 2.0);
@@ -149,13 +147,6 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void draw(DrawingContext context) {
 		Graphics2D graphics = context.getGraphics();
-
-		Boolean antialiasing = getSetting(ANTIALISING);
-
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				(antialiasing != null && antialiasing.booleanValue())
-					? RenderingHints.VALUE_ANTIALIAS_ON
-					: RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		Paint bg = getSetting(BACKGROUND);
 		if (bg != null) {
