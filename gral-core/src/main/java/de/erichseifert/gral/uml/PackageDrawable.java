@@ -1,19 +1,26 @@
 package de.erichseifert.gral.uml;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import metamodel.classes.Package;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.util.Orientation;
 
 /**
  * Represents a drawable that displays a package in UML class diagrams.
  */
 public class PackageDrawable extends DrawableContainer {
-	private final Package p;
+	private final Package pkg;
 	private final Label name;
+
+	private final Rectangle2D tab;
+	private final Rectangle2D frame;
 
 	private boolean membersDisplayed;
 
@@ -22,8 +29,28 @@ public class PackageDrawable extends DrawableContainer {
 	 * @param pkg Package to be displayed.
 	 */
 	public PackageDrawable(Package pkg) {
-		this.p = pkg;
+		super(new StackedLayout(Orientation.VERTICAL));
+
+		this.pkg = pkg;
 		name = new Label(pkg.getName());
+
+		Font font = name.getSetting(Label.FONT);
+		double fontHeight = font.getSize2D();
+		double textWidth = name.getPreferredSize().getWidth();
+		double textHeight = name.getPreferredSize().getHeight();
+
+		double frameWidth = textWidth + fontHeight*2.0;
+
+		tab = new Rectangle2D.Double(
+			0.0, 0.0,
+			(1.0/3.0)*frameWidth, fontHeight*1.0
+		);
+		// TODO Add support for package names in the tab
+		frame = new Rectangle2D.Double(
+			0, tab.getHeight(),
+			frameWidth, textHeight + fontHeight*2.0
+		);
+
 		// TODO Add support for package URI
 	}
 
@@ -31,27 +58,13 @@ public class PackageDrawable extends DrawableContainer {
 	public void draw(DrawingContext context) {
 		Graphics2D g2d = context.getGraphics();
 
-		double textHeight = name.getTextRectangle().getHeight();
-		double textWidth = name.getTextRectangle().getWidth();
-
 		// Draw tab
-		Rectangle2D tab = new Rectangle2D.Double(
-			0.0, 0.0,
-			textWidth + textHeight*2.0, textHeight*2.0
-		);
 		g2d.draw(tab);
 
 		// Draw outer frame
-		Rectangle2D frame = new Rectangle2D.Double(
-			0, tab.getHeight(),
-			textWidth + textHeight*5.0, textHeight*5.0
-		);
 		g2d.draw(frame);
 
 		// Draw package name
-		if (membersDisplayed) {
-			name.setBounds(tab);
-		}
 		name.setBounds(frame);
 		name.draw(context);
 	}
@@ -61,7 +74,7 @@ public class PackageDrawable extends DrawableContainer {
 	 * @return Displayed Package.
 	 */
 	public Package getPackage() {
-		return p;
+		return pkg;
 	}
 
 	/**
@@ -78,5 +91,11 @@ public class PackageDrawable extends DrawableContainer {
 	 */
 	public void setMembersDisplayed(boolean membersDisplayed) {
 		this.membersDisplayed = membersDisplayed;
+	}
+
+	@Override
+	public Dimension2D getPreferredSize() {
+		Dimension2D preferredSize = new de.erichseifert.gral.util.Dimension2D.Double(frame.getWidth(), tab.getHeight() + frame.getHeight());
+		return preferredSize;
 	}
 }

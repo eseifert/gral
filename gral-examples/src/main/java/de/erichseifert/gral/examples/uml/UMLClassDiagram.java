@@ -22,17 +22,17 @@
 package de.erichseifert.gral.examples.uml;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 import javax.swing.JFrame;
 
 import metamodel.classes.NamedElement.VisibilityKind;
 import metamodel.classes.Package;
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
+import de.erichseifert.gral.uml.ClassDiagram;
 import de.erichseifert.gral.uml.PackageDrawable;
+import de.erichseifert.gral.util.Insets2D;
 
 public class UMLClassDiagram extends JFrame {
 
@@ -52,17 +52,15 @@ public class UMLClassDiagram extends JFrame {
 		Package basicBehaviours = new Package(null, VisibilityKind.PUBLIC, "BasicBehaviors", null);
 		basicBehaviours.merge(interfaces);
 
-		Drawable pkg = new PackageDrawable(kernel);
+		DrawableContainer diagram = new ClassDiagram();
+		diagram.setInsets(new Insets2D.Double(10d));
+		Drawable kernelDrawable = new PackageDrawable(kernel);
+		diagram.add(kernelDrawable);
+		Drawable depsDrawable = new PackageDrawable(dependencies);
+		diagram.add(depsDrawable);
 
-		DrawablePanel panel = new DrawablePanel(pkg);
+		DrawablePanel panel = new DrawablePanel(diagram);
 		getContentPane().add(panel, BorderLayout.CENTER);
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		super.paint(g2d);
 	}
 
 	public static void main(String[] args) {
