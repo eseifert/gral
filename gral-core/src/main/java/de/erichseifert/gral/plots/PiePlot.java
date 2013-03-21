@@ -751,19 +751,29 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					Shape shape = new Rectangle2D.Double(
 						0.0, 0.0, bounds.getWidth(), bounds.getHeight());
 					Drawable drawable = null;
-					if (pointRenderer != null) {
-						PointData pointData = new PointData(
-							Arrays.asList((Axis) null),
-							Arrays.asList((AxisRenderer) null),
-							row, 0);
-						drawable = pointRenderer.getPoint(pointData, shape);
+					if (pointRenderer == null) {
+						return;
 					}
+
+					PointData pointData = new PointData(
+						Arrays.asList((Axis) null),
+						Arrays.asList((AxisRenderer) null),
+						row, 0);
+
+					// FIXME: Find a better way to hide values in legends
+					Boolean displayValueOld = pointRenderer.getSetting(PieSliceRenderer.VALUE_DISPLAYED);
+					pointRenderer.setSetting(PieSliceRenderer.VALUE_DISPLAYED, false);
+
+					drawable = pointRenderer.getPoint(pointData, shape);
 
 					Graphics2D graphics = context.getGraphics();
 					AffineTransform txOrig = graphics.getTransform();
 					graphics.translate(bounds.getX(), bounds.getY());
 					drawable.draw(context);
 					graphics.setTransform(txOrig);
+
+					// FIXME: Find a better way to hide values in legends
+					pointRenderer.setSetting(PieSliceRenderer.VALUE_DISPLAYED, displayValueOld);
 				}
 			};
 		}

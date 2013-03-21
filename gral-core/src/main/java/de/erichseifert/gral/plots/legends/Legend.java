@@ -33,7 +33,7 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	/** Key for specifying a {@link Number} value describing the vertical
 	alignment of the legend relative to the plot area. {@code 0.0} means top,
 	{@code 0.5} means centered, and {@code 1.0} means bottom. */
-	Key ALIGNMENT_Y = new Key("legend.alignment.x"); //$NON-NLS-1$
+	Key ALIGNMENT_Y = new Key("legend.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying a {@link java.awt.Insets2D} instance defining the
 	horizontal and vertical gap between items. The gap size is defined
 	relative to the font height of the legend. */
