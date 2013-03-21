@@ -53,9 +53,9 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>com.pyx4me</groupId>
+            <groupId>com.github.wvengen</groupId>
             <artifactId>proguard-maven-plugin</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.6</version>
             <executions>
               <execution>
                 <phase>package</phase>
@@ -70,13 +70,13 @@
               <libs>
                 <lib>${runtime.jar}</lib>
               </libs>
-              <proguardVersion>4.4</proguardVersion>
+              <proguardVersion>4.9</proguardVersion>
             </configuration>
             <dependencies>
               <dependency>
                 <groupId>net.sf.proguard</groupId>
-                <artifactId>proguard</artifactId>
-                <version>4.4</version>
+                <artifactId>proguard-base</artifactId>
+                <version>4.9</version>
                 <scope>runtime</scope>
               </dependency>
             </dependencies>
