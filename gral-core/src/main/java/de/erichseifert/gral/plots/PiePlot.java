@@ -330,12 +330,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 				List<Axis> axes = Arrays.asList(axis);
 				List<AxisRenderer> axisRenderers = Arrays.asList(axisRenderer);
+				// Draw graphics
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
 					PointData pointData = new PointData(
 						axes, axisRenderers, row, 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable point = pointRenderer.getPoint(pointData, shape);
+					point.setBounds(bounds);
+					point.draw(context);
+				}
+				// Draw labels
+				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
+					Row row = s.getRow(rowIndex);
+					PointData pointData = new PointData(
+						axes, axisRenderers, row, 0);
+					Shape shape = pointRenderer.getPointShape(pointData);
+					Drawable point = pointRenderer.getValue(pointData, shape);
 					point.setBounds(bounds);
 					point.draw(context);
 				}
@@ -436,13 +447,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					PlotArea plotArea = plot.getPlotArea();
-					double plotAreaSize = Math.min(
-						plotArea.getWidth(), plotArea.getHeight())/2.0;
-					double radiusRel = DataUtils.getValueOrDefault(
-						plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
-					double radius = plotAreaSize*radiusRel;
-
 					// Paint slice
 					ColorMapper colorMapper = renderer.<ColorMapper>getSetting(
 						PieSliceRenderer.COLOR);
@@ -469,13 +473,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					}
 					GraphicsUtils.fillPaintedShape(
 						context.getGraphics(), shape, paint, null);
-
-					boolean valueDisplayed = renderer.<Boolean>getSetting(
-						VALUE_DISPLAYED);
-					if (valueDisplayed) {
-						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-						drawValueLabel(context, slice, radius, row, colValue);
-					}
 				}
 			};
 		}
@@ -690,6 +687,43 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			label.draw(context);
 		}
+
+		public Drawable getValue(final PointData data, final Shape shape) {
+			Drawable drawable = new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 8389872806138135038L;
+
+				public void draw(DrawingContext context) {
+					PointRenderer renderer = PieSliceRenderer.this;
+
+					Row row = data.row;
+					if (shape == null) {
+						return;
+					}
+
+					Slice slice = plot.getSlice(
+						row.getSource(), row.getIndex());
+					if (slice == null) {
+						return;
+					}
+
+					PlotArea plotArea = plot.getPlotArea();
+					double plotAreaSize = Math.min(
+						plotArea.getWidth(), plotArea.getHeight())/2.0;
+					double radiusRel = DataUtils.getValueOrDefault(
+						plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
+					double radius = plotAreaSize*radiusRel;
+
+					boolean valueDisplayed = renderer.<Boolean>getSetting(
+						VALUE_DISPLAYED);
+					if (valueDisplayed) {
+						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+						drawValueLabel(context, slice, radius, row, colValue);
+					}
+				}
+			};
+			return drawable;
+		}
 	}
 
 	/**
@@ -760,10 +794,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						Arrays.asList((AxisRenderer) null),
 						row, 0);
 
-					// FIXME: Find a better way to hide values in legends
-					Boolean displayValueOld = pointRenderer.getSetting(PieSliceRenderer.VALUE_DISPLAYED);
-					pointRenderer.setSetting(PieSliceRenderer.VALUE_DISPLAYED, false);
-
 					drawable = pointRenderer.getPoint(pointData, shape);
 
 					Graphics2D graphics = context.getGraphics();
@@ -771,9 +801,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					graphics.translate(bounds.getX(), bounds.getY());
 					drawable.draw(context);
 					graphics.setTransform(txOrig);
-
-					// FIXME: Find a better way to hide values in legends
-					pointRenderer.setSetting(PieSliceRenderer.VALUE_DISPLAYED, displayValueOld);
 				}
 			};
 		}

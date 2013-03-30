@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -145,7 +146,7 @@ public class DefaultPointRenderer2DTest {
 		context = new DrawingContext((Graphics2D) unset.getGraphics());
 		layout(unset, axisRenderer);
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, false);
-		point = r.getPoint(data, r.getPointShape(data));
+		point = r.getValue(data, r.getPointShape(data));
 		point.draw(context);
 
 		// Draw with value labels
@@ -153,7 +154,7 @@ public class DefaultPointRenderer2DTest {
 		context = new DrawingContext((Graphics2D) set.getGraphics());
 		layout(set, axisRenderer);
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
-		point = r.getPoint(data, r.getPointShape(data));
+		point = r.getValue(data, r.getPointShape(data));
 		point.draw(context);
 
 		assertNotEquals(unset, set);
@@ -167,7 +168,7 @@ public class DefaultPointRenderer2DTest {
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		for (Format format : formats) {
 			r.setSetting(PointRenderer.VALUE_FORMAT, format);
-			Drawable point = r.getPoint(data, r.getPointShape(data));
+			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
@@ -186,7 +187,7 @@ public class DefaultPointRenderer2DTest {
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
 		for (Double distance : distances) {
 			r.setSetting(PointRenderer.VALUE_DISTANCE, distance);
-			Drawable point = r.getPoint(data, r.getPointShape(data));
+			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
@@ -202,14 +203,18 @@ public class DefaultPointRenderer2DTest {
 		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
 
 		r.setSetting(PointRenderer.VALUE_DISPLAYED, true);
+		r.setSetting(PointRenderer.VALUE_DISTANCE, 0.5);
 		for (Location location : locations) {
 			r.setSetting(PointRenderer.VALUE_LOCATION, location);
-			Drawable point = r.getPoint(data, r.getPointShape(data));
+			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
 			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 			layout(image, axisRenderer);
+			AffineTransform txOld = context.getGraphics().getTransform();
+			context.getGraphics().translate(image.getWidth()/2.0, image.getHeight()/2.0);
 			point.draw(context);
+			context.getGraphics().setTransform(txOld);
 			assertNotEmpty(image);
 		}
 	}

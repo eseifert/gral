@@ -162,11 +162,6 @@ public class BarPlot extends XYPlot {
 						GraphicsUtils.drawPaintedShape(
 							graphics, shape, strokePaint, null, stroke);
 					}
-
-					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
-						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-						drawValueLabel(context, shape, row, colValue);
-					}
 				}
 			};
 		}
@@ -263,6 +258,32 @@ public class BarPlot extends XYPlot {
 			Shape shapeTransformed = tx.createTransformedShape(shape);
 			return shapeTransformed;
 		}
+
+		/**
+		 * Returns a graphical representation of the value label to be drawn for
+		 * the specified data value.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the bounds for the value label.
+		 * @return Component that can be used to draw the value label.
+		 */
+		@Override
+		public Drawable getValue(final PointData data, final Shape shape) {
+			Drawable drawable = new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = -1133369168849171793L;
+
+				public void draw(DrawingContext context) {
+					PointRenderer renderer = BarRenderer.this;
+					Row row = data.row;
+
+					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+						drawValueLabel(context, shape, row, colValue);
+					}
+				}
+			};
+			return drawable;
+		}
 	}
 
 	/**
@@ -325,14 +346,16 @@ public class BarPlot extends XYPlot {
 					PointRenderer pointRenderer = plot.getPointRenderer(data);
 					Shape shape = null;
 					Drawable drawable = null;
+					Drawable labelDrawable = null;
 					if (pointRenderer != null) {
 						shape = pointRenderer.getPointShape(pointData);
+						drawable = pointRenderer.getPoint(pointData, shape);
 						drawable = pointRenderer.getPoint(pointData, shape);
 					}
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-						bounds.getMinY()), drawable, shape);
+							bounds.getMinY()), drawable, shape, labelDrawable);
 
 					Graphics2D graphics = context.getGraphics();
 					Point2D pos = point.position.getPoint2D();

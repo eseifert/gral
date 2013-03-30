@@ -67,8 +67,8 @@ public class DefaultLineRendererTest {
 		// Get line
 		LineRenderer r = new DefaultLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -98,8 +98,8 @@ public class DefaultLineRendererTest {
 	public void testGap() {
 		LineRenderer r = new DefaultLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
 
 		List<Double> gaps = Arrays.asList(

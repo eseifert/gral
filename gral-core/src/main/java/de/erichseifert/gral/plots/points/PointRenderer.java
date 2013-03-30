@@ -115,4 +115,12 @@ public interface PointRenderer extends SettingsStorage {
 	 */
 	Drawable getPoint(PointData data, Shape shape);
 
+	/**
+	 * Returns a graphical representation of the value label to be drawn for
+	 * the specified data value.
+	 * @param data Information on axes, renderers, and values.
+	 * @param shape Outline that describes the bounds for the value label.
+	 * @return Component that can be used to draw the value label.
+	 */
+	Drawable getValue(PointData data, Shape shape);
 }

@@ -98,8 +98,8 @@ public class AbstractLineRendererTest {
 		// Get line
 		LineRenderer r = new MockLineRenderer();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -126,9 +126,9 @@ public class AbstractLineRendererTest {
 		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null)
 		);
 
 		Shape punched = r.punch(line, points);
@@ -141,9 +141,9 @@ public class AbstractLineRendererTest {
 
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null)
 		);
 
 		Shape punched = r.punch(null, points);

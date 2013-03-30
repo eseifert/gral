@@ -110,7 +110,8 @@ public class TableLayout implements Layout {
 	 * Calculates the preferred dimensions for all columns and rows.
 	 * @param container The container for which the dimension should be
 	 *        calculated.
-	 * @see TableLayout#COLS, TableLayout#ROWS
+	 * @see #COLS
+	 * @see #ROWS
 	 */
 	private Info[] getInfo(Container container) {
 		Info[] infos = new Info[2];

@@ -134,6 +134,11 @@ public class AbstractPointRendererTest {
 		public Shape getPointShape(PointData data) {
 			return new Rectangle2D.Double(-1.3, -1.3, 3.0, 3.0);
 		}
+
+		public Drawable getValue(PointData data, Shape shape) {
+			// TODO
+			return null;
+		}
 	}
 
 	@Before

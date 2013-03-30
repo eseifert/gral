@@ -61,7 +61,7 @@ public class Tick extends DataPoint {
 	 */
 	public Tick(TickType type, PointND<Double> position, PointND<Double> normal,
 			Drawable drawable, Shape point, String label) {
-		super(null, position, drawable, point);
+		super(null, position, drawable, point, null);
 		this.type = type;
 		this.normal = normal;
 		this.label = label;

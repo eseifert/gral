@@ -427,15 +427,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 					Shape shape = null;
 					Drawable drawable = null;
+					Drawable labelDrawable = null;
 					if (pointRenderer != null) {
 						shape = pointRenderer.getPointShape(
 							pointData);
 						drawable = pointRenderer.getPoint(
 							pointData, shape);
+						labelDrawable = pointRenderer.getValue(
+							pointData, shape);
 					}
 
 					DataPoint dataPoint = new DataPoint(
-						pointData, pos, drawable, shape);
+						pointData, pos, drawable, shape, labelDrawable);
 					points.add(dataPoint);
 				}
 
@@ -450,13 +453,22 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					drawable.draw(context);
 				}
 				if (pointRenderer != null) {
+					// Draw graphics
 					for (DataPoint point : points) {
 						PointND<Double> pos = point.position;
 						double pointX = pos.get(PointND.X);
 						double pointY = pos.get(PointND.Y);
 						graphics.translate(pointX, pointY);
-						Drawable drawable = point.drawable;
-						drawable.draw(context);
+						point.drawable.draw(context);
+						graphics.setTransform(txOffset);
+					}
+					// Draw labels
+					for (DataPoint point : points) {
+						PointND<Double> pos = point.position;
+						double pointX = pos.get(PointND.X);
+						double pointY = pos.get(PointND.Y);
+						graphics.translate(pointX, pointY);
+						point.labelDrawable.draw(context);
 						graphics.setTransform(txOffset);
 					}
 				}
@@ -537,15 +549,15 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					DataPoint p1 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getMinX(), bounds.getCenterY()),
-						null, null);
+						null, null, null);
 					DataPoint p2 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
-						null, shape);
+						null, shape, null);
 					DataPoint p3 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()),
-						null, null);
+						null, null, null);
 					List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
 					if (areaRenderer != null) {

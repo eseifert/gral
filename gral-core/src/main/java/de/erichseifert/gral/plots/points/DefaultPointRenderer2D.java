@@ -82,11 +82,6 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), shape, paint, null);
 
-				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
-					int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
-					drawValueLabel(context, shape, row, colValue);
-				}
-
 				if (renderer.<Boolean>getSetting(ERROR_DISPLAYED)) {
 					int colErrorTop =
 						renderer.<Integer>getSetting(ERROR_COLUMN_TOP);
@@ -239,5 +234,30 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	public Shape getPointShape(PointData data) {
 		Shape shape = getSetting(SHAPE);
 		return shape;
+	}
+
+	/**
+	 * Returns a graphical representation of the value label to be drawn for
+	 * the specified data value.
+	 * @param data Information on axes, renderers, and values.
+	 * @param shape Outline that describes the bounds for the value label.
+	 * @return Component that can be used to draw the value label.
+	 */
+	public Drawable getValue(final PointData data, final Shape shape) {
+		Drawable drawable = new AbstractDrawable() {
+			/** Version id for serialization. */
+			private static final long serialVersionUID = -2568531344817590175L;
+
+			public void draw(DrawingContext context) {
+				PointRenderer renderer = DefaultPointRenderer2D.this;
+				Row row = data.row;
+
+				if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+					int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+					drawValueLabel(context, shape, row, colValue);
+				}
+			}
+		};
+		return drawable;
 	}
 }

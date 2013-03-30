@@ -356,6 +356,25 @@ public class BoxPlot extends XYPlot {
 			return getSetting(SHAPE);
 		}
 
+		/**
+		 * Returns a graphical representation of the value label to be drawn for
+		 * the specified data value.
+		 * @param data Information on axes, renderers, and values.
+		 * @param shape Outline that describes the bounds for the value label.
+		 * @return Component that can be used to draw the value label.
+		 */
+		public Drawable getValue(final PointData data, final Shape shape) {
+			Drawable drawable = new AbstractDrawable() {
+				/** Version id for serialization. */
+				private static final long serialVersionUID = 6788431763837737592L;
+
+				public void draw(DrawingContext context) {
+					// TODO Implement rendering of value label
+				}
+			};
+			return drawable;
+		}
+
 		@Override
 		protected <T> void setSetting(Key key, T value, boolean isDefault) {
 			// Be nice and automatically convert colors to color mappers
@@ -466,10 +485,11 @@ public class BoxPlot extends XYPlot {
 						symbolRow, 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable drawable = pointRenderer.getPoint(pointData, shape);
+					Drawable labelDrawable = pointRenderer.getValue(pointData, shape);
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-						bounds.getCenterY()), drawable, shape);
+						bounds.getCenterY()), drawable, shape, labelDrawable);
 
 					Graphics2D graphics = context.getGraphics();
 					graphics.draw(bounds);
