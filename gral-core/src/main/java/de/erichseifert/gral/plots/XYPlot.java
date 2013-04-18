@@ -803,6 +803,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 		// Set axis mapping
 		setMapping(source, AXIS_X, AXIS_Y);
+		// The mapping from columns to axes has changed, so scaling has to be
+		// refreshed
+		autoscaleAxes();
 
 		// Assign default renderers
 		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();

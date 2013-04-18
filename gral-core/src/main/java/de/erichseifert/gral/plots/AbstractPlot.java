@@ -752,6 +752,9 @@ public abstract class AbstractPlot extends StylableContainer
 			for (Entry<Tuple, String> entry : mapping.entrySet()) {
 				Tuple mapKey = entry.getKey();
 				DataSource s = (DataSource) mapKey.get(0);
+				if (s.getRowCount() == 0) {
+					continue;
+				}
 				Column col = s.getColumn((Integer) mapKey.get(1));
 				String axisName = entry.getValue();
 
