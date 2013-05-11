@@ -50,10 +50,8 @@ The GRAL Maven project offers two sources for documentation:
 
      $ mvn site
 
-2. A book-like documentation in form of a DocBook file. To build an HTML file of
-   the DocBook file in the ``target/docbook`` directory execute::
-
-     $ mvn docbook:transform
+2. A book-like documentation in the reStructuredText format is available in the
+   file ``documentation_en.rst``.
 
 Using GRAL in an IDE
 ====================

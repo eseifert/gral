@@ -108,7 +108,7 @@
           <excludes>
             <exclude>**/main/resources/**</exclude>
             <exclude>**/test/resources/**</exclude>
-            <exclude>**/src/docbook/**</exclude>
+            <exclude>**/src/rst/**</exclude>
             <exclude>**/LICENSE*</exclude>
             <exclude>**/README</exclude>
             <exclude>**/TODO.txt</exclude>
