@@ -5,7 +5,10 @@
     <title>GRAL Documentation</title>
     <author><firstname>Erich</firstname><surname>Seifert</surname></author>
     <author><firstname>Michael</firstname><surname>Seifert</surname></author>
-    <copyright><year>2011</year><holder>Erich Seifert</holder><holder>Michael Seifert</holder></copyright>
+    <copyright>
+        <year>2010</year><year>2011</year><year>2012</year><year>2013</year>
+        <holder>Erich Seifert</holder><holder>Michael Seifert</holder>
+    </copyright>
 </info>
 
 <chapter xml:id="data">
@@ -723,14 +726,14 @@ axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
             <example xml:id="example.plotting.custom.point.simple">
                 <title>A custom point renderer</title>
                 <programlisting language="java"><![CDATA[
-public class SimplePointRenderer extends DefaultPointRenderer {
+public class SimplePointRenderer extends DefaultPointRenderer2D {
     @Override
-    public Drawable getPoint(final Axis axisY, final AxisRenderer axisYRenderer, final Row row) {
+    public Drawable getPoint(final PointData data, final Shape shape) {
         Drawable drawable = new AbstractDrawable() {
             @Override
             public void draw(DrawingContext context) {
                 Paint paint = SimplePointRenderer.this.getSetting(COLOR);
-                Shape point = getPointPath(row);
+                Shape point = getPointShape(data);
 
                 // Put your custom code here ...
 
@@ -738,12 +741,6 @@ public class SimplePointRenderer extends DefaultPointRenderer {
             }
         };
         return drawable;
-    }
-
-    @Override
-    public Shape getPointPath(Row row) {
-        Shape shape = getSetting(SHAPE);
-        return shape;
     }
 }
 ]]></programlisting>
@@ -782,22 +779,27 @@ public class SimplePointRenderer extends DefaultPointRenderer {
                 <programlisting language="java"><![CDATA[
 public class SimpleLineRenderer2D extends AbstractLineRenderer2D {
     @Override
-    public Drawable getLine(final Iterable<DataPoint> points) {
+    public Shape getLineShape(final List<DataPoint> points) {
+        Path2D line = new Path2D.Double();
+        for (DataPoint point : points) {
+            Point2D pos = point.position.getPoint2D();
+            if (line.getCurrentPoint() == null) {
+                line.moveTo(pos.getX(), pos.getY());
+            } else {
+                line.lineTo(pos.getX(), pos.getY());
+            }
+        }
+        Shape lineShape = punch(line, points);
+        return lineShape;
+    }
+
+    @Override
+    public Drawable getLine(final List<DataPoint> points, final Shape shape) {
         Drawable d = new AbstractDrawable() {
             @Override
             public void draw(DrawingContext context) {
-                Path2D line = new Path2D.Double();
-                for (DataPoint point : points) {
-                    Point2D pos = point.getPosition().getPoint2D();
-                    if (line.getCurrentPoint() == null) {
-                        line.moveTo(pos.getX(), pos.getY());
-                    } else {
-                        line.lineTo(pos.getX(), pos.getY());
-                    }
-                }
-                Shape lineShape = punch(line, points);
                 Paint paint = SimpleLineRenderer2D.this.getSetting(LineRenderer.COLOR);
-                GraphicsUtils.fillPaintedShape(context.getGraphics(), lineShape, paint, null);
+                GraphicsUtils.fillPaintedShape(context.getGraphics(), shape, paint, null);
             }
         };
         return d;
@@ -841,9 +843,8 @@ public class SimpleLineRenderer2D extends AbstractLineRenderer2D {
                 <programlisting language="java"><![CDATA[
 public class SimpleAreaRenderer extends AbstractAreaRenderer {
     @Override
-    public Drawable getArea(Axis axis, AxisRenderer axisRenderer,
-            Iterable<DataPoint> points) {
-        Shape path = getAreaShape(axis, axisRenderer, points);
+    public Drawable getArea(final List<DataPoint> points, final Shape shape) {
+        Shape path = getAreaShape(points);
         final Shape area = punch(path, points);
 
         return new AbstractDrawable() {
@@ -856,10 +857,10 @@ public class SimpleAreaRenderer extends AbstractAreaRenderer {
         };
     }
 
-    private Shape getAreaShape(Axis axis, AxisRenderer axisRenderer,
-            Iterable<DataPoint> points) {
+    public Shape getAreaShape(final List<DataPoint> points) {
+        Shape shape = null;
         // Code to construct the shape
-        ...
+        return shape;
     }
 }
 ]]></programlisting>
