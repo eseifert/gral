@@ -703,17 +703,16 @@ axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
 
             <para>Every point renderer has to implement two methods:
             <methodsynopsis>
-                <type>Drawable</type><methodname>getPoint</methodname>
-                <methodparam><type>Axis</type><parameter>axis</parameter></methodparam>
-                <methodparam><type>AxisRenderer</type><parameter>axisRenderer</parameter></methodparam>
-                <methodparam><type>Row</type><parameter>row</parameter></methodparam>
+                <type>Shape</type><methodname>getPointShape</methodname>
+                <methodparam><type>PointData</type><parameter>data</parameter></methodparam>
             </methodsynopsis>
-            returns a drawable component which then renders the points and
+            returns the vector shape of a specified data point, and
             <methodsynopsis>
-                <type>Shape</type><methodname>getPointPath</methodname>
-                <methodparam><type>Row</type><parameter>row</parameter></methodparam>
+                <type>Drawable</type><methodname>getPoint</methodname>
+                <methodparam><type>PointData</type><parameter>data</parameter></methodparam>
+                <methodparam><type>Shape</type><parameter>shape</parameter></methodparam>
             </methodsynopsis>
-            which returns the vector shape of a specified data point</para>
+            returns a drawable component which then renders the points.</para>
 
             <para>The class <classname>AbstractPointRenderer</classname>
             implements the interface <interfacename>PointRenderer</interfacename>
@@ -752,19 +751,25 @@ public class SimplePointRenderer extends DefaultPointRenderer2D {
 
             <para>Data points can be connected using lines. To draw these lines
             instances of <interfacename>LineRenderer</interfacename> are used.
-            A line renderer has full control over the line shapes, the stroke
+            A line renderer has full control over the line's shape, the stroke
             patterns, and the colors which will be used when drawing. Custom
             renderers can be easily implemented using either the interface
             <interfacename>LineRenderer</interfacename> itself or using the
             abstract class <classname>AbstractLineRenderer2D</classname> which
             is the preferred way for two-dimensional applications.</para>
 
-            <para>Every line renderer has to implement one method:
+            <para>Every line renderer has to implement two methods:
+            <methodsynopsis>
+                <type>Shape</type><methodname>getLineShape</methodname>
+                <methodparam><type>List&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+            </methodsynopsis>
+            returns a vector shape for the line, and
             <methodsynopsis>
                 <type>Drawable</type><methodname>getLine</methodname>
-                <methodparam><type>Iterable&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+                <methodparam><type>List&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+                <methodparam><type>Shape</type><parameter>shape</parameter></methodparam>
             </methodsynopsis>
-            returns a drawable component to display the lines.</para>
+            returns a drawable component to display the line.</para>
 
             <para>The class <classname>AbstractLineRenderer2D</classname>
             implements the interface <interfacename>LineRenderer</interfacename>
@@ -821,12 +826,16 @@ public class SimpleLineRenderer2D extends AbstractLineRenderer2D {
             using the abstract class <classname>AbstractAreaRenderer</classname>
             which is the preferred way.</para>
 
-            <para>Every area renderer has to implement one method:
+            <para>Every area renderer has to implement two methods:
+            <methodsynopsis>
+                <type>Shape</type><methodname>getAreaShape</methodname>
+                <methodparam><type>List&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+            </methodsynopsis>
+            returns a vector shape for the area, and
             <methodsynopsis>
                 <type>Drawable</type><methodname>getArea</methodname>
-                <methodparam><type>Axis</type><parameter>axis</parameter></methodparam>
-                <methodparam><type>AxisRenderer</type><parameter>axisRenderer</parameter></methodparam>
-                <methodparam><type>Iterable&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+                <methodparam><type>List&lt;DataPoint&gt;</type><parameter>points</parameter></methodparam>
+                <methodparam><type>Shape</type><parameter>shape</parameter></methodparam>
             </methodsynopsis>
             returns a drawable component to display the area.</para>
 
@@ -1060,8 +1069,9 @@ public class MyWriter extends IOCapabilitiesStorage implements DataWriter {
     limitations:
 
         <itemizedlist>
-            <listitem><para>It is not very fast for larger data sets</para></listitem>
-            <listitem><para>Despite we try our best to ensure code quality it still has some bugs</para></listitem>
+            <listitem><para>At the moment it's not very fast for large data sets</para></listitem>
+            <listitem><para>The API isn't stable yet, and major changes can happen before version 1.0</para></listitem>
+            <listitem><para>Despite we try our best to ensure code quality there can always be bugs</para></listitem>
         </itemizedlist>
     </para>
 </chapter>
