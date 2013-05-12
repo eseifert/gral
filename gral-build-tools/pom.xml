@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>gral-build-tools</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.9</version>
 
   <name>GRAL build tools</name>
 

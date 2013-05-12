@@ -14,6 +14,7 @@
         <include>LICENSE*</include>
         <include>README*</include>
         <include>NOTICE*</include>
+        <include>CHANGES*</include>
         <include>pom.xml</include>
       </includes>
       <useDefaultExcludes>true</useDefaultExcludes>
