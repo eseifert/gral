@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
   <artifactId>gral-build-tools</artifactId>
-  <version>0.9</version>
+  <version>0.10-SNAPSHOT</version>
 
   <name>GRAL build tools</name>
 
@@ -11,4 +11,11 @@
     <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-build-tools/</developerConnection>
     <tag>HEAD</tag>
   </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>erichseifert.de</id>
+      <url>http://mvn.erichseifert.de/maven2</url>
+    </repository>
+  </distributionManagement>
 </project>

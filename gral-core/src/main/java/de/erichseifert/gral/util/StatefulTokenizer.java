@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  *
  * The class is intended to be sub-classed to implement new grammars.
  * Different sets of rules can be defined with the method
- * {{@link #putRules(String, Rule[])}}, e.g. for string processing. Each rule
+ * {@link #putRules(String, Rule[])}, e.g. for string processing. Each rule
  * in a set produces one token with a type name and it can switch to another
  * state or switch back to the previous state with the special state
  * {@code "#pop"}. The is a list of tokens with arbitrary type.
