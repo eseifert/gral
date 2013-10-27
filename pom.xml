@@ -39,7 +39,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <compileSource>1.5</compileSource>
+    <compileSource>1.6</compileSource>
     <runtime.jar>${java.home}/lib/rt.jar</runtime.jar>
   </properties>
 
