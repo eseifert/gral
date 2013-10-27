@@ -6,12 +6,6 @@
 
   <name>GRAL build tools</name>
 
-  <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk/gral-build-tools/</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-build-tools/</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-
   <distributionManagement>
     <repository>
       <id>erichseifert.de</id>

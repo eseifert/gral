@@ -95,10 +95,4 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
-
-  <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk/gral-core/</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-core/</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

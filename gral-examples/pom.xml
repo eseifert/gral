@@ -56,10 +56,4 @@
       <version>0.10-SNAPSHOT</version>
     </dependency>
   </dependencies>
-
-  <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk/gral-examples/</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk/gral-examples/</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>
