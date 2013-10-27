@@ -275,8 +275,8 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:svn://erichseifert.de/gral/trunk</connection>
-    <developerConnection>scm:svn:svn://erichseifert.de/gral/trunk</developerConnection>
+    <connection>scm:git:git://erichseifert.de/gral.git</connection>
+    <developerConnection>scm:git:ssh://git@erichseifert.de/gral.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
