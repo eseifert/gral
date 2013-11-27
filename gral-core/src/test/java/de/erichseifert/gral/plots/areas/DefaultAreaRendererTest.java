@@ -169,7 +169,7 @@ public class DefaultAreaRendererTest {
 
 			// Draw non-rounded and non rounded gaps
 			for (Boolean rounded : roundeds) {
-				r.setSetting(AreaRenderer.GAP_ROUNDED, rounded);
+				r.setGapRounded(rounded);
 
 				Shape shape = r.getAreaShape(points);
 				Drawable area = r.getArea(points, shape);

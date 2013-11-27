@@ -50,6 +50,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	private static final long serialVersionUID = -9064749128190128428L;
 
 	private Number gap;
+	private boolean gapRounded;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -58,7 +59,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		gap = 0.0;
-		setSettingDefault(GAP_ROUNDED, false);
+		gapRounded = false;
 		setSettingDefault(COLOR, Color.GRAY);
 	}
 
@@ -75,7 +76,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 			return shape;
 		}
 
-		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+		boolean rounded = isGapRounded();
 
 		// Subtract shapes of data points from the area to yield gaps.
 		Area punched = new Area(shape);
@@ -117,5 +118,15 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	@Override
 	public void setGap(Number gap) {
 		this.gap = gap;
+	}
+
+	@Override
+	public boolean isGapRounded() {
+		return gapRounded;
+	}
+
+	@Override
+	public void setGapRounded(boolean gapRounded) {
+		this.gapRounded = gapRounded;
 	}
 }

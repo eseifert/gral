@@ -33,9 +33,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * Interface for renderers that display areas in plots.
  */
 public interface AreaRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value that decides whether the
-	gaps should have rounded corners. */
-	Key GAP_ROUNDED = new Key("area.gap.rounded"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance used to fill the
 	area shape. */
 	Key COLOR = new Key("area.color"); //$NON-NLS-1$
@@ -68,4 +65,15 @@ public interface AreaRenderer extends SettingsStorage {
 	 * @param gap Gap between area and data point.
 	 */
 	void setGap(Number gap);
+
+	/**
+	 * Returns whether the gaps should have rounded corners.
+	 * @return {@code true}, if the gaps should have rounded corners.
+	 */
+	boolean isGapRounded();
+	/**
+	 * Sets a value which decides whether the gaps should have rounded corners.
+	 * @param gapRounded {@code true}, if the gaps should have rounded corners.
+	 */
+	void setGapRounded(boolean gapRounded);
 }
