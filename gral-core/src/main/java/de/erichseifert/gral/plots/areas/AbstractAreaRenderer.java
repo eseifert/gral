@@ -27,12 +27,10 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -45,8 +43,7 @@ import de.erichseifert.gral.util.MathUtils;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAreaRenderer extends BasicSettingsStorage
-		implements AreaRenderer, SettingsListener {
+public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -9064749128190128428L;
 
@@ -58,8 +55,6 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAreaRenderer() {
-		addSettingsListener(this);
-
 		gap = 0.0;
 		gapRounded = false;
 		color = Color.GRAY;
@@ -90,13 +85,6 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	}
 
 	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	public void settingChanged(SettingChangeEvent event) {
-	}
-
-	/**
 	 * Custom deserialization method.
 	 * @param in Input stream.
 	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
@@ -107,9 +95,6 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 			throws ClassNotFoundException, IOException {
 		// Normal deserialization
 		in.defaultReadObject();
-
-		// Restore listeners
-		addSettingsListener(this);
 	}
 
 	@Override
