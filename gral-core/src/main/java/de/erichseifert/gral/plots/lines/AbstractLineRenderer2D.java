@@ -53,6 +53,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 
 	private Stroke stroke;
 	private Number gap;
+	private boolean gapRounded;
 
 	/**
 	 * Initializes a new {@code AbstractLineRenderer2D} instance with
@@ -63,7 +64,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 
 		stroke = new BasicStroke(1.5f);
 		gap = 0.0;
-		setSettingDefault(GAP_ROUNDED, false);
+		gapRounded = false;
 		setSettingDefault(COLOR, Color.BLACK);
 	}
 
@@ -86,7 +87,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 			return lineShape;
 		}
 
-		boolean rounded = this.<Boolean>getSetting(GAP_ROUNDED);
+		boolean rounded = isGapRounded();
 
 		// Subtract shapes of data points from the line to yield gaps.
 		Area punched = new Area(lineShape);
@@ -138,5 +139,15 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setGap(Number gap) {
 		this.gap = gap;
+	}
+
+	@Override
+	public boolean isGapRounded() {
+		return gapRounded;
+	}
+
+	@Override
+	public void setGapRounded(boolean gapRounded) {
+		this.gapRounded = gapRounded;
 	}
 }

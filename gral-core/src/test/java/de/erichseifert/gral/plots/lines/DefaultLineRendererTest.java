@@ -113,7 +113,7 @@ public class DefaultLineRendererTest {
 
 			// Draw non-rounded and non rounded gaps
 			for (Boolean rounded : roundeds) {
-				r.setSetting(LineRenderer.GAP_ROUNDED, rounded);
+				r.setGapRounded(rounded);
 
 				Shape shape = r.getLineShape(points);
 				Drawable line = r.getLine(points, shape);
