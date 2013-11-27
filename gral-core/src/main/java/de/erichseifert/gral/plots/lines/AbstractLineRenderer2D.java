@@ -30,11 +30,10 @@ import java.awt.geom.Area;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -50,8 +49,7 @@ import de.erichseifert.gral.util.SerializationWrapper;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
-		implements LineRenderer, SettingsListener {
+public abstract class AbstractLineRenderer2D implements LineRenderer, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4172505541305453796L;
 
@@ -65,8 +63,6 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	 * default settings.
 	 */
 	public AbstractLineRenderer2D() {
-		addSettingsListener(this);
-
 		stroke = new BasicStroke(1.5f);
 		gap = 0.0;
 		gapRounded = false;
@@ -123,9 +119,6 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		gap = (Number) in.readObject();
 		gapRounded = in.readBoolean();
 		color = (Paint) in.readObject();
-
-		// Restore listeners
-		addSettingsListener(this);
 	}
 
 	private void writeObject(ObjectOutputStream out)

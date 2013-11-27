@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots.lines;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics2D;
@@ -84,9 +85,10 @@ public class DiscreteLineRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		LineRenderer original = new DiscreteLineRenderer2D();
-		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+		DiscreteLineRenderer2D original = new DiscreteLineRenderer2D();
+		DiscreteLineRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getAscentDirection(), deserialized.getAscentDirection());
+		assertEquals(original.getAscendingPoint(), deserialized.getAscendingPoint());
     }
 }

@@ -28,7 +28,6 @@ import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 
 /**
@@ -40,7 +39,7 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public interface LineRenderer extends SettingsStorage {
+public interface LineRenderer {
 	/**
 	 * Returns the geometric shape for this line.
 	 * @param points Points used for creating the line.

@@ -23,10 +23,8 @@ package de.erichseifert.gral.plots.lines;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -118,7 +116,5 @@ public class DefaultLineRendererTest {
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		LineRenderer original = new DefaultLineRenderer2D();
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		TestUtils.assertSettings(original, deserialized);
     }
 }
