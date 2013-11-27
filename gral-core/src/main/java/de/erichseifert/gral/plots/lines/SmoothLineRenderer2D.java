@@ -31,7 +31,6 @@ import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
@@ -44,17 +43,14 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6390029474886495264L;
 
-	/** Key for specifying a {@link Number} value for the smoothness of the
-	line. The value must be in range 0 (sharpest) to 1 (smoothest). */
-	public static final Key SMOOTHNESS =
-		new Key("line.smooth.smoothness"); //$NON-NLS-1$
+	private Number smoothness;
 
 	/**
 	 * Initializes a new {@code SmoothLineRenderer2D} instance with
 	 * default settings.
 	 */
 	public SmoothLineRenderer2D() {
-		setSettingDefault(SMOOTHNESS, 1.0);
+		smoothness = 1.0;
 	}
 
 	/**
@@ -89,7 +85,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	 * @return Geometric shape for this line.
 	 */
 	public Shape getLineShape(List<DataPoint> points) {
-		double smoothness = this.<Number>getSetting(SMOOTHNESS).doubleValue();
+		double smoothness = getSmoothness().doubleValue();
 
 		// Construct shape
 		Path2D shape = new Path2D.Double();
@@ -199,6 +195,26 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 			m2.getX() + (c2.getX() - m2.getX()) * smoothness + p2.getX() - m2.getX(),
 			m2.getY() + (c2.getY() - m2.getY()) * smoothness + p2.getY() - m2.getY()
 		);
+	}
+
+	/** Key for specifying a {@link Number} value for  */
+
+	/**
+	 * Returns the smoothness of the line.
+	 * The value must be in range 0 (sharpest) to 1 (smoothest).
+	 * @return Line smoothness.
+	 */
+	public Number getSmoothness() {
+		return smoothness;
+	}
+
+	/**
+	 * Returns the smoothness of the line.
+	 * The value must be in range 0 (sharpest) to 1 (smoothest).
+	 * @param smoothness Line smoothness.
+	 */
+	public void setSmoothness(Number smoothness) {
+		this.smoothness = smoothness;
 	}
 
 }

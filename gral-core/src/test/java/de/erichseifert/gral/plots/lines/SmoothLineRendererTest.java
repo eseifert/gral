@@ -27,7 +27,6 @@ import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -66,12 +65,12 @@ public class SmoothLineRendererTest {
 	@Test
 	public void testLine() {
 		// Get line
-		LineRenderer r = new SmoothLineRenderer2D();
+		SmoothLineRenderer2D r = new SmoothLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
-		r.setSetting(SmoothLineRenderer2D.SMOOTHNESS, 0.5);
+		r.setSmoothness(0.5);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
 		assertNotNull(line);
@@ -116,9 +115,9 @@ public class SmoothLineRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		LineRenderer original = new SmoothLineRenderer2D();
-		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+		SmoothLineRenderer2D original = new SmoothLineRenderer2D();
+		SmoothLineRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getSmoothness(), deserialized.getSmoothness());
     }
 }
