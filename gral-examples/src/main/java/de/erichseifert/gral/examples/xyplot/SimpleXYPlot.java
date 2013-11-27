@@ -124,7 +124,7 @@ public class SimpleXYPlot extends ExamplePanel {
 			10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for points
-		discreteRenderer.setSetting(LineRenderer.GAP, 2.0);
+		discreteRenderer.setGap(2.0);
 		discreteRenderer.setSetting(LineRenderer.GAP_ROUNDED, true);
 		// Custom ascending
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION,

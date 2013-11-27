@@ -77,7 +77,7 @@ public class StackedPlots extends ExamplePanel {
 		pointsLower.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-3, -3, 6, 6));
 		LineRenderer lineLower = new DefaultLineRenderer2D();
 		lineLower.setStroke(new BasicStroke(2f));
-		lineLower.setSetting(LineRenderer.GAP, 1.0);
+		lineLower.setGap(1.0);
 		lineLower.setSetting(LineRenderer.COLOR, colorLower);
 		plotLower.setLineRenderer(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));

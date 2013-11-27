@@ -41,10 +41,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface LineRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the gap between the line
-	and a point. If the gap value is equal to or smaller than 0 no gap will be
-	used. */
-	Key GAP = new Key("line.gap.size"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides whether the
 	gaps should have rounded corners. */
 	Key GAP_ROUNDED = new Key("line.gap.rounded"); //$NON-NLS-1$
@@ -79,4 +75,18 @@ public interface LineRenderer extends SettingsStorage {
 	 * @param stroke Stroke used for drawing.
 	 */
 	void setStroke(Stroke stroke);
+
+	/**
+	 * Returns the value for the gap between the line and a point.
+	 * If the gap value is equal to or smaller than 0 no gap will be used.
+	 * @return Gap size between drawn line and connected points in pixels.
+	 */
+	Number getGap();
+
+	/**
+	 * Sets the value for the gap between the line and a point.
+	 * If the gap value is equal to or smaller than 0 no gap will be used.
+	 * @param gap Gap size between drawn line and connected points in pixels.
+	 */
+	void setGap(Number gap);
 }

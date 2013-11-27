@@ -52,6 +52,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	private static final long serialVersionUID = -4172505541305453796L;
 
 	private Stroke stroke;
+	private Number gap;
 
 	/**
 	 * Initializes a new {@code AbstractLineRenderer2D} instance with
@@ -61,7 +62,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		stroke = new BasicStroke(1.5f);
-		setSettingDefault(GAP, 0.0);
+		gap = 0.0;
 		setSettingDefault(GAP_ROUNDED, false);
 		setSettingDefault(COLOR, Color.BLACK);
 	}
@@ -80,8 +81,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		Stroke stroke = getStroke();
 		Shape lineShape = stroke.createStrokedShape(line);
 
-		double size = DataUtils.getValueOrDefault(
-			this.<Number>getSetting(GAP), 0.0);
+		double size = DataUtils.getValueOrDefault(getGap(), 0.0);
 		if (!MathUtils.isCalculatable(size) || size == 0.0) {
 			return lineShape;
 		}
@@ -128,5 +128,15 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setStroke(Stroke stroke) {
 		this.stroke = stroke;
+	}
+
+	@Override
+	public Number getGap() {
+		return gap;
+	}
+
+	@Override
+	public void setGap(Number gap) {
+		this.gap = gap;
 	}
 }

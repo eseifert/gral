@@ -90,7 +90,7 @@ public class AreaPlot extends ExamplePanel {
 		plot.setPointRenderer(data, point);
 		LineRenderer line = new DefaultLineRenderer2D();
 		line.setSetting(LineRenderer.COLOR, color);
-		line.setSetting(LineRenderer.GAP, 3.0);
+		line.setGap(3.0);
 		line.setSetting(LineRenderer.GAP_ROUNDED, true);
 		plot.setLineRenderer(data, line);
 		AreaRenderer area = new DefaultAreaRenderer2D();

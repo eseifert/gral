@@ -109,7 +109,7 @@ public class DefaultLineRendererTest {
 
 		// Test different gap sizes
 		for (Double gap : gaps) {
-			r.setSetting(LineRenderer.GAP, gap);
+			r.setGap(gap);
 
 			// Draw non-rounded and non rounded gaps
 			for (Boolean rounded : roundeds) {
