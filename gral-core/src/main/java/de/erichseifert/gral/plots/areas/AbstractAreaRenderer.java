@@ -49,13 +49,15 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -9064749128190128428L;
 
+	private Number gap;
+
 	/**
 	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAreaRenderer() {
 		addSettingsListener(this);
 
-		setSettingDefault(GAP, 0.0);
+		gap = 0.0;
 		setSettingDefault(GAP_ROUNDED, false);
 		setSettingDefault(COLOR, Color.GRAY);
 	}
@@ -68,8 +70,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape shape, List<DataPoint> dataPoints) {
-		double size = DataUtils.getValueOrDefault(
-			this.<Number>getSetting(GAP), 0.0);
+		double size = DataUtils.getValueOrDefault(getGap(), 0.0);
 		if (!MathUtils.isCalculatable(size) || size == 0.0) {
 			return shape;
 		}
@@ -106,5 +107,15 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	@Override
+	public Number getGap() {
+		return gap;
+	}
+
+	@Override
+	public void setGap(Number gap) {
+		this.gap = gap;
 	}
 }

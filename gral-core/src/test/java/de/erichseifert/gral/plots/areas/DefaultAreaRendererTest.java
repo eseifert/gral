@@ -165,7 +165,7 @@ public class DefaultAreaRendererTest {
 
 		// Test different gap sizes
 		for (Double gap : gaps) {
-			r.setSetting(AreaRenderer.GAP, gap);
+			r.setGap(gap);
 
 			// Draw non-rounded and non rounded gaps
 			for (Boolean rounded : roundeds) {

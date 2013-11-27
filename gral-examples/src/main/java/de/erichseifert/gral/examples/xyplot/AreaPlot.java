@@ -104,7 +104,7 @@ public class AreaPlot extends ExamplePanel {
 		plot.setPointRenderer(data, point);
 		plot.setLineRenderer(data, null);
 		AreaRenderer area = new LineAreaRenderer2D();
-		area.setSetting(LineAreaRenderer2D.GAP, 3.0);
+		area.setGap(3.0);
 		area.setSetting(LineAreaRenderer2D.COLOR, color);
 		plot.setAreaRenderer(data, area);
 	}

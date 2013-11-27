@@ -33,9 +33,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * Interface for renderers that display areas in plots.
  */
 public interface AreaRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the gap between the area
-	and a data point. */
-	Key GAP = new Key("area.gap.size"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value that decides whether the
 	gaps should have rounded corners. */
 	Key GAP_ROUNDED = new Key("area.gap.rounded"); //$NON-NLS-1$
@@ -58,4 +55,17 @@ public interface AreaRenderer extends SettingsStorage {
 	 * @return Representation of the area.
 	 */
 	Drawable getArea(List<DataPoint> points, Shape shape);
+
+	// TODO: Mention which unit the Gap property has (pixels?)
+	/**
+	 * Returns the value for the gap between the area and a data point.
+	 * @return Gap between area and data point.
+	 */
+	Number getGap();
+
+	/**
+	 * Sets the value for the gap between the area and a data point.
+	 * @param gap Gap between area and data point.
+	 */
+	void setGap(Number gap);
 }
