@@ -38,7 +38,6 @@ import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
@@ -117,7 +116,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		plot.setPointRenderer(seriesLog, defaultPointRenderer);
 
 		// Format data lines
-		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
+		DiscreteLineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setColor(COLOR1);
 		discreteRenderer.setStroke(new BasicStroke(
 			3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
@@ -127,8 +126,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		discreteRenderer.setGap(2.0);
 		discreteRenderer.setGapRounded(true);
 		// Custom ascending
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION,
-			Orientation.VERTICAL);
+		discreteRenderer.setAscentDirection(Orientation.VERTICAL);
 		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT,
 			0.5);
 

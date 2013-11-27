@@ -43,22 +43,20 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 4648286099838467355L;
 
-	/** Key for specifying an instance of
-	{@link de.erichseifert.gral.util.Orientation} which indicates the primary
-    direction of the "steps". */
-	public static final Key ASCENT_DIRECTION =
-		new Key("line.discrete.ascentDirection"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the relative distance
 	between two points, i.e. the "step" of a stair. */
 	public static final Key ASCENDING_POINT =
 		new Key("line.discrete.ascendingPoint"); //$NON-NLS-1$
+
+	/** Primary direction of the "steps". */
+	private Orientation ascentDirection;
 
 	/**
 	 * Initializes a new {@code DiscreteLineRenderer2D} instance with default
 	 * settings.
 	 */
 	public DiscreteLineRenderer2D() {
-		setSettingDefault(ASCENT_DIRECTION, Orientation.HORIZONTAL);
+		ascentDirection = Orientation.HORIZONTAL;
 		setSettingDefault(ASCENDING_POINT, 0.5);
 	}
 
@@ -94,7 +92,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 * @return Geometric shape for this line.
 	 */
 	public Shape getLineShape(List<DataPoint> points) {
-		Orientation dir = getSetting(ASCENT_DIRECTION);
+		Orientation dir = getAscentDirection();
 		double ascendingPoint =
 			this.<Number>getSetting(ASCENDING_POINT).doubleValue();
 
@@ -122,5 +120,21 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		}
 
 		return punch(shape, points);
+	}
+
+	/**
+	 * Returns the primary direction of the "steps".
+	 * @return Orientation of the "steps".
+	 */
+	public Orientation getAscentDirection() {
+		return ascentDirection;
+	}
+
+	/**
+	 * Sets the primary direction of the "steps".
+	 * @param ascentDirection Orientation of the "steps".
+	 */
+	public void setAscentDirection(Orientation ascentDirection) {
+		this.ascentDirection = ascentDirection;
 	}
 }

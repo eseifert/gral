@@ -23,10 +23,8 @@ package de.erichseifert.gral.plots.lines;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -66,7 +64,7 @@ public class DiscreteLineRendererTest {
 	@Test
 	public void testLine() {
 		// Get line
-		LineRenderer r = new DiscreteLineRenderer2D();
+		DiscreteLineRenderer2D r = new DiscreteLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
@@ -75,7 +73,7 @@ public class DiscreteLineRendererTest {
 		BufferedImage image = createTestImage();
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		for (Orientation dir : Orientation.values()) {
-			r.setSetting(DiscreteLineRenderer2D.ASCENT_DIRECTION, dir);
+			r.setAscentDirection(dir);
 			Shape shape = r.getLineShape(points);
 			Drawable line = r.getLine(points, shape);
 			assertNotNull(line);
