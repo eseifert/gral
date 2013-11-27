@@ -353,7 +353,7 @@ public class BoxPlot extends XYPlot {
 		 * @return Outline that describes the point's shape.
 		 */
 		public Shape getPointShape(PointData data) {
-			return getSetting(SHAPE);
+			return getShape();
 		}
 
 		/**

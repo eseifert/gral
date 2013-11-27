@@ -247,7 +247,7 @@ public class BarPlot extends XYPlot {
 		 * @return A geometric shape for displaying a bar in bar plot.
 		 */
 		protected Shape getBarShape(double x, double y, double width, double height) {
-			Shape shape = getSetting(SHAPE);
+			Shape shape = getShape();
 			Rectangle2D shapeBounds = shape.getBounds2D();
 
 			AffineTransform tx = new AffineTransform();

@@ -37,9 +37,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Shape} instance defining the
-	form of the point. */
-	Key SHAPE = new Key("point"); //$NON-NLS-1$
 	/** Key for specifying an instance either of
 	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
 	{@link java.awt.Paint} that will be used to paint the point shapes. */
@@ -97,6 +94,18 @@ public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying the {@link java.awt.Stroke} instance defining the
 	error bars. */
 	Key ERROR_STROKE = new Key("point.error.stroke"); //$NON-NLS-1$
+
+	/**
+	 * Returns the shape which is used to draw the point.
+	 * @return {@code Shape} instance for the point.
+	 */
+	Shape getShape();
+
+	/**
+	 * Sets the shape which will be used to draw the point.
+	 * @param shape {@code Shape} instance for the point.
+	 */
+	void setShape(Shape shape);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

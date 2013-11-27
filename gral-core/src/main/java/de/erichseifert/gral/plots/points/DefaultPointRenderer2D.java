@@ -232,8 +232,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 * @return Outline that describes the point's shape.
 	 */
 	public Shape getPointShape(PointData data) {
-		Shape shape = getSetting(SHAPE);
-		return shape;
+		return getShape();
 	}
 
 	/**

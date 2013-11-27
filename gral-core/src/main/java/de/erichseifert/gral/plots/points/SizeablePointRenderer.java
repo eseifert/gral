@@ -52,7 +52,7 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 
 	@Override
 	public Shape getPointShape(PointData data) {
-		Shape shape = this.<Shape>getSetting(SHAPE);
+		Shape shape = getShape();
 
 		Row row = data.row;
 		int colSize = this.<Integer>getSetting(COLUMN);

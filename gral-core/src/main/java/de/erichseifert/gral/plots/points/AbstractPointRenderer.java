@@ -25,6 +25,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -46,6 +47,8 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -408976260196287753L;
 
+	private Shape shape;
+
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.
@@ -53,7 +56,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	public AbstractPointRenderer() {
 		addSettingsListener(this);
 
-		setSettingDefault(SHAPE, new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0));
+		shape = new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0);
 		setSettingDefault(COLOR, new SingleColor(Color.BLACK));
 
 		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
@@ -106,5 +109,16 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	@Override
+	public Shape getShape() {
+		return shape;
+	}
+
+	@Override
+	public void setShape(Shape shape) {
+		// TODO Store clone of shape to prevent external modification
+		this.shape = shape;
 	}
 }

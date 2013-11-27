@@ -76,7 +76,7 @@ public class SizeablePointsRendererTest {
 	@Test
 	public void testUnsized() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
+		r.setShape(shape);
 		Shape expected = shape;
 		Shape path = r.getPointShape(data);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
@@ -85,7 +85,7 @@ public class SizeablePointsRendererTest {
 	@Test
 	public void testSized() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
+		r.setShape(shape);
 		Shape expected = AffineTransform.getScaleInstance(2.0, 2.0)
 			.createTransformedShape(shape);
 		Row row2 = new Row(table, 1);
@@ -97,7 +97,7 @@ public class SizeablePointsRendererTest {
 	@Test
 	public void testNegativeSize() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
+		r.setShape(shape);
 		Row row2 = new Row(table, 2);
 		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
 		Shape path = r.getPointShape(data2);
@@ -116,7 +116,7 @@ public class SizeablePointsRendererTest {
 	@Test
 	public void testNullSize() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
+		r.setShape(shape);
 		Row row2 = new Row(table, 4);
 		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
 		Shape path = r.getPointShape(data2);
@@ -126,7 +126,7 @@ public class SizeablePointsRendererTest {
 	@Test
 	public void testInvalidColumn() {
 		PointRenderer r = new SizeablePointRenderer();
-		r.setSetting(PointRenderer.SHAPE, shape);
+		r.setShape(shape);
 		Shape path;
 
 		// Column index too big

@@ -247,7 +247,7 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testErrorNoAxisRenderer() {
-		r.setSetting(PointRenderer.SHAPE, null);
+		r.setShape(null);
 
 		DrawingContext context;
 		Drawable point;
