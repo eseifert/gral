@@ -119,7 +119,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Format data lines
 		LineRenderer discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setSetting(LineRenderer.COLOR, COLOR1);
-		discreteRenderer.setSetting(LineRenderer.STROKE, new BasicStroke(
+		discreteRenderer.setStroke(new BasicStroke(
 			3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
 			10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);

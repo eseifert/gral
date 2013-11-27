@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots.lines;
 
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -40,9 +41,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface LineRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	define the line shape. */
-	Key STROKE = new Key("line.stroke"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the gap between the line
 	and a point. If the gap value is equal to or smaller than 0 no gap will be
 	used. */
@@ -69,4 +67,16 @@ public interface LineRenderer extends SettingsStorage {
 	 * @return Representation of the line.
 	 */
 	Drawable getLine(List<DataPoint> points, Shape shape);
+
+	/**
+	 * Returns the stroke to be used to define the line shape.
+	 * @return Stroke used for drawing.
+	 */
+	Stroke getStroke();
+
+	/**
+	 * Sets the stroke to be used to define the line shape.
+	 * @param stroke Stroke used for drawing.
+	 */
+	void setStroke(Stroke stroke);
 }

@@ -51,6 +51,8 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4172505541305453796L;
 
+	private Stroke stroke;
+
 	/**
 	 * Initializes a new {@code AbstractLineRenderer2D} instance with
 	 * default settings.
@@ -58,7 +60,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	public AbstractLineRenderer2D() {
 		addSettingsListener(this);
 
-		setSettingDefault(STROKE, new BasicStroke(1.5f));
+		stroke = new BasicStroke(1.5f);
 		setSettingDefault(GAP, 0.0);
 		setSettingDefault(GAP_ROUNDED, false);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -75,7 +77,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		if (line == null) {
 			return null;
 		}
-		Stroke stroke = getSetting(LineRenderer.STROKE);
+		Stroke stroke = getStroke();
 		Shape lineShape = stroke.createStrokedShape(line);
 
 		double size = DataUtils.getValueOrDefault(
@@ -116,5 +118,15 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	@Override
+	public Stroke getStroke() {
+		return stroke;
+	}
+
+	@Override
+	public void setStroke(Stroke stroke) {
+		this.stroke = stroke;
 	}
 }

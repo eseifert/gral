@@ -87,7 +87,7 @@ public class AbstractLineRendererTest {
 	@Test
 	public void testCreate() {
 		LineRenderer r = new MockLineRenderer();
-		assertTrue(r.getSetting(LineRenderer.STROKE) instanceof BasicStroke);
+		assertTrue(r.getStroke() instanceof BasicStroke);
 		assertEquals(0.0, r.getSetting(LineRenderer.GAP));
 		assertEquals(false, r.getSetting(LineRenderer.GAP_ROUNDED));
 		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
