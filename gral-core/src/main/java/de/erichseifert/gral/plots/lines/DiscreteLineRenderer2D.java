@@ -31,7 +31,6 @@ import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Orientation;
 
@@ -43,13 +42,10 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 4648286099838467355L;
 
-	/** Key for specifying a {@link Number} value for the relative distance
-	between two points, i.e. the "step" of a stair. */
-	public static final Key ASCENDING_POINT =
-		new Key("line.discrete.ascendingPoint"); //$NON-NLS-1$
-
 	/** Primary direction of the "steps". */
 	private Orientation ascentDirection;
+	/** Relative distance between points, where the orientation changes. */
+	private Number ascendingPoint;
 
 	/**
 	 * Initializes a new {@code DiscreteLineRenderer2D} instance with default
@@ -57,7 +53,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public DiscreteLineRenderer2D() {
 		ascentDirection = Orientation.HORIZONTAL;
-		setSettingDefault(ASCENDING_POINT, 0.5);
+		ascendingPoint = 0.5;
 	}
 
 	/**
@@ -93,8 +89,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Shape getLineShape(List<DataPoint> points) {
 		Orientation dir = getAscentDirection();
-		double ascendingPoint =
-			this.<Number>getSetting(ASCENDING_POINT).doubleValue();
+		double ascendingPoint = getAscendingPoint().doubleValue();
 
 		// Construct shape
 		Path2D shape = new Path2D.Double();
@@ -136,5 +131,21 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public void setAscentDirection(Orientation ascentDirection) {
 		this.ascentDirection = ascentDirection;
+	}
+
+	/**
+	 * Returns the relative distance between two points, {@literal i.e.} the "step" of a stair.
+	 * @return Relative point distance.
+	 */
+	public Number getAscendingPoint() {
+		return ascendingPoint;
+	}
+
+	/**
+	 * Sets the relative distance between two points, {@literal i.e.} the "step" of a stair.
+	 * @param ascendingPoint Relative point distance.
+	 */
+	public void setAscendingPoint(Number ascendingPoint) {
+		this.ascendingPoint = ascendingPoint;
 	}
 }

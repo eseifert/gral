@@ -127,8 +127,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		discreteRenderer.setGapRounded(true);
 		// Custom ascending
 		discreteRenderer.setAscentDirection(Orientation.VERTICAL);
-		discreteRenderer.setSetting(DiscreteLineRenderer2D.ASCENDING_POINT,
-			0.5);
+		discreteRenderer.setAscendingPoint(0.5);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
