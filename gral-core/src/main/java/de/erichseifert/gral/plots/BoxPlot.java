@@ -470,12 +470,12 @@ public class BoxPlot extends XYPlot {
 					double posX = ((Number) row.get(0)).doubleValue();
 					Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
 					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererX.setShape(new Line2D.Double(
 							bounds.getMinX(), bounds.getMaxY(),
 							bounds.getMaxX(), bounds.getMaxY()));
 					Axis axisY = new Axis(1.0, 2.0);
 					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererY.setShape(new Line2D.Double(
 							bounds.getMinX(), bounds.getMaxY(),
 							bounds.getMinX(), bounds.getMinY()));
 

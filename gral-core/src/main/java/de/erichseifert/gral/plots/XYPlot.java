@@ -269,8 +269,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 				Axis axisX = plot.getAxis(AXIS_X);
 				if (axisXRenderer != null && axisX != null && axisX.isValid()) {
-					Shape shapeX =
-						axisXRenderer.getSetting(AxisRenderer.SHAPE);
+					Shape shapeX = axisXRenderer.getShape();
 					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 					List<Tick> ticksX = axisXRenderer.getTicks(axisX);
 					Line2D gridLineVert = new Line2D.Double(
@@ -306,7 +305,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				Axis axisY = plot.getAxis(AXIS_Y);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 				if (axisY != null && axisY.isValid() && axisYRenderer != null) {
-					Shape shapeY = axisYRenderer.getSetting(AxisRenderer.SHAPE);
+					Shape shapeY = axisYRenderer.getShape();
 					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 					List<Tick> ticksY = axisYRenderer.getTicks(axisY);
 					Line2D gridLineHoriz = new Line2D.Double(
@@ -527,12 +526,12 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 					Axis axisX = new Axis(0.0, 1.0);
 					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererX.setShape(new Line2D.Double(
 						bounds.getMinX(), bounds.getCenterY(),
 						bounds.getMaxX(), bounds.getCenterY()));
 					Axis axisY = new Axis(0.0, 1.0);
 					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererY.setShape(new Line2D.Double(
 						bounds.getCenterX(), bounds.getMaxY(),
 						bounds.getCenterX(), bounds.getMinY()));
 
@@ -675,7 +674,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				size.getWidth(), 0.0
 			);
 		}
-		renderer.setSetting(AxisRenderer.SHAPE, shape);
+		renderer.setShape(shape);
 	}
 
 	private void layoutAxisComponent(String axisName, Orientation orientation) {

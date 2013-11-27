@@ -49,7 +49,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.GeometryUtils;
@@ -83,6 +82,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 	/** Intersection point of the axis. */
 	private Number intersection;
+	/** Shape used for drawing. */
+	private Shape shape;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -91,10 +92,11 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		intersection = 0.0;
-
 		// The direction must defined as swapped before SHAPE is constructed.
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
-		setSettingDefault(SHAPE, new Line2D.Double(0.0, 0.0, 1.0, 0.0));
+		setShape(new Line2D.Double(0.0, 0.0, 1.0, 0.0));
+
+
 		setSettingDefault(SHAPE_VISIBLE, true);
 		setSettingDefault(SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
 		setSettingDefault(SHAPE_STROKE, new BasicStroke());
@@ -167,7 +169,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				boolean isShapeVisible =
 					renderer.<Boolean>getSetting(SHAPE_VISIBLE);
 				if (isShapeVisible) {
-					Shape shape = renderer.getSetting(SHAPE);
+					Shape shape = renderer.getShape();
 					GraphicsUtils.drawPaintedShape(
 							graphics, shape, axisPaint, null, axisStroke);
 				}
@@ -644,10 +646,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @param event Event containing information about the changed setting.
 	 */
 	public void settingChanged(SettingChangeEvent event) {
-		Key key = event.getKey();
-		if (SHAPE.equals(key)) {
-			evaluateShape((Shape) event.getValNew());
-		}
 	}
 
 	/**
@@ -674,5 +672,14 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setIntersection(Number intersection) {
 		this.intersection = intersection;
+	}
+
+	public Shape getShape() {
+		return shape;
+	}
+
+	public void setShape(Shape shape) {
+		this.shape = shape;
+		evaluateShape(shape);
 	}
 }

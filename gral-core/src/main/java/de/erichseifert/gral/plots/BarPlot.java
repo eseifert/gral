@@ -329,12 +329,12 @@ public class BarPlot extends XYPlot {
 
 					Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
 					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererX.setShape(new Line2D.Double(
 							bounds.getMinX(), bounds.getMaxY(),
 							bounds.getMaxX(), bounds.getMaxY()));
 					Axis axisY = new Axis(0.0, 0.5);
 					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setSetting(LinearRenderer2D.SHAPE, new Line2D.Double(
+					axisRendererY.setShape(new Line2D.Double(
 							bounds.getMinX(), bounds.getMaxY(),
 							bounds.getMinX(), bounds.getMinY()));
 

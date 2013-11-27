@@ -874,7 +874,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		AxisRenderer renderer = new LinearRenderer2D();
 		// Create a circle with radius 1.0 as shape for the axis
 		Shape shape = new Ellipse2D.Double(-1.0, -1.0, 2.0, 2.0);
-		renderer.setSetting(AxisRenderer.SHAPE, shape);
+		renderer.setShape(shape);
 		// Don't show axis
 		renderer.setSetting(AxisRenderer.SHAPE_VISIBLE, false);
 
@@ -1012,7 +1012,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
 		if ((START.equals(key) || CLOCKWISE.equals(key)) && axisRenderer != null) {
-			Shape shape = axisRenderer.<Shape>getSetting(AxisRenderer.SHAPE);
+			Shape shape = axisRenderer.getShape();
 
 			if (shape != null) {
 				if (START.equals(key) && event.getValOld() != null) {
@@ -1021,10 +1021,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double delta = Math.toRadians(startOld - startNew);
 					AffineTransform tx = AffineTransform.getRotateInstance(delta);
 					shape = tx.createTransformedShape(shape);
-					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
+					axisRenderer.setShape(shape);
 				} else if (CLOCKWISE.equals(key)) {
 					shape = GeometryUtils.reverse(shape);
-					axisRenderer.setSetting(AxisRenderer.SHAPE, shape);
+					axisRenderer.setShape(shape);
 				}
 			}
 		}

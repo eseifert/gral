@@ -81,8 +81,7 @@ public class AbstractPointRendererTest {
 		axis = new Axis(0.0, 10.0);
 
 		axisRenderer = new LinearRenderer2D();
-		axisRenderer.setSetting(AxisRenderer.SHAPE,
-			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+		axisRenderer.setShape(new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
 
 		data = new PointData(
 			Arrays.asList((Axis) null, axis),
@@ -151,7 +150,7 @@ public class AbstractPointRendererTest {
 			image.getWidth()/2.0, 0.0,
 			image.getWidth()/2.0, image.getHeight()
 		);
-		axisRenderer.setSetting(AxisRenderer.SHAPE, axisShape);
+		axisRenderer.setShape(axisShape);
 	}
 
 	@Test

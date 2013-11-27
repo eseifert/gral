@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.awt.Shape;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -32,10 +33,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Shape} instance that defines the
-	shape of the axis. */
-	Key SHAPE =
-		new Key("axis.shape"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides whether the
 	shape of the axis will be drawn. This doesn't influence ticks or labels. */
 	Key SHAPE_VISIBLE =
@@ -232,4 +229,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param intersection Point at which this axis intersects other axes.
 	 */
 	void setIntersection(Number intersection);
+
+	/**
+	 * Returns the shape of the axis.
+	 * @return Shape used for drawing.
+	 */
+	Shape getShape();
+
+	/**
+	 * Sets the shape of the axis.
+	 * @param shape Shape used for drawing.
+	 */
+	void setShape(Shape shape);
 }

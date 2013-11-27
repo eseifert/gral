@@ -63,8 +63,7 @@ public class SizeablePointsRendererTest {
 
 		axis = new Axis(-1.0, 1.0);
 		axisRenderer = new LinearRenderer2D();
-		axisRenderer.setSetting(AxisRenderer.SHAPE,
-			new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
+		axisRenderer.setShape(new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
 
 		data = new PointData(
 			Arrays.asList((Axis) null, axis),
