@@ -250,10 +250,8 @@ public class RasterPlot extends XYPlot {
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_Y, false);
 		//getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS, false);
 		//getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.TICKS, false);
-		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.INTERSECTION,
-			-Double.MAX_VALUE);
-		getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.INTERSECTION,
-			-Double.MAX_VALUE);
+		getAxisRenderer(AXIS_X).setIntersection(-Double.MAX_VALUE);
+		getAxisRenderer(AXIS_Y).setIntersection(-Double.MAX_VALUE);
 
 		// Store data
 		add(data);

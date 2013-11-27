@@ -101,7 +101,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		axisRendererX.setSetting(AxisRenderer.SHAPE_STROKE, stroke);
 		axisRendererY.setSetting(AxisRenderer.LABEL, "Linear axis");
 		// Change intersection point of Y axis
-		axisRendererY.setSetting(AxisRenderer.INTERSECTION, 1.0);
+		axisRendererY.setIntersection(1.0);
 		// Change tick spacing
 		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
 

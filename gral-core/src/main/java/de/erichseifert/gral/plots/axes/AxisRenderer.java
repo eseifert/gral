@@ -32,10 +32,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the intersection point of
-	axis. */
-	Key INTERSECTION =
-		new Key("axis.intersection"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Shape} instance that defines the
 	shape of the axis. */
 	Key SHAPE =
@@ -224,4 +220,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @return N-dimensional normal vector at the position
 	 */
 	PointND<Double> getNormal(Axis axis, Number value, boolean extrapolate, boolean forceLinear);
+
+	/**
+	 * Returns the intersection point of the axis.
+	 * @return Point at which this axis intersects other axes.
+	 */
+	Number getIntersection();
+
+	/**
+	 * Sets the intersection point of the axis.
+	 * @param intersection Point at which this axis intersects other axes.
+	 */
+	void setIntersection(Number intersection);
 }

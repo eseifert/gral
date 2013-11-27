@@ -698,8 +698,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			return;
 		}
 
-		Number intersection =
-			renderer.<Number>getSetting(AxisRenderer.INTERSECTION);
+		Number intersection = renderer.getIntersection();
 		PointND<Double> pos = rendererSecondary.getPosition(
 			axisSecondary, intersection, false, false);
 

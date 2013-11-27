@@ -81,13 +81,16 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	/** Length of the the axis up to a certain approximating line segment. */
 	private double[] shapeLengths;
 
+	/** Intersection point of the axis. */
+	private Number intersection;
+
 	/**
 	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAxisRenderer2D() {
 		addSettingsListener(this);
 
-		setSettingDefault(INTERSECTION, 0.0);
+		intersection = 0.0;
 
 		// The direction must defined as swapped before SHAPE is constructed.
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
@@ -661,5 +664,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	@Override
+	public Number getIntersection() {
+		return intersection;
+	}
+
+	@Override
+	public void setIntersection(Number intersection) {
+		this.intersection = intersection;
 	}
 }

@@ -78,7 +78,7 @@ public class HistogramPlot extends ExamplePanel {
 				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX)*1.1, 25.0));
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_MINOR, false);
-		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.INTERSECTION, -4.4);
+		plot.getAxisRenderer(BarPlot.AXIS_Y).setIntersection(-4.4);
 
 		// Format bars
 		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.COLOR,
