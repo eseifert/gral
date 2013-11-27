@@ -27,12 +27,11 @@ import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 /**
  * Interface for renderers that display areas in plots.
  */
-public interface AreaRenderer extends SettingsStorage {
+public interface AreaRenderer {
 	/**
 	 * Returns the shape used for rendering the area of a data points.
 	 * @param points Data points.

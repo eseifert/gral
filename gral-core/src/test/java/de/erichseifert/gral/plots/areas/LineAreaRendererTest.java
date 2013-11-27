@@ -27,7 +27,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -119,6 +118,8 @@ public class LineAreaRendererTest {
 		AreaRenderer original = new DefaultAreaRenderer2D();
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getGap(), deserialized.getGap());
+		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
+		assertEquals(original.getColor(), deserialized.getColor());
     }
 }
