@@ -80,8 +80,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 			 */
 			public void draw(DrawingContext context) {
 				// Draw path
-				Paint paint = DiscreteLineRenderer2D.this
-					.getSetting(LineRenderer.COLOR);
+				Paint paint = DiscreteLineRenderer2D.this.getColor();
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), shape, paint, null);
 			}

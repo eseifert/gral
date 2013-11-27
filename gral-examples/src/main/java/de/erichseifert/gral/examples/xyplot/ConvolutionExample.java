@@ -112,7 +112,7 @@ public class ConvolutionExample extends ExamplePanel {
 	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
 		plot.setPointRenderer(series, null);
 		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
-		line.setSetting(DefaultLineRenderer2D.COLOR, color);
+		line.setColor(color);
 		plot.setLineRenderer(series, line);
 	}
 

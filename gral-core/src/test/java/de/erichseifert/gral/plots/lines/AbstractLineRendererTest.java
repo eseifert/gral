@@ -90,7 +90,7 @@ public class AbstractLineRendererTest {
 		assertTrue(r.getStroke() instanceof BasicStroke);
 		assertEquals(0.0, r.getGap());
 		assertEquals(false, r.isGapRounded());
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
+		assertEquals(Color.BLACK, r.getColor());
 	}
 
 	@Test
@@ -104,19 +104,6 @@ public class AbstractLineRendererTest {
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
 		assertNotNull(line);
-	}
-
-	@Test
-	public void testSettings() {
-		// Get
-		LineRenderer r = new MockLineRenderer();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-		// Set
-		r.setSetting(LineRenderer.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer.COLOR));
-		// Remove
-		r.removeSetting(LineRenderer.COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
 	}
 
 	@Test
@@ -155,6 +142,9 @@ public class AbstractLineRendererTest {
 		LineRenderer original = new MockLineRenderer();
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getStroke(), deserialized.getStroke());
+		assertEquals(original.getGap(), deserialized.getGap());
+		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
+		assertEquals(original.getColor(), deserialized.getColor());
     }
 }

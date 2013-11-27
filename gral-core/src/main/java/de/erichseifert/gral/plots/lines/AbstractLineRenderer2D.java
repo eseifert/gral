@@ -23,11 +23,13 @@ package de.erichseifert.gral.plots.lines;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
@@ -36,6 +38,8 @@ import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.SerializationUtils;
+import de.erichseifert.gral.util.SerializationWrapper;
 
 
 /**
@@ -54,6 +58,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	private Stroke stroke;
 	private Number gap;
 	private boolean gapRounded;
+	private Paint color;
 
 	/**
 	 * Initializes a new {@code AbstractLineRenderer2D} instance with
@@ -65,7 +70,7 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 		stroke = new BasicStroke(1.5f);
 		gap = 0.0;
 		gapRounded = false;
-		setSettingDefault(COLOR, Color.BLACK);
+		color = Color.BLACK;
 	}
 
 	/**
@@ -114,11 +119,21 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
-		in.defaultReadObject();
+		stroke = ((SerializationWrapper<BasicStroke>) in.readObject()).unwrap();
+		gap = (Number) in.readObject();
+		gapRounded = in.readBoolean();
+		color = (Paint) in.readObject();
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		out.writeObject(SerializationUtils.wrap(stroke));
+		out.writeObject(gap);
+		out.writeBoolean(gapRounded);
+		out.writeObject(color);
 	}
 
 	@Override
@@ -149,5 +164,15 @@ public abstract class AbstractLineRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setGapRounded(boolean gapRounded) {
 		this.gapRounded = gapRounded;
+	}
+
+	@Override
+	public Paint getColor() {
+		return color;
+	}
+
+	@Override
+	public void setColor(Paint color) {
+		this.color = color;
 	}
 }

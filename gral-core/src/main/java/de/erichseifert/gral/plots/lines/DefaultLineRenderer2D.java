@@ -68,8 +68,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 			 */
 			public void draw(DrawingContext context) {
 				// Draw line
-				Paint paint = DefaultLineRenderer2D.this
-					.getSetting(LineRenderer.COLOR);
+				Paint paint = DefaultLineRenderer2D.this.getColor();
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), shape, paint, null);
 			}

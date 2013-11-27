@@ -75,8 +75,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 			 */
 			public void draw(DrawingContext context) {
 				// Draw path
-				Paint paint = SmoothLineRenderer2D.this
-					.getSetting(LineRenderer.COLOR);
+				Paint paint = SmoothLineRenderer2D.this.getColor();
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), shape, paint, null);
 			}

@@ -21,13 +21,13 @@
  */
 package de.erichseifert.gral.plots.lines;
 
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 
@@ -41,10 +41,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface LineRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the line shape. */
-	Key COLOR = new Key("line.color"); //$NON-NLS-1$
-
 	/**
 	 * Returns the geometric shape for this line.
 	 * @param points Points used for creating the line.
@@ -98,4 +94,17 @@ public interface LineRenderer extends SettingsStorage {
 	 * @param gapRounded {@code true} if the gap corners should be rounded.
 	 */
 	void setGapRounded(boolean gapRounded);
+	/** Key for specifying the {@link java.awt.Paint} instance  */
+
+	/**
+	 * Returns the paint to be used to paint the line shape.
+	 * @return Paint for line drawing.
+	 */
+	Paint getColor();
+
+	/**
+	 * Sets the paint to be used to paint the line shape.
+	 * @param color Paint for line drawing.
+	 */
+	void setColor(Paint color);
 }

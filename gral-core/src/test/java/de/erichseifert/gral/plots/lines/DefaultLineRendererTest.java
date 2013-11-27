@@ -82,19 +82,6 @@ public class DefaultLineRendererTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		LineRenderer r = new DefaultLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-		// Set
-		r.setSetting(LineRenderer.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer.COLOR));
-		// Remove
-		r.removeSetting(LineRenderer.COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-	}
-
-	@Test
 	public void testGap() {
 		LineRenderer r = new DefaultLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(

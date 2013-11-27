@@ -115,19 +115,6 @@ public class SmoothLineRendererTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		LineRenderer r = new SmoothLineRenderer2D();
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-		// Set
-		r.setSetting(LineRenderer.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(LineRenderer.COLOR));
-		// Remove
-		r.removeSetting(LineRenderer.COLOR);
-		assertEquals(Color.BLACK, r.getSetting(LineRenderer.COLOR));
-	}
-
-	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		LineRenderer original = new SmoothLineRenderer2D();
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);

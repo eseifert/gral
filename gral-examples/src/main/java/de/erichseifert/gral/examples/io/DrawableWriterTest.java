@@ -58,15 +58,15 @@ public class DrawableWriterTest {
 		plot.setInsets(new Insets2D.Double(20, 50, 50, 20));
 
 		LineRenderer lr1 = new DefaultLineRenderer2D();
-		lr1.setSetting(LineRenderer.COLOR, Color.RED);
+		lr1.setColor(Color.RED);
 		plot.setLineRenderer(s1, lr1);
 
 		LineRenderer lr2 = new DefaultLineRenderer2D();
-		lr2.setSetting(LineRenderer.COLOR, Color.GREEN);
+		lr2.setColor(Color.GREEN);
 		plot.setLineRenderer(s2, lr2);
 
 		LineRenderer lr3 = new DefaultLineRenderer2D();
-		lr3.setSetting(LineRenderer.COLOR, Color.BLUE);
+		lr3.setColor(Color.BLUE);
 		plot.setLineRenderer(s3, lr3);
 	}
 
