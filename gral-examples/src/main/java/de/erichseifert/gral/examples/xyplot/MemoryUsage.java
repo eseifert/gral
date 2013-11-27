@@ -189,7 +189,7 @@ public class MemoryUsage extends ExamplePanel {
 		// Format first data series
 		plot.setPointRenderer(memSysUsage, null);
 		AreaRenderer area1 = new DefaultAreaRenderer2D();
-		area1.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(
+		area1.setColor(new LinearGradientPaint(
 			0f, 0f, 0f, 1f,
 			new float[] {0f, 1f},
 			new Color[] {
@@ -210,7 +210,7 @@ public class MemoryUsage extends ExamplePanel {
 		// Format third data series
 		plot.setPointRenderer(memVmUsage, null);
 		AreaRenderer area3 = new DefaultAreaRenderer2D();
-		area3.setSetting(AreaRenderer.COLOR, new LinearGradientPaint(
+		area3.setColor(new LinearGradientPaint(
 				0f, 0f, 0f, 1f,
 				new float[] {0f, 1f},
 				new Color[] {

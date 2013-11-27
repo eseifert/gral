@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots.areas;
 
 import java.awt.Color;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 
 	private Number gap;
 	private boolean gapRounded;
+	private Paint color;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -60,7 +62,7 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 
 		gap = 0.0;
 		gapRounded = false;
-		setSettingDefault(COLOR, Color.GRAY);
+		color = Color.GRAY;
 	}
 
 	/**
@@ -128,5 +130,15 @@ public abstract class AbstractAreaRenderer extends BasicSettingsStorage
 	@Override
 	public void setGapRounded(boolean gapRounded) {
 		this.gapRounded = gapRounded;
+	}
+
+	@Override
+	public Paint getColor() {
+		return color;
+	}
+
+	@Override
+	public void setColor(Paint color) {
+		this.color = color;
 	}
 }

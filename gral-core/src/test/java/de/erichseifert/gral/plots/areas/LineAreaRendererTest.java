@@ -115,19 +115,6 @@ public class LineAreaRendererTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		AreaRenderer r = new DefaultAreaRenderer2D();
-		assertEquals(Color.GRAY, r.getSetting(AreaRenderer.COLOR));
-		// Set
-		r.setSetting(AreaRenderer.COLOR, Color.RED);
-		assertEquals(Color.RED, r.getSetting(AreaRenderer.COLOR));
-		// Remove
-		r.removeSetting(AreaRenderer.COLOR);
-		assertEquals(Color.GRAY, r.getSetting(AreaRenderer.COLOR));
-	}
-
-	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		AreaRenderer original = new DefaultAreaRenderer2D();
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);

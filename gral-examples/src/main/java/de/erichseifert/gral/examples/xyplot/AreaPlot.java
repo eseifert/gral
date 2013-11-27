@@ -94,7 +94,7 @@ public class AreaPlot extends ExamplePanel {
 		line.setSetting(LineRenderer.GAP_ROUNDED, true);
 		plot.setLineRenderer(data, line);
 		AreaRenderer area = new DefaultAreaRenderer2D();
-		area.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(color, 64));
+		area.setColor(GraphicsUtils.deriveWithAlpha(color, 64));
 		plot.setAreaRenderer(data, area);
 	}
 
@@ -105,7 +105,7 @@ public class AreaPlot extends ExamplePanel {
 		plot.setLineRenderer(data, null);
 		AreaRenderer area = new LineAreaRenderer2D();
 		area.setGap(3.0);
-		area.setSetting(LineAreaRenderer2D.COLOR, color);
+		area.setColor(color);
 		plot.setAreaRenderer(data, area);
 	}
 

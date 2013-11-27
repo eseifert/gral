@@ -21,22 +21,18 @@
  */
 package de.erichseifert.gral.plots.areas;
 
+import java.awt.Paint;
 import java.awt.Shape;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 /**
  * Interface for renderers that display areas in plots.
  */
 public interface AreaRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance used to fill the
-	area shape. */
-	Key COLOR = new Key("area.color"); //$NON-NLS-1$
-
 	/**
 	 * Returns the shape used for rendering the area of a data points.
 	 * @param points Data points.
@@ -71,9 +67,22 @@ public interface AreaRenderer extends SettingsStorage {
 	 * @return {@code true}, if the gaps should have rounded corners.
 	 */
 	boolean isGapRounded();
+
 	/**
 	 * Sets a value which decides whether the gaps should have rounded corners.
 	 * @param gapRounded {@code true}, if the gaps should have rounded corners.
 	 */
 	void setGapRounded(boolean gapRounded);
+
+	/**
+	 * Returns the paint used to fill the area shape.
+	 * @return Paint for the area shape.
+	 */
+	Paint getColor();
+
+	/**
+	 * Sets the paint used to fill the area shape.
+	 * @param color Paint for the area shape.
+	 */
+	void setColor(Paint color);
 }

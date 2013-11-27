@@ -62,7 +62,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			 * @param context Environment used for drawing
 			 */
 			public void draw(DrawingContext context) {
-				Paint paint = DefaultAreaRenderer2D.this.getSetting(COLOR);
+				Paint paint = DefaultAreaRenderer2D.this.getColor();
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),
 					shape, paint, null);
 			}

@@ -65,7 +65,7 @@ public class StackedPlots extends ExamplePanel {
 		lineUpper.setSetting(LineRenderer.COLOR, colorUpper);
 		plotUpper.setLineRenderer(data, lineUpper);
 		AreaRenderer areaUpper = new DefaultAreaRenderer2D();
-		areaUpper.setSetting(AreaRenderer.COLOR, GraphicsUtils.deriveWithAlpha(colorUpper, 64));
+		areaUpper.setColor(GraphicsUtils.deriveWithAlpha(colorUpper, 64));
 		plotUpper.setAreaRenderer(data, areaUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 

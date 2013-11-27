@@ -74,7 +74,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 			 * @param context Environment used for drawing
 			 */
 			public void draw(DrawingContext context) {
-				Paint paint = LineAreaRenderer2D.this.getSetting(COLOR);
+				Paint paint = LineAreaRenderer2D.this.getColor();
 				GraphicsUtils.fillPaintedShape(context.getGraphics(),
 					shape, paint, null);
 			}
