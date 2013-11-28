@@ -97,21 +97,12 @@ public class RasterPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1266585364126459761L;
 
-		/** Key for specifying the {@link Integer} which specifies the
-		index of the column that is used for the x coordinate of a point. */
-		public static final Key COLUMN_X =
-			new Key("rasterplot.columnX"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} which specifies the
-		index of the column that is used for the y coordinate of a point. */
-		public static final Key COLUMN_Y =
-			new Key("rasterplot.columnY"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} which specifies the
-		index of the column that is used for the value of a point. */
-		public static final Key COLUMN_VALUE =
-			new Key("rasterplot.columnValue"); //$NON-NLS-1$
-
 		/** Plot specific settings. */
 		private final SettingsStorage plotSettings;
+
+		private int columnX;
+		private int columnY;
+		private int columnValue;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -121,9 +112,63 @@ public class RasterPlot extends XYPlot {
 		 */
 		public RasterRenderer(SettingsStorage plotSettings) {
 			this.plotSettings = plotSettings;
-			setSettingDefault(COLUMN_X, 0);
-			setSettingDefault(COLUMN_Y, 1);
-			setSettingDefault(COLUMN_VALUE, 2);
+			columnX = 0;
+			columnY = 1;
+			columnValue = 2;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the x coordinate
+		 * of a point.
+		 * @return Index of the column for the x coordinate of a point.
+		 */
+		public int getColumnX() {
+			return columnX;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the x coordinate
+		 * of a point.
+		 * @param columnIndex Index of the column for the x coordinate of a point.
+		 */
+		public void setColumnX(int columnIndex) {
+			this.columnX = columnIndex;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the y coordinate
+		 * of a point.
+		 * @return Index of the column for the y coordinate of a point.
+		 */
+		public int getColumnY() {
+			return columnY;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the y coordinate
+		 * of a point.
+		 * @param columnIndex Index of the column for the y coordinate of a point.
+		 */
+		public void setColumnY(int columnIndex) {
+			this.columnY = columnIndex;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the value of a
+		 * point.
+		 * @return Index of the column for the value of a point.
+		 */
+		public int getColumnValue() {
+			return columnY;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the value of a
+		 * point.
+		 * @param columnY Index of the column for the value of a point.
+		 */
+		public void setColumnValue(int columnIndex) {
+			this.columnValue = columnIndex;
 		}
 
 		/**
@@ -147,15 +192,15 @@ public class RasterPlot extends XYPlot {
 					AxisRenderer axisYRenderer = data.axisRenderers.get(1);
 					Row row = data.row;
 
-					int colX = renderer.<Integer>getSetting(COLUMN_X);
+					int colX = renderer.getColumnX();
 					if (colX < 0 || colX >= row.size() || !row.isColumnNumeric(colX)) {
 						return;
 					}
-					int colY = renderer.<Integer>getSetting(COLUMN_Y);
+					int colY = renderer.getColumnY();
 					if (colY < 0 || colY >= row.size() || !row.isColumnNumeric(colY)) {
 						return;
 					}
-					int colValue = renderer.<Integer>getSetting(COLUMN_VALUE);
+					int colValue = renderer.getColumnValue();
 					if (colValue < 0 || colValue >= row.size() || !row.isColumnNumeric(colValue)) {
 						return;
 					}
