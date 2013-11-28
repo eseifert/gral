@@ -98,11 +98,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying an instance of
-		{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used
-		to paint the background of the box. */
-		public static final Key BOX_BACKGROUND =
-			new Key("boxplot.box.background"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the border of the box and the lines of bars. */
 		public static final Key BOX_COLOR =
@@ -140,6 +135,7 @@ public class BoxPlot extends XYPlot {
 		private int columnBarTop;
 
 		private double boxWidth;
+		private ColorMapper boxBackground;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -153,7 +149,7 @@ public class BoxPlot extends XYPlot {
 			columnBoxTop = 4;
 			columnBarTop = 5;
 			boxWidth = 0.75;
-			setSettingDefault(BOX_BACKGROUND, Color.WHITE);
+			boxBackground = new SingleColor(Color.WHITE);
 			setSettingDefault(BOX_COLOR, Color.BLACK);
 			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
 			setSettingDefault(WHISKER_COLOR, Color.BLACK);
@@ -292,6 +288,33 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the mapping which is used to fill the background of a box.
+		 * @return {@code ColorMapper} instance which is used to fill the
+		 * background of a box.
+		 */
+		public ColorMapper getBoxBackground() {
+			return boxBackground;
+		}
+
+		/**
+		 * Sets the mapping which will be used to fill the background of a box.
+		 * @param color {@code ColorMapper} instance which will be used to fill
+		 * the background of a box.
+		 */
+		public void setBoxBackground(ColorMapper color) {
+			this.boxBackground = color;
+		}
+
+		/**
+		 * Sets the paint which will be used to fill the background of a box.
+		 * @param color {@code Paint} instance which will be used to fill the
+		 * background of a box.
+		 */
+		public void setBoxBackground(Paint color) {
+			setBoxBackground(new SingleColor(color));
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -402,8 +425,7 @@ public class BoxPlot extends XYPlot {
 
 					// Paint shapes
 					Graphics2D graphics = context.getGraphics();
-					ColorMapper paintBoxMapper =
-						BoxWhiskerRenderer.this.getSetting(BOX_BACKGROUND);
+					ColorMapper paintBoxMapper = getBoxBackground();
 					Paint paintBox;
 					if (paintBoxMapper instanceof ContinuousColorMapper) {
 						paintBox = ((ContinuousColorMapper) paintBoxMapper)
@@ -479,16 +501,6 @@ public class BoxPlot extends XYPlot {
 			};
 			return drawable;
 		}
-
-		@Override
-		protected <T> void setSetting(Key key, T value, boolean isDefault) {
-			// Be nice and automatically convert colors to color mappers
-			if (value instanceof Paint && BOX_BACKGROUND.equals(key)) {
-				super.setSetting(key, new SingleColor((Paint) value), isDefault);
-			} else {
-				super.setSetting(key, value, isDefault);
-			}
-		};
 	}
 
 	/**

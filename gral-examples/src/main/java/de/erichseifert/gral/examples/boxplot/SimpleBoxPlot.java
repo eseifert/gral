@@ -81,12 +81,15 @@ public class SimpleBoxPlot extends ExamplePanel {
 		ScaledContinuousColorMapper colors =
 			new LinearGradient(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
 		colors.setRange(1.0, 3.0);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_STROKE, stroke);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BORDER, stroke);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_BACKGROUND, colors);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BOX_COLOR, COLOR1);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.WHISKER_COLOR, COLOR1);
-		plot.getPointRenderer(boxData).setSetting(BoxWhiskerRenderer.BAR_CENTER_COLOR, COLOR1);
+
+		BoxWhiskerRenderer pointRenderer =
+				(BoxWhiskerRenderer) plot.getPointRenderer(boxData);
+		pointRenderer.setSetting(BoxWhiskerRenderer.WHISKER_STROKE, stroke);
+		pointRenderer.setSetting(BoxWhiskerRenderer.BOX_BORDER, stroke);
+		pointRenderer.setBoxBackground(colors);
+		pointRenderer.setSetting(BoxWhiskerRenderer.BOX_COLOR, COLOR1);
+		pointRenderer.setSetting(BoxWhiskerRenderer.WHISKER_COLOR, COLOR1);
+		pointRenderer.setSetting(BoxWhiskerRenderer.BAR_CENTER_COLOR, COLOR1);
 
 		plot.getNavigator().setDirection(XYNavigationDirection.VERTICAL);
 
