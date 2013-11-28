@@ -40,20 +40,16 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2612520977245369774L;
 
-	/** Key for specifying a {@link Number} value for the horizontal alignment
-	relative to the data point. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X =
-		new Key("labelPoint.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the vertical alignment
     relative to the data point. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y =
 		new Key("labelPoint.alignment.y"); //$NON-NLS-1$
-	/** Key for specifying the {@link de.erichseifert.gral.Location} value
-	where the label will be aligned at. */
 
 	private int column;
 	private Format format;
 	private Font font;
+	private double alignmentX;
+	private double alignmentY;
 
 	/**
 	 * Initializes a new object.
@@ -62,8 +58,8 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 		column = 1;
 		format = NumberFormat.getInstance();
 		font = Font.decode(null);
-		setSettingDefault(ALIGNMENT_X, 0.5);
-		setSettingDefault(ALIGNMENT_Y, 0.5);
+		alignmentX = 0.5;
+		alignmentY = 0.5;
 	}
 
 	/**
@@ -116,6 +112,42 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 		this.font = font;
 	}
 
+	/**
+	 * Returns the horizontal alignment relative to the data point.
+	 * 0 means left, 1 means right.
+	 * @return Horizontal alignment relative to the data point.
+	 */
+	public double getAlignmentX() {
+		return alignmentX;
+	}
+
+	/**
+	 * Sets the horizontal alignment relative to the data point.
+	 * 0 means left, 1 means right.
+	 * @param alignmentX Horizontal alignment relative to the data point.
+	 */
+	public void setAlignmentX(double alignmentX) {
+		this.alignmentX = alignmentX;
+	}
+
+	/**
+	 * Returns the vertical alignment relative to the data point.
+	 * 0 means top, 1 means bottom.
+	 * @return Vertical alignment relative to the data point.
+	 */
+	public double getAlignmentY() {
+		return alignmentY;
+	}
+
+	/**
+	 * Sets the vertical alignment relative to the data point.
+	 * 0 means top, 1 means bottom.
+	 * @param alignmentY Vertical alignment relative to the data point.
+	 */
+	public void setAlignmentY(double alignmentY) {
+		this.alignmentY = alignmentY;
+	}
+
 	@Override
 	public Shape getPointShape(PointData data) {
 		Row row = data.row;
@@ -132,11 +164,11 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 		Format format = getFormat();
 		Font font = getFont();
 		String text = format.format(labelValue);
-		double alignment = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		double alignment = getAlignmentX();
 		Shape shape = GraphicsUtils.getOutline(text, font, 0f, alignment);
 
-		double alignX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
-		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
+		double alignX = getAlignmentX();
+		double alignY = getAlignmentY();
 		Rectangle2D bounds = shape.getBounds2D();
 		AffineTransform tx = AffineTransform.getTranslateInstance(
 			-alignX*bounds.getWidth(), alignY*bounds.getHeight());
