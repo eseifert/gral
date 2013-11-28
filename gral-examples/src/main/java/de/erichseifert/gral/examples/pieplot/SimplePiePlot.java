@@ -70,7 +70,7 @@ public class SimplePiePlot extends ExamplePanel {
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.COLOR, colors);
+		plot.getPointRenderer(data).setColor(colors);
 		// Show labels
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_DISPLAYED, true);
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_COLOR, Color.WHITE);

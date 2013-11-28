@@ -76,7 +76,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 				Row row = data.row;
 				int col = data.col;
 
-				ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
+				ColorMapper colors = getColor();
 				Paint paint = colors.get(row.getIndex());
 
 				GraphicsUtils.fillPaintedShape(

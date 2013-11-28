@@ -448,8 +448,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					}
 
 					// Paint slice
-					ColorMapper colorMapper = renderer.<ColorMapper>getSetting(
-						PieSliceRenderer.COLOR);
+					ColorMapper colorMapper = renderer.getColor();
 					Paint paint;
 					if (colorMapper instanceof ContinuousColorMapper) {
 						double sum = plot.getSum(row.getSource());

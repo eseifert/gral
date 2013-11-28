@@ -23,11 +23,8 @@ package de.erichseifert.gral.plots.points;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -51,7 +48,6 @@ import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
-import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -117,8 +113,7 @@ public class AbstractPointRendererTest {
 						posY = pointValue.get(PointND.Y);
 
 						g.translate(posX, posY);
-						ColorMapper colors =
-							renderer.<ColorMapper>getSetting(PointRenderer.COLOR);
+						ColorMapper colors = renderer.getColor();
 						Paint paint = colors.get(row.getIndex());
 						GraphicsUtils.fillPaintedShape(g, shape, paint, null);
 					}
@@ -167,21 +162,6 @@ public class AbstractPointRendererTest {
 		layout(image, axisRenderer);
 		point.draw(context);
 		assertNotEmpty(image);
-	}
-
-	@Test
-	public void testSettings() {
-		// Get
-		assertTrue(r.getSetting(PointRenderer.COLOR) instanceof ColorMapper);
-		assertEquals(Color.BLACK, r.<ColorMapper>getSetting(PointRenderer.COLOR).get(0));
-		// Set
-		r.setSetting(PointRenderer.COLOR, new SingleColor(Color.RED));
-		assertTrue(r.getSetting(PointRenderer.COLOR) instanceof ColorMapper);
-		assertEquals(Color.RED, r.<ColorMapper>getSetting(PointRenderer.COLOR).get(0));
-		// Remove
-		r.removeSetting(PointRenderer.COLOR);
-		assertTrue(r.getSetting(PointRenderer.COLOR) instanceof ColorMapper);
-		assertEquals(Color.BLACK, r.<ColorMapper>getSetting(PointRenderer.COLOR).get(0));
 	}
 
 	@Test

@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.Key;
@@ -48,6 +49,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private static final long serialVersionUID = -408976260196287753L;
 
 	private Shape shape;
+	private ColorMapper color;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -57,7 +59,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		shape = new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0);
-		setSettingDefault(COLOR, new SingleColor(Color.BLACK));
+		color = new SingleColor(Color.BLACK);
 
 		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(VALUE_COLUMN, 1);
@@ -87,8 +89,8 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	protected <T> void setSetting(Key key, T value, boolean isDefault) {
 		// Be nice and automatically convert colors to color mappers
-		if (value instanceof Paint && (COLOR.equals(key) ||
-				VALUE_COLOR.equals(key) || ERROR_COLOR.equals(key))) {
+		if (value instanceof Paint && (VALUE_COLOR.equals(key)
+				|| ERROR_COLOR.equals(key))) {
 			super.setSetting(key, new SingleColor((Paint) value), isDefault);
 		} else {
 			super.setSetting(key, value, isDefault);
@@ -120,5 +122,20 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	public void setShape(Shape shape) {
 		// TODO Store clone of shape to prevent external modification
 		this.shape = shape;
+	}
+
+	@Override
+	public ColorMapper getColor() {
+		return color;
+	}
+
+	@Override
+	public void setColor(ColorMapper color) {
+		this.color = color;
+	}
+
+	@Override
+	public void setColor(Paint color) {
+		setColor(new SingleColor(color));
 	}
 }

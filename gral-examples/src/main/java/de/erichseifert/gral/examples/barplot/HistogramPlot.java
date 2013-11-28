@@ -81,7 +81,7 @@ public class HistogramPlot extends ExamplePanel {
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setIntersection(-4.4);
 
 		// Format bars
-		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.COLOR,
+		plot.getPointRenderer(histogram2d).setColor(
 			GraphicsUtils.deriveWithAlpha(COLOR1, 128));
 		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.VALUE_DISPLAYED,
 			true);

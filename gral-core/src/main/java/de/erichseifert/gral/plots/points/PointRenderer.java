@@ -21,9 +21,11 @@
  */
 package de.erichseifert.gral.plots.points;
 
+import java.awt.Paint;
 import java.awt.Shape;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 
@@ -37,11 +39,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying an instance either of
-	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
-	{@link java.awt.Paint} that will be used to paint the point shapes. */
-	Key COLOR = new Key("point.color"); //$NON-NLS-1$
-
 	/** Key for specifying a {@link Boolean} value whether the data
 	value of a point is displayed or not. */
 	Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
@@ -106,6 +103,24 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param shape {@code Shape} instance for the point.
 	 */
 	void setShape(Shape shape);
+
+	/**
+	 * Returns a mapping or a paint that is to paint the point shapes.
+	 * @return {@code ColorMapper} that is used to paint the point shapes.
+	 */
+	ColorMapper getColor();
+
+	/**
+	 * Sets the mapping that will be used to paint the point shapes.
+	 * @param color {@code ColorMapper} instance to paint the point shapes.
+	 */
+	void setColor(ColorMapper color);
+
+	/**
+	 * Sets the paint that will be used to paint the point shapes.
+	 * @param color {@code Paint} instance to paint the point shapes.
+	 */
+	void setColor(Paint color);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

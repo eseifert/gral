@@ -62,7 +62,7 @@ public class SimpleBarPlot extends ExamplePanel {
 
 		// Format bars
 		PointRenderer pointRenderer = plot.getPointRenderer(data);
-		pointRenderer.setSetting(PointRenderer.COLOR,
+		pointRenderer.setColor(
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },
 					new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }

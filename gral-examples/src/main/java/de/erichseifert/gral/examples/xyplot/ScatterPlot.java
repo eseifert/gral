@@ -27,7 +27,6 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -56,7 +55,7 @@ public class ScatterPlot extends ExamplePanel {
 		plot.setSetting(XYPlot.TITLE, getDescription());
 
 		// Format points
-		plot.getPointRenderer(data).setSetting(PointRenderer.COLOR, COLOR1);
+		plot.getPointRenderer(data).setColor(COLOR1);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);

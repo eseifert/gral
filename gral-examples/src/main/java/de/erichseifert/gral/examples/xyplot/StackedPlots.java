@@ -73,8 +73,8 @@ public class StackedPlots extends ExamplePanel {
 		XYPlot plotLower = new XYPlot(data);
 		Color colorLower = COLOR1;
 		PointRenderer pointsLower = plotLower.getPointRenderer(data);
-		pointsLower.setSetting(PointRenderer.COLOR, colorLower);
-		pointsLower.setSetting(PointRenderer.SHAPE, new Ellipse2D.Double(-3, -3, 6, 6));
+		pointsLower.setColor(colorLower);
+		pointsLower.setShape(new Ellipse2D.Double(-3, -3, 6, 6));
 		LineRenderer lineLower = new DefaultLineRenderer2D();
 		lineLower.setStroke(new BasicStroke(2f));
 		lineLower.setGap(1.0);
