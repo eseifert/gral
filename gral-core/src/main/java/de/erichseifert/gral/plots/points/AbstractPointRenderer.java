@@ -30,6 +30,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.Format;
 
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
@@ -53,6 +54,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 
 	private boolean valueDisplayed;
 	private int valueColumn;
+	private Format valueFormat;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -160,5 +162,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueColumn(int columnIndex) {
 		this.valueColumn = columnIndex;
+	}
+
+	@Override
+	public Format getValueFormat() {
+		return valueFormat;
+	}
+
+	@Override
+	public void setValueFormat(Format format) {
+		this.valueFormat = format;
 	}
 }

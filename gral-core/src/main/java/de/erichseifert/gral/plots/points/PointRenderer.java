@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots.points;
 
 import java.awt.Paint;
 import java.awt.Shape;
+import java.text.Format;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.colors.ColorMapper;
@@ -39,9 +40,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.text.Format} instance to be used to
-	format the displayed data values. */
-	Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
 	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
 	the positioning of the data value relative to the data point. */
 	Key VALUE_LOCATION = new Key("point.value.location"); //$NON-NLS-1$
@@ -141,6 +139,20 @@ public interface PointRenderer extends SettingsStorage {
 	 * @return columnIndex Index of the column that contains the displayed values.
 	 */
 	void setValueColumn(int columnIndex);
+
+	/**
+	 * Returns the format that is used to render the displayed data values.
+	 * @return {@code Format} instance that is used to render the displayed
+	 * data values.
+	 */
+	Format getValueFormat();
+
+	/**
+	 * Sets the format that will be used to render the displayed data values.
+	 * @param format {@code Format} instance that will be used to render the
+	 * displayed data values.
+	 */
+	void setValueFormat(Format format);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

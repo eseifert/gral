@@ -109,7 +109,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		Comparable<?> value = row.get(col);
 
 		// Formatting
-		Format format = getSetting(VALUE_FORMAT);
+		Format format = getValueFormat();
 		if ((format == null) && row.isColumnNumeric(col)) {
 			format = NumberFormat.getInstance();
 		}

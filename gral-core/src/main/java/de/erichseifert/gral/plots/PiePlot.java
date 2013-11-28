@@ -576,7 +576,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			Comparable<?> value = row.get(col);
 
 			// Formatting
-			Format format = getSetting(VALUE_FORMAT);
+			Format format = getValueFormat();
 			if ((format == null) && (value instanceof Number)) {
 				format = NumberFormat.getInstance();
 			}

@@ -146,7 +146,7 @@ public class DefaultPointRenderer2DTest {
 
 		r.setValueDisplayed(true);
 		for (Format format : formats) {
-			r.setSetting(PointRenderer.VALUE_FORMAT, format);
+			r.setValueFormat(format);
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
