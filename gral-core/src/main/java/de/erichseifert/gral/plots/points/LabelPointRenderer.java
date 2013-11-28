@@ -40,10 +40,6 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2612520977245369774L;
 
-	/** Key for specifying a {@link java.awt.Font} instance for the font of
-	this label. */
-	public static final Key FONT =
-		new Key("labelPoint.font"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the horizontal alignment
 	relative to the data point. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_X =
@@ -57,6 +53,7 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 
 	private int column;
 	private Format format;
+	private Font font;
 
 	/**
 	 * Initializes a new object.
@@ -64,7 +61,7 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	public LabelPointRenderer() {
 		column = 1;
 		format = NumberFormat.getInstance();
-		setSettingDefault(FONT, Font.decode(null));
+		font = Font.decode(null);
 		setSettingDefault(ALIGNMENT_X, 0.5);
 		setSettingDefault(ALIGNMENT_Y, 0.5);
 	}
@@ -103,6 +100,22 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 		this.format = format;
 	}
 
+	/**
+	 * Returns the font of this label.
+	 * @return Font of this label.
+	 */
+	public Font getFont() {
+		return font;
+	}
+
+	/**
+	 * Sets font of this label.
+	 * @param font Font of this label.
+	 */
+	public void setFont(Font font) {
+		this.font = font;
+	}
+
 	@Override
 	public Shape getPointShape(PointData data) {
 		Row row = data.row;
@@ -117,7 +130,7 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 		}
 
 		Format format = getFormat();
-		Font font = getSetting(FONT);
+		Font font = getFont();
 		String text = format.format(labelValue);
 		double alignment = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
 		Shape shape = GraphicsUtils.getOutline(text, font, 0f, alignment);
