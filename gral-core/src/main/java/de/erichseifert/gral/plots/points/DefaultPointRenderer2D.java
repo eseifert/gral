@@ -117,7 +117,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		String text = (format != null) ? format.format(value) : value.toString();
 
 		// Visual settings
-		ColorMapper colors = getSetting(VALUE_COLOR);
+		ColorMapper colors = getValueColor();
 		Paint paint = colors.get(row.getIndex());
 		Font font = getSetting(VALUE_FONT);
 		double fontSize = font.getSize2D();

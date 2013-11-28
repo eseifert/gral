@@ -60,6 +60,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private double valueAlignmentY;
 	private double valueRotation;
 	private double valueDistance;
+	private ColorMapper valueColor;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -78,7 +79,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		valueAlignmentY = 0.5;
 		valueRotation = 0.0;
 		valueDistance = 1.0;
-		setSettingDefault(VALUE_COLOR, new SingleColor(Color.BLACK));
+		valueColor = new SingleColor(Color.BLACK);
 		setSettingDefault(VALUE_FONT, Font.decode(null));
 
 		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
@@ -99,8 +100,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	protected <T> void setSetting(Key key, T value, boolean isDefault) {
 		// Be nice and automatically convert colors to color mappers
-		if (value instanceof Paint && (VALUE_COLOR.equals(key)
-				|| ERROR_COLOR.equals(key))) {
+		if (value instanceof Paint && ERROR_COLOR.equals(key)) {
 			super.setSetting(key, new SingleColor((Paint) value), isDefault);
 		} else {
 			super.setSetting(key, value, isDefault);
@@ -227,5 +227,20 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueDistance(double distance) {
 		this.valueDistance = distance;
+	}
+
+	@Override
+	public ColorMapper getValueColor() {
+		return valueColor;
+	}
+
+	@Override
+	public void setValueColor(ColorMapper color) {
+		this.valueColor = color;
+	}
+
+	@Override
+	public void setValueColor(Paint color) {
+		setValueColor(new SingleColor(color));
 	}
 }

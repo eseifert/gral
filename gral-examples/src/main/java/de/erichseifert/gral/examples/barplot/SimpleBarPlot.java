@@ -78,7 +78,7 @@ public class SimpleBarPlot extends ExamplePanel {
 		pointRenderer.setValueDisplayed(true);
 		pointRenderer.setValueColumn(2);
 		pointRenderer.setValueLocation(Location.CENTER);
-		pointRenderer.setSetting(PointRenderer.VALUE_COLOR, GraphicsUtils.deriveDarker(COLOR1));
+		pointRenderer.setValueColor(GraphicsUtils.deriveDarker(COLOR1));
 		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
 			Font.decode(null).deriveFont(Font.BOLD));
 
