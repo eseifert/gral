@@ -66,6 +66,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private int errorColumnTop;
 	private int errorColumnBottom;
 	private ColorMapper errorColor;
+	private Shape errorShape;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -91,7 +92,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		errorColumnTop = 2;
 		errorColumnBottom = 3;
 		errorColor = new SingleColor(Color.BLACK);
-		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
+		errorShape = new Line2D.Double(-2.0, 0.0, 2.0, 0.0);
 		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
 	}
 
@@ -292,5 +293,16 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setErrorColor(Paint color) {
 		setErrorColor(new SingleColor(color));
+	}
+
+	@Override
+	public Shape getErrorShape() {
+		return errorShape;
+	}
+
+	@Override
+	public void setErrorShape(Shape shape) {
+		// TODO Store clone of shape to prevent external modification
+		this.errorShape = shape;
 	}
 }

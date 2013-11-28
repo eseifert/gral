@@ -209,7 +209,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 			graphics, errorBar, errorPaint, null, errorStroke);
 
 		// Draw the shapes at the end of the error bars
-		Shape endShape = getSetting(ERROR_SHAPE);
+		Shape endShape = getErrorShape();
 		graphics.translate(0.0, posYTop);
 		Stroke endShapeStroke = new BasicStroke(1f);
 		GraphicsUtils.drawPaintedShape(
