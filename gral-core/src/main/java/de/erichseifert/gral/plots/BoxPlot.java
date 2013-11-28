@@ -53,7 +53,6 @@ import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -98,14 +97,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying a {@link Number} value for the relative width of
-		the bottom and top bars. */
-		public static final Key BAR_WIDTH =
-			new Key("boxplot.bar.width"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Paint} instance to be used
-		to paint the lines of the center bar. */
-		public static final Key BAR_CENTER_COLOR =
-			new Key("boxplot.bar.center.color"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Stroke} instance to be used
 		to paint the lines of the center bar. */
 		public static final Key BAR_CENTER_STROKE =
@@ -126,6 +117,10 @@ public class BoxPlot extends XYPlot {
 		private Paint whiskerColor;
 		private Stroke whiskerStroke;
 
+		private double barWidth;
+		private Paint barCenterColor;
+		private Stroke barCenterStroke;
+
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
@@ -143,10 +138,10 @@ public class BoxPlot extends XYPlot {
 			boxBorder = new BasicStroke(1f);
 			whiskerColor = Color.BLACK;
 			whiskerStroke = new BasicStroke(1f);
-			setSettingDefault(BAR_WIDTH, 0.75);
-			setSettingDefault(BAR_CENTER_COLOR, Color.BLACK);
-			setSettingDefault(BAR_CENTER_STROKE, new BasicStroke(
-				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+			barWidth = 0.75;
+			barCenterColor = Color.BLACK;
+			barCenterStroke = new BasicStroke(
+				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 		}
 
 		/**
@@ -380,6 +375,60 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the relative width of the bottom and top bars.
+		 * @return Relative width of the bottom and top bars.
+		 */
+		public double getBarWidth() {
+			return barWidth;
+		}
+
+		/**
+		 * Sets the relative width of the bottom and top bars.
+		 * @param width Relative width of the bottom and top bars.
+		 */
+		public void setBarWidth(double width) {
+			this.barWidth = width;
+		}
+
+		/**
+		 * Returns the paint which is used to fill the lines of the center bar.
+		 * @return Paint which is used to fill the lines of the center bar.
+		 */
+		public Paint getBarCenterColor() {
+			return barCenterColor;
+		}
+
+		/**
+		 * Sets the paint which will be used to fill the lines of the center
+		 * bar.
+		 * @param color Paint which will be used to fill the lines of the
+		 * center bar.
+		 */
+		public void setBarCenterColor(Paint color) {
+			this.barCenterColor = color;
+		}
+
+		/**
+		 * Returns the stroke which is used to paint the lines of the center
+		 * bar.
+		 * @return {@code Stroke} instance which is used to paint the lines of
+		 * the center bar.
+		 */
+		public Stroke getBarCenterStroke() {
+			return barCenterStroke;
+		}
+
+		/**
+		 * Sets the stroke which will be used to paint the lines of the
+		 * center bar.
+		 * @param stroke {@code Stroke} instance which will be used to paint
+		 * the lines of the center bar.
+		 */
+		public void setBarCenterStroke(Stroke stroke) {
+			this.barCenterStroke = stroke;
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -448,9 +497,7 @@ public class BoxPlot extends XYPlot {
 						axisY, valueYBarTop, true, false).get(PointND.Y);
 					double boxWidth = Math.abs(boxXMax - boxXMin);
 					// Bars
-					double barWidthRel = DataUtils.getValueOrDefault(
-						BoxWhiskerRenderer.this.<Number>getSetting(BAR_WIDTH),
-						1.0);
+					double barWidthRel = getBarWidth();
 					double barXMin = boxXMin + (1.0 - barWidthRel)*boxWidth/2.0;
 					double barXMax = boxXMax - (1.0 - barWidthRel)*boxWidth/2.0;
 
@@ -503,10 +550,8 @@ public class BoxPlot extends XYPlot {
 					Stroke strokeBox = getBoxBorder();
 					Paint paintWhisker = getWhiskerColor();
 					Stroke strokeWhisker = getWhiskerStroke();
-					Paint paintBarCenter =
-						BoxWhiskerRenderer.this.getSetting(BAR_CENTER_COLOR);
-					Stroke strokeBarCenter =
-						BoxWhiskerRenderer.this.getSetting(BAR_CENTER_STROKE);
+					Paint paintBarCenter = getBarCenterColor();
+					Stroke strokeBarCenter = getBarCenterStroke();
 					// Fill box
 					GraphicsUtils.fillPaintedShape(
 						graphics, box, paintBox, box.getBounds2D());
