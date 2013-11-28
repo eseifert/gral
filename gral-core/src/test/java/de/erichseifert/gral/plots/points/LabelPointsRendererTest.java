@@ -95,5 +95,6 @@ public class LabelPointsRendererTest {
 		LabelPointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumn(), deserialized.getColumn());
+		assertEquals(original.getFormat(), deserialized.getFormat());
     }
 }
