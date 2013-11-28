@@ -84,11 +84,11 @@ public class SimpleBoxPlot extends ExamplePanel {
 
 		BoxWhiskerRenderer pointRenderer =
 				(BoxWhiskerRenderer) plot.getPointRenderer(boxData);
-		pointRenderer.setSetting(BoxWhiskerRenderer.WHISKER_STROKE, stroke);
+		pointRenderer.setWhiskerStroke(stroke);
 		pointRenderer.setBoxBorder(stroke);
 		pointRenderer.setBoxBackground(colors);
 		pointRenderer.setBoxColor(COLOR1);
-		pointRenderer.setSetting(BoxWhiskerRenderer.WHISKER_COLOR, COLOR1);
+		pointRenderer.setWhiskerColor(COLOR1);
 		pointRenderer.setSetting(BoxWhiskerRenderer.BAR_CENTER_COLOR, COLOR1);
 
 		plot.getNavigator().setDirection(XYNavigationDirection.VERTICAL);

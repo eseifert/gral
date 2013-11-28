@@ -98,14 +98,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying the {@link java.awt.Paint} instance to be used
-		to paint the lines of the whiskers. */
-		public static final Key WHISKER_COLOR =
-			new Key("boxplot.whisker.color"); //$NON-NLS-1$
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used
-		to paint the lines of the whiskers. */
-		public static final Key WHISKER_STROKE =
-			new Key("boxplot.whisker.stroke"); //$NON-NLS-1$
 		/** Key for specifying a {@link Number} value for the relative width of
 		the bottom and top bars. */
 		public static final Key BAR_WIDTH =
@@ -131,6 +123,9 @@ public class BoxPlot extends XYPlot {
 		private Paint boxColor;
 		private Stroke boxBorder;
 
+		private Paint whiskerColor;
+		private Stroke whiskerStroke;
+
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
@@ -146,8 +141,8 @@ public class BoxPlot extends XYPlot {
 			boxBackground = new SingleColor(Color.WHITE);
 			boxColor = Color.BLACK;
 			boxBorder = new BasicStroke(1f);
-			setSettingDefault(WHISKER_COLOR, Color.BLACK);
-			setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
+			whiskerColor = Color.BLACK;
+			whiskerStroke = new BasicStroke(1f);
 			setSettingDefault(BAR_WIDTH, 0.75);
 			setSettingDefault(BAR_CENTER_COLOR, Color.BLACK);
 			setSettingDefault(BAR_CENTER_STROKE, new BasicStroke(
@@ -349,6 +344,42 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the paint which is used to fill the lines of the whiskers.
+		 * @return Paint which is used to fill the lines of the whiskers.
+		 */
+		public Paint getWhiskerColor() {
+			return whiskerColor;
+		}
+
+		/**
+		 * Sets the paint which will be used to fill the lines of the whiskers.
+		 * @param color Paint which will be used to fill the lines of the
+		 * whiskers.
+		 */
+		public void setWhiskerColor(Paint color) {
+			this.whiskerColor = color;
+		}
+
+		/**
+		 * Returns the stroke which is used to paint the lines of the whiskers.
+		 * @return {@code Stroke} instance which is used to paint the lines of
+		 * the whiskers.
+		 */
+		public Stroke getWhiskerStroke() {
+			return whiskerStroke;
+		}
+
+		/**
+		 * Sets the stroke which will be used to paint the lines of the
+		 * whiskers.
+		 * @param stroke {@code Stroke} instance which will be used to paint
+		 * the lines of the whiskers.
+		 */
+		public void setWhiskerStroke(Stroke stroke) {
+			this.whiskerStroke = stroke;
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -470,10 +501,8 @@ public class BoxPlot extends XYPlot {
 					}
 					Paint paintStrokeBox = getBoxColor();
 					Stroke strokeBox = getBoxBorder();
-					Paint paintWhisker =
-						BoxWhiskerRenderer.this.getSetting(WHISKER_COLOR);
-					Stroke strokeWhisker =
-						BoxWhiskerRenderer.this.getSetting(WHISKER_STROKE);
+					Paint paintWhisker = getWhiskerColor();
+					Stroke strokeWhisker = getWhiskerStroke();
 					Paint paintBarCenter =
 						BoxWhiskerRenderer.this.getSetting(BAR_CENTER_COLOR);
 					Stroke strokeBarCenter =
