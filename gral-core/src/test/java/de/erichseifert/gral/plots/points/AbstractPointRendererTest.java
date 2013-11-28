@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots.points;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics2D;
@@ -52,6 +53,8 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class AbstractPointRendererTest {
+	private static final double DELTA = 1e-7;
+
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
@@ -169,6 +172,26 @@ public class AbstractPointRendererTest {
 		PointRenderer original = r;
 		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getShape(), deserialized.getShape());
+		assertEquals(original.getColor(), deserialized.getColor());
+
+		assertEquals(original.isValueDisplayed(), deserialized.isValueDisplayed());
+		assertEquals(original.getValueColumn(), deserialized.getValueColumn());
+		assertEquals(original.getValueFormat(), deserialized.getValueFormat());
+		assertEquals(original.getValueLocation(), deserialized.getValueLocation());
+		assertEquals(original.getValueAlignmentX(), deserialized.getValueAlignmentX(), DELTA);
+		assertEquals(original.getValueAlignmentY(), deserialized.getValueAlignmentY(), DELTA);
+		assertEquals(original.getValueRotation(), deserialized.getValueRotation(), DELTA);
+		assertEquals(original.getValueDistance(), deserialized.getValueDistance(), DELTA);
+		assertEquals(original.getValueColor(), deserialized.getValueColor());
+		assertEquals(original.getValueFont(), deserialized.getValueFont());
+
+		assertEquals(original.isErrorDisplayed(), deserialized.isErrorDisplayed());
+		assertEquals(original.getErrorColumnTop(), deserialized.getErrorColumnTop());
+		assertEquals(original.getErrorColumnBottom(), deserialized.getErrorColumnBottom());
+		assertEquals(original.getErrorColor(), deserialized.getErrorColor());
+		// TODO
+		//assertEquals(original.getErrorShape(), deserialized.getErrorShape());
+		assertEquals(original.getErrorStroke(), deserialized.getErrorStroke());
     }
 }

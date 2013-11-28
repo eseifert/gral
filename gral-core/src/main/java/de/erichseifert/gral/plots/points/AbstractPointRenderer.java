@@ -37,9 +37,6 @@ import java.text.Format;
 
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
-import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.SerializationUtils;
 
@@ -47,8 +44,8 @@ import de.erichseifert.gral.util.SerializationUtils;
 /**
  * Abstract class implementing functions for the administration of settings.
  */
-public abstract class AbstractPointRenderer extends BasicSettingsStorage
-		implements PointRenderer, SettingsListener {
+public abstract class AbstractPointRenderer
+		implements PointRenderer, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -408976260196287753L;
 
@@ -78,8 +75,6 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 * color.
 	 */
 	public AbstractPointRenderer() {
-		addSettingsListener(this);
-
 		shape = new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0);
 		color = new SingleColor(Color.BLACK);
 
@@ -102,13 +97,6 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	}
 
 	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	public void settingChanged(SettingChangeEvent event) {
-	}
-
-	/**
 	 * Custom deserialization method.
 	 * @param in Input stream.
 	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
@@ -122,9 +110,6 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		// Custom deserialization
 		errorStroke = (Stroke) SerializationUtils.unwrap(
 				(Serializable) in.readObject());
-
-		// Restore listeners
-		addSettingsListener(this);
 	}
 
 	/**

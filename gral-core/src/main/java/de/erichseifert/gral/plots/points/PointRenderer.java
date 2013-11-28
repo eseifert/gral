@@ -29,7 +29,6 @@ import java.text.Format;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.colors.ColorMapper;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.Location;
 
 /**
@@ -41,7 +40,7 @@ import de.erichseifert.gral.util.Location;
  *   <li>Getting and setting the bounds of the points</li>
  * </ul>
  */
-public interface PointRenderer extends SettingsStorage {
+public interface PointRenderer {
 	/**
 	 * Returns the shape which is used to draw the point.
 	 * @return {@code Shape} instance for the point.

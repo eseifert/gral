@@ -50,7 +50,10 @@ import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.util.Location;
+
 public class DefaultPointRenderer2DTest {
+	private static final double DELTA = 1e-7;
+
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
@@ -245,7 +248,5 @@ public class DefaultPointRenderer2DTest {
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		PointRenderer original = r;
 		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		TestUtils.assertSettings(original, deserialized);
     }
 }
