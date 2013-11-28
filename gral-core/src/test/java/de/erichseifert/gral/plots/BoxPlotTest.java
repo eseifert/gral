@@ -43,6 +43,7 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class BoxPlotTest {
 	private static final double DELTA = 1e-7;
@@ -123,19 +124,19 @@ public class BoxPlotTest {
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
 		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
 
-		for (int dataSourceIndex = 0; dataSourceIndex < dataSourcesOriginal.size(); dataSourceIndex++) {
-			BoxWhiskerRenderer pointRendererOriginal =
-					(BoxWhiskerRenderer) original.getPointRenderer(
-							dataSourcesOriginal.get(dataSourceIndex));
-			BoxWhiskerRenderer pointRendererDeserialized =
-					(BoxWhiskerRenderer) deserialized.getPointRenderer(
-							dataSourcesDeserialized.get(dataSourceIndex));
+		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
+			PointRenderer pointRendererOriginal = original.getPointRenderer(
+							dataSourcesOriginal.get(index));
+			PointRenderer pointRendererDeserialized = deserialized.getPointRenderer(
+							dataSourcesDeserialized.get(index));
 			testPointRendererSerialization(pointRendererOriginal, pointRendererDeserialized);
 		}
     }
 
 	private static void testPointRendererSerialization(
-			BoxWhiskerRenderer original, BoxWhiskerRenderer deserialized) {
+			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
+		BoxWhiskerRenderer original = (BoxWhiskerRenderer) originalRenderer;
+		BoxWhiskerRenderer deserialized = (BoxWhiskerRenderer) deserializedRenderer;
 		assertEquals(original.getColumnPosition(), deserialized.getColumnPosition());
 		assertEquals(original.getColumnBarCenter(), deserialized.getColumnBarCenter());
 		assertEquals(original.getColumnBarBottom(), deserialized.getColumnBarBottom());
