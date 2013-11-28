@@ -69,7 +69,7 @@ public class SimplePiePlot extends ExamplePanel {
 		// Change relative size of inner region
 		pointRenderer.setRadiusInner(0.4);
 		// Change the width of gaps between segments
-		pointRenderer.setSetting(PieSliceRenderer.GAP, 0.2);
+		pointRenderer.setGap(0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
 		pointRenderer.setColor(colors);

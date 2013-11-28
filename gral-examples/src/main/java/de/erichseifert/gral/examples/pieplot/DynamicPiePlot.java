@@ -66,11 +66,13 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0));
 
+		PieSliceRenderer pointRenderer =
+				(PieSliceRenderer) plot.getPointRenderer(data);
 		// Change the width of gaps between segments
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
+		pointRenderer.setGap(0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		plot.getPointRenderer(data).setColor(colors);
+		pointRenderer.setColor(colors);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

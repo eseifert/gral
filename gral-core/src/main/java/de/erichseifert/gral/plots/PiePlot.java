@@ -388,20 +388,12 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1135636437801090607L;
 
-		/** Key for specifying a {@link Number} value for the inner radius of
-		the pie relative to the radius set in the plot. */
-		public static final Key RADIUS_INNER =
-			new Key("pieplot.radius.inner"); //$NON-NLS-1$
-		/** Key for specifying a {@link Number} value for the width of gaps
-		between the segments. */
-		public static final Key GAP =
-			new Key("pieplot.gap"); //$NON-NLS-1$
-
 		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
 		private double radiusOuter;
 		private double radiusInner;
+		private double gap;
 
 		/**
 		 * Initializes a new instance with a pie plot object.
@@ -414,10 +406,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			setErrorColumnTop(1);
 			setErrorColumnBottom(2);
 
+			setColor(new QuasiRandomColors());
 			radiusOuter = 1.0;
 			radiusInner = 0.0;
-			setSettingDefault(COLOR, new QuasiRandomColors());
-			setSettingDefault(GAP, 0.0);
+			gap = 0.0;
 		}
 
 		/**
@@ -456,6 +448,26 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 */
 		public void setRadiusInner(double radiusInner) {
 			this.radiusInner = radiusInner;
+		}
+
+		/**
+		 * Returns the width of gaps between the segments relative to the font
+		 * size.
+		 * @return Width of gaps between the segments relative to the font
+		 * size.
+		 */
+		public double getGap() {
+			return gap;
+		}
+
+		/**
+		 * Sets the width of gaps between the segments relative to the font
+		 * size.
+		 * @param gap Width of gaps between the segments relative to the font
+		 * size.
+		 */
+		public void setGap(double gap) {
+			this.gap = gap;
 		}
 
 		/**
@@ -574,8 +586,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			);
 			Area doughnutSlice = new Area(pieSlice);
 
-			double gap = DataUtils.getValueOrDefault(
-				this.<Number>getSetting(PieSliceRenderer.GAP), 0.0);
+			double gap = getGap();
 			if (gap > 0.0) {
 				Stroke sliceStroke =
 					new BasicStroke((float) (gap*fontSize));
