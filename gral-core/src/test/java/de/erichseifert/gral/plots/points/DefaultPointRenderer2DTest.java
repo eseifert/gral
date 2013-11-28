@@ -200,7 +200,7 @@ public class DefaultPointRenderer2DTest {
 	@Test
 	public void testErrorDisplayed() {
 		r.setErrorColumnTop(1);
-		r.setSetting(PointRenderer.ERROR_COLUMN_BOTTOM, 1);
+		r.setErrorColumnBottom(1);
 
 		DrawingContext context;
 		Drawable point;

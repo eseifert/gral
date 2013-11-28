@@ -42,9 +42,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Integer} value for the index of
-	the column that contains the lower error value. */
-	Key ERROR_COLUMN_BOTTOM = new Key("point.error.columnBottom"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the error bars. */
 	Key ERROR_COLOR = new Key("point.error.paint"); //$NON-NLS-1$
@@ -253,6 +250,19 @@ public interface PointRenderer extends SettingsStorage {
 	 * value.
 	 */
 	void setErrorColumnTop(int columnIndex);
+
+	/**
+	 * Returns the index of the column that contains the lower error value.
+	 * @return Index of the column that contains the lower error value.
+	 */
+	int getErrorColumnBottom();
+
+	/**
+	 * Sets the index of the column that contains the lower error value.
+	 * @param columnIndex  Index of the column that contains the lower error
+	 * value.
+	 */
+	void setErrorColumnBottom(int columnIndex);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

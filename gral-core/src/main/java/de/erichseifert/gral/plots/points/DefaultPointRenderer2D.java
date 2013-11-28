@@ -83,8 +83,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 				if (renderer.isErrorDisplayed()) {
 					int colErrorTop = renderer.getErrorColumnTop();
-					int colErrorBottom =
-						renderer.<Integer>getSetting(ERROR_COLUMN_BOTTOM);
+					int colErrorBottom = renderer.getErrorColumnBottom();
 					drawErrorBars(context, shape,
 						row, col, colErrorTop, colErrorBottom,
 						axisY, axisRendererY);

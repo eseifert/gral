@@ -413,7 +413,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			setValueColumn(0);
 			setErrorColumnTop(1);
-			setSettingDefault(ERROR_COLUMN_BOTTOM, 2);
+			setErrorColumnBottom(2);
 
 			setSettingDefault(RADIUS_OUTER, 1.0);
 			setSettingDefault(RADIUS_INNER, 0.0);
