@@ -204,7 +204,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		Line2D errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
 		ColorMapper colors = getErrorColor();
 		Paint errorPaint = colors.get(row.getIndex());
-		Stroke errorStroke = getSetting(ERROR_STROKE);
+		Stroke errorStroke = getErrorStroke();
 		GraphicsUtils.drawPaintedShape(
 			graphics, errorBar, errorPaint, null, errorStroke);
 

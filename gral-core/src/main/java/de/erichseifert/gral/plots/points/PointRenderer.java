@@ -24,11 +24,11 @@ package de.erichseifert.gral.plots.points;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.text.Format;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.colors.ColorMapper;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.Location;
 
@@ -42,10 +42,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance defining the
-	error bars. */
-	Key ERROR_STROKE = new Key("point.error.stroke"); //$NON-NLS-1$
-
 	/**
 	 * Returns the shape which is used to draw the point.
 	 * @return {@code Shape} instance for the point.
@@ -289,6 +285,18 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param shape {@code Shape} instance for the error indicators.
 	 */
 	void setErrorShape(Shape shape);
+
+	/**
+	 * Returns the stroke which is used to draw the error indicators.
+	 * @return Current stroke of the error indicators.
+	 */
+	Stroke getErrorStroke();
+
+	/**
+	 * Sets the stroke which will be used to draw the error indicators.
+	 * @param stroke Stroke of the error indicators.
+	 */
+	void setErrorStroke(Stroke stroke);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

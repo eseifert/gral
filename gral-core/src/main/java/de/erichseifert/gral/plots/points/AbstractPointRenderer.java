@@ -26,10 +26,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.Format;
 
 import de.erichseifert.gral.plots.colors.ColorMapper;
@@ -38,6 +41,7 @@ import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -67,6 +71,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private int errorColumnBottom;
 	private ColorMapper errorColor;
 	private Shape errorShape;
+	private transient Stroke errorStroke;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -93,7 +98,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		errorColumnBottom = 3;
 		errorColor = new SingleColor(Color.BLACK);
 		errorShape = new Line2D.Double(-2.0, 0.0, 2.0, 0.0);
-		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
+		errorStroke = new BasicStroke(1f);
 	}
 
 	/**
@@ -112,11 +117,29 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
+		// Default deserialization
 		in.defaultReadObject();
+		// Custom deserialization
+		errorStroke = (Stroke) SerializationUtils.unwrap(
+				(Serializable) in.readObject());
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		// Default serialization
+		out.defaultWriteObject();
+		// Custom serialization
+		out.writeObject(SerializationUtils.wrap(errorStroke));
 	}
 
 	@Override
@@ -304,5 +327,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	public void setErrorShape(Shape shape) {
 		// TODO Store clone of shape to prevent external modification
 		this.errorShape = shape;
+	}
+
+	@Override
+	public Stroke getErrorStroke() {
+		return errorStroke;
+	}
+
+	@Override
+	public void setErrorStroke(Stroke stroke) {
+		this.errorStroke = stroke;
 	}
 }
