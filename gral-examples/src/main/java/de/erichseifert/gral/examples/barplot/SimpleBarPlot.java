@@ -69,7 +69,7 @@ public class SimpleBarPlot extends ExamplePanel {
 			)
 		);
 		pointRenderer.setStroke(new BasicStroke(3f));
-		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE_COLOR,
+		pointRenderer.setStrokeColor(
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },
 					new Color[] { GraphicsUtils.deriveBrighter(COLOR1), COLOR1 }

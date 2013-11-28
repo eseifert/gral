@@ -97,14 +97,11 @@ public class BarPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2183638342305398522L;
 
-		/** Key for specifying a {@link java.awt.Paint} instance used to fill
-		the point shape. */
-		public static final Key STROKE_COLOR = new Key("barplot.bar.stroke.color"); //$NON-NLS-1$
-
 		/** Settings of the plot. */
 		private final SettingsStorage plotSettings;
 
 		private transient Stroke stroke;
+		private Paint strokeColor;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -115,7 +112,7 @@ public class BarPlot extends XYPlot {
 			this.plotSettings = plotSettings;
 			setValueLocation(Location.NORTH);
 			stroke  = null;
-			setSettingDefault(STROKE_COLOR, Color.BLACK);
+			strokeColor = Color.BLACK;
 		}
 
 		/**
@@ -132,6 +129,22 @@ public class BarPlot extends XYPlot {
 		 */
 		public void setStroke(Stroke stroke) {
 			this.stroke = stroke;
+		}
+
+		/**
+		 * Returns the paint which is used to fill the point shape.
+		 * @return Paint which is used to fill the point shape.
+		 */
+		public Paint getStrokeColor() {
+			return strokeColor;
+		}
+
+		/**
+		 * Sets the paint which will be used to fill the point shape.
+		 * @param color Paint which will be used to fill the point shape.
+		 */
+		public void setStrokeColor(Paint color) {
+			this.strokeColor = color;
 		}
 
 		/**
@@ -173,7 +186,7 @@ public class BarPlot extends XYPlot {
 						graphics, shape, paint, paintBoundaries);
 
 					Stroke stroke = renderer.getStroke();
-					Paint strokePaint = renderer.<Paint>getSetting(STROKE_COLOR);
+					Paint strokePaint = renderer.getStrokeColor();
 					if (stroke != null && strokePaint != null) {
 						GraphicsUtils.drawPaintedShape(
 							graphics, shape, strokePaint, null, stroke);
