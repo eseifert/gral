@@ -42,9 +42,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the error bars. */
-	Key ERROR_COLOR = new Key("point.error.paint"); //$NON-NLS-1$
 	/** Key for specifying an instance either of
 	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
 	{@link java.awt.Paint} that will be used to paint the error bars. */
@@ -263,6 +260,27 @@ public interface PointRenderer extends SettingsStorage {
 	 * value.
 	 */
 	void setErrorColumnBottom(int columnIndex);
+
+	/**
+	 * Returns the mapping that is used to fill the error indicators.
+	 * @return {@code ColorMapper} instance that is used to fill the error
+	 * indicators.
+	 */
+	ColorMapper getErrorColor();
+
+	/**
+	 * Sets the mapping that will be used to fill the error indicators.
+	 * @param color {@code ColorMapper} instance that will be used to fill
+	 * the error indicators.
+	 */
+	void setErrorColor(ColorMapper color);
+
+	/**
+	 * Sets the paint that will be used to fill the error indicators.
+	 * @param color {@code Paint} instance that will be used to fill the
+	 * error indicators.
+	 */
+	void setErrorColor(Paint color);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

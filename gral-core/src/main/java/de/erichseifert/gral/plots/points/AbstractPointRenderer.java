@@ -35,7 +35,6 @@ import java.text.Format;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.Location;
@@ -66,6 +65,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private boolean errorDisplayed;
 	private int errorColumnTop;
 	private int errorColumnBottom;
+	private ColorMapper errorColor;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -90,7 +90,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		errorDisplayed = false;
 		errorColumnTop = 2;
 		errorColumnBottom = 3;
-		setSettingDefault(ERROR_COLOR, new SingleColor(Color.BLACK));
+		errorColor = new SingleColor(Color.BLACK);
 		setSettingDefault(ERROR_SHAPE, new Line2D.Double(-2.0, 0.0, 2.0, 0.0));
 		setSettingDefault(ERROR_STROKE, new BasicStroke(1f));
 	}
@@ -101,16 +101,6 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	 */
 	public void settingChanged(SettingChangeEvent event) {
 	}
-
-	@Override
-	protected <T> void setSetting(Key key, T value, boolean isDefault) {
-		// Be nice and automatically convert colors to color mappers
-		if (value instanceof Paint && ERROR_COLOR.equals(key)) {
-			super.setSetting(key, new SingleColor((Paint) value), isDefault);
-		} else {
-			super.setSetting(key, value, isDefault);
-		}
-	};
 
 	/**
 	 * Custom deserialization method.
@@ -287,5 +277,20 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setErrorColumnBottom(int columnIndex) {
 		this.errorColumnBottom = columnIndex;
+	}
+
+	@Override
+	public ColorMapper getErrorColor() {
+		return errorColor;
+	}
+
+	@Override
+	public void setErrorColor(ColorMapper color) {
+		this.errorColor = color;
+	}
+
+	@Override
+	public void setErrorColor(Paint color) {
+		setErrorColor(new SingleColor(color));
 	}
 }
