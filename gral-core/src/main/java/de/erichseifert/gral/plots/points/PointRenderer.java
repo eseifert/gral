@@ -42,9 +42,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value whether the error
-	value is displayed. */
-	Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
 	/** Key for specifying a {@link Integer} value for the index of
 	the column that contains the upper error value. */
 	Key ERROR_COLUMN_TOP = new Key("point.error.columnTop"); //$NON-NLS-1$
@@ -229,9 +226,23 @@ public interface PointRenderer extends SettingsStorage {
 
 	/**
 	 * Sets the font that will be used to render the value.
-	 * @param Font that will be used to render the value.
+	 * @param font Font that will be used to render the value.
 	 */
 	void setValueFont(Font font);
+
+	/**
+	 * Returns whether the error value is displayed.
+	 * @return {@code true} if the error value is displayed, otherwise
+	 * {@code false}.
+	 */
+	boolean isErrorDisplayed();
+
+	/**
+	 * Sets whether the error value will be displayed.
+	 * @param errorDisplayed {@code true} if the error value should be
+	 * displayed, otherwise {@code false}.
+	 */
+	void setErrorDisplayed(boolean errorDisplayed);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

@@ -63,6 +63,8 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private ColorMapper valueColor;
 	private Font valueFont;
 
+	private boolean errorDisplayed;
+
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.
@@ -83,7 +85,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		valueColor = new SingleColor(Color.BLACK);
 		valueFont = Font.decode(null);
 
-		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
+		errorDisplayed = false;
 		setSettingDefault(ERROR_COLUMN_TOP, 2);
 		setSettingDefault(ERROR_COLUMN_BOTTOM, 3);
 		setSettingDefault(ERROR_COLOR, new SingleColor(Color.BLACK));
@@ -253,5 +255,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueFont(Font font) {
 		this.valueFont = font;
+	}
+
+	@Override
+	public boolean isErrorDisplayed() {
+		return errorDisplayed;
+	}
+
+	@Override
+	public void setErrorDisplayed(boolean errorDisplayed) {
+		this.errorDisplayed = errorDisplayed;
 	}
 }
