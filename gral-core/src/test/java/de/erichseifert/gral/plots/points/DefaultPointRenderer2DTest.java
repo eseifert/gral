@@ -184,7 +184,7 @@ public class DefaultPointRenderer2DTest {
 		r.setValueDisplayed(true);
 		r.setSetting(PointRenderer.VALUE_DISTANCE, 0.5);
 		for (Location location : locations) {
-			r.setSetting(PointRenderer.VALUE_LOCATION, location);
+			r.setValueLocation(location);
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();

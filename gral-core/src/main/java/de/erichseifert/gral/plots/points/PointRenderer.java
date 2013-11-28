@@ -29,6 +29,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
+import de.erichseifert.gral.util.Location;
 
 /**
  * <p>An interface providing functions for rendering points in a plot.
@@ -40,9 +41,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
-	the positioning of the data value relative to the data point. */
-	Key VALUE_LOCATION = new Key("point.value.location"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value that positions
 	the value horizontally. */
 	Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
@@ -136,7 +134,8 @@ public interface PointRenderer extends SettingsStorage {
 
 	/**
 	 * Sets the index of the column that contains the displayed values.
-	 * @return columnIndex Index of the column that contains the displayed values.
+	 * @return columnIndex Index of the column that contains the displayed
+	 * values.
 	 */
 	void setValueColumn(int columnIndex);
 
@@ -153,6 +152,20 @@ public interface PointRenderer extends SettingsStorage {
 	 * displayed data values.
 	 */
 	void setValueFormat(Format format);
+
+	/**
+	 * Returns the current positioning of the data value relative to the data
+	 * point.
+	 * @return Current positioning of the data value relative to the data
+	 * point.
+	 */
+	Location getValueLocation();
+
+	/**
+	 * Sets the positioning of the data value relative to the data point.
+	 * @return Positioning of the data value relative to the data point.
+	 */
+	void setValueLocation(Location location);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

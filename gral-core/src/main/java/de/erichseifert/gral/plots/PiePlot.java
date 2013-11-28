@@ -591,7 +591,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double fontSize = font.getSize2D();
 
 			// Layout settings
-			Location location = getSetting(VALUE_LOCATION);
+			Location location = getValueLocation();
 			double alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X).doubleValue();
 			double alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y).doubleValue();
 			Number rotation = this.<Number>getSetting(VALUE_ROTATION);

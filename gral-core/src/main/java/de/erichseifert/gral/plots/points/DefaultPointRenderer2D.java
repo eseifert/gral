@@ -124,7 +124,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		double fontSize = font.getSize2D();
 
 		// Layout settings
-		Location location = getSetting(VALUE_LOCATION);
+		Location location = getValueLocation();
 		Number alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X);
 		Number alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y);
 		Number rotation = this.<Number>getSetting(VALUE_ROTATION);

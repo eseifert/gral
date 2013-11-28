@@ -113,7 +113,7 @@ public class BarPlot extends XYPlot {
 		 */
 		public BarRenderer(SettingsStorage plotSettings) {
 			this.plotSettings = plotSettings;
-			setSettingDefault(VALUE_LOCATION, Location.NORTH);
+			setValueLocation(Location.NORTH);
 			setSettingDefault(STROKE, null);
 			setSettingDefault(STROKE_COLOR, Color.BLACK);
 		}

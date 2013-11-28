@@ -55,6 +55,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private boolean valueDisplayed;
 	private int valueColumn;
 	private Format valueFormat;
+	private Location valueLocation;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -68,7 +69,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 
 		valueDisplayed = false;
 		valueColumn = 1;
-		setSettingDefault(VALUE_LOCATION, Location.CENTER);
+		valueLocation = Location.CENTER;
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
 		setSettingDefault(VALUE_ROTATION, 0.0);
@@ -172,5 +173,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueFormat(Format format) {
 		this.valueFormat = format;
+	}
+
+	@Override
+	public Location getValueLocation() {
+		return valueLocation;
+	}
+
+	@Override
+	public void setValueLocation(Location location) {
+		this.valueLocation = location;
 	}
 }
