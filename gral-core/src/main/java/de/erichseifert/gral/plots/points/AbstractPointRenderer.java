@@ -57,6 +57,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private Format valueFormat;
 	private Location valueLocation;
 	private double valueAlignmentX;
+	private double valueAlignmentY;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -72,7 +73,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		valueColumn = 1;
 		valueLocation = Location.CENTER;
 		valueAlignmentX = 0.5;
-		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
+		valueAlignmentY = 0.5;
 		setSettingDefault(VALUE_ROTATION, 0.0);
 		setSettingDefault(VALUE_DISTANCE, 1.0);
 		setSettingDefault(VALUE_COLOR, new SingleColor(Color.BLACK));
@@ -194,5 +195,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueAlignmentX(double alignmentX) {
 		this.valueAlignmentX = alignmentX;
+	}
+
+	@Override
+	public double getValueAlignmentY() {
+		return valueAlignmentY;
+	}
+
+	@Override
+	public void setValueAlignmentY(double alignmentY) {
+		this.valueAlignmentY = alignmentY;
 	}
 }

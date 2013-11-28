@@ -41,9 +41,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value that positions
-	the value vertically. */
-	Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for setting the
 	rotation of the value in degrees. */
 	Key VALUE_ROTATION = new Key("point.value.rotation"); //$NON-NLS-1$
@@ -177,6 +174,20 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param alignmentX Relative horizontal position of the value.
 	 */
 	void setValueAlignmentX(double alignmentX);
+
+	/**
+	 * Returns the relative vertical position of the value. The position will
+	 * be between 0 and 1.
+	 * @return Relative vertical position of the value.
+	 */
+	double getValueAlignmentY();
+
+	/**
+	 * Sets the relative vertical position of the value. The position can be
+	 * specified between 0 and 1.
+	 * @param alignmentX Relative vertical position of the value.
+	 */
+	void setValueAlignmentY(double alignmentX);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further
