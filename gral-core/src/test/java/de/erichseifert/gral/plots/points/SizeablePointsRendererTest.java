@@ -125,26 +125,26 @@ public class SizeablePointsRendererTest {
 
 	@Test
 	public void testInvalidColumn() {
-		PointRenderer r = new SizeablePointRenderer();
+		SizeablePointRenderer r = new SizeablePointRenderer();
 		r.setShape(shape);
 		Shape path;
 
 		// Column index too big
-		r.setSetting(SizeablePointRenderer.COLUMN, table.getColumnCount());
+		r.setColumn(table.getColumnCount());
 		path = r.getPointShape(data);
 		assertEquals(shape, path);
 
 		// Column index too small
-		r.setSetting(SizeablePointRenderer.COLUMN, -1);
+		r.setColumn(-1);
 		path = r.getPointShape(data);
 		assertEquals(shape, path);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		PointRenderer original = new SizeablePointRenderer();
-		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+		SizeablePointRenderer original = new SizeablePointRenderer();
+		SizeablePointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
-    }
+		assertEquals(original.getColumn(), deserialized.getColumn());
+	}
 }

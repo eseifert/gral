@@ -32,7 +32,6 @@ import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -82,10 +81,10 @@ public class SpiralPlot extends ExamplePanel {
 
 		// Format data series
 		Color color = GraphicsUtils.deriveWithAlpha(COLOR1, 96);
-		PointRenderer pointRenderer = new SizeablePointRenderer();
+		SizeablePointRenderer pointRenderer = new SizeablePointRenderer();
 		pointRenderer.setShape(new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
 		pointRenderer.setColor(color);  // color of data points
-		pointRenderer.setSetting(SizeablePointRenderer.COLUMN, 2);  // data column which determines the scaling of data point shapes
+		pointRenderer.setColumn(2);  // data column which determines the scaling of data point shapes
 		plot.setPointRenderer(series, pointRenderer);  // Assign the point renderer to the data series
 
 		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component

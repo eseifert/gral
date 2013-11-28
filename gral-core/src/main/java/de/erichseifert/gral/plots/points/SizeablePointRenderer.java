@@ -25,7 +25,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -38,16 +37,29 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3276439387457161307L;
 
-	/** Key for specifying the {@link Integer} which specifies the index of the
-	column that is used for point sizes. */
-	public static final Key COLUMN =
-		new Key("sizeablePoint.column"); //$NON-NLS-1$
+	private int column;
 
 	/**
 	 * Initializes a new object.
 	 */
 	public SizeablePointRenderer() {
-		setSettingDefault(COLUMN, 2);
+		column = 2;
+	}
+
+	/**
+	 * Returns the index of the column which is used for point sizes.
+	 * @return index of the column which is used for point sizes.
+	 */
+	public int getColumn() {
+		return column;
+	}
+
+	/**
+	 * Sets the index of the column which will be used for point sizes.
+	 * @param column Index of the column which will be used for point sizes.
+	 */
+	public void setColumn(int column) {
+		this.column = column;
 	}
 
 	@Override
@@ -55,7 +67,7 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 		Shape shape = getShape();
 
 		Row row = data.row;
-		int colSize = this.<Integer>getSetting(COLUMN);
+		int colSize = getColumn();
 		if (colSize >= row.size() || colSize < 0 || !row.isColumnNumeric(colSize)) {
 			return shape;
 		}
