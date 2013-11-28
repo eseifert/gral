@@ -96,15 +96,15 @@ public class BarPlot extends XYPlot {
 	public static class BarRenderer extends DefaultPointRenderer2D {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2183638342305398522L;
-		/** Key for specifying a {@link java.awt.Stroke} instance used to paint
-		the outline of the point shape. */
-		public static final Key STROKE = new Key("barplot.bar.stroke"); //$NON-NLS-1$
+
 		/** Key for specifying a {@link java.awt.Paint} instance used to fill
 		the point shape. */
 		public static final Key STROKE_COLOR = new Key("barplot.bar.stroke.color"); //$NON-NLS-1$
 
 		/** Settings of the plot. */
 		private final SettingsStorage plotSettings;
+
+		private transient Stroke stroke;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -114,8 +114,24 @@ public class BarPlot extends XYPlot {
 		public BarRenderer(SettingsStorage plotSettings) {
 			this.plotSettings = plotSettings;
 			setValueLocation(Location.NORTH);
-			setSettingDefault(STROKE, null);
+			stroke  = null;
 			setSettingDefault(STROKE_COLOR, Color.BLACK);
+		}
+
+		/**
+		 * Returns the stroke used to paint the outline of the point shape.
+		 * @return Stroke used to paint the outline of the point shape.
+		 */
+		public Stroke getStroke() {
+			return stroke;
+		}
+
+		/**
+		 * Sets the stroke used to paint the outline of the point shape.
+		 * @param stroke Stroke used to paint the outline of the point shape.
+		 */
+		public void setStroke(Stroke stroke) {
+			this.stroke = stroke;
 		}
 
 		/**
@@ -132,7 +148,7 @@ public class BarPlot extends XYPlot {
 				private static final long serialVersionUID = -3145112034673683520L;
 
 				public void draw(DrawingContext context) {
-					PointRenderer renderer = BarRenderer.this;
+					BarRenderer renderer = BarRenderer.this;
 
 					Row row = data.row;
 
@@ -156,7 +172,7 @@ public class BarPlot extends XYPlot {
 					GraphicsUtils.fillPaintedShape(
 						graphics, shape, paint, paintBoundaries);
 
-					Stroke stroke = renderer.<Stroke>getSetting(STROKE);
+					Stroke stroke = renderer.getStroke();
 					Paint strokePaint = renderer.<Paint>getSetting(STROKE_COLOR);
 					if (stroke != null && strokePaint != null) {
 						GraphicsUtils.drawPaintedShape(

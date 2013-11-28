@@ -29,7 +29,7 @@ import java.awt.LinearGradientPaint;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
-import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -61,14 +61,14 @@ public class SimpleBarPlot extends ExamplePanel {
 		plot.setSetting(BarPlot.BAR_WIDTH, 0.075);
 
 		// Format bars
-		PointRenderer pointRenderer = plot.getPointRenderer(data);
+		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
 		pointRenderer.setColor(
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },
 					new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }
 			)
 		);
-		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE, new BasicStroke(3f));
+		pointRenderer.setStroke(new BasicStroke(3f));
 		pointRenderer.setSetting(BarPlot.BarRenderer.STROKE_COLOR,
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },
