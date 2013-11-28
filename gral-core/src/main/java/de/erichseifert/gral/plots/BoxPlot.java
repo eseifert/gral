@@ -98,10 +98,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying the {@link java.awt.Paint} instance to be used
-		to paint the border of the box and the lines of bars. */
-		public static final Key BOX_COLOR =
-			new Key("boxplot.box.color"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Stroke} instance to be used
 		to paint the border of the box and the lines of the bars. */
 		public static final Key BOX_BORDER =
@@ -136,6 +132,7 @@ public class BoxPlot extends XYPlot {
 
 		private double boxWidth;
 		private ColorMapper boxBackground;
+		private Paint boxColor;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -150,7 +147,7 @@ public class BoxPlot extends XYPlot {
 			columnBarTop = 5;
 			boxWidth = 0.75;
 			boxBackground = new SingleColor(Color.WHITE);
-			setSettingDefault(BOX_COLOR, Color.BLACK);
+			boxColor = Color.BLACK;
 			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
 			setSettingDefault(WHISKER_COLOR, Color.BLACK);
 			setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
@@ -315,6 +312,26 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the paint which is used to fill the border of a box and the
+		 * lines of bars.
+		 * @return Paint which is used to fill the border of a box and the
+		 * lines of bars.
+		 */
+		public Paint getBoxColor() {
+			return boxColor;
+		}
+
+		/**
+		 * Sets the paint which will be used to fill the border of a box and
+		 * the lines of bars.
+		 * @param color Paint which will be used to fill the border of a box
+		 * and the lines of bars.
+		 */
+		public void setBoxColor(Paint color) {
+			this.boxColor = color;
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -434,8 +451,7 @@ public class BoxPlot extends XYPlot {
 						Integer index = Integer.valueOf(row.getIndex());
 						paintBox = paintBoxMapper.get(index);
 					}
-					Paint paintStrokeBox =
-						BoxWhiskerRenderer.this.getSetting(BOX_COLOR);
+					Paint paintStrokeBox = getBoxColor();
 					Stroke strokeBox =
 						BoxWhiskerRenderer.this.getSetting(BOX_BORDER);
 					Paint paintWhisker =
