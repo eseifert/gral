@@ -160,12 +160,11 @@ public class DefaultPointRenderer2DTest {
 	@Test
 	public void testValueDistance() {
 		List<Double> distances = Arrays.asList(
-			(Double) null, Double.NaN,
-			Double.valueOf(0.0), Double.valueOf(1.0));
+			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
 
 		r.setValueDisplayed(true);
 		for (Double distance : distances) {
-			r.setSetting(PointRenderer.VALUE_DISTANCE, distance);
+			r.setValueDistance(distance);
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
@@ -182,7 +181,7 @@ public class DefaultPointRenderer2DTest {
 		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
 
 		r.setValueDisplayed(true);
-		r.setSetting(PointRenderer.VALUE_DISTANCE, 0.5);
+		r.setValueDistance(0.5);
 		for (Location location : locations) {
 			r.setValueLocation(location);
 			Drawable point = r.getValue(data, r.getPointShape(data));

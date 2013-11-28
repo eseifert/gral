@@ -59,6 +59,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private double valueAlignmentX;
 	private double valueAlignmentY;
 	private double valueRotation;
+	private double valueDistance;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -76,7 +77,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		valueAlignmentX = 0.5;
 		valueAlignmentY = 0.5;
 		valueRotation = 0.0;
-		setSettingDefault(VALUE_DISTANCE, 1.0);
+		valueDistance = 1.0;
 		setSettingDefault(VALUE_COLOR, new SingleColor(Color.BLACK));
 		setSettingDefault(VALUE_FONT, Font.decode(null));
 
@@ -216,5 +217,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueRotation(double angle) {
 		this.valueRotation = angle;
+	}
+
+	@Override
+	public double getValueDistance() {
+		return valueRotation;
+	}
+
+	@Override
+	public void setValueDistance(double distance) {
+		this.valueDistance = distance;
 	}
 }

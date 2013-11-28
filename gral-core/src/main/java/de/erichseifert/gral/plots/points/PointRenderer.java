@@ -41,10 +41,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the distance
-	 of values to the point. The distance is specified relative to the font
-	 height. */
-	Key VALUE_DISTANCE = new Key("point.value.distance"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the value. */
 	Key VALUE_COLOR = new Key("point.value.paint"); //$NON-NLS-1$
@@ -197,6 +193,20 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param rotation Rotation angle in degrees.
 	 */
 	void setValueRotation(double angle);
+
+	/**
+	 * Returns the current distance of values to the point. The distance is
+	 * specified relative to the font height.
+	 * @return Distance relative to the font height.
+	 */
+	double getValueDistance();
+
+	/**
+	 * Sets the distance of values to the point. The distance is specified
+	 * relative to the font height.
+	 * @param distance Distance relative to the font height.
+	 */
+	void setValueDistance(double distance);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

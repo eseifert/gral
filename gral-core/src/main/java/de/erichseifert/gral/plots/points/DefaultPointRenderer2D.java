@@ -43,7 +43,6 @@ import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -128,8 +127,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		double alignX = getValueAlignmentX();
 		double alignY = getValueAlignmentY();
 		double rotation = getValueRotation();
-		double distance = DataUtils.getValueOrDefault(
-			this.<Number>getSetting(VALUE_DISTANCE), Double.NaN);
+		double distance = getValueDistance();
 		if (MathUtils.isCalculatable(distance)) {
 			distance *= fontSize;
 		} else {
