@@ -31,6 +31,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,9 +56,9 @@ import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -97,11 +101,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used
-		to paint the lines of the center bar. */
-		public static final Key BAR_CENTER_STROKE =
-			new Key("boxplot.bar.center.stroke"); //$NON-NLS-1$
-
 		private int columnPosition;
 		private int columnBarCenter;
 		private int columnBarBottom;
@@ -112,14 +111,14 @@ public class BoxPlot extends XYPlot {
 		private double boxWidth;
 		private ColorMapper boxBackground;
 		private Paint boxColor;
-		private Stroke boxBorder;
+		private transient Stroke boxBorder;
 
 		private Paint whiskerColor;
-		private Stroke whiskerStroke;
+		private transient Stroke whiskerStroke;
 
 		private double barWidth;
 		private Paint barCenterColor;
-		private Stroke barCenterStroke;
+		private transient Stroke barCenterStroke;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -142,6 +141,43 @@ public class BoxPlot extends XYPlot {
 			barCenterColor = Color.BLACK;
 			barCenterStroke = new BasicStroke(
 				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		}
+
+		/**
+		 * Custom deserialization method.
+		 * @param in Input stream.
+		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+		 * @throws IOException if there is an error while reading data from the
+		 *         input stream.
+		 */
+		private void readObject(ObjectInputStream in)
+				throws ClassNotFoundException, IOException {
+			// Default deserialization
+			in.defaultReadObject();
+			// Custom deserialization
+			/*boxBorder = (Stroke) SerializationUtils.unwrap(
+					(Serializable) in.readObject());*/
+			whiskerStroke = (Stroke) SerializationUtils.unwrap(
+					(Serializable) in.readObject());
+			barCenterStroke = (Stroke) SerializationUtils.unwrap(
+					(Serializable) in.readObject());
+		}
+
+		/**
+		 * Custom serialization method.
+		 * @param out Output stream.
+		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+		 * @throws IOException if there is an error while writing data to the
+		 *         output stream.
+		 */
+		private void writeObject(ObjectOutputStream out)
+				throws ClassNotFoundException, IOException {
+			// Default serialization
+			out.defaultWriteObject();
+			// Custom serialization
+			out.writeObject(SerializationUtils.wrap(boxBorder));
+			out.writeObject(SerializationUtils.wrap(whiskerStroke));
+			out.writeObject(SerializationUtils.wrap(barCenterStroke));
 		}
 
 		/**
