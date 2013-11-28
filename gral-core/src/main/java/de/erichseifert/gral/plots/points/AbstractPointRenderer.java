@@ -61,6 +61,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private double valueRotation;
 	private double valueDistance;
 	private ColorMapper valueColor;
+	private Font valueFont;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -80,7 +81,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		valueRotation = 0.0;
 		valueDistance = 1.0;
 		valueColor = new SingleColor(Color.BLACK);
-		setSettingDefault(VALUE_FONT, Font.decode(null));
+		valueFont = Font.decode(null);
 
 		setSettingDefault(ERROR_DISPLAYED, Boolean.FALSE);
 		setSettingDefault(ERROR_COLUMN_TOP, 2);
@@ -221,7 +222,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 
 	@Override
 	public double getValueDistance() {
-		return valueRotation;
+		return valueDistance;
 	}
 
 	@Override
@@ -242,5 +243,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueColor(Paint color) {
 		setValueColor(new SingleColor(color));
+	}
+
+	@Override
+	public Font getValueFont() {
+		return valueFont;
+	}
+
+	@Override
+	public void setValueFont(Font font) {
+		this.valueFont = font;
 	}
 }

@@ -74,7 +74,8 @@ public class SimplePiePlot extends ExamplePanel {
 		// Show labels
 		plot.getPointRenderer(data).setValueDisplayed(true);
 		plot.getPointRenderer(data).setValueColor(Color.WHITE);
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_FONT, Font.decode(null).deriveFont(Font.BOLD));
+		plot.getPointRenderer(data).setValueFont(
+				Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);

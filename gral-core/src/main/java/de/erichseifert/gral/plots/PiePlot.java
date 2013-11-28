@@ -491,7 +491,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				return null;
 			}
 
-			Font font = this.<Font>getSetting(PieSliceRenderer.VALUE_FONT);
+			Font font = getValueFont();
 			double fontSize = font.getSize2D();
 
 			PlotArea plotArea = plot.getPlotArea();
@@ -587,7 +587,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			// Visual settings
 			ColorMapper colors = getValueColor();
 			Paint paint = colors.get(row.getIndex());
-			Font font = getSetting(VALUE_FONT);
+			Font font = getValueFont();
 			double fontSize = font.getSize2D();
 
 			// Layout settings

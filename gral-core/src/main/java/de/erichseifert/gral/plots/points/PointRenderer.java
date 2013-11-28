@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.points;
 
+import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.text.Format;
@@ -41,11 +42,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying an instance either of
-	{@link de.erichseifert.gral.plots.colors.ColorMapper} or
-	{@link java.awt.Paint} that will be used to paint the value text. */
-	Key VALUE_FONT = new Key("point.value.font"); //$NON-NLS-1$
-
 	/** Key for specifying a {@link Boolean} value whether the error
 	value is displayed. */
 	Key ERROR_DISPLAYED = new Key("point.error.displayed"); //$NON-NLS-1$
@@ -224,6 +220,18 @@ public interface PointRenderer extends SettingsStorage {
 	 * value.
 	 */
 	void setValueColor(Paint color);
+
+	/**
+	 * Returns the font that is used to render the value.
+	 * @return Font that is used to render the value.
+	 */
+	Font getValueFont();
+
+	/**
+	 * Sets the font that will be used to render the value.
+	 * @param Font that will be used to render the value.
+	 */
+	void setValueFont(Font font);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

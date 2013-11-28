@@ -79,8 +79,7 @@ public class SimpleBarPlot extends ExamplePanel {
 		pointRenderer.setValueColumn(2);
 		pointRenderer.setValueLocation(Location.CENTER);
 		pointRenderer.setValueColor(GraphicsUtils.deriveDarker(COLOR1));
-		pointRenderer.setSetting(PointRenderer.VALUE_FONT,
-			Font.decode(null).deriveFont(Font.BOLD));
+		pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot));
