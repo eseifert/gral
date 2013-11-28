@@ -100,26 +100,6 @@ public class BoxPlot extends XYPlot {
 		private static final long serialVersionUID = 2944482729753981341L;
 
 		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the horizontal position of a box. */
-		public static final Key COLUMN_POSITION =
-			new Key("boxplot.position.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the center bar. */
-		public static final Key COLUMN_BAR_CENTER =
-			new Key("boxplot.bar.center.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the bottom bar. */
-		public static final Key COLUMN_BAR_BOTTOM =
-			new Key("boxplot.bar.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the bottom edge of the box. */
-		public static final Key COLUMN_BOX_BOTTOM =
-			new Key("boxplot.box.bottom.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the bottom edge of the box. */
-		public static final Key COLUMN_BOX_TOP =
-			new Key("boxplot.box.top.column"); //$NON-NLS-1$
-		/** Key for specifying the {@link Integer} value which specifies the
 		index of the column that is used for the top bar. */
 		public static final Key COLUMN_BAR_TOP =
 			new Key("boxplot.bar.top.column"); //$NON-NLS-1$
@@ -161,17 +141,24 @@ public class BoxPlot extends XYPlot {
 		public static final Key BAR_CENTER_STROKE =
 			new Key("boxplot.bar.center.stroke"); //$NON-NLS-1$
 
+		private int columnPosition;
+		private int columnBarCenter;
+		private int columnBarBottom;
+		private int columnBoxBottom;
+		private int columnBoxTop;
+		private int columnBarTop;
+
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
 		 */
 		public BoxWhiskerRenderer() {
-			setSettingDefault(COLUMN_POSITION, 0);
-			setSettingDefault(COLUMN_BAR_CENTER, 1);
-			setSettingDefault(COLUMN_BAR_BOTTOM, 2);
-			setSettingDefault(COLUMN_BOX_BOTTOM, 3);
-			setSettingDefault(COLUMN_BOX_TOP, 4);
-			setSettingDefault(COLUMN_BAR_TOP, 5);
+			columnPosition = 0;
+			columnBarCenter = 1;
+			columnBarBottom = 2;
+			columnBoxBottom = 3;
+			columnBoxTop = 4;
+			columnBarTop = 5;
 			setSettingDefault(BOX_WIDTH, 0.75);
 			setSettingDefault(BOX_BACKGROUND, Color.WHITE);
 			setSettingDefault(BOX_COLOR, Color.BLACK);
@@ -182,6 +169,117 @@ public class BoxPlot extends XYPlot {
 			setSettingDefault(BAR_CENTER_COLOR, Color.BLACK);
 			setSettingDefault(BAR_CENTER_STROKE, new BasicStroke(
 				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+		}
+
+		/**
+		 * Returns the index of the column which is used for the horizontal
+		 * position of a box.
+		 * @return Index of the column that is used for the horizontal position
+		 * of a box.
+		 */
+		public int getColumnPosition() {
+			return columnPosition;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the horizontal
+		 * position of a box.
+		 * @param columnPosition Index of the column that is used for the
+		 * horizontal position of a box.
+		 */
+		public void setColumnPosition(int columnPosition) {
+			this.columnPosition = columnPosition;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the center bar.
+		 * @return Index of the column which is used for the center bar.
+		 */
+		public int getColumnBarCenter() {
+			return columnBarCenter;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the center bar.
+		 * @param columnBarCenter Index of the column which will be used for
+		 * the center bar.
+		 */
+		public void setColumnBarCenter(int columnBarCenter) {
+			this.columnBarCenter = columnBarCenter;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the bottom bar.
+		 * @return Index of the column which is used for the bottom bar.
+		 */
+		public int getColumnBarBottom() {
+			return columnBarBottom;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the bottom bar.
+		 * @param columnBarBottom Index of the column which will be used for
+		 * the bottom bar.
+		 */
+		public void setColumnBarBottom(int columnBarBottom) {
+			this.columnBarBottom = columnBarBottom;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the bottom edge of
+		 * the box.
+		 * @return Index of the column which is used for the bottom edge of the
+		 * box.
+		 */
+		public int getColumnBoxBottom() {
+			return columnBoxBottom;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the bottom edge
+		 * of the box.
+		 * @param columnBoxBottom Index of the column which will be used for
+		 * the bottom edge of the box.
+		 */
+		public void setColumnBoxBottom(int columnBoxBottom) {
+			this.columnBoxBottom = columnBoxBottom;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the top edge of
+		 * the box.
+		 * @return Index of the column which is used for the top edge of the
+		 * box.
+		 */
+		public int getColumnBoxTop() {
+			return columnBoxTop;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the top edge of
+		 * the box.
+		 * @param columnBoxTop Index of the column which will be used for the
+		 * top edge of the box.
+		 */
+		public void setColumnBoxTop(int columnBoxTop) {
+			this.columnBoxTop = columnBoxTop;
+		}
+
+		/**
+		 * Returns the index of the column which is used for the top bar.
+		 * @return Index of the column which is used for the top bar.
+		 */
+		public int getColumnBarTop() {
+			return columnBarTop;
+		}
+
+		/**
+		 * Sets the index of the column which will be used for the top bar.
+		 * @param columnBarTop Index of the column which will be used for the
+		 * top bar.
+		 */
+		public void setColumnBarTop(int columnBarTop) {
+			this.columnBarTop = columnBarTop;
 		}
 
 		/**
@@ -205,12 +303,12 @@ public class BoxPlot extends XYPlot {
 
 					// Get the values from data columns
 					BoxWhiskerRenderer renderer =  BoxWhiskerRenderer.this;
-					int colPos = renderer.<Integer>getSetting(COLUMN_POSITION);
-					int colBarCenter = renderer.<Integer>getSetting(COLUMN_BAR_CENTER);
-					int colBarBottom = renderer.<Integer>getSetting(COLUMN_BAR_BOTTOM);
-					int colBoxBottom = renderer.<Integer>getSetting(COLUMN_BOX_BOTTOM);
-					int colBoxTop = renderer.<Integer>getSetting(COLUMN_BOX_TOP);
-					int colBarTop = renderer.<Integer>getSetting(COLUMN_BAR_TOP);
+					int colPos = renderer.getColumnPosition();
+					int colBarCenter = renderer.getColumnBarCenter();
+					int colBarBottom = renderer.getColumnBarBottom();
+					int colBoxBottom = renderer.getColumnBoxBottom();
+					int colBoxTop = renderer.getColumnBoxTop();
+					int colBarTop = renderer.getColumnBarTop();
 
 					if (!row.isColumnNumeric(colPos) ||
 							!row.isColumnNumeric(colBarCenter) ||
