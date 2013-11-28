@@ -592,7 +592,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			// Layout settings
 			Location location = getValueLocation();
-			double alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X).doubleValue();
+			double alignX = getValueAlignmentX();
 			double alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y).doubleValue();
 			Number rotation = this.<Number>getSetting(VALUE_ROTATION);
 			double distance = DataUtils.getValueOrDefault(

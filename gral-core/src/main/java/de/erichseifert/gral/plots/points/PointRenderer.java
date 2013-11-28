@@ -42,9 +42,6 @@ import de.erichseifert.gral.util.Location;
  */
 public interface PointRenderer extends SettingsStorage {
 	/** Key for specifying a {@link Number} value that positions
-	the value horizontally. */
-	Key VALUE_ALIGNMENT_X = new Key("point.value.alignment.x"); //$NON-NLS-1$
-	/** Key for specifying a {@link Number} value that positions
 	the value vertically. */
 	Key VALUE_ALIGNMENT_Y = new Key("point.value.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for setting the
@@ -134,7 +131,7 @@ public interface PointRenderer extends SettingsStorage {
 
 	/**
 	 * Sets the index of the column that contains the displayed values.
-	 * @return columnIndex Index of the column that contains the displayed
+	 * @param columnIndex Index of the column that contains the displayed
 	 * values.
 	 */
 	void setValueColumn(int columnIndex);
@@ -163,9 +160,23 @@ public interface PointRenderer extends SettingsStorage {
 
 	/**
 	 * Sets the positioning of the data value relative to the data point.
-	 * @return Positioning of the data value relative to the data point.
+	 * @param location Positioning of the data value relative to the data point.
 	 */
 	void setValueLocation(Location location);
+
+	/**
+	 * Returns the relative horizontal position of the value. The position will
+	 * be between 0 and 1.
+	 * @return Relative horizontal position of the value.
+	 */
+	double getValueAlignmentX();
+
+	/**
+	 * Sets the relative horizontal position of the value. The position can be
+	 * specified between 0 and 1.
+	 * @param alignmentX Relative horizontal position of the value.
+	 */
+	void setValueAlignmentX(double alignmentX);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

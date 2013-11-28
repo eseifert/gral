@@ -125,7 +125,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 		// Layout settings
 		Location location = getValueLocation();
-		Number alignX = this.<Number>getSetting(VALUE_ALIGNMENT_X);
+		double alignX = getValueAlignmentX();
 		Number alignY = this.<Number>getSetting(VALUE_ALIGNMENT_Y);
 		Number rotation = this.<Number>getSetting(VALUE_ROTATION);
 		double distance = DataUtils.getValueOrDefault(
