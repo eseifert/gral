@@ -155,8 +155,8 @@ public class BoxPlot extends XYPlot {
 			// Default deserialization
 			in.defaultReadObject();
 			// Custom deserialization
-			/*boxBorder = (Stroke) SerializationUtils.unwrap(
-					(Serializable) in.readObject());*/
+			boxBorder = (Stroke) SerializationUtils.unwrap(
+					(Serializable) in.readObject());
 			whiskerStroke = (Stroke) SerializationUtils.unwrap(
 					(Serializable) in.readObject());
 			barCenterStroke = (Stroke) SerializationUtils.unwrap(
