@@ -713,9 +713,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
 					double radius = plotAreaSize*radiusRel;
 
-					boolean valueDisplayed = renderer.<Boolean>getSetting(
-						VALUE_DISPLAYED);
-					if (valueDisplayed) {
+					if (renderer.isValueDisplayed()) {
 						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
 						drawValueLabel(context, slice, radius, row, colValue);
 					}

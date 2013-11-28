@@ -72,7 +72,7 @@ public class SimplePiePlot extends ExamplePanel {
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
 		plot.getPointRenderer(data).setColor(colors);
 		// Show labels
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_DISPLAYED, true);
+		plot.getPointRenderer(data).setValueDisplayed(true);
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_COLOR, Color.WHITE);
 		plot.getPointRenderer(data).setSetting(PieSliceRenderer.VALUE_FONT, Font.decode(null).deriveFont(Font.BOLD));
 

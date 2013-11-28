@@ -39,9 +39,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value whether the data
-	value of a point is displayed or not. */
-	Key VALUE_DISPLAYED = new Key("point.value.displayed"); //$NON-NLS-1$
 	/** Key for specifying a {@link Integer} value for the index of
 	the column that contains the displayed values. */
 	Key VALUE_COLUMN = new Key("point.value.column"); //$NON-NLS-1$
@@ -121,6 +118,20 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param color {@code Paint} instance to paint the point shapes.
 	 */
 	void setColor(Paint color);
+
+	/**
+	 * Returns whether the data value of a point is displayed or not.
+	 * @return {@code true} when the value is displayed, otherwise
+	 * {@code false}.
+	 */
+	boolean isValueDisplayed();
+
+	/**
+	 * Returns whether the data value of a point will be displayed or not.
+	 * @param valueDisplayed {@code true} if the value should be displayed,
+	 * otherwise {@code false}.
+	 */
+	void setValueDisplayed(boolean valueDisplayed);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

@@ -51,6 +51,8 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private Shape shape;
 	private ColorMapper color;
 
+	private boolean valueDisplayed;
+
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
 	 * color.
@@ -61,7 +63,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		shape = new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0);
 		color = new SingleColor(Color.BLACK);
 
-		setSettingDefault(VALUE_DISPLAYED, Boolean.FALSE);
+		valueDisplayed = false;
 		setSettingDefault(VALUE_COLUMN, 1);
 		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
@@ -137,5 +139,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setColor(Paint color) {
 		setColor(new SingleColor(color));
+	}
+
+	@Override
+	public boolean isValueDisplayed() {
+		return valueDisplayed;
+	}
+
+	@Override
+	public void setValueDisplayed(boolean valueDisplayed) {
+		this.valueDisplayed = valueDisplayed;
 	}
 }

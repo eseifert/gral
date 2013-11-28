@@ -31,7 +31,6 @@ import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -83,8 +82,7 @@ public class HistogramPlot extends ExamplePanel {
 		// Format bars
 		plot.getPointRenderer(histogram2d).setColor(
 			GraphicsUtils.deriveWithAlpha(COLOR1, 128));
-		plot.getPointRenderer(histogram2d).setSetting(PointRenderer.VALUE_DISPLAYED,
-			true);
+		plot.getPointRenderer(histogram2d).setValueDisplayed(true);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

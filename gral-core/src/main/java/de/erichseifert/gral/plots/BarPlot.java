@@ -139,7 +139,7 @@ public class BarPlot extends XYPlot {
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 
-					ColorMapper colors = renderer.<ColorMapper>getSetting(COLOR);
+					ColorMapper colors = renderer.getColor();
 					Paint paint = colors.get(row.getIndex());
 
 					Boolean paintAllBars = plotSettings.getSetting(PAINT_ALL_BARS);
@@ -276,7 +276,7 @@ public class BarPlot extends XYPlot {
 					PointRenderer renderer = BarRenderer.this;
 					Row row = data.row;
 
-					if (renderer.<Boolean>getSetting(VALUE_DISPLAYED)) {
+					if (renderer.isValueDisplayed()) {
 						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
 						drawValueLabel(context, shape, row, colValue);
 					}
