@@ -252,7 +252,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 				Row row = data.row;
 
 				if (renderer.isValueDisplayed()) {
-					int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+					int colValue = renderer.getValueColumn();
 					drawValueLabel(context, shape, row, colValue);
 				}
 			}

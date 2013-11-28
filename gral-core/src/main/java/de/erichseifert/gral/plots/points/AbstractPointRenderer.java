@@ -52,6 +52,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	private ColorMapper color;
 
 	private boolean valueDisplayed;
+	private int valueColumn;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -64,7 +65,7 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 		color = new SingleColor(Color.BLACK);
 
 		valueDisplayed = false;
-		setSettingDefault(VALUE_COLUMN, 1);
+		valueColumn = 1;
 		setSettingDefault(VALUE_LOCATION, Location.CENTER);
 		setSettingDefault(VALUE_ALIGNMENT_X, 0.5);
 		setSettingDefault(VALUE_ALIGNMENT_Y, 0.5);
@@ -149,5 +150,15 @@ public abstract class AbstractPointRenderer extends BasicSettingsStorage
 	@Override
 	public void setValueDisplayed(boolean valueDisplayed) {
 		this.valueDisplayed = valueDisplayed;
+	}
+
+	@Override
+	public int getValueColumn() {
+		return valueColumn;
+	}
+
+	@Override
+	public void setValueColumn(int columnIndex) {
+		this.valueColumn = columnIndex;
 	}
 }

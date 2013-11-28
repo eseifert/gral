@@ -39,9 +39,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Integer} value for the index of
-	the column that contains the displayed values. */
-	Key VALUE_COLUMN = new Key("point.value.column"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	Key VALUE_FORMAT = new Key("point.value.format"); //$NON-NLS-1$
@@ -132,6 +129,18 @@ public interface PointRenderer extends SettingsStorage {
 	 * otherwise {@code false}.
 	 */
 	void setValueDisplayed(boolean valueDisplayed);
+
+	/**
+	 * Returns the index of the column that contains the displayed values.
+	 * @return Index of the column that contains the displayed values.
+	 */
+	int getValueColumn();
+
+	/**
+	 * Sets the index of the column that contains the displayed values.
+	 * @return columnIndex Index of the column that contains the displayed values.
+	 */
+	void setValueColumn(int columnIndex);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

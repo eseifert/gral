@@ -411,7 +411,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		public PieSliceRenderer(PiePlot plot) {
 			this.plot =  plot;
 
-			setSettingDefault(VALUE_COLUMN, 0);
+			setValueColumn(0);
 			setSettingDefault(ERROR_COLUMN_TOP, 1);
 			setSettingDefault(ERROR_COLUMN_BOTTOM, 2);
 
@@ -714,7 +714,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double radius = plotAreaSize*radiusRel;
 
 					if (renderer.isValueDisplayed()) {
-						int colValue = renderer.<Integer>getSetting(VALUE_COLUMN);
+						int colValue = renderer.getValueColumn();
 						drawValueLabel(context, slice, radius, row, colValue);
 					}
 				}
