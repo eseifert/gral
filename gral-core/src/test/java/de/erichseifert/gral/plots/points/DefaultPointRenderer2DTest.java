@@ -199,7 +199,7 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testErrorDisplayed() {
-		r.setSetting(PointRenderer.ERROR_COLUMN_TOP, 1);
+		r.setErrorColumnTop(1);
 		r.setSetting(PointRenderer.ERROR_COLUMN_BOTTOM, 1);
 
 		DrawingContext context;
