@@ -52,7 +52,6 @@ import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -99,14 +98,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying the {@link Integer} value which specifies the
-		index of the column that is used for the top bar. */
-		public static final Key COLUMN_BAR_TOP =
-			new Key("boxplot.bar.top.column"); //$NON-NLS-1$
-		/** Key for specifying a {@link Number} value for the relative width
-		of the box. */
-		public static final Key BOX_WIDTH =
-			new Key("boxplot.box.width"); //$NON-NLS-1$
 		/** Key for specifying an instance of
 		{@link de.erichseifert.gral.plots.colors.ColorMapper} that will be used
 		to paint the background of the box. */
@@ -148,6 +139,8 @@ public class BoxPlot extends XYPlot {
 		private int columnBoxTop;
 		private int columnBarTop;
 
+		private double boxWidth;
+
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
@@ -159,7 +152,7 @@ public class BoxPlot extends XYPlot {
 			columnBoxBottom = 3;
 			columnBoxTop = 4;
 			columnBarTop = 5;
-			setSettingDefault(BOX_WIDTH, 0.75);
+			boxWidth = 0.75;
 			setSettingDefault(BOX_BACKGROUND, Color.WHITE);
 			setSettingDefault(BOX_COLOR, Color.BLACK);
 			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
@@ -283,6 +276,22 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the relative width of the box.
+		 * @return Relative width of the box.
+		 */
+		public double getBoxWidth() {
+			return boxWidth;
+		}
+
+		/**
+		 * Sets the relative width of the box.
+		 * @param boxWidth Relative width of the box.
+		 */
+		public void setBoxWidth(double boxWidth) {
+			this.boxWidth = boxWidth;
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -327,9 +336,7 @@ public class BoxPlot extends XYPlot {
 					double valueYBarTop = ((Number) row.get(colBarTop)).doubleValue();
 
 					// Calculate positions in screen units
-					double boxWidthRel = DataUtils.getValueOrDefault(
-						BoxWhiskerRenderer.this.<Number>getSetting(BOX_WIDTH),
-						1.0);
+					double boxWidthRel = getBoxWidth();
 					double boxAlign = 0.5;
 					// Box X
 					double boxXMin = axisXRenderer
@@ -553,7 +560,8 @@ public class BoxPlot extends XYPlot {
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
 
-					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					BoxWhiskerRenderer pointRenderer =
+							(BoxWhiskerRenderer) plot.getPointRenderer(data);
 					if (pointRenderer == null) {
 						return;
 					}
@@ -561,9 +569,7 @@ public class BoxPlot extends XYPlot {
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
 
-					double boxWidthRel = DataUtils.getValueOrDefault(
-						pointRenderer.<Number>getSetting(
-							BoxWhiskerRenderer.BOX_WIDTH), 1.0);
+					double boxWidthRel = pointRenderer.getBoxWidth();
 
 					double posX = ((Number) row.get(0)).doubleValue();
 					Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
