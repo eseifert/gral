@@ -123,7 +123,6 @@ public class BoxPlotTest {
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
 		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
-
 		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
 			PointRenderer pointRendererOriginal = original.getPointRenderer(
 							dataSourcesOriginal.get(index));

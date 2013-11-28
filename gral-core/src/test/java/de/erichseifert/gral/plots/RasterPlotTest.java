@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,8 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.RasterPlot.RasterRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class RasterPlotTest {
 	private DataSource data;
@@ -109,9 +112,29 @@ public class RasterPlotTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Plot original = plot;
-		Plot deserialized = TestUtils.serializeAndDeserialize(original);
+		RasterPlot original = plot;
+		RasterPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
+
+		List<DataSource> dataSourcesOriginal = original.getData();
+		List<DataSource> dataSourcesDeserialized = deserialized.getData();
+		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
+		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
+			PointRenderer pointRendererOriginal = original.getPointRenderer(
+							dataSourcesOriginal.get(index));
+			PointRenderer pointRendererDeserialized = deserialized.getPointRenderer(
+							dataSourcesDeserialized.get(index));
+			testPointRendererSerialization(pointRendererOriginal, pointRendererDeserialized);
+		}
     }
+
+	private static void testPointRendererSerialization(
+			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
+		RasterRenderer original = (RasterRenderer) originalRenderer;
+		RasterRenderer deserialized = (RasterRenderer) deserializedRenderer;
+		assertEquals(original.getColumnX(), deserialized.getColumnX());
+		assertEquals(original.getColumnY(), deserialized.getColumnY());
+		assertEquals(original.getColumnValue(), deserialized.getColumnValue());
+	}
 }

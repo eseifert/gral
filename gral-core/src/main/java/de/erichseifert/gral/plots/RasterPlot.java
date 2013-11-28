@@ -159,7 +159,7 @@ public class RasterPlot extends XYPlot {
 		 * @return Index of the column for the value of a point.
 		 */
 		public int getColumnValue() {
-			return columnY;
+			return columnValue;
 		}
 
 		/**
