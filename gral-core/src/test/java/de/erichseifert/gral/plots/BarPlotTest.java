@@ -25,10 +25,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +39,8 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.BarPlot.BarRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class BarPlotTest {
 	private MockBarPlot plot;
@@ -62,6 +66,9 @@ public class BarPlotTest {
 	public void setUp() {
 		DataSource data = new DummyData(2, 1, 1.0);
 		plot = new MockBarPlot(data);
+
+		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
+		pointRenderer.setStroke(new BasicStroke());
 	}
 
 	@Test
@@ -91,9 +98,28 @@ public class BarPlotTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Plot original = plot;
-		Plot deserialized = TestUtils.serializeAndDeserialize(original);
+		BarPlot original = plot;
+		BarPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
+		List<DataSource> dataSourcesOriginal = original.getData();
+		List<DataSource> dataSourcesDeserialized = deserialized.getData();
+		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
+
+		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
+			PointRenderer pointRendererOriginal = original.getPointRenderer(
+							dataSourcesOriginal.get(index));
+			PointRenderer pointRendererDeserialized = deserialized.getPointRenderer(
+							dataSourcesDeserialized.get(index));
+			testPointRendererSerialization(pointRendererOriginal, pointRendererDeserialized);
+		}
     }
+
+	private static void testPointRendererSerialization(
+			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
+		BarRenderer original = (BarRenderer) originalRenderer;
+		BarRenderer deserialized = (BarRenderer) deserializedRenderer;
+		assertEquals(original.getStroke(), deserialized.getStroke());
+		assertEquals(original.getStrokeColor(), deserialized.getStrokeColor());
+	}
 }
