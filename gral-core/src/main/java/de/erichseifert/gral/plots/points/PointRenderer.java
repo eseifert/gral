@@ -41,9 +41,6 @@ import de.erichseifert.gral.util.Location;
  * </ul>
  */
 public interface PointRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for setting the
-	rotation of the value in degrees. */
-	Key VALUE_ROTATION = new Key("point.value.rotation"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the distance
 	 of values to the point. The distance is specified relative to the font
 	 height. */
@@ -188,6 +185,18 @@ public interface PointRenderer extends SettingsStorage {
 	 * @param alignmentX Relative vertical position of the value.
 	 */
 	void setValueAlignmentY(double alignmentX);
+
+	/**
+	 * Returns the current rotation angle of the value.
+	 * @return Rotation angle in degrees.
+	 */
+	double getValueRotation();
+
+	/**
+	 * Sets the rotation angle of the value.
+	 * @param rotation Rotation angle in degrees.
+	 */
+	void setValueRotation(double angle);
 
 	/**
 	 * Returns a {@code Shape} instance that can be used for further

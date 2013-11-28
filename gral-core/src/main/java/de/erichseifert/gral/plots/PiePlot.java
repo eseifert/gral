@@ -594,7 +594,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			Location location = getValueLocation();
 			double alignX = getValueAlignmentX();
 			double alignY = getValueAlignmentY();
-			Number rotation = this.<Number>getSetting(VALUE_ROTATION);
+			double rotation = getValueRotation();
 			double distance = DataUtils.getValueOrDefault(
 				this.<Number>getSetting(VALUE_DISTANCE), Double.NaN);
 			if (MathUtils.isCalculatable(distance)) {
