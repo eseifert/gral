@@ -98,10 +98,6 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
-		/** Key for specifying the {@link java.awt.Stroke} instance to be used
-		to paint the border of the box and the lines of the bars. */
-		public static final Key BOX_BORDER =
-			new Key("boxplot.box.border"); //$NON-NLS-1$
 		/** Key for specifying the {@link java.awt.Paint} instance to be used
 		to paint the lines of the whiskers. */
 		public static final Key WHISKER_COLOR =
@@ -133,6 +129,7 @@ public class BoxPlot extends XYPlot {
 		private double boxWidth;
 		private ColorMapper boxBackground;
 		private Paint boxColor;
+		private Stroke boxBorder;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -148,7 +145,7 @@ public class BoxPlot extends XYPlot {
 			boxWidth = 0.75;
 			boxBackground = new SingleColor(Color.WHITE);
 			boxColor = Color.BLACK;
-			setSettingDefault(BOX_BORDER, new BasicStroke(1f));
+			boxBorder = new BasicStroke(1f);
 			setSettingDefault(WHISKER_COLOR, Color.BLACK);
 			setSettingDefault(WHISKER_STROKE, new BasicStroke(1f));
 			setSettingDefault(BAR_WIDTH, 0.75);
@@ -332,6 +329,26 @@ public class BoxPlot extends XYPlot {
 		}
 
 		/**
+		 * Returns the stroke which is used to paint the border of a box and
+		 * the lines of the bars.
+		 * @return {@code Stroke} instance which is used to paint the border of
+		 * a box and the lines of the bars.
+		 */
+		public Stroke getBoxBorder() {
+			return boxBorder;
+		}
+
+		/**
+		 * Sets the stroke which will be used to paint the border of a box and
+		 * the lines of the bars.
+		 * @param stroke {@code Stroke} instance which will be used to paint
+		 * the border of a box and the lines of the bars.
+		 */
+		public void setBoxBorder(Stroke stroke) {
+			this.boxBorder = stroke;
+		}
+
+		/**
 		 * Returns the graphical representation to be drawn for the specified
 		 * data value.
 		 * @param data Information on axes, renderers, and values.
@@ -452,8 +469,7 @@ public class BoxPlot extends XYPlot {
 						paintBox = paintBoxMapper.get(index);
 					}
 					Paint paintStrokeBox = getBoxColor();
-					Stroke strokeBox =
-						BoxWhiskerRenderer.this.getSetting(BOX_BORDER);
+					Stroke strokeBox = getBoxBorder();
 					Paint paintWhisker =
 						BoxWhiskerRenderer.this.getSetting(WHISKER_COLOR);
 					Stroke strokeWhisker =
