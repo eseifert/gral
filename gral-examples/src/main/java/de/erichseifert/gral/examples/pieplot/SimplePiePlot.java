@@ -64,18 +64,19 @@ public class SimplePiePlot extends ExamplePanel {
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 
+		PieSliceRenderer pointRenderer =
+				(PieSliceRenderer) plot.getPointRenderer(data);
 		// Change relative size of inner region
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.RADIUS_INNER, 0.4);
+		pointRenderer.setRadiusInner(0.4);
 		// Change the width of gaps between segments
-		plot.getPointRenderer(data).setSetting(PieSliceRenderer.GAP, 0.2);
+		pointRenderer.setSetting(PieSliceRenderer.GAP, 0.2);
 		// Change the colors
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
-		plot.getPointRenderer(data).setColor(colors);
+		pointRenderer.setColor(colors);
 		// Show labels
-		plot.getPointRenderer(data).setValueDisplayed(true);
-		plot.getPointRenderer(data).setValueColor(Color.WHITE);
-		plot.getPointRenderer(data).setValueFont(
-				Font.decode(null).deriveFont(Font.BOLD));
+		pointRenderer.setValueDisplayed(true);
+		pointRenderer.setValueColor(Color.WHITE);
+		pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
