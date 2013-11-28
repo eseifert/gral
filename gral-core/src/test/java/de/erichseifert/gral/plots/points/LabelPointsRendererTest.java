@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.points;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -71,16 +72,16 @@ public class LabelPointsRendererTest {
 
 	@Test
 	public void testInvalidColumn() {
-		PointRenderer r = new LabelPointRenderer();
-		r.setSetting(LabelPointRenderer.COLUMN, table.getColumnCount());
+		LabelPointRenderer r = new LabelPointRenderer();
+		r.setColumn(table.getColumnCount());
 		Shape path = r.getPointShape(data);
 		assertNull(path);
 	}
 
 	@Test
 	public void testNullLabel() {
-		PointRenderer r = new LabelPointRenderer();
-		r.setSetting(LabelPointRenderer.COLUMN, 1);
+		LabelPointRenderer r = new LabelPointRenderer();
+		r.setColumn(1);
 		Row row2 = new Row(table, 1);
 		assertNull(row2.get(1));
 		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
@@ -90,9 +91,9 @@ public class LabelPointsRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		PointRenderer original = new LabelPointRenderer();
-		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
+		LabelPointRenderer original = new LabelPointRenderer();
+		LabelPointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getColumn(), deserialized.getColumn());
     }
 }

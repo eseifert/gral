@@ -32,7 +32,6 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 
-
 /**
  * Class that provides {@code Drawable}s, which display a specified data
  * values.
@@ -41,10 +40,6 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2612520977245369774L;
 
-	/** Key for specifying the {@link Integer} which specifies the index of the
-	column that is used for point sizes. */
-	public static final Key COLUMN =
-		new Key("labelPoint.column"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance which
 	specifies how the labels will be displayed. */
 	public static final Key FORMAT =
@@ -64,21 +59,39 @@ public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Key for specifying the {@link de.erichseifert.gral.Location} value
 	where the label will be aligned at. */
 
+	private int column;
+
 	/**
 	 * Initializes a new object.
 	 */
 	public LabelPointRenderer() {
-		setSettingDefault(COLUMN, 1);
+		column = 1;
 		setSettingDefault(FORMAT, NumberFormat.getInstance());
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ALIGNMENT_X, 0.5);
 		setSettingDefault(ALIGNMENT_Y, 0.5);
 	}
 
+	/**
+	 * Returns the index of the column which is used for the label.
+	 * @return Index of the column which is used for the label.
+	 */
+	public int getColumn() {
+		return column;
+	}
+
+	/**
+	 * Sets the index of the column which will be used for the label.
+	 * @param column Index of the column which will be used for the label.
+	 */
+	public void setColumn(int column) {
+		this.column = column;
+	}
+
 	@Override
 	public Shape getPointShape(PointData data) {
 		Row row = data.row;
-		int colLabel = this.<Number>getSetting(COLUMN).intValue();
+		int colLabel = getColumn();
 		if (colLabel >= row.size()) {
 			return null;
 		}
