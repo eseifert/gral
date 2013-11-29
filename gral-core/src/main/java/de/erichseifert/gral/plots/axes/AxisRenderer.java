@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -35,10 +36,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Font} instance to be used to
-	display the text of major ticks. */
-	Key TICKS_FONT =
-		new Key("axis.ticks.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the shapes of major ticks. */
 	Key TICKS_COLOR =
@@ -337,10 +334,22 @@ public interface AxisRenderer extends SettingsStorage {
 	Number getTickAlignment();
 
 	/**
-	 * Returns the alignment of major ticks relative to the axis.
+	 * Sets the alignment of major ticks relative to the axis.
 	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
 	 * 1.0 means inside the plotting area.
 	 * @param tickAlignment Major tick alignment relative to the axis.
 	 */
 	void setTickAlignment(Number tickAlignment);
+
+	/**
+	 * Returns the font used to display the text of major ticks.
+	 * @return Font used for tick labels.
+	 */
+	Font getTickFont();
+
+	/**
+	 * Sets the font used to display the text of major ticks.
+	 * @param tickFont Font used for tick labels.
+	 */
+	void setTickFont(Font tickFont);
 }

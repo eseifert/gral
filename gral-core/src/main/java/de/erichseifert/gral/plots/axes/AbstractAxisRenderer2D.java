@@ -111,6 +111,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private transient Stroke tickStroke;
 	/** Alignment of major ticks relative to the axis. */
 	private Number tickAlignment;
+	/** Font used to display the text of major ticks. */
+	private Font tickFont;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -135,7 +137,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickLength = 1.0;
 		tickStroke = new BasicStroke();
 		tickAlignment = 0.5;
-		setSettingDefault(TICKS_FONT, Font.decode(null));
+		tickFont = Font.decode(null);
 		setSettingDefault(TICKS_COLOR, Color.BLACK);
 
 		setSettingDefault(TICK_LABELS, true);
@@ -200,7 +202,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				}
 
 				double fontSize =
-					renderer.<Font>getSetting(TICKS_FONT).getSize2D();
+					renderer.getTickFont().getSize2D();
 
 				// Draw ticks
 				boolean drawTicksMajor = renderer.isTicksDrawn();
@@ -279,7 +281,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
 								tickLabel.setSetting(Label.FONT,
-										renderer.<Font>getSetting(TICKS_FONT));
+										renderer.getTickFont());
 								// TODO Allow separate colors for ticks and tick labels?
 								tickLabel.setSetting(Label.COLOR, tickPaint);
 								double labelDist = tickLengthOuter + tickLabelDist;
@@ -377,7 +379,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			@Override
 			public Dimension2D getPreferredSize() {
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
-				double fontSize = renderer.<Font>getSetting(TICKS_FONT).getSize2D();
+				double fontSize = renderer.getTickFont().getSize2D();
 				double tickLength = getTickLengthAbsolute();
 				double tickAlignment = renderer.getTickAlignment()
 					.doubleValue();
@@ -436,7 +438,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @return Tick length in pixels.
 	 */
 	protected double getTickLengthAbsolute() {
-		double fontSize = this.<Font>getSetting(TICKS_FONT).getSize2D();
+		double fontSize = getTickFont().getSize2D();
 		return getTickLength().doubleValue()*fontSize;
 	}
 
@@ -828,5 +830,13 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickAlignment(Number tickAlignment) {
 		this.tickAlignment = tickAlignment;
+	}
+
+	public Font getTickFont() {
+		return tickFont;
+	}
+
+	public void setTickFont(Font tickFont) {
+		this.tickFont = tickFont;
 	}
 }
