@@ -58,9 +58,9 @@ public class Label extends StylableDrawable {
 
 	/** Text for this label. */
 	private String text;
-	/** Horizontal text alignment. */
+	/** Horizontal label alignment. */
 	private Number alignmentX;
-	/** Vertical text alignment. */
+	/** Vertical label alignment. */
 	private Number alignmentY;
 	/** Font used to display the text of this label. */
 	private Font font;
@@ -289,7 +289,7 @@ public class Label extends StylableDrawable {
 	/**
 	 * Returns the horizontal alignment within the bounding rectangle.
 	 * 0.0 means left, 1.0 means right.
-	 * @return Horizontal text alignment.
+	 * @return Horizontal label alignment.
 	 */
 	public Number getAlignmentX() {
 		return alignmentX;
@@ -298,7 +298,7 @@ public class Label extends StylableDrawable {
 	/**
 	 * Sets the horizontal alignment within the bounding rectangle.
 	 * 0.0 means left, 1.0 means right.
-	 * @param alignmentX Horizontal text alignment.
+	 * @param alignmentX Horizontal label alignment.
 	 */
 	public void setAlignmentX(Number alignmentX) {
 		this.alignmentX = alignmentX;
@@ -307,7 +307,7 @@ public class Label extends StylableDrawable {
 	/**
 	 * Returns the vertical alignment within the bounding rectangle.
 	 * 0.0 means top, 1.0 means bottom.
-	 * @return Vertical text alignment.
+	 * @return Vertical label alignment.
 	 */
 	public Number getAlignmentY() {
 		return alignmentY;
@@ -316,7 +316,7 @@ public class Label extends StylableDrawable {
 	/**
 	 * Sets the vertical alignment within the bounding rectangle.
 	 * 0.0 means top, 1.0 means bottom.
-	 * @param alignmentY Vertical text alignment.
+	 * @param alignmentY Vertical label alignment.
 	 */
 	public void setAlignmentY(Number alignmentY) {
 		this.alignmentY = alignmentY;
