@@ -97,10 +97,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
-	/** Key for specifying a {@link Number} value for the radius of the pie
-	relative to the plot area size. */
-	public static final Key RADIUS =
-		new Key("pieplot.radius"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the starting angle of the
 	first segment in degrees. The angle is applied counterclockwise. */
 	public static final Key START =
@@ -119,6 +115,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	private transient PiePlotNavigator navigator;
 
 	private final Point2D center;
+	private double radius;
 
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
@@ -167,7 +164,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				return;
 			}
 			zoom = zoomNew;
-			plot.setSetting(PiePlot.RADIUS, zoomOriginal/getZoom());
+			plot.setRadius(zoomOriginal/getZoom());
 		}
 
 		/**
@@ -224,7 +221,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 */
 		public void setDefaultState() {
 			centerOriginal = getCenter();
-			zoomOriginal = plot.<Number>getSetting(PiePlot.RADIUS).doubleValue();
+			zoomOriginal = plot.getRadius();
 		}
 	}
 
@@ -542,8 +539,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			PlotArea plotArea = plot.getPlotArea();
 			double plotAreaSize = Math.min(
 				plotArea.getWidth(), plotArea.getHeight())/2.0;
-			double radiusRel = DataUtils.getValueOrDefault(
-				plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
+			double radiusRel = plot.getRadius();
 			double radius = plotAreaSize*radiusRel;
 			double radiusRelOuter = getRadiusOuter();
 			double radiusOuter = radius*radiusRelOuter;
@@ -748,8 +744,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					PlotArea plotArea = plot.getPlotArea();
 					double plotAreaSize = Math.min(
 						plotArea.getWidth(), plotArea.getHeight())/2.0;
-					double radiusRel = DataUtils.getValueOrDefault(
-						plot.<Number>getSetting(PiePlot.RADIUS), 1.0);
+					double radiusRel = plot.getRadius();
 					double radius = plotAreaSize*radiusRel;
 
 					if (renderer.isValueDisplayed()) {
@@ -850,7 +845,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		super();
 
 		center = new Point2D.Double(0.5, 0.5);
-		setSettingDefault(RADIUS, 1.0);
+		radius = 1.0;
 		setSettingDefault(START, 0.0);
 		setSettingDefault(CLOCKWISE, true);
 
@@ -1110,5 +1105,21 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 */
 	public void setCenter(Point2D center) {
 		this.center.setLocation(center);
+	}
+
+	/**
+	 * Returns the radius of the pie relative to the plot area size.
+	 * @return Radius of the pie relative to the plot area size.
+	 */
+	public double getRadius() {
+		return radius;
+	}
+
+	/**
+	 * Sets the radius of the pie relative to the plot area size.
+	 * @param radius Radius of the pie relative to the plot area size.
+	 */
+	public void setRadius(double radius) {
+		this.radius = radius;
 	}
 }
