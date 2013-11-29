@@ -35,7 +35,6 @@ import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -96,7 +95,7 @@ public class ConvolutionExample extends ExamplePanel {
 
 		// Format legend
 		plot.getLegend().setOrientation(Orientation.HORIZONTAL);
-		plot.getLegend().setSetting(Legend.ALIGNMENT_Y, 1.0);
+		plot.getLegend().setAlignmentY(1.0);
 
 		// Format data series as lines of different colors
 		formatLine(plot, ds, Color.BLACK);

@@ -92,6 +92,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private Orientation orientation;
 	/** Horizontal alignment of the legend relative to the plot area. */
 	private Number alignmentX;
+	/** Vertical alignment of the legend relative to the plot area. */
+	private Number alignmentY;
 	/** Symbol size relative to the font height. */
 	private Dimension2D symbolSize;
 
@@ -189,7 +191,7 @@ public abstract class AbstractLegend extends StylableContainer
 		borderColor = Color.BLACK;
 		orientation = Orientation.VERTICAL;
 		alignmentX = 0.0;
-		setSettingDefault(ALIGNMENT_Y, 0.0);
+		alignmentY = 0.0;
 		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
 		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
 		refreshLayout();
@@ -351,7 +353,7 @@ public abstract class AbstractLegend extends StylableContainer
 	public void setBounds(double x, double y, double width, double height) {
 		Dimension2D size = getPreferredSize();
 		double alignX = getAlignmentX().doubleValue();
-		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
+		double alignY = getAlignmentY().doubleValue();
 		super.setBounds(
 			x + alignX*(width - size.getWidth()),
 			y + alignY*(height - size.getHeight()),
@@ -477,6 +479,16 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void setAlignmentX(Number alignmentX) {
 		this.alignmentX = alignmentX;
+	}
+
+	@Override
+	public Number getAlignmentY() {
+		return alignmentY;
+	}
+
+	@Override
+	public void setAlignmentY(Number alignmentY) {
+		this.alignmentY = alignmentY;
 	}
 
 	@Override
