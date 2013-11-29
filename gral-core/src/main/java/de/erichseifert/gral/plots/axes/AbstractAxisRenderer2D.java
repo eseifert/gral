@@ -148,6 +148,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number labelRotation;
 	/** Font for axis label text. */
 	private Font labelFont;
+	/** Paint used to draw the axis label. */
+	private Paint labelColor;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -194,7 +196,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		labelDistance = 1.0;
 		labelRotation = 0.0;
 		labelFont = Font.decode(null);
-		setSettingDefault(LABEL_COLOR, Color.BLACK);
+		labelColor = Color.BLACK;
 	}
 
 	/**
@@ -325,7 +327,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					axisLabel.setSetting(Label.FONT,
 							renderer.getLabelFont());
 					axisLabel.setSetting(Label.COLOR,
-							renderer.<Paint>getSetting(LABEL_COLOR));
+							renderer.getLabelColor());
 
 					double tickLength = getTickLengthAbsolute();
 					double tickAlignment = renderer.getTickAlignment()
@@ -1052,5 +1054,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setLabelFont(Font labelFont) {
 		this.labelFont = labelFont;
+	}
+
+	@Override
+	public Paint getLabelColor() {
+		return labelColor;
+	}
+
+	@Override
+	public void setLabelColor(Paint labelColor) {
+		this.labelColor = labelColor;
 	}
 }

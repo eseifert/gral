@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.PointND;
 
@@ -38,11 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the axis label. */
-	Key LABEL_COLOR =
-		new Key("axis.label.color"); //$NON-NLS-1$
-
 	/**
 	 * Returns a component that displays the specified axis.
 	 * @param axis axis to be displayed
@@ -495,4 +489,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param labelFont Font for axis label text.
 	 */
 	void setLabelFont(Font labelFont);
+
+	/**
+	 * Returns the paint used to draw the axis label.
+	 * @return Paint for axis label drawing.
+	 */
+	Paint getLabelColor();
+
+	/**
+	 * Sets the paint used to draw the axis label.
+	 * @param labelColor Paint for axis label drawing.
+	 */
+	void setLabelColor(Paint labelColor);
 }
