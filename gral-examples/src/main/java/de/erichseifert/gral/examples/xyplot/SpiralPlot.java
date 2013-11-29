@@ -65,7 +65,7 @@ public class SpiralPlot extends ExamplePanel {
 		plot.setSetting(Plot.BACKGROUND, new Color(0.75f, 0.75f, 0.75f));
 
 		// Format plot area
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.BORDER, null);        // Remove border of plot area
+		plot.getPlotArea().setBorderColor(null);        // Remove border of plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false); // Disable vertical grid
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false); // Disable horizontal grid
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.CLIPPING, null);      // Disable clipping

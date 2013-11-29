@@ -46,10 +46,6 @@ public abstract class PlotArea extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	fill the border of the plot area. */
-	public static final Key COLOR =
-		new Key("plotarea.color"); //$NON-NLS-1$
 	/** Key for specifying an {@link de.erichseifert.gral.util.Insets2D}
 	instance that defines the clipping of the plotted data relative to
 	the plot area. Positive inset values result in clipping inside the plot
@@ -63,6 +59,8 @@ public abstract class PlotArea extends StylableDrawable {
 	/** Stroke used to draw the border. */
 	// Property will be serialized using a wrapper.
 	private transient Stroke borderStroke;
+	/** Paint used for border drawing. */
+	private Paint borderColor;
 
 	/**
 	 * Initializes a new instance with default background color and border.
@@ -70,7 +68,7 @@ public abstract class PlotArea extends StylableDrawable {
 	public PlotArea() {
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
-		setSettingDefault(COLOR, Color.BLACK);
+		borderColor = Color.BLACK;
 		setSettingDefault(CLIPPING, new Insets2D.Double(0.0));
 	}
 
@@ -97,9 +95,9 @@ public abstract class PlotArea extends StylableDrawable {
 		// FIXME duplicate code! See de.erichseifert.gral.Legend
 		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
-			Paint paint = getSetting(COLOR);
+			Paint borderColor = getBorderColor();
 			GraphicsUtils.drawPaintedShape(context.getGraphics(),
-					getBounds(), paint, null, stroke);
+					getBounds(), borderColor, null, stroke);
 		}
 	}
 
@@ -164,5 +162,21 @@ public abstract class PlotArea extends StylableDrawable {
 	 */
 	public void setBorderStroke(Stroke borderStroke) {
 		this.borderStroke = borderStroke;
+	}
+
+	/**
+	 * Returns the paint used to fill the border of the plot area.
+	 * @return Paint used for border drawing.
+	 */
+	public Paint getBorderColor() {
+		return borderColor;
+	}
+
+	/**
+	 * Sets the paint used to fill the border of the plot area.
+	 * @param borderColor Paint used for border drawing.
+	 */
+	public void setBorderColor(Paint borderColor) {
+		this.borderColor = borderColor;
 	}
 }
