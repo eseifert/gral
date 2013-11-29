@@ -108,6 +108,8 @@ public class PiePlotTest {
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 
+		assertEquals(original.getCenter(), deserialized.getCenter());
+
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
 		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());

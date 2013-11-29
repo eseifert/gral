@@ -97,12 +97,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
-	/** Key for specifying {@link java.awt.Point2D} instance defining the
-	center of the pie. The coordinates must be relative to the plot area
-	dimensions, i.e. 0.0 means left/top, 0.5 means the center, and 1.0 means
-	right/bottom. */
-	public static final Key CENTER =
-		new Key("pieplot.center"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the radius of the pie
 	relative to the plot area size. */
 	public static final Key RADIUS =
@@ -123,6 +117,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	private transient Map<DataSource, List<Slice>> slices;
 	/** Cache for the {@code Navigator} implementation. */
 	private transient PiePlotNavigator navigator;
+
+	private final Point2D center;
 
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
@@ -180,7 +176,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @return Center point in world units.
 		 */
 		public PointND<? extends Number> getCenter() {
-			Point2D center = plot.<Point2D>getSetting(PiePlot.CENTER);
+			Point2D center = plot.getCenter();
 			return new PointND<Number>(center.getX(), center.getY());
 		}
 
@@ -193,7 +189,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				return;
 			}
 			Point2D center2d = center.getPoint2D();
-			plot.setSetting(PiePlot.CENTER, center2d);
+			plot.setCenter(center2d);
 		}
 
 		/**
@@ -296,7 +292,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			Rectangle2D bounds = getBounds();
 
 			// Move to center, so origin for point renderers will be (0, 0)
-			Point2D center = plot.<Point2D>getSetting(PiePlot.CENTER);
+			Point2D center = plot.getCenter();
 			if (center == null) {
 				center = new Point2D.Double(0.5, 0.5);
 			}
@@ -853,7 +849,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	public PiePlot(DataSource data) {
 		super();
 
-		setSettingDefault(CENTER, new Point2D.Double(0.5, 0.5));
+		center = new Point2D.Double(0.5, 0.5);
 		setSettingDefault(RADIUS, 1.0);
 		setSettingDefault(START, 0.0);
 		setSettingDefault(CLOCKWISE, true);
@@ -1085,9 +1081,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
+		// Default deserialization
 		in.defaultReadObject();
-
 		// Handle transient fields
 		slices = new HashMap<DataSource, List<Slice>>();
 
@@ -1095,5 +1090,25 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		for (DataSource source : getData()) {
 			dataUpdated(source);
 		}
+	}
+
+	/**
+	 * Returns a point which defines the center of the pie. The coordinates
+	 * are relative to the plot area dimensions, i.e. 0.0 means left/top,
+	 * 0.5 means the center, and 1.0 means right/bottom.
+	 * @return Point which defines the center of the pie.
+	 */
+	public Point2D getCenter() {
+		return center;
+	}
+
+	/**
+	 * Sets the center of the pie. The coordinates must be relative to the plot
+	 * area dimensions, i.e. 0.0 means left/top, 0.5 means the center, and 1.0
+	 * means right/bottom.
+	 * @param center Point which defines the center of the pie.
+	 */
+	public void setCenter(Point2D center) {
+		this.center.setLocation(center);
 	}
 }
