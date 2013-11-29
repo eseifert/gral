@@ -84,20 +84,6 @@ public class LegendTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		assertEquals(Color.WHITE, legend.getSetting(Legend.BACKGROUND));
-
-		// Set
-		legend.setSetting(Legend.BACKGROUND, Color.RED);
-		assertEquals(Color.RED, legend.<Paint>getSetting(Legend.BACKGROUND));
-
-		// Remove
-		legend.removeSetting(Legend.BACKGROUND);
-		assertEquals(Color.WHITE, legend.<Paint>getSetting(Legend.BACKGROUND));
-	}
-
-	@Test
 	public void testDraw() {
 		legend.setSetting(Legend.BACKGROUND, Color.WHITE);
 		legend.setSetting(Legend.BORDER, new BasicStroke(1f));
