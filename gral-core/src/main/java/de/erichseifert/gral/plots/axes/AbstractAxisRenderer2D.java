@@ -125,6 +125,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean tickLabelsOutside;
 	/** Tick label rotation in degrees. */
 	private Number tickLabelRotation;
+	/** Decides whether minor ticks are drawn. */
+	private boolean ticksMinorEnabled;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -160,7 +162,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		setSettingDefault(TICKS_CUSTOM, null);
 
-		setSettingDefault(TICKS_MINOR, true);
+		ticksMinorEnabled = true;
 		setSettingDefault(TICKS_MINOR_COUNT, 1);
 		setSettingDefault(TICKS_MINOR_LENGTH, 0.5);
 		setSettingDefault(TICKS_MINOR_STROKE, new BasicStroke());
@@ -218,8 +220,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 				// Draw ticks
 				boolean drawTicksMajor = renderer.isTicksDrawn();
-				boolean drawTicksMinor =
-					renderer.<Boolean>getSetting(TICKS_MINOR);
+				boolean drawTicksMinor = renderer.isTicksMinorEnabled();
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
 					// Calculate tick positions (in pixel coordinates)
 					List<Tick> ticks = getTicks(axis);
@@ -910,5 +911,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickLabelRotation(Number tickLabelRotation) {
 		this.tickLabelRotation = tickLabelRotation;
+	}
+
+	@Override
+	public boolean isTicksMinorEnabled() {
+		return ticksMinorEnabled;
+	}
+
+	@Override
+	public void setTicksMinorEnabled(boolean ticksMinorEnabled) {
+		this.ticksMinorEnabled = ticksMinorEnabled;
 	}
 }

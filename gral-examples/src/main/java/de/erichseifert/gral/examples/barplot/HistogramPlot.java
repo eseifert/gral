@@ -30,7 +30,6 @@ import de.erichseifert.gral.data.statistics.Histogram1D;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -71,12 +70,12 @@ public class HistogramPlot extends ExamplePanel {
 		// Format x axis
 		plot.getAxisRenderer(BarPlot.AXIS_X).setTickAlignment(0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setTickSpacing(0.8);
-		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
+		plot.getAxisRenderer(BarPlot.AXIS_X).setTicksMinorEnabled(false);
 		// Format y axis
 		plot.getAxis(BarPlot.AXIS_Y).setRange(0.0,
 				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX)*1.1, 25.0));
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setTickAlignment(0.0);
-		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_MINOR, false);
+		plot.getAxisRenderer(BarPlot.AXIS_Y).setTicksMinorEnabled(false);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setIntersection(-4.4);
 
 		// Format bars

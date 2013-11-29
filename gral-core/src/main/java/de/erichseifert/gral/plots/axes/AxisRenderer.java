@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides whether minor
-	ticks are drawn. */
-	Key TICKS_MINOR =
-		new Key("axis.ticks.minor"); //$NON-NLS-1$
 	/** Key for specifying an {@link Integer} value for the count of minor
 	ticks. */
 	Key TICKS_MINOR_COUNT =
@@ -402,4 +398,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickLabelRotation Tick label rotation in degrees.
 	 */
 	void setTickLabelRotation(Number tickLabelRotation);
+
+	/**
+	 * Returns whether minor ticks are drawn.
+	 * @return {@code true} if minor ticks are drawn, {@code false} otherwise.
+	 */
+	boolean isTicksMinorEnabled();
+
+	/**
+	 * Sets whether minor ticks are drawn.
+	 * @param ticksMinorEnabled {@code true} if minor ticks are drawn, {@code false} otherwise.
+	 */
+	void setTicksMinorEnabled(boolean ticksMinorEnabled);
 }
