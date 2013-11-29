@@ -251,9 +251,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						Paint tickPaint;
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.type)) {
-							tickLength =
-								renderer.getTicksMinorLength()
-								.doubleValue()*fontSize;
+							tickLength = renderer.getTickMinorLengthAbsolute();
 							tickAlignment =
 								renderer.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
 								.doubleValue();
@@ -445,11 +443,20 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 	/**
 	 * Returns the absolute length of a major tick.
-	 * @return Tick length in pixels.
+	 * @return Major tick length in pixels.
 	 */
 	protected double getTickLengthAbsolute() {
 		double fontSize = getTickFont().getSize2D();
 		return getTickLength().doubleValue()*fontSize;
+	}
+
+	/**
+	 * Returns the absolute length of a minor tick.
+	 * @return Minor tick length in pixels.
+	 */
+	protected double getTickMinorLengthAbsolute() {
+		double fontSize = getTickFont().getSize2D();
+		return getTicksMinorLength().doubleValue()*fontSize;
 	}
 
 	/**
