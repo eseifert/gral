@@ -146,6 +146,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number labelDistance;
 	/** Axis label rotation in degrees. */
 	private Number labelRotation;
+	/** Font for axis label text. */
+	private Font labelFont;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -191,7 +193,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		label = null;
 		labelDistance = 1.0;
 		labelRotation = 0.0;
-		setSettingDefault(LABEL_FONT, Font.decode(null));
+		labelFont = Font.decode(null);
 		setSettingDefault(LABEL_COLOR, Color.BLACK);
 	}
 
@@ -321,7 +323,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
 					axisLabel.setSetting(Label.FONT,
-							renderer.<Font>getSetting(LABEL_FONT));
+							renderer.getLabelFont());
 					axisLabel.setSetting(Label.COLOR,
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
@@ -1040,5 +1042,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setLabelRotation(Number labelRotation) {
 		this.labelRotation = labelRotation;
+	}
+
+	@Override
+	public Font getLabelFont() {
+		return labelFont;
+	}
+
+	@Override
+	public void setLabelFont(Font labelFont) {
+		this.labelFont = labelFont;
 	}
 }
