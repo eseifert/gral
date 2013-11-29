@@ -24,7 +24,6 @@ package de.erichseifert.gral.plots;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.BasicStroke;
@@ -66,18 +65,6 @@ public class PlotAreaTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		assertEquals(Color.WHITE, plotArea.getSetting(PlotArea.BACKGROUND));
-		// Set
-		plotArea.setSetting(PlotArea.BACKGROUND, "foobar");
-		assertEquals("foobar", plotArea.<String>getSetting(PlotArea.BACKGROUND));
-		// Remove
-		plotArea.removeSetting(PlotArea.BACKGROUND);
-		assertNotNull(plotArea.getSetting(PlotArea.BACKGROUND));
-	}
-
-	@Test
 	public void testDraw() {
 		plotArea.setSetting(Plot.BACKGROUND, Color.WHITE);
 		plotArea.setSetting(Plot.BORDER, new BasicStroke(1f));
@@ -96,5 +83,6 @@ public class PlotAreaTest {
 		MockPlotArea2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getBackground(), deserialized.getBackground());
     }
 }

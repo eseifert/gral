@@ -41,10 +41,6 @@ public abstract class PlotArea extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the background of the plot area. */
-	public static final Key BACKGROUND =
-		new Key("plotarea.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	paint the border of the plot area. */
 	public static final Key BORDER =
@@ -61,11 +57,14 @@ public abstract class PlotArea extends StylableDrawable {
 	public static final Key CLIPPING =
 		new Key("plotarea.clipping"); //$NON-NLS-1$
 
+	/** Paint used for background drawing. */
+	private Paint background;
+
 	/**
 	 * Initializes a new instance with default background color and border.
 	 */
 	public PlotArea() {
-		setSettingDefault(BACKGROUND, Color.WHITE);
+		background = Color.WHITE;
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(CLIPPING, new Insets2D.Double(0.0));
@@ -78,7 +77,7 @@ public abstract class PlotArea extends StylableDrawable {
 	 */
 	protected void drawBackground(DrawingContext context) {
 		// FIXME duplicate code! See de.erichseifert.gral.Legend
-		Paint paint = getSetting(BACKGROUND);
+		Paint paint = getBackground();
 		if (paint != null) {
 			GraphicsUtils.fillPaintedShape(context.getGraphics(),
 					getBounds(), paint, null);
@@ -105,4 +104,20 @@ public abstract class PlotArea extends StylableDrawable {
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
+
+	/**
+	 * Returns the paint used to draw the background of the plot area.
+	 * @return Paint used for background drawing.
+	 */
+	public Paint getBackground() {
+		return background;
+	}
+
+	/**
+	 * Sets the paint used to draw the background of the plot area.
+	 * @param background Paint used for background drawing.
+	 */
+	public void setBackground(Paint background) {
+		this.background = background;
+	}
 }

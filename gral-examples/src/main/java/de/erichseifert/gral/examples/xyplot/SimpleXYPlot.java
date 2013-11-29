@@ -78,7 +78,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		plot.setSetting(XYPlot.TITLE, getDescription());
 
 		// Format plot area
-		plot.getPlotArea().setSetting(PlotArea.BACKGROUND, new RadialGradientPaint(
+		plot.getPlotArea().setBackground(new RadialGradientPaint(
 			new Point2D.Double(0.5, 0.5),
 			0.75f,
 			new float[] { 0.6f, 0.8f, 1.0f },
