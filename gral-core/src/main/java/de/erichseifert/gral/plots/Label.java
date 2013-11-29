@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying a {@link Number} value for the rotation of this
-	label in degrees. The rotation will be counterclockwise. */
-	public static final Key ROTATION =
-		new Key("label.rotation"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the label shape. */
 	public static final Key COLOR =
@@ -72,6 +68,8 @@ public class Label extends StylableDrawable {
 	private Number alignmentY;
 	/** Font used to display the text of this label. */
 	private Font font;
+	/** Rotaion of in degrees. */
+	private Number rotation;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -95,7 +93,7 @@ public class Label extends StylableDrawable {
 		alignmentX = 0.5;
 		alignmentY = 0.5;
 		font = Font.decode(null);
-		setSettingDefault(ROTATION, 0.0);
+		rotation = 0.0;
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ALIGNMENT_TEXT, 0.5);
 		setSettingDefault(WORD_WRAP, Boolean.FALSE);
@@ -117,7 +115,7 @@ public class Label extends StylableDrawable {
 
 		// Rotate label text around its center point
 		double rotation = DataUtils.getValueOrDefault(
-			this.<Number>getSetting(ROTATION), 0.0);
+			getRotation(), 0.0);
 
 		if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
 			AffineTransform txLabelText =
@@ -163,7 +161,7 @@ public class Label extends StylableDrawable {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
 			double rotation = DataUtils.getValueOrDefault(
-				this.<Number>getSetting(ROTATION), 0.0);
+				getRotation(), 0.0);
 			if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
 				AffineTransform txLabelText =
 					AffineTransform.getRotateInstance(
@@ -190,8 +188,7 @@ public class Label extends StylableDrawable {
 		Font font = getFont();
 		float wrappingWidth = 0f;
 		if (wordWrap) {
-			double rotation = Math.toRadians(this.<Number>getSetting(
-				ROTATION).doubleValue());
+			double rotation = Math.toRadians(getRotation().doubleValue());
 			wrappingWidth = (float) (
 				Math.abs(Math.cos(rotation))*getWidth() +
 				Math.abs(Math.sin(rotation))*getHeight());
@@ -275,7 +272,7 @@ public class Label extends StylableDrawable {
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (ROTATION.equals(key) || ALIGNMENT_TEXT.equals(key) ||
+		if (ALIGNMENT_TEXT.equals(key) ||
 				WORD_WRAP.equals(key)) {
 			invalidate();
 		}
@@ -341,6 +338,25 @@ public class Label extends StylableDrawable {
 	 */
 	public void setFont(Font font) {
 		this.font = font;
+		invalidate();
+	}
+
+	/**
+	 * Returns the rotation of this label.
+	 * The rotation will be counterclockwise.
+	 * @return Rotation in degrees.
+	 */
+	public Number getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * Sets the rotation of this label.
+	 * The rotation will be counterclockwise.
+	 * @param rotation Rotation in degrees.
+	 */
+	public void setRotation(Number rotation) {
+		this.rotation = rotation;
 		invalidate();
 	}
 }

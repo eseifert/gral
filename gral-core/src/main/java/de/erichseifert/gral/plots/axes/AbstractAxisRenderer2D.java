@@ -363,7 +363,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					labelSize.getWidth() + 2.0*labelDist, labelSize.getHeight() + 2.0*labelDist
 				);
 				Rectangle2D marginBounds = marginShape.getBounds2D();
-				label.setSetting(Label.ROTATION, rotation);
+				label.setRotation(rotation);
 				if ((rotation%360.0) != 0.0) {
 					marginShape = AffineTransform.getRotateInstance(
 						Math.toRadians(-rotation),

@@ -93,7 +93,7 @@ public class LabelTest {
 		assertEquals(0.5, label.getAlignmentY().doubleValue(), DELTA);
 		assertEquals(Color.BLACK, label.getSetting(Label.COLOR));
 		assertEquals(Font.decode(null), label.getFont());
-		assertEquals(0.0, label.<Number>getSetting(Label.ROTATION).doubleValue(), DELTA);
+		assertEquals(0.0, label.getRotation().doubleValue(), DELTA);
 
 		// Set
 		label.setSetting(Label.COLOR, Color.RED);
@@ -109,7 +109,7 @@ public class LabelTest {
 		MockLabel empty = new MockLabel();
 		MockLabel text = new MockLabel("foobar");
 		MockLabel rotated = new MockLabel("foobar");
-		rotated.setSetting(Label.ROTATION, 45.0);
+		rotated.setRotation(45.0);
 
 		MockLabel[] labels = { empty, text, rotated };
 
@@ -134,5 +134,6 @@ public class LabelTest {
 		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
 		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
 		assertEquals(original.getFont(), deserialized.getFont());
+		assertEquals(original.getRotation(), deserialized.getRotation());
     }
 }
