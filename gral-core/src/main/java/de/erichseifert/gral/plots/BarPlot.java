@@ -89,6 +89,7 @@ public class BarPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2183638342305398522L;
 
+		/** Plot that contains settings and renderers. */
 		private final BarPlot plot;
 
 		private transient Stroke stroke;
@@ -97,7 +98,7 @@ public class BarPlot extends XYPlot {
 		/**
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider.
-		 * @param plotSettings The settings of the associated plot.
+		 * @param plot The associated plot.
 		 */
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
