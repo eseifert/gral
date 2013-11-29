@@ -227,9 +227,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					double tickLabelRotation =
 						renderer.<Number>getSetting(TICK_LABELS_ROTATION)
 						.doubleValue();
-					double tickLabelDist =
-						renderer.getTickLabelDistance()
-						.doubleValue()*fontSize;
+					double tickLabelDist = renderer.getTickLabelDistanceAbsolute();
 					Line2D tickShape = new Line2D.Double();
 
 					for (Tick tick : ticks) {
@@ -314,13 +312,12 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					double tickAlignment = renderer.getTickAlignment()
 						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-					double tickLabelDist = renderer.getTickLabelDistance()
-						.doubleValue()*fontSize;
+					double tickLabelDistance = renderer.getTickLabelDistanceAbsolute();
 
 					double labelDistance = renderer.<Number>getSetting(LABEL_DISTANCE)
 						.doubleValue()*fontSize;
 					double labelDist =
-						tickLengthOuter + tickLabelDist + fontSize + labelDistance;
+						tickLengthOuter + tickLabelDistance + fontSize + labelDistance;
 					double labelRotation = renderer.<Number>getSetting(LABEL_ROTATION)
 						.doubleValue();
 					double axisLabelPos =
@@ -392,10 +389,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				double tickAlignment = renderer.getTickAlignment()
 					.doubleValue();
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-				double labelDistance = renderer.getTickLabelDistance()
-					.doubleValue();
-				double labelDist = labelDistance*fontSize + tickLengthOuter;
-				double minSize = fontSize + labelDist + tickLengthOuter;
+				double labelDistance = renderer.getTickLabelDistanceAbsolute() + tickLengthOuter;
+				double minSize = fontSize + labelDistance + tickLengthOuter;
 				return new de.erichseifert.gral.util.Dimension2D.Double(minSize, minSize);
 			}
 		};
@@ -448,6 +443,11 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	protected double getTickLengthAbsolute() {
 		double fontSize = getTickFont().getSize2D();
 		return getTickLength().doubleValue()*fontSize;
+	}
+
+	protected double getTickLabelDistanceAbsolute() {
+		double fontSize = getTickFont().getSize2D();
+		return getTickLabelDistance().doubleValue()*fontSize;
 	}
 
 	/**
