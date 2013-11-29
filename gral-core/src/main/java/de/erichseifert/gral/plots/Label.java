@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the label shape. */
-	public static final Key COLOR =
-		new Key("label.color"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the alignment of text
 	with multiple lines. 0 means left, 1 means right. */
 	public static final Key ALIGNMENT_TEXT =
@@ -70,6 +66,8 @@ public class Label extends StylableDrawable {
 	private Font font;
 	/** Rotaion of in degrees. */
 	private Number rotation;
+	/** Paint used to draw the shape. */
+	private Paint color;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -94,7 +92,7 @@ public class Label extends StylableDrawable {
 		alignmentY = 0.5;
 		font = Font.decode(null);
 		rotation = 0.0;
-		setSettingDefault(COLOR, Color.BLACK);
+		color = Color.BLACK;
 		setSettingDefault(ALIGNMENT_TEXT, 0.5);
 		setSettingDefault(WORD_WRAP, Boolean.FALSE);
 	}
@@ -146,7 +144,7 @@ public class Label extends StylableDrawable {
 		graphics.translate(shapePosX, shapePosY);
 
 		// Paint the shape with the color from settings
-		Paint paint = getSetting(COLOR);
+		Paint paint = getColor();
 		GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
 
 
@@ -358,5 +356,21 @@ public class Label extends StylableDrawable {
 	public void setRotation(Number rotation) {
 		this.rotation = rotation;
 		invalidate();
+	}
+
+	/**
+	 * Returns the paint used to draw the label shape.
+	 * @return Paint for shape drawing.
+	 */
+	public Paint getColor() {
+		return color;
+	}
+
+	/**
+	 * Sets the paint used to draw the label shape.
+	 * @param color Paint for shape drawing.
+	 */
+	public void setColor(Paint color) {
+		this.color = color;
 	}
 }

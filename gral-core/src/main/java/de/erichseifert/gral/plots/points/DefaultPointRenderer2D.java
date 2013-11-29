@@ -137,7 +137,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		label.setAlignmentX(alignX);
 		label.setAlignmentY(alignY);
 		label.setRotation(rotation);
-		label.setSetting(Label.COLOR, paint);
+		label.setColor(paint);
 		label.setFont(font);
 
 		Rectangle2D boundsPoint = point.getBounds2D();

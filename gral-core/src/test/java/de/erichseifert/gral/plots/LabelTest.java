@@ -29,7 +29,6 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -91,17 +90,13 @@ public class LabelTest {
 		Label label = new MockLabel("foobar");
 		assertEquals(0.5, label.getAlignmentX().doubleValue(), DELTA);
 		assertEquals(0.5, label.getAlignmentY().doubleValue(), DELTA);
-		assertEquals(Color.BLACK, label.getSetting(Label.COLOR));
+		assertEquals(Color.BLACK, label.getColor());
 		assertEquals(Font.decode(null), label.getFont());
 		assertEquals(0.0, label.getRotation().doubleValue(), DELTA);
 
 		// Set
-		label.setSetting(Label.COLOR, Color.RED);
-		assertEquals(Color.RED, label.<Paint>getSetting(Label.COLOR));
-
-		// Remove
-		label.removeSetting(Label.COLOR);
-		assertEquals(Color.BLACK, label.<Paint>getSetting(Label.COLOR));
+		label.setColor(Color.RED);
+		assertEquals(Color.RED, label.getColor());
 	}
 
 	@Test
@@ -135,5 +130,6 @@ public class LabelTest {
 		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
 		assertEquals(original.getFont(), deserialized.getFont());
 		assertEquals(original.getRotation(), deserialized.getRotation());
+		assertEquals(original.getColor(), deserialized.getColor());
     }
 }
