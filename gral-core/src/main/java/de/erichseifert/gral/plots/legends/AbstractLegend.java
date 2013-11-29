@@ -27,12 +27,17 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.erichseifert.gral.SymbolSettingProvider;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -43,14 +48,11 @@ import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
-import de.erichseifert.gral.plots.StylableContainer;
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -62,7 +64,7 @@ import de.erichseifert.gral.util.Orientation;
  * are displayed. The actual rendering of symbols has to be implemented by
  * derived classes.</p>
  */
-public abstract class AbstractLegend extends StylableContainer
+public abstract class AbstractLegend extends DrawableContainer
 		implements Legend, LegendSymbolRenderer {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -1561976879958765700L;
@@ -74,6 +76,26 @@ public abstract class AbstractLegend extends StylableContainer
 	/** Flag that tells whether the data in the legend is up-to-date. */
 	private transient boolean valid;
 
+	/** Paint used to draw the background. */
+	private Paint background;
+	/** Stroke used to draw the border of the legend. */
+	// Property will be serialized using a wrapper
+	private transient Stroke borderStroke;
+	/** Font used to display the labels. */
+	private Font font;
+	/** Paint used to fill the border of the legend. */
+	private Paint borderColor;
+	/** Direction of the legend's items. */
+	private Orientation orientation;
+	/** Horizontal alignment of the legend relative to the plot area. */
+	private Number alignmentX;
+	/** Vertical alignment of the legend relative to the plot area. */
+	private Number alignmentY;
+	/** Gap size relative to the font height. */
+	private Dimension2D gap;
+	/** Symbol size relative to the font height. */
+	private Dimension2D symbolSize;
+
 	/**
 	 * An abstract base class for drawable symbols.
 	 */
@@ -82,20 +104,20 @@ public abstract class AbstractLegend extends StylableContainer
 		private static final long serialVersionUID = 7475404103140652668L;
 
 		/** Settings for determining the visual of the symbol. */
-		private final SettingsStorage settings;
+		private final SymbolSettingProvider settings;
 
 		/**
 		 * Initializes a new instances.
 		 * @param settings Settings for determining the appearance of the symbol.
 		 */
-		public AbstractSymbol(SettingsStorage settings) {
+		public AbstractSymbol(SymbolSettingProvider settings) {
 			this.settings = settings;
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			double fontSize = settings.<Font>getSetting(FONT).getSize2D();
-			Dimension2D symbolSize = settings.getSetting(SYMBOL_SIZE);
+			double fontSize = settings.getFont().getSize2D();
+			Dimension2D symbolSize = settings.getSymbolSize();
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);
@@ -161,15 +183,18 @@ public abstract class AbstractLegend extends StylableContainer
 		sources = new LinkedHashSet<DataSource>();
 		components = new HashMap<Row, Drawable>();
 
-		setSettingDefault(BACKGROUND, Color.WHITE);
-		setSettingDefault(BORDER, new BasicStroke(1f));
-		setSettingDefault(FONT, Font.decode(null));
-		setSettingDefault(COLOR, Color.BLACK);
-		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
-		setSettingDefault(ALIGNMENT_X, 0.0);
-		setSettingDefault(ALIGNMENT_Y, 0.0);
-		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
-		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
+		background = Color.WHITE;
+		borderStroke = new BasicStroke(1f);
+		font = Font.decode(null);
+		setDrawableFonts(font);
+		borderColor = Color.BLACK;
+		orientation = Orientation.VERTICAL;
+		alignmentX = 0.0;
+		alignmentY = 0.0;
+		// TODO: Replace setter call in constructor
+		setGap(new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
+		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
+		refreshLayout();
 	}
 
 	/**
@@ -191,10 +216,10 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
-		Paint bg = getSetting(BACKGROUND);
-		if (bg != null) {
+		Paint background = getBackground();
+		if (background != null) {
 			GraphicsUtils.fillPaintedShape(
-				context.getGraphics(), getBounds(), bg, null);
+				context.getGraphics(), getBounds(), background, null);
 		}
 	}
 
@@ -203,11 +228,11 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {
-		Stroke stroke = getSetting(BORDER);
+		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
-			Paint fg = getSetting(COLOR);
+			Paint borderColor = getBorderColor();
 			GraphicsUtils.drawPaintedShape(
-				context.getGraphics(), getBounds(), fg, null, stroke);
+				context.getGraphics(), getBounds(), borderColor, null, stroke);
 		}
 	}
 
@@ -234,7 +259,7 @@ public abstract class AbstractLegend extends StylableContainer
 		sources.add(source);
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
-			Font font = this.<Font>getSetting(FONT);
+			Font font = getFont();
 			Item item = new Item(row, this, label, font);
 			add(item);
 			components.put(row, item);
@@ -298,38 +323,18 @@ public abstract class AbstractLegend extends StylableContainer
 		valid = true;
 	}
 
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		Key key = event.getKey();
-		if (ORIENTATION.equals(key) || GAP.equals(key)) {
-			Orientation orientation = getSetting(ORIENTATION);
-			Dimension2D gap = getSetting(GAP);
-			if (GAP.equals(key) && gap != null) {
-				double fontSize = this.<Font>getSetting(FONT).getSize2D();
-				gap.setSize(gap.getWidth()*fontSize, gap.getHeight()*fontSize);
-			}
-			Layout layout = new StackedLayout(orientation, gap);
-			setLayout(layout);
-		} else if (FONT.equals(key)) {
-			for (Drawable drawable : components.values()) {
-				if (drawable instanceof Item) {
-					Item item = (Item) drawable;
-					Font font = getSetting(FONT);
-					item.label.setFont(font);
-				}
-			}
-		}
+	protected final void refreshLayout() {
+		Orientation orientation = getOrientation();
+		Dimension2D gap = getGap();
+		Layout layout = new StackedLayout(orientation, gap);
+		setLayout(layout);
 	}
 
 	@Override
 	public void setBounds(double x, double y, double width, double height) {
 		Dimension2D size = getPreferredSize();
-		double alignX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
-		double alignY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
+		double alignX = getAlignmentX().doubleValue();
+		double alignY = getAlignmentY().doubleValue();
 		super.setBounds(
 			x + alignX*(width - size.getWidth()),
 			y + alignY*(height - size.getHeight()),
@@ -355,5 +360,139 @@ public abstract class AbstractLegend extends StylableContainer
 	 */
 	protected void invalidate() {
 		valid = false;
+	}
+
+	/**
+	 * Sets the font of the contained drawables.
+	 * @param font Font to be set.
+	 */
+	protected final void setDrawableFonts(Font font) {
+		for (Drawable drawable : components.values()) {
+			if (drawable instanceof Item) {
+				Item item = (Item) drawable;
+				item.label.setFont(font);
+			}
+		}
+	}
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		borderStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a deserialized class does not exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		out.defaultWriteObject();
+		out.writeObject(SerializationUtils.wrap(borderStroke));
+	}
+
+	@Override
+	public Paint getBackground() {
+		return background;
+	}
+
+	@Override
+	public void setBackground(Paint background) {
+		this.background = background;
+	}
+
+	@Override
+	public Stroke getBorderStroke() {
+		return borderStroke;
+	}
+
+	@Override
+	public void setBorderStroke(Stroke borderStroke) {
+		this.borderStroke = borderStroke;
+	}
+
+	@Override
+	public Font getFont() {
+		return font;
+	}
+
+	@Override
+	public void setFont(Font font) {
+		this.font = font;
+		setDrawableFonts(font);
+	}
+
+	@Override
+	public Paint getBorderColor() {
+		return borderColor;
+	}
+
+	@Override
+	public void setBorderColor(Paint borderColor) {
+		this.borderColor = borderColor;
+	}
+
+	@Override
+	public Orientation getOrientation() {
+		return orientation;
+	}
+
+	@Override
+	public void setOrientation(Orientation orientation) {
+		this.orientation = orientation;
+		refreshLayout();
+	}
+
+	@Override
+	public Number getAlignmentX() {
+		return alignmentX;
+	}
+
+	@Override
+	public void setAlignmentX(Number alignmentX) {
+		this.alignmentX = alignmentX;
+	}
+
+	@Override
+	public Number getAlignmentY() {
+		return alignmentY;
+	}
+
+	@Override
+	public void setAlignmentY(Number alignmentY) {
+		this.alignmentY = alignmentY;
+	}
+
+	@Override
+	public Dimension2D getGap() {
+		return gap;
+	}
+
+	@Override
+	public void setGap(Dimension2D gap) {
+		this.gap = gap;
+		if (this.gap != null) {
+			double fontSize = getFont().getSize2D();
+			this.gap.setSize(this.gap.getWidth()*fontSize, this.gap.getHeight()*fontSize);
+		}
+	}
+
+	@Override
+	public Dimension2D getSymbolSize() {
+		return symbolSize;
+	}
+
+	@Override
+	public void setSymbolSize(Dimension2D symbolSize) {
+		this.symbolSize = symbolSize;
 	}
 }

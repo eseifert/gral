@@ -26,7 +26,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	LegendTest.class
+	LegendTest.class,
+	ValueLegendTest.class
 })
 public class LegendsTests {
 }

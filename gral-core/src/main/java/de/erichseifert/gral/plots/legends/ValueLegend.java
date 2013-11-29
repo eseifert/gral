@@ -30,8 +30,6 @@ import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 
 /**
  * A legend implementation that displays items for all data values of all data
@@ -42,20 +40,16 @@ public abstract class ValueLegend extends AbstractLegend
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4274009997506638823L;
 
-	/** Key for specifying a {@link Integer} value for the index of
-	the column that contains the labels for the values. */
-	public static final Key LABEL_COLUMN =
-		new Key("valueLegend.label.column"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.text.Format} instance to be used to
-	format the displayed data values. */
-	public static final Key LABEL_FORMAT =
-		new Key("valueLegend.label.format"); //$NON-NLS-1$
+	/** Column index containing the labels. */
+	private int labelColumn;
+	/** Format for data to label text conversion. */
+	private Format labelFormat;
 
 	/**
 	 * Initializes a new instance with default values.
 	 */
 	public ValueLegend() {
-		setSettingDefault(LABEL_COLUMN, 0);
+		labelColumn = 0;
 	}
 
 	@Override
@@ -70,14 +64,14 @@ public abstract class ValueLegend extends AbstractLegend
 
 	@Override
 	protected String getLabel(Row row) {
-		int col = this.<Integer>getSetting(LABEL_COLUMN);
+		int col = getLabelColumn();
 		Comparable<?> value = row.get(col);
 		if (value == null) {
 			return "";
 		}
 
 		// Formatting
-		Format format = getSetting(LABEL_FORMAT);
+		Format format = getLabelFormat();
 		if ((format == null) && row.isColumnNumeric(col)) {
 			format = NumberFormat.getInstance();
 		}
@@ -97,16 +91,6 @@ public abstract class ValueLegend extends AbstractLegend
 	public void remove(DataSource source) {
 		super.remove(source);
 		source.removeDataListener(this);
-	}
-
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		super.settingChanged(event);
-		Key key = event.getKey();
-		if (LABEL_COLUMN.equals(key) || LABEL_FORMAT.equals(key)) {
-			invalidate();
-			refresh();
-		}
 	}
 
 	/**
@@ -155,5 +139,41 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	private void dataChanged(DataSource source, DataChangeEvent... events) {
 		invalidate();
+	}
+
+	/**
+	 * Returns the index of the column that contains the labels for the values.
+	 * @return Column index containing the labels.
+	 */
+	public int getLabelColumn() {
+		return labelColumn;
+	}
+
+	/**
+	 * Sets the index of the column that contains the labels for the values.
+	 * @param labelColumn Column index containing the labels.
+	 */
+	public void setLabelColumn(int labelColumn) {
+		this.labelColumn = labelColumn;
+		invalidate();
+		refresh();
+	}
+
+	/**
+	 * Returns the format used to display data values.
+	 * @return Format for data to label text conversion.
+	 */
+	public Format getLabelFormat() {
+		return labelFormat;
+	}
+
+	/**
+	 * Sets the format used to display data values.
+	 * @param labelFormat Format for data to label text conversion.
+	 */
+	public void setLabelFormat(Format labelFormat) {
+		this.labelFormat = labelFormat;
+		invalidate();
+		refresh();
 	}
 }

@@ -47,7 +47,6 @@ import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -169,7 +168,7 @@ public class MemoryUsage extends ExamplePanel {
 		plot.setSetting(Plot.LEGEND, true);
 
 		// Format legend
-		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
+		plot.getLegend().setOrientation(Orientation.HORIZONTAL);
 
 		// Format plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
