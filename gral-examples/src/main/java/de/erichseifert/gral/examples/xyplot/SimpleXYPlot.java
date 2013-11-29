@@ -89,7 +89,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Format axes
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
-		axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic axis");
+		axisRendererX.setLabel("Logarithmic axis");
 		plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 		// Custom tick labels
 		Map<Double, String> labels = new HashMap<Double, String>();
@@ -99,7 +99,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setShapeStroke(stroke);
-		axisRendererY.setSetting(AxisRenderer.LABEL, "Linear axis");
+		axisRendererY.setLabel("Linear axis");
 		// Change intersection point of Y axis
 		axisRendererY.setIntersection(1.0);
 		// Change tick spacing

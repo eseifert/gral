@@ -140,6 +140,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Paint ticksMinorColor;
 	/** Custom labels containing their respective position and text. */
 	private Map<Double, String> customLabels;
+	/** Label text of the axis. */
+	private String label;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -182,7 +184,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		ticksMinorAlignment = 0.5;
 		ticksMinorColor = Color.BLACK;
 
-		setSettingDefault(LABEL, null);
+		label = null;
 		setSettingDefault(LABEL_DISTANCE, 1.0);
 		setSettingDefault(LABEL_ROTATION, 0.0);
 		setSettingDefault(LABEL_FONT, Font.decode(null));
@@ -311,7 +313,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				}
 
 				// Draw axis label
-				String labelText = renderer.<String>getSetting(LABEL);
+				String labelText = renderer.getLabel();
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
 					axisLabel.setSetting(Label.FONT,
@@ -1004,5 +1006,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setCustomLabels(Map<Double, String> customLabels) {
 		this.customLabels = customLabels;
+	}
+
+	@Override
+	public String getLabel() {
+		return label;
+	}
+
+	@Override
+	public void setLabel(String label) {
+		this.label = label;
 	}
 }

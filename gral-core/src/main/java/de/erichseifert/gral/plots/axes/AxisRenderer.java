@@ -38,10 +38,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link String} instance for the label text of
-	the axis. */
-	Key LABEL =
-		new Key("axis.label"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the distance from the
 	axis to the label. The length is specified relative to font height. */
 	Key LABEL_DISTANCE =
@@ -463,4 +459,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param customLabels Custom tick labels.
 	 */
 	void setCustomLabels(Map<Double, String> customLabels);
+
+	/**
+	 * Returns the label text of the axis.
+	 * @return Axis label.
+	 */
+	String getLabel();
+
+	/**
+	 * Sets the label text of the axis.
+	 * @param label Axis label.
+	 */
+	void setLabel(String label);
 }
