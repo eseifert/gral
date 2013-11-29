@@ -9,7 +9,6 @@ import de.erichseifert.gral.SymbolSettingProvider;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.Orientation;
 
@@ -18,11 +17,6 @@ import de.erichseifert.gral.util.Orientation;
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage, SymbolSettingProvider {
-	/** Key for specifying a {@link java.awt.Insets2D} instance defining the
-	horizontal and vertical gap between items. The gap size is defined
-	relative to the font height of the legend. */
-	Key GAP = new Key("legend.gap"); //$NON-NLS-1$
-
 	/**
 	 * Adds the specified data source in order to display it.
 	 * @param source data source to be added.
@@ -151,4 +145,16 @@ public interface Legend extends Container, Drawable, SettingsStorage, SymbolSett
 	 * @param alignmentY Relative vertical alignment.
 	 */
 	void setAlignmentY(Number alignmentY);
+
+	/**
+	 * Returns the horizontal and vertical gap between items.
+	 * @return Gap size relative to the font height.
+	 */
+	Dimension2D getGap();
+
+	/**
+	 * Sets the horizontal and vertical gap between items.
+	 * @param gap Gap size relative to the font height.
+	 */
+	void setGap(Dimension2D gap);
 }

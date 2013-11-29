@@ -107,6 +107,7 @@ public class LegendTest {
 		assertEquals(original.getOrientation(), deserialized.getOrientation());
 		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
 		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
+		assertEquals(original.getGap(), deserialized.getGap());
 		assertEquals(original.getSymbolSize(), deserialized.getSymbolSize());
     }
 }

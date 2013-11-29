@@ -49,7 +49,6 @@ import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.StylableContainer;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -94,6 +93,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private Number alignmentX;
 	/** Vertical alignment of the legend relative to the plot area. */
 	private Number alignmentY;
+	/** Gap size relative to the font height. */
+	private Dimension2D gap;
 	/** Symbol size relative to the font height. */
 	private Dimension2D symbolSize;
 
@@ -192,7 +193,8 @@ public abstract class AbstractLegend extends StylableContainer
 		orientation = Orientation.VERTICAL;
 		alignmentX = 0.0;
 		alignmentY = 0.0;
-		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
+		// TODO: Replace setter call in constructor
+		setGap(new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
 		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
 		refreshLayout();
 	}
@@ -325,7 +327,7 @@ public abstract class AbstractLegend extends StylableContainer
 
 	protected final void refreshLayout() {
 		Orientation orientation = getOrientation();
-		Dimension2D gap = getSetting(GAP);
+		Dimension2D gap = getGap();
 		Layout layout = new StackedLayout(orientation, gap);
 		setLayout(layout);
 	}
@@ -336,17 +338,6 @@ public abstract class AbstractLegend extends StylableContainer
 	 */
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		Key key = event.getKey();
-		if (GAP.equals(key)) {
-			Orientation orientation = getOrientation();
-			Dimension2D gap = getSetting(GAP);
-			if (GAP.equals(key) && gap != null) {
-				double fontSize = getFont().getSize2D();
-				gap.setSize(gap.getWidth()*fontSize, gap.getHeight()*fontSize);
-			}
-			Layout layout = new StackedLayout(orientation, gap);
-			setLayout(layout);
-		}
 	}
 
 	@Override
@@ -489,6 +480,20 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void setAlignmentY(Number alignmentY) {
 		this.alignmentY = alignmentY;
+	}
+
+	@Override
+	public Dimension2D getGap() {
+		return gap;
+	}
+
+	@Override
+	public void setGap(Dimension2D gap) {
+		this.gap = gap;
+		if (this.gap != null) {
+			double fontSize = getFont().getSize2D();
+			this.gap.setSize(this.gap.getWidth()*fontSize, this.gap.getHeight()*fontSize);
+		}
 	}
 
 	@Override
