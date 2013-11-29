@@ -66,7 +66,7 @@ public class SimpleRasterPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
-		plot.setSetting(RasterPlot.COLORS, new LinearGradient(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
+		plot.setColors(new LinearGradient(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);
