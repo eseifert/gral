@@ -444,7 +444,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	}
 
 	/**
-	 * Returns the absolute length of a major tick in pixels.
+	 * Returns the absolute length of a major tick.
 	 * @return Tick length in pixels.
 	 */
 	protected double getTickLengthAbsolute() {
@@ -452,6 +452,10 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		return getTickLength().doubleValue()*fontSize;
 	}
 
+	/**
+	 * Returns the absolute distance between ticks and labels.
+	 * @return Distance in pixels.
+	 */
 	protected double getTickLabelDistanceAbsolute() {
 		double fontSize = getTickFont().getSize2D();
 		return getTickLabelDistance().doubleValue()*fontSize;
