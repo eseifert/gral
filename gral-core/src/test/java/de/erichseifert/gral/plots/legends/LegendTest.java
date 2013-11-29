@@ -99,7 +99,6 @@ public class LegendTest {
 		Legend original = legend;
 		Legend deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
 		assertEquals(original.getFont(), deserialized.getFont());
