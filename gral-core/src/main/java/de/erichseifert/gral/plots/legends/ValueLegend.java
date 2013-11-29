@@ -30,7 +30,6 @@ import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 
 /**
@@ -42,13 +41,10 @@ public abstract class ValueLegend extends AbstractLegend
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4274009997506638823L;
 
-	/** Key for specifying the {@link java.text.Format} instance to be used to
-	format the displayed data values. */
-	public static final Key LABEL_FORMAT =
-		new Key("valueLegend.label.format"); //$NON-NLS-1$
-
 	/** Column index containing the labels. */
 	private int labelColumn;
+	/** Format for data to label text conversion. */
+	private Format labelFormat;
 
 	/**
 	 * Initializes a new instance with default values.
@@ -76,7 +72,7 @@ public abstract class ValueLegend extends AbstractLegend
 		}
 
 		// Formatting
-		Format format = getSetting(LABEL_FORMAT);
+		Format format = getLabelFormat();
 		if ((format == null) && row.isColumnNumeric(col)) {
 			format = NumberFormat.getInstance();
 		}
@@ -101,11 +97,6 @@ public abstract class ValueLegend extends AbstractLegend
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		super.settingChanged(event);
-		Key key = event.getKey();
-		if (LABEL_FORMAT.equals(key)) {
-			invalidate();
-			refresh();
-		}
 	}
 
 	/**
@@ -170,6 +161,24 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	public void setLabelColumn(int labelColumn) {
 		this.labelColumn = labelColumn;
+		invalidate();
+		refresh();
+	}
+
+	/**
+	 * Returns the format used to display data values.
+	 * @return Format for data to label text conversion.
+	 */
+	public Format getLabelFormat() {
+		return labelFormat;
+	}
+
+	/**
+	 * Sets the format used to display data values.
+	 * @param labelFormat Format for data to label text conversion.
+	 */
+	public void setLabelFormat(Format labelFormat) {
+		this.labelFormat = labelFormat;
 		invalidate();
 		refresh();
 	}

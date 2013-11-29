@@ -49,5 +49,6 @@ public class ValueLegendTest {
 		ValueLegend deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getLabelColumn(), deserialized.getLabelColumn());
+		assertEquals(original.getLabelFormat(), deserialized.getLabelFormat());
     }
 }
