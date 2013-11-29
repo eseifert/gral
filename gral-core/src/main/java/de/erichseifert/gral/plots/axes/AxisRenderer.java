@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the alignment of minor
-	ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
-	Key TICKS_MINOR_ALIGNMENT =
-		new Key("axis.ticks.minor.alignment"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the the shapes of minor ticks. */
 	Key TICKS_MINOR_COLOR =
@@ -434,4 +430,20 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param ticksMinorStroke Stroke used for minor tick drawing.
 	 */
 	void setTicksMinorStroke(Stroke ticksMinorStroke);
+
+	/**
+	 * Returns the alignment of minor ticks.
+	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
+	 * 1.0 means inside the plotting area.
+	 * @return Minor tick alignment relative to the axis.
+	 */
+	Number getTicksMinorAlignment();
+
+	/**
+	 * Sets the alignment of minor ticks.
+	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
+	 * 1.0 means inside the plotting area.
+	 * @param ticksMinorAlignment Minor tick alignment relative to the axis.
+	 */
+	void setTicksMinorAlignment(Number ticksMinorAlignment);
 }

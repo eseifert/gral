@@ -134,6 +134,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	/** Stroke used to draw all minor ticks. */
 	// Property will be serialized using a wrapper
 	private transient Stroke ticksMinorStroke;
+	/** Minor tick alignment relative to the axis. */
+	private Number ticksMinorAlignment;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -173,7 +175,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		ticksMinorCount = 1;
 		ticksMinorLength = 0.5;
 		ticksMinorStroke = new BasicStroke();
-		setSettingDefault(TICKS_MINOR_ALIGNMENT, 0.5);
+		ticksMinorAlignment = 0.5;
 		setSettingDefault(TICKS_MINOR_COLOR, Color.BLACK);
 
 		setSettingDefault(LABEL, null);
@@ -255,8 +257,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.type)) {
 							tickLength = renderer.getTickMinorLengthAbsolute();
-							tickAlignment =
-								renderer.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
+							tickAlignment = renderer.getTicksMinorAlignment()
 								.doubleValue();
 							tickPaint =
 								renderer.<Paint>getSetting(TICKS_MINOR_COLOR);
@@ -970,5 +971,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksMinorStroke(Stroke ticksMinorStroke) {
 		this.ticksMinorStroke = ticksMinorStroke;
+	}
+
+	@Override
+	public Number getTicksMinorAlignment() {
+		return ticksMinorAlignment;
+	}
+
+	@Override
+	public void setTicksMinorAlignment(Number ticksMinorAlignment) {
+		this.ticksMinorAlignment = ticksMinorAlignment;
 	}
 }
