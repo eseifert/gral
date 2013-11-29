@@ -54,7 +54,6 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
@@ -81,10 +80,6 @@ public class BarPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3177733647455649147L;
 
-	/** Key for specifying a {@link Number} value for the  width of the bars in
-	axis coordinates. */
-	public static final Key BAR_WIDTH =
-		new Key("barplot.bar.width"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the minimum height of the
 	bars in view units (e.g. pixels on screen). */
 	public static final Key BAR_HEIGHT_MIN =
@@ -95,6 +90,8 @@ public class BarPlot extends XYPlot {
 	public static final Key PAINT_ALL_BARS =
 		new Key("barplot.bar.paintAll"); //$NON-NLS-1$
 
+	double barWidth;
+
 	/**
 	 * Class that renders a bar in a bar plot.
 	 */
@@ -102,8 +99,7 @@ public class BarPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2183638342305398522L;
 
-		/** Settings of the plot. */
-		private final SettingsStorage plotSettings;
+		private final BarPlot plot;
 
 		private transient Stroke stroke;
 		private Paint strokeColor;
@@ -113,8 +109,8 @@ public class BarPlot extends XYPlot {
 		 * plot as data provider.
 		 * @param plotSettings The settings of the associated plot.
 		 */
-		public BarRenderer(SettingsStorage plotSettings) {
-			this.plotSettings = plotSettings;
+		public BarRenderer(BarPlot plot) {
+			this.plot = plot;
 			setValueLocation(Location.NORTH);
 			stroke  = null;
 			strokeColor = Color.BLACK;
@@ -207,7 +203,7 @@ public class BarPlot extends XYPlot {
 					ColorMapper colors = renderer.getColor();
 					Paint paint = colors.get(row.getIndex());
 
-					Boolean paintAllBars = plotSettings.getSetting(PAINT_ALL_BARS);
+					Boolean paintAllBars = plot.getSetting(PAINT_ALL_BARS);
 					if (paintAllBars != null && paintAllBars.booleanValue()) {
 						AffineTransform txOld = graphics.getTransform();
 						Rectangle2D shapeBounds = shape.getBounds2D();
@@ -256,8 +252,7 @@ public class BarPlot extends XYPlot {
 			double valueY = ((Number) row.get(colY)).doubleValue();
 			double axisYOrigin = 0.0;
 
-			double barWidthRel = DataUtils.getValueOrDefault(
-				plotSettings.<Number>getSetting(BarPlot.BAR_WIDTH), 1.0);
+			double barWidthRel = plot.getBarWidth();
 			barWidthRel = Math.max(barWidthRel, 0.0);
 			double barAlign = 0.5;
 
@@ -287,7 +282,7 @@ public class BarPlot extends XYPlot {
 			double barY = barAboveAxis ? 0.0 : -barHeight;
 
 			double barHeightMin = DataUtils.getValueOrDefault(
-				plotSettings.<Number>getSetting(BAR_HEIGHT_MIN), Double.NaN);
+				plot.<Number>getSetting(BAR_HEIGHT_MIN), Double.NaN);
 			if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
 					barHeight < barHeightMin) {
 				if (barAboveAxis) {
@@ -389,8 +384,7 @@ public class BarPlot extends XYPlot {
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
 
-					double barWidthRel = DataUtils.getValueOrDefault(
-						plot.<Number>getSetting(BarPlot.BAR_WIDTH), 1.0);
+					double barWidthRel = plot.getBarWidth();
 
 					Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
 					AxisRenderer axisRendererX = new LinearRenderer2D();
@@ -442,7 +436,7 @@ public class BarPlot extends XYPlot {
 		super(data);
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
-		setSettingDefault(BAR_WIDTH, 1.0);
+		barWidth = 1.0;
 		setSettingDefault(BAR_HEIGHT_MIN, 0.0);
 		setSettingDefault(PAINT_ALL_BARS, false);
 
@@ -467,8 +461,7 @@ public class BarPlot extends XYPlot {
 			double max = getAxisMax(axisName);
 			if (AXIS_X.equals(axisName)) {
 				// Add margin
-				double barWidth = DataUtils.getValueOrDefault(
-					this.<Number>getSetting(BAR_WIDTH), 1.0);
+				double barWidth = getBarWidth();
 				double margin = barWidth*(max - min)/data.getRowCount();
 				axis.setRange(min - margin/2.0, max + margin/2.0);
 			} else if (AXIS_Y.equals(axisName)) {
@@ -493,5 +486,21 @@ public class BarPlot extends XYPlot {
 		setPointRenderer(source, pointRendererDefault);
 		setLineRenderer(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
+	}
+
+	/**
+	 * Returns the width of the bars in axis coordinates.
+	 * @return Width of the bars in axis coordinates.
+	 */
+	public double getBarWidth() {
+		return barWidth;
+	}
+
+	/**
+	 * Sets the width of the bars in axis coordinates.
+	 * @param barWidth Width of the bars in axis coordinates.
+	 */
+	public void setBarWidth(double barWidth) {
+		this.barWidth = barWidth;
 	}
 }

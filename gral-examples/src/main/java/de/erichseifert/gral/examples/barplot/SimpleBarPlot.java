@@ -58,7 +58,7 @@ public class SimpleBarPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));
-		plot.setSetting(BarPlot.BAR_WIDTH, 0.075);
+		plot.setBarWidth(0.075);
 
 		// Format bars
 		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
