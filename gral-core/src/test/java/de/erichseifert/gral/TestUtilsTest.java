@@ -29,7 +29,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.awt.Color;
-import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -64,46 +63,69 @@ public class TestUtilsTest {
 	}
 
 	@Test
-	public void testAssertShapeEquals() {
-		// Rectangle2D.Double
-		Shape s1 = new Rectangle2D.Double();
+	public void testAssertEqualsShape() {
+		Rectangle2D s1 = new Rectangle2D.Double();
 		try {
-			TestUtils.assertShapeEquals(s1, null);
+			TestUtils.assertEquals(s1, null);
+			fail();
 		} catch (AssertionError e) {
 		}
 		try {
-			TestUtils.assertShapeEquals(null, s1);
+			TestUtils.assertEquals(null, s1);
+			fail();
 		} catch (AssertionError e) {
 		}
-		Shape s2 = new Rectangle2D.Double();
-		TestUtils.assertShapeEquals(s1, s2);
-		TestUtils.assertShapeEquals(s2, s1);
+		Rectangle2D s2 = new Rectangle2D.Double();
+		TestUtils.assertEquals(s1, s2);
+		TestUtils.assertEquals(s2, s1);
 
-		// Line2D.Double
+		s1.setFrame(1.0, 1.0, 10.0, 10.0);
+		try {
+			TestUtils.assertEquals(s1, s2);
+			fail();
+		} catch (AssertionError e) {
+		}
+		try {
+			TestUtils.assertEquals(s2, s1);
+			fail();
+		} catch (AssertionError e) {
+		}
+
+		s2.setFrame(1.0, 1.0, 10.0, 10.0);
+		TestUtils.assertEquals(s1, s2);
+		TestUtils.assertEquals(s2, s1);
+	}
+
+	@Test
+	public void testAssertEqualsLine2D() {
 		Line2D l1 = new Line2D.Double();
 		try {
-			TestUtils.assertShapeEquals(l1, null);
+			TestUtils.assertEquals(l1, null);
+			fail();
 		} catch (AssertionError e) {
 		}
 		try {
-			TestUtils.assertShapeEquals(null, l1);
+			TestUtils.assertEquals(null, l1);
+			fail();
 		} catch (AssertionError e) {
 		}
 		Line2D l2 = new Line2D.Double();
-		TestUtils.assertShapeEquals(l1, l2);
-		TestUtils.assertShapeEquals(l2, l1);
+		TestUtils.assertEquals(l1, l2);
+		TestUtils.assertEquals(l2, l1);
 
 		l2.setLine(0.0, 0.0, 1.0, 1.0);
 		try {
-			TestUtils.assertShapeEquals(l1, l2);
+			TestUtils.assertEquals(l1, l2);
+			fail();
 		} catch (AssertionError e) {
 		}
 		try {
-			TestUtils.assertShapeEquals(l2, l1);
+			TestUtils.assertEquals(l2, l1);
+			fail();
 		} catch (AssertionError e) {
 		}
 		l1.setLine(0.0, 0.0, 1.0, 1.0);
-		TestUtils.assertShapeEquals(l1, l2);
-		TestUtils.assertShapeEquals(l2, l1);
+		TestUtils.assertEquals(l1, l2);
+		TestUtils.assertEquals(l2, l1);
 	}
 }

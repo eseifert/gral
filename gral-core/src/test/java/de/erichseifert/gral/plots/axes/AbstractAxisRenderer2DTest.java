@@ -62,7 +62,7 @@ public class AbstractAxisRenderer2DTest {
 		AbstractAxisRenderer2D original = renderer;
 		AbstractAxisRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
 		assertEquals(original.getIntersection(), deserialized.getIntersection());
-		TestUtils.assertShapeEquals(original.getShape(), deserialized.getShape());
+		TestUtils.assertEquals(original.getShape(), deserialized.getShape());
 		assertEquals(original.isShapeVisible(), deserialized.isShapeVisible());
 		assertEquals(original.isShapeNormalOrientationClockwise(), deserialized.isShapeNormalOrientationClockwise());
 		assertEquals(original.getShapeColor(), deserialized.getShapeColor());
