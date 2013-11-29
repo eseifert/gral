@@ -67,7 +67,7 @@ import de.erichseifert.gral.util.Tuple;
  * Basic implementation of a plot that can listen to changes of data sources
  * and settings.
  */
-public abstract class AbstractPlot extends StylableContainer
+public abstract class AbstractPlot extends DrawableContainer
 		implements Plot, DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6609155385940228771L;

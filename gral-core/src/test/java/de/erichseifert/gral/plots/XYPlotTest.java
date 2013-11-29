@@ -76,8 +76,8 @@ public class XYPlotTest {
 		// XYPlot with all options turned on
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText("foobar");
-		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
-		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
 		plot.setLegendVisible(true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
@@ -85,8 +85,8 @@ public class XYPlotTest {
 
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText(null);
-		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
-		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
+		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
 		plot.setLegendVisible(false);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
@@ -109,8 +109,6 @@ public class XYPlotTest {
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		MockXYPlot original = plots.get(0);
 		MockXYPlot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		TestUtils.assertSettings(original, deserialized);
 
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());

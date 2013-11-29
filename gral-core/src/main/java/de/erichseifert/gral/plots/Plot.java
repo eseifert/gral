@@ -32,7 +32,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.Location;
 
 /**
@@ -45,7 +44,7 @@ import de.erichseifert.gral.util.Location;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public interface Plot extends Drawable, Container, SettingsStorage {
+public interface Plot extends Drawable, Container {
 	/**
 	 * Returns the axis with the specified name.
 	 * @param name Name of the axis.

@@ -87,14 +87,16 @@ public class BarPlotTest {
 		BarPlot original = plot;
 		BarPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
-
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
+
+		assertEquals(original.getBarWidth(), deserialized.getBarWidth(), DELTA);
+		assertEquals(original.getBarHeightMin(), deserialized.getBarHeightMin(), DELTA);
+		assertEquals(original.isPaintAllBars(), deserialized.isPaintAllBars());
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

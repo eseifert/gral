@@ -99,8 +99,6 @@ public class PiePlotTest {
 		PiePlot original = plot;
 		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
-
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());

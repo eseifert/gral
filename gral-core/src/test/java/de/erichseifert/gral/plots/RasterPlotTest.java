@@ -101,14 +101,16 @@ public class RasterPlotTest {
 		RasterPlot original = plot;
 		RasterPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
-
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
+
+		assertEquals(original.getOffset(), deserialized.getOffset());
+		assertEquals(original.getDistance(), deserialized.getDistance());
+		assertEquals(original.getColors(), deserialized.getColors());
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
