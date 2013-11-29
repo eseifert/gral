@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying a {@link Number} value for the horizontal alignment
-	within the bounding rectangle. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_X =
-		new Key("label.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the vertical alignment
 	within the bounding rectangle. 0 means top, 1 means bottom. */
 	public static final Key ALIGNMENT_Y =
@@ -78,6 +74,8 @@ public class Label extends StylableDrawable {
 
 	/** Text for this label. */
 	private String text;
+	/** Horizontal text alignment. */
+	private Number alignmentX;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -98,7 +96,7 @@ public class Label extends StylableDrawable {
 	public Label(String text) {
 		this.text = text;
 
-		setSettingDefault(ALIGNMENT_X, 0.5);
+		alignmentX = 0.5;
 		setSettingDefault(ALIGNMENT_Y, 0.5);
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ROTATION, 0.0);
@@ -146,7 +144,7 @@ public class Label extends StylableDrawable {
 		double shapePosY = getY() - textBounds.getY();
 		// Position the text inside the bounding rectangle using the alignment
 		// settings
-		double alignmentX = this.<Number>getSetting(ALIGNMENT_X).doubleValue();
+		double alignmentX = getAlignmentX().doubleValue();
 		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
 		shapePosX += alignmentX*(getWidth() - textBounds.getWidth());
 		shapePosY += alignmentY*(getHeight() - textBounds.getHeight());
@@ -295,5 +293,23 @@ public class Label extends StylableDrawable {
 		if (width != widthOld || height != heightOld) {
 			invalidate();
 		}
+	}
+
+	/**
+	 * Returns the horizontal alignment within the bounding rectangle.
+	 * 0.0 means left, 1.0 means right.
+	 * @return Horizontal text alignment.
+	 */
+	public Number getAlignmentX() {
+		return alignmentX;
+	}
+
+	/**
+	 * Sets the horizontal alignment within the bounding rectangle.
+	 * 0.0 means left, 1.0 means right.
+	 * @param alignmentX Horizontal text alignment.
+	 */
+	public void setAlignmentX(Number alignmentX) {
+		this.alignmentX = alignmentX;
 	}
 }

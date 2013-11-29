@@ -134,7 +134,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 		// Create a label with the settings
 		Label label = new Label(text);
-		label.setSetting(Label.ALIGNMENT_X, alignX);
+		label.setAlignmentX(alignX);
 		label.setSetting(Label.ALIGNMENT_Y, alignY);
 		label.setSetting(Label.ROTATION, rotation);
 		label.setSetting(Label.COLOR, paint);
