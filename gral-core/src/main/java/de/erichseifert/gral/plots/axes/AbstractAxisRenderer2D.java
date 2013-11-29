@@ -88,6 +88,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean shapeVisible;
 	/** Decides whether the shape normals are orientated clockwise. */
 	private boolean shapeNormalOrientationClockwise;
+	/** Paint used to draw axis shape, ticks, and labels. */
+	private Paint shapeColor;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -100,10 +102,10 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 		setShape(new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 
-		setShapeVisible(true);
-		setShapeNormalOrientationClockwise(false);
+		shapeVisible = true;
+		shapeNormalOrientationClockwise = false;
 		setSettingDefault(SHAPE_STROKE, new BasicStroke());
-		setSettingDefault(SHAPE_COLOR, Color.BLACK);
+		shapeColor = Color.BLACK;
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 
 		setSettingDefault(TICKS, true);
@@ -167,7 +169,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				Paint paintOld = graphics.getPaint();
 
 				// Draw axis shape
-				Paint axisPaint = renderer.getSetting(SHAPE_COLOR);
+				Paint axisPaint = renderer.getShapeColor();
 				Stroke axisStroke = renderer.getSetting(SHAPE_STROKE);
 				boolean isShapeVisible = renderer.isShapeVisible();
 				if (isShapeVisible) {
@@ -705,5 +707,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setShapeNormalOrientationClockwise(boolean clockwise) {
 		this.shapeNormalOrientationClockwise = clockwise;
+	}
+
+	@Override
+	public Paint getShapeColor() {
+		return shapeColor;
+	}
+
+	@Override
+	public void setShapeColor(Paint shapeColor) {
+		this.shapeColor = shapeColor;
 	}
 }

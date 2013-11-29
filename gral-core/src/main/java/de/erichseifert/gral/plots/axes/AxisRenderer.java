@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots.axes;
 
+import java.awt.Paint;
 import java.awt.Shape;
 import java.util.List;
 
@@ -33,10 +34,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying {@link java.awt.Paint} instance to be used to paint
-	 the axis, its ticks and its labels. */
-	Key SHAPE_COLOR =
-		new Key("axis.shape.color"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance which define
 	 the shape of the axis. */
 	Key SHAPE_STROKE =
@@ -262,4 +259,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * counterclockwise.
 	 */
 	void setShapeNormalOrientationClockwise(boolean shapeNormalOrientationClockwise);
+
+	/**
+	 * Returns the paint used to draw the axis, its ticks and its labels.
+	 * @return Paint used for drawing.
+	 */
+	Paint getShapeColor();
+
+	/**
+	 * Sets the paint used to draw the axis, its ticks and its labels.
+	 * @param color Paint used for drawing.
+	 */
+	void setShapeColor(Paint color);
 }
