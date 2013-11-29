@@ -267,7 +267,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			Graphics2D graphics = context.getGraphics();
 
 			Shape clipBoundsOld = graphics.getClip();
-			Insets2D clipOffset = getSetting(CLIPPING);
+			Insets2D clipOffset = getClippingOffset();
 			if (clipOffset != null) {
 				// TODO Use real font size instead of fixed value
 				final double fontSize = 10.0;

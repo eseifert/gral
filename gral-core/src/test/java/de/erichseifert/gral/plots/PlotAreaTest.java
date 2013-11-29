@@ -86,5 +86,6 @@ public class PlotAreaTest {
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
 		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
+		assertEquals(original.getClippingOffset(), deserialized.getClippingOffset());
     }
 }

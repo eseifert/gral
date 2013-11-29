@@ -31,7 +31,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.SerializationUtils;
@@ -46,14 +45,6 @@ public abstract class PlotArea extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
-	/** Key for specifying an {@link de.erichseifert.gral.util.Insets2D}
-	instance that defines the clipping of the plotted data relative to
-	the plot area. Positive inset values result in clipping inside the plot
-	area, negative values result in clipping outside the plot area.
-	Specifying a {@code null} values will turn off clipping. */
-	public static final Key CLIPPING =
-		new Key("plotarea.clipping"); //$NON-NLS-1$
-
 	/** Paint used for background drawing. */
 	private Paint background;
 	/** Stroke used to draw the border. */
@@ -61,6 +52,8 @@ public abstract class PlotArea extends StylableDrawable {
 	private transient Stroke borderStroke;
 	/** Paint used for border drawing. */
 	private Paint borderColor;
+	/** Clipping offset in pixels relative to the outline of the plot area. */
+	private Insets2D clippingOffset;
 
 	/**
 	 * Initializes a new instance with default background color and border.
@@ -69,7 +62,7 @@ public abstract class PlotArea extends StylableDrawable {
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
 		borderColor = Color.BLACK;
-		setSettingDefault(CLIPPING, new Insets2D.Double(0.0));
+		clippingOffset = new Insets2D.Double(0.0);
 	}
 
 	/**
@@ -178,5 +171,27 @@ public abstract class PlotArea extends StylableDrawable {
 	 */
 	public void setBorderColor(Paint borderColor) {
 		this.borderColor = borderColor;
+	}
+
+	/**
+	 * Returns the clipping offset of the plotted data relative to the plot area.
+	 * Positive inset values result in clipping inside the plot area,
+	 * negative values result in clipping outside the plot area.
+	 * Specifying a {@code null} values will turn off clipping.
+	 * @return Clipping offset in pixels relative to the outline of the plot area.
+	 */
+	public Insets2D getClippingOffset() {
+		return clippingOffset;
+	}
+
+	/**
+	 * Sets the clipping offset of the plotted data relative to the plot area.
+	 * Positive inset values result in clipping inside the plot area,
+	 * negative values result in clipping outside the plot area.
+	 * Specifying a {@code null} values will turn off clipping.
+	 * @param clippingOffset Clipping offset in pixels relative to the outline of the plot area.
+	 */
+	public void setClippingArea(Insets2D clippingOffset) {
+		this.clippingOffset = clippingOffset;
 	}
 }
