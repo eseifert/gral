@@ -119,6 +119,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean tickLabelsEnabled;
 	/** Format which converts the tick values to labels. */
 	private Format tickLabelFormat;
+	/** Distance between labels and ticks relative to the font height. */
+	private Number tickLabelDistance;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -148,7 +150,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		tickLabelsEnabled = true;
 		tickLabelFormat = NumberFormat.getInstance();
-		setSettingDefault(TICK_LABELS_DISTANCE, 1.0);
+		tickLabelDistance = 1.0;
 		setSettingDefault(TICK_LABELS_OUTSIDE, true);
 		setSettingDefault(TICK_LABELS_ROTATION, 0.0);
 
@@ -226,7 +228,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						renderer.<Number>getSetting(TICK_LABELS_ROTATION)
 						.doubleValue();
 					double tickLabelDist =
-						renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
+						renderer.getTickLabelDistance()
 						.doubleValue()*fontSize;
 					Line2D tickShape = new Line2D.Double();
 
@@ -312,7 +314,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					double tickAlignment = renderer.getTickAlignment()
 						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-					double tickLabelDist = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
+					double tickLabelDist = renderer.getTickLabelDistance()
 						.doubleValue()*fontSize;
 
 					double labelDistance = renderer.<Number>getSetting(LABEL_DISTANCE)
@@ -390,7 +392,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				double tickAlignment = renderer.getTickAlignment()
 					.doubleValue();
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
-				double labelDistance = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
+				double labelDistance = renderer.getTickLabelDistance()
 					.doubleValue();
 				double labelDist = labelDistance*fontSize + tickLengthOuter;
 				double minSize = fontSize + labelDist + tickLengthOuter;
@@ -868,11 +870,23 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		this.tickLabelsEnabled = tickLabelsEnabled;
 	}
 
+	@Override
 	public Format getTickLabelFormat() {
 		return tickLabelFormat;
 	}
 
+	@Override
 	public void setTickLabelFormat(Format tickLabelFormat) {
 		this.tickLabelFormat = tickLabelFormat;
+	}
+
+	@Override
+	public Number getTickLabelDistance() {
+		return tickLabelDistance;
+	}
+
+	@Override
+	public void setTickLabelDistance(Number tickLabelDistance) {
+		this.tickLabelDistance = tickLabelDistance;
 	}
 }

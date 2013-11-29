@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the distance of labels to
-	their ticks. The distance is specified relative to the font height. */
-	Key TICK_LABELS_DISTANCE =
-		new Key("axis.ticks.major.labels.distance"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides whether the
 	tick labels are drawn outside of the plot. */
 	Key TICK_LABELS_OUTSIDE =
@@ -377,4 +373,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickLabelFormat Format used for tick labels.
 	 */
 	void setTickLabelFormat(Format tickLabelFormat);
+
+	/**
+	 * Returns the distance of labels to their ticks.
+	 * @return Label distance relative to the font height.
+	 */
+	Number getTickLabelDistance();
+
+	/**
+	 * Sets the distance of labels to their ticks.
+	 * @param tickLabelDistance Label distance relative to the font height.
+	 */
+	void setTickLabelDistance(Number tickLabelDistance);
 }
