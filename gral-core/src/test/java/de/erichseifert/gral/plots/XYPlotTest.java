@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Graphics2D;
@@ -108,5 +109,8 @@ public class XYPlotTest {
 		MockXYPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
-    }
+
+		assertEquals(original.getBackground(), deserialized.getBackground());
+		assertEquals(original.getBorder(), deserialized.getBorder());
+	}
 }

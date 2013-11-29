@@ -29,6 +29,8 @@ import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,6 +62,7 @@ import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.SerializationUtils;
 import de.erichseifert.gral.util.Tuple;
 
 
@@ -101,6 +104,7 @@ public abstract class AbstractPlot extends StylableContainer
 	private Legend legend;
 
 	private Paint background;
+	private transient Stroke border;
 
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
@@ -131,7 +135,7 @@ public abstract class AbstractPlot extends StylableContainer
 		}
 
 		background = null;
-		setSettingDefault(BORDER, null);
+		border = null;
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(LEGEND, false);
 		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
@@ -153,7 +157,7 @@ public abstract class AbstractPlot extends StylableContainer
 			GraphicsUtils.fillPaintedShape(graphics, getBounds(), bg, null);
 		}
 
-		Stroke stroke = getSetting(BORDER);
+		Stroke stroke = getBorder();
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(
@@ -417,6 +421,16 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void setBackground(Paint background) {
 		this.background = background;
+	}
+
+	@Override
+	public Stroke getBorder() {
+		return border;
+	}
+
+	@Override
+	public void setBorder(Stroke border) {
+		this.border = border;
 	}
 
 	/**
@@ -780,8 +794,31 @@ public abstract class AbstractPlot extends StylableContainer
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
+		// Default deserialization
 		in.defaultReadObject();
+		// Custom deserialization
+		border = (Stroke) SerializationUtils.unwrap(
+				(Serializable) in.readObject());
+
+		// Restore listeners
+		for (DataSource source : getData()) {
+			source.addDataListener(this);
+		}
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		// Default serialization
+		out.defaultWriteObject();
+		// Custom serialization
+		out.writeObject(SerializationUtils.wrap(border));
 
 		// Restore listeners
 		for (DataSource source : getData()) {

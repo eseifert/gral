@@ -88,6 +88,7 @@ public class BarPlotTest {
 		TestUtils.assertSettings(original, deserialized);
 
 		assertEquals(original.getBackground(), deserialized.getBackground());
+		assertEquals(original.getBorder(), deserialized.getBorder());
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

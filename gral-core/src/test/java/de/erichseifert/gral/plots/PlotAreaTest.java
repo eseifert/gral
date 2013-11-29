@@ -67,7 +67,7 @@ public class PlotAreaTest {
 	@Test
 	public void testDraw() {
 		plotArea.setBackground(Color.WHITE);
-		plotArea.setSetting(Plot.BORDER, new BasicStroke(1f));
+		plotArea.setBorderStroke(new BasicStroke(1f));
 
 		BufferedImage image = createTestImage();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());

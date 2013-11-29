@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.Paint;
+import java.awt.Stroke;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,9 +46,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	paint the border of the plot. */
-	Key BORDER = new Key("plot.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot. */
 	Key COLOR = new Key("plot.color"); //$NON-NLS-1$
@@ -240,4 +238,16 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	 * plot.
 	 */
 	void setBackground(Paint background);
+
+	/**
+	 * Returns the stroke which is used to paint the border of the plot.
+	 * @return Stroke which is used to paint the border of the plot.
+	 */
+	Stroke getBorder();
+
+	/**
+	 * Sets the stroke which will be used to paint the border of the plot.
+	 * @param border Stroke which will be used to paint the border of the plot.
+	 */
+	void setBorder(Stroke border);
 }

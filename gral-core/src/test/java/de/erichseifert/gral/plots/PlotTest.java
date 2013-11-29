@@ -163,7 +163,7 @@ public class PlotTest {
 	public void testDraw() {
 		plot.getTitle().setText("foobar");
 		plot.setBackground(Color.WHITE);
-		plot.setSetting(Plot.BORDER, new BasicStroke(1f));
+		plot.setBorder(new BasicStroke(1f));
 
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
