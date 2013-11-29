@@ -35,10 +35,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides whether the
-	interval for major and minor ticks is chosen automatically. */
-	Key TICKS_AUTO_SPACING =
-		new Key("axis.ticks.autoSpacing"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the length of major tick
 	strokes. The length is specified relative to the font height. */
 	Key TICKS_LENGTH =
@@ -307,4 +303,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickSpacing Distance on axis in which major ticks are drawn.
 	 */
 	void setTickSpacing(Number tickSpacing);
+
+	/**
+	 * Returns whether the interval for major and minor ticks is chosen automatically.
+	 * @return {@code true} if auto-spacing is enabled, {@code false} otherwise.
+	 */
+	boolean isTicksAutoSpaced();
+
+	/**
+	 * Sets whether the interval for major and minor ticks is chosen automatically.
+	 * @param ticksAutoSpaced {@code true} if auto-spacing is enabled, {@code false} otherwise.
+	 */
+	void setTicksAutoSpaced(boolean ticksAutoSpaced);
 }

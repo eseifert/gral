@@ -102,6 +102,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean ticksDrawn;
 	/** Distance on axis in which major ticks are drawn. */
 	private Number tickSpacing;
+	/** Decides whether automatic tick spacing is enabled. */
+	private boolean ticksAutoSpaced;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -122,7 +124,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		ticksDrawn = true;
 		tickSpacing = 0.0;
-		setSettingDefault(TICKS_AUTO_SPACING, false);
+		ticksAutoSpaced = false;
 		setSettingDefault(TICKS_LENGTH, 1.0);
 		setSettingDefault(TICKS_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_ALIGNMENT, 0.5);
@@ -408,7 +410,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		createTicksCustom(ticks, axis, min, max, tickPositions);
 
-		boolean isAutoSpacing = this.<Boolean>getSetting(TICKS_AUTO_SPACING);
+		boolean isAutoSpacing = isTicksAutoSpaced();
 		// If the spacing is invalid, use auto spacing
 		if (!isAutoSpacing) {
 			Number tickSpacing = getTickSpacing();
@@ -773,5 +775,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickSpacing(Number tickSpacing) {
 		this.tickSpacing = tickSpacing;
+	}
+
+	@Override
+	public boolean isTicksAutoSpaced() {
+		return ticksAutoSpaced;
+	}
+
+	@Override
+	public void setTicksAutoSpaced(boolean ticksAutoSpaced) {
+		this.ticksAutoSpaced = ticksAutoSpaced;
 	}
 }
