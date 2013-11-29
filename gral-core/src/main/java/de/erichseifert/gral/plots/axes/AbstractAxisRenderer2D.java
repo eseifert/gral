@@ -242,8 +242,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							tickStroke =
 								renderer.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						} else {
-							tickLength = getTickLength()
-								.doubleValue()*fontSize;
+							tickLength = getTickLengthAbsolute();
 							tickAlignment =
 								renderer.<Number>getSetting(TICKS_ALIGNMENT)
 								.doubleValue();
@@ -297,8 +296,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					axisLabel.setSetting(Label.COLOR,
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
-					double tickLength = renderer.getTickLength()
-						.doubleValue()*fontSize;
+					double tickLength = getTickLengthAbsolute();
 					double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
@@ -376,8 +374,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			public Dimension2D getPreferredSize() {
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
 				double fontSize = renderer.<Font>getSetting(TICKS_FONT).getSize2D();
-				double tickLength = renderer.getTickLength()
-					.doubleValue()*fontSize;
+				double tickLength = getTickLengthAbsolute();
 				double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 					.doubleValue();
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
@@ -428,6 +425,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		createTicks(ticks, axis, min, max, tickPositions, isAutoSpacing);
 
 		return ticks;
+	}
+
+	/**
+	 * Returns the absolute length of a major tick in pixels.
+	 * @return Tick length in pixels.
+	 */
+	protected double getTickLengthAbsolute() {
+		double fontSize = this.<Font>getSetting(TICKS_FONT).getSize2D();
+		return getTickLength().doubleValue()*fontSize;
 	}
 
 	/**
