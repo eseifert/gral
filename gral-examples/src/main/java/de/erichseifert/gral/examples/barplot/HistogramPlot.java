@@ -70,7 +70,7 @@ public class HistogramPlot extends ExamplePanel {
 
 		// Format x axis
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
-		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.8);
+		plot.getAxisRenderer(BarPlot.AXIS_X).setTickSpacing(0.8);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
 		// Format y axis
 		plot.getAxis(BarPlot.AXIS_Y).setRange(0.0,

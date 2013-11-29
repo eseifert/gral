@@ -103,7 +103,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Change intersection point of Y axis
 		axisRendererY.setIntersection(1.0);
 		// Change tick spacing
-		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, 2.0);
+		axisRendererX.setTickSpacing(2.0);
 
 		// Format rendering of data points
 		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();

@@ -100,6 +100,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean shapeDirectionSwapped;
 	/** Decides whether major ticks are drawn. */
 	private boolean ticksDrawn;
+	/** Distance on axis in which major ticks are drawn. */
+	private Number tickSpacing;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -119,7 +121,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		shapeColor = Color.BLACK;
 
 		ticksDrawn = true;
-		setSettingDefault(TICKS_SPACING, 0.0);
+		tickSpacing = 0.0;
 		setSettingDefault(TICKS_AUTO_SPACING, false);
 		setSettingDefault(TICKS_LENGTH, 1.0);
 		setSettingDefault(TICKS_STROKE, new BasicStroke());
@@ -409,7 +411,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		boolean isAutoSpacing = this.<Boolean>getSetting(TICKS_AUTO_SPACING);
 		// If the spacing is invalid, use auto spacing
 		if (!isAutoSpacing) {
-			Number tickSpacing = this.<Number>getSetting(TICKS_SPACING);
+			Number tickSpacing = getTickSpacing();
 			if (tickSpacing == null) {
 				isAutoSpacing = true;
 			} else {
@@ -761,5 +763,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksDrawn(boolean ticksDrawn) {
 		this.ticksDrawn = ticksDrawn;
+	}
+
+	@Override
+	public Number getTickSpacing() {
+		return tickSpacing;
+	}
+
+	@Override
+	public void setTickSpacing(Number tickSpacing) {
+		this.tickSpacing = tickSpacing;
 	}
 }

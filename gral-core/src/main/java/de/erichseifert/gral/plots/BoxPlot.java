@@ -769,7 +769,7 @@ public class BoxPlot extends XYPlot {
 		setLegend(new BoxPlotLegend(this));
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
-		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 1.0);
+		getAxisRenderer(AXIS_X).setTickSpacing(1.0);
 		getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
 		getAxisRenderer(AXIS_X).setIntersection(-Double.MAX_VALUE);
 		getAxisRenderer(AXIS_Y).setIntersection(-Double.MAX_VALUE);

@@ -178,7 +178,7 @@ public class MemoryUsage extends ExamplePanel {
 		// Format axes (set scale and spacings)
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
 		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
-		axisRendererX.setSetting(AxisRenderer.TICKS_SPACING, BUFFER_SIZE*INTERVAL/10.0);
+		axisRendererX.setTickSpacing(BUFFER_SIZE*INTERVAL/10.0);
 		axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererY.setSetting(AxisRenderer.TICKS_MINOR_COUNT, 4);

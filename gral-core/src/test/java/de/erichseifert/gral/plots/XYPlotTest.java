@@ -41,7 +41,6 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 public class XYPlotTest {
 	private List<MockXYPlot> plots;
@@ -80,8 +79,8 @@ public class XYPlotTest {
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
 		plot.setSetting(XYPlot.LEGEND, true);
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.2);
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_SPACING, 0.2);
+		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
 		plots.add(plot);
 
 		plot = new MockXYPlot(data);
@@ -89,8 +88,8 @@ public class XYPlotTest {
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
 		plot.setSetting(XYPlot.LEGEND, false);
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS_SPACING, 0.0);
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_SPACING, 0.0);
+		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
 		plots.add(plot);
 	}
 

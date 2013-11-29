@@ -111,7 +111,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			// TODO Automatic scaling for logarithmic axes
 			tickSpacing = 1.0;
 		} else {
-			tickSpacing = this.<Number>getSetting(TICKS_SPACING).doubleValue();
+			tickSpacing = getTickSpacing().doubleValue();
 		}
 
 		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
