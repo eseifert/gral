@@ -86,6 +86,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private transient Stroke borderStroke;
 	/** Font used to display the labels. */
 	private Font font;
+	/** Paint used to fill the border of the legend. */
+	private Paint borderColor;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -187,7 +189,7 @@ public abstract class AbstractLegend extends StylableContainer
 		borderStroke = new BasicStroke(1f);
 		font = Font.decode(null);
 		setDrawableFonts(font);
-		setSettingDefault(COLOR, Color.BLACK);
+		borderColor = Color.BLACK;
 		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(ALIGNMENT_X, 0.0);
 		setSettingDefault(ALIGNMENT_Y, 0.0);
@@ -228,9 +230,9 @@ public abstract class AbstractLegend extends StylableContainer
 	protected void drawBorder(DrawingContext context) {
 		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
-			Paint fg = getSetting(COLOR);
+			Paint borderColor = getBorderColor();
 			GraphicsUtils.drawPaintedShape(
-				context.getGraphics(), getBounds(), fg, null, stroke);
+				context.getGraphics(), getBounds(), borderColor, null, stroke);
 		}
 	}
 
@@ -439,5 +441,15 @@ public abstract class AbstractLegend extends StylableContainer
 	public void setFont(Font font) {
 		this.font = font;
 		setDrawableFonts(font);
+	}
+
+	@Override
+	public Paint getBorderColor() {
+		return borderColor;
+	}
+
+	@Override
+	public void setBorderColor(Paint borderColor) {
+		this.borderColor = borderColor;
 	}
 }

@@ -15,9 +15,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	 fill the border of the legend. */
-	Key COLOR = new Key("legend.color"); //$NON-NLS-1$
 	/** Key for specifying a {@link de.erichseifert.gral.util.Orientation}
 	instance defining the direction of the legend's items. */
 	Key ORIENTATION = new Key("legend.orientation"); //$NON-NLS-1$
@@ -102,4 +99,16 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * @param font Font used for labels.
 	 */
 	void setFont(Font font);
+
+	/**
+	 * Returns the paint used to fill the border of the legend.
+	 * @return Paint used for border drawing.
+	 */
+	Paint getBorderColor();
+
+	/**
+	 * Sets the paint used to fill the border of the legend.
+	 * @param borderColor Paint used for border drawing.
+	 */
+	void setBorderColor(Paint borderColor);
 }
