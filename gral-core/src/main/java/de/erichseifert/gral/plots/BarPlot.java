@@ -54,7 +54,6 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -80,10 +79,6 @@ public class BarPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3177733647455649147L;
 
-	/** Key for specifying a {@link Number} value for the minimum height of the
-	bars in view units (e.g. pixels on screen). */
-	public static final Key BAR_HEIGHT_MIN =
-		new Key("barplot.bar.heightMin"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which defines whether
 	painting should happen over all bars at once, otherwise each bar will be
 	filled independently. */
@@ -91,6 +86,7 @@ public class BarPlot extends XYPlot {
 		new Key("barplot.bar.paintAll"); //$NON-NLS-1$
 
 	double barWidth;
+	double barHeightMin;
 
 	/**
 	 * Class that renders a bar in a bar plot.
@@ -281,8 +277,7 @@ public class BarPlot extends XYPlot {
 			boolean barAboveAxis = barYMax == barYOrigin;
 			double barY = barAboveAxis ? 0.0 : -barHeight;
 
-			double barHeightMin = DataUtils.getValueOrDefault(
-				plot.<Number>getSetting(BAR_HEIGHT_MIN), Double.NaN);
+			double barHeightMin = plot.getBarHeightMin();
 			if (MathUtils.isCalculatable(barHeightMin) && barHeightMin > 0.0 &&
 					barHeight < barHeightMin) {
 				if (barAboveAxis) {
@@ -437,7 +432,7 @@ public class BarPlot extends XYPlot {
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		barWidth = 1.0;
-		setSettingDefault(BAR_HEIGHT_MIN, 0.0);
+		barHeightMin = 0.0;
 		setSettingDefault(PAINT_ALL_BARS, false);
 
 		setLegend(new BarPlotLegend(this));
@@ -502,5 +497,23 @@ public class BarPlot extends XYPlot {
 	 */
 	public void setBarWidth(double barWidth) {
 		this.barWidth = barWidth;
+	}
+
+	/**
+	 * Returns the minimum height of the bars in view units
+	 * (e.g. pixels on screen).
+	 * @return Minimum height of the bars in view units.
+	 */
+	public double getBarHeightMin() {
+		return barHeightMin;
+	}
+
+	/**
+	 * Sets the minimum height of the bars in view units
+	 * (e.g. pixels on screen).
+	 * @param barHeightMin Minimum height of the bars in view units.
+	 */
+	public void setBarHeightMin(double barHeightMin) {
+		this.barHeightMin = barHeightMin;
 	}
 }
