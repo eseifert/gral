@@ -65,8 +65,6 @@ import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -96,12 +94,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
-	/** Key for specifying a {@link Boolean} value which decides whether the
-	segments should be ordered clockwise ({@code true}) or counterclockwise
-	({@code false}). */
-	public static final Key CLOCKWISE =
-		new Key("pieplot.clockwise"); //$NON-NLS-1$
-
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	/** Slice objects with start and end position for each visible data source. */
@@ -112,6 +104,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	private final Point2D center;
 	private double radius;
 	private double start;
+	private boolean clockwise;
 
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
@@ -555,10 +548,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			double start = plot.getStart();
 
-			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
 			double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
 			double sliceStart;
-			if (clockwise != null && clockwise.booleanValue()) {
+			if (plot.isClockwise()) {
 				sliceStart = start - sliceEndRel*360.0;
 			} else {
 				sliceStart = start + sliceStartRel*360.0;
@@ -677,8 +669,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			double angleStart = Math.toRadians(-start);
 			double direction = 1.0;
-			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
-			if (clockwise != null && !clockwise.booleanValue()) {
+			if (plot.isClockwise()) {
 				direction = -1.0;
 			}
 			double angle = angleStart + direction*labelPosRelH*2.0*Math.PI;
@@ -841,7 +832,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		center = new Point2D.Double(0.5, 0.5);
 		radius = 1.0;
 		start = 0.0;
-		setSettingDefault(CLOCKWISE, true);
+		clockwise = true;
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
 		slices = new HashMap<DataSource, List<Slice>>();
@@ -1031,24 +1022,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		super.settingChanged(event);
-		Key key = event.getKey();
-
-		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
-		if (CLOCKWISE.equals(key) && axisRenderer != null) {
-			Shape shape = axisRenderer.getShape();
-
-			if (shape != null) {
-				if (CLOCKWISE.equals(key)) {
-					shape = GeometryUtils.reverse(shape);
-					axisRenderer.setShape(shape);
-				}
-			}
-		}
-	}
-
-	@Override
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		super.dataChanged(source, events);
 		revalidate(source);
@@ -1136,6 +1109,33 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				double delta = Math.toRadians(startOld - start);
 				AffineTransform tx = AffineTransform.getRotateInstance(delta);
 				shape = tx.createTransformedShape(shape);
+				axisRenderer.setShape(shape);
+			}
+		}
+	}
+
+	/**
+	 * Returns whether the segments are in clockwise or counterclockwise order.
+	 * @return {@code true} if segments are in clockwise order,
+	 * otherwise {@code false}.
+	 */
+	public boolean isClockwise() {
+		return clockwise;
+	}
+
+	/**
+	 * Sets whether the segments will be in clockwise or counterclockwise order.
+	 * @param clockwise {@code true} if segments should be in clockwise order,
+	 * otherwise {@code false}.
+	 */
+	public void setClockwise(boolean clockwise) {
+		this.clockwise = clockwise;
+
+		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
+		if (axisRenderer != null) {
+			Shape shape = axisRenderer.getShape();
+			if (shape != null) {
+				shape = GeometryUtils.reverse(shape);
 				axisRenderer.setShape(shape);
 			}
 		}
