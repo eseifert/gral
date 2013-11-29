@@ -179,10 +179,10 @@ public class MemoryUsage extends ExamplePanel {
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
 		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
 		axisRendererX.setTickSpacing(BUFFER_SIZE*INTERVAL/10.0);
-		axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, DateFormat.getTimeInstance());
+		axisRendererX.setTickLabelFormat(DateFormat.getTimeInstance());
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererY.setSetting(AxisRenderer.TICKS_MINOR_COUNT, 4);
-		axisRendererY.setSetting(AxisRenderer.TICK_LABELS_FORMAT, new DecimalFormat("0 MiB"));
+		axisRendererY.setTickLabelFormat(new DecimalFormat("0 MiB"));
 
 		Color color1Dark = GraphicsUtils.deriveDarker(COLOR1);
 

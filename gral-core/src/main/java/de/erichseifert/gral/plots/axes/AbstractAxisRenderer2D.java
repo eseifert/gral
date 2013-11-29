@@ -117,6 +117,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Paint tickColor;
 	/** Decides whether tick labels will be shown. */
 	private boolean tickLabelsEnabled;
+	/** Format which converts the tick values to labels. */
+	private Format tickLabelFormat;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -145,7 +147,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickColor = Color.BLACK;
 
 		tickLabelsEnabled = true;
-		setSettingDefault(TICK_LABELS_FORMAT, NumberFormat.getInstance());
+		tickLabelFormat = NumberFormat.getInstance();
 		setSettingDefault(TICK_LABELS_DISTANCE, 1.0);
 		setSettingDefault(TICK_LABELS_OUTSIDE, true);
 		setSettingDefault(TICK_LABELS_ROTATION, 0.0);
@@ -505,7 +507,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		} else {
-			Format labelFormat = getSetting(TICK_LABELS_FORMAT);
+			Format labelFormat = getTickLabelFormat();
 			if (labelFormat != null) {
 				tickLabel = labelFormat.format(tickPositionWorld);
 			} else {
@@ -864,5 +866,13 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickLabelsEnabled(boolean tickLabelsEnabled) {
 		this.tickLabelsEnabled = tickLabelsEnabled;
+	}
+
+	public Format getTickLabelFormat() {
+		return tickLabelFormat;
+	}
+
+	public void setTickLabelFormat(Format tickLabelFormat) {
+		this.tickLabelFormat = tickLabelFormat;
 	}
 }

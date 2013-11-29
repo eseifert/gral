@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.text.Format;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -36,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.text.Format} instance which converts
-	the tick values to labels. */
-	Key TICK_LABELS_FORMAT =
-		new Key("axis.ticks.major.labels.format"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the distance of labels to
 	their ticks. The distance is specified relative to the font height. */
 	Key TICK_LABELS_DISTANCE =
@@ -368,4 +365,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickLabelsEnabled {@code true} if tick labels will be drawn, {@code false} otherwise.
 	 */
 	void setTickLabelsEnabled(boolean tickLabelsEnabled);
+
+	/**
+	 * Returns the format which converts the tick values to labels.
+	 * @return Format used for tick labels.
+	 */
+	Format getTickLabelFormat();
+
+	/**
+	 * Sets the format which converts the tick values to labels.
+	 * @param tickLabelFormat Format used for tick labels.
+	 */
+	void setTickLabelFormat(Format tickLabelFormat);
 }
