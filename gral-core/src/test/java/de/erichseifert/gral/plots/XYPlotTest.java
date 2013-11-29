@@ -76,7 +76,7 @@ public class XYPlotTest {
 		plot.getTitle().setText("foobar");
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
-		plot.setSetting(XYPlot.LEGEND, true);
+		plot.setLegendVisible(true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
 		plots.add(plot);
@@ -85,7 +85,7 @@ public class XYPlotTest {
 		plot.getTitle().setText(null);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
-		plot.setSetting(XYPlot.LEGEND, false);
+		plot.setLegendVisible(false);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
 		plots.add(plot);
@@ -113,5 +113,6 @@ public class XYPlotTest {
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());
+		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 	}
 }

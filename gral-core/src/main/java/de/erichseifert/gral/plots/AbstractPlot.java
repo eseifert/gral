@@ -107,6 +107,8 @@ public abstract class AbstractPlot extends StylableContainer
 	private transient Stroke border;
 	private Paint color;
 
+	private boolean legendVisible;
+
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
 	 * The series will be visible by default.
@@ -138,7 +140,7 @@ public abstract class AbstractPlot extends StylableContainer
 		background = null;
 		border = null;
 		color = Color.BLACK;
-		setSettingDefault(LEGEND, false);
+		legendVisible = false;
 		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
 		setSettingDefault(LEGEND_DISTANCE, 2.0);
 
@@ -185,7 +187,7 @@ public abstract class AbstractPlot extends StylableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawLegend(DrawingContext context) {
-		Boolean isVisible = this.<Boolean>getSetting(LEGEND);
+		Boolean isVisible = isLegendVisible();
 		if (isVisible == null || !isVisible.booleanValue() || getLegend() == null) {
 			return;
 		}
@@ -442,6 +444,16 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void setColor(Paint color) {
 		this.color = color;
+	}
+
+	@Override
+	public boolean isLegendVisible() {
+		return legendVisible;
+	}
+
+	@Override
+	public void setLegendVisible(boolean legendVisible) {
+		this.legendVisible = legendVisible;
 	}
 
 	/**

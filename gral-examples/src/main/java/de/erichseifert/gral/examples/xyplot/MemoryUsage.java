@@ -165,7 +165,7 @@ public class MemoryUsage extends ExamplePanel {
 		// Format  plot
 		plot.setInsets(new Insets2D.Double(20.0, 90.0, 40.0, 20.0));
 		plot.getTitle().setText("Memory Usage");
-		plot.setSetting(Plot.LEGEND, true);
+		plot.setLegendVisible(true);
 
 		// Format legend
 		plot.getLegend().setOrientation(Orientation.HORIZONTAL);

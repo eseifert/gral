@@ -60,7 +60,7 @@ public class SimplePiePlot extends ExamplePanel {
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
 		// Display a legend
-		plot.setSetting(PiePlot.LEGEND, true);
+		plot.setLegendVisible(true);
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 

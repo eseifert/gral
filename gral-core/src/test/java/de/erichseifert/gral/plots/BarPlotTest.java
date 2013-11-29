@@ -90,6 +90,7 @@ public class BarPlotTest {
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());
+		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

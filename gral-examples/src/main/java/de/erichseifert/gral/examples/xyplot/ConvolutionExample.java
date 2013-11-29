@@ -33,7 +33,6 @@ import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.KernelUtils;
 import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -91,7 +90,7 @@ public class ConvolutionExample extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		plot.setSetting(Plot.LEGEND, true);
+		plot.setLegendVisible(true);
 
 		// Format legend
 		plot.getLegend().setOrientation(Orientation.HORIZONTAL);

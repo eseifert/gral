@@ -72,7 +72,7 @@ public class AreaPlot extends ExamplePanel {
 
 		// Create new xy-plot
 		XYPlot plot = new XYPlot(data1, data2, data3);
-		plot.setSetting(XYPlot.LEGEND, true);
+		plot.setLegendVisible(true);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 
 		// Format data series

@@ -46,9 +46,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying a {@link Boolean} value to set whether the legend
-	should be shown. */
-	Key LEGEND = new Key("plot.legend"); //$NON-NLS-1$
 	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
 	the positioning of the legend. */
 	Key LEGEND_LOCATION = new Key("plot.legend.location"); //$NON-NLS-1$
@@ -259,4 +256,18 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	 * @param color Paint which will be used to fill the border of the plot.
 	 */
 	void setColor(Paint color);
+
+	/**
+	 * Returns whether the legend is shown.
+	 * @return {@code true} if the legend is shown,
+	 *         {@code false} if the legend is hidden.
+	 */
+	boolean isLegendVisible();
+
+	/**
+	 * Sets whether the legend will be shown.
+	 * @param legendVisible {@code true} if the legend should be shown,
+	 *         {@code false} if the legend should be hidden.
+	 */
+	void setLegendVisible(boolean legendVisible);
 }
