@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -66,12 +67,12 @@ public class TestUtilsTest {
 	public void testAssertEqualsShape() {
 		Rectangle2D s1 = new Rectangle2D.Double();
 		try {
-			TestUtils.assertEquals(s1, null);
+			TestUtils.assertEquals((Shape) s1, (Shape) null);
 			fail();
 		} catch (AssertionError e) {
 		}
 		try {
-			TestUtils.assertEquals(null, s1);
+			TestUtils.assertEquals((Shape) null, (Shape) s1);
 			fail();
 		} catch (AssertionError e) {
 		}
