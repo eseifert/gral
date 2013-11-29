@@ -95,7 +95,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		Map<Double, String> labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
-		axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
+		axisRendererX.setCustomLabels(labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setShapeStroke(stroke);

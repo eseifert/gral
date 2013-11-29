@@ -138,6 +138,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number ticksMinorAlignment;
 	/** Paint used to draw the shapes of minor ticks. */
 	private Paint ticksMinorColor;
+	/** Custom labels containing their respective position and text. */
+	private Map<Double, String> customLabels;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -171,7 +173,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickLabelsOutside = true;
 		tickLabelRotation = 0.0;
 
-		setSettingDefault(TICKS_CUSTOM, null);
+		customLabels = null;
 
 		ticksMinorEnabled = true;
 		ticksMinorCount = 1;
@@ -495,7 +497,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 */
 	protected void createTicksCustom(List<Tick> ticks, Axis axis,
 			double min, double max, Set<Double> tickPositions) {
-		Map<? extends Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
+		Map<? extends Number, String> labelsCustom = getCustomLabels();
 		if (labelsCustom != null) {
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();
@@ -527,7 +529,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		// Retrieve tick label
 		String tickLabel;
-		Map<Number, String> labelsCustom = getSetting(TICKS_CUSTOM);
+		Map<Double, String> labelsCustom = getCustomLabels();
 		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		} else {
@@ -992,5 +994,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksMinorColor(Paint ticksMinorColor) {
 		this.ticksMinorColor = ticksMinorColor;
+	}
+
+	@Override
+	public Map<Double, String> getCustomLabels() {
+		return customLabels;
+	}
+
+	@Override
+	public void setCustomLabels(Map<Double, String> customLabels) {
+		this.customLabels = customLabels;
 	}
 }

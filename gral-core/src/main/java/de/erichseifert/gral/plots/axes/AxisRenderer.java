@@ -27,6 +27,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.text.Format;
 import java.util.List;
+import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.settings.Key;
@@ -37,10 +38,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Custom labels as a {@link java.util.Map} with a position
-	({@code Double}) as key and a label ({@code String}) as value. */
-	Key TICKS_CUSTOM =
-		new Key("axis.ticks.custom"); //$NON-NLS-1$
 	/** Key for specifying the {@link String} instance for the label text of
 	the axis. */
 	Key LABEL =
@@ -454,4 +451,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param ticksMinorColor Paint used for minor tick drawing.
 	 */
 	void setTicksMinorColor(Paint ticksMinorColor);
+
+	/**
+	 * Returns custom labels with their respective position and text.
+	 * @return Custom tick labels.
+	 */
+	Map<Double, String> getCustomLabels();
+
+	/**
+	 * Sets custom labels with their respective position and text.
+	 * @param customLabels Custom tick labels.
+	 */
+	void setCustomLabels(Map<Double, String> customLabels);
 }

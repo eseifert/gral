@@ -33,7 +33,6 @@ import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.XYPlot.XYNavigationDirection;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.plots.colors.ScaledContinuousColorMapper;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -69,8 +68,8 @@ public class SimpleBoxPlot extends ExamplePanel {
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
 		// Format axes
-		plot.getAxisRenderer(BoxPlot.AXIS_X).setSetting(
-			AxisRenderer.TICKS_CUSTOM, DataUtils.map(
+		plot.getAxisRenderer(BoxPlot.AXIS_X).setCustomLabels(
+			DataUtils.map(
 					new Double[] {1.0, 2.0, 3.0},
 					new String[] {"Column 1", "Column 2", "Column 3"}
 			)
