@@ -67,7 +67,6 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -97,10 +96,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
-	/** Key for specifying a {@link Number} value for the starting angle of the
-	first segment in degrees. The angle is applied counterclockwise. */
-	public static final Key START =
-		new Key("pieplot.start"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides whether the
 	segments should be ordered clockwise ({@code true}) or counterclockwise
 	({@code false}). */
@@ -116,6 +111,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 	private final Point2D center;
 	private double radius;
+	private double start;
 
 	/**
 	 * Navigator implementation for pie plots. Zooming changes the
@@ -557,8 +553,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double sliceStartRel = slice.start/sum;
 			double sliceEndRel = slice.end/sum;
 
-			double start = DataUtils.getValueOrDefault(
-				plot.<Number>getSetting(PiePlot.START), 0.0);
+			double start = plot.getStart();
 
 			Boolean clockwise = plot.getSetting(PiePlot.CLOCKWISE);
 			double sliceSpan = (sliceEndRel - sliceStartRel)*360.0;
@@ -678,8 +673,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double labelPosRelH = sliceStartRel + distanceRelH +
 				alignX*(sliceWidthRel - 2.0*distanceRelH);
 
-			double start = DataUtils.getValueOrDefault(
-				plot.<Number>getSetting(PiePlot.START), 0.0);
+			double start = plot.getStart();
 
 			double angleStart = Math.toRadians(-start);
 			double direction = 1.0;
@@ -846,7 +840,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		center = new Point2D.Double(0.5, 0.5);
 		radius = 1.0;
-		setSettingDefault(START, 0.0);
+		start = 0.0;
 		setSettingDefault(CLOCKWISE, true);
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
@@ -1042,18 +1036,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		Key key = event.getKey();
 
 		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
-		if ((START.equals(key) || CLOCKWISE.equals(key)) && axisRenderer != null) {
+		if (CLOCKWISE.equals(key) && axisRenderer != null) {
 			Shape shape = axisRenderer.getShape();
 
 			if (shape != null) {
-				if (START.equals(key) && event.getValOld() != null) {
-					double startOld = ((Number) event.getValOld()).doubleValue();
-					double startNew = ((Number) event.getValNew()).doubleValue();
-					double delta = Math.toRadians(startOld - startNew);
-					AffineTransform tx = AffineTransform.getRotateInstance(delta);
-					shape = tx.createTransformedShape(shape);
-					axisRenderer.setShape(shape);
-				} else if (CLOCKWISE.equals(key)) {
+				if (CLOCKWISE.equals(key)) {
 					shape = GeometryUtils.reverse(shape);
 					axisRenderer.setShape(shape);
 				}
@@ -1121,5 +1108,36 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+
+	/**
+	 * Returns the starting angle of the first segment. The angle is
+	 * counterclockwise.
+	 * @return Starting angle of the first segment in degrees.
+	 */
+	public double getStart() {
+		return start;
+	}
+
+	/**
+	 * Sets the starting angle of the first segment. The angle is always
+	 * applied counterclockwise.
+	 * @param start Starting angle of the first segment in degrees.
+	 */
+	public void setStart(double start) {
+		double startOld = this.start;
+
+		this.start = start;
+
+		AxisRenderer axisRenderer = getAxisRenderer(PiePlot.AXIS_TANGENTIAL);
+		if (axisRenderer != null) {
+			Shape shape = axisRenderer.getShape();
+			if (shape != null) {
+				double delta = Math.toRadians(startOld - start);
+				AffineTransform tx = AffineTransform.getRotateInstance(delta);
+				shape = tx.createTransformedShape(shape);
+				axisRenderer.setShape(shape);
+			}
+		}
 	}
 }

@@ -61,7 +61,7 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		// Change relative size of pie
 		plot.setRadius(0.9);
 		// Change the starting angle of the first pie slice
-		plot.setSetting(PiePlot.START, 90.0);
+		plot.setStart(90.0);
 		// Add some margin to the plot area
 		plot.setInsets(new Insets2D.Double(20.0));
 
