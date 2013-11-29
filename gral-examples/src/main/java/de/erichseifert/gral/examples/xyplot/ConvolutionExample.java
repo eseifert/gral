@@ -95,7 +95,7 @@ public class ConvolutionExample extends ExamplePanel {
 		plot.setSetting(Plot.LEGEND, true);
 
 		// Format legend
-		plot.getLegend().setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
+		plot.getLegend().setOrientation(Orientation.HORIZONTAL);
 		plot.getLegend().setSetting(Legend.ALIGNMENT_Y, 1.0);
 
 		// Format data series as lines of different colors

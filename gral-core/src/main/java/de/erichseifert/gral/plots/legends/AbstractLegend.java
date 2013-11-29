@@ -88,6 +88,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private Font font;
 	/** Paint used to fill the border of the legend. */
 	private Paint borderColor;
+	/** Direction of the legend's items. */
+	private Orientation orientation;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -190,11 +192,12 @@ public abstract class AbstractLegend extends StylableContainer
 		font = Font.decode(null);
 		setDrawableFonts(font);
 		borderColor = Color.BLACK;
-		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
+		orientation = Orientation.VERTICAL;
 		setSettingDefault(ALIGNMENT_X, 0.0);
 		setSettingDefault(ALIGNMENT_Y, 0.0);
 		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
 		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
+		refreshLayout();
 	}
 
 	/**
@@ -323,6 +326,13 @@ public abstract class AbstractLegend extends StylableContainer
 		valid = true;
 	}
 
+	protected final void refreshLayout() {
+		Orientation orientation = getOrientation();
+		Dimension2D gap = getSetting(GAP);
+		Layout layout = new StackedLayout(orientation, gap);
+		setLayout(layout);
+	}
+
 	/**
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
@@ -330,8 +340,8 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (ORIENTATION.equals(key) || GAP.equals(key)) {
-			Orientation orientation = getSetting(ORIENTATION);
+		if (GAP.equals(key)) {
+			Orientation orientation = getOrientation();
 			Dimension2D gap = getSetting(GAP);
 			if (GAP.equals(key) && gap != null) {
 				double fontSize = getFont().getSize2D();
@@ -451,5 +461,16 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void setBorderColor(Paint borderColor) {
 		this.borderColor = borderColor;
+	}
+
+	@Override
+	public Orientation getOrientation() {
+		return orientation;
+	}
+
+	@Override
+	public void setOrientation(Orientation orientation) {
+		this.orientation = orientation;
+		refreshLayout();
 	}
 }

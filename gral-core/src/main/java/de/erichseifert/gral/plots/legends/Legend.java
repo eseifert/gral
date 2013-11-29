@@ -9,15 +9,13 @@ import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
+import de.erichseifert.gral.util.Orientation;
 
 /**
  * Interface for a legend that display visual examples of the variables used in
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage {
-	/** Key for specifying a {@link de.erichseifert.gral.util.Orientation}
-	instance defining the direction of the legend's items. */
-	Key ORIENTATION = new Key("legend.orientation"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value describing the horizontal
 	alignment of the legend relative to the plot area. {@code 0.0} means left,
 	{@code 0.5} means centered, and {@code 1.0} means right. */
@@ -111,4 +109,16 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * @param borderColor Paint used for border drawing.
 	 */
 	void setBorderColor(Paint borderColor);
+
+	/**
+	 * Returns the direction of the legend's items.
+	 * @return Item orientation.
+	 */
+	Orientation getOrientation();
+
+	/**
+	 * Sets the direction of the legend's items.
+	 * @param orientation Item orientation.
+	 */
+	void setOrientation(Orientation orientation);
 }
