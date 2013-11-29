@@ -51,8 +51,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -71,7 +69,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * </ul>
  */
 public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
-		implements AxisRenderer, SettingsListener {
+		implements AxisRenderer {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5623525683845512624L;
 	/** Line segments approximating the shape of the axis. */
@@ -155,8 +153,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * Initializes a new instance with default settings.
 	 */
 	public AbstractAxisRenderer2D() {
-		addSettingsListener(this);
-
 		intersection = 0.0;
 		// The direction must defined as swapped before the shape is evaluated.
 		shapeDirectionSwapped = false;
@@ -713,13 +709,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	}
 
 	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	public void settingChanged(SettingChangeEvent event) {
-	}
-
-	/**
 	 * Custom deserialization method.
 	 * @param in Input stream.
 	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
@@ -733,9 +722,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 		tickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 		ticksMinorStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-
-		// Restore listeners
-		addSettingsListener(this);
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
