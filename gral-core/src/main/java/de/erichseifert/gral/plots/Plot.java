@@ -46,9 +46,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	fill the border of the plot. */
-	Key COLOR = new Key("plot.color"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value to set whether the legend
 	should be shown. */
 	Key LEGEND = new Key("plot.legend"); //$NON-NLS-1$
@@ -250,4 +247,16 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	 * @param border Stroke which will be used to paint the border of the plot.
 	 */
 	void setBorder(Stroke border);
+
+	/**
+	 * Returns the paint which is used to fill the border of the plot.
+	 * @return Paint which is used to fill the border of the plot.
+	 */
+	Paint getColor();
+
+	/**
+	 * Sets the paint which will be used to fill the border of the plot.
+	 * @param color Paint which will be used to fill the border of the plot.
+	 */
+	void setColor(Paint color);
 }

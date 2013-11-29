@@ -112,5 +112,6 @@ public class XYPlotTest {
 
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorder(), deserialized.getBorder());
+		assertEquals(original.getColor(), deserialized.getColor());
 	}
 }

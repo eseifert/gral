@@ -105,6 +105,7 @@ public abstract class AbstractPlot extends StylableContainer
 
 	private Paint background;
 	private transient Stroke border;
+	private Paint color;
 
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
@@ -136,7 +137,7 @@ public abstract class AbstractPlot extends StylableContainer
 
 		background = null;
 		border = null;
-		setSettingDefault(COLOR, Color.BLACK);
+		color = Color.BLACK;
 		setSettingDefault(LEGEND, false);
 		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
 		setSettingDefault(LEGEND_DISTANCE, 2.0);
@@ -159,7 +160,7 @@ public abstract class AbstractPlot extends StylableContainer
 
 		Stroke stroke = getBorder();
 		if (stroke != null) {
-			Paint fg = getSetting(COLOR);
+			Paint fg = getColor();
 			GraphicsUtils.drawPaintedShape(
 					graphics, getBounds(), fg, null, stroke);
 		}
@@ -431,6 +432,16 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void setBorder(Stroke border) {
 		this.border = border;
+	}
+
+	@Override
+	public Paint getColor() {
+		return color;
+	}
+
+	@Override
+	public void setColor(Paint color) {
+		this.color = color;
 	}
 
 	/**
