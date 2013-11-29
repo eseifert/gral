@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	AxisTest.class,
+	AbstractAxisRenderer2DTest.class,
 	LinearRenderer2DTest.class,
 	LogarithmicRenderer2DTest.class
 })
