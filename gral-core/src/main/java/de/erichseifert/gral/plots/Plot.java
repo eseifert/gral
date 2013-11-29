@@ -44,12 +44,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying the {@link String} instance for the title of the
-	plot. */
-	Key TITLE = new Key("plot.title"); //$NON-NLS-1$
-	/** Key for specifying the {@link java.awt.Font} instance that is used to
-	display the title of the plot. */
-	Key TITLE_FONT = new Key("plot.title.font"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	paint the background of the plot. */
 	Key BACKGROUND = new Key("plot.background"); //$NON-NLS-1$

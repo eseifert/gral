@@ -34,7 +34,6 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.Insets2D;
@@ -116,7 +115,7 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		}
 		if (plot != null) {
 			String title = MessageFormat.format("{0,number,integer} random values", data.getRowCount());
-			plot.setSetting(Plot.TITLE, title);
+			plot.getTitle().setText(title);
 		}
 	}
 

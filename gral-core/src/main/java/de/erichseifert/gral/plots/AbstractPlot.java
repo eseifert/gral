@@ -128,8 +128,6 @@ public abstract class AbstractPlot extends StylableContainer
 			add(source);
 		}
 
-		setSettingDefault(TITLE, null);
-		setSettingDefault(TITLE_FONT, Font.decode(null).deriveFont(18f));
 		setSettingDefault(BACKGROUND, null);
 		setSettingDefault(BORDER, null);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -416,19 +414,7 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (TITLE.equals(key)) {
-			String text = getSetting(TITLE);
-			if (text == null) {
-				text = ""; //$NON-NLS-1$
-			}
-			title.setText(text);
-		} else if (TITLE_FONT.equals(key)) {
-			Font font = getSetting(TITLE_FONT);
-			if (font == null) {
-				font = Font.decode(null).deriveFont(18f);
-			}
-			title.setFont(font);
-		} else if (LEGEND_LOCATION.equals(key)) {
+		if (LEGEND_LOCATION.equals(key)) {
 			Location constraints = getSetting(LEGEND_LOCATION);
 			if (legend != null) {
 				legendContainer.remove(legend);

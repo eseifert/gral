@@ -56,7 +56,7 @@ public class SimplePiePlot extends ExamplePanel {
 		PiePlot plot = new PiePlot(data);
 
 		// Format plot
-		plot.setSetting(PiePlot.TITLE, getDescription());
+		plot.getTitle().setText(getDescription());
 		// Change relative size of pie
 		plot.setSetting(PiePlot.RADIUS, 0.9);
 		// Display a legend

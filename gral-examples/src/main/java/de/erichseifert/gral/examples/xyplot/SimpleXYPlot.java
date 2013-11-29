@@ -74,7 +74,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 		plot.setSetting(XYPlot.BACKGROUND, Color.WHITE);
-		plot.setSetting(XYPlot.TITLE, getDescription());
+		plot.getTitle().setText(getDescription());
 
 		// Format plot area
 		plot.getPlotArea().setBackground(new RadialGradientPaint(

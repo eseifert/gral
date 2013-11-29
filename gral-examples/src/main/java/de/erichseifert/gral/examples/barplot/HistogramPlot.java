@@ -63,7 +63,7 @@ public class HistogramPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 65.0, 50.0, 40.0));
-		plot.setSetting(BarPlot.TITLE,
+		plot.getTitle().setText(
 				String.format("Distribution of %d random samples", data.getRowCount()));
 		plot.setBarWidth(0.78);
 

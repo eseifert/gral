@@ -160,22 +160,8 @@ public class PlotTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		assertNull(plot.getSetting(Plot.TITLE));
-
-		// Set
-		plot.setSetting(Plot.TITLE, "foobar");
-		assertEquals("foobar", plot.<String>getSetting(Plot.TITLE));
-
-		// Remove
-		plot.removeSetting(Plot.TITLE);
-		assertNull(plot.getSetting(Plot.TITLE));
-	}
-
-	@Test
 	public void testDraw() {
-		plot.setSetting(Plot.TITLE, "foobar");
+		plot.getTitle().setText("foobar");
 		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
 		plot.setSetting(Plot.BORDER, new BasicStroke(1f));
 

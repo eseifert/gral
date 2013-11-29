@@ -75,7 +75,7 @@ public class XYPlotTest {
 
 		// XYPlot with all options turned on
 		plot = new MockXYPlot(data);
-		plot.setSetting(XYPlot.TITLE, "foobar");
+		plot.getTitle().setText("foobar");
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
 		plot.setSetting(XYPlot.LEGEND, true);
@@ -84,7 +84,7 @@ public class XYPlotTest {
 		plots.add(plot);
 
 		plot = new MockXYPlot(data);
-		plot.setSetting(XYPlot.TITLE, null);
+		plot.getTitle().setText(null);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
 		plot.setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
 		plot.setSetting(XYPlot.LEGEND, false);
