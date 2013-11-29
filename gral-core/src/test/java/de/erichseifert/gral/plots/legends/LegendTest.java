@@ -102,5 +102,6 @@ public class LegendTest {
 		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
+		assertEquals(original.getFont(), deserialized.getFont());
     }
 }

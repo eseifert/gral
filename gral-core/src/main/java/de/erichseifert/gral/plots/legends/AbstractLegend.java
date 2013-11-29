@@ -84,6 +84,8 @@ public abstract class AbstractLegend extends StylableContainer
 	/** Stroke used to draw the border of the legend. */
 	// Property will be serialized using a wrapper
 	private transient Stroke borderStroke;
+	/** Font used to display the labels. */
+	private Font font;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -94,23 +96,32 @@ public abstract class AbstractLegend extends StylableContainer
 
 		/** Settings for determining the visual of the symbol. */
 		private final SettingsStorage settings;
+		private Font font;
 
 		/**
 		 * Initializes a new instances.
 		 * @param settings Settings for determining the appearance of the symbol.
 		 */
-		public AbstractSymbol(SettingsStorage settings) {
+		public AbstractSymbol(SettingsStorage settings, Font font) {
 			this.settings = settings;
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			double fontSize = settings.<Font>getSetting(FONT).getSize2D();
+			double fontSize = getFont().getSize2D();
 			Dimension2D symbolSize = settings.getSetting(SYMBOL_SIZE);
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);
 			return size;
+		}
+
+		public Font getFont() {
+			return font;
+		}
+
+		public void setFont(Font font) {
+			this.font = font;
 		}
 	}
 
@@ -174,7 +185,8 @@ public abstract class AbstractLegend extends StylableContainer
 
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
-		setSettingDefault(FONT, Font.decode(null));
+		font = Font.decode(null);
+		setDrawableFonts(font);
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
 		setSettingDefault(ALIGNMENT_X, 0.0);
@@ -245,7 +257,7 @@ public abstract class AbstractLegend extends StylableContainer
 		sources.add(source);
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
-			Font font = this.<Font>getSetting(FONT);
+			Font font = getFont();
 			Item item = new Item(row, this, label, font);
 			add(item);
 			components.put(row, item);
@@ -320,19 +332,11 @@ public abstract class AbstractLegend extends StylableContainer
 			Orientation orientation = getSetting(ORIENTATION);
 			Dimension2D gap = getSetting(GAP);
 			if (GAP.equals(key) && gap != null) {
-				double fontSize = this.<Font>getSetting(FONT).getSize2D();
+				double fontSize = getFont().getSize2D();
 				gap.setSize(gap.getWidth()*fontSize, gap.getHeight()*fontSize);
 			}
 			Layout layout = new StackedLayout(orientation, gap);
 			setLayout(layout);
-		} else if (FONT.equals(key)) {
-			for (Drawable drawable : components.values()) {
-				if (drawable instanceof Item) {
-					Item item = (Item) drawable;
-					Font font = getSetting(FONT);
-					item.label.setFont(font);
-				}
-			}
 		}
 	}
 
@@ -366,6 +370,19 @@ public abstract class AbstractLegend extends StylableContainer
 	 */
 	protected void invalidate() {
 		valid = false;
+	}
+
+	/**
+	 * Sets the font of the contained drawables.
+	 * @param font Font to be set.
+	 */
+	protected final void setDrawableFonts(Font font) {
+		for (Drawable drawable : components.values()) {
+			if (drawable instanceof Item) {
+				Item item = (Item) drawable;
+				item.label.setFont(font);
+			}
+		}
 	}
 
 	/**
@@ -411,5 +428,16 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void setBorderStroke(Stroke borderStroke) {
 		this.borderStroke = borderStroke;
+	}
+
+	@Override
+	public Font getFont() {
+		return font;
+	}
+
+	@Override
+	public void setFont(Font font) {
+		this.font = font;
+		setDrawableFonts(font);
 	}
 }
