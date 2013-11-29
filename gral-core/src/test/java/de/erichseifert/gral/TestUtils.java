@@ -269,4 +269,31 @@ public class TestUtils {
 			org.junit.Assert.assertEquals(message, expected, actual);
 		}
 	}
+
+	// TODO: Duplicate code. Taken from TestUtils.assertSetting.
+	public static <T extends Shape> void assertShapeEquals(T expected, T actual) {
+		// Line2D instances can't be compared. See Java bug 5057070
+		// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
+		if (expected instanceof Line2D) {
+			if (actual == null) {
+				org.junit.Assert.assertEquals(expected, actual);
+			}
+
+			List<PathSegment> segsExpected =
+				GeometryUtils.getSegments((Shape) expected);
+			List<PathSegment> segsActual =
+				GeometryUtils.getSegments((Shape) actual);
+			org.junit.Assert.assertEquals(segsExpected.size(), segsActual.size());
+			for (int i = 0; i < segsExpected.size(); i++) {
+				PathSegment segExpected = segsExpected.get(i);
+				PathSegment segActual = segsActual.get(i);
+				org.junit.Assert.assertEquals(segExpected.type, segActual.type);
+				org.junit.Assert.assertEquals(segExpected.start, segActual.start);
+				org.junit.Assert.assertEquals(segExpected.end, segActual.end);
+				org.junit.Assert.assertArrayEquals(segExpected.coords, segActual.coords, DELTA);
+			}
+		} else {
+			org.junit.Assert.assertEquals(expected, actual);
+		}
+	}
 }

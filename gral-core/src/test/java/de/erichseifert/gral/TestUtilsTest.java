@@ -29,6 +29,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import org.junit.Test;
@@ -58,5 +61,49 @@ public class TestUtilsTest {
 		Color color = Color.BLACK;
 		image.setRGB(0, 0, color.getRGB());
 		assertNotEmpty(image);
+	}
+
+	@Test
+	public void testAssertShapeEquals() {
+		// Rectangle2D.Double
+		Shape s1 = new Rectangle2D.Double();
+		try {
+			TestUtils.assertShapeEquals(s1, null);
+		} catch (AssertionError e) {
+		}
+		try {
+			TestUtils.assertShapeEquals(null, s1);
+		} catch (AssertionError e) {
+		}
+		Shape s2 = new Rectangle2D.Double();
+		TestUtils.assertShapeEquals(s1, s2);
+		TestUtils.assertShapeEquals(s2, s1);
+
+		// Line2D.Double
+		Line2D l1 = new Line2D.Double();
+		try {
+			TestUtils.assertShapeEquals(l1, null);
+		} catch (AssertionError e) {
+		}
+		try {
+			TestUtils.assertShapeEquals(null, l1);
+		} catch (AssertionError e) {
+		}
+		Line2D l2 = new Line2D.Double();
+		TestUtils.assertShapeEquals(l1, l2);
+		TestUtils.assertShapeEquals(l2, l1);
+
+		l2.setLine(0.0, 0.0, 1.0, 1.0);
+		try {
+			TestUtils.assertShapeEquals(l1, l2);
+		} catch (AssertionError e) {
+		}
+		try {
+			TestUtils.assertShapeEquals(l2, l1);
+		} catch (AssertionError e) {
+		}
+		l1.setLine(0.0, 0.0, 1.0, 1.0);
+		TestUtils.assertShapeEquals(l1, l2);
+		TestUtils.assertShapeEquals(l2, l1);
 	}
 }
