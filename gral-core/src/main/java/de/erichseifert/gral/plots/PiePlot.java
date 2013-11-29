@@ -808,7 +808,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @return A drawable object that can be used to display the symbol.
 		 */
 		public Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(this, getFont()) {
+			return new AbstractSymbol(this) {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = -5460249256507481057L;
 

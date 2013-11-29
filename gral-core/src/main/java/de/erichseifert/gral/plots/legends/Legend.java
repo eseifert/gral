@@ -5,6 +5,7 @@ import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
 
+import de.erichseifert.gral.SymbolSettingProvider;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
@@ -16,7 +17,7 @@ import de.erichseifert.gral.util.Orientation;
  * Interface for a legend that display visual examples of the variables used in
  * a plot.
  */
-public interface Legend extends Container, Drawable, SettingsStorage {
+public interface Legend extends Container, Drawable, SettingsStorage, SymbolSettingProvider {
 	/** Key for specifying a {@link Number} value describing the horizontal
 	alignment of the legend relative to the plot area. {@code 0.0} means left,
 	{@code 0.5} means centered, and {@code 1.0} means right. */

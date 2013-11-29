@@ -37,6 +37,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import de.erichseifert.gral.SymbolSettingProvider;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -50,7 +51,6 @@ import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.StylableContainer;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
@@ -101,35 +101,24 @@ public abstract class AbstractLegend extends StylableContainer
 		private static final long serialVersionUID = 7475404103140652668L;
 
 		/** Settings for determining the visual of the symbol. */
-		private final SettingsStorage settings;
-		private Font font;
+		private final SymbolSettingProvider settings;
 
 		/**
 		 * Initializes a new instances.
 		 * @param settings Settings for determining the appearance of the symbol.
 		 */
-		public AbstractSymbol(SettingsStorage settings, Font font) {
+		public AbstractSymbol(SymbolSettingProvider settings) {
 			this.settings = settings;
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			double fontSize = getFont().getSize2D();
-			// FIXME: Retrieve proper symbol size
-			// Dimension2D symbolSize = settings.getSetting(SYMBOL_SIZE);
-			Dimension2D symbolSize = new de.erichseifert.gral.util.Dimension2D.Double();
+			double fontSize = settings.getFont().getSize2D();
+			Dimension2D symbolSize = settings.getSymbolSize();
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);
 			return size;
-		}
-
-		public Font getFont() {
-			return font;
-		}
-
-		public void setFont(Font font) {
-			this.font = font;
 		}
 	}
 
