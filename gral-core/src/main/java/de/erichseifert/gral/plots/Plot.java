@@ -34,6 +34,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
+import de.erichseifert.gral.util.Location;
 
 /**
  * <p>Interface for classes that display data in a plot.</p>
@@ -46,9 +47,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying a {@link de.erichseifert.gral.util.Location} value for
-	the positioning of the legend. */
-	Key LEGEND_LOCATION = new Key("plot.legend.location"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value that defines the spacing
 	between the plot area and the legend. The distance is defined in font
 	height. */
@@ -270,4 +268,16 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	 *         {@code false} if the legend should be hidden.
 	 */
 	void setLegendVisible(boolean legendVisible);
+
+	/**
+	 * Returns the current positioning of the legend inside the plot.
+	 * @return Current positioning of the legend inside the plot.
+	 */
+	Location getLegendLocation();
+
+	/**
+	 * Sets the positioning of the legend inside the plot.
+	 * @param location Positioning of the legend inside the plot.
+	 */
+	void setLegendLocation(Location location);
 }

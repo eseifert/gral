@@ -114,5 +114,6 @@ public class XYPlotTest {
 		assertEquals(original.getBorder(), deserialized.getBorder());
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
+		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 	}
 }

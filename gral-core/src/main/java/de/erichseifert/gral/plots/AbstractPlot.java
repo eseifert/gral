@@ -108,6 +108,7 @@ public abstract class AbstractPlot extends StylableContainer
 	private Paint color;
 
 	private boolean legendVisible;
+	private Location legendLocation;
 
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
@@ -141,7 +142,7 @@ public abstract class AbstractPlot extends StylableContainer
 		border = null;
 		color = Color.BLACK;
 		legendVisible = false;
-		setSettingDefault(LEGEND_LOCATION, Location.CENTER);
+		legendLocation = Location.CENTER;
 		setSettingDefault(LEGEND_DISTANCE, 2.0);
 
 		add(title, Location.NORTH);
@@ -408,7 +409,7 @@ public abstract class AbstractPlot extends StylableContainer
 		}
 		this.legend = legend;
 		if (this.legend != null) {
-			Location constraints = getSetting(LEGEND_LOCATION);
+			Location constraints = getLegendLocation();
 			legendContainer.add(legend, constraints);
 			for (DataSource source : getVisibleData()) {
 				legend.add(source);
@@ -456,6 +457,20 @@ public abstract class AbstractPlot extends StylableContainer
 		this.legendVisible = legendVisible;
 	}
 
+	@Override
+	public Location getLegendLocation() {
+		return legendLocation;
+	}
+
+	@Override
+	public void setLegendLocation(Location location) {
+		legendLocation = location;
+		if (legend != null) {
+			legendContainer.remove(legend);
+			legendContainer.add(legend, legendLocation);
+		}
+	}
+
 	/**
 	 * Invoked if a setting has changed.
 	 * @param event Event containing information about the changed setting.
@@ -463,13 +478,7 @@ public abstract class AbstractPlot extends StylableContainer
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (LEGEND_LOCATION.equals(key)) {
-			Location constraints = getSetting(LEGEND_LOCATION);
-			if (legend != null) {
-				legendContainer.remove(legend);
-				legendContainer.add(legend, constraints);
-			}
-		} else if (LEGEND_DISTANCE.equals(key)) {
+		if (LEGEND_DISTANCE.equals(key)) {
 			// TODO Use real font size instead of fixed value
 			final double fontSize = 10.0;
 
