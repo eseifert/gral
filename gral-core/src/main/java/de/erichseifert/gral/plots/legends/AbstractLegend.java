@@ -135,7 +135,7 @@ public abstract class AbstractLegend extends StylableContainer
 			add(symbol, Location.WEST);
 
 			label = new Label(labelText);
-			label.setSetting(Label.FONT, font);
+			label.setFont(font);
 			label.setAlignmentX(0.0);
 			label.setAlignmentY(0.5);
 			add(label, Location.CENTER);
@@ -319,7 +319,7 @@ public abstract class AbstractLegend extends StylableContainer
 				if (drawable instanceof Item) {
 					Item item = (Item) drawable;
 					Font font = getSetting(FONT);
-					item.label.setSetting(Label.FONT, font);
+					item.label.setFont(font);
 				}
 			}
 		}

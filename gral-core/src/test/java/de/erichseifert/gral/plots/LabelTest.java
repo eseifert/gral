@@ -92,7 +92,7 @@ public class LabelTest {
 		assertEquals(0.5, label.getAlignmentX().doubleValue(), DELTA);
 		assertEquals(0.5, label.getAlignmentY().doubleValue(), DELTA);
 		assertEquals(Color.BLACK, label.getSetting(Label.COLOR));
-		assertEquals(Font.decode(null), label.getSetting(Label.FONT));
+		assertEquals(Font.decode(null), label.getFont());
 		assertEquals(0.0, label.<Number>getSetting(Label.ROTATION).doubleValue(), DELTA);
 
 		// Set
@@ -133,5 +133,6 @@ public class LabelTest {
 		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getAlignmentX(), original.getAlignmentX());
 		assertEquals(original.getAlignmentY(), original.getAlignmentY());
+		assertEquals(original.getFont(), original.getFont());
     }
 }

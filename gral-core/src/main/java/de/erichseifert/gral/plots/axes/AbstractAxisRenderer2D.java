@@ -303,8 +303,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 							String tickLabelText = tick.label;
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
 								Label tickLabel = new Label(tickLabelText);
-								tickLabel.setSetting(Label.FONT,
-										renderer.getTickFont());
+								tickLabel.setFont(renderer.getTickFont());
 								// TODO Allow separate colors for ticks and tick labels?
 								tickLabel.setSetting(Label.COLOR, tickPaint);
 								double labelDist = tickLengthOuter + tickLabelDist;
@@ -320,8 +319,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 				String labelText = renderer.getLabel();
 				if (labelText != null && !labelText.trim().isEmpty()) {
 					Label axisLabel = new Label(labelText);
-					axisLabel.setSetting(Label.FONT,
-							renderer.getLabelFont());
+					axisLabel.setFont(renderer.getLabelFont());
 					axisLabel.setSetting(Label.COLOR,
 							renderer.getLabelColor());
 

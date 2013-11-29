@@ -109,7 +109,7 @@ public abstract class AbstractPlot extends StylableContainer
 		super(new EdgeLayout(20.0, 20.0));
 
 		title = new Label();
-		title.setSetting(Label.FONT, Font.decode(null).deriveFont(18f));
+		title.setFont(Font.decode(null).deriveFont(18f));
 
 		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
 
@@ -427,7 +427,7 @@ public abstract class AbstractPlot extends StylableContainer
 			if (font == null) {
 				font = Font.decode(null).deriveFont(18f);
 			}
-			title.setSetting(Label.FONT, font);
+			title.setFont(font);
 		} else if (LEGEND_LOCATION.equals(key)) {
 			Location constraints = getSetting(LEGEND_LOCATION);
 			if (legend != null) {

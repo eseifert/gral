@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying the {@link java.awt.Font} instance used to display
-	the text of this label. */
-	public static final Key FONT =
-		new Key("label.font"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the rotation of this
 	label in degrees. The rotation will be counterclockwise. */
 	public static final Key ROTATION =
@@ -74,6 +70,8 @@ public class Label extends StylableDrawable {
 	private Number alignmentX;
 	/** Vertical text alignment. */
 	private Number alignmentY;
+	/** Font used to display the text of this label. */
+	private Font font;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -96,7 +94,7 @@ public class Label extends StylableDrawable {
 
 		alignmentX = 0.5;
 		alignmentY = 0.5;
-		setSettingDefault(FONT, Font.decode(null));
+		font = Font.decode(null);
 		setSettingDefault(ROTATION, 0.0);
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ALIGNMENT_TEXT, 0.5);
@@ -189,7 +187,7 @@ public class Label extends StylableDrawable {
 	 * @return Outline for this label.
 	 */
 	protected Shape getOutline(boolean wordWrap) {
-		Font font = this.<Font>getSetting(FONT);
+		Font font = getFont();
 		float wrappingWidth = 0f;
 		if (wordWrap) {
 			double rotation = Math.toRadians(this.<Number>getSetting(
@@ -277,8 +275,8 @@ public class Label extends StylableDrawable {
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (ROTATION.equals(key) || FONT.equals(key) ||
-				ALIGNMENT_TEXT.equals(key) || WORD_WRAP.equals(key)) {
+		if (ROTATION.equals(key) || ALIGNMENT_TEXT.equals(key) ||
+				WORD_WRAP.equals(key)) {
 			invalidate();
 		}
 	}
@@ -327,5 +325,22 @@ public class Label extends StylableDrawable {
 	 */
 	public void setAlignmentY(Number alignmentY) {
 		this.alignmentY = alignmentY;
+	}
+
+	/**
+	 * Returns the font used to display the text of this label.
+	 * @return Font used for text display.
+	 */
+	public Font getFont() {
+		return font;
+	}
+
+	/**
+	 * Sets the font used to display the text of this label.
+	 * @param font Font used for text display.
+	 */
+	public void setFont(Font font) {
+		this.font = font;
+		invalidate();
 	}
 }

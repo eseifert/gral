@@ -705,7 +705,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			label.setAlignmentY(0.5*dirY + 0.5);
 			label.setSetting(Label.ROTATION, rotation);
 			label.setSetting(Label.COLOR, paint);
-			label.setSetting(Label.FONT, font);
+			label.setFont(font);
 
 			// Calculate label position
 			Dimension2D sizeLabel = label.getPreferredSize();
