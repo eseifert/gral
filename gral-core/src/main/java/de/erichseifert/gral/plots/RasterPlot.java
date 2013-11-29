@@ -76,19 +76,14 @@ public class RasterPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5844862286358250831L;
 
-	/** Key for specifying a {@link java.awt.geom.Point2D} instance which defines
-	the horizontal and vertical offset of the raster from the origin. */
-	public static final Key OFFSET =
-		new Key("rasterplot.offset"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.awt.geom.Dimension2D} instance which
-	defines the horizontal and vertical distance of the raster pixels. */
-	public static final Key DISTANCE =
-		new Key("rasterplot.distance"); //$NON-NLS-1$
 	/** Key for specifying an instance of
 	{@link de.erichseifert.gral.plots.colors.ColorMapper} used for mapping the
 	pixel values to colors. */
 	public static final Key COLORS =
 		new Key("rasterplot.color"); //$NON-NLS-1$
+
+	private final Point2D offset;
+	private final Dimension2D distance;
 
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
@@ -287,8 +282,8 @@ public class RasterPlot extends XYPlot {
 	 * @param data Data to be displayed.
 	 */
 	public RasterPlot(DataSource data) {
-		setSettingDefault(OFFSET, new Point2D.Double());
-		setSettingDefault(DISTANCE, new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0));
+		offset = new Point2D.Double();
+		distance = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
 		setSettingDefault(COLORS, new Grayscale());
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
@@ -308,7 +303,7 @@ public class RasterPlot extends XYPlot {
 	@Override
 	public void autoscaleAxis(String axisName) {
 		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
-			Dimension2D dist = getSetting(DISTANCE);
+			Dimension2D dist = getDistance();
 			// In case we get called before settings defaults have been set,
 			// just set distance to a sane default
 			if (dist == null) {
@@ -378,5 +373,40 @@ public class RasterPlot extends XYPlot {
 		// Adjust rendering
 		setLineRenderer(source, null);
 		setPointRenderer(source, new RasterRenderer(this));
+	}
+
+	/**
+	 * Returns the horizontal and vertical offset of the raster from the
+	 * origin.
+	 * @return Horizontal and vertical offset of the raster from the origin.
+	 */
+	public Point2D getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Sets the horizontal and vertical offset of the raster from the
+	 * origin.
+	 * @param offset Horizontal and vertical offset of the raster from the
+	 * origin.
+	 */
+	public void setOffset(Point2D offset) {
+		this.offset.setLocation(offset);
+	}
+
+	/**
+	 * Returns the horizontal and vertical distance of the raster elements.
+	 * @return Horizontal and vertical distance of the raster elements.
+	 */
+	public Dimension2D getDistance() {
+		return distance;
+	}
+
+	/**
+	 * Returns the horizontal and vertical distance of the raster elements.
+	 * @param distance Horizontal and vertical distance of the raster elements.
+	 */
+	public void setDistance(Dimension2D distance) {
+		this.distance.setSize(distance);
 	}
 }
