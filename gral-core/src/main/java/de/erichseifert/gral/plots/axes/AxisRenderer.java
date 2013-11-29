@@ -36,10 +36,6 @@ import de.erichseifert.gral.util.PointND;
  */
 public interface AxisRenderer extends SettingsStorage {
 	/** Key for specifying a {@link Boolean} value which decides
-	 whether the axis direction will be changed. */
-	Key SHAPE_DIRECTION_SWAPPED =
-		new Key("axis.shape.directionSwapped"); //$NON-NLS-1$
-	/** Key for specifying a {@link Boolean} value which decides
 	 whether major ticks are drawn. */
 	Key TICKS =
 		new Key("axis.ticks.major"); //$NON-NLS-1$
@@ -280,4 +276,18 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param shapeStroke Stroke used for drawing the shape.
 	 */
 	void setShapeStroke(Stroke shapeStroke);
+
+	/**
+	 * Returns whether the axis direction will be changed.
+	 * @return {@code true} if the shape of the axis is inverted,
+	 * {@code false} otherwise.
+	 */
+	boolean isShapeDirectionSwapped();
+
+	/**
+	 * Sets whether the axis direction will be changed.
+	 * @param shapeDirectionSwapped {@code true} if the shape of the axis is inverted,
+	 * {@code false} otherwise.
+	 */
+	void setShapeDirectionSwapped(boolean shapeDirectionSwapped);
 }

@@ -96,6 +96,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	/** Stroke used for drawing the axis shape. */
 	// Property will be serialized using a wrapper
 	private transient Stroke shapeStroke;
+	/** Decides whether the axis direction will be changed. */
+	private boolean shapeDirectionSwapped;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -104,8 +106,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		addSettingsListener(this);
 
 		intersection = 0.0;
-		// The direction must defined as swapped before SHAPE is constructed.
-		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
+		// The direction must defined as swapped before the shape is evaluated.
+		shapeDirectionSwapped = false;
 		shape = new Line2D.Double(0.0, 0.0, 1.0, 0.0);
 		evaluateShape(shape);
 
@@ -113,7 +115,6 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		shapeNormalOrientationClockwise = false;
 		shapeStroke = new BasicStroke();
 		shapeColor = Color.BLACK;
-		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 
 		setSettingDefault(TICKS, true);
 		setSettingDefault(TICKS_SPACING, 0.0);
@@ -623,8 +624,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * @param shape Shape to be evaluated.
 	 */
 	protected final void evaluateShape(Shape shape) {
-		boolean directionSwapped =
-			this.<Boolean>getSetting(SHAPE_DIRECTION_SWAPPED);
+		boolean directionSwapped = isShapeDirectionSwapped();
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 		shapeSegmentLengths = new double[shapeLines.length];
 		// First length is always 0.0, last length is the total length
@@ -740,5 +740,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setShapeStroke(Stroke shapeStroke) {
 		this.shapeStroke = shapeStroke;
+	}
+
+	@Override
+	public boolean isShapeDirectionSwapped() {
+		return shapeDirectionSwapped;
+	}
+
+	@Override
+	public void setShapeDirectionSwapped(boolean shapeDirectionSwapped) {
+		this.shapeDirectionSwapped = shapeDirectionSwapped;
 	}
 }

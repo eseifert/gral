@@ -324,8 +324,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 				AxisRenderer renderer =
 					getPlot().getAxisRenderer(axisName);
 				if (renderer != null) {
-					boolean swapped = renderer.<Boolean>getSetting(
-						AxisRenderer.SHAPE_DIRECTION_SWAPPED);
+					boolean swapped = renderer.isShapeDirectionSwapped();
 					if (swapped) {
 						delta = -delta;
 					}
