@@ -69,13 +69,13 @@ public class HistogramPlot extends ExamplePanel {
 		plot.setSetting(BarPlot.BAR_WIDTH, 0.78);
 
 		// Format x axis
-		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
+		plot.getAxisRenderer(BarPlot.AXIS_X).setTickAlignment(0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setTickSpacing(0.8);
 		plot.getAxisRenderer(BarPlot.AXIS_X).setSetting(AxisRenderer.TICKS_MINOR, false);
 		// Format y axis
 		plot.getAxis(BarPlot.AXIS_Y).setRange(0.0,
 				MathUtils.ceil(histogram.getStatistics().get(Statistics.MAX)*1.1, 25.0));
-		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_ALIGNMENT, 0.0);
+		plot.getAxisRenderer(BarPlot.AXIS_Y).setTickAlignment(0.0);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setSetting(AxisRenderer.TICKS_MINOR, false);
 		plot.getAxisRenderer(BarPlot.AXIS_Y).setIntersection(-4.4);
 

@@ -35,10 +35,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Number} value for the alignment
-	of major ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
-	Key TICKS_ALIGNMENT =
-		new Key("axis.ticks.major.alignment"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance to be used to
 	display the text of major ticks. */
 	Key TICKS_FONT =
@@ -331,4 +327,20 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickStroke Stroke used for major tick drawing.
 	 */
 	void setTickStroke(Stroke tickStroke);
+
+	/**
+	 * Returns the alignment of major ticks relative to the axis.
+	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
+	 * 1.0 means inside the plotting area.
+	 * @return Major tick alignment relative to the axis.
+	 */
+	Number getTickAlignment();
+
+	/**
+	 * Returns the alignment of major ticks relative to the axis.
+	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
+	 * 1.0 means inside the plotting area.
+	 * @param tickAlignment Major tick alignment relative to the axis.
+	 */
+	void setTickAlignment(Number tickAlignment);
 }

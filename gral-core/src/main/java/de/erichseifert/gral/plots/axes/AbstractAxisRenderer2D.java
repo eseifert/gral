@@ -109,6 +109,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	/** Stroke which is used to draw all major ticks. */
 	// Property will be serialized using a wrapper
 	private transient Stroke tickStroke;
+	/** Alignment of major ticks relative to the axis. */
+	private Number tickAlignment;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -132,7 +134,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		ticksAutoSpaced = false;
 		tickLength = 1.0;
 		tickStroke = new BasicStroke();
-		setSettingDefault(TICKS_ALIGNMENT, 0.5);
+		tickAlignment = 0.5;
 		setSettingDefault(TICKS_FONT, Font.decode(null));
 		setSettingDefault(TICKS_COLOR, Color.BLACK);
 
@@ -247,7 +249,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						} else {
 							tickLength = getTickLengthAbsolute();
 							tickAlignment =
-								renderer.<Number>getSetting(TICKS_ALIGNMENT)
+								renderer.getTickAlignment()
 								.doubleValue();
 							tickPaint =
 								renderer.<Paint>getSetting(TICKS_COLOR);
@@ -299,7 +301,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
 					double tickLength = getTickLengthAbsolute();
-					double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
+					double tickAlignment = renderer.getTickAlignment()
 						.doubleValue();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 					double tickLabelDist = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
@@ -377,7 +379,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
 				double fontSize = renderer.<Font>getSetting(TICKS_FONT).getSize2D();
 				double tickLength = getTickLengthAbsolute();
-				double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
+				double tickAlignment = renderer.getTickAlignment()
 					.doubleValue();
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 				double labelDistance = renderer.<Number>getSetting(TICK_LABELS_DISTANCE)
@@ -816,5 +818,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickStroke(Stroke tickStroke) {
 		this.tickStroke = tickStroke;
+	}
+
+	@Override
+	public Number getTickAlignment() {
+		return tickAlignment;
+	}
+
+	@Override
+	public void setTickAlignment(Number tickAlignment) {
+		this.tickAlignment = tickAlignment;
 	}
 }
