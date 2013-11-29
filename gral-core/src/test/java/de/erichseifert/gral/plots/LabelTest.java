@@ -132,5 +132,6 @@ public class LabelTest {
 		assertEquals(original.getRotation(), deserialized.getRotation());
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.getTextAlignment(), deserialized.getTextAlignment());
+		assertEquals(original.isWordWrapEnabled(), deserialized.isWordWrapEnabled());
     }
 }

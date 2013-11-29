@@ -31,7 +31,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -47,11 +46,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying a {@link Boolean} value whether the words of the
-	text should be wrapped to fit the size of the label. */
-	public static final Key WORD_WRAP =
-		new Key("label.wordWrap"); //$NON-NLS-1$
-
 	/** Text for this label. */
 	private String text;
 	/** Horizontal label alignment. */
@@ -66,6 +60,8 @@ public class Label extends StylableDrawable {
 	private Paint color;
 	/** Relative text alignment. */
 	private Number textAlignment;
+	/** Decides whether the text should be wrapped. */
+	private boolean wordWrapEnabled;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -92,7 +88,7 @@ public class Label extends StylableDrawable {
 		rotation = 0.0;
 		color = Color.BLACK;
 		textAlignment = 0.5;
-		setSettingDefault(WORD_WRAP, Boolean.FALSE);
+		wordWrapEnabled = false;
 	}
 
 	/**
@@ -100,7 +96,7 @@ public class Label extends StylableDrawable {
 	 * @param context Environment used for drawing
 	 */
 	public void draw(DrawingContext context) {
-		boolean wordWrap = this.<Boolean>getSetting(WORD_WRAP);
+		boolean wordWrap = isWordWrapEnabled();
 		Shape labelShape = getCachedOutline(wordWrap);
 
 		if (labelShape == null) {
@@ -252,7 +248,7 @@ public class Label extends StylableDrawable {
 	 *         otherwise {@code false}.
 	 */
 	protected boolean isValid() {
-		boolean wordWrap = this.<Boolean>getSetting(WORD_WRAP);
+		boolean wordWrap = isWordWrapEnabled();
 		if (wordWrap) {
 			return outlineWrapped != null;
 		} else {
@@ -266,10 +262,6 @@ public class Label extends StylableDrawable {
 	 */
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
-		Key key = event.getKey();
-		if (WORD_WRAP.equals(key)) {
-			invalidate();
-		}
 	}
 
 	@Override
@@ -386,6 +378,23 @@ public class Label extends StylableDrawable {
 	 */
 	public void setTextAlignment(Number textAlignment) {
 		this.textAlignment = textAlignment;
+		invalidate();
+	}
+
+	/**
+	 * Returns whether words of the text should be wrapped to fit the size of the label.
+	 * @return {@code true} if the text should be wrapped, {@code false} otherwise.
+	 */
+	public boolean isWordWrapEnabled() {
+		return wordWrapEnabled;
+	}
+
+	/**
+	 * Sets whether words of the text should be wrapped to fit the size of the label.
+	 * @param wordWrapEnabled {@code true} if the text should be wrapped, {@code false} otherwise.
+	 */
+	public void setWordWrapEnabled(boolean wordWrapEnabled) {
+		this.wordWrapEnabled = wordWrapEnabled;
 		invalidate();
 	}
 }
