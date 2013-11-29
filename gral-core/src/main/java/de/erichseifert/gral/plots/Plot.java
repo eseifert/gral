@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.awt.Paint;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,9 +45,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * </ul>
  */
 public interface Plot extends Drawable, Container, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the background of the plot. */
-	Key BACKGROUND = new Key("plot.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	paint the border of the plot. */
 	Key BORDER = new Key("plot.border"); //$NON-NLS-1$
@@ -229,4 +227,17 @@ public interface Plot extends Drawable, Container, SettingsStorage {
 	 *        {@code false} otherwise.
 	 */
 	void setVisible(DataSource source, boolean visible);
+
+	/**
+	 * Returns the paint which is used to fill the background of the plot.
+	 * @return Paint which is used to fill the background of the plot.
+	 */
+	Paint getBackground();
+
+	/**
+	 * Sets the paint which will be used to fill the background of the plot.
+	 * @param background Paint which will be used to fill the background of the
+	 * plot.
+	 */
+	void setBackground(Paint background);
 }

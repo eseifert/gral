@@ -100,6 +100,8 @@ public abstract class AbstractPlot extends StylableContainer
 	/** AbstractPlot legend. */
 	private Legend legend;
 
+	private Paint background;
+
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
 	 * The series will be visible by default.
@@ -128,7 +130,7 @@ public abstract class AbstractPlot extends StylableContainer
 			add(source);
 		}
 
-		setSettingDefault(BACKGROUND, null);
+		background = null;
 		setSettingDefault(BORDER, null);
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(LEGEND, false);
@@ -146,7 +148,7 @@ public abstract class AbstractPlot extends StylableContainer
 	public void draw(DrawingContext context) {
 		Graphics2D graphics = context.getGraphics();
 
-		Paint bg = getSetting(BACKGROUND);
+		Paint bg = getBackground();
 		if (bg != null) {
 			GraphicsUtils.fillPaintedShape(graphics, getBounds(), bg, null);
 		}
@@ -405,6 +407,16 @@ public abstract class AbstractPlot extends StylableContainer
 				legend.add(source);
 			}
 		}
+	}
+
+	@Override
+	public Paint getBackground() {
+		return background;
+	}
+
+	@Override
+	public void setBackground(Paint background) {
+		this.background = background;
 	}
 
 	/**

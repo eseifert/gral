@@ -29,7 +29,6 @@ import java.awt.geom.Ellipse2D;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
-import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -62,19 +61,19 @@ public class SpiralPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0));  // Add a margin to the plot
-		plot.setSetting(Plot.BACKGROUND, new Color(0.75f, 0.75f, 0.75f));
+		plot.setBackground(new Color(0.75f, 0.75f, 0.75f));
 
 		// Format plot area
-		plot.getPlotArea().setBorderColor(null);        // Remove border of plot area
+		plot.getPlotArea().setBorderColor(null);    // Remove border of plot area
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false); // Disable vertical grid
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false); // Disable horizontal grid
-		plot.getPlotArea().setClippingArea(null);      // Disable clipping
+		plot.getPlotArea().setClippingArea(null);   // Disable clipping
 
 		// Format axes
 		plot.getAxisRenderer(XYPlot.AXIS_X).setShapeVisible(false);  // Disable x axis
-		plot.getAxisRenderer(XYPlot.AXIS_X).setTicksDrawn(false);          // Disable tick marks on x axis
+		plot.getAxisRenderer(XYPlot.AXIS_X).setTicksDrawn(false);    // Disable tick marks on x axis
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setShapeVisible(false);  // Disable y axis
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setTicksDrawn(false);          // Disable tick marks on y axis
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setTicksDrawn(false);    // Disable tick marks on y axis
 		plot.getAxis(XYPlot.AXIS_X).setRange(-10.0, 10.0);  // Scale x axis from -10 to 10
 		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);  // Scale y axis from -10 to 10
 

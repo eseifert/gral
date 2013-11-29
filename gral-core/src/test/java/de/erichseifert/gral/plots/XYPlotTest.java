@@ -23,11 +23,8 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -91,20 +88,6 @@ public class XYPlotTest {
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
 		plots.add(plot);
-	}
-
-	@Test
-	public void testSettings() {
-		for (MockXYPlot plot : plots) {
-			// Get
-			assertNull(plot.getSetting(Plot.BACKGROUND));
-			// Set
-			plot.setSetting(Plot.BACKGROUND, Color.WHITE);
-			assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
-			// Remove
-			plot.removeSetting(Plot.BACKGROUND);
-			assertNull(plot.getSetting(Plot.BACKGROUND));
-		}
 	}
 
 	@Test

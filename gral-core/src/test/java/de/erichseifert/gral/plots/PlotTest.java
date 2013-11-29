@@ -162,7 +162,7 @@ public class PlotTest {
 	@Test
 	public void testDraw() {
 		plot.getTitle().setText("foobar");
-		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
+		plot.setBackground(Color.WHITE);
 		plot.setSetting(Plot.BORDER, new BasicStroke(1f));
 
 		BufferedImage image = createTestImage();

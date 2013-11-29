@@ -24,11 +24,9 @@ package de.erichseifert.gral.plots;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -72,20 +70,6 @@ public class RasterPlotTest {
 	}
 
 	@Test
-	public void testSettings() {
-		// Get
-		assertNull(plot.getSetting(Plot.BACKGROUND));
-
-		// Set
-		plot.setSetting(Plot.BACKGROUND, Color.WHITE);
-		assertEquals(Color.WHITE, plot.<String>getSetting(Plot.BACKGROUND));
-
-		// Remove
-		plot.removeSetting(Plot.BACKGROUND);
-		assertNull(plot.getSetting(Plot.BACKGROUND));
-	}
-
-	@Test
 	public void testDraw() {
 		plot.getAxis(BarPlot.AXIS_X).setRange(-1.0, 3.0);
 		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
@@ -116,6 +100,8 @@ public class RasterPlotTest {
 		RasterPlot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
+
+		assertEquals(original.getBackground(), deserialized.getBackground());
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

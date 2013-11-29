@@ -73,7 +73,7 @@ public class SimpleXYPlot extends ExamplePanel {
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
-		plot.setSetting(XYPlot.BACKGROUND, Color.WHITE);
+		plot.setBackground(Color.WHITE);
 		plot.getTitle().setText(getDescription());
 
 		// Format plot area
