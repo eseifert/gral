@@ -35,10 +35,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance which is used
-	to draw all major ticks. */
-	Key TICKS_STROKE =
-		new Key("axis.ticks.major.stroke"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the alignment
 	of major ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	Key TICKS_ALIGNMENT =
@@ -323,4 +319,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickLength Tick length relative to the font height.
 	 */
 	void setTickLength(Number tickLength);
+
+	/**
+	 * Returns the stroke which is used to draw all major ticks.
+	 * @return Stroke used for major tick drawing.
+	 */
+	Stroke getTickStroke();
+
+	/**
+	 * Sets the stroke which is used to draw all major ticks.
+	 * @param tickStroke Stroke used for major tick drawing.
+	 */
+	void setTickStroke(Stroke tickStroke);
 }

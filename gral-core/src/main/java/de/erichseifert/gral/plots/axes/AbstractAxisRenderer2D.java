@@ -106,6 +106,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean ticksAutoSpaced;
 	/** Tick length relative to the font */
 	private Number tickLength;
+	/** Stroke which is used to draw all major ticks. */
+	// Property will be serialized using a wrapper
+	private transient Stroke tickStroke;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -128,7 +131,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickSpacing = 0.0;
 		ticksAutoSpaced = false;
 		tickLength = 1.0;
-		setSettingDefault(TICKS_STROKE, new BasicStroke());
+		tickStroke = new BasicStroke();
 		setSettingDefault(TICKS_ALIGNMENT, 0.5);
 		setSettingDefault(TICKS_FONT, Font.decode(null));
 		setSettingDefault(TICKS_COLOR, Color.BLACK);
@@ -248,8 +251,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 								.doubleValue();
 							tickPaint =
 								renderer.<Paint>getSetting(TICKS_COLOR);
-							tickStroke =
-								renderer.<Stroke>getSetting(TICKS_STROKE);
+							tickStroke = renderer.getTickStroke();
 						}
 
 						double tickLengthInner = tickLength*tickAlignment;
@@ -683,6 +685,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		// Normal deserialization
 		in.defaultReadObject();
 		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+		tickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 
 		// Restore listeners
 		addSettingsListener(this);
@@ -691,6 +694,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 		out.writeObject(SerializationUtils.wrap(shapeStroke));
+		out.writeObject(SerializationUtils.wrap(tickStroke));
 	}
 
 	@Override
@@ -802,5 +806,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickLength(Number tickLength) {
 		this.tickLength = tickLength;
+	}
+
+	@Override
+	public Stroke getTickStroke() {
+		return tickStroke;
+	}
+
+	@Override
+	public void setTickStroke(Stroke tickStroke) {
+		this.tickStroke = tickStroke;
 	}
 }
