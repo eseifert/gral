@@ -137,7 +137,7 @@ public abstract class AbstractLegend extends StylableContainer
 			label = new Label(labelText);
 			label.setSetting(Label.FONT, font);
 			label.setAlignmentX(0.0);
-			label.setSetting(Label.ALIGNMENT_Y, 0.5);
+			label.setAlignmentY(0.5);
 			add(label, Location.CENTER);
 		}
 

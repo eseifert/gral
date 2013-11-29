@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying a {@link Number} value for the vertical alignment
-	within the bounding rectangle. 0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y =
-		new Key("label.alignment.y"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance used to display
 	the text of this label. */
 	public static final Key FONT =
@@ -76,6 +72,8 @@ public class Label extends StylableDrawable {
 	private String text;
 	/** Horizontal text alignment. */
 	private Number alignmentX;
+	/** Vertical text alignment. */
+	private Number alignmentY;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -97,7 +95,7 @@ public class Label extends StylableDrawable {
 		this.text = text;
 
 		alignmentX = 0.5;
-		setSettingDefault(ALIGNMENT_Y, 0.5);
+		alignmentY = 0.5;
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(ROTATION, 0.0);
 		setSettingDefault(COLOR, Color.BLACK);
@@ -145,7 +143,7 @@ public class Label extends StylableDrawable {
 		// Position the text inside the bounding rectangle using the alignment
 		// settings
 		double alignmentX = getAlignmentX().doubleValue();
-		double alignmentY = this.<Number>getSetting(ALIGNMENT_Y).doubleValue();
+		double alignmentY = getAlignmentY().doubleValue();
 		shapePosX += alignmentX*(getWidth() - textBounds.getWidth());
 		shapePosY += alignmentY*(getHeight() - textBounds.getHeight());
 		// Apply positioning
@@ -311,5 +309,23 @@ public class Label extends StylableDrawable {
 	 */
 	public void setAlignmentX(Number alignmentX) {
 		this.alignmentX = alignmentX;
+	}
+
+	/**
+	 * Returns the vertical alignment within the bounding rectangle.
+	 * 0.0 means top, 1.0 means bottom.
+	 * @return Vertical text alignment.
+	 */
+	public Number getAlignmentY() {
+		return alignmentY;
+	}
+
+	/**
+	 * Sets the vertical alignment within the bounding rectangle.
+	 * 0.0 means top, 1.0 means bottom.
+	 * @param alignmentY Vertical text alignment.
+	 */
+	public void setAlignmentY(Number alignmentY) {
+		this.alignmentY = alignmentY;
 	}
 }

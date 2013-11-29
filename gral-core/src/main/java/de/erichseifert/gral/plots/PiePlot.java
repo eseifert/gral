@@ -702,7 +702,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			// Create a label with the settings
 			Label label = new Label(text);
 			label.setAlignmentX(1.0 - 0.5*dirX - 0.5);
-			label.setSetting(Label.ALIGNMENT_Y, 0.5*dirY + 0.5);
+			label.setAlignmentY(0.5*dirY + 0.5);
 			label.setSetting(Label.ROTATION, rotation);
 			label.setSetting(Label.COLOR, paint);
 			label.setSetting(Label.FONT, font);

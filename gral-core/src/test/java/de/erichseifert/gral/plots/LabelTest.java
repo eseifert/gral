@@ -90,7 +90,7 @@ public class LabelTest {
 	public void testSettings() {
 		Label label = new MockLabel("foobar");
 		assertEquals(0.5, label.getAlignmentX().doubleValue(), DELTA);
-		assertEquals(0.5, label.<Number>getSetting(Label.ALIGNMENT_Y).doubleValue(), DELTA);
+		assertEquals(0.5, label.getAlignmentY().doubleValue(), DELTA);
 		assertEquals(Color.BLACK, label.getSetting(Label.COLOR));
 		assertEquals(Font.decode(null), label.getSetting(Label.FONT));
 		assertEquals(0.0, label.<Number>getSetting(Label.ROTATION).doubleValue(), DELTA);
@@ -132,5 +132,6 @@ public class LabelTest {
 
 		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getAlignmentX(), original.getAlignmentX());
+		assertEquals(original.getAlignmentY(), original.getAlignmentY());
     }
 }
