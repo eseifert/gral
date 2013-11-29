@@ -115,6 +115,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Font tickFont;
 	/** Paint used to draw the shapes of major ticks. */
 	private Paint tickColor;
+	/** Decides whether tick labels will be shown. */
+	private boolean tickLabelsEnabled;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -142,7 +144,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickFont = Font.decode(null);
 		tickColor = Color.BLACK;
 
-		setSettingDefault(TICK_LABELS, true);
+		tickLabelsEnabled = true;
 		setSettingDefault(TICK_LABELS_FORMAT, NumberFormat.getInstance());
 		setSettingDefault(TICK_LABELS_DISTANCE, 1.0);
 		setSettingDefault(TICK_LABELS_OUTSIDE, true);
@@ -215,7 +217,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					List<Tick> ticks = getTicks(axis);
 
 					boolean isTickLabelVisible =
-						renderer.<Boolean>getSetting(TICK_LABELS);
+						renderer.isTickLabelsEnabled();
 					boolean isTickLabelOutside =
 						renderer.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
 					double tickLabelRotation =
@@ -852,5 +854,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickColor(Paint tickColor) {
 		this.tickColor = tickColor;
+	}
+
+	@Override
+	public boolean isTickLabelsEnabled() {
+		return tickLabelsEnabled;
+	}
+
+	@Override
+	public void setTickLabelsEnabled(boolean tickLabelsEnabled) {
+		this.tickLabelsEnabled = tickLabelsEnabled;
 	}
 }

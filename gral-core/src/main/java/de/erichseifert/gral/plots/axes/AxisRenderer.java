@@ -36,10 +36,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value whether tick labels will be
-	shown. */
-	Key TICK_LABELS =
-		new Key("axis.ticks.major.labels"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance which converts
 	the tick values to labels. */
 	Key TICK_LABELS_FORMAT =
@@ -360,4 +356,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickColor Paint used for major tick drawing.
 	 */
 	void setTickColor(Paint tickColor);
+
+	/**
+	 * Returns whether tick labels will be shown.
+	 * @return {@code true} if tick labels will be drawn, {@code false} otherwise.
+	 */
+	boolean isTickLabelsEnabled();
+
+	/**
+	 * Sets whether tick labels will be shown.
+	 * @param tickLabelsEnabled {@code true} if tick labels will be drawn, {@code false} otherwise.
+	 */
+	void setTickLabelsEnabled(boolean tickLabelsEnabled);
 }
