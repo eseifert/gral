@@ -98,6 +98,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private transient Stroke shapeStroke;
 	/** Decides whether the axis direction will be changed. */
 	private boolean shapeDirectionSwapped;
+	/** Decides whether major ticks are drawn. */
+	private boolean ticksDrawn;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -116,7 +118,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		shapeStroke = new BasicStroke();
 		shapeColor = Color.BLACK;
 
-		setSettingDefault(TICKS, true);
+		ticksDrawn = true;
 		setSettingDefault(TICKS_SPACING, 0.0);
 		setSettingDefault(TICKS_AUTO_SPACING, false);
 		setSettingDefault(TICKS_LENGTH, 1.0);
@@ -190,8 +192,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					renderer.<Font>getSetting(TICKS_FONT).getSize2D();
 
 				// Draw ticks
-				boolean drawTicksMajor =
-					renderer.<Boolean>getSetting(TICKS);
+				boolean drawTicksMajor = renderer.isTicksDrawn();
 				boolean drawTicksMinor =
 					renderer.<Boolean>getSetting(TICKS_MINOR);
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
@@ -750,5 +751,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setShapeDirectionSwapped(boolean shapeDirectionSwapped) {
 		this.shapeDirectionSwapped = shapeDirectionSwapped;
+	}
+
+	@Override
+	public boolean isTicksDrawn() {
+		return ticksDrawn;
+	}
+
+	@Override
+	public void setTicksDrawn(boolean ticksDrawn) {
+		this.ticksDrawn = ticksDrawn;
 	}
 }

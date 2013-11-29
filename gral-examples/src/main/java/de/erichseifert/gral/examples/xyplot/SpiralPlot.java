@@ -31,7 +31,6 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -73,9 +72,9 @@ public class SpiralPlot extends ExamplePanel {
 
 		// Format axes
 		plot.getAxisRenderer(XYPlot.AXIS_X).setShapeVisible(false);  // Disable x axis
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on x axis
+		plot.getAxisRenderer(XYPlot.AXIS_X).setTicksDrawn(false);          // Disable tick marks on x axis
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setShapeVisible(false);  // Disable y axis
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on y axis
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setTicksDrawn(false);          // Disable tick marks on y axis
 		plot.getAxis(XYPlot.AXIS_X).setRange(-10.0, 10.0);  // Scale x axis from -10 to 10
 		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);  // Scale y axis from -10 to 10
 

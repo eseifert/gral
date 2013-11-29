@@ -35,10 +35,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides
-	 whether major ticks are drawn. */
-	Key TICKS =
-		new Key("axis.ticks.major"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the interval
 	for major ticks. */
 	Key TICKS_SPACING =
@@ -248,8 +244,8 @@ public interface AxisRenderer extends SettingsStorage {
 	/**
 	 * Sets whether the normal vector of the shape is calculated using
 	 * clockwise or counterclockwise rotation.
-	 * @param shapeNormalOrientationClockwise {@code true} if the orientation is clockwise, {@code false} if it is
-	 * counterclockwise.
+	 * @param shapeNormalOrientationClockwise {@code true} if the orientation is clockwise,
+	 * {@code false} if it is counterclockwise.
 	 */
 	void setShapeNormalOrientationClockwise(boolean shapeNormalOrientationClockwise);
 
@@ -290,4 +286,17 @@ public interface AxisRenderer extends SettingsStorage {
 	 * {@code false} otherwise.
 	 */
 	void setShapeDirectionSwapped(boolean shapeDirectionSwapped);
+
+	/**
+	 * Returns whether major ticks are drawn.
+	 * @return {@code true} if major ticks should be drawn, {@code false} otherwise.
+	 */
+	boolean isTicksDrawn();
+
+	/**
+	 * Sets whether major ticks are drawn.
+	 * @param ticksDrawn {@code true} if major ticks should be drawn,
+	 * {@code false} otherwise.
+	 */
+	void setTicksDrawn(boolean ticksDrawn);
 }
