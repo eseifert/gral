@@ -27,8 +27,6 @@ import java.io.ObjectInputStream;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.plots.settings.SettingsListener;
 import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 
@@ -37,7 +35,7 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * settings.
  */
 public abstract class StylableDrawable extends AbstractDrawable
-		implements SettingsStorage, SettingsListener {
+		implements SettingsStorage {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 8679795250803282234L;
 
@@ -49,14 +47,6 @@ public abstract class StylableDrawable extends AbstractDrawable
 	 */
 	public StylableDrawable() {
 		settings = new BasicSettingsStorage();
-		settings.addSettingsListener(this);
-	}
-
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	/**
@@ -119,8 +109,5 @@ public abstract class StylableDrawable extends AbstractDrawable
 			throws ClassNotFoundException, IOException {
 		// Normal deserialization
 		in.defaultReadObject();
-
-		// Restore listeners
-		settings.addSettingsListener(this);
 	}
 }

@@ -28,7 +28,6 @@ import java.awt.Stroke;
 
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 
@@ -106,12 +105,4 @@ public abstract class PlotArea extends StylableDrawable {
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
-
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-	}
 }

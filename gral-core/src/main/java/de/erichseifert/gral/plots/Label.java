@@ -31,7 +31,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -254,14 +253,6 @@ public class Label extends StylableDrawable {
 		} else {
 			return outlineUnwrapped != null;
 		}
-	}
-
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	@Override
