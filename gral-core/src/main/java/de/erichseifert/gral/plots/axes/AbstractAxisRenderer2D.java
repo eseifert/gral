@@ -104,6 +104,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number tickSpacing;
 	/** Decides whether automatic tick spacing is enabled. */
 	private boolean ticksAutoSpaced;
+	/** Tick length relative to the font */
+	private Number tickLength;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -125,7 +127,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		ticksDrawn = true;
 		tickSpacing = 0.0;
 		ticksAutoSpaced = false;
-		setSettingDefault(TICKS_LENGTH, 1.0);
+		tickLength = 1.0;
 		setSettingDefault(TICKS_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_ALIGNMENT, 0.5);
 		setSettingDefault(TICKS_FONT, Font.decode(null));
@@ -240,8 +242,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 							tickStroke =
 								renderer.<Stroke>getSetting(TICKS_MINOR_STROKE);
 						} else {
-							tickLength =
-								renderer.<Number>getSetting(TICKS_LENGTH)
+							tickLength = getTickLength()
 								.doubleValue()*fontSize;
 							tickAlignment =
 								renderer.<Number>getSetting(TICKS_ALIGNMENT)
@@ -296,7 +297,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					axisLabel.setSetting(Label.COLOR,
 							renderer.<Paint>getSetting(LABEL_COLOR));
 
-					double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
+					double tickLength = renderer.getTickLength()
 						.doubleValue()*fontSize;
 					double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 						.doubleValue();
@@ -375,7 +376,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			public Dimension2D getPreferredSize() {
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
 				double fontSize = renderer.<Font>getSetting(TICKS_FONT).getSize2D();
-				double tickLength = renderer.<Number>getSetting(TICKS_LENGTH)
+				double tickLength = renderer.getTickLength()
 					.doubleValue()*fontSize;
 				double tickAlignment = renderer.<Number>getSetting(TICKS_ALIGNMENT)
 					.doubleValue();
@@ -785,5 +786,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksAutoSpaced(boolean ticksAutoSpaced) {
 		this.ticksAutoSpaced = ticksAutoSpaced;
+	}
+
+	@Override
+	public Number getTickLength() {
+		return tickLength;
+	}
+
+	@Override
+	public void setTickLength(Number tickLength) {
+		this.tickLength = tickLength;
 	}
 }
