@@ -127,6 +127,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number tickLabelRotation;
 	/** Decides whether minor ticks are drawn. */
 	private boolean ticksMinorEnabled;
+	/** Number of minor ticks between two major ticks. */
+	private int ticksMinorCount;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -163,7 +165,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(TICKS_CUSTOM, null);
 
 		ticksMinorEnabled = true;
-		setSettingDefault(TICKS_MINOR_COUNT, 1);
+		ticksMinorCount = 1;
 		setSettingDefault(TICKS_MINOR_LENGTH, 0.5);
 		setSettingDefault(TICKS_MINOR_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_MINOR_ALIGNMENT, 0.5);
@@ -921,5 +923,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksMinorEnabled(boolean ticksMinorEnabled) {
 		this.ticksMinorEnabled = ticksMinorEnabled;
+	}
+
+	@Override
+	public int getTicksMinorCount() {
+		return ticksMinorCount;
+	}
+
+	@Override
+	public void setTicksMinorCount(int ticksMinorCount) {
+		this.ticksMinorCount = ticksMinorCount;
 	}
 }

@@ -109,7 +109,7 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 			}
 		} else {
 			tickSpacing = getTickSpacing().doubleValue();
-			ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
+			ticksMinorCount = getTicksMinorCount();
 		}
 
 		double tickSpacingMinor = tickSpacing;

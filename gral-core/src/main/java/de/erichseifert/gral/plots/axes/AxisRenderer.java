@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying an {@link Integer} value for the count of minor
-	ticks. */
-	Key TICKS_MINOR_COUNT =
-		new Key("axis.ticks.minor.count"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the length of minor tick
 	strokes. The length is specified relative to font height. */
 	Key TICKS_MINOR_LENGTH =
@@ -410,4 +406,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param ticksMinorEnabled {@code true} if minor ticks are drawn, {@code false} otherwise.
 	 */
 	void setTicksMinorEnabled(boolean ticksMinorEnabled);
+
+	/**
+	 * Returns the count of minor ticks.
+	 * @return Number of minor ticks between two major ticks.
+	 */
+	int getTicksMinorCount();
+
+	/**
+	 * Sets the count of minor ticks.
+	 * @param ticksMinorCount Number of minor ticks between two major ticks.
+	 */
+	void setTicksMinorCount(int ticksMinorCount);
 }

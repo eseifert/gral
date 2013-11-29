@@ -114,7 +114,7 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 			tickSpacing = getTickSpacing().doubleValue();
 		}
 
-		int ticksMinorCount = this.<Integer>getSetting(TICKS_MINOR_COUNT);
+		int ticksMinorCount = getTicksMinorCount();
 		double tickSpacingMinor = (ticksMinorCount > 0)
 			? tickSpacing/(ticksMinorCount + 1) : tickSpacing;
 
