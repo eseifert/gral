@@ -84,6 +84,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number intersection;
 	/** Shape used for drawing. */
 	private Shape shape;
+	/** Decides whether the shape is drawn. */
+	private boolean shapeVisible;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -96,8 +98,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 		setShape(new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 
-
-		setSettingDefault(SHAPE_VISIBLE, true);
+		setShapeVisible(true);
 		setSettingDefault(SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
 		setSettingDefault(SHAPE_STROKE, new BasicStroke());
 		setSettingDefault(SHAPE_COLOR, Color.BLACK);
@@ -166,8 +167,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 				// Draw axis shape
 				Paint axisPaint = renderer.getSetting(SHAPE_COLOR);
 				Stroke axisStroke = renderer.getSetting(SHAPE_STROKE);
-				boolean isShapeVisible =
-					renderer.<Boolean>getSetting(SHAPE_VISIBLE);
+				boolean isShapeVisible = renderer.isShapeVisible();
 				if (isShapeVisible) {
 					Shape shape = renderer.getShape();
 					GraphicsUtils.drawPaintedShape(
@@ -674,12 +674,24 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		this.intersection = intersection;
 	}
 
+	@Override
 	public Shape getShape() {
 		return shape;
 	}
 
+	@Override
 	public void setShape(Shape shape) {
 		this.shape = shape;
 		evaluateShape(shape);
+	}
+
+	@Override
+	public boolean isShapeVisible() {
+		return shapeVisible;
+	}
+
+	@Override
+	public void setShapeVisible(boolean shapeVisible) {
+		this.shapeVisible = shapeVisible;
 	}
 }

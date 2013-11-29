@@ -916,7 +916,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		Shape shape = new Ellipse2D.Double(-1.0, -1.0, 2.0, 2.0);
 		renderer.setShape(shape);
 		// Don't show axis
-		renderer.setSetting(AxisRenderer.SHAPE_VISIBLE, false);
+		renderer.setShapeVisible(false);
 
 		setAxisRenderer(AXIS_TANGENTIAL, renderer);
 	}

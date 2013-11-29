@@ -33,10 +33,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides whether the
-	shape of the axis will be drawn. This doesn't influence ticks or labels. */
-	Key SHAPE_VISIBLE =
-		new Key("axis.shape.visible"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides whether normal
 	vector is calculated using clockwise ({@code true}) or counterclockwise
 	rotation ({@code false}). */
@@ -241,4 +237,18 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param shape Shape used for drawing.
 	 */
 	void setShape(Shape shape);
+
+	/**
+	 * Returns whether the shape of the axis will be drawn.
+	 * This doesn't influence ticks or labels.
+	 * @return {@code true} if the shape should be drawn, false otherwise.
+	 */
+	boolean isShapeVisible();
+
+	/**
+	 * Sets whether the shape of the axis will be drawn.
+	 * This doesn't influence ticks or labels.
+	 * @param shapeVisible {@code true} if the shape should be drawn, false otherwise.
+	 */
+	void setShapeVisible(boolean shapeVisible);
 }

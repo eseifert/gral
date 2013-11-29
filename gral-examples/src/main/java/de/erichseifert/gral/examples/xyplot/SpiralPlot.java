@@ -72,9 +72,9 @@ public class SpiralPlot extends ExamplePanel {
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.CLIPPING, null);      // Disable clipping
 
 		// Format axes
-		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.SHAPE_VISIBLE, false);  // Disable x axis
+		plot.getAxisRenderer(XYPlot.AXIS_X).setShapeVisible(false);  // Disable x axis
 		plot.getAxisRenderer(XYPlot.AXIS_X).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on x axis
-		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.SHAPE_VISIBLE, false);  // Disable y axis
+		plot.getAxisRenderer(XYPlot.AXIS_Y).setShapeVisible(false);  // Disable y axis
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setSetting(AxisRenderer.TICKS, false);          // Disable tick marks on y axis
 		plot.getAxis(XYPlot.AXIS_X).setRange(-10.0, 10.0);  // Scale x axis from -10 to 10
 		plot.getAxis(XYPlot.AXIS_Y).setRange(-10.0, 10.0);  // Scale y axis from -10 to 10
