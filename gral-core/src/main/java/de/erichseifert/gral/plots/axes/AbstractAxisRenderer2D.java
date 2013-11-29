@@ -50,7 +50,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
-import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -68,8 +67,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  *   <li>Administration of settings</li>
  * </ul>
  */
-public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
-		implements AxisRenderer {
+public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5623525683845512624L;
 	/** Line segments approximating the shape of the axis. */
@@ -96,6 +94,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private transient Stroke shapeStroke;
 	/** Decides whether the axis direction will be changed. */
 	private boolean shapeDirectionSwapped;
+
 	/** Decides whether major ticks are drawn. */
 	private boolean ticksDrawn;
 	/** Distance on axis in which major ticks are drawn. */
@@ -123,6 +122,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean tickLabelsOutside;
 	/** Tick label rotation in degrees. */
 	private Number tickLabelRotation;
+
 	/** Decides whether minor ticks are drawn. */
 	private boolean ticksMinorEnabled;
 	/** Number of minor ticks between two major ticks. */

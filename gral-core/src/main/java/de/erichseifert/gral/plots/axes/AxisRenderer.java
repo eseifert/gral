@@ -30,13 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.PointND;
 
 /**
  * Interface for generic renderers of axes.
  */
-public interface AxisRenderer extends SettingsStorage {
+public interface AxisRenderer {
 	/**
 	 * Returns a component that displays the specified axis.
 	 * @param axis axis to be displayed
