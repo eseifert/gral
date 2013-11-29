@@ -123,6 +123,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number tickLabelDistance;
 	/** Decides whether the tick labels are drawn outside of the plot. */
 	private boolean tickLabelsOutside;
+	/** Tick label rotation in degrees. */
+	private Number tickLabelRotation;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -154,7 +156,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickLabelFormat = NumberFormat.getInstance();
 		tickLabelDistance = 1.0;
 		tickLabelsOutside = true;
-		setSettingDefault(TICK_LABELS_ROTATION, 0.0);
+		tickLabelRotation = 0.0;
 
 		setSettingDefault(TICKS_CUSTOM, null);
 
@@ -225,8 +227,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 					boolean isTickLabelVisible =
 						renderer.isTickLabelsEnabled();
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
-					double tickLabelRotation =
-						renderer.<Number>getSetting(TICK_LABELS_ROTATION)
+					double tickLabelRotation = renderer.getTickLabelRotation()
 						.doubleValue();
 					double tickLabelDist = renderer.getTickLabelDistanceAbsolute();
 					Line2D tickShape = new Line2D.Double();
@@ -899,5 +900,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickLabelsOutside(boolean tickLabelsOutside) {
 		this.tickLabelsOutside = tickLabelsOutside;
+	}
+
+	@Override
+	public Number getTickLabelRotation() {
+		return tickLabelRotation;
+	}
+
+	@Override
+	public void setTickLabelRotation(Number tickLabelRotation) {
+		this.tickLabelRotation = tickLabelRotation;
 	}
 }
