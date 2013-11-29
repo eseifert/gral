@@ -113,6 +113,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Number tickAlignment;
 	/** Font used to display the text of major ticks. */
 	private Font tickFont;
+	/** Paint used to draw the shapes of major ticks. */
+	private Paint tickColor;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -138,7 +140,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickStroke = new BasicStroke();
 		tickAlignment = 0.5;
 		tickFont = Font.decode(null);
-		setSettingDefault(TICKS_COLOR, Color.BLACK);
+		tickColor = Color.BLACK;
 
 		setSettingDefault(TICK_LABELS, true);
 		setSettingDefault(TICK_LABELS_FORMAT, NumberFormat.getInstance());
@@ -254,7 +256,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 								renderer.getTickAlignment()
 								.doubleValue();
 							tickPaint =
-								renderer.<Paint>getSetting(TICKS_COLOR);
+								renderer.getTickColor();
 							tickStroke = renderer.getTickStroke();
 						}
 
@@ -832,11 +834,23 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		this.tickAlignment = tickAlignment;
 	}
 
+	@Override
 	public Font getTickFont() {
 		return tickFont;
 	}
 
+	@Override
 	public void setTickFont(Font tickFont) {
 		this.tickFont = tickFont;
+	}
+
+	@Override
+	public Paint getTickColor() {
+		return tickColor;
+	}
+
+	@Override
+	public void setTickColor(Paint tickColor) {
+		this.tickColor = tickColor;
 	}
 }

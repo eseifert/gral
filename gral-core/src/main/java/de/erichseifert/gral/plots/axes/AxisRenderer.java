@@ -36,10 +36,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the shapes of major ticks. */
-	Key TICKS_COLOR =
-		new Key("axis.ticks.color"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value whether tick labels will be
 	shown. */
 	Key TICK_LABELS =
@@ -352,4 +348,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickFont Font used for tick labels.
 	 */
 	void setTickFont(Font tickFont);
+
+	/**
+	 * Returns the paint used to draw the shapes of major ticks.
+	 * @return Paint used for major tick drawing.
+	 */
+	Paint getTickColor();
+
+	/**
+	 * Sets the paint used to draw the shapes of major ticks.
+	 * @param tickColor Paint used for major tick drawing.
+	 */
+	void setTickColor(Paint tickColor);
 }
