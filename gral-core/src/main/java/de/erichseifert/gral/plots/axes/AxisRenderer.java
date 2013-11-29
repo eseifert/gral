@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance which is used
-	to draw all minor ticks. */
-	Key TICKS_MINOR_STROKE =
-		new Key("axis.ticks.minor.stroke"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the alignment of minor
 	ticks: 0.0 means outside, 0.5 means centered, 1.0 means inside. */
 	Key TICKS_MINOR_ALIGNMENT =
@@ -426,4 +422,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param ticksMinorLength Tick length relative to font height.
 	 */
 	void setTicksMinorLength(Number ticksMinorLength);
+
+	/**
+	 * Returns the stroke used to draw all minor ticks.
+	 * @return Stroke used for minor tick drawing.
+	 */
+	Stroke getTicksMinorStroke();
+
+	/**
+	 * Sets the stroke used to draw all minor ticks.
+	 * @param ticksMinorStroke Stroke used for minor tick drawing.
+	 */
+	void setTicksMinorStroke(Stroke ticksMinorStroke);
 }

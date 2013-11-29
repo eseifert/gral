@@ -131,6 +131,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private int ticksMinorCount;
 	/** Tick length relative to font height.*/
 	private Number ticksMinorLength;
+	/** Stroke used to draw all minor ticks. */
+	// Property will be serialized using a wrapper
+	private transient Stroke ticksMinorStroke;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -169,7 +172,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		ticksMinorEnabled = true;
 		ticksMinorCount = 1;
 		ticksMinorLength = 0.5;
-		setSettingDefault(TICKS_MINOR_STROKE, new BasicStroke());
+		ticksMinorStroke = new BasicStroke();
 		setSettingDefault(TICKS_MINOR_ALIGNMENT, 0.5);
 		setSettingDefault(TICKS_MINOR_COLOR, Color.BLACK);
 
@@ -257,8 +260,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 								.doubleValue();
 							tickPaint =
 								renderer.<Paint>getSetting(TICKS_MINOR_COLOR);
-							tickStroke =
-								renderer.<Stroke>getSetting(TICKS_MINOR_STROKE);
+							tickStroke = renderer.getTicksMinorStroke();
 						} else {
 							tickLength = getTickLengthAbsolute();
 							tickAlignment =
@@ -716,6 +718,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		in.defaultReadObject();
 		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 		tickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+		ticksMinorStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 
 		// Restore listeners
 		addSettingsListener(this);
@@ -725,6 +728,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		out.defaultWriteObject();
 		out.writeObject(SerializationUtils.wrap(shapeStroke));
 		out.writeObject(SerializationUtils.wrap(tickStroke));
+		out.writeObject(SerializationUtils.wrap(ticksMinorStroke));
 	}
 
 	@Override
@@ -956,5 +960,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksMinorLength(Number ticksMinorLength) {
 		this.ticksMinorLength = ticksMinorLength;
+	}
+
+	@Override
+	public Stroke getTicksMinorStroke() {
+		return ticksMinorStroke;
+	}
+
+	@Override
+	public void setTicksMinorStroke(Stroke ticksMinorStroke) {
+		this.ticksMinorStroke = ticksMinorStroke;
 	}
 }
