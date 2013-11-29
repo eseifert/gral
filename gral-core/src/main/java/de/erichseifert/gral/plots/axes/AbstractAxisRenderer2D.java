@@ -100,7 +100,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		intersection = 0.0;
 		// The direction must defined as swapped before SHAPE is constructed.
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
-		setShape(new Line2D.Double(0.0, 0.0, 1.0, 0.0));
+		shape = new Line2D.Double(0.0, 0.0, 1.0, 0.0);
+		evaluateShape(shape);
 
 		shapeVisible = true;
 		shapeNormalOrientationClockwise = false;
@@ -615,7 +616,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	 * Calculates important aspects of the specified shape.
 	 * @param shape Shape to be evaluated.
 	 */
-	protected void evaluateShape(Shape shape) {
+	protected final void evaluateShape(Shape shape) {
 		boolean directionSwapped =
 			this.<Boolean>getSetting(SHAPE_DIRECTION_SWAPPED);
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
