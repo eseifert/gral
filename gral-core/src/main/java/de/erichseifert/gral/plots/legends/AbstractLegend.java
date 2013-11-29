@@ -48,8 +48,6 @@ import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
-import de.erichseifert.gral.plots.StylableContainer;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
@@ -66,7 +64,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * are displayed. The actual rendering of symbols has to be implemented by
  * derived classes.</p>
  */
-public abstract class AbstractLegend extends StylableContainer
+public abstract class AbstractLegend extends DrawableContainer
 		implements Legend, LegendSymbolRenderer {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -1561976879958765700L;
@@ -330,14 +328,6 @@ public abstract class AbstractLegend extends StylableContainer
 		Dimension2D gap = getGap();
 		Layout layout = new StackedLayout(orientation, gap);
 		setLayout(layout);
-	}
-
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	@Override

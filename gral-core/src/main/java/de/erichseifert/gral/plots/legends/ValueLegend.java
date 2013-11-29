@@ -30,7 +30,6 @@ import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 
 /**
  * A legend implementation that displays items for all data values of all data
@@ -92,11 +91,6 @@ public abstract class ValueLegend extends AbstractLegend
 	public void remove(DataSource source) {
 		super.remove(source);
 		source.removeDataListener(this);
-	}
-
-	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		super.settingChanged(event);
 	}
 
 	/**
