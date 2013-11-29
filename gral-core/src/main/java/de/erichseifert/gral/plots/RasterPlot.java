@@ -44,8 +44,6 @@ import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.Grayscale;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -76,14 +74,9 @@ public class RasterPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5844862286358250831L;
 
-	/** Key for specifying an instance of
-	{@link de.erichseifert.gral.plots.colors.ColorMapper} used for mapping the
-	pixel values to colors. */
-	public static final Key COLORS =
-		new Key("rasterplot.color"); //$NON-NLS-1$
-
 	private final Point2D offset;
 	private final Dimension2D distance;
+	private ColorMapper colors;
 
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
@@ -93,7 +86,7 @@ public class RasterPlot extends XYPlot {
 		private static final long serialVersionUID = 1266585364126459761L;
 
 		/** Plot specific settings. */
-		private final SettingsStorage plotSettings;
+		private final RasterPlot plot;
 
 		private int columnX;
 		private int columnY;
@@ -103,10 +96,10 @@ public class RasterPlot extends XYPlot {
 		 * Constructor that creates a new instance and initializes it with a
 		 * plot as data provider. The default columns for (x, y, value) are set
 		 * to (0, 1, 2)
-		 * @param plotSettings Plot specific settings.
+		 * @param plot Plot storing global settings.
 		 */
-		public RasterRenderer(SettingsStorage plotSettings) {
-			this.plotSettings = plotSettings;
+		public RasterRenderer(RasterPlot plot) {
+			this.plot = plot;
 			columnX = 0;
 			columnY = 1;
 			columnValue = 2;
@@ -230,7 +223,7 @@ public class RasterPlot extends XYPlot {
 
 					// Paint pixel
 					Graphics2D graphics = context.getGraphics();
-					ColorMapper colorMapper = plotSettings.getSetting(COLORS);
+					ColorMapper colorMapper = plot.getColors();
 					Paint paint;
 					if (colorMapper instanceof ContinuousColorMapper) {
 						paint = ((ContinuousColorMapper) colorMapper)
@@ -284,7 +277,7 @@ public class RasterPlot extends XYPlot {
 	public RasterPlot(DataSource data) {
 		offset = new Point2D.Double();
 		distance = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
-		setSettingDefault(COLORS, new Grayscale());
+		colors = new Grayscale();
 
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_Y, false);
@@ -408,5 +401,21 @@ public class RasterPlot extends XYPlot {
 	 */
 	public void setDistance(Dimension2D distance) {
 		this.distance.setSize(distance);
+	}
+
+	/**
+	 * Returns the object which is used to map pixel values to colors.
+	 * @return Object which is used to map pixel values to colors.
+	 */
+	public ColorMapper getColors() {
+		return colors;
+	}
+
+	/**
+	 * Sets the object which will be used to map pixel values to colors.
+	 * @param colors Object which will be used to map pixel values to colors.
+	 */
+	public void setColors(ColorMapper colors) {
+		this.colors = colors;
 	}
 }
