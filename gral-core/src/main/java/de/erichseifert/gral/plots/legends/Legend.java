@@ -18,10 +18,6 @@ import de.erichseifert.gral.util.Orientation;
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage, SymbolSettingProvider {
-	/** Key for specifying a {@link Number} value describing the horizontal
-	alignment of the legend relative to the plot area. {@code 0.0} means left,
-	{@code 0.5} means centered, and {@code 1.0} means right. */
-	Key ALIGNMENT_X = new Key("legend.alignment.x"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value describing the vertical
 	alignment of the legend relative to the plot area. {@code 0.0} means top,
 	{@code 0.5} means centered, and {@code 1.0} means bottom. */
@@ -131,4 +127,18 @@ public interface Legend extends Container, Drawable, SettingsStorage, SymbolSett
 	 * @param symbolSize Symbol size relative to the font height.
 	 */
 	void setSymbolSize(Dimension2D symbolSize);
+
+	/**
+	 * Returns the horizontal alignment of the legend relative to the plot area.
+	 * {@code 0.0} means left, {@code 0.5} means centered, and {@code 1.0} means right.
+	 * @return Relative horizontal alignment.
+	 */
+	Number getAlignmentX();
+
+	/**
+	 * Sets the horizontal alignment of the legend relative to the plot area.
+	 * {@code 0.0} means left, {@code 0.5} means centered, and {@code 1.0} means right.
+	 * @param alignmentX Relative horizontal alignment.
+	 */
+	void setAlignmentX(Number alignmentX);
 }
