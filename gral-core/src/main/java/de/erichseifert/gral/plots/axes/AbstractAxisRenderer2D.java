@@ -35,6 +35,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.HashSet;
@@ -55,6 +57,7 @@ import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -90,6 +93,9 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean shapeNormalOrientationClockwise;
 	/** Paint used to draw axis shape, ticks, and labels. */
 	private Paint shapeColor;
+	/** Stroke used for drawing the axis shape. */
+	// Property will be serialized using a wrapper
+	private transient Stroke shapeStroke;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -105,7 +111,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		shapeVisible = true;
 		shapeNormalOrientationClockwise = false;
-		setSettingDefault(SHAPE_STROKE, new BasicStroke());
+		shapeStroke = new BasicStroke();
 		shapeColor = Color.BLACK;
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
 
@@ -171,7 +177,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 				// Draw axis shape
 				Paint axisPaint = renderer.getShapeColor();
-				Stroke axisStroke = renderer.getSetting(SHAPE_STROKE);
+				Stroke axisStroke = renderer.getShapeStroke();
 				boolean isShapeVisible = renderer.isShapeVisible();
 				if (isShapeVisible) {
 					Shape shape = renderer.getShape();
@@ -664,9 +670,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 			throws ClassNotFoundException, IOException {
 		// Normal deserialization
 		in.defaultReadObject();
+		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 
 		// Restore listeners
 		addSettingsListener(this);
+	}
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		out.writeObject(SerializationUtils.wrap(shapeStroke));
 	}
 
 	@Override
@@ -718,5 +730,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setShapeColor(Paint shapeColor) {
 		this.shapeColor = shapeColor;
+	}
+
+	@Override
+	public Stroke getShapeStroke() {
+		return shapeStroke;
+	}
+
+	@Override
+	public void setShapeStroke(Stroke shapeStroke) {
+		this.shapeStroke = shapeStroke;
 	}
 }

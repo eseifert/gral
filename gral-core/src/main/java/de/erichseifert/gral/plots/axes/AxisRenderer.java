@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots.axes;
 
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -34,10 +35,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance which define
-	 the shape of the axis. */
-	Key SHAPE_STROKE =
-		new Key("axis.shape.stroke"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value which decides
 	 whether the axis direction will be changed. */
 	Key SHAPE_DIRECTION_SWAPPED =
@@ -271,4 +268,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param color Paint used for drawing.
 	 */
 	void setShapeColor(Paint color);
+
+	/**
+	 * Returns the stroke which defines the shape of the axis.
+	 * @return Stroke used for drawing the shape.
+	 */
+	Stroke getShapeStroke();
+
+	/**
+	 * Sets the stroke which defines the shape of the axis.
+	 * @param shapeStroke Stroke used for drawing the shape.
+	 */
+	void setShapeStroke(Stroke shapeStroke);
 }

@@ -98,7 +98,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
-		axisRendererX.setSetting(AxisRenderer.SHAPE_STROKE, stroke);
+		axisRendererX.setShapeStroke(stroke);
 		axisRendererY.setSetting(AxisRenderer.LABEL, "Linear axis");
 		// Change intersection point of Y axis
 		axisRendererY.setIntersection(1.0);
