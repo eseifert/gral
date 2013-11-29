@@ -129,6 +129,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private boolean ticksMinorEnabled;
 	/** Number of minor ticks between two major ticks. */
 	private int ticksMinorCount;
+	/** Tick length relative to font height.*/
+	private Number ticksMinorLength;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -166,7 +168,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 		ticksMinorEnabled = true;
 		ticksMinorCount = 1;
-		setSettingDefault(TICKS_MINOR_LENGTH, 0.5);
+		ticksMinorLength = 0.5;
 		setSettingDefault(TICKS_MINOR_STROKE, new BasicStroke());
 		setSettingDefault(TICKS_MINOR_ALIGNMENT, 0.5);
 		setSettingDefault(TICKS_MINOR_COLOR, Color.BLACK);
@@ -250,7 +252,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.type)) {
 							tickLength =
-								renderer.<Number>getSetting(TICKS_MINOR_LENGTH)
+								renderer.getTicksMinorLength()
 								.doubleValue()*fontSize;
 							tickAlignment =
 								renderer.<Number>getSetting(TICKS_MINOR_ALIGNMENT)
@@ -933,5 +935,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTicksMinorCount(int ticksMinorCount) {
 		this.ticksMinorCount = ticksMinorCount;
+	}
+
+	@Override
+	public Number getTicksMinorLength() {
+		return ticksMinorLength;
+	}
+
+	@Override
+	public void setTicksMinorLength(Number ticksMinorLength) {
+		this.ticksMinorLength = ticksMinorLength;
 	}
 }
