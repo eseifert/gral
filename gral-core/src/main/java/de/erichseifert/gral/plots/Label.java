@@ -47,10 +47,6 @@ public class Label extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
-	/** Key for specifying a {@link Number} value for the alignment of text
-	with multiple lines. 0 means left, 1 means right. */
-	public static final Key ALIGNMENT_TEXT =
-		new Key("label.alignment.text"); //$NON-NLS-1$
 	/** Key for specifying a {@link Boolean} value whether the words of the
 	text should be wrapped to fit the size of the label. */
 	public static final Key WORD_WRAP =
@@ -68,6 +64,8 @@ public class Label extends StylableDrawable {
 	private Number rotation;
 	/** Paint used to draw the shape. */
 	private Paint color;
+	/** Relative text alignment. */
+	private Number textAlignment;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -93,7 +91,7 @@ public class Label extends StylableDrawable {
 		font = Font.decode(null);
 		rotation = 0.0;
 		color = Color.BLACK;
-		setSettingDefault(ALIGNMENT_TEXT, 0.5);
+		textAlignment = 0.5;
 		setSettingDefault(WORD_WRAP, Boolean.FALSE);
 	}
 
@@ -191,8 +189,7 @@ public class Label extends StylableDrawable {
 				Math.abs(Math.cos(rotation))*getWidth() +
 				Math.abs(Math.sin(rotation))*getHeight());
 		}
-		double alignment = this.<Number>getSetting(
-			ALIGNMENT_TEXT).doubleValue();
+		double alignment = getTextAlignment().doubleValue();
 		Shape outline = GraphicsUtils.getOutline(
 			getText(), font, wrappingWidth, alignment);
 		return outline;
@@ -270,8 +267,7 @@ public class Label extends StylableDrawable {
 	@Override
 	public void settingChanged(SettingChangeEvent event) {
 		Key key = event.getKey();
-		if (ALIGNMENT_TEXT.equals(key) ||
-				WORD_WRAP.equals(key)) {
+		if (WORD_WRAP.equals(key)) {
 			invalidate();
 		}
 	}
@@ -372,5 +368,24 @@ public class Label extends StylableDrawable {
 	 */
 	public void setColor(Paint color) {
 		this.color = color;
+	}
+
+	/**
+	 * Returns the alignment of text with multiple lines.
+	 * 0.0 means left, 1.0 means right.
+	 * @return Relative text alignment.
+	 */
+	public Number getTextAlignment() {
+		return textAlignment;
+	}
+
+	/**
+	 * Sets the alignment of text with multiple lines.
+	 * 0.0 means left, 1.0 means right.
+	 * @param textAlignment Relative text alignment.
+	 */
+	public void setTextAlignment(Number textAlignment) {
+		this.textAlignment = textAlignment;
+		invalidate();
 	}
 }

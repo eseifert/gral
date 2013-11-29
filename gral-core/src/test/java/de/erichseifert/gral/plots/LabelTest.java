@@ -131,5 +131,6 @@ public class LabelTest {
 		assertEquals(original.getFont(), deserialized.getFont());
 		assertEquals(original.getRotation(), deserialized.getRotation());
 		assertEquals(original.getColor(), deserialized.getColor());
+		assertEquals(original.getTextAlignment(), deserialized.getTextAlignment());
     }
 }
