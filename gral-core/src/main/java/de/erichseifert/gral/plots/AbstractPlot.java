@@ -56,9 +56,6 @@ import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -109,6 +106,7 @@ public abstract class AbstractPlot extends StylableContainer
 
 	private boolean legendVisible;
 	private Location legendLocation;
+	private double legendDistance;
 
 	/**
 	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
@@ -143,7 +141,7 @@ public abstract class AbstractPlot extends StylableContainer
 		color = Color.BLACK;
 		legendVisible = false;
 		legendLocation = Location.CENTER;
-		setSettingDefault(LEGEND_DISTANCE, 2.0);
+		legendDistance = 2.0;
 
 		add(title, Location.NORTH);
 	}
@@ -471,28 +469,26 @@ public abstract class AbstractPlot extends StylableContainer
 		}
 	}
 
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
 	@Override
-	public void settingChanged(SettingChangeEvent event) {
-		Key key = event.getKey();
-		if (LEGEND_DISTANCE.equals(key)) {
-			// TODO Use real font size instead of fixed value
-			final double fontSize = 10.0;
+	public double getLegendDistance() {
+		return legendDistance;
+	}
 
-			double distance = DataUtils.getValueOrDefault(
-				this.<Number>getSetting(LEGEND_DISTANCE), Double.NaN);
-			if (MathUtils.isCalculatable(distance)) {
-				distance *= fontSize;
-			} else {
-				distance = 0.0;
-			}
+	@Override
+	public void setLegendDistance(double distance) {
+		legendDistance = distance;
 
-			OuterEdgeLayout layout = new OuterEdgeLayout(distance);
-			legendContainer.setLayout(layout);
+		// TODO Use real font size instead of fixed value
+		final double fontSize = 10.0;
+
+		if (MathUtils.isCalculatable(distance)) {
+			distance *= fontSize;
+		} else {
+			distance = 0.0;
 		}
+
+		OuterEdgeLayout layout = new OuterEdgeLayout(distance);
+		legendContainer.setLayout(layout);
 	}
 
 	/**

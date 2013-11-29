@@ -43,6 +43,8 @@ import de.erichseifert.gral.plots.RasterPlot.RasterRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class RasterPlotTest {
+	private static final double DELTA = 1e-7;
+
 	private DataSource data;
 	private MockRasterPlot plot;
 
@@ -106,6 +108,7 @@ public class RasterPlotTest {
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
+		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

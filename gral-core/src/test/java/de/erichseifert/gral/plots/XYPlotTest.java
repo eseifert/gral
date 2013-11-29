@@ -41,6 +41,8 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class XYPlotTest {
+	private static final double DELTA = 1e-7;
+
 	private List<MockXYPlot> plots;
 
 	private static class MockXYPlot extends XYPlot {
@@ -115,5 +117,6 @@ public class XYPlotTest {
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
+		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 	}
 }

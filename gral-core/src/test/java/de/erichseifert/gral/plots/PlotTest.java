@@ -272,5 +272,6 @@ public class PlotTest {
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
+		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 	}
 }

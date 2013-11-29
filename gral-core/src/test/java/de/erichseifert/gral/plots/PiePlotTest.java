@@ -106,6 +106,7 @@ public class PiePlotTest {
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
+		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();

@@ -41,6 +41,8 @@ import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class BarPlotTest {
+	private static final double DELTA = 1e-7;
+
 	private MockBarPlot plot;
 
 	private static final class MockBarPlot extends BarPlot {
@@ -92,6 +94,7 @@ public class BarPlotTest {
 		assertEquals(original.getColor(), deserialized.getColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
+		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 
 		List<DataSource> dataSourcesOriginal = original.getData();
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
