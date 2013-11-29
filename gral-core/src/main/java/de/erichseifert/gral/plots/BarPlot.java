@@ -53,7 +53,6 @@ import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
@@ -79,14 +78,9 @@ public class BarPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3177733647455649147L;
 
-	/** Key for specifying a {@link Boolean} value which defines whether
-	painting should happen over all bars at once, otherwise each bar will be
-	filled independently. */
-	public static final Key PAINT_ALL_BARS =
-		new Key("barplot.bar.paintAll"); //$NON-NLS-1$
-
 	double barWidth;
 	double barHeightMin;
+	boolean paintAllBars;
 
 	/**
 	 * Class that renders a bar in a bar plot.
@@ -199,8 +193,7 @@ public class BarPlot extends XYPlot {
 					ColorMapper colors = renderer.getColor();
 					Paint paint = colors.get(row.getIndex());
 
-					Boolean paintAllBars = plot.getSetting(PAINT_ALL_BARS);
-					if (paintAllBars != null && paintAllBars.booleanValue()) {
+					if (plot.isPaintAllBars()) {
 						AffineTransform txOld = graphics.getTransform();
 						Rectangle2D shapeBounds = shape.getBounds2D();
 						paintBoundaries = new Rectangle2D.Double();//plot.getPlotArea().getBounds();
@@ -433,7 +426,7 @@ public class BarPlot extends XYPlot {
 		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
 		barWidth = 1.0;
 		barHeightMin = 0.0;
-		setSettingDefault(PAINT_ALL_BARS, false);
+		paintAllBars = false;
 
 		setLegend(new BarPlotLegend(this));
 	}
@@ -515,5 +508,25 @@ public class BarPlot extends XYPlot {
 	 */
 	public void setBarHeightMin(double barHeightMin) {
 		this.barHeightMin = barHeightMin;
+	}
+
+	/**
+	 * Returns whether all bars are filled as a whole, or if each bar is filled
+	 * independently.
+	 * @return {@code true} if all bars are filled as a whole, or
+	 * 		   {@code false} if each bar is filled independently.
+	 */
+	public boolean isPaintAllBars() {
+		return paintAllBars;
+	}
+
+	/**
+	 * Sets whether all bars will be filled as a whole, or if each bar will be
+	 * filled independently.
+	 * @param paintAllBars {@code true} to fill all bars as a whole, or
+	 * 		   {@code false} to fill each bar independently.
+	 */
+	public void setPaintAllBars(boolean paintAllBars) {
+		this.paintAllBars = paintAllBars;
 	}
 }
