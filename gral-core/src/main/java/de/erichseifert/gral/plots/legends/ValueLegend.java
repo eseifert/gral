@@ -42,20 +42,19 @@ public abstract class ValueLegend extends AbstractLegend
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4274009997506638823L;
 
-	/** Key for specifying a {@link Integer} value for the index of
-	the column that contains the labels for the values. */
-	public static final Key LABEL_COLUMN =
-		new Key("valueLegend.label.column"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.text.Format} instance to be used to
 	format the displayed data values. */
 	public static final Key LABEL_FORMAT =
 		new Key("valueLegend.label.format"); //$NON-NLS-1$
 
+	/** Column index containing the labels. */
+	private int labelColumn;
+
 	/**
 	 * Initializes a new instance with default values.
 	 */
 	public ValueLegend() {
-		setSettingDefault(LABEL_COLUMN, 0);
+		labelColumn = 0;
 	}
 
 	@Override
@@ -70,7 +69,7 @@ public abstract class ValueLegend extends AbstractLegend
 
 	@Override
 	protected String getLabel(Row row) {
-		int col = this.<Integer>getSetting(LABEL_COLUMN);
+		int col = getLabelColumn();
 		Comparable<?> value = row.get(col);
 		if (value == null) {
 			return "";
@@ -103,7 +102,7 @@ public abstract class ValueLegend extends AbstractLegend
 	public void settingChanged(SettingChangeEvent event) {
 		super.settingChanged(event);
 		Key key = event.getKey();
-		if (LABEL_COLUMN.equals(key) || LABEL_FORMAT.equals(key)) {
+		if (LABEL_FORMAT.equals(key)) {
 			invalidate();
 			refresh();
 		}
@@ -155,5 +154,23 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	private void dataChanged(DataSource source, DataChangeEvent... events) {
 		invalidate();
+	}
+
+	/**
+	 * Returns the index of the column that contains the labels for the values.
+	 * @return Column index containing the labels.
+	 */
+	public int getLabelColumn() {
+		return labelColumn;
+	}
+
+	/**
+	 * Sets the index of the column that contains the labels for the values.
+	 * @param labelColumn Column index containing the labels.
+	 */
+	public void setLabelColumn(int labelColumn) {
+		this.labelColumn = labelColumn;
+		invalidate();
+		refresh();
 	}
 }

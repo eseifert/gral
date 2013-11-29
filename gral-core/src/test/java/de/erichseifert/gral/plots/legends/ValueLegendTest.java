@@ -21,13 +21,33 @@
  */
 package de.erichseifert.gral.plots.legends;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	LegendTest.class,
-	ValueLegendTest.class
-})
-public class LegendsTests {
+import java.io.IOException;
+
+import org.junit.Test;
+
+import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.AbstractDrawable;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
+
+public class ValueLegendTest {
+	private static class MockValueLegend extends ValueLegend {
+		public Drawable getSymbol(Row data) {
+			return new AbstractDrawable() {
+				public void draw(DrawingContext context) {
+				}
+			};
+		}
+	};
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		ValueLegend original = new MockValueLegend();
+		ValueLegend deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getLabelColumn(), deserialized.getLabelColumn());
+    }
 }
