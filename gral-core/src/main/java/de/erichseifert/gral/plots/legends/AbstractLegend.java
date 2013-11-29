@@ -74,6 +74,9 @@ public abstract class AbstractLegend extends StylableContainer
 	/** Flag that tells whether the data in the legend is up-to-date. */
 	private transient boolean valid;
 
+	/** Paint used to draw the background. */
+	private Paint background;
+
 	/**
 	 * An abstract base class for drawable symbols.
 	 */
@@ -161,7 +164,7 @@ public abstract class AbstractLegend extends StylableContainer
 		sources = new LinkedHashSet<DataSource>();
 		components = new HashMap<Row, Drawable>();
 
-		setSettingDefault(BACKGROUND, Color.WHITE);
+		background = Color.WHITE;
 		setSettingDefault(BORDER, new BasicStroke(1f));
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(COLOR, Color.BLACK);
@@ -191,10 +194,10 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
-		Paint bg = getSetting(BACKGROUND);
-		if (bg != null) {
+		Paint background = getBackground();
+		if (background != null) {
 			GraphicsUtils.fillPaintedShape(
-				context.getGraphics(), getBounds(), bg, null);
+				context.getGraphics(), getBounds(), background, null);
 		}
 	}
 
@@ -355,5 +358,15 @@ public abstract class AbstractLegend extends StylableContainer
 	 */
 	protected void invalidate() {
 		valid = false;
+	}
+
+	@Override
+	public Paint getBackground() {
+		return background;
+	}
+
+	@Override
+	public void setBackground(Paint background) {
+		this.background = background;
 	}
 }

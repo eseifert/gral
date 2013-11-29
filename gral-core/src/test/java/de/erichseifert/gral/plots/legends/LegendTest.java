@@ -30,7 +30,6 @@ import static org.junit.Assert.assertTrue;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -44,8 +43,6 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.plots.legends.SeriesLegend;
 
 public class LegendTest {
 	private MockLegend legend;
@@ -85,7 +82,7 @@ public class LegendTest {
 
 	@Test
 	public void testDraw() {
-		legend.setSetting(Legend.BACKGROUND, Color.WHITE);
+		legend.setBackground(Color.WHITE);
 		legend.setSetting(Legend.BORDER, new BasicStroke(1f));
 		legend.add(new DummyData(1, 1, 1.0));
 
@@ -103,5 +100,6 @@ public class LegendTest {
 		Legend deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
+		assertEquals(original.getBackground(), deserialized.getBackground());
     }
 }

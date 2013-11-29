@@ -1,5 +1,7 @@
 package de.erichseifert.gral.plots.legends;
 
+import java.awt.Paint;
+
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
@@ -11,9 +13,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	 paint the background. */
-	Key BACKGROUND = new Key("legend.background"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
 	 paint the border of the legend. */
 	Key BORDER = new Key("legend.border"); //$NON-NLS-1$
@@ -71,4 +70,16 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * Updates the items for all data sources stored in this legend.
 	 */
 	void refresh();
+
+	/**
+	 * Returns the paint used to draw the background.
+	 * @return Paint used for background drawing.
+	 */
+	Paint getBackground();
+
+	/**
+	 * Sets the paint used to draw the background.
+	 * @param background Paint used for background drawing.
+	 */
+	void setBackground(Paint background);
 }
