@@ -33,7 +33,6 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
-import de.erichseifert.gral.plots.PlotArea;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
@@ -84,7 +83,7 @@ public class SimpleXYPlot extends ExamplePanel {
 			new float[] { 0.6f, 0.8f, 1.0f },
 			new Color[] { new Color(0, 0, 0, 0), new Color(0, 0, 0, 32), new Color(0, 0, 0, 128) }
 		));
-		plot.getPlotArea().setSetting(PlotArea.BORDER, null);
+		plot.getPlotArea().setBorderStroke(null);
 
 		// Format axes
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();

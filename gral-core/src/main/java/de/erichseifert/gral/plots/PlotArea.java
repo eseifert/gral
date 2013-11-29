@@ -25,11 +25,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -41,10 +46,6 @@ public abstract class PlotArea extends StylableDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	paint the border of the plot area. */
-	public static final Key BORDER =
-		new Key("plotarea.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Paint} instance to be used to
 	fill the border of the plot area. */
 	public static final Key COLOR =
@@ -59,13 +60,16 @@ public abstract class PlotArea extends StylableDrawable {
 
 	/** Paint used for background drawing. */
 	private Paint background;
+	/** Stroke used to draw the border. */
+	// Property will be serialized using a wrapper.
+	private transient Stroke borderStroke;
 
 	/**
 	 * Initializes a new instance with default background color and border.
 	 */
 	public PlotArea() {
 		background = Color.WHITE;
-		setSettingDefault(BORDER, new BasicStroke(1f));
+		borderStroke = new BasicStroke(1f);
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(CLIPPING, new Insets2D.Double(0.0));
 	}
@@ -91,7 +95,7 @@ public abstract class PlotArea extends StylableDrawable {
 	 */
 	protected void drawBorder(DrawingContext context) {
 		// FIXME duplicate code! See de.erichseifert.gral.Legend
-		Stroke stroke = getSetting(BORDER);
+		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
 			Paint paint = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(context.getGraphics(),
@@ -104,6 +108,31 @@ public abstract class PlotArea extends StylableDrawable {
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
+
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		borderStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a deserialized class does not exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		out.defaultWriteObject();
+		out.writeObject(SerializationUtils.wrap(borderStroke));
+	}
 
 	/**
 	 * Returns the paint used to draw the background of the plot area.
@@ -119,5 +148,21 @@ public abstract class PlotArea extends StylableDrawable {
 	 */
 	public void setBackground(Paint background) {
 		this.background = background;
+	}
+
+	/**
+	 * Returns the stroke used to draw the border of the plot area.
+	 * @return Stroke used for border drawing.
+	 */
+	public Stroke getBorderStroke() {
+		return borderStroke;
+	}
+
+	/**
+	 * Sets the stroke used to draw the border of the plot area.
+	 * @param borderStroke Stroke used for border drawing.
+	 */
+	public void setBorderStroke(Stroke borderStroke) {
+		this.borderStroke = borderStroke;
 	}
 }
