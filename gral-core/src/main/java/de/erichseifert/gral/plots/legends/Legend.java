@@ -1,6 +1,7 @@
 package de.erichseifert.gral.plots.legends;
 
 import java.awt.Paint;
+import java.awt.Stroke;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
@@ -13,9 +14,6 @@ import de.erichseifert.gral.plots.settings.SettingsStorage;
  * a plot.
  */
 public interface Legend extends Container, Drawable, SettingsStorage {
-	/** Key for specifying the {@link java.awt.Stroke} instance to be used to
-	 paint the border of the legend. */
-	Key BORDER = new Key("legend.border"); //$NON-NLS-1$
 	/** Key for specifying the {@link java.awt.Font} instance to be used to
 	 display the legend labels. */
 	Key FONT = new Key("legend.font"); //$NON-NLS-1$
@@ -82,4 +80,16 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * @param background Paint used for background drawing.
 	 */
 	void setBackground(Paint background);
+
+	/**
+	 * Returns the stroke used to draw the border of the legend.
+	 * @return Stroke used for border drawing.
+	 */
+	Stroke getBorderStroke();
+
+	/**
+	 * Sets the stroke used to draw the border of the legend.
+	 * @param borderStroke Stroke used for border drawing.
+	 */
+	void setBorderStroke(Stroke borderStroke);
 }

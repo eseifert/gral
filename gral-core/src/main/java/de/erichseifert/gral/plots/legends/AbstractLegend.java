@@ -27,6 +27,10 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -51,6 +55,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -76,6 +81,9 @@ public abstract class AbstractLegend extends StylableContainer
 
 	/** Paint used to draw the background. */
 	private Paint background;
+	/** Stroke used to draw the border of the legend. */
+	// Property will be serialized using a wrapper
+	private transient Stroke borderStroke;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -165,7 +173,7 @@ public abstract class AbstractLegend extends StylableContainer
 		components = new HashMap<Row, Drawable>();
 
 		background = Color.WHITE;
-		setSettingDefault(BORDER, new BasicStroke(1f));
+		borderStroke = new BasicStroke(1f);
 		setSettingDefault(FONT, Font.decode(null));
 		setSettingDefault(COLOR, Color.BLACK);
 		setSettingDefault(ORIENTATION, Orientation.VERTICAL);
@@ -206,7 +214,7 @@ public abstract class AbstractLegend extends StylableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {
-		Stroke stroke = getSetting(BORDER);
+		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
 			Paint fg = getSetting(COLOR);
 			GraphicsUtils.drawPaintedShape(
@@ -360,6 +368,31 @@ public abstract class AbstractLegend extends StylableContainer
 		valid = false;
 	}
 
+	/**
+	 * Custom deserialization method.
+	 * @param in Input stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+	 * @throws IOException if there is an error while reading data from the input stream.
+	 */
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		in.defaultReadObject();
+		borderStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+	}
+
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a deserialized class does not exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
+	private void writeObject(ObjectOutputStream out)
+			throws ClassNotFoundException, IOException {
+		out.defaultWriteObject();
+		out.writeObject(SerializationUtils.wrap(borderStroke));
+	}
+
 	@Override
 	public Paint getBackground() {
 		return background;
@@ -368,5 +401,15 @@ public abstract class AbstractLegend extends StylableContainer
 	@Override
 	public void setBackground(Paint background) {
 		this.background = background;
+	}
+
+	@Override
+	public Stroke getBorderStroke() {
+		return borderStroke;
+	}
+
+	@Override
+	public void setBorderStroke(Stroke borderStroke) {
+		this.borderStroke = borderStroke;
 	}
 }

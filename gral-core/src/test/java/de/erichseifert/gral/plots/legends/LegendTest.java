@@ -83,7 +83,7 @@ public class LegendTest {
 	@Test
 	public void testDraw() {
 		legend.setBackground(Color.WHITE);
-		legend.setSetting(Legend.BORDER, new BasicStroke(1f));
+		legend.setBorderStroke(new BasicStroke(1f));
 		legend.add(new DummyData(1, 1, 1.0));
 
 		BufferedImage image = createTestImage();
@@ -101,5 +101,6 @@ public class LegendTest {
 
 		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getBackground(), deserialized.getBackground());
+		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
     }
 }
