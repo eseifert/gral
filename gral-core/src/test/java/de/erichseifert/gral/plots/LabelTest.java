@@ -131,8 +131,8 @@ public class LabelTest {
 		Label deserialized = TestUtils.serializeAndDeserialize(original);
 
 		TestUtils.assertSettings(original, deserialized);
-		assertEquals(original.getAlignmentX(), original.getAlignmentX());
-		assertEquals(original.getAlignmentY(), original.getAlignmentY());
-		assertEquals(original.getFont(), original.getFont());
+		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
+		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
+		assertEquals(original.getFont(), deserialized.getFont());
     }
 }
