@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying the {@link java.awt.Paint} instance to be used to
-	paint the the shapes of minor ticks. */
-	Key TICKS_MINOR_COLOR =
-		new Key("label.color"); //$NON-NLS-1$
 	/** Custom labels as a {@link java.util.Map} with a position
 	({@code Double}) as key and a label ({@code String}) as value. */
 	Key TICKS_CUSTOM =
@@ -446,4 +442,16 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param ticksMinorAlignment Minor tick alignment relative to the axis.
 	 */
 	void setTicksMinorAlignment(Number ticksMinorAlignment);
+
+	/**
+	 * Returns the paint used to draw the shapes of minor ticks.
+	 * @return Paint used for minor tick drawing.
+	 */
+	Paint getTicksMinorColor();
+
+	/**
+	 * Sets the paint used to draw the shapes of minor ticks.
+	 * @param ticksMinorColor Paint used for minor tick drawing.
+	 */
+	void setTicksMinorColor(Paint ticksMinorColor);
 }
