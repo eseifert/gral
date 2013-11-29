@@ -105,5 +105,6 @@ public class LegendTest {
 		assertEquals(original.getFont(), deserialized.getFont());
 		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 		assertEquals(original.getOrientation(), deserialized.getOrientation());
+		assertEquals(original.getSymbolSize(), deserialized.getSymbolSize());
     }
 }

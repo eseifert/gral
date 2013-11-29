@@ -90,6 +90,8 @@ public abstract class AbstractLegend extends StylableContainer
 	private Paint borderColor;
 	/** Direction of the legend's items. */
 	private Orientation orientation;
+	/** Symbol size relative to the font height. */
+	private Dimension2D symbolSize;
 
 	/**
 	 * An abstract base class for drawable symbols.
@@ -113,7 +115,9 @@ public abstract class AbstractLegend extends StylableContainer
 		@Override
 		public Dimension2D getPreferredSize() {
 			double fontSize = getFont().getSize2D();
-			Dimension2D symbolSize = settings.getSetting(SYMBOL_SIZE);
+			// FIXME: Retrieve proper symbol size
+			// Dimension2D symbolSize = settings.getSetting(SYMBOL_SIZE);
+			Dimension2D symbolSize = new de.erichseifert.gral.util.Dimension2D.Double();
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);
@@ -196,7 +200,7 @@ public abstract class AbstractLegend extends StylableContainer
 		setSettingDefault(ALIGNMENT_X, 0.0);
 		setSettingDefault(ALIGNMENT_Y, 0.0);
 		setSettingDefault(GAP, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
-		setSettingDefault(SYMBOL_SIZE, new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0));
+		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
 		refreshLayout();
 	}
 
@@ -472,5 +476,15 @@ public abstract class AbstractLegend extends StylableContainer
 	public void setOrientation(Orientation orientation) {
 		this.orientation = orientation;
 		refreshLayout();
+	}
+
+	@Override
+	public Dimension2D getSymbolSize() {
+		return symbolSize;
+	}
+
+	@Override
+	public void setSymbolSize(Dimension2D symbolSize) {
+		this.symbolSize = symbolSize;
 	}
 }

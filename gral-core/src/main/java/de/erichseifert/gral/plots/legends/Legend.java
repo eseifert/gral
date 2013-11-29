@@ -3,6 +3,7 @@ package de.erichseifert.gral.plots.legends;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.awt.geom.Dimension2D;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
@@ -28,10 +29,6 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	horizontal and vertical gap between items. The gap size is defined
 	relative to the font height of the legend. */
 	Key GAP = new Key("legend.gap"); //$NON-NLS-1$
-	/** Key for specifying a {@link java.awt.Insets2D} instance defining the
-	size of the legend's symbols. The symbol size is defined relative to the
-	font height of the legend. */
-	Key SYMBOL_SIZE = new Key("legend.symbol.size"); //$NON-NLS-1$
 
 	/**
 	 * Adds the specified data source in order to display it.
@@ -121,4 +118,16 @@ public interface Legend extends Container, Drawable, SettingsStorage {
 	 * @param orientation Item orientation.
 	 */
 	void setOrientation(Orientation orientation);
+
+	/**
+	 * Returns the size of the legend's symbols.
+	 * @return Symbol size relative to the font height.
+	 */
+	Dimension2D getSymbolSize();
+
+	/**
+	 * Sets the size of the legend's symbols.
+	 * @param symbolSize Symbol size relative to the font height.
+	 */
+	void setSymbolSize(Dimension2D symbolSize);
 }
