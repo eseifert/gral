@@ -27,15 +27,14 @@ import java.io.ObjectInputStream;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.plots.settings.BasicSettingsStorage;
 import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
 
 
 /**
  * Abstract class that represents a drawable object which can be styled using
  * settings.
+ * TODO: StylableDrawable is scheduled for removal.
  */
-public abstract class StylableDrawable extends AbstractDrawable
-		implements SettingsStorage {
+public abstract class StylableDrawable extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 8679795250803282234L;
 

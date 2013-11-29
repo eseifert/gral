@@ -125,7 +125,6 @@ public class LabelTest {
 		Label original = new MockLabel("foobar");
 		Label deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
 		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
 		assertEquals(original.getFont(), deserialized.getFont());

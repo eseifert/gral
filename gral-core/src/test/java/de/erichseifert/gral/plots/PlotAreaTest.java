@@ -82,7 +82,6 @@ public class PlotAreaTest {
 		MockPlotArea2D original = plotArea;
 		MockPlotArea2D deserialized = TestUtils.serializeAndDeserialize(original);
 
-		TestUtils.assertSettings(original, deserialized);
 		assertEquals(original.getBackground(), deserialized.getBackground());
 		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
 		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
