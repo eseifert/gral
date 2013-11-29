@@ -786,7 +786,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
 		if (renderer != null) {
 			if (AXIS_X2.equals(axisName) || AXIS_Y.equals(axisName)) {
-				renderer.setSetting(AxisRenderer.SHAPE_NORMAL_ORIENTATION_CLOCKWISE, true);
+				renderer.setShapeNormalOrientationClockwise(true);
 			}
 			if (AXIS_Y.equals(axisName)) {
 				renderer.setSetting(AxisRenderer.LABEL_ROTATION, 90.0);

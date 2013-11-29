@@ -86,6 +86,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Shape shape;
 	/** Decides whether the shape is drawn. */
 	private boolean shapeVisible;
+	/** Decides whether the shape normals are orientated clockwise. */
+	private boolean shapeNormalOrientationClockwise;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -99,7 +101,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		setShape(new Line2D.Double(0.0, 0.0, 1.0, 0.0));
 
 		setShapeVisible(true);
-		setSettingDefault(SHAPE_NORMAL_ORIENTATION_CLOCKWISE, false);
+		setShapeNormalOrientationClockwise(false);
 		setSettingDefault(SHAPE_STROKE, new BasicStroke());
 		setSettingDefault(SHAPE_COLOR, Color.BLACK);
 		setSettingDefault(SHAPE_DIRECTION_SWAPPED, false);
@@ -511,7 +513,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		segmentIndex = MathUtils.limit(
 				segmentIndex, 0, shapeLineNormals.length - 1);
 		Boolean normalOrientationClockwise = AbstractAxisRenderer2D.this
-			.getSetting(SHAPE_NORMAL_ORIENTATION_CLOCKWISE);
+			.isShapeNormalOrientationClockwise();
 		double normalOrientation = (normalOrientationClockwise != null &&
 				normalOrientationClockwise.booleanValue()) ? 1.0 : -1.0;
 		PointND<Double> tickNormal = new PointND<Double>(
@@ -693,5 +695,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setShapeVisible(boolean shapeVisible) {
 		this.shapeVisible = shapeVisible;
+	}
+
+	@Override
+	public boolean isShapeNormalOrientationClockwise() {
+		return shapeNormalOrientationClockwise;
+	}
+
+	@Override
+	public void setShapeNormalOrientationClockwise(boolean clockwise) {
+		this.shapeNormalOrientationClockwise = clockwise;
 	}
 }

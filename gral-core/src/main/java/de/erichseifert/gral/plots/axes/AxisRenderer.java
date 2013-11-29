@@ -33,11 +33,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides whether normal
-	vector is calculated using clockwise ({@code true}) or counterclockwise
-	rotation ({@code false}). */
-	Key SHAPE_NORMAL_ORIENTATION_CLOCKWISE =
-		new Key("axis.shape.normalOrientationClockwise"); //$NON-NLS-1$
 	/** Key for specifying {@link java.awt.Paint} instance to be used to paint
 	 the axis, its ticks and its labels. */
 	Key SHAPE_COLOR =
@@ -251,4 +246,20 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param shapeVisible {@code true} if the shape should be drawn, false otherwise.
 	 */
 	void setShapeVisible(boolean shapeVisible);
+
+	/**
+	 * Returns whether the normal vector of the shape is calculated using
+	 * clockwise or counterclockwise rotation.
+	 * @return {@code true} if the orientation is clockwise, {@code false} if it is
+	 * counterclockwise.
+	 */
+	boolean isShapeNormalOrientationClockwise();
+
+	/**
+	 * Sets whether the normal vector of the shape is calculated using
+	 * clockwise or counterclockwise rotation.
+	 * @param shapeNormalOrientationClockwise {@code true} if the orientation is clockwise, {@code false} if it is
+	 * counterclockwise.
+	 */
+	void setShapeNormalOrientationClockwise(boolean shapeNormalOrientationClockwise);
 }
