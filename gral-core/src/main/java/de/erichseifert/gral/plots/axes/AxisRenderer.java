@@ -37,10 +37,6 @@ import de.erichseifert.gral.util.PointND;
  * Interface for generic renderers of axes.
  */
 public interface AxisRenderer extends SettingsStorage {
-	/** Key for specifying a {@link Boolean} value which decides whether the
-	tick labels are drawn outside of the plot. */
-	Key TICK_LABELS_OUTSIDE =
-		new Key("axis.ticks.major.labels.outside"); //$NON-NLS-1$
 	/** Key for specifying a {@link Number} value for the rotation of the tick
 	labels in degrees. */
 	Key TICK_LABELS_ROTATION =
@@ -385,4 +381,17 @@ public interface AxisRenderer extends SettingsStorage {
 	 * @param tickLabelDistance Label distance relative to the font height.
 	 */
 	void setTickLabelDistance(Number tickLabelDistance);
+
+	/**
+	 * Returns whether the tick labels are drawn outside of the plot.
+	 * @return {@code true} if the labels are drawn outside of the plot, {@code false} otherwise.
+	 */
+	boolean isTickLabelsOutside();
+
+	/**
+	 * Sets whether the tick labels are drawn outside of the plot.
+	 * @param tickLabelsOutside {@code true} if the labels are drawn outside of the plot,
+	 * {@code false} otherwise.
+	 */
+	void setTickLabelsOutside(boolean tickLabelsOutside);
 }

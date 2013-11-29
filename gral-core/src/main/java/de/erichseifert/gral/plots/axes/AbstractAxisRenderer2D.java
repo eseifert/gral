@@ -121,6 +121,8 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	private Format tickLabelFormat;
 	/** Distance between labels and ticks relative to the font height. */
 	private Number tickLabelDistance;
+	/** Decides whether the tick labels are drawn outside of the plot. */
+	private boolean tickLabelsOutside;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -151,7 +153,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 		tickLabelsEnabled = true;
 		tickLabelFormat = NumberFormat.getInstance();
 		tickLabelDistance = 1.0;
-		setSettingDefault(TICK_LABELS_OUTSIDE, true);
+		tickLabelsOutside = true;
 		setSettingDefault(TICK_LABELS_ROTATION, 0.0);
 
 		setSettingDefault(TICKS_CUSTOM, null);
@@ -222,8 +224,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 
 					boolean isTickLabelVisible =
 						renderer.isTickLabelsEnabled();
-					boolean isTickLabelOutside =
-						renderer.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
 					double tickLabelRotation =
 						renderer.<Number>getSetting(TICK_LABELS_ROTATION)
 						.doubleValue();
@@ -322,7 +323,7 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 						.doubleValue();
 					double axisLabelPos =
 						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
-					boolean isTickLabelOutside = renderer.<Boolean>getSetting(TICK_LABELS_OUTSIDE);
+					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
 
 					PointND<Double> labelPos = getPosition(axis, axisLabelPos, false, true);
 					PointND<Double> labelNormal = getNormal(axis, axisLabelPos, false, true);
@@ -888,5 +889,15 @@ public abstract class AbstractAxisRenderer2D extends BasicSettingsStorage
 	@Override
 	public void setTickLabelDistance(Number tickLabelDistance) {
 		this.tickLabelDistance = tickLabelDistance;
+	}
+
+	@Override
+	public boolean isTickLabelsOutside() {
+		return tickLabelsOutside;
+	}
+
+	@Override
+	public void setTickLabelsOutside(boolean tickLabelsOutside) {
+		this.tickLabelsOutside = tickLabelsOutside;
 	}
 }
