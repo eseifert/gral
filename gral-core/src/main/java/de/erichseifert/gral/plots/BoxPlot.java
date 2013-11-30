@@ -770,7 +770,7 @@ public class BoxPlot extends XYPlot {
 
 		((XYPlotArea2D) getPlotArea()).setGridMajorX(false);
 		getAxisRenderer(AXIS_X).setTickSpacing(1.0);
-		getAxisRenderer(AXIS_X).setTicksMinorEnabled(false);
+		getAxisRenderer(AXIS_X).setTicksMinorVisible(false);
 		getAxisRenderer(AXIS_X).setIntersection(-Double.MAX_VALUE);
 		getAxisRenderer(AXIS_Y).setIntersection(-Double.MAX_VALUE);
 

@@ -228,25 +228,25 @@ public interface Plot extends Drawable, Container {
 	 * Returns the stroke which is used to paint the border of the plot.
 	 * @return Stroke which is used to paint the border of the plot.
 	 */
-	Stroke getBorder();
+	Stroke getBorderStroke();
 
 	/**
 	 * Sets the stroke which will be used to paint the border of the plot.
 	 * @param border Stroke which will be used to paint the border of the plot.
 	 */
-	void setBorder(Stroke border);
+	void setBorderStroke(Stroke border);
 
 	/**
 	 * Returns the paint which is used to fill the border of the plot.
 	 * @return Paint which is used to fill the border of the plot.
 	 */
-	Paint getColor();
+	Paint getBorderColor();
 
 	/**
 	 * Sets the paint which will be used to fill the border of the plot.
 	 * @param color Paint which will be used to fill the border of the plot.
 	 */
-	void setColor(Paint color);
+	void setBorderColor(Paint color);
 
 	/**
 	 * Returns whether the legend is shown.

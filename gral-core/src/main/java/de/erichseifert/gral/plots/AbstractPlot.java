@@ -101,8 +101,8 @@ public abstract class AbstractPlot extends DrawableContainer
 	private Legend legend;
 
 	private Paint background;
-	private transient Stroke border;
-	private Paint color;
+	private transient Stroke borderStroke;
+	private Paint borderColor;
 
 	private boolean legendVisible;
 	private Location legendLocation;
@@ -137,8 +137,8 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 
 		background = null;
-		border = null;
-		color = Color.BLACK;
+		borderStroke = null;
+		borderColor = Color.BLACK;
 		legendVisible = false;
 		legendLocation = Location.CENTER;
 		legendDistance = 2.0;
@@ -159,9 +159,9 @@ public abstract class AbstractPlot extends DrawableContainer
 			GraphicsUtils.fillPaintedShape(graphics, getBounds(), bg, null);
 		}
 
-		Stroke stroke = getBorder();
+		Stroke stroke = getBorderStroke();
 		if (stroke != null) {
-			Paint fg = getColor();
+			Paint fg = getBorderColor();
 			GraphicsUtils.drawPaintedShape(
 					graphics, getBounds(), fg, null, stroke);
 		}
@@ -426,23 +426,23 @@ public abstract class AbstractPlot extends DrawableContainer
 	}
 
 	@Override
-	public Stroke getBorder() {
-		return border;
+	public Stroke getBorderStroke() {
+		return borderStroke;
 	}
 
 	@Override
-	public void setBorder(Stroke border) {
-		this.border = border;
+	public void setBorderStroke(Stroke border) {
+		this.borderStroke = border;
 	}
 
 	@Override
-	public Paint getColor() {
-		return color;
+	public Paint getBorderColor() {
+		return borderColor;
 	}
 
 	@Override
-	public void setColor(Paint color) {
-		this.color = color;
+	public void setBorderColor(Paint color) {
+		this.borderColor = color;
 	}
 
 	@Override
@@ -825,7 +825,7 @@ public abstract class AbstractPlot extends DrawableContainer
 		// Default deserialization
 		in.defaultReadObject();
 		// Custom deserialization
-		border = (Stroke) SerializationUtils.unwrap(
+		borderStroke = (Stroke) SerializationUtils.unwrap(
 				(Serializable) in.readObject());
 
 		// Restore listeners
@@ -846,7 +846,7 @@ public abstract class AbstractPlot extends DrawableContainer
 		// Default serialization
 		out.defaultWriteObject();
 		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(border));
+		out.writeObject(SerializationUtils.wrap(borderStroke));
 
 		// Restore listeners
 		for (DataSource source : getData()) {

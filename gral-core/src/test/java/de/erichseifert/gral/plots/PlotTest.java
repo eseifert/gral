@@ -163,7 +163,7 @@ public class PlotTest {
 	public void testDraw() {
 		plot.getTitle().setText("foobar");
 		plot.setBackground(Color.WHITE);
-		plot.setBorder(new BasicStroke(1f));
+		plot.setBorderStroke(new BasicStroke(1f));
 
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
@@ -266,8 +266,8 @@ public class PlotTest {
 		Plot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorder(), deserialized.getBorder());
-		assertEquals(original.getColor(), deserialized.getColor());
+		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
+		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);

@@ -70,7 +70,7 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.getShapeStroke(), deserialized.getShapeStroke());
 		assertEquals(original.isShapeDirectionSwapped(), deserialized.isShapeDirectionSwapped());
 
-		assertEquals(original.isTicksDrawn(), deserialized.isTicksDrawn());
+		assertEquals(original.isTicksVisible(), deserialized.isTicksVisible());
 		assertEquals(original.getTickSpacing(), deserialized.getTickSpacing());
 		assertEquals(original.isTicksAutoSpaced(), deserialized.isTicksAutoSpaced());
 		assertEquals(original.getTickLength(), deserialized.getTickLength(), DELTA);
@@ -78,13 +78,13 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.getTickAlignment(), deserialized.getTickAlignment(), DELTA);
 		assertEquals(original.getTickFont(), deserialized.getTickFont());
 		assertEquals(original.getTickColor(), deserialized.getTickColor());
-		assertEquals(original.isTickLabelsEnabled(), deserialized.isTickLabelsEnabled());
+		assertEquals(original.isTickLabelsVisible(), deserialized.isTickLabelsVisible());
 		assertEquals(original.getTickLabelFormat(), deserialized.getTickLabelFormat());
 		assertEquals(original.getTickLabelDistance(), deserialized.getTickLabelDistance(), DELTA);
 		assertEquals(original.isTickLabelsOutside(), deserialized.isTickLabelsOutside());
 		assertEquals(original.getTickLabelRotation(), deserialized.getTickLabelRotation(), DELTA);
 
-		assertEquals(original.isTicksMinorEnabled(), deserialized.isTicksMinorEnabled());
+		assertEquals(original.isTicksMinorVisible(), deserialized.isTicksMinorVisible());
 		assertEquals(original.getTicksMinorCount(), deserialized.getTicksMinorCount());
 		assertEquals(original.getTicksMinorLength(), deserialized.getTicksMinorLength(), DELTA);
 		assertEquals(original.getTicksMinorStroke(), deserialized.getTicksMinorStroke());
