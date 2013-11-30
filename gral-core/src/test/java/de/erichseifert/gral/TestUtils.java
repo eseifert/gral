@@ -37,11 +37,7 @@ import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-import java.util.Map;
 
-import de.erichseifert.gral.plots.settings.Key;
-import de.erichseifert.gral.plots.settings.SettingsStorage;
-import de.erichseifert.gral.plots.settings.SettingsUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GeometryUtils.PathSegment;
 
@@ -224,21 +220,6 @@ public class TestUtils {
 	public static void assertEquals(String message, Line2D expected, Line2D actual) {
 		org.junit.Assert.assertEquals(message, expected.getP1(), actual.getP1());
 		org.junit.Assert.assertEquals(message, expected.getP2(), actual.getP2());
-	}
-
-	public static <T extends SettingsStorage> void assertSettings(T expected, T actual) {
-		Map<String, Key> keys = SettingsUtils.getKeys(expected.getClass());
-
-		for (Map.Entry<String, Key> entry : keys.entrySet()) {
-			String name = entry.getKey();
-			Key key = entry.getValue();
-
-			Object valueExpected = expected.getSetting(key);
-			Object valueActual = actual.getSetting(key);
-
-			assertSetting(String.format("Setting '%s' differs.", name),
-				valueExpected, valueActual);
-		}
 	}
 
 	public static <T> void assertSetting(String message, T expected, T actual) {

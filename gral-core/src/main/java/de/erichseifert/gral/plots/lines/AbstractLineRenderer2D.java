@@ -33,7 +33,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.plots.settings.SettingChangeEvent;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -97,13 +96,6 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 				p.position.getPoint2D(), p.shape);
 		}
 		return punched;
-	}
-
-	/**
-	 * Invoked if a setting has changed.
-	 * @param event Event containing information about the changed setting.
-	 */
-	public void settingChanged(SettingChangeEvent event) {
 	}
 
 	/**
