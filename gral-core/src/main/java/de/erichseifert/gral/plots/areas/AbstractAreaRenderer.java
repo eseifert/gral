@@ -25,13 +25,10 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.Area;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.List;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -47,7 +44,7 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -9064749128190128428L;
 
-	private Number gap;
+	private double gap;
 	private boolean gapRounded;
 	private Paint color;
 
@@ -68,7 +65,7 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable
 	 * @return Punched shape.
 	 */
 	protected Shape punch(Shape shape, List<DataPoint> dataPoints) {
-		double size = DataUtils.getValueOrDefault(getGap(), 0.0);
+		double size = getGap();
 		if (!MathUtils.isCalculatable(size) || size == 0.0) {
 			return shape;
 		}
@@ -84,26 +81,13 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable
 		return punched;
 	}
 
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Normal deserialization
-		in.defaultReadObject();
-	}
-
 	@Override
-	public Number getGap() {
+	public double getGap() {
 		return gap;
 	}
 
 	@Override
-	public void setGap(Number gap) {
+	public void setGap(double gap) {
 		this.gap = gap;
 	}
 

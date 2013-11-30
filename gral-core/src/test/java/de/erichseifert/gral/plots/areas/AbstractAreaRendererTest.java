@@ -16,6 +16,7 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 
 public class AbstractAreaRendererTest {
+	private static final double DELTA = 1e-7;
 
 	private static class MockAbstractAreaRenderer extends AbstractAreaRenderer {
 		public MockAbstractAreaRenderer() {
@@ -42,7 +43,7 @@ public class AbstractAreaRendererTest {
 		AreaRenderer original = new MockAbstractAreaRenderer();
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
-		assertEquals(original.getGap(), deserialized.getGap());
+		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
 		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
 		assertEquals(original.getColor(), deserialized.getColor());
 	}

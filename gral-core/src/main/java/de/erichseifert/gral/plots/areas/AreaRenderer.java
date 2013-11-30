@@ -53,13 +53,13 @@ public interface AreaRenderer {
 	 * Returns the value for the gap between the area and a data point.
 	 * @return Gap between area and data point.
 	 */
-	Number getGap();
+	double getGap();
 
 	/**
 	 * Sets the value for the gap between the area and a data point.
 	 * @param gap Gap between area and data point.
 	 */
-	void setGap(Number gap);
+	void setGap(double gap);
 
 	/**
 	 * Returns whether the gaps should have rounded corners.

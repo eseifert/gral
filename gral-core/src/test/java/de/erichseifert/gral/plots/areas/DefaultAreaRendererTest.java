@@ -144,8 +144,7 @@ public class DefaultAreaRendererTest {
 		);
 
 		List<Double> gaps = Arrays.asList(
-			(Double) null, Double.NaN,
-			Double.valueOf(0.0), Double.valueOf(1.0));
+			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
 		List<Boolean> roundeds = Arrays.asList(false, true);
 
 		// Test different gap sizes
