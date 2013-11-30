@@ -30,6 +30,7 @@ import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -64,10 +65,11 @@ public class SpiralPlot extends ExamplePanel {
 		plot.setBackground(new Color(0.75f, 0.75f, 0.75f));
 
 		// Format plot area
-		plot.getPlotArea().setBorderColor(null);    // Remove border of plot area
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false); // Disable vertical grid
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_Y, false); // Disable horizontal grid
-		plot.getPlotArea().setClippingArea(null);   // Disable clipping
+		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();
+		plotArea.setBorderColor(null);   // Remove border of plot area
+		plotArea.setGridMajorX(false);   // Disable vertical grid
+		plotArea.setGridMajorY(false);   // Disable horizontal grid
+		plotArea.setClippingArea(null);  // Disable clipping
 
 		// Format axes
 		plot.getAxisRenderer(XYPlot.AXIS_X).setShapeVisible(false);  // Disable x axis

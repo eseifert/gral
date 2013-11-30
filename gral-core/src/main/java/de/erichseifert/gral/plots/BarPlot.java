@@ -424,7 +424,7 @@ public class BarPlot extends XYPlot {
 	public BarPlot(DataSource... data) {
 		super(data);
 
-		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
+		((XYPlotArea2D) getPlotArea()).setGridMajorX(false);
 		barWidth = 1.0;
 		barHeightMin = 0.0;
 		paintAllBars = false;

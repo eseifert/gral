@@ -39,6 +39,7 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 
 public class XYPlotTest {
 	private static final double DELTA = 1e-7;
@@ -76,7 +77,7 @@ public class XYPlotTest {
 		// XYPlot with all options turned on
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText("foobar");
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, true);
+		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(true);
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
 		plot.setLegendVisible(true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
@@ -85,7 +86,7 @@ public class XYPlotTest {
 
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText(null);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MAJOR_X, false);
+		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(false);
 		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
 		plot.setLegendVisible(false);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
@@ -116,5 +117,16 @@ public class XYPlotTest {
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
+
+		testPlotAreaSerialization(original.getPlotArea(), deserialized.getPlotArea());
+	}
+
+	private static void testPlotAreaSerialization(PlotArea originalPlotArea, PlotArea deserializedPlotArea) {
+		XYPlotArea2D original = (XYPlotArea2D) originalPlotArea;
+		XYPlotArea2D deserialized = (XYPlotArea2D) deserializedPlotArea;
+
+		assertEquals(original.isGridMajorX(), deserialized.isGridMajorX());
+		assertEquals(original.isGridMajorY(), deserialized.isGridMajorY());
+		assertEquals(original.getGridMajorColor(), deserialized.getGridMajorColor());
 	}
 }

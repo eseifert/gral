@@ -279,8 +279,8 @@ public class RasterPlot extends XYPlot {
 		distance = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
 		colors = new Grayscale();
 
-		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_X, false);
-		getPlotArea().setSettingDefault(XYPlotArea2D.GRID_MAJOR_Y, false);
+		((XYPlotArea2D) getPlotArea()).setGridMajorX(false);
+		((XYPlotArea2D) getPlotArea()).setGridMajorY(false);
 		//getAxisRenderer(AXIS_X).setSetting(AxisRenderer.TICKS, false);
 		//getAxisRenderer(AXIS_Y).setSetting(AxisRenderer.TICKS, false);
 		getAxisRenderer(AXIS_X).setIntersection(-Double.MAX_VALUE);
