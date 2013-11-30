@@ -178,7 +178,7 @@ public interface AxisRenderer {
 	void setShapeStroke(Stroke shapeStroke);
 
 	/**
-	 * Returns whether the axis direction will be changed.
+	 * Returns whether the axis direction is changed.
 	 * @return {@code true} if the shape of the axis is inverted,
 	 * {@code false} otherwise.
 	 */
@@ -186,23 +186,23 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets whether the axis direction will be changed.
-	 * @param shapeDirectionSwapped {@code true} if the shape of the axis is inverted,
-	 * {@code false} otherwise.
+	 * @param shapeDirectionSwapped {@code true} if the shape of the axis
+	 * should be inverted, {@code false} otherwise.
 	 */
 	void setShapeDirectionSwapped(boolean shapeDirectionSwapped);
 
 	/**
 	 * Returns whether major ticks are drawn.
-	 * @return {@code true} if major ticks should be drawn, {@code false} otherwise.
+	 * @return {@code true} if major ticks are drawn, {@code false} otherwise.
 	 */
-	boolean isTicksDrawn();
+	boolean isTicksVisible();
 
 	/**
-	 * Sets whether major ticks are drawn.
-	 * @param ticksDrawn {@code true} if major ticks should be drawn,
+	 * Sets whether major ticks will be drawn.
+	 * @param ticksVisible {@code true} if major ticks should be drawn,
 	 * {@code false} otherwise.
 	 */
-	void setTicksDrawn(boolean ticksDrawn);
+	void setTicksVisible(boolean ticksVisible);
 
 	/**
 	 * Returns the interval for major ticks.
@@ -296,13 +296,13 @@ public interface AxisRenderer {
 	 * Returns whether tick labels will be shown.
 	 * @return {@code true} if tick labels will be drawn, {@code false} otherwise.
 	 */
-	boolean isTickLabelsEnabled();
+	boolean isTickLabelsVisible();
 
 	/**
 	 * Sets whether tick labels will be shown.
-	 * @param tickLabelsEnabled {@code true} if tick labels will be drawn, {@code false} otherwise.
+	 * @param tickLabelsVisible {@code true} if tick labels will be drawn, {@code false} otherwise.
 	 */
-	void setTickLabelsEnabled(boolean tickLabelsEnabled);
+	void setTickLabelsVisible(boolean tickLabelsVisible);
 
 	/**
 	 * Returns the format which converts the tick values to labels.
@@ -357,13 +357,13 @@ public interface AxisRenderer {
 	 * Returns whether minor ticks are drawn.
 	 * @return {@code true} if minor ticks are drawn, {@code false} otherwise.
 	 */
-	boolean isTicksMinorEnabled();
+	boolean isTicksMinorVisible();
 
 	/**
 	 * Sets whether minor ticks are drawn.
-	 * @param ticksMinorEnabled {@code true} if minor ticks are drawn, {@code false} otherwise.
+	 * @param ticksMinorVisible {@code true} if minor ticks are drawn, {@code false} otherwise.
 	 */
-	void setTicksMinorEnabled(boolean ticksMinorEnabled);
+	void setTicksMinorVisible(boolean ticksMinorVisible);
 
 	/**
 	 * Returns the count of minor ticks.

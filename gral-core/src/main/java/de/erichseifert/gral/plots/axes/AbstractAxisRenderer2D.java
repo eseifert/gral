@@ -96,7 +96,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private boolean shapeDirectionSwapped;
 
 	/** Decides whether major ticks are drawn. */
-	private boolean ticksDrawn;
+	private boolean ticksVisible;
 	/** Distance on axis in which major ticks are drawn. */
 	private Number tickSpacing;
 	/** Decides whether automatic tick spacing is enabled. */
@@ -113,7 +113,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Paint used to draw the shapes of major ticks. */
 	private Paint tickColor;
 	/** Decides whether tick labels will be shown. */
-	private boolean tickLabelsEnabled;
+	private boolean tickLabelsVisible;
 	/** Format which converts the tick values to labels. */
 	private Format tickLabelFormat;
 	/** Distance between labels and ticks relative to the font height. */
@@ -124,7 +124,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private Number tickLabelRotation;
 
 	/** Decides whether minor ticks are drawn. */
-	private boolean ticksMinorEnabled;
+	private boolean ticksMinorVisible;
 	/** Number of minor ticks between two major ticks. */
 	private int ticksMinorCount;
 	/** Tick length relative to font height.*/
@@ -164,7 +164,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		shapeStroke = new BasicStroke();
 		shapeColor = Color.BLACK;
 
-		ticksDrawn = true;
+		ticksVisible = true;
 		tickSpacing = 0.0;
 		ticksAutoSpaced = false;
 		tickLength = 1.0;
@@ -173,7 +173,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		tickFont = Font.decode(null);
 		tickColor = Color.BLACK;
 
-		tickLabelsEnabled = true;
+		tickLabelsVisible = true;
 		tickLabelFormat = NumberFormat.getInstance();
 		tickLabelDistance = 1.0;
 		tickLabelsOutside = true;
@@ -181,7 +181,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 
 		customLabels = null;
 
-		ticksMinorEnabled = true;
+		ticksMinorVisible = true;
 		ticksMinorCount = 1;
 		ticksMinorLength = 0.5;
 		ticksMinorStroke = new BasicStroke();
@@ -238,14 +238,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					renderer.getTickFont().getSize2D();
 
 				// Draw ticks
-				boolean drawTicksMajor = renderer.isTicksDrawn();
-				boolean drawTicksMinor = renderer.isTicksMinorEnabled();
+				boolean drawTicksMajor = renderer.isTicksVisible();
+				boolean drawTicksMinor = renderer.isTicksMinorVisible();
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
 					// Calculate tick positions (in pixel coordinates)
 					List<Tick> ticks = getTicks(axis);
 
 					boolean isTickLabelVisible =
-						renderer.isTickLabelsEnabled();
+						renderer.isTickLabelsVisible();
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
 					double tickLabelRotation = renderer.getTickLabelRotation()
 						.doubleValue();
@@ -800,13 +800,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public boolean isTicksDrawn() {
-		return ticksDrawn;
+	public boolean isTicksVisible() {
+		return ticksVisible;
 	}
 
 	@Override
-	public void setTicksDrawn(boolean ticksDrawn) {
-		this.ticksDrawn = ticksDrawn;
+	public void setTicksVisible(boolean ticksVisible) {
+		this.ticksVisible = ticksVisible;
 	}
 
 	@Override
@@ -880,13 +880,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public boolean isTickLabelsEnabled() {
-		return tickLabelsEnabled;
+	public boolean isTickLabelsVisible() {
+		return tickLabelsVisible;
 	}
 
 	@Override
-	public void setTickLabelsEnabled(boolean tickLabelsEnabled) {
-		this.tickLabelsEnabled = tickLabelsEnabled;
+	public void setTickLabelsVisible(boolean tickLabelsVisible) {
+		this.tickLabelsVisible = tickLabelsVisible;
 	}
 
 	@Override
@@ -930,13 +930,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public boolean isTicksMinorEnabled() {
-		return ticksMinorEnabled;
+	public boolean isTicksMinorVisible() {
+		return ticksMinorVisible;
 	}
 
 	@Override
-	public void setTicksMinorEnabled(boolean ticksMinorEnabled) {
-		this.ticksMinorEnabled = ticksMinorEnabled;
+	public void setTicksMinorVisible(boolean ticksMinorVisible) {
+		this.ticksMinorVisible = ticksMinorVisible;
 	}
 
 	@Override
