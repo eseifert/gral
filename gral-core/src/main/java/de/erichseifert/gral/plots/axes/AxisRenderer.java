@@ -232,13 +232,13 @@ public interface AxisRenderer {
 	 * Returns the length of major tick strokes.
 	 * @return Tick length relative to the font height.
 	 */
-	Number getTickLength();
+	double getTickLength();
 
 	/**
 	 * Sets the length of major tick strokes.
 	 * @param tickLength Tick length relative to the font height.
 	 */
-	void setTickLength(Number tickLength);
+	void setTickLength(double tickLength);
 
 	/**
 	 * Returns the stroke which is used to draw all major ticks.

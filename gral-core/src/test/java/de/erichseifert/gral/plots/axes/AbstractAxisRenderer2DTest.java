@@ -33,6 +33,7 @@ import org.junit.Test;
 import de.erichseifert.gral.TestUtils;
 
 public class AbstractAxisRenderer2DTest {
+	private static final double DELTA = 1e-10;
 	private AbstractAxisRenderer2D renderer;
 
 	private static class MockAbstractAxisRenderer2D extends AbstractAxisRenderer2D {
@@ -72,7 +73,7 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.isTicksDrawn(), deserialized.isTicksDrawn());
 		assertEquals(original.getTickSpacing(), deserialized.getTickSpacing());
 		assertEquals(original.isTicksAutoSpaced(), deserialized.isTicksAutoSpaced());
-		assertEquals(original.getTickLength(), deserialized.getTickLength());
+		assertEquals(original.getTickLength(), deserialized.getTickLength(), DELTA);
 		assertEquals(original.getTickStroke(), deserialized.getTickStroke());
 		assertEquals(original.getTickAlignment(), deserialized.getTickAlignment());
 		assertEquals(original.getTickFont(), deserialized.getTickFont());

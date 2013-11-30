@@ -102,7 +102,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Decides whether automatic tick spacing is enabled. */
 	private boolean ticksAutoSpaced;
 	/** Tick length relative to the font */
-	private Number tickLength;
+	private double tickLength;
 	/** Stroke which is used to draw all major ticks. */
 	// Property will be serialized using a wrapper
 	private transient Stroke tickStroke;
@@ -456,7 +456,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	protected double getTickLengthAbsolute() {
 		double fontSize = getTickFont().getSize2D();
-		return getTickLength().doubleValue()*fontSize;
+		return getTickLength()*fontSize;
 	}
 
 	/**
@@ -830,12 +830,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTickLength() {
+	public double getTickLength() {
 		return tickLength;
 	}
 
 	@Override
-	public void setTickLength(Number tickLength) {
+	public void setTickLength(double tickLength) {
 		this.tickLength = tickLength;
 	}
 
