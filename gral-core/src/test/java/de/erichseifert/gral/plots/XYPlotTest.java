@@ -78,7 +78,7 @@ public class XYPlotTest {
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText("foobar");
 		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(true);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, true);
+		((XYPlotArea2D) plot.getPlotArea()).setGridMinorX(true);
 		plot.setLegendVisible(true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
@@ -87,7 +87,7 @@ public class XYPlotTest {
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText(null);
 		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(false);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_X, false);
+		((XYPlotArea2D) plot.getPlotArea()).setGridMinorX(false);
 		plot.setLegendVisible(false);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
@@ -128,5 +128,8 @@ public class XYPlotTest {
 		assertEquals(original.isGridMajorX(), deserialized.isGridMajorX());
 		assertEquals(original.isGridMajorY(), deserialized.isGridMajorY());
 		assertEquals(original.getGridMajorColor(), deserialized.getGridMajorColor());
+		assertEquals(original.isGridMinorX(), deserialized.isGridMinorX());
+		assertEquals(original.isGridMinorY(), deserialized.isGridMinorY());
+		assertEquals(original.getGridMinorColor(), deserialized.getGridMinorColor());
 	}
 }

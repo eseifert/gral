@@ -173,7 +173,7 @@ public class MemoryUsage extends ExamplePanel {
 
 		// Format plot area
 		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(false);
-		plot.getPlotArea().setSetting(XYPlot.XYPlotArea2D.GRID_MINOR_Y, true);
+		((XYPlotArea2D) plot.getPlotArea()).setGridMinorY(true);
 
 		// Format axes (set scale and spacings)
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
