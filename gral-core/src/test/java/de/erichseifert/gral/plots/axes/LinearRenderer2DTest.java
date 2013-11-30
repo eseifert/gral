@@ -114,6 +114,7 @@ public class LinearRenderer2DTest {
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		AxisRenderer original = renderer;
+		@SuppressWarnings("unused")
 		AxisRenderer deserialized = TestUtils.serializeAndDeserialize(original);
     }
 }

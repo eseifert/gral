@@ -65,6 +65,8 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		/**
 		 * Compares two rows using the rules defined by the
 		 * {@code DataComparator}s of this instance.
+		 * @param row1 First row to compare.
+		 * @param row2 Second row to compare.
 	     * @return A negative number if first argument is less than the second,
 	     *         zero if first argument is equal to the second,
 	     *         or a positive integer as the greater than the second.

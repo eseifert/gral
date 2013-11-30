@@ -153,7 +153,7 @@ public class RasterPlot extends XYPlot {
 		/**
 		 * Sets the index of the column which will be used for the value of a
 		 * point.
-		 * @param columnY Index of the column for the value of a point.
+		 * @param columnIndex Index of the column for the value of a point.
 		 */
 		public void setColumnValue(int columnIndex) {
 			this.columnValue = columnIndex;

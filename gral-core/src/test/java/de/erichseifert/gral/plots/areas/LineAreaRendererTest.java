@@ -115,6 +115,7 @@ public class LineAreaRendererTest {
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		AreaRenderer original = new DefaultAreaRenderer2D();
+		@SuppressWarnings("unused")
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
     }
 }

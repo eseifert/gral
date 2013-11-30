@@ -46,8 +46,6 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class DefaultLineRendererTest {
-	private static final double DELTA = 1e-7;
-
 	private PointData data;
 
 	@Before
@@ -116,6 +114,7 @@ public class DefaultLineRendererTest {
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		LineRenderer original = new DefaultLineRenderer2D();
+		@SuppressWarnings("unused")
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
     }
 }

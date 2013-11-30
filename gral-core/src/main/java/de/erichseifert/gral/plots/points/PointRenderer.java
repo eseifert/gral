@@ -162,7 +162,7 @@ public interface PointRenderer {
 
 	/**
 	 * Sets the rotation angle of the value.
-	 * @param rotation Rotation angle in degrees.
+	 * @param angle Rotation angle in degrees.
 	 */
 	void setValueRotation(double angle);
 

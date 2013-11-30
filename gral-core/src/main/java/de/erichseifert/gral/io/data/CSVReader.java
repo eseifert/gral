@@ -131,9 +131,9 @@ public class CSVReader extends AbstractDataReader {
 	public CSVReader(String mimeType) {
 		super(mimeType);
 		if ("text/tab-separated-values".equals(mimeType)) { //$NON-NLS-1$
-			setDefault(SEPARATOR_CHAR, '\t'); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, '\t');
 		} else {
-			setDefault(SEPARATOR_CHAR, ','); //$NON-NLS-1$ //$NON-NLS-2$
+			setDefault(SEPARATOR_CHAR, ',');
 		}
 	}
 
@@ -254,7 +254,6 @@ public class CSVReader extends AbstractDataReader {
 			try {
 				parse = String.class.getMethod("valueOf", Object.class);
 			} catch (NoSuchMethodException e) {
-				parse = null;
 			}
 		} else {
 			for (Method m : c.getMethods()) {
