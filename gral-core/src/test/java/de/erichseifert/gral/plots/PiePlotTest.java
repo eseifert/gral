@@ -100,8 +100,8 @@ public class PiePlotTest {
 		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorder(), deserialized.getBorder());
-		assertEquals(original.getColor(), deserialized.getColor());
+		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
+		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
 		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
 		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
