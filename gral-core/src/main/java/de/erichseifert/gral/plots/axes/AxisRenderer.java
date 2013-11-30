@@ -407,7 +407,7 @@ public interface AxisRenderer {
 	 * 1.0 means inside the plotting area.
 	 * @return Minor tick alignment relative to the axis.
 	 */
-	Number getTicksMinorAlignment();
+	double getTicksMinorAlignment();
 
 	/**
 	 * Sets the alignment of minor ticks.
@@ -415,7 +415,7 @@ public interface AxisRenderer {
 	 * 1.0 means inside the plotting area.
 	 * @param ticksMinorAlignment Minor tick alignment relative to the axis.
 	 */
-	void setTicksMinorAlignment(Number ticksMinorAlignment);
+	void setTicksMinorAlignment(double ticksMinorAlignment);
 
 	/**
 	 * Returns the paint used to draw the shapes of minor ticks.

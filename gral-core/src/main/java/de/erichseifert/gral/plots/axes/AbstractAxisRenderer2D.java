@@ -133,7 +133,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	// Property will be serialized using a wrapper
 	private transient Stroke ticksMinorStroke;
 	/** Minor tick alignment relative to the axis. */
-	private Number ticksMinorAlignment;
+	private double ticksMinorAlignment;
 	/** Paint used to draw the shapes of minor ticks. */
 	private Paint ticksMinorColor;
 	/** Custom labels containing their respective position and text. */
@@ -266,8 +266,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.type)) {
 							tickLength = renderer.getTickMinorLengthAbsolute();
-							tickAlignment = renderer.getTicksMinorAlignment()
-								.doubleValue();
+							tickAlignment = renderer.getTicksMinorAlignment();
 							tickPaint = renderer.getTicksMinorColor();
 							tickStroke = renderer.getTicksMinorStroke();
 						} else {
@@ -965,12 +964,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTicksMinorAlignment() {
+	public double getTicksMinorAlignment() {
 		return ticksMinorAlignment;
 	}
 
 	@Override
-	public void setTicksMinorAlignment(Number ticksMinorAlignment) {
+	public void setTicksMinorAlignment(double ticksMinorAlignment) {
 		this.ticksMinorAlignment = ticksMinorAlignment;
 	}
 
