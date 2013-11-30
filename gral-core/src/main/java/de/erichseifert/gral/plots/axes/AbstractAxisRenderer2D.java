@@ -39,6 +39,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -138,7 +140,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private Paint minorTickColor;
 
 	/** Custom labels containing their respective position and text. */
-	private Map<Double, String> customTicks;
+	private final Map<Double, String> customTicks;
 	/** Label text of the axis. */
 	private String label;
 	/** Distance relative to font height. */
@@ -180,7 +182,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		tickLabelsOutside = true;
 		tickLabelRotation = 0.0;
 
-		customTicks = null;
+		customTicks = new HashMap<Double, String>();
 
 		minorTickVisible = true;
 		minorTicksCount = 1;
@@ -987,13 +989,13 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 
 	@Override
 	public Map<Double, String> getCustomTicks() {
-		// TODO Return unmodifiable map
-		return customTicks;
+		return Collections.unmodifiableMap(customTicks);
 	}
 
 	@Override
 	public void setCustomTicks(Map<Double, String> positionsAndLabels) {
-		this.customTicks = positionsAndLabels;
+		customTicks.clear();
+		customTicks.putAll(positionsAndLabels);
 	}
 
 	@Override
