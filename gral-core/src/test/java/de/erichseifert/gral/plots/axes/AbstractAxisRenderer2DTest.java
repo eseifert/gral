@@ -84,14 +84,14 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.isTickLabelsOutside(), deserialized.isTickLabelsOutside());
 		assertEquals(original.getTickLabelRotation(), deserialized.getTickLabelRotation(), DELTA);
 
-		assertEquals(original.isTicksMinorVisible(), deserialized.isTicksMinorVisible());
-		assertEquals(original.getTicksMinorCount(), deserialized.getTicksMinorCount());
-		assertEquals(original.getTicksMinorLength(), deserialized.getTicksMinorLength(), DELTA);
-		assertEquals(original.getTicksMinorStroke(), deserialized.getTicksMinorStroke());
-		assertEquals(original.getTicksMinorAlignment(), deserialized.getTicksMinorAlignment(), DELTA);
-		assertEquals(original.getTicksMinorColor(), deserialized.getTicksMinorColor());
+		assertEquals(original.isMinorTicksVisible(), deserialized.isMinorTicksVisible());
+		assertEquals(original.getMinorTicksCount(), deserialized.getMinorTicksCount());
+		assertEquals(original.getMinorTickLength(), deserialized.getMinorTickLength(), DELTA);
+		assertEquals(original.getMinorTickStroke(), deserialized.getMinorTickStroke());
+		assertEquals(original.getMinorTickAlignment(), deserialized.getMinorTickAlignment(), DELTA);
+		assertEquals(original.getMinorTickColor(), deserialized.getMinorTickColor());
 
-		assertEquals(original.getCustomLabels(), deserialized.getCustomLabels());
+		assertEquals(original.getCustomTicks(), deserialized.getCustomTicks());
 		assertEquals(original.getLabel(), deserialized.getLabel());
 		assertEquals(original.getLabelDistance(), deserialized.getLabelDistance(), DELTA);
 		assertEquals(original.getLabelRotation(), deserialized.getLabelRotation(), DELTA);

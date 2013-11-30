@@ -148,10 +148,10 @@ public interface AxisRenderer {
 	/**
 	 * Sets whether the normal vector of the shape is calculated using
 	 * clockwise or counterclockwise rotation.
-	 * @param shapeNormalOrientationClockwise {@code true} if the orientation is clockwise,
+	 * @param clockwise {@code true} if the orientation is clockwise,
 	 * {@code false} if it is counterclockwise.
 	 */
-	void setShapeNormalOrientationClockwise(boolean shapeNormalOrientationClockwise);
+	void setShapeNormalOrientationClockwise(boolean clockwise);
 
 	/**
 	 * Returns the paint used to draw the axis, its ticks and its labels.
@@ -173,9 +173,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the stroke which defines the shape of the axis.
-	 * @param shapeStroke Stroke used for drawing the shape.
+	 * @param stroke Stroke used for drawing the shape.
 	 */
-	void setShapeStroke(Stroke shapeStroke);
+	void setShapeStroke(Stroke stroke);
 
 	/**
 	 * Returns whether the axis direction is changed.
@@ -186,10 +186,10 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets whether the axis direction will be changed.
-	 * @param shapeDirectionSwapped {@code true} if the shape of the axis
+	 * @param directionSwapped {@code true} if the shape of the axis
 	 * should be inverted, {@code false} otherwise.
 	 */
-	void setShapeDirectionSwapped(boolean shapeDirectionSwapped);
+	void setShapeDirectionSwapped(boolean directionSwapped);
 
 	/**
 	 * Returns whether major ticks are drawn.
@@ -212,9 +212,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the interval for major ticks.
-	 * @param tickSpacing Distance on axis in which major ticks are drawn.
+	 * @param spacing Distance on axis in which major ticks are drawn.
 	 */
-	void setTickSpacing(Number tickSpacing);
+	void setTickSpacing(Number spacing);
 
 	/**
 	 * Returns whether the interval for major and minor ticks is chosen automatically.
@@ -224,9 +224,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets whether the interval for major and minor ticks is chosen automatically.
-	 * @param ticksAutoSpaced {@code true} if auto-spacing is enabled, {@code false} otherwise.
+	 * @param autoSpaced {@code true} if auto-spacing is enabled, {@code false} otherwise.
 	 */
-	void setTicksAutoSpaced(boolean ticksAutoSpaced);
+	void setTicksAutoSpaced(boolean autoSpaced);
 
 	/**
 	 * Returns the length of major tick strokes.
@@ -236,9 +236,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the length of major tick strokes.
-	 * @param tickLength Tick length relative to the font height.
+	 * @param length Tick length relative to the font height.
 	 */
-	void setTickLength(double tickLength);
+	void setTickLength(double length);
 
 	/**
 	 * Returns the stroke which is used to draw all major ticks.
@@ -248,9 +248,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the stroke which is used to draw all major ticks.
-	 * @param tickStroke Stroke used for major tick drawing.
+	 * @param stroke Stroke used for major tick drawing.
 	 */
-	void setTickStroke(Stroke tickStroke);
+	void setTickStroke(Stroke stroke);
 
 	/**
 	 * Returns the alignment of major ticks relative to the axis.
@@ -264,9 +264,9 @@ public interface AxisRenderer {
 	 * Sets the alignment of major ticks relative to the axis.
 	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
 	 * 1.0 means inside the plotting area.
-	 * @param tickAlignment Major tick alignment relative to the axis.
+	 * @param alignment Major tick alignment relative to the axis.
 	 */
-	void setTickAlignment(double tickAlignment);
+	void setTickAlignment(double alignment);
 
 	/**
 	 * Returns the font used to display the text of major ticks.
@@ -276,9 +276,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the font used to display the text of major ticks.
-	 * @param tickFont Font used for tick labels.
+	 * @param font Font used for tick labels.
 	 */
-	void setTickFont(Font tickFont);
+	void setTickFont(Font font);
 
 	/**
 	 * Returns the paint used to draw the shapes of major ticks.
@@ -288,9 +288,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the paint used to draw the shapes of major ticks.
-	 * @param tickColor Paint used for major tick drawing.
+	 * @param color Paint used for major tick drawing.
 	 */
-	void setTickColor(Paint tickColor);
+	void setTickColor(Paint color);
 
 	/**
 	 * Returns whether tick labels will be shown.
@@ -312,9 +312,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the format which converts the tick values to labels.
-	 * @param tickLabelFormat Format used for tick labels.
+	 * @param format Format used for tick labels.
 	 */
-	void setTickLabelFormat(Format tickLabelFormat);
+	void setTickLabelFormat(Format format);
 
 	/**
 	 * Returns the distance of labels to their ticks.
@@ -324,9 +324,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the distance of labels to their ticks.
-	 * @param tickLabelDistance Label distance relative to the font height.
+	 * @param distance Label distance relative to the font height.
 	 */
-	void setTickLabelDistance(double tickLabelDistance);
+	void setTickLabelDistance(double distance);
 
 	/**
 	 * Returns whether the tick labels are drawn outside of the plot.
@@ -349,57 +349,57 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the rotation of the tick labels.
-	 * @param tickLabelRotation Tick label rotation in degrees.
+	 * @param angle Tick label rotation in degrees.
 	 */
-	void setTickLabelRotation(double tickLabelRotation);
+	void setTickLabelRotation(double angle);
 
 	/**
 	 * Returns whether minor ticks are drawn.
 	 * @return {@code true} if minor ticks are drawn, {@code false} otherwise.
 	 */
-	boolean isTicksMinorVisible();
+	boolean isMinorTicksVisible();
 
 	/**
 	 * Sets whether minor ticks are drawn.
-	 * @param ticksMinorVisible {@code true} if minor ticks are drawn, {@code false} otherwise.
+	 * @param minorTicksVisible {@code true} if minor ticks are drawn, {@code false} otherwise.
 	 */
-	void setTicksMinorVisible(boolean ticksMinorVisible);
+	void setMinorTicksVisible(boolean minorTicksVisible);
 
 	/**
 	 * Returns the count of minor ticks.
 	 * @return Number of minor ticks between two major ticks.
 	 */
-	int getTicksMinorCount();
+	int getMinorTicksCount();
 
 	/**
 	 * Sets the count of minor ticks.
-	 * @param ticksMinorCount Number of minor ticks between two major ticks.
+	 * @param count Number of minor ticks between two major ticks.
 	 */
-	void setTicksMinorCount(int ticksMinorCount);
+	void setMinorTicksCount(int count);
 
 	/**
 	 * Returns the length of minor tick strokes.
 	 * @return Tick length relative to font height.
 	 */
-	double getTicksMinorLength();
+	double getMinorTickLength();
 
 	/**
 	 * Sets the length of minor tick strokes.
-	 * @param ticksMinorLength Tick length relative to font height.
+	 * @param length Tick length relative to font height.
 	 */
-	void setTicksMinorLength(double ticksMinorLength);
+	void setMinorTickLength(double length);
 
 	/**
 	 * Returns the stroke used to draw all minor ticks.
 	 * @return Stroke used for minor tick drawing.
 	 */
-	Stroke getTicksMinorStroke();
+	Stroke getMinorTickStroke();
 
 	/**
 	 * Sets the stroke used to draw all minor ticks.
-	 * @param ticksMinorStroke Stroke used for minor tick drawing.
+	 * @param stroke Stroke used for minor tick drawing.
 	 */
-	void setTicksMinorStroke(Stroke ticksMinorStroke);
+	void setMinorTickStroke(Stroke stroke);
 
 	/**
 	 * Returns the alignment of minor ticks.
@@ -407,39 +407,39 @@ public interface AxisRenderer {
 	 * 1.0 means inside the plotting area.
 	 * @return Minor tick alignment relative to the axis.
 	 */
-	double getTicksMinorAlignment();
+	double getMinorTickAlignment();
 
 	/**
 	 * Sets the alignment of minor ticks.
 	 * 0.0 means outside the plotting area, 0.5 means centered on the axis,
 	 * 1.0 means inside the plotting area.
-	 * @param ticksMinorAlignment Minor tick alignment relative to the axis.
+	 * @param alignment Minor tick alignment relative to the axis.
 	 */
-	void setTicksMinorAlignment(double ticksMinorAlignment);
+	void setMinorTickAlignment(double alignment);
 
 	/**
 	 * Returns the paint used to draw the shapes of minor ticks.
 	 * @return Paint used for minor tick drawing.
 	 */
-	Paint getTicksMinorColor();
+	Paint getMinorTickColor();
 
 	/**
 	 * Sets the paint used to draw the shapes of minor ticks.
 	 * @param ticksMinorColor Paint used for minor tick drawing.
 	 */
-	void setTicksMinorColor(Paint ticksMinorColor);
+	void setMinorTickColor(Paint ticksMinorColor);
 
 	/**
-	 * Returns custom labels with their respective position and text.
-	 * @return Custom tick labels.
+	 * Returns custom ticks with their respective position and label.
+	 * @return A map of custom tick positions and labels.
 	 */
-	Map<Double, String> getCustomLabels();
+	Map<Double, String> getCustomTicks();
 
 	/**
-	 * Sets custom labels with their respective position and text.
-	 * @param customLabels Custom tick labels.
+	 * Sets custom ticks with their respective position and label.
+	 * @param positionsAndLabels A map of custom tick positions and labels.
 	 */
-	void setCustomLabels(Map<Double, String> customLabels);
+	void setCustomTicks(Map<Double, String> positionsAndLabels);
 
 	/**
 	 * Returns the label text of the axis.
@@ -461,9 +461,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the distance from the axis to the label.
-	 * @param labelDistance Distance relative to font height.
+	 * @param distance Distance relative to font height.
 	 */
-	void setLabelDistance(double labelDistance);
+	void setLabelDistance(double distance);
 
 	/**
 	 * Returns the rotation of the axis label.
@@ -473,9 +473,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the rotation of the axis label.
-	 * @param labelRotation Axis label rotation in degrees.
+	 * @param angle Axis label rotation in degrees.
 	 */
-	void setLabelRotation(double labelRotation);
+	void setLabelRotation(double angle);
 
 	/**
 	 * Returns the font used to display the axis label text.
@@ -485,9 +485,9 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the font used to display the axis label text.
-	 * @param labelFont Font for axis label text.
+	 * @param font Font for axis label text.
 	 */
-	void setLabelFont(Font labelFont);
+	void setLabelFont(Font font);
 
 	/**
 	 * Returns the paint used to draw the axis label.
@@ -497,7 +497,7 @@ public interface AxisRenderer {
 
 	/**
 	 * Sets the paint used to draw the axis label.
-	 * @param labelColor Paint for axis label drawing.
+	 * @param color Paint for axis label drawing.
 	 */
-	void setLabelColor(Paint labelColor);
+	void setLabelColor(Paint color);
 }

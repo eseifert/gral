@@ -68,7 +68,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
 		// Format axes
-		plot.getAxisRenderer(BoxPlot.AXIS_X).setCustomLabels(
+		plot.getAxisRenderer(BoxPlot.AXIS_X).setCustomTicks(
 			DataUtils.map(
 					new Double[] {1.0, 2.0, 3.0},
 					new String[] {"Column 1", "Column 2", "Column 3"}

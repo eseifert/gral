@@ -124,21 +124,21 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private double tickLabelRotation;
 
 	/** Decides whether minor ticks are drawn. */
-	private boolean ticksMinorVisible;
+	private boolean minorTickVisible;
 	/** Number of minor ticks between two major ticks. */
-	private int ticksMinorCount;
+	private int minorTicksCount;
 	/** Tick length relative to font height.*/
-	private double ticksMinorLength;
+	private double minorTickLength;
 	/** Stroke used to draw all minor ticks. */
 	// Property will be serialized using a wrapper
-	private transient Stroke ticksMinorStroke;
+	private transient Stroke minorTickStroke;
 	/** Minor tick alignment relative to the axis. */
-	private double ticksMinorAlignment;
+	private double minorTickAlignment;
 	/** Paint used to draw the shapes of minor ticks. */
-	private Paint ticksMinorColor;
+	private Paint minorTickColor;
 
 	/** Custom labels containing their respective position and text. */
-	private Map<Double, String> customLabels;
+	private Map<Double, String> customTicks;
 	/** Label text of the axis. */
 	private String label;
 	/** Distance relative to font height. */
@@ -180,14 +180,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		tickLabelsOutside = true;
 		tickLabelRotation = 0.0;
 
-		customLabels = null;
+		customTicks = null;
 
-		ticksMinorVisible = true;
-		ticksMinorCount = 1;
-		ticksMinorLength = 0.5;
-		ticksMinorStroke = new BasicStroke();
-		ticksMinorAlignment = 0.5;
-		ticksMinorColor = Color.BLACK;
+		minorTickVisible = true;
+		minorTicksCount = 1;
+		minorTickLength = 0.5;
+		minorTickStroke = new BasicStroke();
+		minorTickAlignment = 0.5;
+		minorTickColor = Color.BLACK;
 
 		label = null;
 		labelDistance = 1.0;
@@ -240,7 +240,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 
 				// Draw ticks
 				boolean drawTicksMajor = renderer.isTicksVisible();
-				boolean drawTicksMinor = renderer.isTicksMinorVisible();
+				boolean drawTicksMinor = renderer.isMinorTicksVisible();
 				if (drawTicksMajor || (drawTicksMajor && drawTicksMinor)) {
 					// Calculate tick positions (in pixel coordinates)
 					List<Tick> ticks = getTicks(axis);
@@ -267,9 +267,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 						Stroke tickStroke;
 						if (TickType.MINOR.equals(tick.type)) {
 							tickLength = renderer.getTickMinorLengthAbsolute();
-							tickAlignment = renderer.getTicksMinorAlignment();
-							tickPaint = renderer.getTicksMinorColor();
-							tickStroke = renderer.getTicksMinorStroke();
+							tickAlignment = renderer.getMinorTickAlignment();
+							tickPaint = renderer.getMinorTickColor();
+							tickStroke = renderer.getMinorTickStroke();
 						} else {
 							tickLength = getTickLengthAbsolute();
 							tickAlignment = renderer.getTickAlignment();
@@ -458,7 +458,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	protected double getTickMinorLengthAbsolute() {
 		double fontSize = getTickFont().getSize2D();
-		return getTicksMinorLength()*fontSize;
+		return getMinorTickLength()*fontSize;
 	}
 
 	/**
@@ -493,7 +493,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	protected void createTicksCustom(List<Tick> ticks, Axis axis,
 			double min, double max, Set<Double> tickPositions) {
-		Map<? extends Number, String> labelsCustom = getCustomLabels();
+		Map<? extends Number, String> labelsCustom = getCustomTicks();
 		if (labelsCustom != null) {
 			for (Number tickPositionWorldObj : labelsCustom.keySet()) {
 				double tickPositionWorld = tickPositionWorldObj.doubleValue();
@@ -525,7 +525,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 
 		// Retrieve tick label
 		String tickLabel;
-		Map<Double, String> labelsCustom = getCustomLabels();
+		Map<Double, String> labelsCustom = getCustomTicks();
 		if (labelsCustom != null && labelsCustom.containsKey(tickPositionWorld)) {
 			tickLabel = labelsCustom.get(tickPositionWorld);
 		} else {
@@ -707,18 +707,21 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		// Normal deserialization
+		// Default deserialization
 		in.defaultReadObject();
+		// Custom deserialization
 		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 		tickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-		ticksMinorStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
+		minorTickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
+		// Default deserialization
 		out.defaultWriteObject();
+		// Custom serialization
 		out.writeObject(SerializationUtils.wrap(shapeStroke));
 		out.writeObject(SerializationUtils.wrap(tickStroke));
-		out.writeObject(SerializationUtils.wrap(ticksMinorStroke));
+		out.writeObject(SerializationUtils.wrap(minorTickStroke));
 	}
 
 	@Override
@@ -768,8 +771,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setShapeColor(Paint shapeColor) {
-		this.shapeColor = shapeColor;
+	public void setShapeColor(Paint color) {
+		this.shapeColor = color;
 	}
 
 	@Override
@@ -778,8 +781,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setShapeStroke(Stroke shapeStroke) {
-		this.shapeStroke = shapeStroke;
+	public void setShapeStroke(Stroke stroke) {
+		this.shapeStroke = stroke;
 	}
 
 	@Override
@@ -788,8 +791,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setShapeDirectionSwapped(boolean shapeDirectionSwapped) {
-		this.shapeDirectionSwapped = shapeDirectionSwapped;
+	public void setShapeDirectionSwapped(boolean directionSwapped) {
+		this.shapeDirectionSwapped = directionSwapped;
 	}
 
 	@Override
@@ -808,8 +811,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickSpacing(Number tickSpacing) {
-		this.tickSpacing = tickSpacing;
+	public void setTickSpacing(Number spacing) {
+		this.tickSpacing = spacing;
 	}
 
 	@Override
@@ -818,8 +821,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTicksAutoSpaced(boolean ticksAutoSpaced) {
-		this.ticksAutoSpaced = ticksAutoSpaced;
+	public void setTicksAutoSpaced(boolean autoSpaced) {
+		this.ticksAutoSpaced = autoSpaced;
 	}
 
 	@Override
@@ -828,8 +831,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickLength(double tickLength) {
-		this.tickLength = tickLength;
+	public void setTickLength(double length) {
+		this.tickLength = length;
 	}
 
 	@Override
@@ -838,8 +841,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickStroke(Stroke tickStroke) {
-		this.tickStroke = tickStroke;
+	public void setTickStroke(Stroke stroke) {
+		this.tickStroke = stroke;
 	}
 
 	@Override
@@ -848,8 +851,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickAlignment(double tickAlignment) {
-		this.tickAlignment = tickAlignment;
+	public void setTickAlignment(double alignment) {
+		this.tickAlignment = alignment;
 	}
 
 	@Override
@@ -858,8 +861,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickFont(Font tickFont) {
-		this.tickFont = tickFont;
+	public void setTickFont(Font font) {
+		this.tickFont = font;
 	}
 
 	@Override
@@ -868,8 +871,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickColor(Paint tickColor) {
-		this.tickColor = tickColor;
+	public void setTickColor(Paint color) {
+		this.tickColor = color;
 	}
 
 	@Override
@@ -888,8 +891,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickLabelFormat(Format tickLabelFormat) {
-		this.tickLabelFormat = tickLabelFormat;
+	public void setTickLabelFormat(Format format) {
+		this.tickLabelFormat = format;
 	}
 
 	@Override
@@ -898,8 +901,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickLabelDistance(double tickLabelDistance) {
-		this.tickLabelDistance = tickLabelDistance;
+	public void setTickLabelDistance(double distance) {
+		this.tickLabelDistance = distance;
 	}
 
 	@Override
@@ -908,8 +911,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickLabelsOutside(boolean tickLabelsOutside) {
-		this.tickLabelsOutside = tickLabelsOutside;
+	public void setTickLabelsOutside(boolean labelsOutside) {
+		this.tickLabelsOutside = labelsOutside;
 	}
 
 	@Override
@@ -918,78 +921,79 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setTickLabelRotation(double tickLabelRotation) {
-		this.tickLabelRotation = tickLabelRotation;
+	public void setTickLabelRotation(double angle) {
+		this.tickLabelRotation = angle;
 	}
 
 	@Override
-	public boolean isTicksMinorVisible() {
-		return ticksMinorVisible;
+	public boolean isMinorTicksVisible() {
+		return minorTickVisible;
 	}
 
 	@Override
-	public void setTicksMinorVisible(boolean ticksMinorVisible) {
-		this.ticksMinorVisible = ticksMinorVisible;
+	public void setMinorTicksVisible(boolean minorTicksVisible) {
+		this.minorTickVisible = minorTicksVisible;
 	}
 
 	@Override
-	public int getTicksMinorCount() {
-		return ticksMinorCount;
+	public int getMinorTicksCount() {
+		return minorTicksCount;
 	}
 
 	@Override
-	public void setTicksMinorCount(int ticksMinorCount) {
-		this.ticksMinorCount = ticksMinorCount;
+	public void setMinorTicksCount(int count) {
+		this.minorTicksCount = count;
 	}
 
 	@Override
-	public double getTicksMinorLength() {
-		return ticksMinorLength;
+	public double getMinorTickLength() {
+		return minorTickLength;
 	}
 
 	@Override
-	public void setTicksMinorLength(double ticksMinorLength) {
-		this.ticksMinorLength = ticksMinorLength;
+	public void setMinorTickLength(double length) {
+		this.minorTickLength = length;
 	}
 
 	@Override
-	public Stroke getTicksMinorStroke() {
-		return ticksMinorStroke;
+	public Stroke getMinorTickStroke() {
+		return minorTickStroke;
 	}
 
 	@Override
-	public void setTicksMinorStroke(Stroke ticksMinorStroke) {
-		this.ticksMinorStroke = ticksMinorStroke;
+	public void setMinorTickStroke(Stroke stroke) {
+		this.minorTickStroke = stroke;
 	}
 
 	@Override
-	public double getTicksMinorAlignment() {
-		return ticksMinorAlignment;
+	public double getMinorTickAlignment() {
+		return minorTickAlignment;
 	}
 
 	@Override
-	public void setTicksMinorAlignment(double ticksMinorAlignment) {
-		this.ticksMinorAlignment = ticksMinorAlignment;
+	public void setMinorTickAlignment(double alignment) {
+		this.minorTickAlignment = alignment;
 	}
 
 	@Override
-	public Paint getTicksMinorColor() {
-		return ticksMinorColor;
+	public Paint getMinorTickColor() {
+		return minorTickColor;
 	}
 
 	@Override
-	public void setTicksMinorColor(Paint ticksMinorColor) {
-		this.ticksMinorColor = ticksMinorColor;
+	public void setMinorTickColor(Paint color) {
+		this.minorTickColor = color;
 	}
 
 	@Override
-	public Map<Double, String> getCustomLabels() {
-		return customLabels;
+	public Map<Double, String> getCustomTicks() {
+		// TODO Return unmodifiable map
+		return customTicks;
 	}
 
 	@Override
-	public void setCustomLabels(Map<Double, String> customLabels) {
-		this.customLabels = customLabels;
+	public void setCustomTicks(Map<Double, String> positionsAndLabels) {
+		this.customTicks = positionsAndLabels;
 	}
 
 	@Override
@@ -1008,8 +1012,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setLabelDistance(double labelDistance) {
-		this.labelDistance = labelDistance;
+	public void setLabelDistance(double distance) {
+		this.labelDistance = distance;
 	}
 
 	@Override
@@ -1018,8 +1022,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setLabelRotation(double labelRotation) {
-		this.labelRotation = labelRotation;
+	public void setLabelRotation(double angle) {
+		this.labelRotation = angle;
 	}
 
 	@Override
@@ -1028,8 +1032,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setLabelFont(Font labelFont) {
-		this.labelFont = labelFont;
+	public void setLabelFont(Font font) {
+		this.labelFont = font;
 	}
 
 	@Override
@@ -1038,7 +1042,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public void setLabelColor(Paint labelColor) {
-		this.labelColor = labelColor;
+	public void setLabelColor(Paint color) {
+		this.labelColor = color;
 	}
 }
