@@ -143,6 +143,8 @@ public abstract class AbstractPlot extends DrawableContainer
 		legendLocation = Location.CENTER;
 		legendDistance = 2.0;
 
+		refreshLegendLayout();
+
 		add(title, Location.NORTH);
 	}
 
@@ -415,6 +417,22 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 	}
 
+	/**
+	 * Refreshes the positioning and spacing of the legend.
+	 */
+	protected void refreshLegendLayout() {
+		// TODO Use real font size instead of fixed value
+		final double fontSize = 10.0;
+
+		double absoluteLegendDistance = 0.0;
+		if (MathUtils.isCalculatable(legendDistance)) {
+			absoluteLegendDistance = legendDistance*fontSize;
+		}
+
+		OuterEdgeLayout layout = new OuterEdgeLayout(absoluteLegendDistance);
+		legendContainer.setLayout(layout);
+	}
+
 	@Override
 	public Paint getBackground() {
 		return background;
@@ -477,18 +495,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	@Override
 	public void setLegendDistance(double distance) {
 		legendDistance = distance;
-
-		// TODO Use real font size instead of fixed value
-		final double fontSize = 10.0;
-
-		if (MathUtils.isCalculatable(distance)) {
-			distance *= fontSize;
-		} else {
-			distance = 0.0;
-		}
-
-		OuterEdgeLayout layout = new OuterEdgeLayout(distance);
-		legendContainer.setLayout(layout);
+		refreshLegendLayout();
 	}
 
 	/**
