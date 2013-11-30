@@ -45,6 +45,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class LegendTest {
+	private static final double DELTA = 1e-10;
 	private MockLegend legend;
 
 	private static class MockLegend extends SeriesLegend {
@@ -104,7 +105,7 @@ public class LegendTest {
 		assertEquals(original.getFont(), deserialized.getFont());
 		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 		assertEquals(original.getOrientation(), deserialized.getOrientation());
-		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
+		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
 		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
 		assertEquals(original.getGap(), deserialized.getGap());
 		assertEquals(original.getSymbolSize(), deserialized.getSymbolSize());

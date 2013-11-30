@@ -122,14 +122,14 @@ public interface Legend extends Container, Drawable, SymbolSettingProvider {
 	 * {@code 0.0} means left, {@code 0.5} means centered, and {@code 1.0} means right.
 	 * @return Relative horizontal alignment.
 	 */
-	Number getAlignmentX();
+	double getAlignmentX();
 
 	/**
 	 * Sets the horizontal alignment of the legend relative to the plot area.
 	 * {@code 0.0} means left, {@code 0.5} means centered, and {@code 1.0} means right.
 	 * @param alignmentX Relative horizontal alignment.
 	 */
-	void setAlignmentX(Number alignmentX);
+	void setAlignmentX(double alignmentX);
 
 	/**
 	 * Returns the vertical alignment of the legend relative to the plot area.
