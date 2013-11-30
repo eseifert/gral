@@ -51,6 +51,8 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class AbstractLineRendererTest {
+	private static final double DELTA = 1e-7;
+
 	private PointData data;
 
 	private static class MockLineRenderer extends AbstractLineRenderer2D {
@@ -88,7 +90,7 @@ public class AbstractLineRendererTest {
 	public void testCreate() {
 		LineRenderer r = new MockLineRenderer();
 		assertTrue(r.getStroke() instanceof BasicStroke);
-		assertEquals(0.0, r.getGap());
+		assertEquals(0.0, r.getGap(), DELTA);
 		assertEquals(false, r.isGapRounded());
 		assertEquals(Color.BLACK, r.getColor());
 	}
@@ -143,7 +145,7 @@ public class AbstractLineRendererTest {
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getStroke(), deserialized.getStroke());
-		assertEquals(original.getGap(), deserialized.getGap());
+		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
 		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
 		assertEquals(original.getColor(), deserialized.getColor());
     }

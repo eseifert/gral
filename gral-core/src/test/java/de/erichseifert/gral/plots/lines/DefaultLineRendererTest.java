@@ -46,6 +46,8 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class DefaultLineRendererTest {
+	private static final double DELTA = 1e-7;
+
 	private PointData data;
 
 	@Before
@@ -88,8 +90,7 @@ public class DefaultLineRendererTest {
 		);
 
 		List<Double> gaps = Arrays.asList(
-			(Double) null, Double.NaN,
-			Double.valueOf(0.0), Double.valueOf(1.0));
+			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
 		List<Boolean> roundeds = Arrays.asList(false, true);
 
 		// Test different gap sizes

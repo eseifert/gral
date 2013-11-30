@@ -33,11 +33,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SerializationUtils;
-import de.erichseifert.gral.util.SerializationWrapper;
 
 
 /**
@@ -52,8 +50,8 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4172505541305453796L;
 
-	private Stroke stroke;
-	private Number gap;
+	private transient Stroke stroke;
+	private double gap;
 	private boolean gapRounded;
 	private Paint color;
 
@@ -82,7 +80,7 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 		Stroke stroke = getStroke();
 		Shape lineShape = stroke.createStrokedShape(line);
 
-		double size = DataUtils.getValueOrDefault(getGap(), 0.0);
+		double size = getGap();
 		if (!MathUtils.isCalculatable(size) || size == 0.0) {
 			return lineShape;
 		}
@@ -107,18 +105,26 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 	 */
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
-		stroke = ((SerializationWrapper<BasicStroke>) in.readObject()).unwrap();
-		gap = (Number) in.readObject();
-		gapRounded = in.readBoolean();
-		color = (Paint) in.readObject();
+		// Default deserialization
+		in.defaultReadObject();
+		// Custom deserialization
+		stroke = (Stroke) SerializationUtils.unwrap(
+				(Serializable) in.readObject());
 	}
 
+	/**
+	 * Custom serialization method.
+	 * @param out Output stream.
+	 * @throws ClassNotFoundException if a serialized class doesn't exist.
+	 * @throws IOException if there is an error while writing data to the
+	 *         output stream.
+	 */
 	private void writeObject(ObjectOutputStream out)
 			throws ClassNotFoundException, IOException {
+		// Default serialization
+		out.defaultWriteObject();
+		// Custom serialization
 		out.writeObject(SerializationUtils.wrap(stroke));
-		out.writeObject(gap);
-		out.writeBoolean(gapRounded);
-		out.writeObject(color);
 	}
 
 	@Override
@@ -132,12 +138,12 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 	}
 
 	@Override
-	public Number getGap() {
+	public double getGap() {
 		return gap;
 	}
 
 	@Override
-	public void setGap(Number gap) {
+	public void setGap(double gap) {
 		this.gap = gap;
 	}
 

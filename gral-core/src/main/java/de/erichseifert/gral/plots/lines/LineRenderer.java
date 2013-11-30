@@ -73,14 +73,14 @@ public interface LineRenderer {
 	 * If the gap value is equal to or smaller than 0 no gap will be used.
 	 * @return Gap size between drawn line and connected points in pixels.
 	 */
-	Number getGap();
+	double getGap();
 
 	/**
 	 * Sets the value for the gap between the line and a point.
 	 * If the gap value is equal to or smaller than 0 no gap will be used.
 	 * @param gap Gap size between drawn line and connected points in pixels.
 	 */
-	void setGap(Number gap);
+	void setGap(double gap);
 
 	/**
 	 * Returns whether the gaps should have rounded corners.
