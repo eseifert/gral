@@ -106,7 +106,7 @@ public class LegendTest {
 		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 		assertEquals(original.getOrientation(), deserialized.getOrientation());
 		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
-		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
+		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY(), DELTA);
 		assertEquals(original.getGap(), deserialized.getGap());
 		assertEquals(original.getSymbolSize(), deserialized.getSymbolSize());
     }

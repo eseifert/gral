@@ -90,7 +90,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	/** Horizontal alignment of the legend relative to the plot area. */
 	private double alignmentX;
 	/** Vertical alignment of the legend relative to the plot area. */
-	private Number alignmentY;
+	private double alignmentY;
 	/** Gap size relative to the font height. */
 	private Dimension2D gap;
 	/** Symbol size relative to the font height. */
@@ -334,7 +334,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	public void setBounds(double x, double y, double width, double height) {
 		Dimension2D size = getPreferredSize();
 		double alignX = getAlignmentX();
-		double alignY = getAlignmentY().doubleValue();
+		double alignY = getAlignmentY();
 		super.setBounds(
 			x + alignX*(width - size.getWidth()),
 			y + alignY*(height - size.getHeight()),
@@ -463,12 +463,12 @@ public abstract class AbstractLegend extends DrawableContainer
 	}
 
 	@Override
-	public Number getAlignmentY() {
+	public double getAlignmentY() {
 		return alignmentY;
 	}
 
 	@Override
-	public void setAlignmentY(Number alignmentY) {
+	public void setAlignmentY(double alignmentY) {
 		this.alignmentY = alignmentY;
 	}
 

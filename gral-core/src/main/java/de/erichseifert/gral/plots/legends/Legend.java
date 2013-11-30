@@ -136,14 +136,14 @@ public interface Legend extends Container, Drawable, SymbolSettingProvider {
 	 * {@code 0.0} means top, {@code 0.5} means centered, and {@code 1.0} means bottom.
 	 * @return Relative vertical alignment.
 	 */
-	Number getAlignmentY();
+	double getAlignmentY();
 
 	/**
 	 * Sets the vertical alignment of the legend relative to the plot area.
 	 * {@code 0.0} means top, {@code 0.5} means centered, and {@code 1.0} means bottom.
 	 * @param alignmentY Relative vertical alignment.
 	 */
-	void setAlignmentY(Number alignmentY);
+	void setAlignmentY(double alignmentY);
 
 	/**
 	 * Returns the horizontal and vertical gap between items.
