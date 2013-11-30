@@ -143,7 +143,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Distance relative to font height. */
 	private double labelDistance;
 	/** Axis label rotation in degrees. */
-	private Number labelRotation;
+	private double labelRotation;
 	/** Font for axis label text. */
 	private Font labelFont;
 	/** Paint used to draw the axis label. */
@@ -326,8 +326,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					double labelDistance = renderer.getLabelDistance()*fontSize;
 					double labelDist =
 						tickLengthOuter + tickLabelDistance + fontSize + labelDistance;
-					double labelRotation = renderer.getLabelRotation()
-						.doubleValue();
+					double labelRotation = renderer.getLabelRotation();
 					double axisLabelPos =
 						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
@@ -1013,12 +1012,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getLabelRotation() {
+	public double getLabelRotation() {
 		return labelRotation;
 	}
 
 	@Override
-	public void setLabelRotation(Number labelRotation) {
+	public void setLabelRotation(double labelRotation) {
 		this.labelRotation = labelRotation;
 	}
 

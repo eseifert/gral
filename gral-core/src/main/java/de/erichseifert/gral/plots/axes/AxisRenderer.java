@@ -469,13 +469,13 @@ public interface AxisRenderer {
 	 * Returns the rotation of the axis label.
 	 * @return Axis label rotation in degrees.
 	 */
-	Number getLabelRotation();
+	double getLabelRotation();
 
 	/**
 	 * Sets the rotation of the axis label.
 	 * @param labelRotation Axis label rotation in degrees.
 	 */
-	void setLabelRotation(Number labelRotation);
+	void setLabelRotation(double labelRotation);
 
 	/**
 	 * Returns the font used to display the axis label text.
