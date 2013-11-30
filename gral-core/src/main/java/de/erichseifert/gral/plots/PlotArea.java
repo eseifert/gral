@@ -30,6 +30,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
@@ -41,7 +42,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * It serves as base for specialized implementations for different plot types.
  * Derived classes have to implement how the actual drawing is done.
  */
-public abstract class PlotArea extends StylableDrawable {
+public abstract class PlotArea extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 

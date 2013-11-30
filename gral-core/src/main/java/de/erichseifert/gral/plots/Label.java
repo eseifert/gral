@@ -30,6 +30,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -41,7 +42,7 @@ import de.erichseifert.gral.util.MathUtils;
  * A Label is able to manage its settings and to set and get the
  * displayed text, as well as calculating its bounds.
  */
-public class Label extends StylableDrawable {
+public class Label extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
 
