@@ -29,7 +29,6 @@ import java.text.Format;
 import java.text.NumberFormat;
 
 import de.erichseifert.gral.data.Row;
-import de.erichseifert.gral.plots.settings.Key;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
@@ -39,11 +38,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
 public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2612520977245369774L;
-
-	/** Key for specifying a {@link Number} value for the vertical alignment
-    relative to the data point. 0 means top, 1 means bottom. */
-	public static final Key ALIGNMENT_Y =
-		new Key("labelPoint.alignment.y"); //$NON-NLS-1$
 
 	private int column;
 	private Format format;
