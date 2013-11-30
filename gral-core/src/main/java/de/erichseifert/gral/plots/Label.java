@@ -49,17 +49,17 @@ public class Label extends AbstractDrawable {
 	/** Text for this label. */
 	private String text;
 	/** Horizontal label alignment. */
-	private Number alignmentX;
+	private double alignmentX;
 	/** Vertical label alignment. */
-	private Number alignmentY;
+	private double alignmentY;
 	/** Font used to display the text of this label. */
 	private Font font;
 	/** Rotaion of in degrees. */
-	private Number rotation;
+	private double rotation;
 	/** Paint used to draw the shape. */
 	private Paint color;
 	/** Relative text alignment. */
-	private Number textAlignment;
+	private double textAlignment;
 	/** Decides whether the text should be wrapped. */
 	private boolean wordWrapEnabled;
 
@@ -130,8 +130,8 @@ public class Label extends AbstractDrawable {
 		double shapePosY = getY() - textBounds.getY();
 		// Position the text inside the bounding rectangle using the alignment
 		// settings
-		double alignmentX = getAlignmentX().doubleValue();
-		double alignmentY = getAlignmentY().doubleValue();
+		double alignmentX = getAlignmentX();
+		double alignmentY = getAlignmentY();
 		shapePosX += alignmentX*(getWidth() - textBounds.getWidth());
 		shapePosY += alignmentY*(getHeight() - textBounds.getHeight());
 		// Apply positioning
@@ -180,12 +180,12 @@ public class Label extends AbstractDrawable {
 		Font font = getFont();
 		float wrappingWidth = 0f;
 		if (wordWrap) {
-			double rotation = Math.toRadians(getRotation().doubleValue());
+			double rotation = Math.toRadians(getRotation());
 			wrappingWidth = (float) (
 				Math.abs(Math.cos(rotation))*getWidth() +
 				Math.abs(Math.sin(rotation))*getHeight());
 		}
-		double alignment = getTextAlignment().doubleValue();
+		double alignment = getTextAlignment();
 		Shape outline = GraphicsUtils.getOutline(
 			getText(), font, wrappingWidth, alignment);
 		return outline;
@@ -271,7 +271,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means left, 1.0 means right.
 	 * @return Horizontal label alignment.
 	 */
-	public Number getAlignmentX() {
+	public double getAlignmentX() {
 		return alignmentX;
 	}
 
@@ -280,7 +280,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means left, 1.0 means right.
 	 * @param alignmentX Horizontal label alignment.
 	 */
-	public void setAlignmentX(Number alignmentX) {
+	public void setAlignmentX(double alignmentX) {
 		this.alignmentX = alignmentX;
 	}
 
@@ -289,7 +289,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means top, 1.0 means bottom.
 	 * @return Vertical label alignment.
 	 */
-	public Number getAlignmentY() {
+	public double getAlignmentY() {
 		return alignmentY;
 	}
 
@@ -298,7 +298,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means top, 1.0 means bottom.
 	 * @param alignmentY Vertical label alignment.
 	 */
-	public void setAlignmentY(Number alignmentY) {
+	public void setAlignmentY(double alignmentY) {
 		this.alignmentY = alignmentY;
 	}
 
@@ -324,17 +324,17 @@ public class Label extends AbstractDrawable {
 	 * The rotation will be counterclockwise.
 	 * @return Rotation in degrees.
 	 */
-	public Number getRotation() {
+	public double getRotation() {
 		return rotation;
 	}
 
 	/**
 	 * Sets the rotation of this label.
 	 * The rotation will be counterclockwise.
-	 * @param rotation Rotation in degrees.
+	 * @param angle Rotation in degrees.
 	 */
-	public void setRotation(Number rotation) {
-		this.rotation = rotation;
+	public void setRotation(double angle) {
+		this.rotation = angle;
 		invalidate();
 	}
 
@@ -359,7 +359,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means left, 1.0 means right.
 	 * @return Relative text alignment.
 	 */
-	public Number getTextAlignment() {
+	public double getTextAlignment() {
 		return textAlignment;
 	}
 
@@ -368,7 +368,7 @@ public class Label extends AbstractDrawable {
 	 * 0.0 means left, 1.0 means right.
 	 * @param textAlignment Relative text alignment.
 	 */
-	public void setTextAlignment(Number textAlignment) {
+	public void setTextAlignment(double textAlignment) {
 		this.textAlignment = textAlignment;
 		invalidate();
 	}

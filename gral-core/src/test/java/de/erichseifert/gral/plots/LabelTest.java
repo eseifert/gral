@@ -88,11 +88,11 @@ public class LabelTest {
 	@Test
 	public void testSettings() {
 		Label label = new MockLabel("foobar");
-		assertEquals(0.5, label.getAlignmentX().doubleValue(), DELTA);
-		assertEquals(0.5, label.getAlignmentY().doubleValue(), DELTA);
+		assertEquals(0.5, label.getAlignmentX(), DELTA);
+		assertEquals(0.5, label.getAlignmentY(), DELTA);
 		assertEquals(Color.BLACK, label.getColor());
 		assertEquals(Font.decode(null), label.getFont());
-		assertEquals(0.0, label.getRotation().doubleValue(), DELTA);
+		assertEquals(0.0, label.getRotation(), DELTA);
 
 		// Set
 		label.setColor(Color.RED);
@@ -125,12 +125,12 @@ public class LabelTest {
 		Label original = new MockLabel("foobar");
 		Label deserialized = TestUtils.serializeAndDeserialize(original);
 
-		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX());
-		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY());
+		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
+		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY(), DELTA);
 		assertEquals(original.getFont(), deserialized.getFont());
-		assertEquals(original.getRotation(), deserialized.getRotation());
+		assertEquals(original.getRotation(), deserialized.getRotation(), DELTA);
 		assertEquals(original.getColor(), deserialized.getColor());
-		assertEquals(original.getTextAlignment(), deserialized.getTextAlignment());
+		assertEquals(original.getTextAlignment(), deserialized.getTextAlignment(), DELTA);
 		assertEquals(original.isWordWrapEnabled(), deserialized.isWordWrapEnabled());
     }
 }
