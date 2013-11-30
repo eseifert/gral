@@ -381,13 +381,13 @@ public interface AxisRenderer {
 	 * Returns the length of minor tick strokes.
 	 * @return Tick length relative to font height.
 	 */
-	Number getTicksMinorLength();
+	double getTicksMinorLength();
 
 	/**
 	 * Sets the length of minor tick strokes.
 	 * @param ticksMinorLength Tick length relative to font height.
 	 */
-	void setTicksMinorLength(Number ticksMinorLength);
+	void setTicksMinorLength(double ticksMinorLength);
 
 	/**
 	 * Returns the stroke used to draw all minor ticks.

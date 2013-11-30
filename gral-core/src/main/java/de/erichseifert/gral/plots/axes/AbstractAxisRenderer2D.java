@@ -128,7 +128,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Number of minor ticks between two major ticks. */
 	private int ticksMinorCount;
 	/** Tick length relative to font height.*/
-	private Number ticksMinorLength;
+	private double ticksMinorLength;
 	/** Stroke used to draw all minor ticks. */
 	// Property will be serialized using a wrapper
 	private transient Stroke ticksMinorStroke;
@@ -460,7 +460,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	protected double getTickMinorLengthAbsolute() {
 		double fontSize = getTickFont().getSize2D();
-		return getTicksMinorLength().doubleValue()*fontSize;
+		return getTicksMinorLength()*fontSize;
 	}
 
 	/**
@@ -945,12 +945,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTicksMinorLength() {
+	public double getTicksMinorLength() {
 		return ticksMinorLength;
 	}
 
 	@Override
-	public void setTicksMinorLength(Number ticksMinorLength) {
+	public void setTicksMinorLength(double ticksMinorLength) {
 		this.ticksMinorLength = ticksMinorLength;
 	}
 
