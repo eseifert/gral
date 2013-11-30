@@ -75,7 +75,7 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.isTicksAutoSpaced(), deserialized.isTicksAutoSpaced());
 		assertEquals(original.getTickLength(), deserialized.getTickLength(), DELTA);
 		assertEquals(original.getTickStroke(), deserialized.getTickStroke());
-		assertEquals(original.getTickAlignment(), deserialized.getTickAlignment());
+		assertEquals(original.getTickAlignment(), deserialized.getTickAlignment(), DELTA);
 		assertEquals(original.getTickFont(), deserialized.getTickFont());
 		assertEquals(original.getTickColor(), deserialized.getTickColor());
 		assertEquals(original.isTickLabelsEnabled(), deserialized.isTickLabelsEnabled());

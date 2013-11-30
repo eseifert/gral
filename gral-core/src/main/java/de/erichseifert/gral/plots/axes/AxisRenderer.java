@@ -258,7 +258,7 @@ public interface AxisRenderer {
 	 * 1.0 means inside the plotting area.
 	 * @return Major tick alignment relative to the axis.
 	 */
-	Number getTickAlignment();
+	double getTickAlignment();
 
 	/**
 	 * Sets the alignment of major ticks relative to the axis.
@@ -266,7 +266,7 @@ public interface AxisRenderer {
 	 * 1.0 means inside the plotting area.
 	 * @param tickAlignment Major tick alignment relative to the axis.
 	 */
-	void setTickAlignment(Number tickAlignment);
+	void setTickAlignment(double tickAlignment);
 
 	/**
 	 * Returns the font used to display the text of major ticks.

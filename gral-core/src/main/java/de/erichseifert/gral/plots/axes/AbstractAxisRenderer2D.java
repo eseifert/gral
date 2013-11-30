@@ -107,7 +107,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	// Property will be serialized using a wrapper
 	private transient Stroke tickStroke;
 	/** Alignment of major ticks relative to the axis. */
-	private Number tickAlignment;
+	private double tickAlignment;
 	/** Font used to display the text of major ticks. */
 	private Font tickFont;
 	/** Paint used to draw the shapes of major ticks. */
@@ -273,9 +273,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 							tickStroke = renderer.getTicksMinorStroke();
 						} else {
 							tickLength = getTickLengthAbsolute();
-							tickAlignment =
-								renderer.getTickAlignment()
-								.doubleValue();
+							tickAlignment = renderer.getTickAlignment();
 							tickPaint =
 								renderer.getTickColor();
 							tickStroke = renderer.getTickStroke();
@@ -323,8 +321,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					axisLabel.setColor(renderer.getLabelColor());
 
 					double tickLength = getTickLengthAbsolute();
-					double tickAlignment = renderer.getTickAlignment()
-						.doubleValue();
+					double tickAlignment = renderer.getTickAlignment();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 					double tickLabelDistance = renderer.getTickLabelDistanceAbsolute();
 
@@ -400,8 +397,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 				AbstractAxisRenderer2D renderer = AbstractAxisRenderer2D.this;
 				double fontSize = renderer.getTickFont().getSize2D();
 				double tickLength = getTickLengthAbsolute();
-				double tickAlignment = renderer.getTickAlignment()
-					.doubleValue();
+				double tickAlignment = renderer.getTickAlignment();
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 				double labelDistance = renderer.getTickLabelDistanceAbsolute() + tickLengthOuter;
 				double minSize = fontSize + labelDistance + tickLengthOuter;
@@ -850,12 +846,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTickAlignment() {
+	public double getTickAlignment() {
 		return tickAlignment;
 	}
 
 	@Override
-	public void setTickAlignment(Number tickAlignment) {
+	public void setTickAlignment(double tickAlignment) {
 		this.tickAlignment = tickAlignment;
 	}
 
