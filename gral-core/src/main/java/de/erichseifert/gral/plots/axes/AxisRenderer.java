@@ -320,13 +320,13 @@ public interface AxisRenderer {
 	 * Returns the distance of labels to their ticks.
 	 * @return Label distance relative to the font height.
 	 */
-	Number getTickLabelDistance();
+	double getTickLabelDistance();
 
 	/**
 	 * Sets the distance of labels to their ticks.
 	 * @param tickLabelDistance Label distance relative to the font height.
 	 */
-	void setTickLabelDistance(Number tickLabelDistance);
+	void setTickLabelDistance(double tickLabelDistance);
 
 	/**
 	 * Returns whether the tick labels are drawn outside of the plot.

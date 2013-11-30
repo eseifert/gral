@@ -117,7 +117,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Format which converts the tick values to labels. */
 	private Format tickLabelFormat;
 	/** Distance between labels and ticks relative to the font height. */
-	private Number tickLabelDistance;
+	private double tickLabelDistance;
 	/** Decides whether the tick labels are drawn outside of the plot. */
 	private boolean tickLabelsOutside;
 	/** Tick label rotation in degrees. */
@@ -470,7 +470,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	protected double getTickLabelDistanceAbsolute() {
 		double fontSize = getTickFont().getSize2D();
-		return getTickLabelDistance().doubleValue()*fontSize;
+		return getTickLabelDistance()*fontSize;
 	}
 
 	/**
@@ -896,12 +896,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTickLabelDistance() {
+	public double getTickLabelDistance() {
 		return tickLabelDistance;
 	}
 
 	@Override
-	public void setTickLabelDistance(Number tickLabelDistance) {
+	public void setTickLabelDistance(double tickLabelDistance) {
 		this.tickLabelDistance = tickLabelDistance;
 	}
 
