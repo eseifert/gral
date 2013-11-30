@@ -127,8 +127,8 @@ public class PiePlotTest {
 			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
 		PieSliceRenderer original = (PieSliceRenderer) originalRenderer;
 		PieSliceRenderer deserialized = (PieSliceRenderer) deserializedRenderer;
-		assertEquals(original.getRadiusInner(), deserialized.getRadiusInner(), DELTA);
-		assertEquals(original.getRadiusOuter(), deserialized.getRadiusOuter(), DELTA);
+		assertEquals(original.getInnerRadius(), deserialized.getInnerRadius(), DELTA);
+		assertEquals(original.getOuterRadius(), deserialized.getOuterRadius(), DELTA);
 		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
 	}
 }

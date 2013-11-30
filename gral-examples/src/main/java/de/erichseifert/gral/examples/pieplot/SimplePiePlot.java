@@ -67,7 +67,7 @@ public class SimplePiePlot extends ExamplePanel {
 		PieSliceRenderer pointRenderer =
 				(PieSliceRenderer) plot.getPointRenderer(data);
 		// Change relative size of inner region
-		pointRenderer.setRadiusInner(0.4);
+		pointRenderer.setInnerRadius(0.4);
 		// Change the width of gaps between segments
 		pointRenderer.setGap(0.2);
 		// Change the colors

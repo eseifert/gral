@@ -373,8 +373,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
-		private double radiusOuter;
-		private double radiusInner;
+		private double outerRadius;
+		private double innerRadius;
 		private double gap;
 
 		/**
@@ -389,8 +389,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			setErrorColumnBottom(2);
 
 			setColor(new QuasiRandomColors());
-			radiusOuter = 1.0;
-			radiusInner = 0.0;
+			outerRadius = 1.0;
+			innerRadius = 0.0;
 			gap = 0.0;
 		}
 
@@ -399,18 +399,18 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * radius set in the plot.
 		 * @return Outer radius of a pie relative to the radius of the plot.
 		 */
-		public double getRadiusOuter() {
-			return radiusOuter;
+		public double getOuterRadius() {
+			return outerRadius;
 		}
 
 		/**
 		 * Sets the value for the outer radius of a pie relative to the radius
 		 * set in the plot.
-		 * @param radiusOuter Outer Radius of a pie relative to the radius of
-		 * the plot.
+		 * @param radius Outer radius of a pie relative to the radius of the
+		 * plot.
 		 */
-		public void setRadiusOuter(double radiusOuter) {
-			this.radiusOuter = radiusOuter;
+		public void setOuterRadius(double radius) {
+			this.outerRadius = radius;
 		}
 
 		/**
@@ -418,18 +418,18 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * radius set in the plot.
 		 * @return Inner radius of a pie relative to the radius of the plot.
 		 */
-		public double getRadiusInner() {
-			return radiusInner;
+		public double getInnerRadius() {
+			return innerRadius;
 		}
 
 		/**
 		 * Sets the value for the inner radius of a pie relative to the radius
 		 * set in the plot.
-		 * @param radiusInner Inner radius of a pie relative to the radius of
-		 * the plot.
+		 * @param radius Inner radius of a pie relative to the radius of the
+		 * plot.
 		 */
-		public void setRadiusInner(double radiusInner) {
-			this.radiusInner = radiusInner;
+		public void setInnerRadius(double radius) {
+			this.innerRadius = radius;
 		}
 
 		/**
@@ -530,7 +530,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				plotArea.getWidth(), plotArea.getHeight())/2.0;
 			double radiusRel = plot.getRadius();
 			double radius = plotAreaSize*radiusRel;
-			double radiusRelOuter = getRadiusOuter();
+			double radiusRelOuter = getOuterRadius();
 			double radiusOuter = radius*radiusRelOuter;
 
 			// Construct slice
@@ -574,7 +574,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				doughnutSlice.subtract(sliceContour);
 			}
 
-			double radiusRelInner = getRadiusInner();
+			double radiusRelInner = getInnerRadius();
 			if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
 				double radiusInner = radius*radiusRelInner;
 				Ellipse2D inner = new Ellipse2D.Double(
@@ -628,8 +628,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			}
 
 			// Vertical layout
-			double radiusRelOuter = getRadiusOuter();
-			double radiusRelInner = getRadiusInner();
+			double radiusRelOuter = getOuterRadius();
+			double radiusRelInner = getInnerRadius();
 			double radiusOuter = radius*radiusRelOuter;
 			double radiusInner = radius*radiusRelInner;
 			double distanceV = distance;
