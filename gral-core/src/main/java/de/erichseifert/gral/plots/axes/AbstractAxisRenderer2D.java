@@ -136,6 +136,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private double ticksMinorAlignment;
 	/** Paint used to draw the shapes of minor ticks. */
 	private Paint ticksMinorColor;
+
 	/** Custom labels containing their respective position and text. */
 	private Map<Double, String> customLabels;
 	/** Label text of the axis. */
