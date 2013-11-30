@@ -457,13 +457,13 @@ public interface AxisRenderer {
 	 * Returns the distance from the axis to the label.
 	 * @return Distance relative to font height.
 	 */
-	Number getLabelDistance();
+	double getLabelDistance();
 
 	/**
 	 * Sets the distance from the axis to the label.
 	 * @param labelDistance Distance relative to font height.
 	 */
-	void setLabelDistance(Number labelDistance);
+	void setLabelDistance(double labelDistance);
 
 	/**
 	 * Returns the rotation of the axis label.

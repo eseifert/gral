@@ -141,7 +141,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Label text of the axis. */
 	private String label;
 	/** Distance relative to font height. */
-	private Number labelDistance;
+	private double labelDistance;
 	/** Axis label rotation in degrees. */
 	private Number labelRotation;
 	/** Font for axis label text. */
@@ -323,8 +323,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 					double tickLabelDistance = renderer.getTickLabelDistanceAbsolute();
 
-					double labelDistance = renderer.getLabelDistance()
-						.doubleValue()*fontSize;
+					double labelDistance = renderer.getLabelDistance()*fontSize;
 					double labelDist =
 						tickLengthOuter + tickLabelDistance + fontSize + labelDistance;
 					double labelRotation = renderer.getLabelRotation()
@@ -1004,12 +1003,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getLabelDistance() {
+	public double getLabelDistance() {
 		return labelDistance;
 	}
 
 	@Override
-	public void setLabelDistance(Number labelDistance) {
+	public void setLabelDistance(double labelDistance) {
 		this.labelDistance = labelDistance;
 	}
 
