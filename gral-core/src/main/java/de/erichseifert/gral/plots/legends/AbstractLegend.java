@@ -37,7 +37,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.erichseifert.gral.SymbolSettingProvider;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -104,20 +103,20 @@ public abstract class AbstractLegend extends DrawableContainer
 		private static final long serialVersionUID = 7475404103140652668L;
 
 		/** Settings for determining the visual of the symbol. */
-		private final SymbolSettingProvider settings;
+		private final Legend legend;
 
 		/**
 		 * Initializes a new instances.
-		 * @param settings Settings for determining the appearance of the symbol.
+		 * @param legend Legend that determines the appearance of the symbol.
 		 */
-		public AbstractSymbol(SymbolSettingProvider settings) {
-			this.settings = settings;
+		public AbstractSymbol(Legend legend) {
+			this.legend = legend;
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			double fontSize = settings.getFont().getSize2D();
-			Dimension2D symbolSize = settings.getSymbolSize();
+			double fontSize = legend.getFont().getSize2D();
+			Dimension2D symbolSize = legend.getSymbolSize();
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);
