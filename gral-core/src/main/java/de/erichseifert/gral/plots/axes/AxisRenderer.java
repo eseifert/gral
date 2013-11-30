@@ -345,13 +345,13 @@ public interface AxisRenderer {
 	 * Returns the rotation of the tick labels.
 	 * @return Tick label rotation in degrees.
 	 */
-	Number getTickLabelRotation();
+	double getTickLabelRotation();
 
 	/**
 	 * Sets the rotation of the tick labels.
 	 * @param tickLabelRotation Tick label rotation in degrees.
 	 */
-	void setTickLabelRotation(Number tickLabelRotation);
+	void setTickLabelRotation(double tickLabelRotation);
 
 	/**
 	 * Returns whether minor ticks are drawn.

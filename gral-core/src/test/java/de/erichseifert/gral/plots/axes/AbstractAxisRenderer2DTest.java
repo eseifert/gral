@@ -82,7 +82,7 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.getTickLabelFormat(), deserialized.getTickLabelFormat());
 		assertEquals(original.getTickLabelDistance(), deserialized.getTickLabelDistance(), DELTA);
 		assertEquals(original.isTickLabelsOutside(), deserialized.isTickLabelsOutside());
-		assertEquals(original.getTickLabelRotation(), deserialized.getTickLabelRotation());
+		assertEquals(original.getTickLabelRotation(), deserialized.getTickLabelRotation(), DELTA);
 
 		assertEquals(original.isTicksMinorEnabled(), deserialized.isTicksMinorEnabled());
 		assertEquals(original.getTicksMinorCount(), deserialized.getTicksMinorCount());

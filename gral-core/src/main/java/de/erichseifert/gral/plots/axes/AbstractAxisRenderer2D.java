@@ -121,7 +121,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Decides whether the tick labels are drawn outside of the plot. */
 	private boolean tickLabelsOutside;
 	/** Tick label rotation in degrees. */
-	private Number tickLabelRotation;
+	private double tickLabelRotation;
 
 	/** Decides whether minor ticks are drawn. */
 	private boolean ticksMinorEnabled;
@@ -247,8 +247,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					boolean isTickLabelVisible =
 						renderer.isTickLabelsEnabled();
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
-					double tickLabelRotation = renderer.getTickLabelRotation()
-						.doubleValue();
+					double tickLabelRotation = renderer.getTickLabelRotation();
 					double tickLabelDist = renderer.getTickLabelDistanceAbsolute();
 					Line2D tickShape = new Line2D.Double();
 
@@ -916,12 +915,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public Number getTickLabelRotation() {
+	public double getTickLabelRotation() {
 		return tickLabelRotation;
 	}
 
 	@Override
-	public void setTickLabelRotation(Number tickLabelRotation) {
+	public void setTickLabelRotation(double tickLabelRotation) {
 		this.tickLabelRotation = tickLabelRotation;
 	}
 
