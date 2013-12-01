@@ -76,14 +76,14 @@ public interface PointRenderer {
 	 * @return {@code true} when the value is displayed, otherwise
 	 * {@code false}.
 	 */
-	boolean isValueDisplayed();
+	boolean isValueVisible();
 
 	/**
 	 * Returns whether the data value of a point will be displayed or not.
-	 * @param valueDisplayed {@code true} if the value should be displayed,
+	 * @param valueVisible {@code true} if the value should be displayed,
 	 * otherwise {@code false}.
 	 */
-	void setValueDisplayed(boolean valueDisplayed);
+	void setValueVisible(boolean valueVisible);
 
 	/**
 	 * Returns the index of the column that contains the displayed values.

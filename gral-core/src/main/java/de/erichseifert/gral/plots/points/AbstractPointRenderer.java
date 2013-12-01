@@ -52,7 +52,7 @@ public abstract class AbstractPointRenderer
 	private Shape shape;
 	private ColorMapper color;
 
-	private boolean valueDisplayed;
+	private boolean valueVisible;
 	private int valueColumn;
 	private Format valueFormat;
 	private Location valueLocation;
@@ -78,7 +78,7 @@ public abstract class AbstractPointRenderer
 		shape = new Rectangle2D.Double(-2.5, -2.5, 5.0, 5.0);
 		color = new SingleColor(Color.BLACK);
 
-		valueDisplayed = false;
+		valueVisible = false;
 		valueColumn = 1;
 		valueLocation = Location.CENTER;
 		valueAlignmentX = 0.5;
@@ -154,13 +154,13 @@ public abstract class AbstractPointRenderer
 	}
 
 	@Override
-	public boolean isValueDisplayed() {
-		return valueDisplayed;
+	public boolean isValueVisible() {
+		return valueVisible;
 	}
 
 	@Override
-	public void setValueDisplayed(boolean valueDisplayed) {
-		this.valueDisplayed = valueDisplayed;
+	public void setValueVisible(boolean valueVisible) {
+		this.valueVisible = valueVisible;
 	}
 
 	@Override

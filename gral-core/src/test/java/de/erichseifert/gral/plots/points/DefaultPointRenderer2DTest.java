@@ -125,7 +125,7 @@ public class DefaultPointRenderer2DTest {
 		BufferedImage unset = createTestImage();
 		context = new DrawingContext((Graphics2D) unset.getGraphics());
 		layout(unset, axisRenderer);
-		r.setValueDisplayed(false);
+		r.setValueVisible(false);
 		point = r.getValue(data, r.getPointShape(data));
 		point.draw(context);
 
@@ -133,7 +133,7 @@ public class DefaultPointRenderer2DTest {
 		BufferedImage set = createTestImage();
 		context = new DrawingContext((Graphics2D) set.getGraphics());
 		layout(set, axisRenderer);
-		r.setValueDisplayed(true);
+		r.setValueVisible(true);
 		point = r.getValue(data, r.getPointShape(data));
 		point.draw(context);
 
@@ -145,7 +145,7 @@ public class DefaultPointRenderer2DTest {
 		List<Format> formats = Arrays.asList(
 			(Format) null, NumberFormat.getInstance());
 
-		r.setValueDisplayed(true);
+		r.setValueVisible(true);
 		for (Format format : formats) {
 			r.setValueFormat(format);
 			Drawable point = r.getValue(data, r.getPointShape(data));
@@ -163,7 +163,7 @@ public class DefaultPointRenderer2DTest {
 		List<Double> distances = Arrays.asList(
 			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
 
-		r.setValueDisplayed(true);
+		r.setValueVisible(true);
 		for (Double distance : distances) {
 			r.setValueDistance(distance);
 			Drawable point = r.getValue(data, r.getPointShape(data));
@@ -181,7 +181,7 @@ public class DefaultPointRenderer2DTest {
 		Location[] locations = new Location[Location.values().length + 1];
 		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
 
-		r.setValueDisplayed(true);
+		r.setValueVisible(true);
 		r.setValueDistance(0.5);
 		for (Location location : locations) {
 			r.setValueLocation(location);

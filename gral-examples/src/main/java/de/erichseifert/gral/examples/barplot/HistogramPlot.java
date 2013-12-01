@@ -81,7 +81,7 @@ public class HistogramPlot extends ExamplePanel {
 		// Format bars
 		plot.getPointRenderer(histogram2d).setColor(
 			GraphicsUtils.deriveWithAlpha(COLOR1, 128));
-		plot.getPointRenderer(histogram2d).setValueDisplayed(true);
+		plot.getPointRenderer(histogram2d).setValueVisible(true);
 
 		// Add plot to Swing component
 		InteractivePanel panel = new InteractivePanel(plot);

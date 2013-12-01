@@ -74,7 +74,7 @@ public class SimplePiePlot extends ExamplePanel {
 		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
 		pointRenderer.setColor(colors);
 		// Show labels
-		pointRenderer.setValueDisplayed(true);
+		pointRenderer.setValueVisible(true);
 		pointRenderer.setValueColor(Color.WHITE);
 		pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
 
