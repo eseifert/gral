@@ -51,7 +51,7 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
 
 public class AbstractLineRendererTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private PointData data;
 

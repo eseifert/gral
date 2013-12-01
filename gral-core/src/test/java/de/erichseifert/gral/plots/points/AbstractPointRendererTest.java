@@ -53,7 +53,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class AbstractPointRendererTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private static DataTable table;
 	private static Row row;

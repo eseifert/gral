@@ -44,7 +44,7 @@ import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class BoxPlotTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private DataSource data;
 	private MockBoxPlot plot;

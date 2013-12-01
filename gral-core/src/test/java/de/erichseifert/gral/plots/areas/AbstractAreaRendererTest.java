@@ -16,7 +16,7 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 
 public class AbstractAreaRendererTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private static class MockAbstractAreaRenderer extends AbstractAreaRenderer {
 		public MockAbstractAreaRenderer() {

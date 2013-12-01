@@ -41,7 +41,7 @@ import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class BarPlotTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private MockBarPlot plot;
 

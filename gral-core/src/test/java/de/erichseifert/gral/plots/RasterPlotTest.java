@@ -43,7 +43,7 @@ import de.erichseifert.gral.plots.RasterPlot.RasterRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class RasterPlotTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private DataSource data;
 	private MockRasterPlot plot;

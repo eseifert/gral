@@ -41,7 +41,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class LabelPointsRendererTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private static DataTable table;
 	private static Row row;

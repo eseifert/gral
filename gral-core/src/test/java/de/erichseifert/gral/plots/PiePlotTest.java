@@ -43,7 +43,7 @@ import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 public class PiePlotTest {
-	private static final double DELTA = 1e-7;
+	private static final double DELTA = TestUtils.DELTA;
 
 	private DataSource data;
 	private MockPiePlot plot;
