@@ -125,12 +125,12 @@ public class BoxPlotTest {
 			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
 		BoxWhiskerRenderer original = (BoxWhiskerRenderer) originalRenderer;
 		BoxWhiskerRenderer deserialized = (BoxWhiskerRenderer) deserializedRenderer;
-		assertEquals(original.getColumnPosition(), deserialized.getColumnPosition());
-		assertEquals(original.getColumnBarCenter(), deserialized.getColumnBarCenter());
-		assertEquals(original.getColumnBarBottom(), deserialized.getColumnBarBottom());
-		assertEquals(original.getColumnBoxBottom(), deserialized.getColumnBoxBottom());
-		assertEquals(original.getColumnBoxTop(), deserialized.getColumnBoxTop());
-		assertEquals(original.getColumnBarTop(), deserialized.getColumnBarTop());
+		assertEquals(original.getPositionColumn(), deserialized.getPositionColumn());
+		assertEquals(original.getCenterBarColumn(), deserialized.getCenterBarColumn());
+		assertEquals(original.getBottomBarColumn(), deserialized.getBottomBarColumn());
+		assertEquals(original.getBoxBottomColumn(), deserialized.getBoxBottomColumn());
+		assertEquals(original.getBoxTopColumn(), deserialized.getBoxTopColumn());
+		assertEquals(original.getTopBarColumn(), deserialized.getTopBarColumn());
 		assertEquals(original.getBoxWidth(), deserialized.getBoxWidth(), DELTA);
 		assertEquals(original.getBoxBackground(), deserialized.getBoxBackground());
 		assertEquals(original.getBoxBorderColor(), deserialized.getBoxBorderColor());
