@@ -669,7 +669,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			double angleStart = Math.toRadians(-start);
 			double direction = 1.0;
-			if (plot.isClockwise()) {
+			if (!plot.isClockwise()) {
 				direction = -1.0;
 			}
 			double angle = angleStart + direction*labelPosRelH*2.0*Math.PI;
