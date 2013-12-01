@@ -88,9 +88,9 @@ public class RasterPlot extends XYPlot {
 		/** Plot specific settings. */
 		private final RasterPlot plot;
 
-		private int columnX;
-		private int columnY;
-		private int columnValue;
+		private int xColumn;
+		private int yColumn;
+		private int valueColumn;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -100,9 +100,9 @@ public class RasterPlot extends XYPlot {
 		 */
 		public RasterRenderer(RasterPlot plot) {
 			this.plot = plot;
-			columnX = 0;
-			columnY = 1;
-			columnValue = 2;
+			xColumn = 0;
+			yColumn = 1;
+			valueColumn = 2;
 		}
 
 		/**
@@ -110,8 +110,8 @@ public class RasterPlot extends XYPlot {
 		 * of a point.
 		 * @return Index of the column for the x coordinate of a point.
 		 */
-		public int getColumnX() {
-			return columnX;
+		public int getXColumn() {
+			return xColumn;
 		}
 
 		/**
@@ -119,8 +119,8 @@ public class RasterPlot extends XYPlot {
 		 * of a point.
 		 * @param columnIndex Index of the column for the x coordinate of a point.
 		 */
-		public void setColumnX(int columnIndex) {
-			this.columnX = columnIndex;
+		public void setXColumn(int columnIndex) {
+			this.xColumn = columnIndex;
 		}
 
 		/**
@@ -128,8 +128,8 @@ public class RasterPlot extends XYPlot {
 		 * of a point.
 		 * @return Index of the column for the y coordinate of a point.
 		 */
-		public int getColumnY() {
-			return columnY;
+		public int getYColumn() {
+			return yColumn;
 		}
 
 		/**
@@ -137,8 +137,8 @@ public class RasterPlot extends XYPlot {
 		 * of a point.
 		 * @param columnIndex Index of the column for the y coordinate of a point.
 		 */
-		public void setColumnY(int columnIndex) {
-			this.columnY = columnIndex;
+		public void setYColumn(int columnIndex) {
+			this.yColumn = columnIndex;
 		}
 
 		/**
@@ -146,8 +146,8 @@ public class RasterPlot extends XYPlot {
 		 * point.
 		 * @return Index of the column for the value of a point.
 		 */
-		public int getColumnValue() {
-			return columnValue;
+		public int getValueColumn() {
+			return valueColumn;
 		}
 
 		/**
@@ -155,8 +155,8 @@ public class RasterPlot extends XYPlot {
 		 * point.
 		 * @param columnIndex Index of the column for the value of a point.
 		 */
-		public void setColumnValue(int columnIndex) {
-			this.columnValue = columnIndex;
+		public void setValueColumn(int columnIndex) {
+			this.valueColumn = columnIndex;
 		}
 
 		/**
@@ -180,15 +180,15 @@ public class RasterPlot extends XYPlot {
 					AxisRenderer axisYRenderer = data.axisRenderers.get(1);
 					Row row = data.row;
 
-					int colX = renderer.getColumnX();
+					int colX = renderer.getXColumn();
 					if (colX < 0 || colX >= row.size() || !row.isColumnNumeric(colX)) {
 						return;
 					}
-					int colY = renderer.getColumnY();
+					int colY = renderer.getYColumn();
 					if (colY < 0 || colY >= row.size() || !row.isColumnNumeric(colY)) {
 						return;
 					}
-					int colValue = renderer.getColumnValue();
+					int colValue = renderer.getValueColumn();
 					if (colValue < 0 || colValue >= row.size() || !row.isColumnNumeric(colValue)) {
 						return;
 					}

@@ -128,8 +128,8 @@ public class RasterPlotTest {
 			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
 		RasterRenderer original = (RasterRenderer) originalRenderer;
 		RasterRenderer deserialized = (RasterRenderer) deserializedRenderer;
-		assertEquals(original.getColumnX(), deserialized.getColumnX());
-		assertEquals(original.getColumnY(), deserialized.getColumnY());
-		assertEquals(original.getColumnValue(), deserialized.getColumnValue());
+		assertEquals(original.getXColumn(), deserialized.getXColumn());
+		assertEquals(original.getYColumn(), deserialized.getYColumn());
+		assertEquals(original.getValueColumn(), deserialized.getValueColumn());
 	}
 }
