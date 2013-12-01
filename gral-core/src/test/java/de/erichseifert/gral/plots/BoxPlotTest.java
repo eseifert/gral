@@ -133,12 +133,12 @@ public class BoxPlotTest {
 		assertEquals(original.getColumnBarTop(), deserialized.getColumnBarTop());
 		assertEquals(original.getBoxWidth(), deserialized.getBoxWidth(), DELTA);
 		assertEquals(original.getBoxBackground(), deserialized.getBoxBackground());
-		assertEquals(original.getBoxColor(), deserialized.getBoxColor());
-		assertEquals(original.getBoxBorder(), deserialized.getBoxBorder());
+		assertEquals(original.getBoxBorderColor(), deserialized.getBoxBorderColor());
+		assertEquals(original.getBoxBorderStroke(), deserialized.getBoxBorderStroke());
 		assertEquals(original.getWhiskerColor(), deserialized.getWhiskerColor());
 		assertEquals(original.getWhiskerStroke(), deserialized.getWhiskerStroke());
 		assertEquals(original.getBarWidth(), deserialized.getBarWidth(), DELTA);
-		assertEquals(original.getBarCenterColor(), deserialized.getBarCenterColor());
-		assertEquals(original.getBarCenterStroke(), deserialized.getBarCenterStroke());
+		assertEquals(original.getCenterBarColor(), deserialized.getCenterBarColor());
+		assertEquals(original.getCenterBarStroke(), deserialized.getCenterBarStroke());
 	}
 }

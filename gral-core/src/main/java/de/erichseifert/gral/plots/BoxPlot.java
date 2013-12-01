@@ -110,15 +110,15 @@ public class BoxPlot extends XYPlot {
 
 		private double boxWidth;
 		private ColorMapper boxBackground;
-		private Paint boxColor;
-		private transient Stroke boxBorder;
+		private Paint boxBorderColor;
+		private transient Stroke boxBorderStroke;
 
 		private Paint whiskerColor;
 		private transient Stroke whiskerStroke;
 
 		private double barWidth;
-		private Paint barCenterColor;
-		private transient Stroke barCenterStroke;
+		private Paint centerBarColor;
+		private transient Stroke centerBarStroke;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -133,13 +133,13 @@ public class BoxPlot extends XYPlot {
 			columnBarTop = 5;
 			boxWidth = 0.75;
 			boxBackground = new SingleColor(Color.WHITE);
-			boxColor = Color.BLACK;
-			boxBorder = new BasicStroke(1f);
+			boxBorderColor = Color.BLACK;
+			boxBorderStroke = new BasicStroke(1f);
 			whiskerColor = Color.BLACK;
 			whiskerStroke = new BasicStroke(1f);
 			barWidth = 0.75;
-			barCenterColor = Color.BLACK;
-			barCenterStroke = new BasicStroke(
+			centerBarColor = Color.BLACK;
+			centerBarStroke = new BasicStroke(
 				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 		}
 
@@ -155,11 +155,11 @@ public class BoxPlot extends XYPlot {
 			// Default deserialization
 			in.defaultReadObject();
 			// Custom deserialization
-			boxBorder = (Stroke) SerializationUtils.unwrap(
+			boxBorderStroke = (Stroke) SerializationUtils.unwrap(
 					(Serializable) in.readObject());
 			whiskerStroke = (Stroke) SerializationUtils.unwrap(
 					(Serializable) in.readObject());
-			barCenterStroke = (Stroke) SerializationUtils.unwrap(
+			centerBarStroke = (Stroke) SerializationUtils.unwrap(
 					(Serializable) in.readObject());
 		}
 
@@ -175,9 +175,9 @@ public class BoxPlot extends XYPlot {
 			// Default serialization
 			out.defaultWriteObject();
 			// Custom serialization
-			out.writeObject(SerializationUtils.wrap(boxBorder));
+			out.writeObject(SerializationUtils.wrap(boxBorderStroke));
 			out.writeObject(SerializationUtils.wrap(whiskerStroke));
-			out.writeObject(SerializationUtils.wrap(barCenterStroke));
+			out.writeObject(SerializationUtils.wrap(centerBarStroke));
 		}
 
 		/**
@@ -340,8 +340,8 @@ public class BoxPlot extends XYPlot {
 		 * @return Paint which is used to fill the border of a box and the
 		 * lines of bars.
 		 */
-		public Paint getBoxColor() {
-			return boxColor;
+		public Paint getBoxBorderColor() {
+			return boxBorderColor;
 		}
 
 		/**
@@ -350,8 +350,8 @@ public class BoxPlot extends XYPlot {
 		 * @param color Paint which will be used to fill the border of a box
 		 * and the lines of bars.
 		 */
-		public void setBoxColor(Paint color) {
-			this.boxColor = color;
+		public void setBoxBorderColor(Paint color) {
+			this.boxBorderColor = color;
 		}
 
 		/**
@@ -360,8 +360,8 @@ public class BoxPlot extends XYPlot {
 		 * @return {@code Stroke} instance which is used to paint the border of
 		 * a box and the lines of the bars.
 		 */
-		public Stroke getBoxBorder() {
-			return boxBorder;
+		public Stroke getBoxBorderStroke() {
+			return boxBorderStroke;
 		}
 
 		/**
@@ -370,8 +370,8 @@ public class BoxPlot extends XYPlot {
 		 * @param stroke {@code Stroke} instance which will be used to paint
 		 * the border of a box and the lines of the bars.
 		 */
-		public void setBoxBorder(Stroke stroke) {
-			this.boxBorder = stroke;
+		public void setBoxBorderStroke(Stroke stroke) {
+			this.boxBorderStroke = stroke;
 		}
 
 		/**
@@ -430,8 +430,8 @@ public class BoxPlot extends XYPlot {
 		 * Returns the paint which is used to fill the lines of the center bar.
 		 * @return Paint which is used to fill the lines of the center bar.
 		 */
-		public Paint getBarCenterColor() {
-			return barCenterColor;
+		public Paint getCenterBarColor() {
+			return centerBarColor;
 		}
 
 		/**
@@ -440,8 +440,8 @@ public class BoxPlot extends XYPlot {
 		 * @param color Paint which will be used to fill the lines of the
 		 * center bar.
 		 */
-		public void setBarCenterColor(Paint color) {
-			this.barCenterColor = color;
+		public void setCenterBarColor(Paint color) {
+			this.centerBarColor = color;
 		}
 
 		/**
@@ -450,8 +450,8 @@ public class BoxPlot extends XYPlot {
 		 * @return {@code Stroke} instance which is used to paint the lines of
 		 * the center bar.
 		 */
-		public Stroke getBarCenterStroke() {
-			return barCenterStroke;
+		public Stroke getCenterBarStroke() {
+			return centerBarStroke;
 		}
 
 		/**
@@ -460,8 +460,8 @@ public class BoxPlot extends XYPlot {
 		 * @param stroke {@code Stroke} instance which will be used to paint
 		 * the lines of the center bar.
 		 */
-		public void setBarCenterStroke(Stroke stroke) {
-			this.barCenterStroke = stroke;
+		public void setCenterBarStroke(Stroke stroke) {
+			this.centerBarStroke = stroke;
 		}
 
 		/**
@@ -582,12 +582,12 @@ public class BoxPlot extends XYPlot {
 						Integer index = Integer.valueOf(row.getIndex());
 						paintBox = paintBoxMapper.get(index);
 					}
-					Paint paintStrokeBox = getBoxColor();
-					Stroke strokeBox = getBoxBorder();
+					Paint paintStrokeBox = getBoxBorderColor();
+					Stroke strokeBox = getBoxBorderStroke();
 					Paint paintWhisker = getWhiskerColor();
 					Stroke strokeWhisker = getWhiskerStroke();
-					Paint paintBarCenter = getBarCenterColor();
-					Stroke strokeBarCenter = getBarCenterStroke();
+					Paint paintBarCenter = getCenterBarColor();
+					Stroke strokeBarCenter = getCenterBarStroke();
 					// Fill box
 					GraphicsUtils.fillPaintedShape(
 						graphics, box, paintBox, box.getBounds2D());
