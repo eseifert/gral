@@ -217,14 +217,14 @@ public interface PointRenderer {
 	 * @return {@code true} if the error value is displayed, otherwise
 	 * {@code false}.
 	 */
-	boolean isErrorDisplayed();
+	boolean isErrorVisible();
 
 	/**
 	 * Sets whether the error value will be displayed.
-	 * @param errorDisplayed {@code true} if the error value should be
-	 * displayed, otherwise {@code false}.
+	 * @param errorVisible {@code true} if the error value should be displayed,
+	 * otherwise {@code false}.
 	 */
-	void setErrorDisplayed(boolean errorDisplayed);
+	void setErrorVisible(boolean errorVisible);
 
 	/**
 	 * Returns the index of the column that contains the upper error value.

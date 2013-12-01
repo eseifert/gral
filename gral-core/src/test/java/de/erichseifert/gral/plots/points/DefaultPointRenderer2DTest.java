@@ -207,7 +207,7 @@ public class DefaultPointRenderer2DTest {
 		Drawable point;
 
 		// Draw without error bars
-		r.setErrorDisplayed(false);
+		r.setErrorVisible(false);
 		BufferedImage unset = createTestImage();
 		context = new DrawingContext((Graphics2D) unset.getGraphics());
 		layout(unset, axisRenderer);
@@ -215,7 +215,7 @@ public class DefaultPointRenderer2DTest {
 		point.draw(context);
 
 		// Draw with error bars
-		r.setErrorDisplayed(true);
+		r.setErrorVisible(true);
 		BufferedImage set = createTestImage();
 		context = new DrawingContext((Graphics2D) set.getGraphics());
 		layout(set, axisRenderer);
@@ -233,7 +233,7 @@ public class DefaultPointRenderer2DTest {
 		Drawable point;
 
 		// Draw error bars
-		r.setErrorDisplayed(true);
+		r.setErrorVisible(true);
 		BufferedImage image = createTestImage();
 		context = new DrawingContext((Graphics2D) image.getGraphics());
 		layout(image, axisRenderer);

@@ -110,7 +110,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		plot.setPointRenderer(seriesLin, sizeablePointRenderer);
 		PointRenderer defaultPointRenderer = new DefaultPointRenderer2D();
 		defaultPointRenderer.setColor(GraphicsUtils.deriveDarker(COLOR2));
-		defaultPointRenderer.setErrorDisplayed(true);
+		defaultPointRenderer.setErrorVisible(true);
 		defaultPointRenderer.setErrorColor(COLOR2);
 		plot.setPointRenderer(seriesLog, defaultPointRenderer);
 

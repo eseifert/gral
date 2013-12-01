@@ -186,7 +186,7 @@ public class AbstractPointRendererTest {
 		assertEquals(original.getValueColor(), deserialized.getValueColor());
 		assertEquals(original.getValueFont(), deserialized.getValueFont());
 
-		assertEquals(original.isErrorDisplayed(), deserialized.isErrorDisplayed());
+		assertEquals(original.isErrorVisible(), deserialized.isErrorVisible());
 		assertEquals(original.getErrorColumnTop(), deserialized.getErrorColumnTop());
 		assertEquals(original.getErrorColumnBottom(), deserialized.getErrorColumnBottom());
 		assertEquals(original.getErrorColor(), deserialized.getErrorColor());

@@ -63,7 +63,7 @@ public abstract class AbstractPointRenderer
 	private ColorMapper valueColor;
 	private Font valueFont;
 
-	private boolean errorDisplayed;
+	private boolean errorVisible;
 	private int errorColumnTop;
 	private int errorColumnBottom;
 	private ColorMapper errorColor;
@@ -88,7 +88,7 @@ public abstract class AbstractPointRenderer
 		valueColor = new SingleColor(Color.BLACK);
 		valueFont = Font.decode(null);
 
-		errorDisplayed = false;
+		errorVisible = false;
 		errorColumnTop = 2;
 		errorColumnBottom = 3;
 		errorColor = new SingleColor(Color.BLACK);
@@ -259,13 +259,13 @@ public abstract class AbstractPointRenderer
 	}
 
 	@Override
-	public boolean isErrorDisplayed() {
-		return errorDisplayed;
+	public boolean isErrorVisible() {
+		return errorVisible;
 	}
 
 	@Override
-	public void setErrorDisplayed(boolean errorDisplayed) {
-		this.errorDisplayed = errorDisplayed;
+	public void setErrorVisible(boolean errorVisible) {
+		this.errorVisible = errorVisible;
 	}
 
 	@Override
