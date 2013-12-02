@@ -77,8 +77,8 @@ public class XYPlotTest {
 		// XYPlot with all options turned on
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText("foobar");
-		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(true);
-		((XYPlotArea2D) plot.getPlotArea()).setGridMinorX(true);
+		((XYPlotArea2D) plot.getPlotArea()).setMajorGridX(true);
+		((XYPlotArea2D) plot.getPlotArea()).setMinorGridX(true);
 		plot.setLegendVisible(true);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
@@ -86,8 +86,8 @@ public class XYPlotTest {
 
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText(null);
-		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(false);
-		((XYPlotArea2D) plot.getPlotArea()).setGridMinorX(false);
+		((XYPlotArea2D) plot.getPlotArea()).setMajorGridX(false);
+		((XYPlotArea2D) plot.getPlotArea()).setMinorGridX(false);
 		plot.setLegendVisible(false);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
@@ -125,11 +125,11 @@ public class XYPlotTest {
 		XYPlotArea2D original = (XYPlotArea2D) originalPlotArea;
 		XYPlotArea2D deserialized = (XYPlotArea2D) deserializedPlotArea;
 
-		assertEquals(original.isGridMajorX(), deserialized.isGridMajorX());
-		assertEquals(original.isGridMajorY(), deserialized.isGridMajorY());
-		assertEquals(original.getGridMajorColor(), deserialized.getGridMajorColor());
-		assertEquals(original.isGridMinorX(), deserialized.isGridMinorX());
-		assertEquals(original.isGridMinorY(), deserialized.isGridMinorY());
-		assertEquals(original.getGridMinorColor(), deserialized.getGridMinorColor());
+		assertEquals(original.isMajorGridX(), deserialized.isMajorGridX());
+		assertEquals(original.isMajorGridY(), deserialized.isMajorGridY());
+		assertEquals(original.getMajorGridColor(), deserialized.getMajorGridColor());
+		assertEquals(original.isMinorGridX(), deserialized.isMinorGridX());
+		assertEquals(original.isMinorGridY(), deserialized.isMinorGridY());
+		assertEquals(original.getMinorGridColor(), deserialized.getMinorGridColor());
 	}
 }

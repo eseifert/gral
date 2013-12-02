@@ -189,18 +189,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		private final XYPlot plot;
 
 		/** Decides whether the horizontal grid lines at major ticks are drawn. */
-		private boolean gridMajorX;
+		private boolean majorGridX;
 		/** Decides whether the vertical grid lines at major ticks are drawn. */
-		private boolean gridMajorY;
+		private boolean majorGridY;
 		/** Paint to fill the grid lines at major ticks. */
-		private Paint gridMajorColor;
+		private Paint majorGridColor;
 
 		/** Decides whether the horizontal grid lines at minor ticks are drawn. */
-		private boolean gridMinorX;
+		private boolean minorGridX;
 		/** Decides whether the vertical grid lines at minor ticks are drawn. */
-		private boolean gridMinorY;
+		private boolean minorGridY;
 		/** Paint to fill the grid lines at minor ticks. */
-		private Paint gridMinorColor;
+		private Paint minorGridColor;
 
 		/**
 		 * Creates a new instance with default settings and initializes it with
@@ -210,13 +210,13 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		public XYPlotArea2D(XYPlot plot) {
 			this.plot = plot;
 
-			gridMajorX = true;
-			gridMajorY = true;
-			gridMajorColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+			majorGridX = true;
+			majorGridY = true;
+			majorGridColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
 
-			gridMinorX = false;
-			gridMinorY = false;
-			gridMinorColor = new Color(0.0f, 0.0f, 0.0f, 0.05f);
+			minorGridX = false;
+			minorGridY = false;
+			minorGridColor = new Color(0.0f, 0.0f, 0.0f, 0.05f);
 		}
 
 		/**
@@ -246,7 +246,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			Rectangle2D bounds = getBounds();
 
 			// Draw gridX
-			if (isGridMajorX() || isGridMinorX()) {
+			if (isMajorGridX() || isMinorGridX()) {
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(AXIS_X);
 				Axis axisX = plot.getAxis(AXIS_X);
 				if (axisXRenderer != null && axisX != null && axisX.isValid()) {
@@ -260,8 +260,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						bounds.getHeight() - shapeBoundsX.getMinY()
 					);
 					for (Tick tick : ticksX) {
-						if ((tick.type == TickType.MAJOR && !isGridMajorX()) ||
-								(tick.type == TickType.MINOR && !isGridMinorX())) {
+						if ((tick.type == TickType.MAJOR && !isMajorGridX()) ||
+								(tick.type == TickType.MINOR && !isMinorGridX())) {
 							continue;
 						}
 						Point2D tickPoint = tick.position.getPoint2D();
@@ -269,9 +269,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 							continue;
 						}
 
-						Paint paint = gridMajorColor;
+						Paint paint = majorGridColor;
 						if (tick.type == TickType.MINOR) {
-							paint = getGridMinorColor();
+							paint = getMinorGridColor();
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
 						GraphicsUtils.drawPaintedShape(
@@ -282,7 +282,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			}
 
 			// Draw gridY
-			if (isGridMajorY() || isGridMinorY()) {
+			if (isMajorGridY() || isMinorGridY()) {
 				Axis axisY = plot.getAxis(AXIS_Y);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(AXIS_Y);
 				if (axisY != null && axisY.isValid() && axisYRenderer != null) {
@@ -296,8 +296,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					for (Tick tick : ticksY) {
 						boolean isMajorTick = tick.type == TickType.MAJOR;
 						boolean isMinorTick = tick.type == TickType.MINOR;
-						if ((isMajorTick && !isGridMajorY()) ||
-								(isMinorTick && !isGridMinorY())) {
+						if ((isMajorTick && !isMajorGridY()) ||
+								(isMinorTick && !isMinorGridY())) {
 							continue;
 						}
 						Point2D tickPoint = tick.position.getPoint2D();
@@ -305,9 +305,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 							continue;
 						}
 
-						Paint paint = gridMajorColor;
+						Paint paint = majorGridColor;
 						if (isMinorTick) {
-							paint = getGridMinorColor();
+							paint = getMinorGridColor();
 						}
 						graphics.translate(tickPoint.getX(), tickPoint.getY());
 						GraphicsUtils.drawPaintedShape(
@@ -469,8 +469,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @return {@code true} if horizontal grid lines at major ticks along
 		 * the x-axis are drawn, otherwise {@code false}.
 		 */
-		public boolean isGridMajorX() {
-			return gridMajorX;
+		public boolean isMajorGridX() {
+			return majorGridX;
 		}
 
 		/**
@@ -479,8 +479,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @param gridMajorX {@code true} if horizontal grid lines at major
 		 * ticks along the x-axis should be drawn, otherwise {@code false}.
 		 */
-		public void setGridMajorX(boolean gridMajorX) {
-			this.gridMajorX = gridMajorX;
+		public void setMajorGridX(boolean gridMajorX) {
+			this.majorGridX = gridMajorX;
 		}
 
 		/**
@@ -489,8 +489,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @return {@code true} if vertical grid lines at major ticks along the
 		 * y-axis are drawn, otherwise {@code false}.
 		 */
-		public boolean isGridMajorY() {
-			return gridMajorY;
+		public boolean isMajorGridY() {
+			return majorGridY;
 		}
 
 		/**
@@ -499,8 +499,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @param gridMajorY {@code true} if vertical grid lines at major ticks
 		 * along the y-axis should be drawn, otherwise {@code false}.
 		 */
-		public void setGridMajorY(boolean gridMajorY) {
-			this.gridMajorY = gridMajorY;
+		public void setMajorGridY(boolean gridMajorY) {
+			this.majorGridY = gridMajorY;
 		}
 
 		/**
@@ -508,18 +508,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * ticks.
 		 * @return Paint which is used to paint the grid lines at major ticks.
 		 */
-		public Paint getGridMajorColor() {
-			return gridMajorColor;
+		public Paint getMajorGridColor() {
+			return majorGridColor;
 		}
 
 		/**
 		 * Sets the paint which will be used to paint the grid lines at major
 		 * ticks.
-		 * @param gridMajorColor Paint which should be used to paint the grid
-		 * lines at major ticks.
+		 * @param color Paint which should be used to paint the grid lines at
+		 * major ticks.
 		 */
-		public void setGridMajorColor(Color gridMajorColor) {
-			this.gridMajorColor = gridMajorColor;
+		public void setMajorGridColor(Color color) {
+			this.majorGridColor = color;
 		}
 
 		/**
@@ -528,8 +528,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @return {@code true} if horizontal grid lines at minor ticks along
 		 * the x-axis are drawn, otherwise {@code false}.
 		 */
-		public boolean isGridMinorX() {
-			return gridMinorX;
+		public boolean isMinorGridX() {
+			return minorGridX;
 		}
 
 		/**
@@ -538,8 +538,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @param gridMinorX {@code true} if horizontal grid lines at minor
 		 * ticks along the x-axis should be drawn, otherwise {@code false}.
 		 */
-		public void setGridMinorX(boolean gridMinorX) {
-			this.gridMinorX = gridMinorX;
+		public void setMinorGridX(boolean gridMinorX) {
+			this.minorGridX = gridMinorX;
 		}
 
 		/**
@@ -548,8 +548,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @return {@code true} if vertical grid lines at minor ticks along the
 		 * y-axis are drawn, otherwise {@code false}.
 		 */
-		public boolean isGridMinorY() {
-			return gridMinorY;
+		public boolean isMinorGridY() {
+			return minorGridY;
 		}
 
 		/**
@@ -558,8 +558,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * @param gridMinorY {@code true} if vertical grid lines at minor ticks
 		 * along the y-axis should be drawn, otherwise {@code false}.
 		 */
-		public void setGridMinorY(boolean gridMinorY) {
-			this.gridMinorY = gridMinorY;
+		public void setMinorGridY(boolean gridMinorY) {
+			this.minorGridY = gridMinorY;
 		}
 
 		/**
@@ -567,18 +567,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * ticks.
 		 * @return Paint which is used to paint the grid lines at minor ticks.
 		 */
-		public Paint getGridMinorColor() {
-			return gridMinorColor;
+		public Paint getMinorGridColor() {
+			return minorGridColor;
 		}
 
 		/**
 		 * Sets the paint which will be used to paint the grid lines at minor
 		 * ticks.
-		 * @param gridMinorColor Paint which should be used to paint the grid
-		 * lines at minor ticks.
+		 * @param color Paint which should be used to paint the grid lines at
+		 * minor ticks.
 		 */
-		public void setGridMinorColor(Color gridMinorColor) {
-			this.gridMinorColor = gridMinorColor;
+		public void setMinorGridColor(Color color) {
+			this.minorGridColor = color;
 		}
 	}
 

@@ -172,8 +172,8 @@ public class MemoryUsage extends ExamplePanel {
 		plot.getLegend().setOrientation(Orientation.HORIZONTAL);
 
 		// Format plot area
-		((XYPlotArea2D) plot.getPlotArea()).setGridMajorX(false);
-		((XYPlotArea2D) plot.getPlotArea()).setGridMinorY(true);
+		((XYPlotArea2D) plot.getPlotArea()).setMajorGridX(false);
+		((XYPlotArea2D) plot.getPlotArea()).setMinorGridY(true);
 
 		// Format axes (set scale and spacings)
 		plot.getAxis(XYPlot.AXIS_Y).setRange(0.0, 1.0);
