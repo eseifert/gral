@@ -3,3 +3,9 @@ description = 'GRAL core'
 dependencies {
 	testCompile group: 'junit', name: 'junit', version:'4.10'
 }
+
+apply plugin: "checkstyle"
+
+checkstyle {
+	configFile = new File("${projectDir}/src/etc/checkstyle.xml")
+}
