@@ -49,25 +49,43 @@ public abstract class AbstractPointRenderer
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -408976260196287753L;
 
+	/** Shape to draw for the points. */
 	private Shape shape;
+	/** Color mapping used to fill the points. */
 	private ColorMapper color;
 
+	/** Decides whether a value label are drawn at the point. */
 	private boolean valueVisible;
+	/** Index of the column for the value label content. */
 	private int valueColumn;
+	/** Format of the value label content. */
 	private Format valueFormat;
+	/** Position of the value label relative to the point position. */
 	private Location valueLocation;
+	/** Horizontal alignment of the value label. */
 	private double valueAlignmentX;
+	/** Vertical alignment of the value label. */
 	private double valueAlignmentY;
+	/** Rotation angle of the value label in degrees. */
 	private double valueRotation;
+	/** Distance of the value label to the shape of the point. */
 	private double valueDistance;
+	/** Color mapping to fill the value label. */
 	private ColorMapper valueColor;
+	/** Font to draw the value label contents. */
 	private Font valueFont;
 
+	/** Decides whether error indicators are drawn for the point. */
 	private boolean errorVisible;
+	/** Index of the column for the upper error bounds. */
 	private int errorColumnTop;
+	/** Index of the column for the lower error bounds. */
 	private int errorColumnBottom;
+	/** Color mapping to fill the error indicators. */
 	private ColorMapper errorColor;
+	/** Shape to draw the error indicators. */
 	private Shape errorShape;
+	/** Stroke to the shapes of the error indicators. */
 	private transient Stroke errorStroke;
 
 	/**
