@@ -61,6 +61,14 @@ subprojects {
 			licenseTask.exclude '**.properties'
 		}
 	}
+	
+	apply plugin: "pmd"
+	pmd {
+		// TODO: Dynamic dependency resolution possible?
+		toolVersion = "5.0.5"
+		ruleSets = ["java-basic"]
+		ignoreFailures = true
+	}
 }
 
 // Include the proguard-gradle plugin
