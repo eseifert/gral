@@ -9,6 +9,9 @@ subprojects {
 	apply plugin: 'java'
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
+	// TODO: Add support for MacOS
+	// jar is located at: ${java.home}/bundle/Classes/classes.jar
+	ext.runtimeJar = "${System.getProperty('java.home')}/lib/rt.jar"
 
 	repositories {
 		mavenLocal()
@@ -17,6 +20,21 @@ subprojects {
 	}
 	dependencies {
 		compile group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version:'0.9.1'
+	}
+	
+	task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
+		description = "Uses ProGuard to reduce the code size of this project."
+		// Configure ProGuard
+		configuration("src/etc/proguard.conf")
+		target(targetCompatibility.toString())
+		injars(jar.archivePath)
+		outjars("${libsDir}/shrunk/${jar.archiveName}")
+		libraryjars(runtimeJar)
+
+		doLast {
+			// Use the shrunk jar for all further processing
+			jar.destinationDir = new File("${libsDir}/shrunk/")
+		}
 	}
 }
 
