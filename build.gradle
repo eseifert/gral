@@ -3,6 +3,8 @@ allprojects  {
 
 	group = 'de.erichseifert.gral'
 	version = '0.10-SNAPSHOT'
+	
+	ext.inceptionYear = 2009
 }
 
 subprojects {
@@ -36,6 +38,29 @@ subprojects {
 			jar.destinationDir = new File("${libsDir}/shrunk/")
 		}
 	}
+	
+	apply plugin: 'license'
+	license {
+		header(rootProject.file("config/license-header.txt"))
+		strictCheck(true)
+		mapping {
+			java = "SLASHSTAR_STYLE"
+		}
+		dryRun = true;
+		
+		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
+		ext.year = "${inceptionYear}-${currentYear}"
+		ext.owner1 = "Erich Seifert"
+		ext.email1 = "dev[at]erichseifert.de"
+		ext.owner2 = "Michael Seifert"
+		ext.email2 = "michael[at]erichseifert.de"
+
+		// Exlude certain file types from license checking
+		// https://github.com/hierynomus/license-gradle-plugin/issues/9
+	 	tasks.withType(nl.javadude.gradle.plugins.license.License).each { licenseTask ->
+			licenseTask.exclude '**.properties'
+		}
+	}
 }
 
 // Include the proguard-gradle plugin
@@ -48,4 +73,17 @@ buildscript {
 	dependencies {
 		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
 	}
+}
+
+// Include the License Gradle plugin
+buildscript {
+    repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		maven { url "http://repo.maven.apache.org/maven2" }
+    }
+
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+'
+    }
 }
