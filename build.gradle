@@ -17,5 +17,17 @@ subprojects {
 	}
 	dependencies {
 		compile group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version:'0.9.1'
-	}  
+	}
+}
+
+// Include the proguard-gradle plugin
+buildscript {
+	repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		maven { url "http://repo.maven.apache.org/maven2" }
+	}
+	dependencies {
+		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
+	}
 }
