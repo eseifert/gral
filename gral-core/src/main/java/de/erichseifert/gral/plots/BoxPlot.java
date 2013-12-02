@@ -101,23 +101,38 @@ public class BoxPlot extends XYPlot {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 2944482729753981341L;
 
+		/** Index of the column for the horizontal position of a box. */
 		private int positionColumn;
+		/** Index of the column for the vertical center bar. */
 		private int centerBarColumn;
+		/** Index of the column for the lower vertical bar. */
 		private int bottomBarColumn;
+		/** Index of the column for the lower end of the box. */
 		private int boxBottomColumn;
+		/** Index of the column for the upper end of the box. */
 		private int boxTopColumn;
+		/** Index of the column for the upper vertical bar. */
 		private int topBarColumn;
 
+		/** Relative width of each box. 1.0 means boxes touch each other. */
 		private double boxWidth;
+		/** Color mapping to fill the background of the boxes. */
 		private ColorMapper boxBackground;
+		/** Paint to fill the border of the boxes. */
 		private Paint boxBorderColor;
+		/** Stroke to draw the border of the boxes. */
 		private transient Stroke boxBorderStroke;
 
+		/** Paint to fill the border of the whiskers. */
 		private Paint whiskerColor;
+		/** Stroke to draw the border of the whiskers. */
 		private transient Stroke whiskerStroke;
 
+		/** Relative width of the vertical bars. */
 		private double barWidth;
+		/** Paint to fill the center bar. */
 		private Paint centerBarColor;
+		/** Stroke to draw the center bar. */
 		private transient Stroke centerBarStroke;
 
 		/**

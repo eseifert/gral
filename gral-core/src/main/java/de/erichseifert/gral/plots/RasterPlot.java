@@ -74,8 +74,11 @@ public class RasterPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5844862286358250831L;
 
+	/** Offset of the raster pixels to the origin. */
 	private final Point2D offset;
+	/** Size of the raster pixels. */
 	private final Dimension2D distance;
+	/** Color mapping to fill the raster pixels. */
 	private ColorMapper colors;
 
 	/**
@@ -88,8 +91,11 @@ public class RasterPlot extends XYPlot {
 		/** Plot specific settings. */
 		private final RasterPlot plot;
 
+		/** Horizontal position of the current raster pixel. */
 		private int xColumn;
+		/** Vertical position of the current raster pixel. */
 		private int yColumn;
+		/** Value of the current raster pixel. */
 		private int valueColumn;
 
 		/**
@@ -146,6 +152,7 @@ public class RasterPlot extends XYPlot {
 		 * point.
 		 * @return Index of the column for the value of a point.
 		 */
+		@Override
 		public int getValueColumn() {
 			return valueColumn;
 		}
@@ -155,6 +162,7 @@ public class RasterPlot extends XYPlot {
 		 * point.
 		 * @param columnIndex Index of the column for the value of a point.
 		 */
+		@Override
 		public void setValueColumn(int columnIndex) {
 			this.valueColumn = columnIndex;
 		}

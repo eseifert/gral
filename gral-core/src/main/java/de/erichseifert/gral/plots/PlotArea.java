@@ -46,14 +46,15 @@ public abstract class PlotArea extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
-	/** Paint used for background drawing. */
+	/** Paint to fill the background. */
 	private Paint background;
-	/** Stroke used to draw the border. */
+	/** Stroke to draw the border. */
 	// Property will be serialized using a wrapper.
 	private transient Stroke borderStroke;
-	/** Paint used for border drawing. */
+	/** Paint to fill the border. */
 	private Paint borderColor;
-	/** Clipping offset in pixels relative to the outline of the plot area. */
+	/** Offset to clip plot graphics in pixels, specified relative to the
+	 * outline of the plot area. */
 	private Insets2D clippingOffset;
 
 	/**
@@ -67,8 +68,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	}
 
 	/**
-	 * Draws the background of this Legend with the specified Graphics2D
-	 * object.
+	 * Draws the background of this legend with the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBackground(DrawingContext context) {
@@ -81,8 +81,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	}
 
 	/**
-	 * Draws the border of this Legend with the specified Graphics2D
-	 * object.
+	 * Draws the border of this Legend with the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawBorder(DrawingContext context) {
@@ -96,7 +95,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	}
 
 	/**
-	 * Draws the data using the specified Graphics2D object.
+	 * Draws the data using the specified drawing context.
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
@@ -127,59 +126,61 @@ public abstract class PlotArea extends AbstractDrawable {
 	}
 
 	/**
-	 * Returns the paint used to draw the background of the plot area.
-	 * @return Paint used for background drawing.
+	 * Returns the paint which is used to draw the background of the plot area.
+	 * @return Paint which is used to fill the background.
 	 */
 	public Paint getBackground() {
 		return background;
 	}
 
 	/**
-	 * Sets the paint used to draw the background of the plot area.
-	 * @param background Paint used for background drawing.
+	 * Sets the paint which will be used to fill the background of the plot
+	 * area.
+	 * @param background Paint which should be used to fill the background.
 	 */
 	public void setBackground(Paint background) {
 		this.background = background;
 	}
 
 	/**
-	 * Returns the stroke used to draw the border of the plot area.
-	 * @return Stroke used for border drawing.
+	 * Returns the stroke which is used to draw the border of the plot area.
+	 * @return Stroke which is used to draw the border.
 	 */
 	public Stroke getBorderStroke() {
 		return borderStroke;
 	}
 
 	/**
-	 * Sets the stroke used to draw the border of the plot area.
-	 * @param borderStroke Stroke used for border drawing.
+	 * Sets the stroke which will be used to draw the border of the plot area.
+	 * @param stroke Stroke which should be used to draw the border.
 	 */
-	public void setBorderStroke(Stroke borderStroke) {
-		this.borderStroke = borderStroke;
+	public void setBorderStroke(Stroke stroke) {
+		this.borderStroke = stroke;
 	}
 
 	/**
-	 * Returns the paint used to fill the border of the plot area.
-	 * @return Paint used for border drawing.
+	 * Returns the paint which is used to fill the border of the plot area.
+	 * @return Paint which is used to fill the border.
 	 */
 	public Paint getBorderColor() {
 		return borderColor;
 	}
 
 	/**
-	 * Sets the paint used to fill the border of the plot area.
-	 * @param borderColor Paint used for border drawing.
+	 * Sets the paint which will be used to fill the border of the plot area.
+	 * @param color Paint which should be used to fill the border.
 	 */
-	public void setBorderColor(Paint borderColor) {
-		this.borderColor = borderColor;
+	public void setBorderColor(Paint color) {
+		this.borderColor = color;
 	}
 
 	/**
-	 * Returns the clipping offset of the plotted data relative to the plot area.
-	 * Positive inset values result in clipping inside the plot area,
+	 * Returns the clipping offset of the plotted data relative to the plot
+	 * area. Positive inset values result in clipping inside the plot area,
 	 * negative values result in clipping outside the plot area.
 	 * Specifying a {@code null} values will turn off clipping.
-	 * @return Clipping offset in pixels relative to the outline of the plot area.
+	 * @return Clipping offset in pixels relative to the outline of the plot
+	 * area.
 	 */
 	public Insets2D getClippingOffset() {
 		return clippingOffset;
@@ -190,9 +191,10 @@ public abstract class PlotArea extends AbstractDrawable {
 	 * Positive inset values result in clipping inside the plot area,
 	 * negative values result in clipping outside the plot area.
 	 * Specifying a {@code null} values will turn off clipping.
-	 * @param clippingOffset Clipping offset in pixels relative to the outline of the plot area.
+	 * @param offset Clipping offset in pixels relative to the outline of the
+	 * plot area.
 	 */
-	public void setClippingArea(Insets2D clippingOffset) {
-		this.clippingOffset = clippingOffset;
+	public void setClippingArea(Insets2D offset) {
+		this.clippingOffset = offset;
 	}
 }

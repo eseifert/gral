@@ -280,8 +280,7 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
-	 * p. 154
+	 * @see "Cormen et al. (2001): Introduction to Algorithms. 2nd Edition, page 154"
 	 */
 	private static <T extends Comparable<T>> int randomizedPartition(
 			List<T> a, int lower, int upper) {
@@ -299,8 +298,7 @@ public abstract class MathUtils {
 	 * @param lower Starting index
 	 * @param upper End index
 	 * @return Pivot point of the partitioned array
-	 * @see Cormen et al. (2001): Introduction to Algorithms. 2nd edition.
-	 * p. 146
+	 * @see "Cormen et al. (2001): Introduction to Algorithms. 2nd Edition, page 146"
 	 */
 	private static <T extends Comparable<T>> int partition(
 			List<T> a, int lower, int upper) {

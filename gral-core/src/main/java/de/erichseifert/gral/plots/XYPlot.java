@@ -188,12 +188,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		/** x-y plot this plot area is associated to. */
 		private final XYPlot plot;
 
+		/** Decides whether the horizontal grid lines at major ticks are drawn. */
 		private boolean gridMajorX;
+		/** Decides whether the vertical grid lines at major ticks are drawn. */
 		private boolean gridMajorY;
+		/** Paint to fill the grid lines at major ticks. */
 		private Paint gridMajorColor;
 
+		/** Decides whether the horizontal grid lines at minor ticks are drawn. */
 		private boolean gridMinorX;
+		/** Decides whether the vertical grid lines at minor ticks are drawn. */
 		private boolean gridMinorY;
+		/** Paint to fill the grid lines at minor ticks. */
 		private Paint gridMinorColor;
 
 		/**

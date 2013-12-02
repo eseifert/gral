@@ -36,15 +36,18 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Abstract base class that can be used to control the zoom and panning of a
+ * <p>Abstract base class that can be used to control the zoom and panning of a
  * plot. The navigator translates the interaction to operations on a defined
- * set axes: Zooming is translated as scaling, panning is done by uniformly
- * changing the minimum and maximum values of the axes.
+ * set of axes: Zooming is translated as scaling, panning is done by uniformly
+ * changing the minimum and maximum values of the axes.</p>
  *
- * Additionally, the actions can also be bound to a certain direction by
+ * <p>Additionally, the actions can also be bound to a certain direction by
  * defining a more restricted set of axes. The methods {@link #getDirection()}
  * and {@link #setDirection(de.erichseifert.gral.navigation.NavigationDirection)}
- * provide a convenient way for setting predefined sets of axes.
+ * provide a convenient way for setting predefined sets of axes:</p>
+ *
+ * <pre>
+ *
  */
 public abstract class PlotNavigator extends AbstractNavigator {
 	/** AbstractPlot that will be navigated. */

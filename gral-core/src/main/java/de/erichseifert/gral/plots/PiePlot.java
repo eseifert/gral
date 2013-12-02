@@ -101,9 +101,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	/** Cache for the {@code Navigator} implementation. */
 	private transient PiePlotNavigator navigator;
 
+	/** Position of the pie center. */
 	private final Point2D center;
+	/** Radius of the the pie. */
 	private double radius;
+	/** Starting angle in degrees. */
 	private double start;
+	/** Decides whether pie slices are drawn in clockwise direction. */
 	private boolean clockwise;
 
 	/**
@@ -373,8 +377,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
+		/** Relative outer radius of the current pie slice,
+		 * in percentage of the total radius. */
 		private double outerRadius;
+		/** Relative inner radius of the current pie slice,
+		 * in percentage of the total radius. */
 		private double innerRadius;
+		/** Gap of the current pie slice, in pixels. */
 		private double gap;
 
 		/**

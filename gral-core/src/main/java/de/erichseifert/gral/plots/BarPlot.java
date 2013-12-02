@@ -78,8 +78,13 @@ public class BarPlot extends XYPlot {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3177733647455649147L;
 
+	/** Relative width of the bars. 1.0 means the bars touch each other
+	 * without gap. */
 	double barWidth;
+	/** Minimal height of the bars in pixels. */
 	double barHeightMin;
+	/** Decides whether the bars should be filled as a whole, or each bar on
+	 * its own. This can e.g. be important for gradients. */
 	boolean paintAllBars;
 
 	/**
@@ -92,7 +97,9 @@ public class BarPlot extends XYPlot {
 		/** Plot that contains settings and renderers. */
 		private final BarPlot plot;
 
+		/** Stroke to draw the border of the bar. */
 		private transient Stroke stroke;
+		/** Color to fill the border of the bar. */
 		private Paint strokeColor;
 
 		/**
@@ -126,7 +133,7 @@ public class BarPlot extends XYPlot {
 		/**
 		 * Custom serialization method.
 		 * @param out Output stream.
-		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
+		 * @throws ClassNotFoundException if a serialized class doesn't exist.
 		 * @throws IOException if there is an error while writing data to the
 		 *         output stream.
 		 */

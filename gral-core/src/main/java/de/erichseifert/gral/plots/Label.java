@@ -54,7 +54,7 @@ public class Label extends AbstractDrawable {
 	private double alignmentY;
 	/** Font used to display the text of this label. */
 	private Font font;
-	/** Rotaion of in degrees. */
+	/** Rotation angle in degrees. */
 	private double rotation;
 	/** Paint used to draw the shape. */
 	private Paint color;

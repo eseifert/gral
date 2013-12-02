@@ -100,12 +100,18 @@ public abstract class AbstractPlot extends DrawableContainer
 	/** AbstractPlot legend. */
 	private Legend legend;
 
+	/** Paint to fill the plot background. */
 	private Paint background;
+	/** Stroke to draw the plot border. */
 	private transient Stroke borderStroke;
+	/** Paint to fill the plot border. */
 	private Paint borderColor;
 
+	/** Decides whether a legend will be shown. */
 	private boolean legendVisible;
+	/** Positioning of the legend. */
 	private Location legendLocation;
+	/** Distance of the legend to the plot area. */
 	private double legendDistance;
 
 	/**
