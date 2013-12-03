@@ -26,6 +26,9 @@ import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -33,6 +36,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Arrays;
 
 import org.junit.Before;
@@ -141,6 +145,22 @@ public class AbstractPointRendererTest {
 	@Before
 	public void setUp() {
 		r = new MockPointRenderer();
+
+		r.setColor(Color.RED);
+
+		r.setValueVisible(true);
+		r.setValueAlignmentX(0.0);
+		r.setValueAlignmentY(0.0);
+		r.setValueRotation(90.0);
+		r.setValueDistance(1.0);
+		r.setValueColor(Color.BLUE);
+		r.setValueFont(Font.decode(null).deriveFont(42f));
+		r.setValueFormat(NumberFormat.getNumberInstance());
+
+		r.setErrorVisible(true);
+		r.setErrorShape(new Line2D.Double(-1.0, 0.0, 1.0, 0.0));
+		r.setErrorColor(Color.BLACK);
+		r.setErrorStroke(new BasicStroke(1.5f));
 	}
 
 	private static void layout(BufferedImage image, AxisRenderer axisRenderer) {
@@ -190,8 +210,7 @@ public class AbstractPointRendererTest {
 		assertEquals(original.getErrorColumnTop(), deserialized.getErrorColumnTop());
 		assertEquals(original.getErrorColumnBottom(), deserialized.getErrorColumnBottom());
 		assertEquals(original.getErrorColor(), deserialized.getErrorColor());
-		// TODO
-		//assertEquals(original.getErrorShape(), deserialized.getErrorShape());
+		TestUtils.assertEquals(original.getErrorShape(), deserialized.getErrorShape());
 		assertEquals(original.getErrorStroke(), deserialized.getErrorStroke());
     }
 }
