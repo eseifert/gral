@@ -2,6 +2,7 @@ package de.erichseifert.gral.plots.areas;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -36,6 +37,22 @@ public class AbstractAreaRendererTest {
 				}
 			};
 		}
+	}
+
+	@Test
+	public void testProperties() {
+		double gap = 1.23;
+		boolean gapRounded = true;
+		Color color = Color.RED;
+
+		MockAbstractAreaRenderer r = new MockAbstractAreaRenderer();
+		r.setGap(gap);
+		r.setGapRounded(gapRounded);
+		r.setColor(color);
+
+		assertEquals(gap, r.getGap(), DELTA);
+		assertEquals(gapRounded, r.isGapRounded());
+		assertEquals(color, r.getColor());
 	}
 
 	@Test
