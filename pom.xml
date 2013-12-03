@@ -1,3 +1,26 @@
+<!--
+
+    GRAL: GRAphing Library for Java(R)
+
+    (C) Copyright 2009-2013 Erich Seifert <dev[at]erichseifert.de>,
+    Michael Seifert <michael[at]erichseifert.de>
+
+    This file is part of GRAL.
+
+    GRAL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    GRAL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.erichseifert.gral</groupId>
@@ -71,7 +94,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.1</version>
         <configuration>
           <source>${compileSource}</source>
           <target>${compileSource}</target>
@@ -79,13 +102,13 @@
       </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.0</version>
+        <version>3.3</version>
       </plugin>
       <plugin>
         <inherited>false</inherited>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.9.0</version>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>2.5</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
@@ -127,7 +150,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.11</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
@@ -153,7 +176,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.2</version>
+        <version>2.4</version>
         <dependencies>
           <dependency>
             <groupId>de.erichseifert.gral</groupId>
@@ -178,7 +201,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.7</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -198,7 +221,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.10</version>
+        <version>2.16</version>
         <configuration>
           <aggregate>true</aggregate>
         </configuration>
@@ -206,7 +229,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.9.1</version>
         <configuration>
           <show>public</show>
         </configuration>
@@ -222,7 +245,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.11</version>
         <configuration>
           <configLocation>checkstyle.xml</configLocation>
           <includeTestSourceDirectory>false</includeTestSourceDirectory>
@@ -231,7 +254,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>2.5</version>
+        <version>3.0.1</version>
         <configuration>
           <linkXref>true</linkXref>
           <targetJdk>${compileSource}</targetJdk>
@@ -240,7 +263,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.5.1</version>
+        <version>2.6</version>
         <configuration>
           <instrumentation>
             <excludes>
