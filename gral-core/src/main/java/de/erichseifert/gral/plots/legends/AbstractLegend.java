@@ -322,6 +322,10 @@ public abstract class AbstractLegend extends DrawableContainer
 		valid = true;
 	}
 
+	/**
+	 * Refreshes the layout of the legend. It's currently used to handle new
+	 * gap values.
+	 */
 	protected final void refreshLayout() {
 		Orientation orientation = getOrientation();
 		Dimension2D gap = getGap();

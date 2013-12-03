@@ -716,6 +716,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			label.draw(context);
 		}
 
+		@Override
 		public Drawable getValue(final PointData data, final Shape shape) {
 			Drawable drawable = new AbstractDrawable() {
 				/** Version id for serialization. */

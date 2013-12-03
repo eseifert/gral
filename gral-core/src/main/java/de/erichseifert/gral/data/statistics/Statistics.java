@@ -199,7 +199,7 @@ public class Statistics implements DataListener {
 	 * Utility method that calculates quantiles for the given data values and
 	 * stores the results in {@code stats}.
 	 * @param stats {@code Map} for storing results
-	 * @see de.erichseifert.gral.util.MathUtils.quantile(java.util.List,double)
+	 * @see de.erichseifert.gral.util.MathUtils#quantile(java.util.List,double)
 	 */
 	private void createDistributionStats(Iterable<Comparable<?>> data, Map<String, Double> stats) {
 		// Create sorted list of data

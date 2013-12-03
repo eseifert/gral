@@ -558,10 +558,12 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	}
 
 	/**
-	 * Recursively looks for a plot at the specified point and returns it, or
-	 * {@code null} if no plot could be found at the position.
-	 * @param point
-	 * @return
+	 * Returns a navigable area at the specified point, {@code null} if no
+	 * object could be found. If the specified container isn't navigable, its
+	 * children are recursively checked.
+	 * @param drawable The drawable container to check for navigable children.
+	 * @param point Position that should hit the navigable object.
+	 * @return A navigable object.
 	 */
 	private static Navigable getNavigableAt(Drawable drawable, Point2D point) {
 		if ((drawable instanceof Navigable) && drawable.getBounds().contains(point)) {
