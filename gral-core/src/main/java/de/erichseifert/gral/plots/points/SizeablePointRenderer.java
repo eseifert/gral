@@ -37,6 +37,7 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3276439387457161307L;
 
+	/** Index of the column for the point size. */
 	private int column;
 
 	/**

@@ -43,6 +43,8 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6390029474886495264L;
 
+	/** Degree of "smoothness", where 0.0 means no smoothing, and 1.0 means
+	 * maximal smoothing. */
 	private Number smoothness;
 
 	/**

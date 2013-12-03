@@ -50,9 +50,14 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4172505541305453796L;
 
+	/** Stroke to draw the line. */
 	private transient Stroke stroke;
+	/** Gap between points and the line. */
 	private double gap;
+	/** Decides whether the shape of the gap between points and the line is
+	 * rounded. */
 	private boolean gapRounded;
+	/** Paint to fill the line. */
 	private Paint color;
 
 	/**

@@ -47,7 +47,8 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -8396097579938931392L;
 
-	/** Stroke that is used to draw the lines from the data points to the axis. */
+	/** Stroke that is used to draw the lines from the data points to the
+	 * axis. */
 	private Stroke stroke;
 
 	/**

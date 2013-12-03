@@ -44,8 +44,12 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -9064749128190128428L;
 
+	/** Gap between points and the area. */
 	private double gap;
+	/** Decides whether the shape of the gap between points and the area is
+	 * rounded. */
 	private boolean gapRounded;
+	/** Paint to fill the area. */
 	private Paint color;
 
 	/**

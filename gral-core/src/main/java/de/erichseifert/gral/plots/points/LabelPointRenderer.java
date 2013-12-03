@@ -32,21 +32,26 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
- * Class that provides {@code Drawable}s, which display a specified data
- * values.
+ * Class that provides {@code Drawable}s, which display specified data
+ * values as labels.
  */
 public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2612520977245369774L;
 
+	/** Index of the column for the label content. */
 	private int column;
+	/** Format for the label content. */
 	private Format format;
+	/** Font for the label content. */
 	private Font font;
+	/** Horizontal alignment of the label content. */
 	private double alignmentX;
+	/** Vertical alignment of the label content. */
 	private double alignmentY;
 
 	/**
-	 * Initializes a new object.
+	 * Initializes a new renderer.
 	 */
 	public LabelPointRenderer() {
 		column = 1;
