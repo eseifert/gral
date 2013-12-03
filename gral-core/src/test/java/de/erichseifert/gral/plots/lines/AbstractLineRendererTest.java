@@ -140,6 +140,19 @@ public class AbstractLineRendererTest {
 	}
 
 	@Test
+	public void testProperties() {
+		Color color = Color.RED;
+		BasicStroke stroke = new BasicStroke(1.5f);
+
+		MockLineRenderer r = new MockLineRenderer();
+		r.setColor(color);
+		r.setStroke(stroke);
+
+		assertEquals(color, r.getColor());
+		assertEquals(stroke, r.getStroke());
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		LineRenderer original = new MockLineRenderer();
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
