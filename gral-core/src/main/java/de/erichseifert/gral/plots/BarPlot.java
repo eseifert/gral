@@ -98,9 +98,10 @@ public class BarPlot extends XYPlot {
 		private final BarPlot plot;
 
 		/** Stroke to draw the border of the bar. */
-		private transient Stroke stroke;
+		// Custom serialization will be done with a wrapper object
+		private transient Stroke borderStroke;
 		/** Color to fill the border of the bar. */
-		private Paint strokeColor;
+		private Paint borderColor;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -110,8 +111,8 @@ public class BarPlot extends XYPlot {
 		public BarRenderer(BarPlot plot) {
 			this.plot = plot;
 			setValueLocation(Location.NORTH);
-			stroke  = null;
-			strokeColor = Color.BLACK;
+			borderStroke = null;
+			borderColor = Color.BLACK;
 		}
 
 		/**
@@ -126,7 +127,7 @@ public class BarPlot extends XYPlot {
 			// Default deserialization
 			in.defaultReadObject();
 			// Custom deserialization
-			stroke = (Stroke) SerializationUtils.unwrap(
+			borderStroke = (Stroke) SerializationUtils.unwrap(
 					(Serializable) in.readObject());
 		}
 
@@ -142,39 +143,39 @@ public class BarPlot extends XYPlot {
 			// Default serialization
 			out.defaultWriteObject();
 			// Custom serialization
-			out.writeObject(SerializationUtils.wrap(stroke));
+			out.writeObject(SerializationUtils.wrap(borderStroke));
 		}
 
 		/**
 		 * Returns the stroke used to paint the outline of the point shape.
 		 * @return Stroke used to paint the outline of the point shape.
 		 */
-		public Stroke getStroke() {
-			return stroke;
+		public Stroke getBorderStroke() {
+			return borderStroke;
 		}
 
 		/**
 		 * Sets the stroke used to paint the outline of the point shape.
 		 * @param stroke Stroke used to paint the outline of the point shape.
 		 */
-		public void setStroke(Stroke stroke) {
-			this.stroke = stroke;
+		public void setBorderStroke(Stroke stroke) {
+			this.borderStroke = stroke;
 		}
 
 		/**
 		 * Returns the paint which is used to fill the point shape.
 		 * @return Paint which is used to fill the point shape.
 		 */
-		public Paint getStrokeColor() {
-			return strokeColor;
+		public Paint getBorderColor() {
+			return borderColor;
 		}
 
 		/**
 		 * Sets the paint which will be used to fill the point shape.
 		 * @param color Paint which will be used to fill the point shape.
 		 */
-		public void setStrokeColor(Paint color) {
-			this.strokeColor = color;
+		public void setBorderColor(Paint color) {
+			this.borderColor = color;
 		}
 
 		/**
@@ -214,8 +215,8 @@ public class BarPlot extends XYPlot {
 					GraphicsUtils.fillPaintedShape(
 						graphics, shape, paint, paintBoundaries);
 
-					Stroke stroke = renderer.getStroke();
-					Paint strokePaint = renderer.getStrokeColor();
+					Stroke stroke = renderer.getBorderStroke();
+					Paint strokePaint = renderer.getBorderColor();
 					if (stroke != null && strokePaint != null) {
 						GraphicsUtils.drawPaintedShape(
 							graphics, shape, strokePaint, null, stroke);

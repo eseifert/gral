@@ -68,8 +68,8 @@ public class SimpleBarPlot extends ExamplePanel {
 					new Color[] { COLOR1, GraphicsUtils.deriveBrighter(COLOR1) }
 			)
 		);
-		pointRenderer.setStroke(new BasicStroke(3f));
-		pointRenderer.setStrokeColor(
+		pointRenderer.setBorderStroke(new BasicStroke(3f));
+		pointRenderer.setBorderColor(
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },
 					new Color[] { GraphicsUtils.deriveBrighter(COLOR1), COLOR1 }

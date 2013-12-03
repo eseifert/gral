@@ -68,7 +68,7 @@ public class BarPlotTest {
 		plot = new MockBarPlot(data);
 
 		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
-		pointRenderer.setStroke(new BasicStroke());
+		pointRenderer.setBorderStroke(new BasicStroke());
 	}
 
 	@Test
@@ -114,7 +114,7 @@ public class BarPlotTest {
 			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
 		BarRenderer original = (BarRenderer) originalRenderer;
 		BarRenderer deserialized = (BarRenderer) deserializedRenderer;
-		assertEquals(original.getStroke(), deserialized.getStroke());
-		assertEquals(original.getStrokeColor(), deserialized.getStrokeColor());
+		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
+		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
 	}
 }
