@@ -26,6 +26,8 @@ import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -40,6 +42,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
+import de.erichseifert.gral.util.Location;
 
 public class XYPlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -77,9 +80,18 @@ public class XYPlotTest {
 		// XYPlot with all options turned on
 		plot = new MockXYPlot(data);
 		plot.getTitle().setText("foobar");
-		((XYPlotArea2D) plot.getPlotArea()).setMajorGridX(true);
-		((XYPlotArea2D) plot.getPlotArea()).setMinorGridX(true);
+		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();
+		plotArea.setMajorGridX(true);
+		plotArea.setMajorGridY(true);
+		plotArea.setMajorGridColor(Color.BLUE);
+		plotArea.setMinorGridX(true);
+		plotArea.setMinorGridY(true);
+		plotArea.setMinorGridColor(Color.BLUE);
 		plot.setLegendVisible(true);
+		plot.setLegendLocation(Location.SOUTH);
+		plot.setLegendDistance(2.0);
+		plot.setBorderColor(Color.RED);
+		plot.setBorderStroke(new BasicStroke(1.5f));
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.2);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.2);
 		plots.add(plot);
@@ -89,6 +101,7 @@ public class XYPlotTest {
 		((XYPlotArea2D) plot.getPlotArea()).setMajorGridX(false);
 		((XYPlotArea2D) plot.getPlotArea()).setMinorGridX(false);
 		plot.setLegendVisible(false);
+		plot.setBorderColor(null);
 		plot.getAxisRenderer(XYPlot.AXIS_X).setTickSpacing(0.0);
 		plot.getAxisRenderer(XYPlot.AXIS_Y).setTickSpacing(0.0);
 		plots.add(plot);
