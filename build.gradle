@@ -1,4 +1,4 @@
-allprojects  {
+allprojects {
 	apply plugin: 'maven'
 
 	group = 'de.erichseifert.gral'
