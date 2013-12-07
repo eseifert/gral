@@ -1,7 +1,7 @@
-description = 'GRAL example applications'
+description = "GRAL example applications"
 
 dependencies {
-	compile project(':gral-core')
+	compile project(":gral-core")
 }
 
 distributions {
@@ -15,5 +15,11 @@ distributions {
 				from configurations.runtime
 			}
 		}
+	}
+}
+
+jar {
+	manifest {
+		attributes("Main-Class": "de.erichseifert.gral.examples.Browser")
 	}
 }
