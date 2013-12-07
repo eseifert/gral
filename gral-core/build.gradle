@@ -1,15 +1,16 @@
-description = 'GRAL core'
+description = "GRAL core"
 
 dependencies {
-	testCompile(group: 'junit', name: 'junit', version:'4.10')
+	testCompile(group: "junit", name: "junit", version: "4.10")
 }
 
 buildscript {
-	apply from: 'https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle'
+	apply from: "https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle"
 }
 
 task report(dependsOn: "cobertura") {
 	description = "Generates reports."
+	group = "Report"
 }
 
 distributions {
@@ -57,7 +58,7 @@ task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
 	}
 }
 
-apply plugin: 'maven'
+apply plugin: "maven"
 uploadArchives {
 	repositories {
 		mavenDeployer {
