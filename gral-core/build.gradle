@@ -1,7 +1,7 @@
 description = 'GRAL core'
 
 dependencies {
-	testCompile group: 'junit', name: 'junit', version:'4.10'
+	testCompile(group: 'junit', name: 'junit', version:'4.10')
 }
 
 apply plugin: "checkstyle"
@@ -40,6 +40,36 @@ distributions {
 			into("lib") {
 				from jar
 				from configurations.runtime
+			}
+		}
+	}
+}
+
+apply plugin: 'maven'
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: "http://mvn.erichseifert.de/maven2") {
+				authentication(userName: "mavenUser", password: "mavenPassword")
+			}
+			pom.project {
+				inceptionYear(inceptionYear)
+				licenses {
+					license {
+						name("GNU Library or Lesser General Public License (LGPL)")
+						url("http://www.gnu.org/licenses/lgpl.txt")
+						distribution("main")
+					}
+				}
+				issueManagement {
+					system("trac")
+					url("http://trac.erichseifert.de/gral/")
+				}
+				scm {
+					connection("scm:git:git://erichseifert.de/gral.git")
+					developerConnection("scm:git:ssh://git@erichseifert.de/gral.git")
+					tag("HEAD")
+				}
 			}
 		}
 	}

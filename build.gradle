@@ -1,6 +1,4 @@
 allprojects {
-	apply plugin: 'maven'
-
 	group = 'de.erichseifert.gral'
 	version = '0.10-SNAPSHOT'
 	
