@@ -4,12 +4,6 @@ dependencies {
 	testCompile(group: 'junit', name: 'junit', version:'4.10')
 }
 
-apply plugin: "checkstyle"
-
-checkstyle {
-	configFile = new File("${projectDir}/src/etc/checkstyle.xml")
-}
-
 buildscript {
 	apply from: 'https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle'
 }

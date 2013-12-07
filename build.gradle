@@ -45,6 +45,9 @@ subprojects {
 		}
 	}
 	
+	apply plugin: "checkstyle"
+	checkstyle.configFile = new File("${rootDir}/config/checkstyle.xml")
+	
 	apply plugin: "pmd"
 	pmd {
 		// TODO: Dynamic dependency resolution possible?
