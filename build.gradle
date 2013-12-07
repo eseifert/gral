@@ -1,17 +1,21 @@
 allprojects {
-	group = 'de.erichseifert.gral'
-	version = '0.10-SNAPSHOT'
+	group = "de.erichseifert.gral"
+	version = "0.10-SNAPSHOT"
 	
 	ext.inceptionYear = 2009
 }
 
 subprojects {
-	apply plugin: 'java'
+	apply plugin: "java"
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
-	// TODO: Add support for MacOS
-	// jar is located at: ${java.home}/bundle/Classes/classes.jar
-	ext.runtimeJar = "${System.getProperty('java.home')}/lib/rt.jar"
+
+	// Determine the location of rt.jar
+	if (System.getProperty("os.name").startsWith("Mac")) {
+		ext.runtimeJar = "${System.getProperty("java.home")}/bundle/Classes/classes.jar"
+	} else {
+		ext.runtimeJar = "${System.getProperty("java.home")}/lib/rt.jar"
+	}
 
 	repositories {
 		mavenLocal()
