@@ -438,38 +438,47 @@ public class BarPlot extends XYPlot {
 		paintAllBars = false;
 
 		setLegend(new BarPlotLegend(this));
+
+		autoscaleAxes();
 	}
 
 	@Override
 	public void autoscaleAxis(String axisName) {
-		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
-			List<DataSource> sources = getData();
-			if (sources.isEmpty()) {
-				return;
-			}
-			DataSource data = sources.get(0);
-
-			Axis axis = getAxis(axisName);
-			if (axis == null || !axis.isAutoscaled()) {
-				return;
-			}
-
-			double min = getAxisMin(axisName);
-			double max = getAxisMax(axisName);
-			if (AXIS_X.equals(axisName)) {
-				// Add margin
-				double barWidth = getBarWidth();
-				double margin = barWidth*(max - min)/data.getRowCount();
-				axis.setRange(min - margin/2.0, max + margin/2.0);
-			} else if (AXIS_Y.equals(axisName)) {
-				// Make sure 0 is always visible for y axis
-				min = Math.min(min, 0.0);
-				max = Math.max(max, 0.0);
-				axis.setRange(min, max);
-			}
-		} else {
+		if (!AXIS_X.equals(axisName) && !AXIS_Y.equals(axisName)) {
 			super.autoscaleAxis(axisName);
 		}
+		Axis axis = getAxis(axisName);
+		if (axis == null || !axis.isAutoscaled()) {
+			return;
+		}
+
+		List<DataSource> sources = getData();
+		if (sources.isEmpty()) {
+			return;
+		}
+
+		int rowCount = 0;
+		for (DataSource data : sources) {
+			rowCount = Math.max(rowCount, data.getRowCount());
+		}
+		if (rowCount == 0) {
+			return;
+		}
+
+		double min = getAxisMin(axisName);
+		double max = getAxisMax(axisName);
+		double spacing = 0.0;
+		if (AXIS_X.equals(axisName)) {
+			// Add margin
+			double barWidth = getBarWidth();
+			double margin = barWidth*(max - min)/rowCount;
+			spacing = margin/2.0;
+		} else {
+			// Make sure 0 is always visible for y axis
+			min = Math.min(min, 0.0);
+			max = Math.max(max, 0.0);
+		}
+		axis.setRange(min - spacing, max + spacing);
 	}
 
 	@Override
