@@ -23,17 +23,16 @@ subprojects {
 		mavenCentral()
 	}
 	dependencies {
-		compile group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version:'0.9.1'
+		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.9.1")
 	}
 	
-	apply plugin: 'license'
+	apply plugin: "license"
 	license {
 		header(rootProject.file("config/license-header.txt"))
 		strictCheck(true)
 		mapping {
 			java = "SLASHSTAR_STYLE"
 		}
-		dryRun = true;
 		
 		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
 		ext.year = "${inceptionYear}-${currentYear}"
@@ -45,7 +44,7 @@ subprojects {
 		// Exlude certain file types from license checking
 		// https://github.com/hierynomus/license-gradle-plugin/issues/9
 	 	tasks.withType(nl.javadude.gradle.plugins.license.License).each { licenseTask ->
-			licenseTask.exclude '**.properties'
+			licenseTask.exclude "**.properties"
 		}
 	}
 	
@@ -69,7 +68,7 @@ subprojects {
 					include("gradlew")
 					include("gradlew.bat")
 				}
-				from("${projectDir}") {
+				from(projectDir) {
 					include("build.gradle")
 				}
 			}
@@ -89,6 +88,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+'
+        classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
     }
 }
