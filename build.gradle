@@ -32,6 +32,7 @@ subprojects {
 		injars(jar.archivePath)
 		outjars("${libsDir}/shrunk/${jar.archiveName}")
 		libraryjars(runtimeJar)
+		libraryjars(configurations.runtime)
 
 		doLast {
 			// Use the shrunk jar for all further processing
@@ -85,6 +86,7 @@ subprojects {
 			}
 		}
 	}
+	distTar.dependsOn(shrink)
 	distTar.compression = Compression.BZIP2
 	distTar.extension = "tar.bz2"
 }
