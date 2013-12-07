@@ -3,3 +3,18 @@ description = 'GRAL example applications'
 dependencies {
 	compile project(':gral-core')
 }
+
+apply plugin: "distribution"
+distributions {
+	main {
+		contents {
+			from(projectDir) {
+				include("src/**")
+			}
+			into("lib") {
+				from jar
+				from configurations.runtime
+			}
+		}
+	}
+}

@@ -69,6 +69,24 @@ subprojects {
 		ruleSets = ["java-basic"]
 		ignoreFailures = true
 	}
+	
+	apply plugin: "distribution"
+	distributions {
+		main {
+			contents {
+				from(rootDir) {
+					include("LICENSE**")
+					include("gradlew")
+					include("gradlew.bat")
+				}
+				from("${projectDir}") {
+					include("build.gradle")
+				}
+			}
+		}
+	}
+	distTar.compression = Compression.BZIP2
+	distTar.extension = "tar.bz2"
 }
 
 // Include the proguard-gradle plugin

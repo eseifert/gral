@@ -17,3 +17,30 @@ buildscript {
 task report(dependsOn: "cobertura") {
 	description = "Generates reports."
 }
+
+apply plugin: "distribution"
+distributions {
+	main {
+		contents {
+			from(rootDir) {
+				include("CHANGES")
+				include("README")
+			}
+			from(projectDir) {
+				include("src/**")
+			}
+			into("doc") {
+				into("javadoc") {
+					from javadoc
+				}
+				into("rst") {
+					from("${projectDir}/src/rst")
+				}
+			}
+			into("lib") {
+				from jar
+				from configurations.runtime
+			}
+		}
+	}
+}
