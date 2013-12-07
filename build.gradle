@@ -18,7 +18,7 @@ subprojects {
 	repositories {
 		mavenLocal()
 		maven { url "http://mvn.erichseifert.de/maven2" }
-		maven { url "http://repo.maven.apache.org/maven2" }
+		mavenCentral()
 	}
 	dependencies {
 		compile group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version:'0.9.1'
@@ -96,7 +96,7 @@ buildscript {
 	repositories {
 		mavenLocal()
 		maven { url "http://mvn.erichseifert.de/maven2" }
-		maven { url "http://repo.maven.apache.org/maven2" }
+		mavenCentral()
 	}
 	dependencies {
 		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
@@ -108,7 +108,7 @@ buildscript {
     repositories {
 		mavenLocal()
 		maven { url "http://mvn.erichseifert.de/maven2" }
-		maven { url "http://repo.maven.apache.org/maven2" }
+		mavenCentral()
     }
 
     dependencies {
