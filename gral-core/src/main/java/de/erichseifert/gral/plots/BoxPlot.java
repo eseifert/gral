@@ -843,31 +843,45 @@ public class BoxPlot extends XYPlot {
 
 	@Override
 	public void autoscaleAxis(String axisName) {
-		if (AXIS_X.equals(axisName) || AXIS_Y.equals(axisName)) {
-			Axis axis = getAxis(axisName);
-			if (axis == null || !axis.isAutoscaled()) {
-				return;
-			}
-
-			List<DataSource> sources = getData();
-			if (sources.isEmpty()) {
-				return;
-			}
-			DataSource data = getData().get(0);
-
-			if (AXIS_X.equals(axisName)) {
-				Column col0 = data.getColumn(0);
-				axis.setRange(
-					col0.getStatistics(Statistics.MIN) - 0.5,
-					col0.getStatistics(Statistics.MAX) + 0.5);
-			} else if (AXIS_Y.equals(axisName)) {
-				double yMin = data.getColumn(2).getStatistics(Statistics.MIN);
-				double yMax = data.getColumn(5).getStatistics(Statistics.MAX);
-				double ySpacing = 0.05*(yMax - yMin);
-				axis.setRange(yMin - ySpacing, yMax + ySpacing);
-			}
-		} else {
+		if (!AXIS_X.equals(axisName) && !AXIS_Y.equals(axisName)) {
 			super.autoscaleAxis(axisName);
 		}
+		Axis axis = getAxis(axisName);
+		if (axis == null || !axis.isAutoscaled()) {
+			return;
+		}
+
+		List<DataSource> sources = getData();
+		if (sources.isEmpty()) {
+			return;
+		}
+
+		boolean isXAxis = AXIS_X.equals(axisName);
+
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		for (DataSource data : sources) {
+			BoxWhiskerRenderer pointRenderer =
+					(BoxWhiskerRenderer) getPointRenderer(data);
+			if (pointRenderer == null) {
+				continue;
+			}
+
+			int minColumnIndex, maxColumnIndex;
+			if (isXAxis) {
+				minColumnIndex = pointRenderer.getPositionColumn();
+				maxColumnIndex = pointRenderer.getPositionColumn();
+			} else {
+				minColumnIndex = pointRenderer.getBottomBarColumn();
+				maxColumnIndex = pointRenderer.getTopBarColumn();
+			}
+
+			min = Math.min(min, data.getColumn(minColumnIndex)
+					.getStatistics(Statistics.MIN));
+			max = Math.max(max, data.getColumn(maxColumnIndex)
+					.getStatistics(Statistics.MAX));
+		}
+		double spacing = (isXAxis) ? 0.5 : 0.05*(max - min);
+		axis.setRange(min - spacing, max + spacing);
 	}
 }
