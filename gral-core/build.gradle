@@ -37,6 +37,9 @@ distributions {
 		}
 	}
 }
+distTar.dependsOn("shrink")
+distZip.dependsOn("shrink")
+
 
 task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
 	description = "Uses ProGuard to reduce the code size of this project."

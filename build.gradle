@@ -74,7 +74,6 @@ subprojects {
 			}
 		}
 	}
-	distTar.dependsOn(shrink)
 	distTar.compression = Compression.BZIP2
 	distTar.extension = "tar.bz2"
 }
