@@ -12,7 +12,6 @@ task report(dependsOn: "cobertura") {
 	description = "Generates reports."
 }
 
-apply plugin: "distribution"
 distributions {
 	main {
 		contents {

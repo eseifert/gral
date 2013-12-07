@@ -4,7 +4,6 @@ dependencies {
 	compile project(':gral-core')
 }
 
-apply plugin: "distribution"
 distributions {
 	main {
 		contents {
