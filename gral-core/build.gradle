@@ -45,6 +45,22 @@ distributions {
 	}
 }
 
+task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
+	description = "Uses ProGuard to reduce the code size of this project."
+	// Configure ProGuard
+	configuration("${projectDir}/src/etc/proguard.conf")
+	target(targetCompatibility.toString())
+	injars(jar.archivePath)
+	outjars("${libsDir}/shrunk/${jar.archiveName}")
+	libraryjars(runtimeJar)
+	libraryjars(configurations.runtime)
+
+	doLast {
+		// Use the shrunk jar for all further processing
+		jar.destinationDir = new File("${libsDir}/shrunk/")
+	}
+}
+
 apply plugin: 'maven'
 uploadArchives {
 	repositories {
@@ -72,5 +88,17 @@ uploadArchives {
 				}
 			}
 		}
+	}
+}
+
+// Include the proguard-gradle plugin
+buildscript {
+	repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		mavenCentral()
+	}
+	dependencies {
+		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
 	}
 }
