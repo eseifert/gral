@@ -58,31 +58,38 @@ task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
 	}
 }
 
-apply plugin: "maven"
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			repository(url: "http://mvn.erichseifert.de/maven2") {
-				authentication(userName: "mavenUser", password: "mavenPassword")
+apply plugin: "maven-publish"
+publishing {
+	publications {
+		core(MavenPublication) {
+			from components.java
+			
+			// Add additional information to the pom.xml
+			pom.withXml {
+				def root = asNode()
+				root.appendNode("inceptionYear", inceptionYear)
+				def licenses = root.appendNode("licenses")
+					def license = licenses.appendNode("license")
+						license.appendNode("name", "GNU Library or Lesser General Public License (LGPL)")
+						license.appendNode("url", "http://www.gnu.org/licenses/lgpl.txt")
+						license.appendNode("distribution", "repo")
+				def issueManagement = root.appendNode("issueManagement") 
+					issueManagement.appendNode("system", "trac")
+					issueManagement.appendNode("url", "http://trac.erichseifert.de/gral/")
+				def scm = root.appendNode("scm")
+					scm.appendNode("connection", "scm:git:git://erichseifert.de/gral.git")
+					scm.appendNode("developerConnection", "scm:git:ssh://git@erichseifert.de/gral.git")
+					scm.appendNode("tag", "HEAD")
 			}
-			pom.project {
-				inceptionYear(inceptionYear)
-				licenses {
-					license {
-						name("GNU Library or Lesser General Public License (LGPL)")
-						url("http://www.gnu.org/licenses/lgpl.txt")
-						distribution("main")
-					}
-				}
-				issueManagement {
-					system("trac")
-					url("http://trac.erichseifert.de/gral/")
-				}
-				scm {
-					connection("scm:git:git://erichseifert.de/gral.git")
-					developerConnection("scm:git:ssh://git@erichseifert.de/gral.git")
-					tag("HEAD")
-				}
+		}
+	}
+	
+	repositories {
+		maven {
+			url("http://mvn.erichseifert.de/maven2")
+			credentials {
+				username = "mavenUser"
+				password = "mavenPassword"
 			}
 		}
 	}
