@@ -366,6 +366,34 @@ fact a special case of an xy-plot.
 
     Plot plot = new BarPlot(series);
 
+Box-and-whisker plot
+~~~~~~~~~~~~~~~~~~~~
+
+Box-and-whisker, or short box plots, are used to display the statistics like
+minimum, maximum, median, or quantiles in a concise plot. GRAL's class
+``BoxPlot`` is used to create this type of plot.
+
+.. code:: java
+
+    Plot plot = new BoxPlot(series);
+
+The data series must provide six columns for each plot element:
+
+- x position of the box-whisker-plot
+- y position of the center bar (e.g. median)
+- y position of the lower whisker (e.g. minimum)
+- upper edge of the box (e.g. first quartile)
+- lower edge of the box (e.g. third quartile)
+- y position of the upper whisker (e.g. maximum)
+
+A utility method of ``BoxPlot`` can be used to generate a suitable data source
+from an existing data source:
+
+.. code:: java
+
+    DataSource series = BoxPlot.createBoxData(data);
+    Plot plot = new BoxPlot(series);
+
 Pie plot
 ~~~~~~~~
 
@@ -377,7 +405,31 @@ of plot.
 
     Plot plot = new PiePlot(series);
 
-Custimization
+Raster plot
+~~~~~~~~~~~
+
+Raster plots are used to display a two-dimensional grid with filled grid tiles.
+GRAL's class ``RasterPlot`` is used to create this type of plot.
+
+.. code:: java
+
+    Plot plot = new RasterPlot(series);
+
+The data series must provide three columns for each grid tile:
+
+- x position of the grid tile
+- y position of the grid tile
+- value of the grid tile
+
+A utility method of ``RasterPlot`` can be used to generate a suitable data
+source from an existing data source:
+
+.. code:: java
+
+    DataSource series = RasterPlot.createBoxData(data);
+    Plot plot = new RasterPlot(series);
+
+Customization
 -------------
 
 The visual appearance of most classes in GRAL can be queried and changed using
