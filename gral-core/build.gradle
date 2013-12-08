@@ -97,8 +97,8 @@ publishing {
 		maven {
 			url("http://mvn.erichseifert.de/maven2")
 			credentials {
-				username = "mavenUser"
-				password = "mavenPassword"
+				username = mvnRepoUsername
+				password = mvnRepoPassword
 			}
 		}
 	}
