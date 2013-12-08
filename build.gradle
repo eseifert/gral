@@ -1,6 +1,6 @@
 allprojects {
 	group = "de.erichseifert.gral"
-	version = "0.10-SNAPSHOT"
+	version = "0.10"
 
 	ext.inceptionYear = 2009
 }
