@@ -1,7 +1,7 @@
 allprojects {
 	group = "de.erichseifert.gral"
 	version = "0.10-SNAPSHOT"
-	
+
 	ext.inceptionYear = 2009
 }
 
@@ -39,7 +39,7 @@ subprojects {
 		ext.owner1 = "Erich Seifert"
 		ext.email1 = "dev[at]erichseifert.de"
 		ext.owner2 = "Michael Seifert"
-		ext.email2 = "michael[at]erichseifert.de"
+		ext.email2 = "mseifert[at]error-reports.org"
 
 		// Exlude certain file types from license checking
 		// https://github.com/hierynomus/license-gradle-plugin/issues/9
