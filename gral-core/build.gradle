@@ -1,0 +1,117 @@
+description = "GRAL core"
+
+dependencies {
+	testCompile(group: "junit", name: "junit", version: "4.10")
+}
+
+buildscript {
+	apply from: "https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle"
+}
+
+task report {
+	dependsOn = ["cobertura", check]
+	description = "Generates reports."
+	group = "Report"
+
+	tasks.withType(Pmd).each {pmdTask ->
+		pmdTask.ignoreFailures = true
+	}
+	tasks.withType(Checkstyle).each {checkstyleTask ->
+		checkstyleTask.ignoreFailures = true
+		checkstyleTask.showViolations = false
+	}
+}
+
+distributions {
+	main {
+		contents {
+			from(rootDir) {
+				include("CHANGES")
+				include("README")
+			}
+			from(projectDir) {
+				include("src/**")
+			}
+			into("doc") {
+				into("javadoc") {
+					from javadoc
+				}
+				into("rst") {
+					from("${projectDir}/src/rst")
+				}
+			}
+			into("lib") {
+				from jar
+				from configurations.runtime
+			}
+		}
+	}
+}
+distTar.dependsOn("shrink")
+distZip.dependsOn("shrink")
+
+
+task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
+	description = "Uses ProGuard to reduce the code size of this project."
+	// Configure ProGuard
+	configuration("${projectDir}/src/etc/proguard.conf")
+	target(targetCompatibility.toString())
+	injars(jar.archivePath)
+	outjars("${libsDir}/shrunk/${jar.archiveName}")
+	libraryjars(runtimeJar)
+	libraryjars(configurations.runtime)
+
+	doLast {
+		// Use the shrunk jar for all further processing
+		jar.destinationDir = new File("${libsDir}/shrunk/")
+	}
+}
+
+apply plugin: "maven-publish"
+publishing {
+	publications {
+		core(MavenPublication) {
+			from components.java
+			
+			// Add additional information to the pom.xml
+			pom.withXml {
+				def root = asNode()
+				root.appendNode("inceptionYear", inceptionYear)
+				def licenses = root.appendNode("licenses")
+					def license = licenses.appendNode("license")
+						license.appendNode("name", "GNU Library or Lesser General Public License (LGPL)")
+						license.appendNode("url", "http://www.gnu.org/licenses/lgpl.txt")
+						license.appendNode("distribution", "repo")
+				def issueManagement = root.appendNode("issueManagement") 
+					issueManagement.appendNode("system", "trac")
+					issueManagement.appendNode("url", "http://trac.erichseifert.de/gral/")
+				def scm = root.appendNode("scm")
+					scm.appendNode("connection", "scm:git:git://erichseifert.de/gral.git")
+					scm.appendNode("developerConnection", "scm:git:ssh://git@erichseifert.de/gral.git")
+					scm.appendNode("tag", "HEAD")
+			}
+		}
+	}
+	
+	repositories {
+		maven {
+			url("http://mvn.erichseifert.de/maven2")
+			credentials {
+				username = "mavenUser"
+				password = "mavenPassword"
+			}
+		}
+	}
+}
+
+// Include the proguard-gradle plugin
+buildscript {
+	repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		mavenCentral()
+	}
+	dependencies {
+		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
+	}
+}

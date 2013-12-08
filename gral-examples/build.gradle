@@ -1,0 +1,25 @@
+description = "GRAL example applications"
+
+dependencies {
+	compile project(":gral-core")
+}
+
+distributions {
+	main {
+		contents {
+			from(projectDir) {
+				include("src/**")
+			}
+			into("lib") {
+				from jar
+				from configurations.runtime
+			}
+		}
+	}
+}
+
+jar {
+	manifest {
+		attributes("Main-Class": "de.erichseifert.gral.examples.Browser")
+	}
+}

@@ -1,0 +1,92 @@
+allprojects {
+	group = "de.erichseifert.gral"
+	version = "0.10-SNAPSHOT"
+	
+	ext.inceptionYear = 2009
+}
+
+subprojects {
+	apply plugin: "java"
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	// Determine the location of rt.jar
+	if (System.getProperty("os.name").startsWith("Mac")) {
+		ext.runtimeJar = "${System.getProperty("java.home")}/bundle/Classes/classes.jar"
+	} else {
+		ext.runtimeJar = "${System.getProperty("java.home")}/lib/rt.jar"
+	}
+
+	repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		mavenCentral()
+	}
+	dependencies {
+		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.9.1")
+	}
+	
+	apply plugin: "license"
+	license {
+		header(rootProject.file("config/license-header.txt"))
+		strictCheck(true)
+		mapping {
+			java = "SLASHSTAR_STYLE"
+		}
+		
+		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
+		ext.year = "${inceptionYear}-${currentYear}"
+		ext.owner1 = "Erich Seifert"
+		ext.email1 = "dev[at]erichseifert.de"
+		ext.owner2 = "Michael Seifert"
+		ext.email2 = "michael[at]erichseifert.de"
+
+		// Exlude certain file types from license checking
+		// https://github.com/hierynomus/license-gradle-plugin/issues/9
+	 	tasks.withType(nl.javadude.gradle.plugins.license.License).each { licenseTask ->
+			licenseTask.exclude "**.properties"
+		}
+	}
+	
+	apply plugin: "checkstyle"
+	checkstyle.configFile = new File("${rootDir}/config/checkstyle.xml")
+	
+	apply plugin: "pmd"
+	pmd {
+		// TODO: Dynamic dependency resolution possible?
+		toolVersion = "5.0.5"
+		ruleSets = ["java-basic"]
+		ignoreFailures = true
+	}
+	
+	apply plugin: "distribution"
+	distributions {
+		main {
+			contents {
+				from(rootDir) {
+					include("LICENSE**")
+				}
+				from(projectDir) {
+					include("build.gradle")
+				}
+			}
+		}
+	}
+	distZip.dependsOn(check)
+	distTar.dependsOn(check)
+	distTar.compression = Compression.BZIP2
+	distTar.extension = "tar.bz2"
+}
+
+// Include the License Gradle plugin
+buildscript {
+    repositories {
+		mavenLocal()
+		maven { url "http://mvn.erichseifert.de/maven2" }
+		mavenCentral()
+    }
+
+    dependencies {
+        classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
+    }
+}
