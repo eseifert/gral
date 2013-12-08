@@ -8,9 +8,18 @@ buildscript {
 	apply from: "https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle"
 }
 
-task report(dependsOn: "cobertura") {
+task report {
+	dependsOn = ["cobertura", check]
 	description = "Generates reports."
 	group = "Report"
+
+	tasks.withType(Pmd).each {pmdTask ->
+		pmdTask.ignoreFailures = true
+	}
+	tasks.withType(Checkstyle).each {checkstyleTask ->
+		checkstyleTask.ignoreFailures = true
+		checkstyleTask.showViolations = false
+	}
 }
 
 distributions {
