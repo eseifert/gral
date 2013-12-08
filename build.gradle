@@ -65,8 +65,6 @@ subprojects {
 			contents {
 				from(rootDir) {
 					include("LICENSE**")
-					include("gradlew")
-					include("gradlew.bat")
 				}
 				from(projectDir) {
 					include("build.gradle")
