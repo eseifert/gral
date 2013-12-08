@@ -32,7 +32,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.Arrays;
 
 /**
  * Data source for database tables accessed through a JDBC connection.
@@ -41,8 +40,6 @@ public class JdbcData extends AbstractDataSource {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5196527358266585129L;
 
-	/** The data types of all columns. */
-	private Class<? extends Comparable<?>>[] types;
 	/** The JDBC connection. */
 	private final Connection connection;
 	/** The name of the table containing the data. */
@@ -73,9 +70,8 @@ public class JdbcData extends AbstractDataSource {
 		this.table = table;
 		setBuffered(buffered);
 
-		types = null;
 		try {
-			this.types = getJdbcColumnTypes();
+			setColumnTypes(getJdbcColumnTypes());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -124,15 +120,10 @@ public class JdbcData extends AbstractDataSource {
 
 	@Override
 	public int getColumnCount() {
-		if (types != null) {
-			return types.length;
+		if (getColumnTypes() != null) {
+			return getColumnTypes().length;
 		}
 		return 0;
-	}
-
-	@Override
-	public Class<? extends Comparable<?>>[] getColumnTypes() {
-		return Arrays.copyOf(types, types.length);
 	}
 
 	/**
@@ -235,7 +226,9 @@ public class JdbcData extends AbstractDataSource {
 	 *         the result set.
 	 */
 	private Comparable<?> jdbcToJavaValue(ResultSet row, int col) throws SQLException {
-		Class<? extends Comparable<?>> colType = types[col];
+		// TODO Add getColumn(int).getType() method to Column
+		// AbstractDataSource.getColumnTypes() makes a defensive copy.
+		Class<? extends Comparable<?>> colType = getColumnTypes()[col];
 		int sqlCol = col + 1;
 		if (Byte.class.equals(colType)) {
 			return row.getByte(sqlCol);
