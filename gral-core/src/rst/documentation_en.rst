@@ -15,11 +15,13 @@ Creating data
 -------------
 
 Assuming you have computed some values you want to plot, how can you store your
-data in a ``DataSource``? You can do so through the class ``DataTable``.
-``DataTable`` is an implementation of ``DataSource`` (or ``AbstractDataSource``
-to be more precise) and supports operations like adding and removing rows. The
-values you must match the number of columns and their types, which both had
-already been specified in the constructor.
+data in a ``DataSource``?
+
+You can do so through the class ``DataTable``. ``DataTable`` is an
+implementation of ``DataSource`` (or ``AbstractDataSource`` to be more precise)
+and supports operations like adding and removing rows. The values you must match
+the number of columns and their types, which both had already been specified in
+the constructor.
 
 .. code:: java
 
@@ -351,7 +353,7 @@ the plot as well as its background color, its border, or its spacings.
 
 .. code:: java
 
-    plot.setSetting(Plot.LEGEND, true);
+    plot.setLegendVisible(true);
 
 Bar plot
 ~~~~~~~~
@@ -378,9 +380,9 @@ of plot.
 Custimization
 -------------
 
-The visual properties of most classes in GRAL can be queried and changed using
-the methods ``getSetting`` and ``setSetting``. This way, settings like colors,
-borders, margins, or positions can be easily customized.
+The visual appearance of most classes in GRAL can be queried and changed using
+the ``get`` and ``set`` methods for each property. This way, properties like
+colors, borders, margins, or positions can be easily customized.
 
 Customizing the plot
 ~~~~~~~~~~~~~~~~~~~~
@@ -393,7 +395,7 @@ example shows how to set the title of an xy-plot.
 .. code:: java
 
     Plot plot = new XYPlot(data);
-    plot.setSetting(XYPlot.TITLE, "My First XY Plot");
+    plot.getTitle().setText("My First XY Plot");
 
 In the next example you can see how a background gradient can be assigned to the
 whole plot.
@@ -407,7 +409,7 @@ whole plot.
         new float[] {0f, 1f},  // Relative fractions
         new Color[] {Color.GRAY, Color.WHITE}  // Gradient colors
     );
-    plot.setSetting(Plot.BACKGROUND, gradient);
+    plot.setBackground(gradient);
 
 The ``PlotArea2D`` is the container for plotting the data. It must be fetched
 from a plot with the method, ``getPlotArea`` as each ``Plot`` type can also have
@@ -417,8 +419,8 @@ plot area itself completely.
 .. code:: java
 
     PlotArea2D plotArea = plot.getPlotArea();
-    plotArea.setSetting(PlotArea2D.BACKGROUND, null);
-    plotArea.setSetting(PlotArea2D.BORDER, null);
+    plotArea.setBackground(null);
+    plotArea.setBorder(null);
 
 Often, a legend has to added to a plot. Every plot already has a ``Legend``
 which just has to be turned on explicitly. Then, the positioning, orientation,
@@ -427,10 +429,10 @@ shows how to add a horizontal legend to the the bottom left corner of a plot.
 
 .. code:: java
 
-    plot.setSetting(Plot.LEGEND, true);
-    plot.setSetting(Plot.LEGEND_LOCATION, Location.SOUTH_WEST);
+    plot.setLegendVisible(true);
+    plot.setLegendLocation(Location.SOUTH_WEST);
     Legend legend = plot.getLegend();
-    legend.setSetting(Legend.ORIENTATION, Orientation.HORIZONTAL);
+    legend.setLegendOrientation(Orientation.HORIZONTAL);
 
 Customizing axes
 ~~~~~~~~~~~~~~~~
@@ -444,7 +446,7 @@ instance and can have different settings.
 .. code:: java
 
     AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
-    axisRendererX.setSetting(AxisRenderer.TICKS_SPACING,  5.0);
+    axisRendererX.setTickSpacing(5.0);
 
 There are to implementations of ``AxisRenderer``: for axes with a linear scale
 (the default case) ``LinearRenderer2D`` is used; for axes with a logarithmic
@@ -454,21 +456,21 @@ scale the class ``LogarithmicRenderer2D`` is used:
 
     XYPlot plot = new XYPlot(seriesLog, seriesLin);
     AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
-    axisRendererX.setSetting(AxisRenderer.LABEL, "Logarithmic data");
+    axisRendererX.setLabel("Logarithmic data");
     plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 
 .. code:: java
 
     AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
     Format dateFormat = DateFormat.getTimeInstance();
-    axisRendererX.setSetting(AxisRenderer.TICK_LABELS_FORMAT, dateFormat);
+    axisRendererX.setTickLabelFormat(dateFormat);
 
 .. code:: java
 
     Map<Double, String> labels = new HashMap<Double, String>();
     labels.put(2.0, "Doubled");
     labels.put(1.5, "One and a half times");
-    axisRendererX.setSetting(AxisRenderer.TICKS_CUSTOM, labels);
+    axisRendererX.setCustomTicks(labels);
 
 Customizing points
 ~~~~~~~~~~~~~~~~~~
@@ -498,7 +500,7 @@ In the following example you can see how to implement a simple renderer.
             Drawable drawable = new AbstractDrawable() {
                 @Override
                 public void draw(DrawingContext context) {
-                    Paint paint = SimplePointRenderer.this.getSetting(COLOR);
+                    Paint paint = SimplePointRenderer.this.getColor();
                     Shape point = getPointShape(data);
 
                     // Put your custom code here ...
@@ -554,7 +556,7 @@ In the following example you can see how to implement a simple renderer.
             Drawable d = new AbstractDrawable() {
                 @Override
                 public void draw(DrawingContext context) {
-                    Paint paint = SimpleLineRenderer2D.this.getSetting(LineRenderer.COLOR);
+                    Paint paint = SimpleLineRenderer2D.this.getColor();
                     GraphicsUtils.fillPaintedShape(context.getGraphics(), shape, paint, null);
                 }
             };
@@ -594,7 +596,7 @@ In the following example you can see how to implement a simple renderer.
             return new AbstractDrawable() {
                 @Override
                 public void draw(DrawingContext context) {
-                    Paint paint = SimpleAreaRenderer.this.getSetting(COLOR);
+                    Paint paint = SimpleAreaRenderer.this.getColor();
                     GraphicsUtils.fillPaintedShape(context.getGraphics(),
                             area, paint, area.getBounds2D());
                 }
@@ -612,7 +614,7 @@ Exporting plot images
 ~~~~~~~~~~~~~~~~~~~~~
 
 Usage similar to data import/export. Bitmap formats like PNG, JPEG, BMP, or GIF
-and vector formats like SVG, PDF, EPS.
+and vector formats like SVG, PDF, or EPS.
 
 .. code:: java
 
@@ -638,11 +640,11 @@ Writing a new plot type
 .. code:: java
 
     public class MyPlot extends Plot implements DataListener {
-        public static final Key MY_SETTING = new Key("myplot.mysetting");
+        private double mySetting;
 
         public MyPlot(DataSource data) {
             super(data);
-            setSettingDefault(MY_SETTING, 1.0);
+            mySetting = 1.0;
             ...
             dataChanged(data);
             data.addDataListener(this);
