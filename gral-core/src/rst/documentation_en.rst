@@ -484,7 +484,7 @@ shows how to add a horizontal legend to the the bottom left corner of a plot.
     plot.setLegendVisible(true);
     plot.setLegendLocation(Location.SOUTH_WEST);
     Legend legend = plot.getLegend();
-    legend.setLegendOrientation(Orientation.HORIZONTAL);
+    legend.setOrientation(Orientation.HORIZONTAL);
 
 Customizing axes
 ~~~~~~~~~~~~~~~~
