@@ -406,7 +406,6 @@ public class BarPlot extends XYPlot {
 					if (pointRenderer != null) {
 						shape = pointRenderer.getPointShape(pointData);
 						drawable = pointRenderer.getPoint(pointData, shape);
-						drawable = pointRenderer.getPoint(pointData, shape);
 					}
 
 					DataPoint point = new DataPoint(pointData,
