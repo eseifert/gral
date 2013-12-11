@@ -111,8 +111,7 @@ public class TestUtils {
 		// Check whether there are non-transparent pixel values
 		DataBufferInt buf = (DataBufferInt) image.getRaster().getDataBuffer();
 		int[] data = buf.getData();
-		for (int i = 0; i < data.length; i++) {
-			int color = data[i];
+		for (int color : data) {
 			int alpha = color & 0xFF000000;
 			if (alpha != 0) {
 				return false;

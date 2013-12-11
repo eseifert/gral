@@ -92,8 +92,8 @@ public class DataTableTest {
 		assertEquals(3, table2.getColumnCount());
 		assertEquals(0, table1.getRowCount());
 		Class<? extends Comparable<?>>[] types2 = table2.getColumnTypes();
-		for (int i = 0; i < types2.length; i++) {
-			assertEquals(Double.class, types2[i]);
+		for (Class<? extends Comparable<?>> aTypes2 : types2) {
+			assertEquals(Double.class, aTypes2);
 		}
 
 		// Copy constructor

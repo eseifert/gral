@@ -253,7 +253,7 @@ public class PlotTest {
 		List<DataSource> visible = plot.getVisibleData();
 		assertEquals(all.size(), visible.size());
 		for (int i = 0; i < all.size(); i++) {
-			assertEquals(all.get(i), all.get(i));
+			assertEquals(all.get(i), visible.get(i));
 		}
 		plot.setVisible(series1, false);
 		assertEquals(visible.size() - 1, plot.getVisibleData().size());
