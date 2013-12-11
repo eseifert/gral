@@ -53,11 +53,11 @@ public class SizeablePointsRendererTest {
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
-		table.add(1, 3, 1);              // 0
-		table.add(2, 5, 2);              // 1
-		table.add(3, 2, -1);             // 2
-		table.add(4, 1, 0);              // 3
-		table.add(5, 4, (Integer) null); // 4
+		table.add(1, 3, 1);    // 0
+		table.add(2, 5, 2);    // 1
+		table.add(3, 2, -1);   // 2
+		table.add(4, 1, 0);    // 3
+		table.add(5, 4, null); // 4
 
 		row = new Row(table, 0);
 
@@ -66,8 +66,8 @@ public class SizeablePointsRendererTest {
 		axisRenderer.setShape(new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
 
 		data = new PointData(
-			Arrays.asList((Axis) null, axis),
-			Arrays.asList((AxisRenderer) null, axisRenderer),
+			Arrays.asList(null, axis),
+			Arrays.asList(null, axisRenderer),
 			row, 0);
 
 		shape = new Rectangle2D.Double(-5.0, -5.0, 10.0, 10.0);

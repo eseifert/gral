@@ -137,7 +137,7 @@ public class MathUtilsTest {
 
 	@Test
 	public void testRandomizedSelect() {
-		List<Double> a = Arrays.<Double>asList(13.0, 5.0, 8.0, 3.0, 1.0, 2.0, 1.0);
+		List<Double> a = Arrays.asList(13.0, 5.0, 8.0, 3.0, 1.0, 2.0, 1.0);
 
 		for (int i = 0; i < a.size(); i++) {
 			assertEquals(i, MathUtils.randomizedSelect(a, 0, a.size() - 1, i + 1));
@@ -152,7 +152,7 @@ public class MathUtilsTest {
 		assertEquals(1, Collections.frequency(a, 13.0));
 
 		// Check behavior for empty lists
-		List<Double> b = Arrays.<Double>asList();
+		List<Double> b = Arrays.asList();
 		assertEquals(-1, MathUtils.randomizedSelect(b, 0, a.size() - 1, 1));
 	}
 
@@ -167,7 +167,7 @@ public class MathUtilsTest {
 
 	@Test
 	public void testQuantile() {
-		List<Double> values = Arrays.<Double>asList(
+		List<Double> values = Arrays.asList(
 				11.4, 17.3, 21.3, 25.9, 40.1, 50.5, 60.0, 70.0, 75.0);
 
 		assertEquals(11.40, MathUtils.quantile(values, 0.0), DELTA);

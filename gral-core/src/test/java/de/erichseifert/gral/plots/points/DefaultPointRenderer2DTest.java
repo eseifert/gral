@@ -80,8 +80,8 @@ public class DefaultPointRenderer2DTest {
 		axisRenderer.setShape(new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
 
 		data = new PointData(
-			Arrays.asList((Axis) null, axis),
-			Arrays.asList((AxisRenderer) null, axisRenderer),
+			Arrays.asList(null, axis),
+			Arrays.asList(null, axisRenderer),
 			row, 0);
 
 	}

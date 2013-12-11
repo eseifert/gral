@@ -67,12 +67,12 @@ public class TestUtilsTest {
 	public void testAssertEqualsShape() {
 		Rectangle2D s1 = new Rectangle2D.Double();
 		try {
-			TestUtils.assertEquals((Shape) s1, (Shape) null);
+			TestUtils.assertEquals(s1, null);
 			fail();
 		} catch (AssertionError e) {
 		}
 		try {
-			TestUtils.assertEquals((Shape) null, (Shape) s1);
+			TestUtils.assertEquals(null, s1);
 			fail();
 		} catch (AssertionError e) {
 		}

@@ -53,8 +53,8 @@ public class LabelPointsRendererTest {
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
 		table = new DataTable(Integer.class, Integer.class, Integer.class);
-		table.add(1, 3, 1);              // 0
-		table.add(2, (Integer) null, 2); // 1
+		table.add(1, 3, 1);    // 0
+		table.add(2, null, 2); // 1
 
 		row = new Row(table, 0);
 
