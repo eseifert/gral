@@ -52,7 +52,7 @@ public abstract class IOCapabilitiesStorage {
 	 * Adds the specified capabilities to the Set of supported formats.
 	 * @param capabilities Capabilities to be added.
 	 */
-	protected static final void addCapabilities(IOCapabilities capabilities) {
+	protected static void addCapabilities(IOCapabilities capabilities) {
 		IOCapabilitiesStorage.capabilities.add(capabilities);
 	}
 }

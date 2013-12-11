@@ -78,7 +78,7 @@ public class DrawableWriterFilter extends FileFilter {
 		return capabilities;
 	}
 
-	private final static String getExtension(File f) {
+	private static String getExtension(File f) {
 		String name = f.getName();
 		int lastDot = name.lastIndexOf('.');
 		if ((lastDot <= 0) || (lastDot == name.length() - 1)) {

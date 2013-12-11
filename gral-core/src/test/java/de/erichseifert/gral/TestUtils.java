@@ -49,7 +49,7 @@ public class TestUtils {
 	 * Creates a new writable image for running a unit test.
 	 * @return A writable image instance.
 	 */
-	public static final BufferedImage createTestImage() {
+	public static BufferedImage createTestImage() {
 		return new BufferedImage(40, 30, BufferedImage.TYPE_INT_ARGB);
 	}
 
@@ -60,7 +60,7 @@ public class TestUtils {
 	 * @param message Custom message.
 	 * @param image Image to test.
 	 */
-	public static final void assertEmpty(String message, BufferedImage image) {
+	public static void assertEmpty(String message, BufferedImage image) {
 		if (!isEmpty(image)) {
 			fail((String.valueOf(message) + " Image is not empty.").trim());
 		}
@@ -71,7 +71,7 @@ public class TestUtils {
 	 * it contains only transparent pixels (alpha &lt; 0).
 	 * @param image Image to test.
 	 */
-	public static final void assertEmpty(BufferedImage image) {
+	public static void assertEmpty(BufferedImage image) {
 		assertEmpty("", image);
 	}
 
@@ -82,7 +82,7 @@ public class TestUtils {
 	 * @param message Custom message.
 	 * @param image Image to test.
 	 */
-	public static final void assertNotEmpty(String message, BufferedImage image) {
+	public static void assertNotEmpty(String message, BufferedImage image) {
 		// An image without data is considered empty
 		assertTrue(image.getWidth() > 0);
 		assertTrue(image.getHeight() > 0);
@@ -127,7 +127,7 @@ public class TestUtils {
 	 * @param image1 First image.
 	 * @param image2 Second image.
 	 */
-	public static final void assertEquals(String message, BufferedImage image1, BufferedImage image2) {
+	public static void assertEquals(String message, BufferedImage image1, BufferedImage image2) {
 		if (!isEqual(image1, image2)) {
 			fail((String.valueOf(message) + " Image contents are different.").trim());
 		}
@@ -138,7 +138,7 @@ public class TestUtils {
 	 * @param image1 First image.
 	 * @param image2 Second image.
 	 */
-	public static final void assertEquals(BufferedImage image1, BufferedImage image2) {
+	public static void assertEquals(BufferedImage image1, BufferedImage image2) {
 		assertEquals("", image1, image2);
 	}
 
@@ -148,7 +148,7 @@ public class TestUtils {
 	 * @param image1 First image.
 	 * @param image2 Second image.
 	 */
-	public static final void assertNotEquals(String message, BufferedImage image1, BufferedImage image2) {
+	public static void assertNotEquals(String message, BufferedImage image1, BufferedImage image2) {
 		if (isEqual(image1, image2)) {
 			fail((String.valueOf(message) + " Image contents are identical.").trim());
 		}
@@ -159,7 +159,7 @@ public class TestUtils {
 	 * @param image1 First image.
 	 * @param image2 Second image.
 	 */
-	public static final void assertNotEquals(BufferedImage image1, BufferedImage image2) {
+	public static void assertNotEquals(BufferedImage image1, BufferedImage image2) {
 		assertNotEquals("", image1, image2);
 	}
 
