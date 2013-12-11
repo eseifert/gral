@@ -80,7 +80,7 @@ public class RandomColors extends IndexedColorMapper {
 	 */
 	@Override
 	public Paint get(int index) {
-		Integer key = Integer.valueOf(index);
+		Integer key = index;
 		if (colorCache.containsKey(key)) {
 			return colorCache.get(key);
 		}

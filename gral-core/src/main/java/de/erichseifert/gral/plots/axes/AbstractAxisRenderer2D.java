@@ -570,10 +570,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 
 		segmentIndex = MathUtils.limit(
 				segmentIndex, 0, shapeLineNormals.length - 1);
-		Boolean normalOrientationClockwise = AbstractAxisRenderer2D.this
+		boolean normalOrientationClockwise = AbstractAxisRenderer2D.this
 			.isShapeNormalOrientationClockwise();
-		double normalOrientation = (normalOrientationClockwise != null &&
-				normalOrientationClockwise.booleanValue()) ? 1.0 : -1.0;
+		double normalOrientation =
+				normalOrientationClockwise ? 1.0 : -1.0;
 		PointND<Double> tickNormal = new PointND<Double>(
 			normalOrientation * shapeLineNormals[segmentIndex].getX(),
 			normalOrientation * shapeLineNormals[segmentIndex].getY()

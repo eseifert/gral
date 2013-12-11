@@ -64,7 +64,7 @@ public class LinearGradient extends ScaledContinuousColorMapper {
 			return null;
 		}
 
-		double x = v.doubleValue();
+		double x = v;
 		int colorMax = colors.size() - 1;
 		double pos = MathUtils.limit(x*colorMax, 0.0, colorMax);
 

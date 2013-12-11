@@ -160,8 +160,7 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueDistance() {
-		List<Double> distances = Arrays.asList(
-			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
+		List<Double> distances = Arrays.asList(Double.NaN, 0.0, 1.0);
 
 		r.setValueVisible(true);
 		for (Double distance : distances) {

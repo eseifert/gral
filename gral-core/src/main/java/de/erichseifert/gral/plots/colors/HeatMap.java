@@ -54,7 +54,7 @@ public class HeatMap extends ScaledContinuousColorMapper {
 			return null;
 		}
 
-		double x = v.doubleValue();
+		double x = v;
 		double xInv = 1.0 - x;
 		double xInv2 = xInv*xInv;
 		double x2 = x*x;

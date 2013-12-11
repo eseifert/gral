@@ -143,16 +143,15 @@ public class DefaultAreaRendererTest {
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
 
-		List<Double> gaps = Arrays.asList(
-			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
-		List<Boolean> roundeds = Arrays.asList(false, true);
+		List<Double> gaps = Arrays.asList(Double.NaN, 0.0, 1.0);
+		List<Boolean> roundedValues = Arrays.asList(false, true);
 
 		// Test different gap sizes
 		for (Double gap : gaps) {
 			r.setGap(gap);
 
 			// Draw non-rounded and non rounded gaps
-			for (Boolean rounded : roundeds) {
+			for (Boolean rounded : roundedValues) {
 				r.setGapRounded(rounded);
 
 				Shape shape = r.getAreaShape(points);

@@ -53,20 +53,19 @@ public abstract class ContinuousColorMapper extends AbstractColorMapper<Double> 
 
 	@Override
 	protected Double applyMode(Double value, Double rangeMin, Double rangeMax) {
-		if (value.doubleValue() >= rangeMin.doubleValue() &&
-				value.doubleValue() <= rangeMax.doubleValue()) {
+		if (value >= rangeMin && value <= rangeMax) {
 			return value;
 		}
 		Mode mode = getMode();
 		if (mode == Mode.REPEAT) {
 			return MathUtils.limit(value, rangeMin, rangeMax);
 		} else if (mode == Mode.CIRCULAR) {
-			double range = rangeMax.doubleValue() - rangeMin.doubleValue();
-			double i = value.doubleValue()%range;
+			double range = rangeMax - rangeMin;
+			double i = value%range;
 			if (i < 0.0) {
 				i += range;
 			}
-			return i + rangeMin.doubleValue();
+			return i + rangeMin;
 		}
 		return null;
 	}

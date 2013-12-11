@@ -62,7 +62,7 @@ public class IndexedColors extends IndexedColorMapper {
 		if (!MathUtils.isCalculatable(i)) {
 			return null;
 		}
-		return colors.get(i.intValue());
+		return colors.get(i);
 	}
 
 	/**

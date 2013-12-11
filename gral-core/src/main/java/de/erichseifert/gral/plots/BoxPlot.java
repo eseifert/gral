@@ -594,7 +594,7 @@ public class BoxPlot extends XYPlot {
 						paintBox = ((ContinuousColorMapper) paintBoxMapper)
 							.get(valueX);
 					} else {
-						Integer index = Integer.valueOf(row.getIndex());
+						int index = row.getIndex();
 						paintBox = paintBoxMapper.get(index);
 					}
 					Paint paintStrokeBox = getBoxBorderColor();
@@ -695,7 +695,7 @@ public class BoxPlot extends XYPlot {
 			 */
 			public Comparable<?> get(int col, int row) {
 				if (col == 0) {
-					return Double.valueOf(row + 1);
+					return (double) (row + 1);
 				}
 				return values[col - 1];
 			}

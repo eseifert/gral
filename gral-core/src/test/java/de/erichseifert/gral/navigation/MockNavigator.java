@@ -57,8 +57,8 @@ final class MockNavigator extends AbstractNavigator {
 
 	public PointND<? extends Number> getCenter() {
 		PointND<Double> center = new PointND<Double>(
-			this.center.get(PointND.X).doubleValue(),
-			this.center.get(PointND.Y).doubleValue()
+			this.center.get(PointND.X),
+			this.center.get(PointND.Y)
 		);
 		return center;
 	}
@@ -91,16 +91,16 @@ final class MockNavigator extends AbstractNavigator {
 
 	public void setDefaultState() {
 		centerDefault.setLocation(
-			center.get(PointND.X).doubleValue(),
-			center.get(PointND.Y).doubleValue()
+			center.get(PointND.X),
+			center.get(PointND.Y)
 		);
 		zoomDefault = zoom;
 	}
 
 	public void reset() {
 		setCenter(new PointND<Double>(
-			centerDefault.get(PointND.X).doubleValue(),
-			centerDefault.get(PointND.Y).doubleValue()
+			centerDefault.get(PointND.X),
+			centerDefault.get(PointND.Y)
 		));
 		setZoom(zoomDefault);
 	}

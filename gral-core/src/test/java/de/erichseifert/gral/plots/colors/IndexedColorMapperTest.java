@@ -46,7 +46,7 @@ public class IndexedColorMapperTest {
 			if (!MathUtils.isCalculatable(i)) {
 				return null;
 			}
-			int c = i.intValue();
+			int c = i;
 			return new Color(c, c, c);
 		}
 	}

@@ -87,8 +87,7 @@ public class DefaultLineRendererTest {
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
 		);
 
-		List<Double> gaps = Arrays.asList(
-			Double.NaN, Double.valueOf(0.0), Double.valueOf(1.0));
+		List<Double> gaps = Arrays.asList(Double.NaN, 0.0, 1.0);
 		List<Boolean> roundeds = Arrays.asList(false, true);
 
 		// Test different gap sizes

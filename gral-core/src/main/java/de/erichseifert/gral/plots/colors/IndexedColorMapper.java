@@ -54,20 +54,19 @@ public abstract class IndexedColorMapper
 
 	@Override
 	protected Integer applyMode(Integer index, Integer rangeMin, Integer rangeMax) {
-		if (index.intValue() >= rangeMin.intValue() &&
-				index.intValue() <= rangeMax.intValue()) {
+		if (index >= rangeMin && index <= rangeMax) {
 			return index;
 		}
 		Mode mode = getMode();
 		if (mode == Mode.REPEAT) {
 			return MathUtils.limit(index, rangeMin, rangeMax);
 		} else if (mode == Mode.CIRCULAR) {
-			int range = rangeMax.intValue() - rangeMin.intValue() + 1;
-			int i = index.intValue()%range;
+			int range = rangeMax - rangeMin + 1;
+			int i = index%range;
 			if (i < 0) {
 				i += range;
 			}
-			return i + rangeMin.intValue();
+			return i + rangeMin;
 		}
 		return null;
 	}

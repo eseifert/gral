@@ -194,8 +194,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @param context Environment used for drawing.
 	 */
 	protected void drawLegend(DrawingContext context) {
-		Boolean isVisible = isLegendVisible();
-		if (isVisible == null || !isVisible.booleanValue() || getLegend() == null) {
+		if (!isLegendVisible() || getLegend() == null) {
 			return;
 		}
 		getLegend().draw(context);
