@@ -121,7 +121,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 	@SuppressWarnings("unchecked")
 	protected VectorWriter(String mimeType) {
 		this.mimeType = mimeType;
-		Class<? extends Graphics2D> gfxCls = null;
+		Class<? extends Graphics2D> gfxCls;
 		try {
 			gfxCls = (Class<? extends Graphics2D>) graphics.get(mimeType);
 		} catch (ClassCastException e) {

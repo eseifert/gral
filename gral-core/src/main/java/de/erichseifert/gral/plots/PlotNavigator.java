@@ -363,8 +363,8 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			if (axis == null) {
 				continue;
 			}
-			double min = 0.0;
-			double max = 0.0;
+			double min;
+			double max;
 			Number center = 0.0;
 			AxisRenderer renderer = getPlot().getAxisRenderer(axisName);
 			if (renderer != null && axis.isValid()) {

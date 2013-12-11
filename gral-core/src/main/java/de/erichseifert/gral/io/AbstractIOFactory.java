@@ -55,7 +55,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 		entries = new HashMap<String, Class<? extends T>>();
 
 		// Retrieve property-files
-		Enumeration<URL> propFiles = null;
+		Enumeration<URL> propFiles;
 		propFiles = getClass().getClassLoader().getResources(propFileName);
 		if (!propFiles.hasMoreElements()) {
 			throw new IOException(MessageFormat.format(
@@ -77,7 +77,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 			for (Map.Entry<Object, Object> prop : props.entrySet()) {
 				String mimeType = (String) prop.getKey();
 				String className = (String) prop.getValue();
-				Class<?> clazz = null;
+				Class<?> clazz;
 				try {
 					clazz = Class.forName(className);
 				} catch (ClassNotFoundException e) {

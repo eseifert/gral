@@ -90,7 +90,7 @@ public class RandomColors extends IndexedColorMapper {
 		//random.setSeed(seed);
 
 		// Generate a new color that is distant enough from previous colors
-		boolean match = false;
+		boolean match;
 		Color r;
 		do {
 			r = getRandomColor();

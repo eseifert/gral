@@ -135,7 +135,7 @@ public class Histogram1D extends Histogram {
 			long colMin = Long.MAX_VALUE;
 			long colMax = Long.MIN_VALUE;
 
-			DataAccessor data = null;
+			DataAccessor data;
 			if (orientation == Orientation.VERTICAL) {
 				data = getData().getColumn(breakIndex);
 			} else {

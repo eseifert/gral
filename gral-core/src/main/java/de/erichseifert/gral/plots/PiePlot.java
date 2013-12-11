@@ -811,7 +811,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					PointRenderer pointRenderer = plot.getPointRenderer(data);
 					Shape shape = new Rectangle2D.Double(
 						0.0, 0.0, bounds.getWidth(), bounds.getHeight());
-					Drawable drawable = null;
+
 					if (pointRenderer == null) {
 						return;
 					}
@@ -821,7 +821,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						Arrays.asList((AxisRenderer) null),
 						row, 0);
 
-					drawable = pointRenderer.getPoint(pointData, shape);
+					Drawable drawable = pointRenderer.getPoint(pointData, shape);
 
 					Graphics2D graphics = context.getGraphics();
 					AffineTransform txOrig = graphics.getTransform();

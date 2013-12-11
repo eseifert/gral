@@ -70,7 +70,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		this.data.addDataListener(this);
 
 		Class<? extends Comparable<?>>[] typesOrig = data.getColumnTypes();
-		Class<? extends Comparable<?>>[] types = null;
+		Class<? extends Comparable<?>>[] types;
 
 		if (cols.length > 0) {
 			types = new Class[cols.length];

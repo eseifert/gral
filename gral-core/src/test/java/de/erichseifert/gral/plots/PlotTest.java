@@ -200,7 +200,7 @@ public class PlotTest {
 
 	@Test
 	public void testDataRemove() {
-		int sizeBefore = 0, size = 0;
+		int sizeBefore, size;
 
 		// Remove
 		sizeBefore = plot.getData().size();
@@ -216,7 +216,7 @@ public class PlotTest {
 
 	@Test
 	public void testDataAdd() {
-		int sizeBefore = 0, size = 0;
+		int sizeBefore, size;
 
 		// Append
 		DataSeries series3 = new DataSeries("series3", table, 0, 2);

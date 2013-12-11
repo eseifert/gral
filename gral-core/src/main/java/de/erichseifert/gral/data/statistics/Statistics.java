@@ -245,8 +245,8 @@ public class Statistics implements DataListener {
 	 *         if the specified statistical value does not exist
 	 */
 	public double get(String key, Orientation orientation, int index) {
-		Map<String, Double> stats = null;
-		Iterable<Comparable<?>> statsData = null;
+		Map<String, Double> stats;
+		Iterable<Comparable<?>> statsData;
 		if (orientation == Orientation.VERTICAL) {
 			if (index >= statisticsByCol.size()) {
 				statisticsByCol.add(new HashMap<String, Double>());
