@@ -73,7 +73,8 @@ public class SizeablePointRenderer extends DefaultPointRenderer2D {
 			return shape;
 		}
 
-		double size = DataUtils.getValueOrDefault((Number) row.get(colSize), Double.NaN);
+		Number value = (Number) row.get(colSize);
+		double size = DataUtils.getValueOrDefault(value, Double.NaN);
 		if (!MathUtils.isCalculatable(size) || size <= 0.0) {
 			return null;
 		}

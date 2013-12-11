@@ -106,9 +106,7 @@ public class Label extends AbstractDrawable {
 		Rectangle2D textBounds = labelShape.getBounds2D();
 
 		// Rotate label text around its center point
-		double rotation = DataUtils.getValueOrDefault(
-			getRotation(), 0.0);
-
+		double rotation = getRotation();
 		if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
 			AffineTransform txLabelText =
 				AffineTransform.getRotateInstance(
@@ -152,8 +150,7 @@ public class Label extends AbstractDrawable {
 		if (getCachedOutline(false) != null) {
 			Shape shape = getTextRectangle();
 			Rectangle2D bounds = shape.getBounds2D();
-			double rotation = DataUtils.getValueOrDefault(
-				getRotation(), 0.0);
+			double rotation = getRotation();
 			if (MathUtils.isCalculatable(rotation) && rotation != 0.0) {
 				AffineTransform txLabelText =
 					AffineTransform.getRotateInstance(
