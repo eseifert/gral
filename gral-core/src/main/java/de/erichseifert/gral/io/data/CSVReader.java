@@ -257,7 +257,7 @@ public class CSVReader extends AbstractDataReader {
 			}
 		} else {
 			for (Method m : c.getMethods()) {
-				boolean isStatic = m.toString().indexOf("static") >= 0; //$NON-NLS-1$
+				boolean isStatic = m.toString().contains("static"); //$NON-NLS-1$
 				if (!isStatic) {
 					continue;
 				}

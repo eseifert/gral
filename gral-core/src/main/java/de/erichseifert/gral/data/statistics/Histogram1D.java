@@ -24,11 +24,7 @@ package de.erichseifert.gral.data.statistics;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
@@ -118,9 +114,7 @@ public class Histogram1D extends Histogram {
 				"Invalid number of breaks: got {0,number,integer}, expected {1,number,integer}.", //$NON-NLS-1$
 				breaks.length, count));
 		}
-		for (Number[] brk : breaks) {
-			this.breaks.add(brk);
-		}
+		Collections.addAll(this.breaks, breaks);
 		dataUpdated(getData());
 	}
 
