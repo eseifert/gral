@@ -165,7 +165,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 
 		Iterator<ImageWriter> writers =
 			ImageIO.getImageWritersByMIMEType(getMimeType());
-		while (writers.hasNext()) {
+		if (writers.hasNext()) {
 			ImageWriter writer = writers.next();
 			ImageOutputStream ios =
 				ImageIO.createImageOutputStream(destination);
@@ -179,7 +179,6 @@ public class BitmapWriter extends IOCapabilitiesStorage
 				d.setBounds(boundsOld);
 				ios.close();
 			}
-			return;
 		}
 	}
 
