@@ -96,7 +96,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	/** Data format as MIME type string. */
 	private final String mimeType;
 	/** Bitmap raster format. */
-	private int rasterFormat;
+	private final int rasterFormat;
 
 	/**
 	 * Creates a new {@code BitmapWriter} object with the specified

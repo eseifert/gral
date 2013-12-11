@@ -26,10 +26,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 
+import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
 
 public class SortedListTest {
-	public static final double DELTA = 1e-15;
+	public static final double DELTA = TestUtils.DELTA;
 
 	@Test
 	public void testCreation() {

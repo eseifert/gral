@@ -23,13 +23,14 @@ package de.erichseifert.gral.util;
 
 import static org.junit.Assert.assertEquals;
 
+import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
 
 import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.KernelUtils;
 
 public class KernelUtilsTest {
-	public static final double DELTA = 1e-15;
+	public static final double DELTA = TestUtils.DELTA;
 
 	@Test
 	public void testBinomial() {

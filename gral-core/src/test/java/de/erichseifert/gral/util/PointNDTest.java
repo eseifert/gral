@@ -34,7 +34,7 @@ import org.junit.Test;
 import de.erichseifert.gral.TestUtils;
 
 public class PointNDTest {
-	public static final double DELTA = 1e-15;
+	public static final double DELTA = TestUtils.DELTA;
 
 	@Test
 	public void testCreate() {
