@@ -33,7 +33,7 @@ import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
 
 public class MathUtilsTest {
-	public static final double DELTA = TestUtils.DELTA;
+	public static final double DELTA = 1e-14;
 
 	@Test
 	public void testAlmostEqual() {
