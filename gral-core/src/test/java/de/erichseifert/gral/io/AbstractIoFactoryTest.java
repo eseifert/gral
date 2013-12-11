@@ -40,7 +40,7 @@ public class AbstractIoFactoryTest {
 		public Object get(String mimeType) {
 			return null;
 		}
-	};
+	}
 
 
 	@Test(expected=IOException.class)

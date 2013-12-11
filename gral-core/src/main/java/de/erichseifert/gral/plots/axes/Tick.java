@@ -40,7 +40,7 @@ public class Tick extends DataPoint {
 		MINOR,
 		/** User-defined tick mark. */
 		CUSTOM
-	};
+	}
 
 	/** The type of tick mark (major/minor/custom). */
 	public final TickType type;

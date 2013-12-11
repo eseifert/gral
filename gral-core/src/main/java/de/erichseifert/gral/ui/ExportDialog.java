@@ -57,7 +57,7 @@ public class ExportDialog extends JDialog {
 		APPROVE,
 		/** User canceled or closed dialog. */
 		CANCEL
-	};
+	}
 
 	/** Bounding rectangle for document. */
 	private final Rectangle2D documentBounds;
@@ -213,7 +213,7 @@ public class ExportDialog extends JDialog {
 	/**
 	 * Sets the type of action the user executed. The value can later be used
 	 * to determine whether the user approved or canceled the dialog.
-	 * @param Type of user action.
+	 * @param userAction Type of user action.
 	 */
 	private void setUserAction(UserAction userAction) {
 		this.userAction = userAction;

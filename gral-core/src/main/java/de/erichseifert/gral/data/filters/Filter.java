@@ -68,7 +68,7 @@ public abstract class Filter extends AbstractDataSource
 		MIRROR,
 		/**	Repeat the data. */
 		CIRCULAR
-	};
+	}
 
 	/** Original data source. */
 	private final DataSource original;

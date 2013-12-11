@@ -41,7 +41,7 @@ public class ValueLegendTest {
 				}
 			};
 		}
-	};
+	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {

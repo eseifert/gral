@@ -298,6 +298,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					continue;
 				}
 
+				// TODO Use property for column index
 				int colIndex = 0;
 				if (colIndex < 0 || colIndex >= s.getColumnCount() ||
 						!s.isColumnNumeric(colIndex)) {
@@ -1035,7 +1036,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		super.dataChanged(source, events);
 		revalidate(source);
-	};
+	}
 
 	/**
 	 * Custom deserialization method.

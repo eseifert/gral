@@ -22,4 +22,4 @@
 /**
  * Unit tests for {@code de.erichseifert.gral.plots.legends} package.
  */
-package de.erichseifert.gral.navigation;
+package de.erichseifert.gral.plots.legends;

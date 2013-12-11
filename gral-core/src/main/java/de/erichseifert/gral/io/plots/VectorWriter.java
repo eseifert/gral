@@ -110,7 +110,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 
 	/** Current data format as MIME type string. */
 	private final String mimeType;
-	/** Current {@cod{@code Graphics2D}ation used for rendering. */
+	/** Current {@code Graphics2D} implementation used for rendering. */
 	private final Class<? extends Graphics2D> graphicsClass;
 
 	/**

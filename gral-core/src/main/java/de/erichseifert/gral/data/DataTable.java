@@ -80,7 +80,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			}
 			return 0;
 		}
-	};
+	}
 
 	/**
 	 * Initializes a new instance with the specified number of columns and

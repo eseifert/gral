@@ -68,7 +68,7 @@ public class XYPlotTest {
 		public boolean isDrawn() {
 			return drawn;
 		}
-	};
+	}
 
 	@Before
 	public void setUp() {

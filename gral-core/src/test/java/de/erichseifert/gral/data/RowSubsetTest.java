@@ -50,7 +50,7 @@ public class RowSubsetTest {
 			return (cell instanceof Number) &&
 				(((Number) cell).doubleValue() % 2.0) == 0.0;
 		}
-	};
+	}
 
 	private DataTable table;
 	private RowSubset data;

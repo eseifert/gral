@@ -64,7 +64,7 @@ public class LegendTest {
 				}
 			};
 		}
-	};
+	}
 
 	@Before
 	public void setUp() {
