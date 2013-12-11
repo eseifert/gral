@@ -93,7 +93,6 @@ public interface LineRenderer {
 	 * @param gapRounded {@code true} if the gap corners should be rounded.
 	 */
 	void setGapRounded(boolean gapRounded);
-	/** Key for specifying the {@link java.awt.Paint} instance  */
 
 	/**
 	 * Returns the paint to be used to paint the line shape.
