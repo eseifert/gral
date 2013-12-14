@@ -34,7 +34,7 @@ public class PackageDrawable extends DrawableContainer {
 		this.pkg = pkg;
 		name = new Label(pkg.getName());
 
-		Font font = name.getSetting(Label.FONT);
+		Font font = name.getFont();
 		double fontHeight = font.getSize2D();
 		double textWidth = name.getPreferredSize().getWidth();
 		double textHeight = name.getPreferredSize().getHeight();
