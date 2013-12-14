@@ -58,6 +58,7 @@ public class PackageDrawable extends DrawableContainer {
 	public void draw(DrawingContext context) {
 		Graphics2D g2d = context.getGraphics();
 
+		g2d.translate(getX(), getY());
 		// Draw tab
 		g2d.draw(tab);
 
@@ -67,6 +68,7 @@ public class PackageDrawable extends DrawableContainer {
 		// Draw package name
 		name.setBounds(frame);
 		name.draw(context);
+		g2d.translate(-getX(), -getY());
 	}
 
 	/**
