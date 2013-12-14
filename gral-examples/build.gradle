@@ -2,6 +2,7 @@ description = "GRAL example applications"
 
 dependencies {
 	compile project(":gral-core")
+	compile project(":gral-uml")
 }
 
 distributions {

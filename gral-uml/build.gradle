@@ -1,0 +1,7 @@
+description = "GRAL UML"
+
+dependencies {
+	compile(group: "metamodel", name: "MetaModel", version: "0.1-SNAPSHOT")
+	compile project(':gral-core')
+	testCompile(group: "junit", name: "junit", version: "4.10")
+}

@@ -1,5 +1,6 @@
 rootProject.name = 'GRAL'
-include ':gral-core', ':gral-examples'
+include ':gral-core', ':gral-uml', ':gral-examples'
 
 project(':gral-core').projectDir = "$rootDir/gral-core" as File
+project(':gral-uml').projectDir = "$rootDir/gral-uml" as File
 project(':gral-examples').projectDir = "$rootDir/gral-examples" as File
