@@ -8,7 +8,6 @@ import java.awt.geom.Rectangle2D;
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
-import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -27,12 +26,10 @@ public class PackageDrawable extends DrawableContainer {
 
 	private boolean membersDisplayed;
 
-	public static class Tab extends AbstractDrawable {
-		private final Label name;
-		private boolean nameVisible;
+	public static class Tab extends NamedElementDrawable {
 
 		public Tab(Package pkg) {
-			this.name = new Label(pkg.getName());
+			super(pkg);
 		}
 
 		@Override
@@ -40,32 +37,7 @@ public class PackageDrawable extends DrawableContainer {
 			Graphics2D g2d = context.getGraphics();
 			g2d.draw(getBounds());
 
-			if (nameVisible) {
-				name.draw(context);
-			}
-		}
-
-		@Override
-		public Dimension2D getPreferredSize() {
-			return name.getPreferredSize();
-		}
-
-		public boolean isNameVisible() {
-			return nameVisible;
-		}
-
-		public void setNameVisible(boolean nameVisible) {
-			this.nameVisible = nameVisible;
-		}
-
-		public Label getName() {
-			return name;
-		}
-
-		@Override
-		public void setBounds(double x, double y, double width, double height) {
-			super.setBounds(x, y, width, height);
-			name.setBounds(x, y, width, height);
+			super.draw(context);
 		}
 	}
 
