@@ -49,16 +49,30 @@ public class PackageDrawable extends DrawableContainer {
 
 		double frameWidth = textWidth + fontHeight*2.0;
 
-		tab = new Rectangle2D.Double(
-			0.0, 0.0,
-			(1.0/3.0)*frameWidth, fontHeight*1.0
-		);
+		tab = new Rectangle2D.Double();
+		calculateTabSize();
 		frame = new Rectangle2D.Double(
 			0, tab.getHeight(),
 			frameWidth, textHeight + fontHeight*2.0
 		);
 
 		// TODO Add support for package URI
+	}
+
+	protected final void calculateTabSize() {
+		Font font = name.getFont();
+		double fontHeight = font.getSize2D();
+		double textWidth = name.getPreferredSize().getWidth();
+
+		double frameWidth = textWidth + fontHeight*2.0;
+		double tabWidth = 1.0/3.0*frameWidth;
+		if (isMembersDisplayed()) {
+			tabWidth = Math.min(textWidth, frameWidth);
+		}
+		tab.setFrame(
+			0.0, 0.0,
+			tabWidth, fontHeight*1.0
+		);
 	}
 
 	@Override
@@ -105,6 +119,7 @@ public class PackageDrawable extends DrawableContainer {
 	 */
 	public void setMembersDisplayed(boolean membersDisplayed) {
 		this.membersDisplayed = membersDisplayed;
+		calculateTabSize();
 	}
 
 	@Override
