@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
+import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -21,10 +22,21 @@ public class PackageDrawable extends DrawableContainer {
 	private final Package pkg;
 	private final Label name;
 
-	private final Rectangle2D tab;
+	private final Tab tab;
 	private final Rectangle2D frame;
 
 	private boolean membersDisplayed;
+
+	protected static class Tab extends AbstractDrawable {
+		public Tab() {
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			Graphics2D g2d = context.getGraphics();
+			g2d.draw(getBounds());
+		}
+	}
 
 	/**
 	 * Creates a drawable used to display the specified package.
@@ -49,7 +61,7 @@ public class PackageDrawable extends DrawableContainer {
 
 		double frameWidth = textWidth + fontHeight*2.0;
 
-		tab = new Rectangle2D.Double();
+		tab = new Tab();
 		calculateTabSize();
 		frame = new Rectangle2D.Double(
 			0, tab.getHeight(),
@@ -69,7 +81,7 @@ public class PackageDrawable extends DrawableContainer {
 		if (isMembersDisplayed()) {
 			tabWidth = Math.min(textWidth, frameWidth);
 		}
-		tab.setFrame(
+		tab.setBounds(
 			0.0, 0.0,
 			tabWidth, fontHeight*1.0
 		);
@@ -81,7 +93,7 @@ public class PackageDrawable extends DrawableContainer {
 
 		g2d.translate(getX(), getY());
 		// Draw tab
-		g2d.draw(tab);
+		tab.draw(context);
 
 		// Draw outer frame
 		g2d.draw(frame);
@@ -89,7 +101,7 @@ public class PackageDrawable extends DrawableContainer {
 		// Draw package name
 		if (isMembersDisplayed()) {
 			// TODO: Tab size needs to be adjusted
-			name.setBounds(tab);
+			name.setBounds(tab.getBounds());
 		} else {
 			name.setBounds(frame);
 		}
