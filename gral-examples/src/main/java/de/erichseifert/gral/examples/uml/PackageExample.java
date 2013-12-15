@@ -26,43 +26,32 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 import metamodel.classes.kernel.Package;
-import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
 import de.erichseifert.gral.uml.PackageDrawable;
-import de.erichseifert.gral.util.Insets2D;
 
-public class UMLClassDiagram extends JFrame {
+public class PackageExample extends JFrame {
 
-	public UMLClassDiagram() {
+	public PackageExample() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 
-		Package kernel = new Package("Kernel");
-		Package associationClasses = new Package("AssociationClasses");
-		kernel.merge(associationClasses);
-		Package dependencies = new Package("Dependencies");
-		kernel.merge(dependencies);
-		Package powerTypes = new Package("PowerTypes");
-		kernel.merge(powerTypes);
-		Package interfaces = new Package("Interfaces");
-		dependencies.merge(interfaces);
-		Package basicBehaviours = new Package("BasicBehaviors");
-		basicBehaviours.merge(interfaces);
+		// Example taken from UML 2.4.1 superstructure document
+		Package types = new Package("Types");
 
 		DrawableContainer diagram = new ClassDiagram();
-		diagram.setInsets(new Insets2D.Double(10d));
-		Drawable kernelDrawable = new PackageDrawable(kernel);
-		diagram.add(kernelDrawable);
-		Drawable depsDrawable = new PackageDrawable(dependencies);
-		diagram.add(depsDrawable);
+		PackageDrawable typesDrawableCompactView = new PackageDrawable(types);
+		diagram.add(typesDrawableCompactView);
+		PackageDrawable typesDrawableContainerView = new PackageDrawable(types);
+		typesDrawableContainerView.setMembersDisplayed(true);
+		diagram.add(typesDrawableContainerView);
 
 		DrawablePanel panel = new DrawablePanel(diagram);
 		getContentPane().add(panel, BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
-		new UMLClassDiagram().setVisible(true);
+		new PackageExample().setVisible(true);
 	}
 }
