@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
+import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
@@ -33,6 +34,12 @@ public class PackageDrawable extends DrawableContainer {
 
 		this.pkg = pkg;
 		name = new Label(pkg.getName());
+
+		for (NamedElement member : pkg.getOwnedMembers()) {
+			if (member instanceof metamodel.classes.kernel.Class) {
+				add(new ClassDrawable(member.getQualifiedName()));
+			}
+		}
 
 		Font font = name.getFont();
 		double fontHeight = font.getSize2D();
