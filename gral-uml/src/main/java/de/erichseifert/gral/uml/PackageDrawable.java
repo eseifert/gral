@@ -27,14 +27,45 @@ public class PackageDrawable extends DrawableContainer {
 
 	private boolean membersDisplayed;
 
-	protected static class Tab extends AbstractDrawable {
-		public Tab() {
+	public static class Tab extends AbstractDrawable {
+		private final Label name;
+		private boolean nameVisible;
+
+		public Tab(Package pkg) {
+			this.name = new Label(pkg.getName());
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
 			g2d.draw(getBounds());
+
+			if (nameVisible) {
+				name.draw(context);
+			}
+		}
+
+		@Override
+		public Dimension2D getPreferredSize() {
+			return name.getPreferredSize();
+		}
+
+		public boolean isNameVisible() {
+			return nameVisible;
+		}
+
+		public void setNameVisible(boolean nameVisible) {
+			this.nameVisible = nameVisible;
+		}
+
+		public Label getName() {
+			return name;
+		}
+
+		@Override
+		public void setBounds(double x, double y, double width, double height) {
+			super.setBounds(x, y, width, height);
+			name.setBounds(x, y, width, height);
 		}
 	}
 
@@ -61,7 +92,7 @@ public class PackageDrawable extends DrawableContainer {
 
 		double frameWidth = textWidth + fontHeight*2.0;
 
-		tab = new Tab();
+		tab = new Tab(pkg);
 		calculateTabSize();
 		frame = new Rectangle2D.Double(
 			0, tab.getHeight(),
@@ -99,13 +130,10 @@ public class PackageDrawable extends DrawableContainer {
 		g2d.draw(frame);
 
 		// Draw package name
-		if (isMembersDisplayed()) {
-			// TODO: Tab size needs to be adjusted
-			name.setBounds(tab.getBounds());
-		} else {
+		if (!isMembersDisplayed()) {
 			name.setBounds(frame);
+			name.draw(context);
 		}
-		name.draw(context);
 		g2d.translate(-getX(), -getY());
 	}
 
@@ -138,5 +166,9 @@ public class PackageDrawable extends DrawableContainer {
 	public Dimension2D getPreferredSize() {
 		Dimension2D preferredSize = new de.erichseifert.gral.util.Dimension2D.Double(frame.getWidth(), tab.getHeight() + frame.getHeight());
 		return preferredSize;
+	}
+
+	public Tab getTab() {
+		return tab;
 	}
 }

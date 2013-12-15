@@ -44,6 +44,7 @@ public class PackageExample extends JFrame {
 		PackageDrawable typesDrawableCompactView = new PackageDrawable(types);
 		diagram.add(typesDrawableCompactView);
 		PackageDrawable typesDrawableContainerView = new PackageDrawable(types);
+		typesDrawableContainerView.getTab().setNameVisible(true);
 		typesDrawableContainerView.setMembersDisplayed(true);
 		diagram.add(typesDrawableContainerView);
 
