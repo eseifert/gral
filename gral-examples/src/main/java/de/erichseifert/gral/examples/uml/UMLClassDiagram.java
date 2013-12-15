@@ -26,7 +26,6 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 import metamodel.classes.kernel.Package;
-import metamodel.classes.kernel.VisibilityKind;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
@@ -40,16 +39,16 @@ public class UMLClassDiagram extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 
-		Package kernel = new Package(null, "Kernel", VisibilityKind.PUBLIC, null);
-		Package associationClasses = new Package(null, "AssociationClasses", VisibilityKind.PUBLIC, null);
+		Package kernel = new Package("Kernel");
+		Package associationClasses = new Package("AssociationClasses");
 		kernel.merge(associationClasses);
-		Package dependencies = new Package(null, "Dependencies", VisibilityKind.PUBLIC, null);
+		Package dependencies = new Package("Dependencies");
 		kernel.merge(dependencies);
-		Package powerTypes = new Package(null, "PowerTypes", VisibilityKind.PUBLIC, null);
+		Package powerTypes = new Package("PowerTypes");
 		kernel.merge(powerTypes);
-		Package interfaces = new Package(null, "Interfaces", VisibilityKind.PUBLIC, null);
+		Package interfaces = new Package("Interfaces");
 		dependencies.merge(interfaces);
-		Package basicBehaviours = new Package(null, "BasicBehaviors", VisibilityKind.PUBLIC, null);
+		Package basicBehaviours = new Package("BasicBehaviors");
 		basicBehaviours.merge(interfaces);
 
 		DrawableContainer diagram = new ClassDiagram();
