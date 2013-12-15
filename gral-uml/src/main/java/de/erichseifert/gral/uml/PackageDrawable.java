@@ -53,7 +53,6 @@ public class PackageDrawable extends DrawableContainer {
 			0.0, 0.0,
 			(1.0/3.0)*frameWidth, fontHeight*1.0
 		);
-		// TODO Add support for package names in the tab
 		frame = new Rectangle2D.Double(
 			0, tab.getHeight(),
 			frameWidth, textHeight + fontHeight*2.0
@@ -74,7 +73,12 @@ public class PackageDrawable extends DrawableContainer {
 		g2d.draw(frame);
 
 		// Draw package name
-		name.setBounds(frame);
+		if (isMembersDisplayed()) {
+			// TODO: Tab size needs to be adjusted
+			name.setBounds(tab);
+		} else {
+			name.setBounds(frame);
+		}
 		name.draw(context);
 		g2d.translate(-getX(), -getY());
 	}
