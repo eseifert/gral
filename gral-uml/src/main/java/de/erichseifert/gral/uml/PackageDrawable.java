@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import metamodel.classes.Package;
+import metamodel.classes.kernel.Package;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;

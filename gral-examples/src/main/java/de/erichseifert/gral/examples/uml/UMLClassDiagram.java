@@ -25,8 +25,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import metamodel.classes.NamedElement.VisibilityKind;
-import metamodel.classes.Package;
+import metamodel.classes.kernel.Package;
+import metamodel.classes.kernel.VisibilityKind;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
@@ -40,16 +40,16 @@ public class UMLClassDiagram extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 
-		Package kernel = new Package(null, VisibilityKind.PUBLIC, "Kernel", null);
-		Package associationClasses = new Package(null, VisibilityKind.PUBLIC, "AssociationClasses", null);
+		Package kernel = new Package(null, "Kernel", VisibilityKind.PUBLIC, null);
+		Package associationClasses = new Package(null, "AssociationClasses", VisibilityKind.PUBLIC, null);
 		kernel.merge(associationClasses);
-		Package dependencies = new Package(null, VisibilityKind.PUBLIC, "Dependencies", null);
+		Package dependencies = new Package(null, "Dependencies", VisibilityKind.PUBLIC, null);
 		kernel.merge(dependencies);
-		Package powerTypes = new Package(null, VisibilityKind.PUBLIC, "PowerTypes", null);
+		Package powerTypes = new Package(null, "PowerTypes", VisibilityKind.PUBLIC, null);
 		kernel.merge(powerTypes);
-		Package interfaces = new Package(null, VisibilityKind.PUBLIC, "Interfaces", null);
+		Package interfaces = new Package(null, "Interfaces", VisibilityKind.PUBLIC, null);
 		dependencies.merge(interfaces);
-		Package basicBehaviours = new Package(null, VisibilityKind.PUBLIC, "BasicBehaviors", null);
+		Package basicBehaviours = new Package(null, "BasicBehaviors", VisibilityKind.PUBLIC, null);
 		basicBehaviours.merge(interfaces);
 
 		DrawableContainer diagram = new ClassDiagram();
