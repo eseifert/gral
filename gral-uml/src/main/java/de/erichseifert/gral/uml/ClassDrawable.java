@@ -38,8 +38,8 @@ public class ClassDrawable extends DrawableContainer {
 	/** Stroke used to paint the border of the plot area. */
 	private Stroke borderStroke;
 
-	public ClassDrawable(String fullyQualifiedName) {
-		className = new Label(fullyQualifiedName);
+	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
+		className = new Label(clazz.getQualifiedName());
 		className.setAlignmentX(0.0);
 		className.setAlignmentY(0.0);
 
