@@ -193,7 +193,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 
 			// New axis scale
 			double zoom = info.getZoom();
-			double range = rangeOrig*zoom;
+			double range = rangeOrig/zoom;
 			double center = renderer.worldToView(axis, info.getCenter(), true);
 			Number min = renderer.viewToWorld(axis, center - 0.5*range, true);
 			Number max = renderer.viewToWorld(axis, center + 0.5*range, true);

@@ -301,11 +301,11 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		Navigator navigator = navigable.getNavigator();
 		if (times >= 0) {
 			for (int i = 0; i < times; i++) {
-				navigator.zoomOut();
+				navigator.zoomIn();
 			}
 		} else {
 			for (int i = 0; i < -times; i++) {
-				navigator.zoomIn();
+				navigator.zoomOut();
 			}
 		}
 

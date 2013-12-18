@@ -157,7 +157,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				return;
 			}
 			zoom = zoomNew;
-			plot.setRadius(zoomOriginal/getZoom());
+			plot.setRadius(zoomOriginal*getZoom());
 		}
 
 		/**
