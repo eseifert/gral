@@ -41,6 +41,7 @@ Building the documentation
 The GRAL Gradle project offers three sources for documentation:
 
 1. The JavaDoc files that can be generated with::
+
      $ gradle javadoc
 
 2. The reports found in ``build/reports`` containing a project various
