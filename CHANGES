@@ -1,3 +1,17 @@
+GRAL 0.11 (Not released yet)
+============================
+
+GRAL 0.10 (2013-12-09)
+======================
+
+Plotting:
+	- Replaced all plot settings by regular Java properties
+
+General:
+    - Migrated the version control system from Subversion to git
+    - Replaced the Maven build system by Gradle
+    - Various bug fixes
+
 GRAL 0.9 (2013-05-12)
 =====================
 
