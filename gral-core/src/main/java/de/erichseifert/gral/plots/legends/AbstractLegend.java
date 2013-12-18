@@ -127,7 +127,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	/**
 	 * Class that displays a specific data source as an item of a legend.
 	 */
-	protected static class Item extends DrawableContainer {
+	public static class Item extends DrawableContainer {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 3401141040936913098L;
 
