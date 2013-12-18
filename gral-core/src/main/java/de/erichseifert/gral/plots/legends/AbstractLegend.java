@@ -169,6 +169,14 @@ public abstract class AbstractLegend extends DrawableContainer
 		public Row getRow() {
 			return row;
 		}
+
+		public Label getLabel() {
+			return label;
+		}
+
+		public Drawable getSymbol() {
+			return symbol;
+		}
 	}
 
 	/**
