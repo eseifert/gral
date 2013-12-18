@@ -25,7 +25,7 @@ subprojects {
 	dependencies {
 		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.9.1")
 	}
-	
+
 	apply plugin: "license"
 	license {
 		header(rootProject.file("config/license-header.txt"))
@@ -33,7 +33,7 @@ subprojects {
 		mapping {
 			java = "SLASHSTAR_STYLE"
 		}
-		
+
 		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
 		ext.year = "${inceptionYear}-${currentYear}"
 		ext.owner1 = "Erich Seifert"
@@ -47,10 +47,10 @@ subprojects {
 			licenseTask.exclude "**.properties"
 		}
 	}
-	
+
 	apply plugin: "checkstyle"
 	checkstyle.configFile = new File("${rootDir}/config/checkstyle.xml")
-	
+
 	apply plugin: "pmd"
 	pmd {
 		// TODO: Dynamic dependency resolution possible?
@@ -58,10 +58,10 @@ subprojects {
 		ruleSets = ["java-basic"]
 		ignoreFailures = true
 	}
-	
+
 	apply plugin: "distribution"
 	distributions {
-		main {
+		standard {
 			contents {
 				from(rootDir) {
 					include("LICENSE**")
@@ -80,13 +80,13 @@ subprojects {
 
 // Include the License Gradle plugin
 buildscript {
-    repositories {
+	repositories {
 		mavenLocal()
 		maven { url "http://mvn.erichseifert.de/maven2" }
 		mavenCentral()
-    }
+	}
 
-    dependencies {
-        classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
-    }
+	dependencies {
+		classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
+	}
 }
