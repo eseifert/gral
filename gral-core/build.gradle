@@ -73,6 +73,8 @@ publishing {
 		core(MavenPublication) {
 			from components.java
 			
+			artifact sourceJar
+
 			// Add additional information to the pom.xml
 			pom.withXml {
 				def root = asNode()
