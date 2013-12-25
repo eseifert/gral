@@ -76,6 +76,13 @@ subprojects {
 	distTar.dependsOn(check)
 	distTar.compression = Compression.BZIP2
 	distTar.extension = "tar.bz2"
+	
+	task sourceJar(type: Jar) {
+		description = 'Assembles a jar archive containing the source code of the main classes.'
+		group = 'Build'
+		from sourceSets.main.allJava
+		classifier 'sources'
+	}
 }
 
 // Include the License Gradle plugin
