@@ -65,6 +65,7 @@ public class PackageDrawable extends DrawableContainer {
 		double frameWidth = textWidth + fontHeight*2.0;
 
 		tab = new Tab(pkg);
+		tab.setNameVisible(false);
 		calculateTabSize();
 		frame = new Rectangle2D.Double(
 			0, tab.getHeight(),
