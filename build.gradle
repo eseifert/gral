@@ -1,6 +1,6 @@
 allprojects {
 	group = "de.erichseifert.gral"
-	version = "0.10"
+	version = getVersionString()
 
 	ext.inceptionYear = 2009
 }
@@ -89,4 +89,18 @@ buildscript {
 	dependencies {
 		classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
 	}
+}
+
+/*
+ * This method must not be named getVersion, because it would
+ * overwrite the implicit getter of the version property in the
+ * current Project object.
+ */
+def getVersionString() {
+	def out = new ByteArrayOutputStream()
+	exec {
+		commandLine('git', 'describe', '--tags')
+		standardOutput = out
+	}
+	return out.toString().trim()
 }
