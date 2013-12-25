@@ -67,49 +67,6 @@ task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
 	}
 }
 
-apply plugin: "maven-publish"
-publishing {
-	publications {
-		core(MavenPublication) {
-			from components.java
-			
-			artifact sourceJar
-
-			// Add additional information to the pom.xml
-			pom.withXml {
-				def root = asNode()
-				root.appendNode("inceptionYear", inceptionYear)
-				def licenses = root.appendNode("licenses")
-					def license = licenses.appendNode("license")
-						license.appendNode("name", "GNU Library or Lesser General Public License (LGPL)")
-						license.appendNode("url", "http://www.gnu.org/licenses/lgpl.txt")
-						license.appendNode("distribution", "repo")
-				def issueManagement = root.appendNode("issueManagement") 
-					issueManagement.appendNode("system", "trac")
-					issueManagement.appendNode("url", "http://trac.erichseifert.de/gral/")
-				def scm = root.appendNode("scm")
-					scm.appendNode("connection", "scm:git:git://erichseifert.de/gral.git")
-					scm.appendNode("developerConnection", "scm:git:ssh://git@erichseifert.de/gral.git")
-					scm.appendNode("tag", "HEAD")
-			}
-		}
-	}
-
-	repositories {
-		// Only configure remote maven repository, if the credentials are present
-		if (project.hasProperty("mvnRepoUsername") && project.hasProperty("mvnRepoPassword")) {
-			maven {
-				name = 'erichseifert'
-				url("http://mvn.erichseifert.de/maven2")
-				credentials {
-					username = mvnRepoUsername
-					password = mvnRepoPassword
-				}
-			}
-		}
-	}
-}
-
 // Include the proguard-gradle plugin
 buildscript {
 	repositories {
