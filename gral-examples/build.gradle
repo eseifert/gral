@@ -3,6 +3,7 @@ description = "GRAL example applications"
 dependencies {
 	compile project(":gral-core")
 	compile project(":gral-uml")
+	compile(group: 'metamodel', name: 'metamodel-examples', version: '0.0+')
 }
 
 distributions {
