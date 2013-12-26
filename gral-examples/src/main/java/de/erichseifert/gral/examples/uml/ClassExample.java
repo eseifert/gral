@@ -2,9 +2,7 @@ package de.erichseifert.gral.examples.uml;
 
 import javax.swing.JFrame;
 
-import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.Package;
-import metamodel.classes.kernel.VisibilityKind;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.uml.PackageDrawable;
 
@@ -16,8 +14,7 @@ public class ClassExample extends JFrame {
 
 		// Example taken from UML 2.4.1 superstructure
 		Package defaultPackage = new Package("Default");
-		Class window = new Class(defaultPackage, "Window", VisibilityKind.PUBLIC);
-		defaultPackage.add(window);
+		defaultPackage.addClass("Window");
 
 		PackageDrawable packageDrawable = new PackageDrawable(defaultPackage);
 		getContentPane().add(new DrawablePanel(packageDrawable));
