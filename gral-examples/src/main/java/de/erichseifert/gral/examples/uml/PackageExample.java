@@ -26,6 +26,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 import metamodel.classes.kernel.Package;
+import metamodel.examples.TypesPackage;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
@@ -37,8 +38,7 @@ public class PackageExample extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 
-		// Example taken from UML 2.4.1 superstructure document
-		Package types = new Package("Types");
+		Package types = new TypesPackage();
 
 		DrawableContainer diagram = new ClassDiagram();
 		PackageDrawable typesDrawableCompactView = new PackageDrawable(types);
