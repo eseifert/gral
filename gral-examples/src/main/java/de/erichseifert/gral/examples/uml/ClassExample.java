@@ -3,8 +3,9 @@ package de.erichseifert.gral.examples.uml;
 import javax.swing.JFrame;
 
 import metamodel.classes.kernel.Package;
+import metamodel.examples.WindowClass;
 import de.erichseifert.gral.ui.DrawablePanel;
-import de.erichseifert.gral.uml.PackageDrawable;
+import de.erichseifert.gral.uml.ClassDrawable;
 
 public class ClassExample extends JFrame {
 
@@ -14,10 +15,10 @@ public class ClassExample extends JFrame {
 
 		// Example taken from UML 2.4.1 superstructure
 		Package defaultPackage = new Package("Default");
-		defaultPackage.addClass("Window");
+		WindowClass windowClass = new WindowClass(defaultPackage);
 
-		PackageDrawable packageDrawable = new PackageDrawable(defaultPackage);
-		getContentPane().add(new DrawablePanel(packageDrawable));
+		ClassDrawable classDrawable = new ClassDrawable(windowClass);
+		getContentPane().add(new DrawablePanel(classDrawable));
 	}
 
 	/**
