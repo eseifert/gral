@@ -1,9 +1,6 @@
 package de.erichseifert.gral.uml;
 
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Rectangle2D;
 
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.NamedElement;
@@ -19,12 +16,9 @@ import de.erichseifert.gral.util.Orientation;
  */
 public class PackageDrawable extends DrawableContainer {
 	private final Package pkg;
-	private final Label name;
 
 	private final Tab tab;
-	private final Rectangle2D frame;
-
-	private boolean membersDisplayed;
+	private final Body body;
 
 	public static class Tab extends NamedElementDrawable {
 
@@ -41,6 +35,43 @@ public class PackageDrawable extends DrawableContainer {
 		}
 	}
 
+	public static class Body extends DrawableContainer {
+		private final Label name;
+		private boolean membersDisplayed;
+
+		public Body(Package pkg) {
+			super(new StackedLayout(Orientation.VERTICAL));
+			name = new Label(pkg.getName());
+
+			for (NamedElement member : pkg.getOwnedMembers()) {
+				if (member instanceof metamodel.classes.kernel.Class) {
+					add(new ClassDrawable((Class) member));
+				}
+			}
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			Graphics2D g2d = context.getGraphics();
+			g2d.draw(getBounds());
+
+			if (membersDisplayed) {
+				drawComponents(context);
+			} else {
+				name.setBounds(getBounds());
+				name.draw(context);
+			}
+		}
+
+		public boolean isMembersDisplayed() {
+			return membersDisplayed;
+		}
+
+		public void setMembersDisplayed(boolean membersDisplayed) {
+			this.membersDisplayed = membersDisplayed;
+		}
+	}
+
 	/**
 	 * Creates a drawable used to display the specified package.
 	 * @param pkg Package to be displayed.
@@ -49,74 +80,13 @@ public class PackageDrawable extends DrawableContainer {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
-		name = new Label(pkg.getName());
-		for (NamedElement element : pkg.getOwnedMembers()) {
-			if (element instanceof Class) {
-				add(new ClassDrawable((Class) element));
-			}
-		}
-
-		for (NamedElement member : pkg.getOwnedMembers()) {
-			if (member instanceof metamodel.classes.kernel.Class) {
-				add(new ClassDrawable((Class) member));
-			}
-		}
-
-		Font font = name.getFont();
-		double fontHeight = font.getSize2D();
-		double textWidth = name.getPreferredSize().getWidth();
-		double textHeight = name.getPreferredSize().getHeight();
-
-		double frameWidth = textWidth + fontHeight*2.0;
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
-		calculateTabSize();
-		frame = new Rectangle2D.Double(
-			0, tab.getHeight(),
-			frameWidth, textHeight + fontHeight*2.0
-		);
-
+		add(tab);
+		body = new Body(pkg);
+		add(body);
 		// TODO Add support for package URI
-	}
-
-	protected final void calculateTabSize() {
-		Font font = name.getFont();
-		double fontHeight = font.getSize2D();
-		double textWidth = name.getPreferredSize().getWidth();
-
-		double frameWidth = textWidth + fontHeight*2.0;
-		double tabWidth = 1.0/3.0*frameWidth;
-		if (isMembersDisplayed()) {
-			tabWidth = Math.min(textWidth, frameWidth);
-		}
-		tab.setBounds(
-			0.0, 0.0,
-			tabWidth, fontHeight*1.0
-		);
-	}
-
-	@Override
-	public void draw(DrawingContext context) {
-		Graphics2D g2d = context.getGraphics();
-
-		g2d.translate(getX(), getY());
-		// Draw tab
-		tab.draw(context);
-
-		// Draw outer frame
-		g2d.draw(frame);
-
-		if (isMembersDisplayed()) {
-			drawComponents(context);
-		}
-
-		// Draw package name
-		if (!isMembersDisplayed()) {
-			name.setBounds(frame);
-			name.draw(context);
-		}
-		g2d.translate(-getX(), -getY());
 	}
 
 	/**
@@ -132,7 +102,7 @@ public class PackageDrawable extends DrawableContainer {
 	 * @return {@code true} if the members are shown, {@code false} otherwise.
 	 */
 	public boolean isMembersDisplayed() {
-		return membersDisplayed;
+		return body.isMembersDisplayed();
 	}
 
 	/**
@@ -140,14 +110,7 @@ public class PackageDrawable extends DrawableContainer {
 	 * @param membersDisplayed Tells whether or not the package members should be displayed.
 	 */
 	public void setMembersDisplayed(boolean membersDisplayed) {
-		this.membersDisplayed = membersDisplayed;
-		calculateTabSize();
-	}
-
-	@Override
-	public Dimension2D getPreferredSize() {
-		Dimension2D preferredSize = new de.erichseifert.gral.util.Dimension2D.Double(frame.getWidth(), tab.getHeight() + frame.getHeight());
-		return preferredSize;
+		body.setMembersDisplayed(membersDisplayed);
 	}
 
 	public Tab getTab() {
