@@ -41,6 +41,11 @@ public class StackedLayout implements Layout {
 	private final Dimension2D gap;
 	/** Alignment of smaller components. */
 	private final double alignment;
+	/**
+	 * Whether components are strechted to the container's width (vertical layout)
+	 * or height (horizontal layout).
+	 */
+	private boolean componentsStrechted;
 
 	/**
 	 * Creates a new StackedLayout object with the specified orientation
@@ -53,17 +58,29 @@ public class StackedLayout implements Layout {
 
 	/**
 	 * Creates a new StackedLayout object with the specified orientation
-	 * gap between the components.
+	 * and gap between the components.
 	 * @param orientation Orientation in which components are stacked.
 	 * @param gap Gap between the components.
 	 */
 	public StackedLayout(Orientation orientation, Dimension2D gap) {
+		this(orientation, gap, true);
+	}
+
+	/**
+	 * Creates a new StackedLayout object with the specified orientation,
+	 * gap between the components, and stretching behaviour.
+	 * @param orientation Orientation in which components are stacked.
+	 * @param gap Gap between the components.
+	 * @param componentsStrechted Whether components should be strechted to the size of the container.
+	 */
+	public StackedLayout(Orientation orientation, Dimension2D gap, boolean componentsStrechted) {
 		this.orientation = orientation;
 		this.gap = new de.erichseifert.gral.util.Dimension2D.Double();
 		if (gap != null) {
 			this.gap.setSize(gap);
 		}
 		this.alignment = 0.5;
+		this.componentsStrechted = componentsStrechted;
 	}
 
 	/**
@@ -89,7 +106,8 @@ public class StackedLayout implements Layout {
 					x += gap.getWidth();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
-				component.setBounds(x, y, compBounds.getWidth(), height);
+				double componentHeight = isComponentsStrechted() ? height : Math.max(compBounds.getHeight(), height);
+				component.setBounds(x, y, compBounds.getWidth(), componentHeight);
 				x += compBounds.getWidth();
 			}
 		} else if (getOrientation() == Orientation.VERTICAL) {
@@ -99,7 +117,8 @@ public class StackedLayout implements Layout {
 					y += gap.getHeight();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
-				component.setBounds(x, y, width, compBounds.getHeight());
+				double componentWidth = isComponentsStrechted() ? width : Math.max(compBounds.getWidth(), width);
+				component.setBounds(x, y, componentWidth, compBounds.getHeight());
 				y += compBounds.getHeight();
 			}
 		}
@@ -167,6 +186,24 @@ public class StackedLayout implements Layout {
 			new de.erichseifert.gral.util.Dimension2D.Double();
 		gap.setSize(this.gap);
 		return gap;
+	}
+
+	/**
+	 * Returns whether components are strechted to the container's width (vertical layout)
+	 * or height (horizontal orientation).
+	 * @return {@code true} if the layed out components should be strechted, {@code false} otherwise.
+	 */
+	public boolean isComponentsStrechted() {
+		return componentsStrechted;
+	}
+
+	/**
+	 * Sets whether the components should be stretched to the container's width (vertical layout)
+	 * or height (horizontal layout).
+	 * @param componentsStrechted {@code true} if the layed out components should be strechted, {@code false} otherwise.
+	 */
+	public void setComponentsStrechted(boolean componentsStrechted) {
+		this.componentsStrechted = componentsStrechted;
 	}
 
 }
