@@ -23,15 +23,15 @@ package de.erichseifert.gral.uml;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.util.Orientation;
 
 public class ClassDrawable extends DrawableContainer {
 	private final Label className;
@@ -39,9 +39,11 @@ public class ClassDrawable extends DrawableContainer {
 	private Stroke borderStroke;
 
 	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
+		super(new StackedLayout(Orientation.VERTICAL));
 		className = new Label(clazz.getQualifiedName());
 		className.setAlignmentX(0.0);
 		className.setAlignmentY(0.0);
+		add(className);
 
 		double textHeight = className.getTextRectangle().getHeight();
 		double textWidth = className.getTextRectangle().getWidth();
@@ -58,19 +60,8 @@ public class ClassDrawable extends DrawableContainer {
 
 	@Override
 	public void draw(DrawingContext context) {
-		Graphics2D g2d = context.getGraphics();
-		// TODO: Move to DrawablePanel
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		AffineTransform txOld = g2d.getTransform();
-
-		Insets2D insets = getInsets();
-		g2d.translate(insets.getLeft(), insets.getTop());
-		className.draw(context);
-
-		g2d.setTransform(txOld);
-
 		drawBorder(context);
+		super.drawComponents(context);
 	}
 
 	protected void drawBorder(DrawingContext context) {
