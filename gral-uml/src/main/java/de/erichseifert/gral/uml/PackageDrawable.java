@@ -50,6 +50,11 @@ public class PackageDrawable extends DrawableContainer {
 
 		this.pkg = pkg;
 		name = new Label(pkg.getName());
+		for (NamedElement element : pkg.getOwnedMembers()) {
+			if (element instanceof Class) {
+				add(new ClassDrawable((Class) element));
+			}
+		}
 
 		for (NamedElement member : pkg.getOwnedMembers()) {
 			if (member instanceof metamodel.classes.kernel.Class) {
@@ -101,6 +106,10 @@ public class PackageDrawable extends DrawableContainer {
 
 		// Draw outer frame
 		g2d.draw(frame);
+
+		if (isMembersDisplayed()) {
+			drawComponents(context);
+		}
 
 		// Draw package name
 		if (!isMembersDisplayed()) {
