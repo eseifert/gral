@@ -40,7 +40,7 @@ public class StackedLayout implements Layout {
 	/** Spacing of components. */
 	private final Dimension2D gap;
 	/** Alignment of smaller components. */
-	private final double alignment;
+	private double alignment;
 	/**
 	 * Whether components are strechted to the container's width (vertical layout)
 	 * or height (horizontal layout).
@@ -100,7 +100,7 @@ public class StackedLayout implements Layout {
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
 		if (getOrientation() == Orientation.HORIZONTAL) {
-			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*alignment;
+			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*getAlignment();
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					x += gap.getWidth();
@@ -111,7 +111,7 @@ public class StackedLayout implements Layout {
 				x += compBounds.getWidth();
 			}
 		} else if (getOrientation() == Orientation.VERTICAL) {
-			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*alignment;
+			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*getAlignment();
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					y += gap.getHeight();
@@ -204,6 +204,26 @@ public class StackedLayout implements Layout {
 	 */
 	public void setComponentsStrechted(boolean componentsStrechted) {
 		this.componentsStrechted = componentsStrechted;
+	}
+
+	/**
+	 * Returns the relative position of the components within the container.
+	 * This value only has effect, if the components do not fill the container
+	 * in the current layout direction.
+	 * @return Relative position of layed out components.
+	 */
+	public double getAlignment() {
+		return alignment;
+	}
+
+	/**
+	 * Sets the relative position of the components within the container.
+	 * This value only has effect, if the components do not fill the container
+	 * in the current layout direction.
+	 * @param alignment Relative position of layed out components.
+	 */
+	public void setAlignment(double alignment) {
+		this.alignment = alignment;
 	}
 
 }
