@@ -39,6 +39,19 @@ public class ClassDrawable extends DrawableContainer {
 	/** Stroke used to paint the border of the plot area. */
 	private Stroke borderStroke;
 
+	private static class PropertyLabel extends Label {
+		private final Property property;
+
+		public PropertyLabel(Property property) {
+			this.property = property;
+		}
+
+		@Override
+		public String getText() {
+			return property.getName();
+		}
+	}
+
 	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
 		super(new StackedLayout(Orientation.VERTICAL));
 		className = new Label(clazz.getQualifiedName());
@@ -47,7 +60,7 @@ public class ClassDrawable extends DrawableContainer {
 		add(className);
 
 		for (Property property : clazz.getOwnedAttributes()) {
-			Label propertyLabel = new Label(property.getName());
+			Label propertyLabel = new PropertyLabel(property);
 			add(propertyLabel);
 		}
 
