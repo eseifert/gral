@@ -115,7 +115,7 @@ public class StackedLayout implements Layout {
 					componentHeight = height;
 					componentY = yMin;
 				} else {
-					componentHeight = Math.max(compBounds.getHeight(), height);
+					componentHeight = Math.min(compBounds.getHeight(), height);
 					componentY = yMin + (height - componentHeight)*getAlignmentY();
 				}
 				component.setBounds(xMin, componentY, compBounds.getWidth(), componentHeight);
@@ -134,7 +134,7 @@ public class StackedLayout implements Layout {
 					componentWidth = width;
 					componentX = xMin;
 				} else {
-					componentWidth = Math.max(compBounds.getWidth(), width);
+					componentWidth = Math.min(compBounds.getWidth(), width);
 					componentX = xMin + (width - componentWidth)*getAlignmentX();
 				}
 				component.setBounds(componentX, yMin, componentWidth, compBounds.getHeight());
