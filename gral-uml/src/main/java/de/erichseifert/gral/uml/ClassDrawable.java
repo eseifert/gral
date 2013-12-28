@@ -26,6 +26,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 
+import metamodel.classes.interfaces.Property;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -44,6 +45,11 @@ public class ClassDrawable extends DrawableContainer {
 		className.setAlignmentX(0.0);
 		className.setAlignmentY(0.0);
 		add(className);
+
+		for (Property property : clazz.getOwnedAttributes()) {
+			Label propertyLabel = new Label(property.getName());
+			add(propertyLabel);
+		}
 
 		double textHeight = className.getTextRectangle().getHeight();
 		double textWidth = className.getTextRectangle().getWidth();
