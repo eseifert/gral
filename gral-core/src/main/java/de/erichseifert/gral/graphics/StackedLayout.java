@@ -39,8 +39,10 @@ public class StackedLayout implements Layout {
 	private final Orientation orientation;
 	/** Spacing of components. */
 	private final Dimension2D gap;
-	/** Alignment of smaller components. */
-	private double alignment;
+	/** Horizontal alignment of smaller components. */
+	private double alignmentX;
+	/** Vertical alignment of smaller components. */
+	private double alignmentY;
 	/**
 	 * Whether components are strechted to the container's width (vertical layout)
 	 * or height (horizontal layout).
@@ -79,7 +81,8 @@ public class StackedLayout implements Layout {
 		if (gap != null) {
 			this.gap.setSize(gap);
 		}
-		this.alignment = 0.5;
+		this.alignmentX = 0.5;
+		this.alignmentY = 0.5;
 		this.componentsStrechted = componentsStrechted;
 	}
 
@@ -94,32 +97,48 @@ public class StackedLayout implements Layout {
 		Insets2D insets = container.getInsets();
 		Dimension2D gap = getGap();
 
-		double x = bounds.getMinX() + insets.getLeft();
-		double y = bounds.getMinY() + insets.getTop();
+		double xMin = bounds.getMinX() + insets.getLeft();
+		double yMin = bounds.getMinY() + insets.getTop();
 		double width = bounds.getWidth() - insets.getLeft() - insets.getRight();
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
 		if (getOrientation() == Orientation.HORIZONTAL) {
-			x += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*getAlignment();
+			xMin += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*getAlignmentX();
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					x += gap.getWidth();
+					xMin += gap.getWidth();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
-				double componentHeight = isComponentsStrechted() ? height : Math.max(compBounds.getHeight(), height);
-				component.setBounds(x, y, compBounds.getWidth(), componentHeight);
-				x += compBounds.getWidth();
+				double componentHeight;
+				double componentY;
+				if (isComponentsStrechted()) {
+					componentHeight = height;
+					componentY = yMin;
+				} else {
+					componentHeight = Math.max(compBounds.getHeight(), height);
+					componentY = yMin + (height - componentHeight)*getAlignmentY();
+				}
+				component.setBounds(xMin, componentY, compBounds.getWidth(), componentHeight);
+				xMin += compBounds.getWidth();
 			}
 		} else if (getOrientation() == Orientation.VERTICAL) {
-			y += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*getAlignment();
+			yMin += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*getAlignmentY();
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					y += gap.getHeight();
+					yMin += gap.getHeight();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
-				double componentWidth = isComponentsStrechted() ? width : Math.max(compBounds.getWidth(), width);
-				component.setBounds(x, y, componentWidth, compBounds.getHeight());
-				y += compBounds.getHeight();
+				double componentWidth;
+				double componentX;
+				if (isComponentsStrechted()) {
+					componentWidth = width;
+					componentX = xMin;
+				} else {
+					componentWidth = Math.max(compBounds.getWidth(), width);
+					componentX = xMin + (width - componentWidth)*getAlignmentX();
+				}
+				component.setBounds(componentX, yMin, componentWidth, compBounds.getHeight());
+				yMin += compBounds.getHeight();
 			}
 		}
 	}
@@ -207,23 +226,39 @@ public class StackedLayout implements Layout {
 	}
 
 	/**
-	 * Returns the relative position of the components within the container.
-	 * This value only has effect, if the components do not fill the container
-	 * in the current layout direction.
+	 * Returns the relative horizontal position of the components within the container.
+	 * This value only has effect, if the components do not fill the width of the container.
 	 * @return Relative position of layed out components.
 	 */
-	public double getAlignment() {
-		return alignment;
+	public double getAlignmentX() {
+		return alignmentX;
 	}
 
 	/**
-	 * Sets the relative position of the components within the container.
-	 * This value only has effect, if the components do not fill the container
-	 * in the current layout direction.
-	 * @param alignment Relative position of layed out components.
+	 * Sets the relative horizontal position of the components within the container.
+	 * This value only has effect, if the components do not fill the width of the container.
+	 * @param alignmentX Relative position of layed out components.
 	 */
-	public void setAlignment(double alignment) {
-		this.alignment = alignment;
+	public void setAlignmentX(double alignmentX) {
+		this.alignmentX = alignmentX;
+	}
+
+	/**
+	 * Returns the relative vertical position of the components within the container.
+	 * This value only has effect, if the components do not fill the height of the container.
+	 * @return Relative position of layed out components.
+	 */
+	public double getAlignmentY() {
+		return alignmentY;
+	}
+
+	/**
+	 * Sets the relative vertical position of the components within the container.
+	 * This value only has effect, if the components do not fill the height of the container.
+	 * @param alignmentY Relative position of layed out components.
+	 */
+	public void setAlignmentY(double alignmentY) {
+		this.alignmentY = alignmentY;
 	}
 
 }
