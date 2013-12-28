@@ -22,6 +22,7 @@
 package de.erichseifert.gral.uml;
 
 import java.awt.BasicStroke;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
@@ -70,8 +71,8 @@ public class ClassDrawable extends DrawableContainer {
 	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
 		super(new StackedLayout(Orientation.VERTICAL));
 		className = new Label(clazz.getQualifiedName());
-		className.setAlignmentX(0.0);
-		className.setAlignmentY(0.0);
+		Font classNameFont = className.getFont().deriveFont(Font.BOLD);
+		className.setFont(classNameFont);
 		add(className);
 
 		for (Property property : clazz.getOwnedAttributes()) {
