@@ -72,6 +72,9 @@ public class ClassDrawable extends DrawableContainer {
 		super(new StackedLayout(Orientation.VERTICAL));
 		className = new Label(clazz.getQualifiedName());
 		Font classNameFont = className.getFont().deriveFont(Font.BOLD);
+		if (clazz.isAbstract()) {
+			classNameFont = classNameFont.deriveFont(Font.ITALIC);
+		}
 		className.setFont(classNameFont);
 		add(className);
 
