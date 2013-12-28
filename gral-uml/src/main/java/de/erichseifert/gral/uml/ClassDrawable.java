@@ -43,6 +43,7 @@ public class ClassDrawable extends DrawableContainer {
 	private static class PropertyLabel extends Label {
 		private final Property property;
 		private boolean visibilityDisplayed;
+		private boolean typeDisplayed;
 
 		public PropertyLabel(Property property) {
 			this.property = property;
@@ -56,6 +57,10 @@ public class ClassDrawable extends DrawableContainer {
 				text.append(" ");
 			}
 			text.append(property.getName());
+			if (isTypeDisplayed()) {
+				text.append(": ");
+				text.append(property.getType().getName());
+			}
 			return text.toString();
 		}
 
@@ -65,6 +70,14 @@ public class ClassDrawable extends DrawableContainer {
 
 		public void setVisibilityDisplayed(boolean visibilityDisplayed) {
 			this.visibilityDisplayed = visibilityDisplayed;
+		}
+
+		public boolean isTypeDisplayed() {
+			return typeDisplayed;
+		}
+
+		public void setTypeDisplayed(boolean typeDisplayed) {
+			this.typeDisplayed = typeDisplayed;
 		}
 	}
 
@@ -81,6 +94,7 @@ public class ClassDrawable extends DrawableContainer {
 		for (Property property : clazz.getOwnedAttributes()) {
 			PropertyLabel propertyLabel = new PropertyLabel(property);
 			propertyLabel.setVisibilityDisplayed(true);
+			propertyLabel.setTypeDisplayed(true);
 			propertyLabel.setAlignmentX(0.0);
 			add(propertyLabel);
 		}
