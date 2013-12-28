@@ -81,6 +81,7 @@ public class ClassDrawable extends DrawableContainer {
 		for (Property property : clazz.getOwnedAttributes()) {
 			PropertyLabel propertyLabel = new PropertyLabel(property);
 			propertyLabel.setVisibilityDisplayed(true);
+			propertyLabel.setAlignmentX(0.0);
 			add(propertyLabel);
 		}
 
