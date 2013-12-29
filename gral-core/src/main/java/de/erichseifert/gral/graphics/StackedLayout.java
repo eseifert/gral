@@ -110,7 +110,7 @@ public class StackedLayout implements Layout {
 		if (gap != null) {
 			this.gap.setSize(gap);
 		}
-		defaultConstraints = new Constraints(false, 0.5, 0.5);
+		defaultConstraints = new Constraints(true, 0.5, 0.5);
 	}
 
 	/**
