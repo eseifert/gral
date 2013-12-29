@@ -83,6 +83,21 @@ public class ClassDrawable extends DrawableContainer {
 		}
 	}
 
+	private static class OperationLabel extends Label {
+		private final Operation operation;
+
+		public OperationLabel(Operation operation) {
+			this.operation = operation;
+		}
+
+		@Override
+		public String getText() {
+			StringBuilder text = new StringBuilder();
+			text.append(operation.getName());
+			return text.toString();
+		}
+	}
+
 	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
 		super(new StackedLayout(Orientation.VERTICAL, new Dimension2D.Double(0.0, 7.0)));
 		className = new Label(clazz.getQualifiedName());
@@ -103,7 +118,7 @@ public class ClassDrawable extends DrawableContainer {
 			add(propertyLabel);
 		}
 		for (Operation operation : clazz.getOwnedOperations()) {
-			Label operationLabel = new Label(operation.getName());
+			OperationLabel operationLabel = new OperationLabel(operation);
 			operationLabel.setAlignmentX(0.0);
 			add(operationLabel);
 		}
