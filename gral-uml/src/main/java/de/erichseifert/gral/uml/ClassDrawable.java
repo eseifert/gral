@@ -25,7 +25,6 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import metamodel.classes.interfaces.Property;
@@ -135,8 +134,6 @@ public class ClassDrawable extends DrawableContainer {
 		className.setFont(classNameFont);
 		add(className);
 
-		setInsets(new Insets2D.Double(12.0, 6.0, 6.0, 6.0));
-
 		for (Property property : clazz.getOwnedAttributes()) {
 			PropertyLabel propertyLabel = new PropertyLabel(property);
 			propertyLabel.setVisibilityDisplayed(true);
@@ -152,15 +149,8 @@ public class ClassDrawable extends DrawableContainer {
 		}
 
 		double textHeight = className.getTextRectangle().getHeight();
-		double textWidth = className.getTextRectangle().getWidth();
 		Insets2D insets = new Insets2D.Double(textHeight);
 		setInsets(insets);
-		Rectangle2D bounds = new Rectangle2D.Double(
-			0.0, 0.0,
-			insets.getLeft() + textWidth + insets.getRight(),
-			insets.getTop() + textHeight + insets.getBottom()
-		);
-		setBounds(bounds);
 		borderStroke = new BasicStroke(5f);
 	}
 
