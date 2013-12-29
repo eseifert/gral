@@ -179,6 +179,32 @@ public class ContainerTest {
 	}
 
 	@Test
+	public void testGetDrawableAtOrder() {
+		// Create two overlapping drawables
+		MockDrawable d1 = new MockDrawable();
+		MockDrawable d2 = new MockDrawable();
+		Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+		d1.setBounds(bounds);
+		d2.setBounds(bounds);
+
+		container.add(d1);
+		container.add(d2);
+
+		Point2D point = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+		assertEquals(d1, container.getDrawableAt(point));
+
+		// Clear container
+		container.remove(d1);
+		container.remove(d2);
+		assertEquals(0, container.size());
+
+		// Re-add drawables in inverse order
+		container.add(d2);
+		container.add(d1);
+		assertEquals(d2, container.getDrawableAt(point));
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		DrawableContainer original = container;
 		DrawableContainer deserialized = TestUtils.serializeAndDeserialize(original);

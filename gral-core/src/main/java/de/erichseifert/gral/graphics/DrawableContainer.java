@@ -137,6 +137,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 						drawable = (Drawable) container;
 					}
 				}
+				break;
 			}
 		}
 		return drawable;
