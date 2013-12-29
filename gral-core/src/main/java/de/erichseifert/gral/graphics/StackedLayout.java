@@ -22,6 +22,7 @@
 package de.erichseifert.gral.graphics;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
@@ -42,7 +43,8 @@ public class StackedLayout implements Layout {
 	/** Default layout behaviour for components. */
 	private final Constraints defaultConstraints;
 
-	public static class Constraints {
+	public static class Constraints implements Serializable {
+		private static final long serialVersionUID = -3375316557720116460L;
 		/**
 		 * Whether the component is strechted to the container's width (vertical layout)
 		 * or height (horizontal layout).
