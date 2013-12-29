@@ -50,6 +50,9 @@ public class PackageDrawable extends DrawableContainer {
 					add(new ClassDrawable((Class) member));
 				}
 			}
+			
+			double textHeight = name.getTextRectangle().getHeight();
+			setInsets(new Insets2D.Double(textHeight));
 		}
 
 		@Override
