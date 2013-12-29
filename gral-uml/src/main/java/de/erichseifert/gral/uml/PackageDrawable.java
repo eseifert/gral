@@ -1,6 +1,7 @@
 package de.erichseifert.gral.uml;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Dimension2D;
 
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.NamedElement;
@@ -9,6 +10,7 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 
 /**
@@ -61,6 +63,20 @@ public class PackageDrawable extends DrawableContainer {
 				name.setBounds(getBounds());
 				name.draw(context);
 			}
+		}
+
+		@Override
+		public Dimension2D getPreferredSize() {
+			if (membersDisplayed) {
+				return super.getPreferredSize();
+			}
+			Dimension2D preferredSize = name.getPreferredSize();
+			Insets2D insets = getInsets();
+			preferredSize.setSize(
+				preferredSize.getWidth() + insets.getLeft() + insets.getRight(),
+				preferredSize.getHeight() + insets.getTop() + insets.getBottom()
+			);
+			return preferredSize;
 		}
 
 		public boolean isMembersDisplayed() {
