@@ -92,6 +92,8 @@ public class ClassDrawable extends DrawableContainer {
 		className.setFont(classNameFont);
 		add(className);
 
+		setInsets(new Insets2D.Double(12.0, 6.0, 6.0, 6.0));
+
 		for (Property property : clazz.getOwnedAttributes()) {
 			PropertyLabel propertyLabel = new PropertyLabel(property);
 			propertyLabel.setVisibilityDisplayed(true);
