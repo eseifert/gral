@@ -87,6 +87,7 @@ public class ClassDrawable extends DrawableContainer {
 
 	private static class OperationLabel extends Label {
 		private final Operation operation;
+		private boolean visibilityDisplayed;
 
 		public OperationLabel(Operation operation) {
 			this.operation = operation;
@@ -95,6 +96,10 @@ public class ClassDrawable extends DrawableContainer {
 		@Override
 		public String getText() {
 			StringBuilder text = new StringBuilder();
+			if (isVisibilityDisplayed()) {
+				text.append(operation.getVisibility().getLiteral());
+				text.append(" ");
+			}
 			text.append(operation.getName());
 			text.append("(");
 			Iterator<Parameter> parameterIterator = operation.getOwnedParameters().iterator();
@@ -109,6 +114,14 @@ public class ClassDrawable extends DrawableContainer {
 			}
 			text.append(")");
 			return text.toString();
+		}
+
+		public boolean isVisibilityDisplayed() {
+			return visibilityDisplayed;
+		}
+
+		public void setVisibilityDisplayed(boolean visibilityDisplayed) {
+			this.visibilityDisplayed = visibilityDisplayed;
 		}
 	}
 
@@ -133,6 +146,7 @@ public class ClassDrawable extends DrawableContainer {
 		}
 		for (Operation operation : clazz.getOwnedOperations()) {
 			OperationLabel operationLabel = new OperationLabel(operation);
+			operationLabel.setVisibilityDisplayed(true);
 			operationLabel.setAlignmentX(0.0);
 			add(operationLabel);
 		}
