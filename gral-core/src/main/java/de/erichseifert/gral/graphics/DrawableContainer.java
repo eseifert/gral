@@ -123,11 +123,20 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 * @return Component at the specified point, or {@code null} if no
 	 *         component could be found.
 	 */
+	@Override
 	public Drawable getDrawableAt(Point2D point) {
 		Drawable drawable = null;
 		for (Drawable component : components) {
 			if (component != null && component.getBounds().contains(point)) {
 				drawable = component;
+				// Check whether the point is in one of the child elements of the container
+				if (drawable instanceof Container) {
+					Container container = (Container) drawable;
+					drawable = container.getDrawableAt(point);
+					if (drawable == null) {
+						drawable = (Drawable) container;
+					}
+				}
 			}
 		}
 		return drawable;

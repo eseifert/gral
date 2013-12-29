@@ -145,7 +145,8 @@ public class ContainerTest {
 			new Point2D.Double(0.0, 0.0),
 			new Point2D.Double(0.5, 0.5),
 			new Point2D.Double(1.0, 1.0),
-			new Point2D.Double(1.5, 1.5)
+			new Point2D.Double(1.5, 1.5),
+			new Point2D.Double(2.0, 2.0)
 		};
 
 		for (Point2D point : points) {
@@ -156,11 +157,19 @@ public class ContainerTest {
 		d.setBounds(0.0, 0.0, 1.0, 1.0);
 		container.add(d);
 
+		DrawableContainer nestedContainer = new DrawableContainer();
+		nestedContainer.setBounds(1.0, 1.0, 1.0, 1.0);
+		container.add(nestedContainer);
+		MockDrawable nestedDrawable = new MockDrawable();
+		nestedDrawable.setBounds(1.5, 1.5, 0.5, 0.5);
+		nestedContainer.add(nestedDrawable);
+
 		Drawable[] expected = {
 			null,
 			d,
 			d,
-			null,
+			nestedContainer,
+			nestedDrawable,
 			null
 		};
 		for (int i = 0; i < points.length; i++) {
