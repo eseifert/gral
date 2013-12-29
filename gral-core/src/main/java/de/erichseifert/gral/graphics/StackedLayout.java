@@ -39,15 +39,53 @@ public class StackedLayout implements Layout {
 	private final Orientation orientation;
 	/** Spacing of components. */
 	private final Dimension2D gap;
-	/** Horizontal alignment of smaller components. */
-	private double alignmentX;
-	/** Vertical alignment of smaller components. */
-	private double alignmentY;
-	/**
-	 * Whether components are strechted to the container's width (vertical layout)
-	 * or height (horizontal layout).
-	 */
-	private boolean componentsStrechted;
+	/** Default layout behaviour for components. */
+	private final Constraints defaultConstraints;
+
+	public static class Constraints {
+		/**
+		 * Whether the component is strechted to the container's width (vertical layout)
+		 * or height (horizontal layout).
+		 */
+		private final boolean strechted;
+		/** Horizontal alignment of the component. */
+		private final double alignmentX;
+		/** Vertical alignment of the component. */
+		private final double alignmentY;
+
+		public Constraints(boolean strechted, double alignmentX, double alignmentY) {
+			this.strechted = strechted;
+			this.alignmentX = alignmentX;
+			this.alignmentY = alignmentY;
+		}
+
+		/**
+		 * Returns whether the component is strechted to the container's width (vertical layout)
+		 * or height (horizontal orientation).
+		 * @return {@code true} if the layed out component should be strechted, {@code false} otherwise.
+		 */
+		public boolean isStrechted() {
+			return strechted;
+		}
+
+		/**
+		 * Returns the relative horizontal position of the component within the container.
+		 * This value only has effect, if the components do not fill the width of the container.
+		 * @return Relative position of layed out components.
+		 */
+		public double getAlignmentX() {
+			return alignmentX;
+		}
+
+		/**
+		 * Returns the relative vertical position of the components within the container.
+		 * This value only has effect, if the components do not fill the height of the container.
+		 * @return Relative position of layed out components.
+		 */
+		public double getAlignmentY() {
+			return alignmentY;
+		}
+	}
 
 	/**
 	 * Creates a new StackedLayout object with the specified orientation
@@ -65,25 +103,12 @@ public class StackedLayout implements Layout {
 	 * @param gap Gap between the components.
 	 */
 	public StackedLayout(Orientation orientation, Dimension2D gap) {
-		this(orientation, gap, true);
-	}
-
-	/**
-	 * Creates a new StackedLayout object with the specified orientation,
-	 * gap between the components, and stretching behaviour.
-	 * @param orientation Orientation in which components are stacked.
-	 * @param gap Gap between the components.
-	 * @param componentsStrechted Whether components should be strechted to the size of the container.
-	 */
-	public StackedLayout(Orientation orientation, Dimension2D gap, boolean componentsStrechted) {
 		this.orientation = orientation;
 		this.gap = new de.erichseifert.gral.util.Dimension2D.Double();
 		if (gap != null) {
 			this.gap.setSize(gap);
 		}
-		this.alignmentX = 0.5;
-		this.alignmentY = 0.5;
-		this.componentsStrechted = componentsStrechted;
+		defaultConstraints = new Constraints(false, 0.5, 0.5);
 	}
 
 	/**
@@ -103,39 +128,41 @@ public class StackedLayout implements Layout {
 		double height = bounds.getHeight() - insets.getTop() - insets.getBottom();
 		int count = 0;
 		if (getOrientation() == Orientation.HORIZONTAL) {
-			xMin += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*getAlignmentX();
+			xMin += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*defaultConstraints.getAlignmentX();
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					xMin += gap.getWidth();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
+				Constraints constraints = getConstraints(component, container);
 				double componentHeight;
 				double componentY;
-				if (isComponentsStrechted()) {
+				if (constraints.isStrechted()) {
 					componentHeight = height;
 					componentY = yMin;
 				} else {
 					componentHeight = Math.min(compBounds.getHeight(), height);
-					componentY = yMin + (height - componentHeight)*getAlignmentY();
+					componentY = yMin + (height - componentHeight)*constraints.getAlignmentY();
 				}
 				component.setBounds(xMin, componentY, compBounds.getWidth(), componentHeight);
 				xMin += compBounds.getWidth();
 			}
 		} else if (getOrientation() == Orientation.VERTICAL) {
-			yMin += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*getAlignmentY();
+			yMin += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*defaultConstraints.getAlignmentY();
 			for (Drawable component : container) {
 				if (count++ > 0) {
 					yMin += gap.getHeight();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
+				Constraints constraints = getConstraints(component, container);
 				double componentWidth;
 				double componentX;
-				if (isComponentsStrechted()) {
+				if (constraints.isStrechted()) {
 					componentWidth = width;
 					componentX = xMin;
 				} else {
 					componentWidth = Math.min(compBounds.getWidth(), width);
-					componentX = xMin + (width - componentWidth)*getAlignmentX();
+					componentX = xMin + (width - componentWidth)*constraints.getAlignmentX();
 				}
 				component.setBounds(componentX, yMin, componentWidth, compBounds.getHeight());
 				yMin += compBounds.getHeight();
@@ -207,58 +234,11 @@ public class StackedLayout implements Layout {
 		return gap;
 	}
 
-	/**
-	 * Returns whether components are strechted to the container's width (vertical layout)
-	 * or height (horizontal orientation).
-	 * @return {@code true} if the layed out components should be strechted, {@code false} otherwise.
-	 */
-	public boolean isComponentsStrechted() {
-		return componentsStrechted;
+	private Constraints getConstraints(Drawable component, Container container) {
+		Object constraints = container.getConstraints(component);
+		if (constraints == null || !(constraints instanceof Constraints)) {
+			constraints = defaultConstraints;
+		}
+		return (Constraints) constraints;
 	}
-
-	/**
-	 * Sets whether the components should be stretched to the container's width (vertical layout)
-	 * or height (horizontal layout).
-	 * @param componentsStrechted {@code true} if the layed out components should be strechted, {@code false} otherwise.
-	 */
-	public void setComponentsStrechted(boolean componentsStrechted) {
-		this.componentsStrechted = componentsStrechted;
-	}
-
-	/**
-	 * Returns the relative horizontal position of the components within the container.
-	 * This value only has effect, if the components do not fill the width of the container.
-	 * @return Relative position of layed out components.
-	 */
-	public double getAlignmentX() {
-		return alignmentX;
-	}
-
-	/**
-	 * Sets the relative horizontal position of the components within the container.
-	 * This value only has effect, if the components do not fill the width of the container.
-	 * @param alignmentX Relative position of layed out components.
-	 */
-	public void setAlignmentX(double alignmentX) {
-		this.alignmentX = alignmentX;
-	}
-
-	/**
-	 * Returns the relative vertical position of the components within the container.
-	 * This value only has effect, if the components do not fill the height of the container.
-	 * @return Relative position of layed out components.
-	 */
-	public double getAlignmentY() {
-		return alignmentY;
-	}
-
-	/**
-	 * Sets the relative vertical position of the components within the container.
-	 * This value only has effect, if the components do not fill the height of the container.
-	 * @param alignmentY Relative position of layed out components.
-	 */
-	public void setAlignmentY(double alignmentY) {
-		this.alignmentY = alignmentY;
-	}
-
 }
