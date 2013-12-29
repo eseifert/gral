@@ -28,6 +28,7 @@ import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 
 import metamodel.classes.interfaces.Property;
+import metamodel.classes.kernel.Operation;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -100,6 +101,11 @@ public class ClassDrawable extends DrawableContainer {
 			propertyLabel.setTypeDisplayed(true);
 			propertyLabel.setAlignmentX(0.0);
 			add(propertyLabel);
+		}
+		for (Operation operation : clazz.getOwnedOperations()) {
+			Label operationLabel = new Label(operation.getName());
+			operationLabel.setAlignmentX(0.0);
+			add(operationLabel);
 		}
 
 		double textHeight = className.getTextRectangle().getHeight();
