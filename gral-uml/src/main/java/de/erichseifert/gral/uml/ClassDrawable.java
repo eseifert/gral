@@ -26,9 +26,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
+import java.util.Iterator;
 
 import metamodel.classes.interfaces.Property;
 import metamodel.classes.kernel.Operation;
+import metamodel.classes.kernel.Parameter;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -94,6 +96,18 @@ public class ClassDrawable extends DrawableContainer {
 		public String getText() {
 			StringBuilder text = new StringBuilder();
 			text.append(operation.getName());
+			text.append("(");
+			Iterator<Parameter> parameterIterator = operation.getOwnedParameters().iterator();
+			while (parameterIterator.hasNext()) {
+				Parameter parameter = parameterIterator.next();
+				text.append(parameter.getName());
+				text.append(": ");
+				text.append(parameter.getType().getName());
+				if (parameterIterator.hasNext()) {
+					text.append(", ");
+				}
+			}
+			text.append(")");
 			return text.toString();
 		}
 	}
