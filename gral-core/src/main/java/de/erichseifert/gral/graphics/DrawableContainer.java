@@ -116,31 +116,24 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		layout();
 	}
 
-	/**
-	 * Returns the top-most component at the specified point. If no component
-	 * could be found {@code null} will be returned.
-	 * @param point Two-dimensional point.
-	 * @return Component at the specified point, or {@code null} if no
-	 *         component could be found.
-	 */
 	@Override
-	public Drawable getDrawableAt(Point2D point) {
-		Drawable drawable = null;
-		for (Drawable component : components) {
-			if (component != null && component.getBounds().contains(point)) {
-				drawable = component;
-				// Check whether the point is in one of the child elements of the container
-				if (drawable instanceof Container) {
-					Container container = (Container) drawable;
-					drawable = container.getDrawableAt(point);
-					if (drawable == null) {
-						drawable = (Drawable) container;
-					}
-				}
-				break;
+	public List<Drawable> getDrawablesAt(Point2D point) {
+		return getDrawablesAt(this, point, new LinkedList<Drawable>());
+	}
+
+	private static List<Drawable> getDrawablesAt(Container container, Point2D point, LinkedList<Drawable> previousResults) {
+		if (container instanceof Drawable && container.getBounds().contains(point)) {
+			previousResults.addFirst((Drawable) container);
+		}
+		for (Drawable component : container) {
+			// Check whether the point is in one of the child elements of the container
+			if (component instanceof Container) {
+				getDrawablesAt((Container) component, point, previousResults);
+			} else if (component != null && component.getBounds().contains(point)) {
+				previousResults.addFirst(component);
 			}
 		}
-		return drawable;
+		return previousResults;
 	}
 
 	/**

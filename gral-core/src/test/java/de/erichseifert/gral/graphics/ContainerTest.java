@@ -29,6 +29,9 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -150,7 +153,7 @@ public class ContainerTest {
 		};
 
 		for (Point2D point : points) {
-			assertEquals(null, container.getDrawableAt(point));
+			assertEquals(Collections.emptyList(), container.getDrawablesAt(point));
 		}
 
 		MockDrawable d = new MockDrawable();
@@ -164,17 +167,27 @@ public class ContainerTest {
 		nestedDrawable.setBounds(1.5, 1.5, 0.5, 0.5);
 		nestedContainer.add(nestedDrawable);
 
-		Drawable[] expected = {
-			null,
-			d,
-			d,
-			nestedContainer,
-			nestedDrawable,
-			null
+		List<Drawable> dList = new ArrayList<Drawable>(1);
+		dList.add(d);
+		List<Drawable> dPlusNestedContainerList = new ArrayList<Drawable>(2);
+		dPlusNestedContainerList.add(nestedContainer);
+		dPlusNestedContainerList.add(d);
+		List<Drawable> nestedContainerList = new ArrayList<Drawable>(1);
+		nestedContainerList.add(nestedContainer);
+		List<Drawable> nestedDrawableList = new ArrayList<Drawable>(1);
+		nestedDrawableList.add(nestedDrawable);
+		nestedDrawableList.add(nestedContainer);
+		List[] expected = {
+			Collections.emptyList(),
+			dList,
+			dList,
+			nestedContainerList,
+			nestedDrawableList,
+			Collections.emptyList()
 		};
 		for (int i = 0; i < points.length; i++) {
 			assertEquals(String.format("Unexpected result at %s:", points[i]),
-				expected[i], container.getDrawableAt(points[i]));
+				expected[i], container.getDrawablesAt(points[i]));
 		}
 	}
 
@@ -189,9 +202,12 @@ public class ContainerTest {
 
 		container.add(d1);
 		container.add(d2);
+		List<Drawable> resultList = new ArrayList<Drawable>(2);
+		resultList.add(d2);
+		resultList.add(d1);
 
 		Point2D point = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
-		assertEquals(d1, container.getDrawableAt(point));
+		assertEquals(resultList, container.getDrawablesAt(point));
 
 		// Clear container
 		container.remove(d1);
@@ -201,7 +217,8 @@ public class ContainerTest {
 		// Re-add drawables in inverse order
 		container.add(d2);
 		container.add(d1);
-		assertEquals(d2, container.getDrawableAt(point));
+		Collections.reverse(resultList);
+		assertEquals(resultList, container.getDrawablesAt(point));
 	}
 
 	@Test

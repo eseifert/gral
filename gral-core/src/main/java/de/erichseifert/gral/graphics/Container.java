@@ -23,6 +23,7 @@ package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 import de.erichseifert.gral.util.Insets2D;
 
@@ -90,13 +91,14 @@ public interface Container extends Iterable<Drawable> {
 	void add(Drawable drawable, Object constraints);
 
 	/**
-	 * Returns the component at the specified point. If no component could be
-	 * found {@code null} will be returned.
+	 * Returns the components at the specified point.
+	 * The first component in the result {@code List} is the most
+	 * specific component, i.e. the component with the deepest nesting level.
+	 * If no component could be found an empty {@code List} will be returned.
 	 * @param point Two-dimensional point.
-	 * @return Component at the specified point, or {@code null} if no
-	 *         component could be found.
+	 * @return Components at the specified point, with the deepest nested component first.
 	 */
-	Drawable getDrawableAt(Point2D point);
+	List<Drawable> getDrawablesAt(Point2D point);
 
 	/**
 	 * Return additional information on component

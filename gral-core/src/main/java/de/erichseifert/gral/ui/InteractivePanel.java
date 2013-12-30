@@ -41,6 +41,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -566,12 +567,17 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	 * @return A navigable object.
 	 */
 	private static Navigable getNavigableAt(Drawable drawable, Point2D point) {
-		if ((drawable instanceof Navigable) && drawable.getBounds().contains(point)) {
-			return (Navigable) drawable;
-		}
+		List<Drawable> componentsToCheck;
 		if (drawable instanceof Container) {
-			Drawable component = ((Container) drawable).getDrawableAt(point);
-			return getNavigableAt(component, point);
+			componentsToCheck = ((Container) drawable).getDrawablesAt(point);
+		} else {
+			componentsToCheck = new ArrayList<Drawable>(1);
+			componentsToCheck.add(drawable);
+		}
+		for (Drawable component : componentsToCheck) {
+			if ((component instanceof Navigable) && component.getBounds().contains(point)) {
+				return (Navigable) component;
+			}
 		}
 		return null;
 	}
