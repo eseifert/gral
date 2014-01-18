@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import de.erichseifert.gral.util.Insets2D;
 
@@ -51,7 +53,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	/** Object that manages the layout of all container components. */
 	private Layout layout;
 	/** Elements stored in this container. */
-	private final List<Drawable> components;
+	private final Queue<Drawable> components;
 	/** Supplemental information for components, like layout constraints. */
 	private final Map<Drawable, Object> constraints;
 
@@ -70,7 +72,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 */
 	public DrawableContainer(Layout layout) {
 		insets = new Insets2D.Double();
-		components = new LinkedList<Drawable>();
+		components = new ConcurrentLinkedQueue<Drawable>();
 		constraints = new HashMap<Drawable, Object>();
 		this.layout = layout;
 	}
@@ -111,8 +113,8 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 			throw new IllegalArgumentException(
 				"A container cannot be added to itself."); //$NON-NLS-1$
 		}
-		components.add(drawable);
 		this.constraints.put(drawable, constraints);
+		components.add(drawable);
 		layout();
 	}
 
@@ -200,8 +202,9 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 * Recalculates this container's layout.
 	 */
 	public void layout() {
-		if (getLayout() != null) {
-			getLayout().layout(this);
+		Layout layout = getLayout();
+		if (layout != null) {
+			layout.layout(this);
 		}
 	}
 
@@ -236,8 +239,9 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 
 	@Override
 	public Dimension2D getPreferredSize() {
-		if (getLayout() != null) {
-			return getLayout().getPreferredSize(this);
+		Layout layout = getLayout();
+		if (layout != null) {
+			return layout.getPreferredSize(this);
 		}
 		return super.getPreferredSize();
 	}
