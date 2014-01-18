@@ -23,7 +23,7 @@ task report {
 }
 
 distributions {
-	main {
+	standard {
 		contents {
 			from(rootDir) {
 				include("CHANGES")
