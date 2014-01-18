@@ -105,8 +105,8 @@ public class PlotNavigatorTest {
 		// Valid zoom
 		nav.setZoom(2.0);
 		assertEquals(2.0, nav.getZoom(), DELTA);
-		assertEquals(-3.0, axisX.getMin().doubleValue(), DELTA);
-		assertEquals(13.0, axisX.getMax().doubleValue(), DELTA);
+		assertEquals(3.0, axisX.getMin().doubleValue(), DELTA);
+		assertEquals(7.0, axisX.getMax().doubleValue(), DELTA);
 
 		// Negative zoom doesn't get set
 		nav.setZoom(-1.0);
