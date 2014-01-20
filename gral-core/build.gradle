@@ -94,13 +94,17 @@ publishing {
 			}
 		}
 	}
-	
+
 	repositories {
-		maven {
-			url("http://mvn.erichseifert.de/maven2")
-			credentials {
-				username = mvnRepoUsername
-				password = mvnRepoPassword
+		// Only configure remote maven repository, if the credentials are present
+		if (project.hasProperty("mvnRepoUsername") && project.hasProperty("mvnRepoPassword")) {
+			maven {
+				name = 'erichseifert'
+				url("http://mvn.erichseifert.de/maven2")
+				credentials {
+					username = mvnRepoUsername
+					password = mvnRepoPassword
+				}
 			}
 		}
 	}
