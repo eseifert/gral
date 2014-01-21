@@ -38,8 +38,10 @@ public class StackedLayout implements Layout {
 
 	/** Orientation in which elements should be laid out. */
 	private final Orientation orientation;
-	/** Spacing of components. */
-	private final Dimension2D gap;
+	/** Horizontal spacing of components. */
+	private final double gapX;
+	/** Vertical spacing of components. */
+	private final double gapY;
 	/** Default layout behaviour for components. */
 	private final Constraints defaultConstraints;
 
@@ -106,9 +108,12 @@ public class StackedLayout implements Layout {
 	 */
 	public StackedLayout(Orientation orientation, Dimension2D gap) {
 		this.orientation = orientation;
-		this.gap = new de.erichseifert.gral.util.Dimension2D.Double();
 		if (gap != null) {
-			this.gap.setSize(gap);
+			gapX = gap.getWidth();
+			gapY = gap.getHeight();
+		} else {
+			gapX = 0.0;
+			gapY = 0.0;
 		}
 		defaultConstraints = new Constraints(true, 0.5, 0.5);
 	}
@@ -232,7 +237,7 @@ public class StackedLayout implements Layout {
 	public Dimension2D getGap() {
 		Dimension2D gap =
 			new de.erichseifert.gral.util.Dimension2D.Double();
-		gap.setSize(this.gap);
+		gap.setSize(gapX, gapY);
 		return gap;
 	}
 
