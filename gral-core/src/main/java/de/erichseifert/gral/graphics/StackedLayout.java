@@ -93,17 +93,18 @@ public class StackedLayout extends AbstractLayout {
 	 * @param orientation Orientation in which components are stacked.
 	 */
 	public StackedLayout(Orientation orientation) {
-		this(orientation, null);
+		this(orientation, 0.0, 0.0);
 	}
 
 	/**
 	 * Creates a new StackedLayout object with the specified orientation
 	 * and gap between the components.
 	 * @param orientation Orientation in which components are stacked.
-	 * @param gap Gap between the components.
+	 * @param gapX Horizontal gap between the components.
+	 * @param gapY Vertical gap between the components.
 	 */
-	public StackedLayout(Orientation orientation, Dimension2D gap) {
-		super(gap.getWidth(), gap.getHeight());
+	public StackedLayout(Orientation orientation, double gapX, double gapY) {
+		super(gapX, gapY);
 		this.orientation = orientation;
 		defaultConstraints = new Constraints(true, 0.5, 0.5);
 	}

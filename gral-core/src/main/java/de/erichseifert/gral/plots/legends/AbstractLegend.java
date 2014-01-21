@@ -337,7 +337,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	protected final void refreshLayout() {
 		Orientation orientation = getOrientation();
 		Dimension2D gap = getGap();
-		Layout layout = new StackedLayout(orientation, gap);
+		Layout layout = new StackedLayout(orientation, gap.getWidth(), gap.getHeight());
 		setLayout(layout);
 	}
 
