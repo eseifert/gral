@@ -32,6 +32,7 @@ import org.junit.runners.Suite;
 	DrawableTest.class,
 	ContainerTest.class,
 	AbstractLayoutTest.class,
+	AbstractOrientedLayoutTest.class,
 	EdgeLayoutTest.class,
 	// TODO Add test for OuterEdgeLayout
 	StackedLayoutTest.class,
