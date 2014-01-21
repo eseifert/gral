@@ -4,9 +4,9 @@ public abstract class AbstractLayout implements Layout {
 	private static final long serialVersionUID = 5961215915010787754L;
 
 	/** Horizontal spacing of components. */
-	private double gapX;
+	private final double gapX;
 	/** Vertical spacing of components. */
-	private double gapY;
+	private final double gapY;
 
 	public AbstractLayout(double gapX, double gapY) {
 		this.gapX = gapX;
