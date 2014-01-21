@@ -36,7 +36,8 @@ import de.erichseifert.gral.TestUtils;
 
 public class TableLayoutTest {
 	private static final double DELTA = 1e-15;
-	private static final Dimension2D GAP = new de.erichseifert.gral.util.Dimension2D.Double(5.0, 10.0);
+	private static final double GAP_X = 5.0;
+	private static final double GAP_Y = 10.0;
 	private static final double COMP_WIDTH = 10.0;
 	private static final double COMP_HEIGHT = 5.0;
 
@@ -77,21 +78,21 @@ public class TableLayoutTest {
 		assertEquals(0.0, noGap.getGapX(), DELTA);
 		assertEquals(0.0, noGap.getGapY(), DELTA);
 
-		TableLayout gapped = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
-		assertEquals(GAP.getWidth(), gapped.getGapX(), DELTA);
-		assertEquals(GAP.getHeight(), gapped.getGapY(), DELTA);
+		TableLayout gapped = new TableLayout(1, GAP_X, GAP_Y);
+		assertEquals(GAP_X, gapped.getGapX(), DELTA);
+		assertEquals(GAP_Y, gapped.getGapY(), DELTA);
 	}
 
 	@Test
 	public void testCreateInvalid() {
 		try {
-			new TableLayout(-1, GAP.getWidth(), GAP.getHeight());
+			new TableLayout(-1, GAP_X, GAP_Y);
 			fail("Expected IllegalArgumentException because of negative column number.");
 		} catch (IllegalArgumentException e) {
 		}
 
 		try {
-			new TableLayout(0, GAP.getWidth(), GAP.getHeight());
+			new TableLayout(0, GAP_X, GAP_Y);
 			fail("Expected IllegalArgumentException because column number was zero.");
 		} catch (IllegalArgumentException e) {
 		}
@@ -99,23 +100,23 @@ public class TableLayoutTest {
 
 	@Test
 	public void testPreferredSizeVertical() {
-		Layout layout = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
+		Layout layout = new TableLayout(1, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(COMP_WIDTH, size.getWidth(), DELTA);
-		assertEquals(3.0*COMP_HEIGHT + 2.0*GAP.getHeight(), size.getHeight(), DELTA);
+		assertEquals(3.0*COMP_HEIGHT + 2.0*GAP_Y, size.getHeight(), DELTA);
 	}
 
 	@Test
 	public void testPreferredSizeHorizontal() {
-		Layout layout = new TableLayout(3, GAP.getWidth(), GAP.getHeight());
+		Layout layout = new TableLayout(3, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
-		assertEquals(3.0*COMP_WIDTH + 2.0*GAP.getWidth(), size.getWidth(), DELTA);
+		assertEquals(3.0*COMP_WIDTH + 2.0*GAP_X, size.getWidth(), DELTA);
 		assertEquals(COMP_HEIGHT, size.getHeight(), DELTA);
 	}
 
 	@Test
 	public void testLayoutVertical() {
-		Layout layout = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
+		Layout layout = new TableLayout(1, GAP_X, GAP_Y);
 		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
@@ -125,26 +126,26 @@ public class TableLayoutTest {
 		assertEquals(bounds.getMinX(), b.getX(), DELTA);
 		assertEquals(bounds.getMinX(), c.getX(), DELTA);
 		// Test y coordinates
-		double meanCompHeight = (bounds.getHeight() - 2.0*GAP.getHeight())/3.0;
-		assertEquals(bounds.getMinY() + 0.0*meanCompHeight + 0.0*GAP.getHeight(), a.getY(), DELTA);
-		assertEquals(bounds.getMinY() + 1.0*meanCompHeight + 1.0*GAP.getHeight(), b.getY(), DELTA);
-		assertEquals(bounds.getMinY() + 2.0*meanCompHeight + 2.0*GAP.getHeight(), c.getY(), DELTA);
+		double meanCompHeight = (bounds.getHeight() - 2.0*GAP_Y)/3.0;
+		assertEquals(bounds.getMinY() + 0.0*meanCompHeight + 0.0*GAP_Y, a.getY(), DELTA);
+		assertEquals(bounds.getMinY() + 1.0*meanCompHeight + 1.0*GAP_Y, b.getY(), DELTA);
+		assertEquals(bounds.getMinY() + 2.0*meanCompHeight + 2.0*GAP_Y, c.getY(), DELTA);
 
 		// TODO Test width and height
 	}
 
 	@Test
 	public void testLayoutHorizontal() {
-		Layout layout = new TableLayout(3, GAP.getWidth(), GAP.getHeight());
+		Layout layout = new TableLayout(3, GAP_X, GAP_Y);
 		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
 		// Test x coordinates
-		double meanCompWidth = (bounds.getWidth() - 2.0*GAP.getWidth())/3.0;
-		assertEquals(bounds.getMinX() + 0.0*meanCompWidth + 0.0*GAP.getWidth(), a.getX(), DELTA);
-		assertEquals(bounds.getMinX() + 1.0*meanCompWidth + 1.0*GAP.getWidth(), b.getX(), DELTA);
-		assertEquals(bounds.getMinX() + 2.0*meanCompWidth + 2.0*GAP.getWidth(), c.getX(), DELTA);
+		double meanCompWidth = (bounds.getWidth() - 2.0*GAP_X)/3.0;
+		assertEquals(bounds.getMinX() + 0.0*meanCompWidth + 0.0*GAP_X, a.getX(), DELTA);
+		assertEquals(bounds.getMinX() + 1.0*meanCompWidth + 1.0*GAP_X, b.getX(), DELTA);
+		assertEquals(bounds.getMinX() + 2.0*meanCompWidth + 2.0*GAP_X, c.getX(), DELTA);
 		// Test y coordinates
 		assertEquals(bounds.getMinY(), a.getY(), DELTA);
 		assertEquals(bounds.getMinY(), b.getY(), DELTA);
@@ -155,7 +156,7 @@ public class TableLayoutTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		TableLayout original = new TableLayout(3, GAP.getWidth(), GAP.getHeight());
+		TableLayout original = new TableLayout(3, GAP_X, GAP_Y);
 		TableLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumns(), deserialized.getColumns());
