@@ -32,16 +32,12 @@ import de.erichseifert.gral.util.Orientation;
  * Class that represents a layout manager which arranges its components
  * as horizontal or vertical stacks.
  */
-public class StackedLayout implements Layout {
+public class StackedLayout extends AbstractLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -3183337606556363756L;
 
 	/** Orientation in which elements should be laid out. */
 	private final Orientation orientation;
-	/** Horizontal spacing of components. */
-	private final double gapX;
-	/** Vertical spacing of components. */
-	private final double gapY;
 	/** Default layout behaviour for components. */
 	private final Constraints defaultConstraints;
 
@@ -107,14 +103,8 @@ public class StackedLayout implements Layout {
 	 * @param gap Gap between the components.
 	 */
 	public StackedLayout(Orientation orientation, Dimension2D gap) {
+		super(gap.getWidth(), gap.getHeight());
 		this.orientation = orientation;
-		if (gap != null) {
-			gapX = gap.getWidth();
-			gapY = gap.getHeight();
-		} else {
-			gapX = 0.0;
-			gapY = 0.0;
-		}
 		defaultConstraints = new Constraints(true, 0.5, 0.5);
 	}
 
@@ -127,7 +117,6 @@ public class StackedLayout implements Layout {
 		Dimension2D size = getPreferredSize(container);
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
-		Dimension2D gap = getGap();
 
 		double xMin = bounds.getMinX() + insets.getLeft();
 		double yMin = bounds.getMinY() + insets.getTop();
@@ -138,7 +127,7 @@ public class StackedLayout implements Layout {
 			xMin += Math.max(bounds.getWidth() - size.getWidth(), 0.0)*defaultConstraints.getAlignmentX();
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					xMin += gap.getWidth();
+					xMin += getGapX();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
 				Constraints constraints = getConstraints(component, container);
@@ -158,7 +147,7 @@ public class StackedLayout implements Layout {
 			yMin += Math.max(bounds.getHeight() - size.getHeight(), 0.0)*defaultConstraints.getAlignmentY();
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					yMin += gap.getHeight();
+					yMin += getGapY();
 				}
 				Dimension2D compBounds = component.getPreferredSize();
 				Constraints constraints = getConstraints(component, container);
@@ -184,7 +173,6 @@ public class StackedLayout implements Layout {
 	 */
 	public Dimension2D getPreferredSize(Container container) {
 		Insets2D insets = container.getInsets();
-		Dimension2D gap = getGap();
 
 		double width = insets.getLeft();
 		double height = insets.getTop();
@@ -193,7 +181,7 @@ public class StackedLayout implements Layout {
 			double h = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					width += gap.getWidth();
+					width += getGapX();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
@@ -204,7 +192,7 @@ public class StackedLayout implements Layout {
 			double w = 0.0;
 			for (Drawable component : container) {
 				if (count++ > 0) {
-					height += gap.getHeight();
+					height += getGapY();
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				w = Math.max(w, itemBounds.getWidth());
@@ -227,18 +215,6 @@ public class StackedLayout implements Layout {
 	 */
 	public Orientation getOrientation() {
 		return orientation;
-	}
-
-	/**
-	 * Returns the minimal space between components. No space will be allocated
-	 * if there are no components.
-	 * @return Horizontal and vertical gaps
-	 */
-	public Dimension2D getGap() {
-		Dimension2D gap =
-			new de.erichseifert.gral.util.Dimension2D.Double();
-		gap.setSize(gapX, gapY);
-		return gap;
 	}
 
 	private Constraints getConstraints(Drawable component, Container container) {

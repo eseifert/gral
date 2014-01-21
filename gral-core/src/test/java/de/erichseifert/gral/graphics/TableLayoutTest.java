@@ -74,14 +74,12 @@ public class TableLayoutTest {
 	@Test
 	public void testCreate() {
 		TableLayout noGap = new TableLayout(1);
-		Dimension2D gap1 = noGap.getGap();
-		assertEquals(0.0, gap1.getWidth(), DELTA);
-		assertEquals(0.0, gap1.getHeight(), DELTA);
+		assertEquals(0.0, noGap.getGapX(), DELTA);
+		assertEquals(0.0, noGap.getGapY(), DELTA);
 
 		TableLayout gapped = new TableLayout(1, GAP.getWidth(), GAP.getHeight());
-		Dimension2D gap2 = gapped.getGap();
-		assertEquals(GAP.getWidth(), gap2.getWidth(), DELTA);
-		assertEquals(GAP.getHeight(), gap2.getHeight(), DELTA);
+		assertEquals(GAP.getWidth(), gapped.getGapX(), DELTA);
+		assertEquals(GAP.getHeight(), gapped.getGapY(), DELTA);
 	}
 
 	@Test
@@ -161,6 +159,5 @@ public class TableLayoutTest {
 		TableLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumns(), deserialized.getColumns());
-		assertEquals(original.getGap(), deserialized.getGap());
 	}
 }

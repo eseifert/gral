@@ -35,16 +35,12 @@ import de.erichseifert.gral.util.Insets2D;
  * to Java's {@link java.awt.GridLayout}, but the cells in the grid may have
  * different dimensions.
  */
-public class TableLayout implements Layout {
+public class TableLayout extends AbstractLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6738742507926295041L;
 
 	/** Number of columns. */
 	private final int cols;
-	/** Horizontal spacing. */
-	private final double gapH;
-	/** Vertical spacing. */
-	private final double gapV;
 
 	/** Index of the column values in the array that is returned by
 	{@link #getInfo(Container)}. */
@@ -89,12 +85,11 @@ public class TableLayout implements Layout {
 	 * @param gapV Vertical gap.
 	 */
 	public TableLayout(int cols, double gapH, double gapV) {
+		super(gapH, gapV);
 		if (cols <= 0) {
 			throw new IllegalArgumentException("Invalid number of columns.");
 		}
 		this.cols = cols;
-		this.gapH = gapH;
-		this.gapV = gapV;
 	}
 
 	/**
@@ -146,8 +141,8 @@ public class TableLayout implements Layout {
 		}
 		infos[COLS].insetsSum = insets.getLeft() + insets.getRight();
 		infos[ROWS].insetsSum = insets.getTop() + insets.getBottom();
-		infos[COLS].gapSum = Math.max((infos[COLS].size - 1)*gapH, 0.0);
-		infos[ROWS].gapSum = Math.max((infos[ROWS].size - 1)*gapV, 0.0);
+		infos[COLS].gapSum = Math.max((infos[COLS].size - 1)*getGapX(), 0.0);
+		infos[ROWS].gapSum = Math.max((infos[ROWS].size - 1)*getGapY(), 0.0);
 		double containerWidth =
 			Math.max(bounds.getWidth() - infos[COLS].insetsSum - infos[COLS].gapSum, 0.0);
 		double containerHeight =
@@ -210,9 +205,9 @@ public class TableLayout implements Layout {
 
 			if (col.equals(lastCol)) {
 				x = bounds.getX() + insets.getLeft();
-				y += h + gapV;
+				y += h + getGapY();
 			} else {
-				x += w + gapH;
+				x += w + getGapX();
 			}
 
 			compIndex++;
@@ -231,17 +226,6 @@ public class TableLayout implements Layout {
 			infos[COLS].sizeSum + infos[COLS].gapSum + infos[COLS].insetsSum,
 			infos[ROWS].sizeSum + infos[ROWS].gapSum + infos[ROWS].insetsSum
 		);
-	}
-
-	/**
-	 * Returns the minimal space between components.
-	 * @return Horizontal and vertical gaps
-	 */
-	public Dimension2D getGap() {
-		Dimension2D gap =
-			new de.erichseifert.gral.util.Dimension2D.Double();
-		gap.setSize(gapH, gapV);
-		return gap;
 	}
 
 	/**

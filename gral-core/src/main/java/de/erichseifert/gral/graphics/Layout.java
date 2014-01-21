@@ -32,6 +32,18 @@ import java.io.Serializable;
 public interface Layout extends Serializable {
 
 	/**
+	 * Returns the amount of horizontal space between two layed out components.
+	 * @return Space in pixels.
+	 */
+	double getGapX();
+
+	/**
+	 * Returns the amount of vertical space between two layed out components.
+	 * @return Space in pixels.
+	 */
+	double getGapY();
+
+	/**
 	 * Arranges the components of the specified container according to this
 	 * layout.
 	 * @param container Container to be laid out.

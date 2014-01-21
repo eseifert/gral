@@ -36,13 +36,9 @@ import de.erichseifert.gral.util.Location;
  * {@link EdgeLayout}, but also allows components to be placed outside the
  * container.
  */
-public class OuterEdgeLayout implements Layout {
+public class OuterEdgeLayout extends AbstractLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2238929452967312857L;
-
-	/** Spacing between the container's edges and the components. */
-	private final double gapX;
-	private final double gapY;
 
 	/**
 	 * Initializes a layout manager object with the specified space between the
@@ -50,8 +46,7 @@ public class OuterEdgeLayout implements Layout {
 	 * @param gap Spacing between the container's edges and the components.
 	 */
 	public OuterEdgeLayout(double gap) {
-		this.gapX = gap;
-		this.gapY = gap;
+		super(gap, gap);
 	}
 
 	/**
@@ -86,10 +81,10 @@ public class OuterEdgeLayout implements Layout {
 		double heightNorth = getMaxHeight(northWest, north,  northEast);
 		double heightSouth = getMaxHeight(southWest, south,  southEast);
 
-		double gapEast  = (widthEast > 0.0) ? gapX : 0.0;
-		double gapWest  = (widthWest > 0.0) ? gapX : 0.0;
-		double gapNorth = (heightNorth > 0.0) ? gapY : 0.0;
-		double gapSouth = (heightSouth > 0.0) ? gapY : 0.0;
+		double gapEast  = (widthEast > 0.0) ? getGapX() : 0.0;
+		double gapWest  = (widthWest > 0.0) ? getGapX() : 0.0;
+		double gapNorth = (heightNorth > 0.0) ? getGapY() : 0.0;
+		double gapSouth = (heightSouth > 0.0) ? getGapY() : 0.0;
 
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
@@ -151,9 +146,9 @@ public class OuterEdgeLayout implements Layout {
 		);
 
 		layoutComponent(center,
-			xCenter + gapX, yCenter + gapY,
-				bounds.getWidth() - insets.getHorizontal() - 2*gapX,
-				bounds.getHeight() - insets.getVertical() - 2*gapY
+			xCenter + getGapX(), yCenter + getGapY(),
+				bounds.getWidth() - insets.getHorizontal() - 2*getGapX(),
+				bounds.getHeight() - insets.getVertical() - 2*getGapY()
 		);
 	}
 
@@ -174,24 +169,12 @@ public class OuterEdgeLayout implements Layout {
 			insets = new Insets2D.Double();
 		}
 
-		double width = center.getWidth() + insets.getHorizontal() + 2*gapX;
-		double height = center.getHeight() + insets.getVertical() + 2*gapY;
+		double width = center.getWidth() + insets.getHorizontal() + 2*getGapX();
+		double height = center.getHeight() + insets.getVertical() + 2*getGapY();
 
 		return new de.erichseifert.gral.util.Dimension2D.Double(
 			width, height
 		);
-	}
-
-	/**
-	 * Returns the minimal space between components. No space will be allocated
-	 * when no components are available.
-	 * @return Horizontal and vertical gaps
-	 */
-	public Dimension2D getGap() {
-		Dimension2D gap =
-			new de.erichseifert.gral.util.Dimension2D.Double();
-		gap.setSize(this.gapX, this.gapY);
-		return gap;
 	}
 
 	/**

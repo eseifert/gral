@@ -90,14 +90,12 @@ public class EdgeLayoutTest {
 	@Test
 	public void testCreate() {
 		EdgeLayout noGap = new EdgeLayout();
-		Dimension2D gap1 = noGap.getGap();
-		assertEquals(0.0, gap1.getWidth(), DELTA);
-		assertEquals(0.0, gap1.getHeight(), DELTA);
+		assertEquals(0.0, noGap.getGapX(), DELTA);
+		assertEquals(0.0, noGap.getGapY(), DELTA);
 
 		EdgeLayout gapped = new EdgeLayout(GAP_H, GAP_V);
-		Dimension2D gap2 = gapped.getGap();
-		assertEquals(GAP_H, gap2.getWidth(), DELTA);
-		assertEquals(GAP_V, gap2.getHeight(), DELTA);
+		assertEquals(GAP_H, gapped.getGapX(), DELTA);
+		assertEquals(GAP_V, gapped.getGapY(), DELTA);
 	}
 
 	@Test
@@ -141,7 +139,5 @@ public class EdgeLayoutTest {
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		EdgeLayout original = layout;
 		EdgeLayout deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getGap(), deserialized.getGap());
 	}
 }

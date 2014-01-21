@@ -36,14 +36,9 @@ import de.erichseifert.gral.util.Location;
  * {@link java.awt.BorderLayout}, but also allows components to be placed in
  * each of the corners.
  */
-public class EdgeLayout implements Layout {
+public class EdgeLayout extends AbstractLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3661169796145433549L;
-
-	/** Horizontal spacing. */
-	private final double gapH;
-	/** Vertical spacing. */
-	private final double gapV;
 
 	/**
 	 * Initializes a layout manager object with the specified space between the
@@ -52,8 +47,7 @@ public class EdgeLayout implements Layout {
 	 * @param gapV Vertical gap.
 	 */
 	public EdgeLayout(double gapH, double gapV) {
-		this.gapH = gapH;
-		this.gapV = gapV;
+		super(gapH, gapV);
 	}
 
 	/**
@@ -88,10 +82,10 @@ public class EdgeLayout implements Layout {
 		double heightNorth = getMaxHeight(northWest, north,  northEast);
 		double heightSouth = getMaxHeight(southWest, south,  southEast);
 
-		double gapWest  = (widthWest > 0.0 && center != null) ? gapH : 0.0;
-		double gapEast  = (widthEast > 0.0 && center != null) ? gapH : 0.0;
-		double gapNorth = (heightNorth > 0.0 && center != null) ? gapV : 0.0;
-		double gapSouth = (heightSouth > 0.0 && center != null) ? gapV : 0.0;
+		double gapWest  = (widthWest > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapEast  = (widthEast > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapNorth = (heightNorth > 0.0 && center != null) ? getGapY() : 0.0;
+		double gapSouth = (heightSouth > 0.0 && center != null) ? getGapY() : 0.0;
 
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
@@ -194,10 +188,10 @@ public class EdgeLayout implements Layout {
 		double heightCenter = getMaxHeight(west,      center, east);
 		double heightSouth  = getMaxHeight(southWest, south,  southEast);
 
-		double gapEast  = (widthEast > 0.0 && center != null) ? gapH : 0.0;
-		double gapWest  = (widthWest > 0.0 && center != null) ? gapH : 0.0;
-		double gapNorth = (heightNorth > 0.0 && center != null) ? gapV : 0.0;
-		double gapSouth = (heightSouth > 0.0 && center != null) ? gapV : 0.0;
+		double gapEast  = (widthEast > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapWest  = (widthWest > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapNorth = (heightNorth > 0.0 && center != null) ? getGapY() : 0.0;
+		double gapSouth = (heightSouth > 0.0 && center != null) ? getGapY() : 0.0;
 
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
@@ -212,18 +206,6 @@ public class EdgeLayout implements Layout {
 		return new de.erichseifert.gral.util.Dimension2D.Double(
 			width, height
 		);
-	}
-
-	/**
-	 * Returns the minimal space between components. No space will be allocated
-	 * when no components are available.
-	 * @return Horizontal and vertical gaps
-	 */
-	public Dimension2D getGap() {
-		Dimension2D gap =
-			new de.erichseifert.gral.util.Dimension2D.Double();
-		gap.setSize(gapH, gapV);
-		return gap;
 	}
 
 	/**
