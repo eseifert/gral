@@ -32,12 +32,10 @@ import de.erichseifert.gral.util.Orientation;
  * Class that represents a layout manager which arranges its components
  * as horizontal or vertical stacks.
  */
-public class StackedLayout extends AbstractLayout {
+public class StackedLayout extends AbstractOrientedLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -3183337606556363756L;
 
-	/** Orientation in which elements should be laid out. */
-	private final Orientation orientation;
 	/** Default layout behaviour for components. */
 	private final Constraints defaultConstraints;
 
@@ -104,8 +102,7 @@ public class StackedLayout extends AbstractLayout {
 	 * @param gapY Vertical gap between the components.
 	 */
 	public StackedLayout(Orientation orientation, double gapX, double gapY) {
-		super(gapX, gapY);
-		this.orientation = orientation;
+		super(orientation, gapX, gapY);
 		defaultConstraints = new Constraints(true, 0.5, 0.5);
 	}
 
@@ -207,15 +204,6 @@ public class StackedLayout extends AbstractLayout {
 		Dimension2D bounds =
 			new de.erichseifert.gral.util.Dimension2D.Double(width, height);
 		return bounds;
-	}
-
-	/**
-	 * Returns whether the components will be laid out horizontally or
-	 * vertically.
-	 * @return Orientation constant
-	 */
-	public Orientation getOrientation() {
-		return orientation;
 	}
 
 	private Constraints getConstraints(Drawable component, Container container) {
