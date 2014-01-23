@@ -8,8 +8,14 @@ import de.erichseifert.gral.util.Orientation;
  */
 public interface OrientedLayout extends Layout {
 	/**
-	 * Returns the orientation of this layout.
+	 * Returns the layout direction.
 	 * @return Layout orientation.
 	 */
 	Orientation getOrientation();
+
+	/**
+	 * Sets the layout direction.
+	 * @param orientation Layout orientation.
+	 */
+	void setOrientation(Orientation orientation);
 }

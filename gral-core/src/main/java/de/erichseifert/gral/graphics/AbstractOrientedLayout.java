@@ -5,7 +5,7 @@ import de.erichseifert.gral.util.Orientation;
 public abstract class AbstractOrientedLayout extends AbstractLayout implements
 		OrientedLayout {
 	/** Orientation in which elements should be laid out. */
-	private final Orientation orientation;
+	private Orientation orientation;
 
 	public AbstractOrientedLayout(Orientation orientation, double gapX, double gapY) {
 		super(gapX, gapY);
@@ -15,5 +15,10 @@ public abstract class AbstractOrientedLayout extends AbstractLayout implements
 	@Override
 	public Orientation getOrientation() {
 		return orientation;
+	}
+
+	@Override
+	public void setOrientation(Orientation orientation) {
+		this.orientation = orientation;
 	}
 }
