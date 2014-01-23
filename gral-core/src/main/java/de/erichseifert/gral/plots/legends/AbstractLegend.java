@@ -45,6 +45,7 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
+import de.erichseifert.gral.graphics.OrientedLayout;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -201,6 +202,7 @@ public abstract class AbstractLegend extends DrawableContainer
 		// TODO: Replace setter call in constructor
 		setGap(new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
 		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
+		setLayout(new StackedLayout(orientation, gap.getWidth(), gap.getHeight()));
 		refreshLayout();
 	}
 
@@ -335,10 +337,14 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * gap values.
 	 */
 	protected final void refreshLayout() {
-		Orientation orientation = getOrientation();
 		Dimension2D gap = getGap();
-		Layout layout = new StackedLayout(orientation, gap.getWidth(), gap.getHeight());
-		setLayout(layout);
+		Layout layout = getLayout();
+		layout.setGapX(gap.getWidth());
+		layout.setGapY(gap.getHeight());
+		if (layout instanceof OrientedLayout) {
+			OrientedLayout orientedLayout = (OrientedLayout) layout;
+			orientedLayout.setOrientation(getOrientation());
+		}
 	}
 
 	@Override
