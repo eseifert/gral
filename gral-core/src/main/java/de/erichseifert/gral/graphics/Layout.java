@@ -38,10 +38,22 @@ public interface Layout extends Serializable {
 	double getGapX();
 
 	/**
+	 * Sets the amount of horizontal space between two layed out components.
+	 * @param gapX Space in pixels.
+	 */
+	void setGapX(double gapX);
+
+	/**
 	 * Returns the amount of vertical space between two layed out components.
 	 * @return Space in pixels.
 	 */
 	double getGapY();
+
+	/**
+	 * Sets the amount of horizontal space between two layed out components.
+	 * @param gapY Space in pixels.
+	 */
+	void setGapY(double gapY);
 
 	/**
 	 * Arranges the components of the specified container according to this
