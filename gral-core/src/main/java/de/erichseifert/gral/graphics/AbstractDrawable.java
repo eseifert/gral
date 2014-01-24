@@ -114,4 +114,9 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 	public Dimension2D getPreferredSize() {
 		return new de.erichseifert.gral.util.Dimension2D.Double();
 	}
+
+	@Override
+	public void setPosition(double x, double y) {
+		bounds.setFrame(x, y, bounds.getWidth(), bounds.getHeight());
+	}
 }

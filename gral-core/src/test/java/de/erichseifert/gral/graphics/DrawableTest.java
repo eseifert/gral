@@ -97,6 +97,17 @@ public class DrawableTest {
 	}
 
 	@Test
+	public void testSetPosition() {
+		drawable.setPosition(4.0, 2.0);
+		assertEquals(4.0, drawable.getBounds().getX(), DELTA);
+		assertEquals(2.0, drawable.getBounds().getY(), DELTA);
+
+		drawable.setPosition(-4.0, -2.0);
+		assertEquals(-4.0, drawable.getBounds().getX(), DELTA);
+		assertEquals(-2.0, drawable.getBounds().getY(), DELTA);
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		MockDrawable original = drawable;
 		MockDrawable deserialized = TestUtils.serializeAndDeserialize(original);

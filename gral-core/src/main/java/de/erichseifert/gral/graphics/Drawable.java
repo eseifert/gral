@@ -66,6 +66,13 @@ public interface Drawable {
 	double getY();
 
 	/**
+	 * Sets the position to the specified coordinates.
+	 * @param x Coordinate on the x-axis.
+	 * @param y Coordinate on the y-axis.
+	 */
+	void setPosition(double x, double y);
+
+	/**
 	 * Returns the width of the bounds.
 	 * @return horizontal extent
 	 */
