@@ -888,7 +888,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				renderer.setShapeNormalOrientationClockwise(true);
 			}
 			if (AXIS_Y.equals(axisName)) {
-				renderer.setLabelRotation(90.0);
+				renderer.getLabel().setRotation(90.0);
 			}
 		}
 		super.setAxisRenderer(axisName, renderer);

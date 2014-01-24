@@ -33,6 +33,7 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
@@ -88,7 +89,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Format axes
 		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
-		axisRendererX.setLabel("Logarithmic axis");
+		axisRendererX.setLabel(new Label("Logarithmic axis"));
 		plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 		// Custom tick labels
 		Map<Double, String> labels = new HashMap<Double, String>();
@@ -98,7 +99,9 @@ public class SimpleXYPlot extends ExamplePanel {
 		// Custom stroke for the x-axis
 		BasicStroke stroke = new BasicStroke(2f);
 		axisRendererX.setShapeStroke(stroke);
-		axisRendererY.setLabel("Linear axis");
+		Label linearAxisLabel = new Label("Linear axis");
+		linearAxisLabel.setRotation(90);
+		axisRendererY.setLabel(linearAxisLabel);
 		// Change intersection point of Y axis
 		axisRendererY.setIntersection(1.0);
 		// Change tick spacing

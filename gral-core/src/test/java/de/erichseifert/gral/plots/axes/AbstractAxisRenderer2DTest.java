@@ -94,8 +94,5 @@ public class AbstractAxisRenderer2DTest {
 		assertEquals(original.getCustomTicks(), deserialized.getCustomTicks());
 		assertEquals(original.getLabel(), deserialized.getLabel());
 		assertEquals(original.getLabelDistance(), deserialized.getLabelDistance(), DELTA);
-		assertEquals(original.getLabelRotation(), deserialized.getLabelRotation(), DELTA);
-		assertEquals(original.getLabelFont(), deserialized.getLabelFont());
-		assertEquals(original.getLabelColor(), deserialized.getLabelColor());
     }
 }

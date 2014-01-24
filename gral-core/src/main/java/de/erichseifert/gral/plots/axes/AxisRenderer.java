@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.PointND;
 
 /**
@@ -442,16 +443,16 @@ public interface AxisRenderer {
 	void setCustomTicks(Map<Double, String> positionsAndLabels);
 
 	/**
-	 * Returns the label text of the axis.
+	 * Returns the label of the axis.
 	 * @return Axis label.
 	 */
-	String getLabel();
+	Label getLabel();
 
 	/**
-	 * Sets the label text of the axis.
+	 * Sets the label of the axis.
 	 * @param label Axis label.
 	 */
-	void setLabel(String label);
+	void setLabel(Label label);
 
 	/**
 	 * Returns the distance from the axis to the label.
@@ -464,40 +465,4 @@ public interface AxisRenderer {
 	 * @param distance Distance relative to font height.
 	 */
 	void setLabelDistance(double distance);
-
-	/**
-	 * Returns the rotation of the axis label.
-	 * @return Axis label rotation in degrees.
-	 */
-	double getLabelRotation();
-
-	/**
-	 * Sets the rotation of the axis label.
-	 * @param angle Axis label rotation in degrees.
-	 */
-	void setLabelRotation(double angle);
-
-	/**
-	 * Returns the font used to display the axis label text.
-	 * @return Font for axis label text.
-	 */
-	Font getLabelFont();
-
-	/**
-	 * Sets the font used to display the axis label text.
-	 * @param font Font for axis label text.
-	 */
-	void setLabelFont(Font font);
-
-	/**
-	 * Returns the paint used to draw the axis label.
-	 * @return Paint for axis label drawing.
-	 */
-	Paint getLabelColor();
-
-	/**
-	 * Sets the paint used to draw the axis label.
-	 * @param color Paint for axis label drawing.
-	 */
-	void setLabelColor(Paint color);
 }

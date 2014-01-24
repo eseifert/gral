@@ -142,15 +142,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	/** Custom labels containing their respective position and text. */
 	private final Map<Double, String> customTicks;
 	/** Label text of the axis. */
-	private String label;
+	private Label label;
 	/** Distance relative to font height. */
 	private double labelDistance;
-	/** Axis label rotation in degrees. */
-	private double labelRotation;
-	/** Font for axis label text. */
-	private Font labelFont;
-	/** Paint used to draw the axis label. */
-	private Paint labelColor;
 
 	/**
 	 * Initializes a new instance with default settings.
@@ -191,11 +185,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		minorTickAlignment = 0.5;
 		minorTickColor = Color.BLACK;
 
-		label = null;
+		label = new Label();
 		labelDistance = 1.0;
-		labelRotation = 0.0;
-		labelFont = Font.decode(null);
-		labelColor = Color.BLACK;
 	}
 
 	/**
@@ -315,12 +306,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 				}
 
 				// Draw axis label
-				String labelText = renderer.getLabel();
-				if (labelText != null && !labelText.trim().isEmpty()) {
-					Label axisLabel = new Label(labelText);
-					axisLabel.setFont(renderer.getLabelFont());
-					axisLabel.setColor(renderer.getLabelColor());
-
+				Label axisLabel = renderer.getLabel();
+				if (axisLabel != null && !axisLabel.getText().trim().isEmpty()) {
 					double tickLength = getTickLengthAbsolute();
 					double tickAlignment = renderer.getTickAlignment();
 					double tickLengthOuter = tickLength*(1.0 - tickAlignment);
@@ -329,7 +316,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					double labelDistance = renderer.getLabelDistance()*fontSize;
 					double labelDist =
 						tickLengthOuter + tickLabelDistance + fontSize + labelDistance;
-					double labelRotation = renderer.getLabelRotation();
 					double axisLabelPos =
 						(axis.getMin().doubleValue() + axis.getMax().doubleValue()) * 0.5;
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
@@ -340,7 +326,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					if (labelPos != null && labelNormal != null) {
 						layoutLabel(axisLabel, labelPos.getPoint2D(),
 								labelNormal.getPoint2D(), labelDist,
-								isTickLabelOutside, labelRotation);
+								isTickLabelOutside, axisLabel.getRotation());
 						axisLabel.draw(context);
 					}
 				}
@@ -999,12 +985,12 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	}
 
 	@Override
-	public String getLabel() {
+	public Label getLabel() {
 		return label;
 	}
 
 	@Override
-	public void setLabel(String label) {
+	public void setLabel(Label label) {
 		this.label = label;
 	}
 
@@ -1016,35 +1002,5 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	@Override
 	public void setLabelDistance(double distance) {
 		this.labelDistance = distance;
-	}
-
-	@Override
-	public double getLabelRotation() {
-		return labelRotation;
-	}
-
-	@Override
-	public void setLabelRotation(double angle) {
-		this.labelRotation = angle;
-	}
-
-	@Override
-	public Font getLabelFont() {
-		return labelFont;
-	}
-
-	@Override
-	public void setLabelFont(Font font) {
-		this.labelFont = font;
-	}
-
-	@Override
-	public Paint getLabelColor() {
-		return labelColor;
-	}
-
-	@Override
-	public void setLabelColor(Paint color) {
-		this.labelColor = color;
 	}
 }
