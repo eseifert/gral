@@ -61,6 +61,8 @@ public class Label extends AbstractDrawable {
 	private double textAlignment;
 	/** Decides whether the text should be wrapped. */
 	private boolean wordWrapEnabled;
+	/** Paint used to display the background. */
+	private Paint background;
 
 	/** Cached outline of the label text with word wrapping. */
 	private transient Shape outlineWrapped;
@@ -120,6 +122,12 @@ public class Label extends AbstractDrawable {
 		// Get graphics instance and store state information
 		Graphics2D graphics = context.getGraphics();
 		AffineTransform txOld = graphics.getTransform();
+
+		// Draw background
+		Paint background = getBackground();
+		if (background != null) {
+			GraphicsUtils.fillPaintedShape(graphics, getBounds(), background, null);
+		}
 
 		// Calculate absolute text position:
 		// First, move the text to the upper left of the bounding rectangle
@@ -384,5 +392,21 @@ public class Label extends AbstractDrawable {
 	public void setWordWrapEnabled(boolean wordWrapEnabled) {
 		this.wordWrapEnabled = wordWrapEnabled;
 		invalidate();
+	}
+
+	/**
+	 * Returns the background color.
+	 * @return Background color or {@code null}, if no background is defined.
+	 */
+	public Paint getBackground() {
+		return background;
+	}
+
+	/**
+	 * Sets the background color to the specified value.
+	 * @param background Background color.
+	 */
+	public void setBackground(Paint background) {
+		this.background = background;
 	}
 }
