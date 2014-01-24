@@ -89,6 +89,26 @@ public class ContainerTest {
 	}
 
 	@Test
+	public void testContains() {
+		// TODO: Allow null values?
+		assertFalse(container.contains(container));
+
+		Drawable d1 = new MockDrawable();
+		assertFalse(container.contains(d1));
+		container.add(d1);
+		assertTrue(container.contains(d1));
+
+		Drawable d2 = new MockDrawable();
+		container.add(d2);
+		assertTrue(container.contains(d1));
+		assertTrue(container.contains(d2));
+
+		container.remove(d1);
+		assertFalse(container.contains(d1));
+		assertTrue(container.contains(d2));
+	}
+
+	@Test
 	public void testConstraints() {
 		Drawable d = new MockDrawable();
 		container.add(d, "foo");

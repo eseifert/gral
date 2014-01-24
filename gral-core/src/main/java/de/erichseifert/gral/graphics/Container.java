@@ -91,6 +91,14 @@ public interface Container extends Iterable<Drawable> {
 	void add(Drawable drawable, Object constraints);
 
 	/**
+	 * Returns whether the specified {@code Drawable} is stored.
+	 * @param drawable Element to be checked.
+	 * @return {@code true} if the element is stored in the {@code Container},
+	 * {@code false} otherwise.
+	 */
+	boolean contains(Drawable drawable);
+
+	/**
 	 * Returns the components at the specified point.
 	 * The first component in the result {@code List} is the most
 	 * specific component, i.e. the component with the deepest nesting level.

@@ -120,6 +120,11 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	@Override
+	public boolean contains(Drawable drawable) {
+		return components.contains(drawable);
+	}
+
+	@Override
 	public List<Drawable> getDrawablesAt(Point2D point) {
 		return getDrawablesAt(this, point, new LinkedList<Drawable>());
 	}
