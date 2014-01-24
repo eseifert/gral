@@ -23,6 +23,7 @@ package de.erichseifert.gral.graphics;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -121,6 +122,17 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	@Override
 	public List<Drawable> getDrawablesAt(Point2D point) {
 		return getDrawablesAt(this, point, new LinkedList<Drawable>());
+	}
+
+	@Override
+	public List<Drawable> getDrawables() {
+		/*
+		 * TODO: Size of ArrayList can be different from the number of added components
+		 * in concurrent environments.
+		 */
+		List<Drawable> drawableList = new ArrayList<Drawable>(components.size());
+		drawableList.addAll(components);
+		return drawableList;
 	}
 
 	private static List<Drawable> getDrawablesAt(Container container, Point2D point, LinkedList<Drawable> previousResults) {

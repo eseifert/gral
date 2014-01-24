@@ -101,6 +101,12 @@ public interface Container extends Iterable<Drawable> {
 	List<Drawable> getDrawablesAt(Point2D point);
 
 	/**
+	 * Returns a list of stored components.
+	 * @return Contained drawables.
+	 */
+	List<Drawable> getDrawables();
+
+	/**
 	 * Return additional information on component
 	 * @param drawable Component
 	 * @return Information object or {@code null}

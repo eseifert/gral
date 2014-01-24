@@ -23,6 +23,7 @@ package de.erichseifert.gral.graphics;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.geom.Dimension2D;
@@ -189,6 +190,30 @@ public class ContainerTest {
 			assertEquals(String.format("Unexpected result at %s:", points[i]),
 				expected[i], container.getDrawablesAt(points[i]));
 		}
+	}
+
+	@Test
+	public void testGetDrawables() {
+		assertNotNull(container.getDrawables());
+		assertTrue(container.getDrawables().isEmpty());
+
+		Drawable d1 = new MockDrawable();
+		container.add(d1);
+		List<Drawable> drawables = container.getDrawables();
+		assertEquals(1, drawables.size());
+		assertEquals(d1, drawables.get(0));
+
+		Drawable d2 = new MockDrawable();
+		container.add(d2);
+		drawables = container.getDrawables();
+		assertEquals(2, drawables.size());
+		assertEquals(d1, drawables.get(0));
+		assertEquals(d2, drawables.get(1));
+
+		container.remove(d1);
+		drawables = container.getDrawables();
+		assertEquals(1, drawables.size());
+		assertEquals(d2, drawables.get(0));
 	}
 
 	@Test
