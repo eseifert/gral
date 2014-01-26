@@ -141,7 +141,8 @@ public abstract class PlotArea extends AbstractDrawable {
 
 	/**
 	 * Sets the new font that will be used as a default for sub-components and
-	 * for calculation of relative sizes.
+	 * for calculation of relative sizes. This method is only used internally
+	 * to propagate the base font and shouldn't be used manually.
 	 * @param baseFont New base font.
 	 */
 	public void setBaseFont(Font baseFont) {

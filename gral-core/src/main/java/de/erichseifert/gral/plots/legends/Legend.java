@@ -74,7 +74,8 @@ public interface Legend extends Container, Drawable {
 
 	/**
 	 * Sets the new font that will be used as a default for sub-components and
-	 * for calculation of relative sizes.
+	 * for calculation of relative sizes. This method is only used internally
+	 * to propagate the base font and shouldn't be used manually.
 	 * @param baseFont New base font.
 	 */
 	void setBaseFont(Font baseFont);
