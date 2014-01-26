@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.io.IOException;
@@ -46,21 +47,25 @@ public abstract class PlotArea extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2745982325709470005L;
 
+	/** Default font used for sub-components and the calculation of relative
+	sizes. */
+	private Font baseFont;
 	/** Paint to fill the background. */
 	private Paint background;
-	/** Stroke to draw the border. */
-	// Property will be serialized using a wrapper.
+	/** Stroke to draw the border.
+	Property will be serialized using a wrapper. */
 	private transient Stroke borderStroke;
 	/** Paint to fill the border. */
 	private Paint borderColor;
 	/** Offset to clip plot graphics in pixels, specified relative to the
-	 * outline of the plot area. */
+	outline of the plot area. */
 	private Insets2D clippingOffset;
 
 	/**
 	 * Initializes a new instance with default background color and border.
 	 */
 	public PlotArea() {
+		baseFont = null;
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
 		borderColor = Color.BLACK;
@@ -123,6 +128,24 @@ public abstract class PlotArea extends AbstractDrawable {
 			throws ClassNotFoundException, IOException {
 		out.defaultWriteObject();
 		out.writeObject(SerializationUtils.wrap(borderStroke));
+	}
+
+	/**
+	 * Returns the current font used as a default for sub-components ans for
+	 * calculation of relative sizes.
+	 * @return Current base font.
+	 */
+	public Font getBaseFont() {
+		return baseFont;
+	}
+
+	/**
+	 * Sets the new font that will be used as a default for sub-components and
+	 * for calculation of relative sizes.
+	 * @param baseFont New base font.
+	 */
+	protected void setBaseFont(Font baseFont) {
+		this.baseFont = baseFont;
 	}
 
 	/**

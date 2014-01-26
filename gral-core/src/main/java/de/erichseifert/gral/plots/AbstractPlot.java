@@ -21,28 +21,46 @@
  */
 package de.erichseifert.gral.plots;
 
-import de.erichseifert.gral.data.Column;
-import de.erichseifert.gral.data.DataChangeEvent;
-import de.erichseifert.gral.data.DataListener;
-import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.graphics.Container;
-import de.erichseifert.gral.graphics.*;
-import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.util.*;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import de.erichseifert.gral.data.Column;
+import de.erichseifert.gral.data.DataChangeEvent;
+import de.erichseifert.gral.data.DataListener;
+import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.graphics.Container;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.EdgeLayout;
+import de.erichseifert.gral.graphics.OuterEdgeLayout;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.legends.Legend;
+import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.util.SerializationUtils;
+import de.erichseifert.gral.util.Tuple;
 
 
 /**
@@ -135,7 +153,7 @@ public abstract class AbstractPlot extends DrawableContainer
 
 		// Use system standard font as base font
 		font = Font.decode(null);
-		updateLayout();
+		updateBaseFont();
 
 		// Create title
 		title = new Label();
@@ -469,14 +487,17 @@ public abstract class AbstractPlot extends DrawableContainer
 	@Override
 	public void setFont(Font font) {
 		this.font = font;
-		updateLayout();
+		updateBaseFont();
 	}
 
-	private void updateLayout() {
+	private void updateBaseFont() {
 		// Update layout
 		float gap = DEFAULT_LAYOUT_GAP*font.getSize2D();
 		getLayout().setGapX(gap);
 		getLayout().setGapY(gap);
+
+		// Update plot area
+		plotArea.setBaseFont(font);
 	}
 
 	@Override
