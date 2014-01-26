@@ -21,46 +21,28 @@
  */
 package de.erichseifert.gral.plots;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Stroke;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.graphics.Container;
-import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.graphics.DrawableContainer;
-import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.graphics.EdgeLayout;
-import de.erichseifert.gral.graphics.OuterEdgeLayout;
+import de.erichseifert.gral.graphics.*;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Location;
-import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.SerializationUtils;
-import de.erichseifert.gral.util.Tuple;
+import de.erichseifert.gral.util.*;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
 
 
 /**
@@ -71,6 +53,11 @@ public abstract class AbstractPlot extends DrawableContainer
 		implements Plot, DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6609155385940228771L;
+
+	/** Default size of the plot title relative to the size of the base font. */
+	private static final float DEFAULT_TITLE_FONT_SIZE = 1.5f;
+	/** Default space between layout components relative to the size of the base font. */
+	private static final float DEFAULT_LAYOUT_GAP = 2f;
 
 	/** Data sources. */
 	private final List<DataSource> data;
@@ -107,6 +94,10 @@ public abstract class AbstractPlot extends DrawableContainer
 	/** Paint to fill the plot border. */
 	private Paint borderColor;
 
+	/** Base font which is used as default for other elements of the plot and
+	for calculation of relative sizes. */
+	private Font font;
+
 	/** Decides whether a legend will be shown. */
 	private boolean legendVisible;
 	/** Positioning of the legend. */
@@ -120,12 +111,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @param series Initial data series to be displayed.
 	 */
 	public AbstractPlot(DataSource... series) {
-		super(new EdgeLayout(20.0, 20.0));
-
-		title = new Label();
-		title.setFont(Font.decode(null).deriveFont(18f));
-
-		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
+		super(new EdgeLayout());
 
 		dataVisible = new HashSet<DataSource>();
 
@@ -142,16 +128,26 @@ public abstract class AbstractPlot extends DrawableContainer
 			add(source);
 		}
 
+		// No background or border by default
 		background = null;
 		borderStroke = null;
 		borderColor = Color.BLACK;
-		legendVisible = false;
+
+		// Use system standard font as base font
+		font = Font.decode(null);
+		updateLayout();
+
+		// Create title
+		title = new Label();
+		title.setFont(font.deriveFont(DEFAULT_TITLE_FONT_SIZE*font.getSize2D()));
+		add(title, Location.NORTH);
+
+		// Create legend, but don't show it by default
+		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
 		legendLocation = Location.CENTER;
 		legendDistance = 2.0;
-
+		legendVisible = false;
 		refreshLegendLayout();
-
-		add(title, Location.NORTH);
 	}
 
 	/**
@@ -426,12 +422,9 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * Refreshes the positioning and spacing of the legend.
 	 */
 	protected void refreshLegendLayout() {
-		// TODO Use real font size instead of fixed value
-		final double fontSize = 10.0;
-
 		double absoluteLegendDistance = 0.0;
 		if (MathUtils.isCalculatable(legendDistance)) {
-			absoluteLegendDistance = legendDistance*fontSize;
+			absoluteLegendDistance = legendDistance*font.getSize2D();
 		}
 
 		OuterEdgeLayout layout = new OuterEdgeLayout(absoluteLegendDistance);
@@ -466,6 +459,24 @@ public abstract class AbstractPlot extends DrawableContainer
 	@Override
 	public void setBorderColor(Paint color) {
 		this.borderColor = color;
+	}
+
+	@Override
+	public Font getFont() {
+		return font;
+	}
+
+	@Override
+	public void setFont(Font font) {
+		this.font = font;
+		updateLayout();
+	}
+
+	private void updateLayout() {
+		// Update layout
+		float gap = DEFAULT_LAYOUT_GAP*font.getSize2D();
+		getLayout().setGapX(gap);
+		getLayout().setGapY(gap);
 	}
 
 	@Override
