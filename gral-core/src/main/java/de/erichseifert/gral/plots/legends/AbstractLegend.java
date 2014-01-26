@@ -76,6 +76,9 @@ public abstract class AbstractLegend extends DrawableContainer
 	/** Flag that tells whether the data in the legend is up-to-date. */
 	private transient boolean valid;
 
+	/** Default font used for sub-components and the calculation of relative
+	 sizes. */
+	private Font baseFont;
 	/** Paint used to draw the background. */
 	private Paint background;
 	/** Stroke used to draw the border of the legend. */
@@ -132,6 +135,9 @@ public abstract class AbstractLegend extends DrawableContainer
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 3401141040936913098L;
 
+		/** Default font used for sub-components and the calculation of relative
+		 sizes. */
+		private Font baseFont;
 		/** Data source that is related to this item. */
 		private final Row row;
 		/** Symbol that should be drawn. */
@@ -415,6 +421,16 @@ public abstract class AbstractLegend extends DrawableContainer
 			throws ClassNotFoundException, IOException {
 		out.defaultWriteObject();
 		out.writeObject(SerializationUtils.wrap(borderStroke));
+	}
+
+	@Override
+	public Font getBaseFont() {
+		return baseFont;
+	}
+
+	@Override
+	public void setBaseFont(Font baseFont) {
+		this.baseFont = baseFont;
 	}
 
 	@Override

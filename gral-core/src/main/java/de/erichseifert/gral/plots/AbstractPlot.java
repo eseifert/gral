@@ -386,9 +386,11 @@ public abstract class AbstractPlot extends DrawableContainer
 	protected void setPlotArea(PlotArea plotArea) {
 		if (this.plotArea != null) {
 			remove(this.plotArea);
+			this.plotArea.setBaseFont(null);
 		}
 		this.plotArea = plotArea;
 		if (this.plotArea != null) {
+			this.plotArea.setBaseFont(font);
 			add(this.plotArea, Location.CENTER);
 		}
 	}
@@ -425,9 +427,11 @@ public abstract class AbstractPlot extends DrawableContainer
 		if (this.legend != null) {
 			legendContainer.remove(this.legend);
 			this.legend.clear();
+			this.legend.setBaseFont(null);
 		}
 		this.legend = legend;
 		if (this.legend != null) {
+			this.legend.setBaseFont(font);
 			Location constraints = getLegendLocation();
 			legendContainer.add(legend, constraints);
 			for (DataSource source : getVisibleData()) {
@@ -497,7 +501,14 @@ public abstract class AbstractPlot extends DrawableContainer
 		getLayout().setGapY(gap);
 
 		// Update plot area
-		plotArea.setBaseFont(font);
+		if (plotArea != null) {
+			plotArea.setBaseFont(font);
+		}
+
+		// Update legend
+		if (legend != null) {
+			legend.setBaseFont(font);
+		}
 	}
 
 	@Override

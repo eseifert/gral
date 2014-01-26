@@ -66,6 +66,20 @@ public interface Legend extends Container, Drawable {
 	void refresh();
 
 	/**
+	 * Returns the current font used as a default for sub-components ans for
+	 * calculation of relative sizes.
+	 * @return Current base font.
+	 */
+	Font getBaseFont();
+
+	/**
+	 * Sets the new font that will be used as a default for sub-components and
+	 * for calculation of relative sizes.
+	 * @param baseFont New base font.
+	 */
+	void setBaseFont(Font baseFont);
+
+	/**
 	 * Returns the paint used to draw the background.
 	 * @return Paint used for background drawing.
 	 */

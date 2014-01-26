@@ -144,7 +144,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	 * for calculation of relative sizes.
 	 * @param baseFont New base font.
 	 */
-	protected void setBaseFont(Font baseFont) {
+	public void setBaseFont(Font baseFont) {
 		this.baseFont = baseFont;
 	}
 
