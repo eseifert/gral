@@ -72,6 +72,11 @@ public abstract class AbstractPlot extends DrawableContainer
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -6609155385940228771L;
 
+	/** Default size of the plot title relative to the size of the base font. */
+	private static final float DEFAULT_TITLE_FONT_SIZE = 1.5f;
+	/** Default space between layout components relative to the size of the base font. */
+	private static final float DEFAULT_LAYOUT_GAP = 2f;
+
 	/** Data sources. */
 	private final List<DataSource> data;
 	/** Set of all data sources that are visible (not hidden). */
@@ -107,6 +112,10 @@ public abstract class AbstractPlot extends DrawableContainer
 	/** Paint to fill the plot border. */
 	private Paint borderColor;
 
+	/** Base font which is used as default for other elements of the plot and
+	for calculation of relative sizes. */
+	private Font font;
+
 	/** Decides whether a legend will be shown. */
 	private boolean legendVisible;
 	/** Positioning of the legend. */
@@ -120,12 +129,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @param series Initial data series to be displayed.
 	 */
 	public AbstractPlot(DataSource... series) {
-		super(new EdgeLayout(20.0, 20.0));
-
-		title = new Label();
-		title.setFont(Font.decode(null).deriveFont(18f));
-
-		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
+		super(new EdgeLayout());
 
 		dataVisible = new HashSet<DataSource>();
 
@@ -142,16 +146,26 @@ public abstract class AbstractPlot extends DrawableContainer
 			add(source);
 		}
 
+		// No background or border by default
 		background = null;
 		borderStroke = null;
 		borderColor = Color.BLACK;
-		legendVisible = false;
+
+		// Use system standard font as base font
+		font = Font.decode(null);
+		updateBaseFont();
+
+		// Create title
+		title = new Label();
+		title.setFont(font.deriveFont(DEFAULT_TITLE_FONT_SIZE*font.getSize2D()));
+		add(title, Location.NORTH);
+
+		// Create legend, but don't show it by default
+		legendContainer = new DrawableContainer(new OuterEdgeLayout(0.0));
 		legendLocation = Location.CENTER;
 		legendDistance = 2.0;
-
+		legendVisible = false;
 		refreshLegendLayout();
-
-		add(title, Location.NORTH);
 	}
 
 	/**
@@ -372,9 +386,11 @@ public abstract class AbstractPlot extends DrawableContainer
 	protected void setPlotArea(PlotArea plotArea) {
 		if (this.plotArea != null) {
 			remove(this.plotArea);
+			this.plotArea.setBaseFont(null);
 		}
 		this.plotArea = plotArea;
 		if (this.plotArea != null) {
+			this.plotArea.setBaseFont(font);
 			add(this.plotArea, Location.CENTER);
 		}
 	}
@@ -411,9 +427,11 @@ public abstract class AbstractPlot extends DrawableContainer
 		if (this.legend != null) {
 			legendContainer.remove(this.legend);
 			this.legend.clear();
+			this.legend.setBaseFont(null);
 		}
 		this.legend = legend;
 		if (this.legend != null) {
+			this.legend.setBaseFont(font);
 			Location constraints = getLegendLocation();
 			legendContainer.add(legend, constraints);
 			for (DataSource source : getVisibleData()) {
@@ -426,12 +444,9 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * Refreshes the positioning and spacing of the legend.
 	 */
 	protected void refreshLegendLayout() {
-		// TODO Use real font size instead of fixed value
-		final double fontSize = 10.0;
-
 		double absoluteLegendDistance = 0.0;
 		if (MathUtils.isCalculatable(legendDistance)) {
-			absoluteLegendDistance = legendDistance*fontSize;
+			absoluteLegendDistance = legendDistance*font.getSize2D();
 		}
 
 		OuterEdgeLayout layout = new OuterEdgeLayout(absoluteLegendDistance);
@@ -466,6 +481,34 @@ public abstract class AbstractPlot extends DrawableContainer
 	@Override
 	public void setBorderColor(Paint color) {
 		this.borderColor = color;
+	}
+
+	@Override
+	public Font getFont() {
+		return font;
+	}
+
+	@Override
+	public void setFont(Font font) {
+		this.font = font;
+		updateBaseFont();
+	}
+
+	private void updateBaseFont() {
+		// Update layout
+		float gap = DEFAULT_LAYOUT_GAP*font.getSize2D();
+		getLayout().setGapX(gap);
+		getLayout().setGapY(gap);
+
+		// Update plot area
+		if (plotArea != null) {
+			plotArea.setBaseFont(font);
+		}
+
+		// Update legend
+		if (legend != null) {
+			legend.setBaseFont(font);
+		}
 	}
 
 	@Override

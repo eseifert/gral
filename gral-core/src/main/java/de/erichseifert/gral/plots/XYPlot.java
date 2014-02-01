@@ -327,8 +327,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			Shape clipBoundsOld = graphics.getClip();
 			Insets2D clipOffset = getClippingOffset();
 			if (clipOffset != null) {
-				// TODO Use real font size instead of fixed value
-				final double fontSize = 10.0;
+				final double fontSize = getBaseFont().getSize2D();
 
 				// Perform clipping
 				Shape clipBounds = new Rectangle2D.Double(
