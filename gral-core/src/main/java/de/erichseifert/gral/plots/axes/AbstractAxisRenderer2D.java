@@ -78,8 +78,8 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private Point2D[] shapeLineNormals;
 	/** Lengths of the line segments approximating the axis. */
 	private double[] shapeSegmentLengths;
-	/** Length of the the axis up to a certain approximating line segment. */
-	private double[] shapeLengths;
+	/** Length of the axis up to a certain approximating line segment. */
+	private double[] shapeSegmentLengthsAccumulated;
 
 	/** Intersection point of the axis. */
 	private Number intersection;
@@ -549,7 +549,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 			valueView = worldToView(axis, value, extrapolate);
 		}
 
-		int segmentIndex = MathUtils.binarySearchFloor(shapeLengths, valueView);
+		int segmentIndex = MathUtils.binarySearchFloor(shapeSegmentLengthsAccumulated, valueView);
 		if (segmentIndex < 0 || segmentIndex >= shapeLines.length) {
 			return null;
 		}
@@ -573,10 +573,10 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 * @return Shape length.
 	 */
 	protected double getShapeLength() {
-		if (shapeLengths == null || shapeLengths.length == 0) {
+		if (shapeSegmentLengthsAccumulated == null || shapeSegmentLengthsAccumulated.length == 0) {
 			return 0.0;
 		}
-		return shapeLengths[shapeLengths.length - 1];
+		return shapeSegmentLengthsAccumulated[shapeSegmentLengthsAccumulated.length - 1];
 	}
 
 	/**
@@ -595,39 +595,39 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 			return null;
 		}
 
-		double valueView;
+		double relativePositionOnShapePath = axis.getPosition(value).doubleValue();
+		double positionOnShapePath = relativePositionOnShapePath*getShapeLength();
 		if (forceLinear) {
-			valueView = (value.doubleValue() - axis.getMin().doubleValue()) /
-				axis.getRange()*getShapeLength();
+			positionOnShapePath = axis.getPosition(value).doubleValue()*getShapeLength();
 		} else {
-			valueView = worldToView(axis, value, extrapolate);
+			positionOnShapePath = worldToView(axis, value, extrapolate);
 		}
 
-		if (Double.isNaN(valueView)) {
+		if (Double.isNaN(relativePositionOnShapePath)) {
 			return null;
 		}
 
 		// TODO Check if this is a valid way to allow infinite values
-		if (valueView == Double.NEGATIVE_INFINITY) {
-			valueView = 0.0;
-		} else if (valueView == Double.POSITIVE_INFINITY) {
-			valueView = getShapeLength();
+		if (relativePositionOnShapePath == Double.NEGATIVE_INFINITY) {
+			relativePositionOnShapePath = 0.0;
+		} else if (relativePositionOnShapePath == Double.POSITIVE_INFINITY) {
+			relativePositionOnShapePath = 1.0;
 		}
 
-		if (valueView <= 0.0 || valueView >= getShapeLength()) {
+		if (relativePositionOnShapePath <= 0.0 || relativePositionOnShapePath >= 1.0) {
 			if (extrapolate) {
 				// do linear extrapolation if point lies outside of shape
-				int segmentIndex = (valueView <= 0.0) ? 0 : shapeLines.length - 1;
+				int segmentIndex = (relativePositionOnShapePath <= 0.0) ? 0 : shapeLines.length - 1;
 				Line2D segment = shapeLines[segmentIndex];
 				double segmentLen = shapeSegmentLengths[segmentIndex];
-				double shapeLen = shapeLengths[segmentIndex];
-				double relLen = (valueView - shapeLen)/segmentLen;
+				double shapeLen = shapeSegmentLengthsAccumulated[segmentIndex];
+				double relLen = (positionOnShapePath - shapeLen)/segmentLen;
 				return new PointND<Double>(
 					segment.getX1() + (segment.getX2() - segment.getX1())*relLen,
 					segment.getY1() + (segment.getY2() - segment.getY1())*relLen
 				);
 			} else {
-				if (valueView <= 0.0) {
+				if (relativePositionOnShapePath <= 0.0) {
 					Point2D p2d = shapeLines[0].getP1();
 					return new PointND<Double>(p2d.getX(), p2d.getY());
 				} else {
@@ -638,14 +638,14 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		}
 
 		// Determine to which segment the value belongs using a binary search
-		int i = MathUtils.binarySearchFloor(shapeLengths, valueView);
+		int segmentIndex = MathUtils.binarySearchFloor(shapeSegmentLengthsAccumulated, positionOnShapePath);
 
-		if (i < 0 || i >= shapeLines.length) {
+		if (segmentIndex < 0 || segmentIndex >= shapeLines.length) {
 			return null;
 		}
-		Line2D line = shapeLines[i];
+		Line2D line = shapeLines[segmentIndex];
 
-		double posRel = (valueView - shapeLengths[i]) / shapeSegmentLengths[i];
+		double posRel = (positionOnShapePath - shapeSegmentLengthsAccumulated[segmentIndex]) / shapeSegmentLengths[segmentIndex];
 		PointND<Double> pos = new PointND<Double>(
 			line.getX1() + (line.getX2() - line.getX1())*posRel,
 			line.getY1() + (line.getY2() - line.getY1())*posRel
@@ -662,7 +662,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		shapeLines = GeometryUtils.shapeToLines(shape, directionSwapped);
 		shapeSegmentLengths = new double[shapeLines.length];
 		// First length is always 0.0, last length is the total length
-		shapeLengths = new double[shapeLines.length + 1];
+		shapeSegmentLengthsAccumulated = new double[shapeLines.length + 1];
 		shapeLineNormals = new Point2D[shapeLines.length];
 
 		if (shapeLines.length == 0) {
@@ -675,7 +675,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 			// Calculate length of axis shape at each shape segment
 			double segmentLength = line.getP1().distance(line.getP2());
 			shapeSegmentLengths[i] = segmentLength;
-			shapeLengths[i + 1] = shapeLengths[i] + segmentLength;
+			shapeSegmentLengthsAccumulated[i + 1] = shapeSegmentLengthsAccumulated[i] + segmentLength;
 
 			// Calculate a normalized vector perpendicular to the current
 			// axis shape segment
