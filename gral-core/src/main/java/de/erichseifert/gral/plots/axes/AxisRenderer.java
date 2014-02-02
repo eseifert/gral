@@ -45,9 +45,15 @@ public interface AxisRenderer {
 	 */
 	public abstract Drawable getRendererComponent(Axis axis);
 
+	/*
+	 * TODO: Enforce minimum and maximum values when extrapolation is turned off
+	 * by using MathUtils.limit(double, double, double) on the result
+	 */
 	/**
 	 * Converts a world (axis) coordinate value to a view (screen) coordinate
-	 * value.
+	 * value. If @code{extrapolate == false}, this method should return 0.0 when
+	 * value is smaller than @code{axis.getMin()} and {@code getShapeLength()} when
+	 * value is larger than @code{axis.getMax(}).
 	 * @param axis Axis
 	 * @param value World coordinate value to convert
 	 * @param extrapolate Option to activate extrapolation value that are not

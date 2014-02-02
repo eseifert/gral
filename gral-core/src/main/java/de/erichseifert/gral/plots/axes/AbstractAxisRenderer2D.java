@@ -595,62 +595,54 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 			return null;
 		}
 
+		// Determine relative position of the value
 		double relativePositionOnShapePath = axis.getPosition(value).doubleValue();
-		double positionOnShapePath = relativePositionOnShapePath*getShapeLength();
+		if (!extrapolate) {
+			relativePositionOnShapePath = MathUtils.limit(relativePositionOnShapePath, 0.0, 1.0);
+		}
+
+		// Determine absolute position of the value
+		double positionOnShapePath;
 		if (forceLinear) {
-			positionOnShapePath = axis.getPosition(value).doubleValue()*getShapeLength();
+			positionOnShapePath = relativePositionOnShapePath*getShapeLength();
 		} else {
 			positionOnShapePath = worldToView(axis, value, extrapolate);
 		}
 
-		if (Double.isNaN(relativePositionOnShapePath)) {
+		if (Double.isNaN(positionOnShapePath)) {
 			return null;
 		}
 
 		// TODO Check if this is a valid way to allow infinite values
-		if (relativePositionOnShapePath == Double.NEGATIVE_INFINITY) {
-			relativePositionOnShapePath = 0.0;
-		} else if (relativePositionOnShapePath == Double.POSITIVE_INFINITY) {
-			relativePositionOnShapePath = 1.0;
+		if (positionOnShapePath == Double.NEGATIVE_INFINITY) {
+			positionOnShapePath = 0.0;
+		} else if (positionOnShapePath == Double.POSITIVE_INFINITY) {
+			positionOnShapePath = 1.0;
 		}
 
-		if (relativePositionOnShapePath <= 0.0 || relativePositionOnShapePath >= 1.0) {
-			if (extrapolate) {
-				// do linear extrapolation if point lies outside of shape
-				int segmentIndex = (relativePositionOnShapePath <= 0.0) ? 0 : shapeLines.length - 1;
-				Line2D segment = shapeLines[segmentIndex];
-				double segmentLen = shapeSegmentLengths[segmentIndex];
-				double shapeLen = shapeSegmentLengthsAccumulated[segmentIndex];
-				double relLen = (positionOnShapePath - shapeLen)/segmentLen;
-				return new PointND<Double>(
-					segment.getX1() + (segment.getX2() - segment.getX1())*relLen,
-					segment.getY1() + (segment.getY2() - segment.getY1())*relLen
-				);
-			} else {
-				if (relativePositionOnShapePath <= 0.0) {
-					Point2D p2d = shapeLines[0].getP1();
-					return new PointND<Double>(p2d.getX(), p2d.getY());
-				} else {
-					Point2D p2d = shapeLines[shapeLines.length - 1].getP2();
-					return new PointND<Double>(p2d.getX(), p2d.getY());
-				}
-			}
+		// Determine shape segment
+		int segmentIndex;
+		if (relativePositionOnShapePath <= 0.0) {
+				segmentIndex = 0;
+		} else if (relativePositionOnShapePath >= 1.0) {
+				segmentIndex = shapeLines.length - 1;
+		} else {
+			// Determine to which segment the value belongs using a binary search
+			segmentIndex = MathUtils.binarySearchFloor(shapeSegmentLengthsAccumulated, positionOnShapePath);
 		}
-
-		// Determine to which segment the value belongs using a binary search
-		int segmentIndex = MathUtils.binarySearchFloor(shapeSegmentLengthsAccumulated, positionOnShapePath);
 
 		if (segmentIndex < 0 || segmentIndex >= shapeLines.length) {
 			return null;
 		}
-		Line2D line = shapeLines[segmentIndex];
 
-		double posRel = (positionOnShapePath - shapeSegmentLengthsAccumulated[segmentIndex]) / shapeSegmentLengths[segmentIndex];
-		PointND<Double> pos = new PointND<Double>(
-			line.getX1() + (line.getX2() - line.getX1())*posRel,
-			line.getY1() + (line.getY2() - line.getY1())*posRel
-		);
-		return pos;
+		// Compute actual position of the value in view coordinates
+		Line2D segment = shapeLines[segmentIndex];
+		double segmentLen = shapeSegmentLengths[segmentIndex];
+		double segmentLenAcc = shapeSegmentLengthsAccumulated[segmentIndex];
+		double relLen = (positionOnShapePath - segmentLenAcc)/segmentLen;
+		double x = segment.getX1() + (segment.getX2() - segment.getX1())*relLen;
+		double y = segment.getY1() + (segment.getY2() - segment.getY1())*relLen;
+		return new PointND<Double>(x, y);
 	}
 
 	/**
