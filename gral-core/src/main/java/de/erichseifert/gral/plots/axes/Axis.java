@@ -167,6 +167,21 @@ public class Axis implements Serializable {
 	}
 
 	/**
+	 * Returns the relative position of the specified value on the axis.
+	 * The value is returned in view coordinates.
+	 * @param value Value whose positition is to be determined
+	 * @return Position relative to axis range
+	 */
+	public Number getPosition(Number value) {
+		if (value == null) {
+			return null;
+		}
+		double relativePosition = (value.doubleValue() - getMin().doubleValue()) /
+				getRange();
+		return relativePosition;
+	}
+
+	/**
 	 * Returns whether the axis range should be determined automatically rather
 	 * than using the axis's minimum and a maximum values.
 	 * @return whether the axis is scaled automatically to fit the current data
