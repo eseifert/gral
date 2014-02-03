@@ -34,7 +34,6 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
-import de.erichseifert.gral.util.Dimension2D;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 
@@ -125,7 +124,7 @@ public class ClassDrawable extends DrawableContainer {
 	}
 
 	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
-		super(new StackedLayout(Orientation.VERTICAL, new Dimension2D.Double(0.0, 7.0)));
+		super(new StackedLayout(Orientation.VERTICAL, 0.0, 7.0));
 		className = new Label(clazz.getQualifiedName());
 		Font classNameFont = className.getFont().deriveFont(Font.BOLD);
 		if (clazz.isAbstract()) {
