@@ -48,9 +48,11 @@ public class PackageDrawable extends DrawableContainer {
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				if (member instanceof metamodel.classes.kernel.Class) {
 					add(new ClassDrawable((Class) member));
+				} else if (member instanceof Package) {
+					add(new PackageDrawable((Package) member));
 				}
 			}
-			
+
 			double textHeight = name.getTextRectangle().getHeight();
 			setInsets(new Insets2D.Double(textHeight));
 		}
