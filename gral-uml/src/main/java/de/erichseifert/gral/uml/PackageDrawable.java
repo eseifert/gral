@@ -8,6 +8,7 @@ import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.Insets2D;
@@ -136,5 +137,18 @@ public class PackageDrawable extends DrawableContainer {
 
 	public Tab getTab() {
 		return tab;
+	}
+
+	@Override
+	public void setLayout(Layout layout) {
+		body.setLayout(layout);
+	}
+
+	@Override
+	public Layout getLayout() {
+		if (body != null) {
+			return body.getLayout();
+		}
+		return null;
 	}
 }
