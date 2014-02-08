@@ -52,6 +52,7 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;

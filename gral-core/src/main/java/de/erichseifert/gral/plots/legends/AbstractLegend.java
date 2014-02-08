@@ -47,7 +47,7 @@ import de.erichseifert.gral.graphics.EdgeLayout;
 import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.OrientedLayout;
 import de.erichseifert.gral.graphics.StackedLayout;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;

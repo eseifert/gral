@@ -52,6 +52,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EdgeLayout;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.OuterEdgeLayout;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
