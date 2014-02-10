@@ -117,6 +117,6 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 
 	@Override
 	public void setPosition(double x, double y) {
-		bounds.setFrame(x, y, bounds.getWidth(), bounds.getHeight());
+		setBounds(x, y, getWidth(), getHeight());
 	}
 }
