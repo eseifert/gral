@@ -2,6 +2,8 @@ package de.erichseifert.gral.uml;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -11,10 +13,12 @@ import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator extends AbstractNavigator {
 	private final DrawableContainer drawableContainer;
+	private final Map<Drawable, Dimension2D> initialSizeByDrawable;
 	private double zoom;
 
 	public DrawableContainerNavigator(DrawableContainer drawableContainer) {
 		this.drawableContainer = drawableContainer;
+		initialSizeByDrawable = new HashMap<Drawable, Dimension2D>();
 		zoom = 1.0;
 		setZoomFactor(1.05);
 	}
@@ -29,10 +33,13 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 		this.zoom = zoom;
 		for (Drawable drawable : drawableContainer.getDrawables()) {
 			Rectangle2D bounds = drawable.getBounds();
-			// TODO: Preferred size as base size suitable?
-			Dimension2D preferredSize = drawable.getPreferredSize();
-			double width = preferredSize.getWidth()*zoom;
-			double height  = preferredSize.getHeight()*zoom;
+			Dimension2D baseSize = initialSizeByDrawable.get(drawable);
+			if (baseSize == null) {
+				baseSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());
+				initialSizeByDrawable.put(drawable, baseSize);
+			}
+			double width = baseSize.getWidth()*zoom;
+			double height  = baseSize.getHeight()*zoom;
 			double widthDelta = width - bounds.getWidth();
 			double heightDelta = height - bounds.getHeight();
 			double x = bounds.getX() - widthDelta/2;
