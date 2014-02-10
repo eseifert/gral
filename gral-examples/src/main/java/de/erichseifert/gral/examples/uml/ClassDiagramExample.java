@@ -1,5 +1,7 @@
 package de.erichseifert.gral.examples.uml;
 
+import java.awt.geom.Rectangle2D;
+
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -21,8 +23,9 @@ public class ClassDiagramExample extends JFrame {
 		classDiagram = new ClassDiagram();
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
-		classDiagram.add(new ClassDrawable(windowClass));
-		classDiagram.setLayout(null);
+		ClassDrawable windowClassDrawable = new ClassDrawable(windowClass);
+		windowClassDrawable.setBounds(new Rectangle2D.Double(0.0, 0.0, 100.0, 100.0));
+		classDiagram.add(windowClassDrawable);
 
 		DrawablePanel panel = new InteractivePanel(classDiagram);
 		getContentPane().add(panel);
