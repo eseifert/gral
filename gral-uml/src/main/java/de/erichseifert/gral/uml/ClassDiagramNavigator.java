@@ -1,5 +1,6 @@
 package de.erichseifert.gral.uml;
 
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -14,7 +15,7 @@ public class ClassDiagramNavigator extends AbstractNavigator implements Navigato
 	public ClassDiagramNavigator(ClassDiagram classDiagram) {
 		this.classDiagram = classDiagram;
 		zoom = 1.0;
-		setZoomFactor(1.01);
+		setZoomFactor(1.05);
 	}
 
 	@Override
@@ -25,7 +26,19 @@ public class ClassDiagramNavigator extends AbstractNavigator implements Navigato
 	@Override
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
-		// TODO: Resize contained drawables
+		for (Drawable drawable : classDiagram.getDrawables()) {
+			Rectangle2D bounds = drawable.getBounds();
+			// TODO: Preferred size as base size suitable?
+			Dimension2D preferredSize = drawable.getPreferredSize();
+			double width = preferredSize.getWidth()*zoom;
+			double height  = preferredSize.getHeight()*zoom;
+			double widthDelta = width - bounds.getWidth();
+			double heightDelta = height - bounds.getHeight();
+			double x = bounds.getX() - widthDelta/2;
+			double y = bounds.getY() - heightDelta/2;
+			drawable.setBounds(new Rectangle2D.Double(x, y, width, height));
+			// TODO: Change font of Drawable
+		}
 	}
 
 	@Override
