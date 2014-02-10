@@ -7,6 +7,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator extends AbstractNavigator {
@@ -31,7 +32,7 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 		if (!isZoomable()) {
 			return;
 		}
-		this.zoom = zoom;
+		this.zoom = MathUtils.limit(zoom, getZoomMin(), getZoomMax());
 		Rectangle2D bounds = drawableContainer.getBounds();
 		if (initialSize == null) {
 			initialSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());;
