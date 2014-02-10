@@ -10,7 +10,7 @@ public class ClassDiagram extends DrawableContainer implements Navigable {
 
 	public ClassDiagram() {
 		super(new TableLayout(4));
-		navigator = new ClassDiagramNavigator(this);
+		navigator = new DrawableContainerNavigator(this);
 	}
 
 	@Override
