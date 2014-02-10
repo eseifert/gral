@@ -6,6 +6,7 @@ import java.awt.Stroke;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.Label;
 
 public class ClassDrawableNavigator extends DrawableContainerNavigator {
@@ -27,12 +28,13 @@ public class ClassDrawableNavigator extends DrawableContainerNavigator {
 
 		// Scale font of name label
 		Label classLabel = classDrawable.getClassName();
-		Font classLabelFont = defaultFontSizesByLabel.get(classLabel);
-		if (classLabelFont == null) {
-			classLabelFont = classLabel.getFont();
-			defaultFontSizesByLabel.put(classLabel, classLabelFont);
+		zoomLabel(classLabel, zoom);
+
+		for (Drawable drawable : classDrawable.getDrawables()) {
+			if (drawable instanceof Label) {
+				zoomLabel((Label) drawable, zoom);
+			}
 		}
-		classLabel.setFont(classLabelFont.deriveFont((float) (classLabelFont.getSize2D()*zoom)));
 
 		// Scale font of border stroke
 		Stroke classBorderStroke = defaultBorderStroke;
@@ -46,5 +48,14 @@ public class ClassDrawableNavigator extends DrawableContainerNavigator {
 			Stroke strokeNew = new BasicStroke((float) (lineWidth*zoom));
 			classDrawable.setBorderStroke(strokeNew);
 		}
+	}
+
+	private void zoomLabel(Label label, double zoom) {
+		Font classLabelFont = defaultFontSizesByLabel.get(label);
+		if (classLabelFont == null) {
+			classLabelFont = label.getFont();
+			defaultFontSizesByLabel.put(label, classLabelFont);
+		}
+		label.setFont(classLabelFont.deriveFont((float) (classLabelFont.getSize2D()*zoom)));
 	}
 }
