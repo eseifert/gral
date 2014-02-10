@@ -178,4 +178,8 @@ public class ClassDrawable extends DrawableContainer {
 	public void setBorderStroke(Stroke borderStroke) {
 		this.borderStroke = borderStroke;
 	}
+
+	public Label getClassName() {
+		return className;
+	}
 }
