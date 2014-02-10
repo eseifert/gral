@@ -6,6 +6,7 @@ import java.awt.geom.Rectangle2D;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.navigation.AbstractNavigator;
+import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator extends AbstractNavigator {
@@ -37,6 +38,9 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 			double x = bounds.getX() - widthDelta/2;
 			double y = bounds.getY() - heightDelta/2;
 			drawable.setBounds(new Rectangle2D.Double(x, y, width, height));
+			if (drawable instanceof Navigable) {
+				((Navigable) drawable).getNavigator().setZoom(zoom);
+			}
 		}
 	}
 
