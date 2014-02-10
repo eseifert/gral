@@ -82,9 +82,12 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 	public void pan(PointND<? extends Number> deltas) {
 		double deltaX = deltas.get(0).doubleValue();
 		double deltaY = deltas.get(1).doubleValue();
+		Rectangle2D bounds = drawableContainer.getBounds();
+		drawableContainer.setPosition(bounds.getX() + deltaX, bounds.getY() + deltaY);
 		for (Drawable drawable : drawableContainer.getDrawables()) {
-			Rectangle2D bounds = drawable.getBounds();
-			drawable.setPosition(bounds.getX() + deltaX, bounds.getY() + deltaY);
+			if (drawable instanceof Navigable) {
+				((Navigable) drawable).getNavigator().pan(deltas);
+			}
 		}
 	}
 
