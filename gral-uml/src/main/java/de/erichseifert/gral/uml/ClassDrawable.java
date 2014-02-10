@@ -154,7 +154,7 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 		double textHeight = className.getTextRectangle().getHeight();
 		Insets2D insets = new Insets2D.Double(textHeight);
 		setInsets(insets);
-		borderStroke = new BasicStroke(5f);
+		borderStroke = new BasicStroke(1f);
 	}
 
 	@Override
@@ -167,8 +167,8 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 		Graphics2D g2d = context.getGraphics();
 
 		Stroke strokeOld = g2d.getStroke();
-		//Stroke borderStroke = getBorderStroke();
-		//g2d.setStroke(borderStroke);
+		Stroke borderStroke = getBorderStroke();
+		g2d.setStroke(borderStroke);
 
 		g2d.draw(getBounds());
 
