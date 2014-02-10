@@ -23,9 +23,13 @@ public class ClassDiagramExample extends JFrame {
 		classDiagram = new ClassDiagram();
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
-		ClassDrawable windowClassDrawable = new ClassDrawable(windowClass);
-		windowClassDrawable.setBounds(new Rectangle2D.Double(0.0, 0.0, 100.0, 100.0));
-		classDiagram.add(windowClassDrawable);
+		ClassDrawable windowClassDrawable1 = new ClassDrawable(windowClass);
+		windowClassDrawable1.setBounds(new Rectangle2D.Double(0.0, 0.0, 100.0, 100.0));
+		classDiagram.add(windowClassDrawable1);
+
+		ClassDrawable windowClassDrawable2 = new ClassDrawable(windowClass);
+		windowClassDrawable2.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
+		classDiagram.add(windowClassDrawable2);
 
 		DrawablePanel panel = new InteractivePanel(classDiagram);
 		getContentPane().add(panel);
