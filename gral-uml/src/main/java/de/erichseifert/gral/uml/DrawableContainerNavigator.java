@@ -28,6 +28,9 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 
 	@Override
 	public void setZoom(double zoom) {
+		if (!isZoomable()) {
+			return;
+		}
 		this.zoom = zoom;
 		Rectangle2D bounds = drawableContainer.getBounds();
 		if (initialSize == null) {
