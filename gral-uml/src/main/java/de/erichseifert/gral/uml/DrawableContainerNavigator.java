@@ -2,8 +2,6 @@ package de.erichseifert.gral.uml;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -13,12 +11,12 @@ import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator extends AbstractNavigator {
 	private final DrawableContainer drawableContainer;
-	private final Map<Drawable, Dimension2D> initialSizeByDrawable;
+	private Dimension2D initialSize;
 	private double zoom;
 
 	public DrawableContainerNavigator(DrawableContainer drawableContainer) {
 		this.drawableContainer = drawableContainer;
-		initialSizeByDrawable = new HashMap<Drawable, Dimension2D>();
+		Rectangle2D bounds = drawableContainer.getBounds();
 		zoom = 1.0;
 		setZoomFactor(1.05);
 	}
@@ -31,22 +29,35 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 	@Override
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
+		Rectangle2D bounds = drawableContainer.getBounds();
+		if (initialSize == null) {
+			initialSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());;
+		}
+		double width = initialSize.getWidth()*zoom;
+		double height  = initialSize.getHeight()*zoom;
+		double widthDelta = width - bounds.getWidth();
+		double heightDelta = height - bounds.getHeight();
+		double x = bounds.getX() - widthDelta/2;
+		double y = bounds.getY() - heightDelta/2;
+		drawableContainer.setBounds(new Rectangle2D.Double(x, y, width, height));
+	}
+
+	@Override
+	public void zoomIn() {
+		super.zoomIn();
 		for (Drawable drawable : drawableContainer.getDrawables()) {
-			Rectangle2D bounds = drawable.getBounds();
-			Dimension2D baseSize = initialSizeByDrawable.get(drawable);
-			if (baseSize == null) {
-				baseSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());
-				initialSizeByDrawable.put(drawable, baseSize);
-			}
-			double width = baseSize.getWidth()*zoom;
-			double height  = baseSize.getHeight()*zoom;
-			double widthDelta = width - bounds.getWidth();
-			double heightDelta = height - bounds.getHeight();
-			double x = bounds.getX() - widthDelta/2;
-			double y = bounds.getY() - heightDelta/2;
-			drawable.setBounds(new Rectangle2D.Double(x, y, width, height));
 			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().setZoom(zoom);
+				((Navigable) drawable).getNavigator().zoomIn();
+			}
+		}
+	}
+
+	@Override
+	public void zoomOut() {
+		super.zoomOut();
+		for (Drawable drawable : drawableContainer.getDrawables()) {
+			if (drawable instanceof Navigable) {
+				((Navigable) drawable).getNavigator().zoomOut();
 			}
 		}
 	}
