@@ -3,6 +3,8 @@ package de.erichseifert.gral.uml;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
+import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigator;
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
@@ -17,11 +19,13 @@ import de.erichseifert.gral.util.Orientation;
 /**
  * Represents a drawable that displays a package in UML class diagrams.
  */
-public class PackageDrawable extends DrawableContainer {
+public class PackageDrawable extends DrawableContainer implements Navigable {
 	private final Package pkg;
 
 	private final Tab tab;
 	private final Body body;
+
+	private final Navigator navigator;
 
 	public static class Tab extends NamedElementDrawable {
 
@@ -102,6 +106,7 @@ public class PackageDrawable extends DrawableContainer {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
+		navigator = new DrawableContainerNavigator(this);
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
@@ -110,6 +115,10 @@ public class PackageDrawable extends DrawableContainer {
 		body = new Body(pkg);
 		add(body);
 		// TODO Add support for package URI
+	}
+
+	public Navigator getNavigator() {
+		return navigator;
 	}
 
 	/**
