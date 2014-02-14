@@ -3,18 +3,17 @@ package de.erichseifert.gral.uml;
 import java.awt.Graphics2D;
 import java.awt.geom.Dimension2D;
 
-import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
-import metamodel.classes.kernel.Class;
-import metamodel.classes.kernel.NamedElement;
-import metamodel.classes.kernel.Package;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.graphics.Layout;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
+import metamodel.classes.kernel.Class;
+import metamodel.classes.kernel.NamedElement;
+import metamodel.classes.kernel.Package;
 
 /**
  * Represents a drawable that displays a package in UML class diagrams.
@@ -149,16 +148,7 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		return tab;
 	}
 
-	@Override
-	public void setLayout(Layout layout) {
-		body.setLayout(layout);
-	}
-
-	@Override
-	public Layout getLayout() {
-		if (body != null) {
-			return body.getLayout();
-		}
-		return null;
+	public Body getBody() {
+		return body;
 	}
 }
