@@ -9,7 +9,9 @@ import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
 import de.erichseifert.gral.uml.ClassDrawable;
+import de.erichseifert.gral.uml.PackageDrawable;
 import metamodel.classes.kernel.Package;
+import metamodel.examples.TypesPackage;
 import metamodel.examples.WindowClass;
 
 public class ClassDiagramExample extends JFrame {
@@ -30,6 +32,11 @@ public class ClassDiagramExample extends JFrame {
 		ClassDrawable windowClassDrawable2 = new ClassDrawable(windowClass);
 		windowClassDrawable2.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
 		classDiagram.add(windowClassDrawable2);
+
+		Package typesPackage = new TypesPackage();
+		PackageDrawable typesPacakgeDrawable = new PackageDrawable(typesPackage);
+		typesPacakgeDrawable.setBounds(new Rectangle2D.Double(300.0, 100.0, 150.0, 80.0));
+		classDiagram.add(typesPacakgeDrawable);
 
 		DrawablePanel panel = new InteractivePanel(classDiagram);
 		getContentPane().add(panel);
