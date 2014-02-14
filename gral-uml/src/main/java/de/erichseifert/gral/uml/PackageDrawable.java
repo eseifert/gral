@@ -105,7 +105,8 @@ public class PackageDrawable extends DrawableContainer {
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
-		add(tab);
+		StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
+		add(tab, layoutConstraints);
 		body = new Body(pkg);
 		add(body);
 		// TODO Add support for package URI
