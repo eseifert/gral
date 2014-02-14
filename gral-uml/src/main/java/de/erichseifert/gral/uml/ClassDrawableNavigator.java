@@ -9,15 +9,12 @@ import java.util.Map;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.Label;
 
-public class ClassDrawableNavigator extends DrawableContainerNavigator {
-	// TODO: Make DrawableContainerNavigator generic
-	private final ClassDrawable classDrawable;
+public class ClassDrawableNavigator extends DrawableContainerNavigator<ClassDrawable> {
 	private final Map<Label, Font> defaultFontSizesByLabel;
 	private Stroke defaultBorderStroke;
 
 	public ClassDrawableNavigator(ClassDrawable classDrawable) {
 		super(classDrawable);
-		this.classDrawable = classDrawable;
 		defaultFontSizesByLabel = new HashMap<Label, Font>();
 	}
 
@@ -26,10 +23,10 @@ public class ClassDrawableNavigator extends DrawableContainerNavigator {
 		super.setZoom(zoom);
 
 		// Scale font of name label
-		Label classLabel = classDrawable.getClassName();
+		Label classLabel = getDrawableContainer().getClassName();
 		zoomLabel(classLabel, zoom);
 
-		for (Drawable drawable : classDrawable.getDrawables()) {
+		for (Drawable drawable : getDrawableContainer().getDrawables()) {
 			if (drawable instanceof Label) {
 				zoomLabel((Label) drawable, zoom);
 			}
@@ -38,14 +35,14 @@ public class ClassDrawableNavigator extends DrawableContainerNavigator {
 		// Scale font of border stroke
 		Stroke classBorderStroke = defaultBorderStroke;
 		if (defaultBorderStroke == null) {
-			defaultBorderStroke = classDrawable.getBorderStroke();
+			defaultBorderStroke = getDrawableContainer().getBorderStroke();
 			classBorderStroke = defaultBorderStroke;
 		}
 		if (classBorderStroke instanceof BasicStroke) {
 			BasicStroke basicStroke = (BasicStroke) classBorderStroke;
 			float lineWidth = basicStroke.getLineWidth();
 			Stroke strokeNew = new BasicStroke((float) (lineWidth*zoom));
-			classDrawable.setBorderStroke(strokeNew);
+			getDrawableContainer().setBorderStroke(strokeNew);
 		}
 	}
 

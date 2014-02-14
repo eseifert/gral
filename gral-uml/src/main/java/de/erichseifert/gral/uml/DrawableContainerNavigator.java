@@ -10,12 +10,12 @@ import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
-public class DrawableContainerNavigator extends AbstractNavigator {
-	private final DrawableContainer drawableContainer;
+public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
+	private final T drawableContainer;
 	private Dimension2D initialSize;
 	private double zoom;
 
-	public DrawableContainerNavigator(DrawableContainer drawableContainer) {
+	public DrawableContainerNavigator(T drawableContainer) {
 		this.drawableContainer = drawableContainer;
 		Rectangle2D bounds = drawableContainer.getBounds();
 		zoom = 1.0;
@@ -106,7 +106,7 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 		// TODO: reset center
 	}
 
-	public DrawableContainer getDrawableContainer() {
+	public T getDrawableContainer() {
 		return drawableContainer;
 	}
 }
