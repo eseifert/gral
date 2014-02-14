@@ -25,19 +25,21 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
-import metamodel.classes.interfaces.Property;
-import metamodel.classes.kernel.Operation;
-import metamodel.classes.kernel.Parameter;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
+import metamodel.classes.interfaces.Property;
+import metamodel.classes.kernel.Operation;
+import metamodel.classes.kernel.Parameter;
 
 public class ClassDrawable extends DrawableContainer implements Navigable {
 	private final Label className;
@@ -160,7 +162,25 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 	@Override
 	public void draw(DrawingContext context) {
 		drawBorder(context);
-		super.drawComponents(context);
+		drawComponents(context);
+	}
+
+	@Override
+	protected void drawComponents(DrawingContext context) {
+		// Use the regular drawing routine, if enough space is available
+		if (getHeight() >= getPreferredSize().getHeight()) {
+			super.drawComponents(context);
+			return;
+		}
+
+		for (Drawable drawable : getDrawables()) {
+			Rectangle2D drawableBounds = drawable.getBounds();
+			if (drawableBounds.getMaxY() > getBounds().getMaxY()) {
+				// TODO: Show hint that some fields or methods are not visible
+				break;
+			}
+			drawable.draw(context);
+		}
 	}
 
 	protected void drawBorder(DrawingContext context) {
