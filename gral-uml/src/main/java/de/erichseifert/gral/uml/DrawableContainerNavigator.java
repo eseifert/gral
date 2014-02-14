@@ -105,4 +105,8 @@ public class DrawableContainerNavigator extends AbstractNavigator {
 		setZoom(1.0);
 		// TODO: reset center
 	}
+
+	public DrawableContainer getDrawableContainer() {
+		return drawableContainer;
+	}
 }

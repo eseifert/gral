@@ -10,7 +10,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.Label;
 
 public class ClassDrawableNavigator extends DrawableContainerNavigator {
-	// TODO: Allow access to stored DrawableContainer in DrawableContainerNavigator
 	// TODO: Make DrawableContainerNavigator generic
 	private final ClassDrawable classDrawable;
 	private final Map<Label, Font> defaultFontSizesByLabel;
