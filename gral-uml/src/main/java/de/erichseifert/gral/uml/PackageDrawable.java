@@ -30,6 +30,7 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 
 	public static class Tab extends NamedElementDrawable {
 		private final Insets2D insets;
+		// TODO: Make stroke serializable
 		private Stroke borderStroke;
 
 		public Tab(Package pkg) {
@@ -81,11 +82,14 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 
 	public static class Body extends DrawableContainer {
 		private final Label name;
+		// TODO: Make stroke serializable
+		private Stroke borderStroke;
 		private boolean membersDisplayed;
 
 		public Body(Package pkg) {
 			super(new StackedLayout(Orientation.VERTICAL));
 			name = new Label(pkg.getName());
+			borderStroke = new BasicStroke(1f);
 
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				if (member instanceof metamodel.classes.kernel.Class) {
@@ -102,7 +106,10 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		@Override
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
+			Stroke strokeOld = g2d.getStroke();
+			g2d.setStroke(getBorderStroke());
 			g2d.draw(getBounds());
+			g2d.setStroke(strokeOld);
 
 			if (membersDisplayed) {
 				drawComponents(context);
@@ -132,6 +139,14 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 
 		public void setMembersDisplayed(boolean membersDisplayed) {
 			this.membersDisplayed = membersDisplayed;
+		}
+
+		public Stroke getBorderStroke() {
+			return borderStroke;
+		}
+
+		public void setBorderStroke(Stroke borderStroke) {
+			this.borderStroke = borderStroke;
 		}
 	}
 
