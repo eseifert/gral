@@ -27,9 +27,12 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 	private final Navigator navigator;
 
 	public static class Tab extends NamedElementDrawable {
+		private final Insets2D insets;
 
 		public Tab(Package pkg) {
 			super(pkg);
+			float fontSize = getName().getFont().getSize2D();
+			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
 		}
 
 		@Override
@@ -38,6 +41,26 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 			g2d.draw(getBounds());
 
 			super.draw(context);
+		}
+
+		public Insets2D getInsets() {
+			Insets2D insetsCopy = new Insets2D.Double();
+			insetsCopy.setInsets(this.insets);
+			return insetsCopy;
+		}
+
+		public void setInsets(Insets2D insets) {
+			this.insets.setInsets(insets);
+		}
+
+		@Override
+		public Dimension2D getPreferredSize() {
+			Dimension2D preferredSize = super.getPreferredSize();
+			preferredSize.setSize(
+				preferredSize.getWidth() + insets.getHorizontal(),
+				preferredSize.getHeight() + insets.getVertical()
+			);
+			return preferredSize;
 		}
 	}
 
