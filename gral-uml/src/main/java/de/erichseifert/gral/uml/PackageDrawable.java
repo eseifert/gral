@@ -105,7 +105,7 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
-		navigator = new DrawableContainerNavigator(this);
+		navigator = new PackageDrawableNavigator(this);
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
