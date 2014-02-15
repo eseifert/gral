@@ -1,6 +1,8 @@
 package de.erichseifert.gral.uml;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
 
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -28,17 +30,22 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 
 	public static class Tab extends NamedElementDrawable {
 		private final Insets2D insets;
+		private Stroke borderStroke;
 
 		public Tab(Package pkg) {
 			super(pkg);
 			float fontSize = getName().getFont().getSize2D();
 			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
+			borderStroke = new BasicStroke(1f);
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
+			Stroke strokeOld = g2d.getStroke();
+			g2d.setStroke(getBorderStroke());
 			g2d.draw(getBounds());
+			g2d.setStroke(strokeOld);
 
 			super.draw(context);
 		}
@@ -61,6 +68,14 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 				preferredSize.getHeight() + insets.getVertical()
 			);
 			return preferredSize;
+		}
+
+		public Stroke getBorderStroke() {
+			return borderStroke;
+		}
+
+		public void setBorderStroke(Stroke borderStroke) {
+			this.borderStroke = borderStroke;
 		}
 	}
 
