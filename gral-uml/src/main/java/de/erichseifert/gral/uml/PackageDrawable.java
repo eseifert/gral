@@ -4,7 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Rectangle2D;
 
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.StackedLayout;
@@ -87,7 +89,6 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		private boolean membersDisplayed;
 
 		public Body(Package pkg) {
-			super(new StackedLayout(Orientation.VERTICAL));
 			name = new Label(pkg.getName());
 			borderStroke = new BasicStroke(1f);
 
@@ -122,7 +123,14 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		@Override
 		public Dimension2D getPreferredSize() {
 			if (membersDisplayed) {
-				return super.getPreferredSize();
+				double width = 0.0;
+				double height = 0.0;
+				for (Drawable drawable : getDrawables()) {
+					Rectangle2D bounds = drawable.getBounds();
+					width += bounds.getWidth();
+					height += bounds.getHeight();
+				}
+				return new de.erichseifert.gral.util.Dimension2D.Double(width, height);
 			}
 			Dimension2D preferredSize = name.getPreferredSize();
 			Insets2D insets = getInsets();
