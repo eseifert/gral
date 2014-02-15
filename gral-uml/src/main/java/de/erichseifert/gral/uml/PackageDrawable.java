@@ -204,4 +204,9 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 	public Body getBody() {
 		return body;
 	}
+
+	public void setBorderStroke(Stroke borderStroke) {
+		getTab().setBorderStroke(borderStroke);
+		getBody().setBorderStroke(borderStroke);
+	}
 }
