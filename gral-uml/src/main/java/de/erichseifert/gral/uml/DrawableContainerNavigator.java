@@ -1,22 +1,28 @@
 package de.erichseifert.gral.uml;
 
+import java.awt.Font;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
+	private final Map<Label, Font> defaultFontSizesByLabel;
 	private final T drawableContainer;
 	private Dimension2D initialSize;
 	private double zoom;
 
 	public DrawableContainerNavigator(T drawableContainer) {
 		this.drawableContainer = drawableContainer;
+		defaultFontSizesByLabel = new HashMap<Label, Font>();
 		Rectangle2D bounds = drawableContainer.getBounds();
 		zoom = 1.0;
 		setZoomFactor(1.05);
@@ -35,7 +41,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 		this.zoom = MathUtils.limit(zoom, getZoomMin(), getZoomMax());
 		Rectangle2D bounds = drawableContainer.getBounds();
 		if (initialSize == null) {
-			initialSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());;
+			initialSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());
 		}
 		double width = initialSize.getWidth()*zoom;
 		double height  = initialSize.getHeight()*zoom;
@@ -108,5 +114,14 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 
 	public T getDrawableContainer() {
 		return drawableContainer;
+	}
+
+	protected void zoomLabel(Label label, double zoom) {
+		Font classLabelFont = defaultFontSizesByLabel.get(label);
+		if (classLabelFont == null) {
+			classLabelFont = label.getFont();
+			defaultFontSizesByLabel.put(label, classLabelFont);
+		}
+		label.setFont(classLabelFont.deriveFont((float) (classLabelFont.getSize2D()*zoom)));
 	}
 }
