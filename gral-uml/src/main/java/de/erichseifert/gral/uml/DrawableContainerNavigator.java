@@ -109,6 +109,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 	@Override
 	public void reset() {
 		setZoom(1.0);
+		getDrawableContainer().layout();
 		// TODO: reset center
 	}
 
