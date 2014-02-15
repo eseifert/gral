@@ -1,5 +1,6 @@
 package de.erichseifert.gral.uml;
 
+import java.awt.BasicStroke;
 import java.awt.Stroke;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -27,9 +28,9 @@ public class PackageDrawableNavigator extends DrawableContainerNavigator<Package
 		}
 
 		// Scale font of border stroke
-		/*Stroke packageBorderStroke = defaultBorderStroke;
+		Stroke packageBorderStroke = defaultBorderStroke;
 		if (defaultBorderStroke == null) {
-			defaultBorderStroke = getDrawableContainer().getBorderStroke();
+			defaultBorderStroke = getDrawableContainer().getBody().getBorderStroke();
 			packageBorderStroke = defaultBorderStroke;
 		}
 		if (packageBorderStroke instanceof BasicStroke) {
@@ -37,6 +38,6 @@ public class PackageDrawableNavigator extends DrawableContainerNavigator<Package
 			float lineWidth = basicStroke.getLineWidth();
 			Stroke strokeNew = new BasicStroke((float) (lineWidth*zoom));
 			getDrawableContainer().setBorderStroke(strokeNew);
-		}*/
+		}
 	}
 }
