@@ -33,7 +33,7 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;

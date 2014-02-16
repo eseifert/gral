@@ -8,9 +8,9 @@ import java.util.Map;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.plots.Label;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 

@@ -4,7 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Stroke;
 
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
 
 public class PackageDrawableNavigator extends DrawableContainerNavigator<PackageDrawable> {
 	private Stroke defaultBorderStroke;

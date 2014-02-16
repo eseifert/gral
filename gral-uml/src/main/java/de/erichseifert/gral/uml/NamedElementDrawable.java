@@ -2,10 +2,10 @@ package de.erichseifert.gral.uml;
 
 import java.awt.geom.Dimension2D;
 
-import metamodel.classes.kernel.NamedElement;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
+import metamodel.classes.kernel.NamedElement;
 
 public abstract class NamedElementDrawable extends AbstractDrawable {
 	private final Label name;
