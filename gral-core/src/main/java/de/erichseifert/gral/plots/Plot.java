@@ -21,17 +21,20 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.awt.Font;
+import java.awt.Paint;
+import java.awt.Stroke;
+import java.util.Collection;
+import java.util.List;
+
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.util.Location;
-
-import java.awt.*;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * <p>Interface for classes that display data in a plot.</p>

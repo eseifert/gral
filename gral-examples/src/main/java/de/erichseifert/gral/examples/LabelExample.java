@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.geom.Point2D;
 
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
 

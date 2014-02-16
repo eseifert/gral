@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.plots;
+package de.erichseifert.gral.graphics;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
@@ -36,7 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.Dimension2D;
 
 public class LabelTest {

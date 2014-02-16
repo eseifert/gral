@@ -41,7 +41,7 @@ public class SimplePiePlot extends ExamplePanel {
 
 	private static final int SAMPLE_COUNT = 10;
 	/** Instance to generate random data values. */
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	@SuppressWarnings("unchecked")
 	public SimplePiePlot() {

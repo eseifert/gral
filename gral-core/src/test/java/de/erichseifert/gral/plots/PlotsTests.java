@@ -42,7 +42,6 @@ import de.erichseifert.gral.plots.points.PointsTests;
 	PointsTests.class,
 	LegendsTests.class,
 	// Tests for classes
-	LabelTest.class,
 	PlotAreaTest.class,
 	PlotTest.class,
 	XYPlotTest.class,

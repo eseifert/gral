@@ -39,12 +39,11 @@ import de.erichseifert.gral.util.Insets2D;
 
 
 public class DrawableWriterTest {
-	private final DataTable data;
 	private final XYPlot plot;
 
 	@SuppressWarnings("unchecked")
 	public DrawableWriterTest() {
-		data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		data.add(1.0, 4.5, 4.3, 4.0);
 		data.add(1.5, 5.5, 5.3, 5.0);
 		data.add(3.0, 3.5, 3.7, 4.0);

@@ -50,7 +50,7 @@ import java.util.Set;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.Label;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
