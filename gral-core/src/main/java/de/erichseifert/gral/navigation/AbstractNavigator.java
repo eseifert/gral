@@ -99,22 +99,44 @@ public abstract class AbstractNavigator implements Navigator {
 	 * Increases the current zoom level by the specified zoom factor.
 	 */
 	public void zoomIn() {
-		if (!isZoomable()) {
-			return;
-		}
-		double zoom = getZoom();
-		setZoom(zoom*getZoomFactor());
+		zoomInAt(null);
 	}
 
 	/**
 	 * Decreases the current zoom level by the specified zoom factor.
 	 */
 	public void zoomOut() {
+		zoomOutAt(null);
+	}
+
+	@Override
+	public void zoomAt(double zoom, PointND<? extends Number> zoomPoint) {
 		if (!isZoomable()) {
 			return;
 		}
+		boolean pan = isPannable() && zoomPoint != null;
+
+		PointND<? extends Number> center = null;
+		if (pan) {
+			center = getCenter();
+			setCenter(zoomPoint);
+		}
+		setZoom(zoom);
+		if (pan) {
+			setCenter(center);
+		}
+	}
+
+	@Override
+	public void zoomInAt(PointND<? extends Number> zoomPoint) {
 		double zoom = getZoom();
-		setZoom(zoom/getZoomFactor());
+		zoomAt(zoom*getZoomFactor(), zoomPoint);
+	}
+
+	@Override
+	public void zoomOutAt(PointND<? extends Number> zoomPoint) {
+		double zoom = getZoom();
+		zoomAt(zoom/getZoomFactor(), zoomPoint);
 	}
 
 	/**
