@@ -1,7 +1,7 @@
 package de.erichseifert.gral.uml;
 
 import java.awt.Font;
-import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +17,9 @@ import de.erichseifert.gral.util.PointND;
 public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
 	private final Map<Label, Font> defaultFontSizesByLabel;
 	private final T drawableContainer;
-	private Dimension2D initialSize;
+	private Rectangle2D initialBounds;
 	private double zoom;
+	private final Point2D center;
 
 	public DrawableContainerNavigator(T drawableContainer) {
 		this.drawableContainer = drawableContainer;
@@ -26,6 +27,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 		Rectangle2D bounds = drawableContainer.getBounds();
 		zoom = 1.0;
 		setZoomFactor(1.05);
+		center = new Point2D.Double();
 	}
 
 	@Override
@@ -40,52 +42,48 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 		}
 		this.zoom = MathUtils.limit(zoom, getZoomMin(), getZoomMax());
 		Rectangle2D bounds = drawableContainer.getBounds();
-		if (initialSize == null) {
-			initialSize = new de.erichseifert.gral.util.Dimension2D.Double(bounds.getWidth(), bounds.getHeight());
+		if (initialBounds == null) {
+			initialBounds = new Rectangle2D.Double();
+			//center.setLocation(initialBounds.getCenterX(), initialBounds.getCenterY());
+			initialBounds.setFrame(bounds);
 		}
-		double width = initialSize.getWidth()*zoom;
-		double height  = initialSize.getHeight()*zoom;
-		double widthDelta = width - bounds.getWidth();
-		double heightDelta = height - bounds.getHeight();
-		double x = bounds.getX() - widthDelta/2;
-		double y = bounds.getY() - heightDelta/2;
+		double width = initialBounds.getWidth()*zoom;
+		double height  = initialBounds.getHeight()*zoom;
+		double x = (bounds.getX() - center.getX())*zoom + center.getX();
+		double y = (bounds.getY() - center.getY())*zoom + center.getY();
 		drawableContainer.setBounds(new Rectangle2D.Double(x, y, width, height));
 	}
 
 	@Override
-	public void zoomIn() {
-		super.zoomIn();
+	public void zoomInAt(PointND<? extends Number> zoomPoint) {
+		super.zoomInAt(zoomPoint);
 		for (Drawable drawable : drawableContainer.getDrawables()) {
 			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().zoomIn();
+				((Navigable) drawable).getNavigator().zoomInAt(zoomPoint);
 			}
 		}
 	}
 
 	@Override
-	public void zoomOut() {
-		super.zoomOut();
+	public void zoomOutAt(PointND<? extends Number> zoomPoint) {
+		super.zoomOutAt(zoomPoint);
 		for (Drawable drawable : drawableContainer.getDrawables()) {
 			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().zoomOut();
+				((Navigable) drawable).getNavigator().zoomOutAt(zoomPoint);
 			}
 		}
 	}
 
 	@Override
 	public PointND<? extends Number> getCenter() {
-		Rectangle2D bounds = drawableContainer.getBounds();
-		PointND<Double> center = new PointND<Double>(bounds.getCenterX(), bounds.getCenterY());
-		return center;
+		return new PointND<Double>(center.getX(), center.getY());
 	}
 
 	@Override
 	public void setCenter(PointND<? extends Number> center) {
-		Rectangle2D bounds = drawableContainer.getBounds();
 		double centerX = center.get(0).doubleValue();
 		double centerY = center.get(1).doubleValue();
-		bounds.setFrameFromCenter(centerX, centerY, bounds.getX(), bounds.getY());
-		drawableContainer.setBounds(bounds);
+		this.center.setLocation(centerX, centerY);
 	}
 
 	@Override
