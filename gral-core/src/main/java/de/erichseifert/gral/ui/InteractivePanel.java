@@ -300,13 +300,15 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		}
 
 		Navigator navigator = navigable.getNavigator();
+		// TODO: Transform to world coordinates?
+		PointND<? extends Number> zoomPoint = new PointND<Number>(point.getX(), point.getY());
 		if (times >= 0) {
 			for (int i = 0; i < times; i++) {
-				navigator.zoomIn();
+				navigator.zoomInAt(zoomPoint);
 			}
 		} else {
 			for (int i = 0; i < -times; i++) {
-				navigator.zoomOut();
+				navigator.zoomOutAt(zoomPoint);
 			}
 		}
 
