@@ -35,6 +35,7 @@ import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
+import de.erichseifert.gral.uml.navigation.ClassDrawableNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.interfaces.Property;

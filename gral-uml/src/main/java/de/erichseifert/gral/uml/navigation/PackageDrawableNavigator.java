@@ -1,10 +1,11 @@
-package de.erichseifert.gral.uml;
+package de.erichseifert.gral.uml.navigation;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.Label;
+import de.erichseifert.gral.uml.PackageDrawable;
 
 public class PackageDrawableNavigator extends DrawableContainerNavigator<PackageDrawable> {
 	private Stroke defaultBorderStroke;

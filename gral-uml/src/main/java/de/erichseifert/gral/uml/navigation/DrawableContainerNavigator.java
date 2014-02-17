@@ -1,4 +1,4 @@
-package de.erichseifert.gral.uml;
+package de.erichseifert.gral.uml.navigation;
 
 import java.awt.Font;
 import java.awt.geom.Point2D;

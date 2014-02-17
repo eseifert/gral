@@ -3,6 +3,7 @@ package de.erichseifert.gral.uml;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
+import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
 
 public class ClassDiagram extends DrawableContainer implements Navigable {
 	private final Navigator navigator;
