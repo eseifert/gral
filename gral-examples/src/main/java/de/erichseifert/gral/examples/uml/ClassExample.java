@@ -2,10 +2,11 @@ package de.erichseifert.gral.examples.uml;
 
 import javax.swing.JFrame;
 
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.ui.DrawablePanel;
+import de.erichseifert.gral.uml.ClassDrawableRenderer;
 import metamodel.classes.kernel.Package;
 import metamodel.examples.WindowClass;
-import de.erichseifert.gral.ui.DrawablePanel;
-import de.erichseifert.gral.uml.ClassDrawable;
 
 public class ClassExample extends JFrame {
 
@@ -17,7 +18,8 @@ public class ClassExample extends JFrame {
 		Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
 
-		ClassDrawable classDrawable = new ClassDrawable(windowClass);
+		ClassDrawableRenderer classDrawableRenderer = new ClassDrawableRenderer();
+		Drawable classDrawable = classDrawableRenderer.getRendererComponent(windowClass);
 		getContentPane().add(new DrawablePanel(classDrawable));
 	}
 

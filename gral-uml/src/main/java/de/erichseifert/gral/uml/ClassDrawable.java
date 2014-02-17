@@ -128,7 +128,7 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 		}
 	}
 
-	public ClassDrawable(metamodel.classes.kernel.Class clazz) {
+	protected ClassDrawable(metamodel.classes.kernel.Class clazz) {
 		super(new StackedLayout(Orientation.VERTICAL, 0.0, 7.0));
 		navigator = new ClassDrawableNavigator(this);
 		className = new Label(clazz.getQualifiedName());

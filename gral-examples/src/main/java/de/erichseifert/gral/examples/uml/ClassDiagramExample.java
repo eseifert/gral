@@ -5,10 +5,11 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
-import de.erichseifert.gral.uml.ClassDrawable;
+import de.erichseifert.gral.uml.ClassDrawableRenderer;
 import de.erichseifert.gral.uml.PackageDrawable;
 import metamodel.classes.kernel.Package;
 import metamodel.examples.TypesPackage;
@@ -25,11 +26,12 @@ public class ClassDiagramExample extends JFrame {
 		classDiagram = new ClassDiagram();
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
-		ClassDrawable windowClassDrawable1 = new ClassDrawable(windowClass);
+		ClassDrawableRenderer classDrawableRenderer = new ClassDrawableRenderer();
+		Drawable windowClassDrawable1 = classDrawableRenderer.getRendererComponent(windowClass);
 		windowClassDrawable1.setBounds(new Rectangle2D.Double(0.0, 0.0, 100.0, 100.0));
 		classDiagram.add(windowClassDrawable1);
 
-		ClassDrawable windowClassDrawable2 = new ClassDrawable(windowClass);
+		Drawable windowClassDrawable2 = classDrawableRenderer.getRendererComponent(windowClass);
 		windowClassDrawable2.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
 		classDiagram.add(windowClassDrawable2);
 
