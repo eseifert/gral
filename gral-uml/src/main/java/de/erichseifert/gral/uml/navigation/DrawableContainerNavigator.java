@@ -17,17 +17,15 @@ import de.erichseifert.gral.util.PointND;
 public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
 	private final Map<Label, Font> defaultFontSizesByLabel;
 	private final T drawableContainer;
-	private Rectangle2D initialBounds;
 	private double zoom;
-	private final Point2D center;
+	private final PointND<? extends Number> center;
 
 	public DrawableContainerNavigator(T drawableContainer) {
 		this.drawableContainer = drawableContainer;
 		defaultFontSizesByLabel = new HashMap<Label, Font>();
-		Rectangle2D bounds = drawableContainer.getBounds();
 		zoom = 1.0;
 		setZoomFactor(1.05);
-		center = new Point2D.Double();
+		center = new PointND<Number>(0.0, 0.0);
 	}
 
 	@Override
@@ -41,49 +39,56 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 			return;
 		}
 		this.zoom = MathUtils.limit(zoom, getZoomMin(), getZoomMax());
-		Rectangle2D bounds = drawableContainer.getBounds();
-		if (initialBounds == null) {
-			initialBounds = new Rectangle2D.Double();
-			//center.setLocation(initialBounds.getCenterX(), initialBounds.getCenterY());
-			initialBounds.setFrame(bounds);
-		}
-		double width = initialBounds.getWidth()*zoom;
-		double height  = initialBounds.getHeight()*zoom;
-		double x = (bounds.getX() - center.getX())*zoom + center.getX();
-		double y = (bounds.getY() - center.getY())*zoom + center.getY();
-		drawableContainer.setBounds(new Rectangle2D.Double(x, y, width, height));
 	}
 
-	@Override
-	public void zoomInAt(PointND<? extends Number> zoomPoint) {
-		super.zoomInAt(zoomPoint);
-		for (Drawable drawable : drawableContainer.getDrawables()) {
-			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().zoomInAt(zoomPoint);
-			}
-		}
-	}
-
-	@Override
-	public void zoomOutAt(PointND<? extends Number> zoomPoint) {
-		super.zoomOutAt(zoomPoint);
-		for (Drawable drawable : drawableContainer.getDrawables()) {
-			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().zoomOutAt(zoomPoint);
-			}
-		}
+	// TODO: Coordinate transformation is the responsibility of the renderer
+	private Point2D toViewCoordinates(PointND<? extends Number> point, double zoom) {
+		return new Point2D.Double(
+				(point.get(0).doubleValue() - center.get(0).doubleValue())*zoom,
+				(point.get(1).doubleValue() - center.get(1).doubleValue())*zoom
+		);
 	}
 
 	@Override
 	public PointND<? extends Number> getCenter() {
-		return new PointND<Double>(center.getX(), center.getY());
+		return new PointND<Number>(center.get(0), center.get(1));
+	}
+
+	@Override
+	public void zoomAt(double zoom, PointND<? extends Number> zoomPoint) {
+		if (!isZoomable()) {
+			return;
+		}
+		if (isPannable() && zoomPoint != null) {
+			Point2D centerView = toViewCoordinates(center, zoom);
+			// TODO: zoomPoint should be passed in world coordinates
+			Point2D absoluteZoomPointView = new Point2D.Double(
+					centerView.getX() - zoomPoint.get(0).doubleValue(),
+					centerView.getY() - zoomPoint.get(1).doubleValue()
+			);
+			Point2D absoluteZoomPointScaledView = new Point2D.Double(
+				absoluteZoomPointView.getX()/getZoom()*zoom,
+				absoluteZoomPointView.getY()/getZoom()*zoom
+			);
+			Point2D combinedViewportMovement = new Point2D.Double(
+					-absoluteZoomPointScaledView.getX() + absoluteZoomPointView.getX(),
+					-absoluteZoomPointScaledView.getY() + absoluteZoomPointView.getY()
+			);
+			setCenter(toWorldCoordinates(combinedViewportMovement, zoom));
+		}
+		setZoom(zoom);
 	}
 
 	@Override
 	public void setCenter(PointND<? extends Number> center) {
-		double centerX = center.get(0).doubleValue();
-		double centerY = center.get(1).doubleValue();
-		this.center.setLocation(centerX, centerY);
+		this.center.setLocation(center.get(0), center.get(1));
+	}
+
+	private PointND<? extends Number> toWorldCoordinates(Point2D point, double zoom) {
+		return new PointND<Double>(
+			point.getX()/zoom + center.get(0).doubleValue(),
+			point.getY()/zoom + center.get(1).doubleValue()
+		);
 	}
 
 	@Override

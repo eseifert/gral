@@ -33,20 +33,16 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
-import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
-import de.erichseifert.gral.uml.navigation.ClassDrawableNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.interfaces.Property;
 import metamodel.classes.kernel.Operation;
 import metamodel.classes.kernel.Parameter;
 
-public class ClassDrawable extends DrawableContainer implements Navigable {
+public class ClassDrawable extends DrawableContainer {
 	private final Label className;
 	/** Stroke used to paint the border of the plot area. */
 	private Stroke borderStroke;
-	private final Navigator navigator;
 
 	private static class PropertyLabel extends Label {
 		private final Property property;
@@ -131,7 +127,6 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 
 	protected ClassDrawable(metamodel.classes.kernel.Class clazz) {
 		super(new StackedLayout(Orientation.VERTICAL, 0.0, 7.0));
-		navigator = new ClassDrawableNavigator(this);
 		className = new Label(clazz.getQualifiedName());
 		Font classNameFont = className.getFont().deriveFont(Font.BOLD);
 		if (clazz.isAbstract()) {
@@ -206,10 +201,5 @@ public class ClassDrawable extends DrawableContainer implements Navigable {
 
 	public Label getClassName() {
 		return className;
-	}
-
-	@Override
-	public Navigator getNavigator() {
-		return navigator;
 	}
 }

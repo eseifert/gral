@@ -11,9 +11,6 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
-import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
-import de.erichseifert.gral.uml.navigation.PackageDrawableNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.kernel.Class;
@@ -23,13 +20,11 @@ import metamodel.classes.kernel.Package;
 /**
  * Represents a drawable that displays a package in UML class diagrams.
  */
-public class PackageDrawable extends DrawableContainer implements Navigable {
+public class PackageDrawable extends DrawableContainer {
 	private final Package pkg;
 
 	private final Tab tab;
 	private final Body body;
-
-	private final Navigator navigator;
 
 	public static class Tab extends NamedElementDrawable {
 		private final Insets2D insets;
@@ -167,7 +162,6 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
-		navigator = new PackageDrawableNavigator(this);
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
@@ -176,10 +170,6 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		body = new Body(pkg);
 		add(body);
 		// TODO Add support for package URI
-	}
-
-	public Navigator getNavigator() {
-		return navigator;
 	}
 
 	/**
