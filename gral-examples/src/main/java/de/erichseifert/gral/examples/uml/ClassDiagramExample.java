@@ -24,6 +24,7 @@ public class ClassDiagramExample extends JFrame {
 		setSize(1024, 768);
 
 		classDiagram = new ClassDiagram();
+		classDiagram.setBounds(0, 0, 1000, 700);
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
 		ClassDrawableRenderer classDrawableRenderer = new ClassDrawableRenderer();
