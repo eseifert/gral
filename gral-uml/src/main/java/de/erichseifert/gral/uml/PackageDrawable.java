@@ -118,6 +118,13 @@ public class PackageDrawable extends DrawableContainer {
 
 		@Override
 		public Dimension2D getPreferredSize() {
+			Dimension2D preferredSize = name.getPreferredSize();
+			Insets2D insets = getInsets();
+			preferredSize.setSize(
+					preferredSize.getWidth() + insets.getLeft() + insets.getRight(),
+					preferredSize.getHeight() + insets.getTop() + insets.getBottom()
+			);
+
 			if (membersDisplayed) {
 				double width = 0.0;
 				double height = 0.0;
@@ -126,14 +133,11 @@ public class PackageDrawable extends DrawableContainer {
 					width += bounds.getWidth();
 					height += bounds.getHeight();
 				}
-				return new de.erichseifert.gral.util.Dimension2D.Double(width, height);
+				return new de.erichseifert.gral.util.Dimension2D.Double(
+					Math.max(width, preferredSize.getWidth()),
+					Math.max(height, preferredSize.getHeight())
+				);
 			}
-			Dimension2D preferredSize = name.getPreferredSize();
-			Insets2D insets = getInsets();
-			preferredSize.setSize(
-				preferredSize.getWidth() + insets.getLeft() + insets.getRight(),
-				preferredSize.getHeight() + insets.getTop() + insets.getBottom()
-			);
 			return preferredSize;
 		}
 
