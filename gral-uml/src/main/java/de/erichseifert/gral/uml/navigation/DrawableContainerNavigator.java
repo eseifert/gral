@@ -90,17 +90,13 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 
 	@Override
 	public void pan(PointND<? extends Number> deltas) {
-		Point2D deltasView = deltas.getPoint2D();
-		PointND<? extends Number> deltasWorld = new PointND<Double>(
-				deltasView.getX()/getZoom(),
-				deltasView.getY()/getZoom()
+		Point2D centerView = toViewCoordinates(getCenter(), getZoom());
+		Point2D centerNewView = new Point2D.Double(
+				centerView.getX() - deltas.get(0).doubleValue(),
+				centerView.getY() - deltas.get(1).doubleValue()
 		);
-		PointND<? extends Number> centerOld = getCenter();
-		PointND<? extends Number> centerNew = new PointND<Double>(
-				centerOld.get(0).doubleValue() - deltasWorld.get(0).doubleValue(),
-				centerOld.get(1).doubleValue() - deltasWorld.get(1).doubleValue()
-		);
-		setCenter(centerNew);
+		PointND<? extends Number> centerNewWorld = toWorldCoordinates(centerNewView, getZoom());
+		setCenter(centerNewWorld);
 	}
 
 	@Override
