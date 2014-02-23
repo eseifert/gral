@@ -9,7 +9,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
-import de.erichseifert.gral.util.PointND;
 
 public class ClassDiagram extends DrawableContainer implements Navigable {
 	private final Navigator navigator;
@@ -24,9 +23,9 @@ public class ClassDiagram extends DrawableContainer implements Navigable {
 		AffineTransform txOld = g2d.getTransform();
 		double zoom = navigator.getZoom();
 
-		Point2D origin = toViewCoordinates(new PointND<Double>(getX(), getY()), zoom);
-		g2d.translate(origin.getX(), origin.getY());
+		Point2D origin = navigator.getCenter().getPoint2D();
 		g2d.scale(zoom, zoom);
+		g2d.translate(-origin.getX(), -origin.getY());
 		super.drawComponents(context);
 		g2d.setTransform(txOld);
 	}
@@ -34,13 +33,5 @@ public class ClassDiagram extends DrawableContainer implements Navigable {
 	@Override
 	public Navigator getNavigator() {
 		return navigator;
-	}
-
-	private Point2D toViewCoordinates(PointND<? extends Number> point, double zoom) {
-		PointND<? extends Number> center = navigator.getCenter();
-		return new Point2D.Double(
-				(point.get(0).doubleValue() - center.get(0).doubleValue())*zoom,
-				(point.get(1).doubleValue() - center.get(1).doubleValue())*zoom
-		);
 	}
 }
