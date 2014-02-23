@@ -118,13 +118,4 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 	public T getDrawableContainer() {
 		return drawableContainer;
 	}
-
-	protected void zoomLabel(Label label, double zoom) {
-		Font classLabelFont = defaultFontSizesByLabel.get(label);
-		if (classLabelFont == null) {
-			classLabelFont = label.getFont();
-			defaultFontSizesByLabel.put(label, classLabelFont);
-		}
-		label.setFont(classLabelFont.deriveFont((float) (classLabelFont.getSize2D()*zoom)));
-	}
 }
