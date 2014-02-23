@@ -2,15 +2,12 @@ package de.erichseifert.gral.uml.navigation;
 
 import java.awt.Font;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.navigation.AbstractNavigator;
-import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -93,15 +90,17 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 
 	@Override
 	public void pan(PointND<? extends Number> deltas) {
-		double deltaX = deltas.get(0).doubleValue();
-		double deltaY = deltas.get(1).doubleValue();
-		Rectangle2D bounds = drawableContainer.getBounds();
-		drawableContainer.setPosition(bounds.getX() + deltaX, bounds.getY() + deltaY);
-		for (Drawable drawable : drawableContainer.getDrawables()) {
-			if (drawable instanceof Navigable) {
-				((Navigable) drawable).getNavigator().pan(deltas);
-			}
-		}
+		Point2D deltasView = deltas.getPoint2D();
+		PointND<? extends Number> deltasWorld = new PointND<Double>(
+				deltasView.getX()/getZoom(),
+				deltasView.getY()/getZoom()
+		);
+		PointND<? extends Number> centerOld = getCenter();
+		PointND<? extends Number> centerNew = new PointND<Double>(
+				centerOld.get(0).doubleValue() - deltasWorld.get(0).doubleValue(),
+				centerOld.get(1).doubleValue() - deltasWorld.get(1).doubleValue()
+		);
+		setCenter(centerNew);
 	}
 
 	@Override
