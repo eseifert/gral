@@ -161,6 +161,10 @@ public class PackageDrawable extends DrawableContainer {
 					width += bounds.getWidth();
 					height += bounds.getHeight();
 				}
+				// Scale the preferred size according to the current zoom
+				double zoom = getNavigator().getZoom();
+				width *= zoom;
+				height *= zoom;
 				return new de.erichseifert.gral.util.Dimension2D.Double(
 					Math.max(width, preferredSize.getWidth()),
 					Math.max(height, preferredSize.getHeight())
