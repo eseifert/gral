@@ -3,7 +3,9 @@ package de.erichseifert.gral.uml;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -11,6 +13,9 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigator;
+import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.kernel.Class;
@@ -20,8 +25,9 @@ import metamodel.classes.kernel.Package;
 /**
  * Represents a drawable that displays a package in UML class diagrams.
  */
-public class PackageDrawable extends DrawableContainer {
+public class PackageDrawable extends DrawableContainer implements Navigable {
 	private final Package pkg;
+	private final Navigator navigator;
 
 	private final Tab tab;
 	private final Body body;
@@ -166,6 +172,7 @@ public class PackageDrawable extends DrawableContainer {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
+		navigator = new DrawableContainerNavigator(this);
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
@@ -182,6 +189,24 @@ public class PackageDrawable extends DrawableContainer {
 	 */
 	public Package getPackage() {
 		return pkg;
+	}
+
+	@Override
+	protected void drawComponents(DrawingContext context) {
+		Graphics2D g2d = context.getGraphics();
+		AffineTransform txOld = g2d.getTransform();
+		double zoom = navigator.getZoom();
+
+		Point2D origin = navigator.getCenter().getPoint2D();
+		g2d.scale(zoom, zoom);
+		g2d.translate(-origin.getX(), -origin.getY());
+		super.drawComponents(context);
+		g2d.setTransform(txOld);
+	}
+
+	@Override
+	public Navigator getNavigator() {
+		return navigator;
 	}
 
 	/**
