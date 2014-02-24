@@ -12,14 +12,12 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
-	private final Map<Label, Font> defaultFontSizesByLabel;
 	private final T drawableContainer;
 	private double zoom;
 	private final PointND<? extends Number> center;
 
 	public DrawableContainerNavigator(T drawableContainer) {
 		this.drawableContainer = drawableContainer;
-		defaultFontSizesByLabel = new HashMap<Label, Font>();
 		zoom = 1.0;
 		setZoomFactor(1.05);
 		center = new PointND<Number>(0.0, 0.0);
@@ -39,7 +37,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 	}
 
 	// TODO: Coordinate transformation is the responsibility of the renderer
-	private Point2D toViewCoordinates(PointND<? extends Number> point, double zoom) {
+	public Point2D toViewCoordinates(PointND<? extends Number> point, double zoom) {
 		return new Point2D.Double(
 				(point.get(0).doubleValue() - center.get(0).doubleValue())*zoom,
 				(point.get(1).doubleValue() - center.get(1).doubleValue())*zoom
@@ -81,7 +79,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 		this.center.setLocation(center.get(0), center.get(1));
 	}
 
-	private PointND<? extends Number> toWorldCoordinates(Point2D point, double zoom) {
+	public PointND<? extends Number> toWorldCoordinates(Point2D point, double zoom) {
 		return new PointND<Double>(
 			point.getX()/zoom + center.get(0).doubleValue(),
 			point.getY()/zoom + center.get(1).doubleValue()
