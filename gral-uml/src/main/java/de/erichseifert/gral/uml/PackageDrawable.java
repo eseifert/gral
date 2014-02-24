@@ -96,10 +96,18 @@ public class PackageDrawable extends DrawableContainer {
 
 			navigator = new DrawableContainerNavigator(this);
 			for (NamedElement member : pkg.getOwnedMembers()) {
+				Drawable drawable = null;
 				if (member instanceof metamodel.classes.kernel.Class) {
-					add(new ClassDrawable((Class) member));
+					drawable = new ClassDrawable((Class) member);
 				} else if (member instanceof Package) {
-					add(new PackageDrawable((Package) member));
+					drawable = new PackageDrawable((Package) member);
+					((PackageDrawable) drawable).setMembersDisplayed(true);
+					((PackageDrawable) drawable).getTab().setNameVisible(true);
+				}
+				if (drawable != null) {
+					Dimension2D preferredSize = drawable.getPreferredSize();
+					drawable.setBounds(0, 0, preferredSize.getWidth(), preferredSize.getHeight());
+					add(drawable);
 				}
 			}
 
