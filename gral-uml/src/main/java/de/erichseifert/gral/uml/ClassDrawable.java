@@ -25,10 +25,8 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
@@ -159,24 +157,6 @@ public class ClassDrawable extends DrawableContainer {
 	public void draw(DrawingContext context) {
 		drawBorder(context);
 		drawComponents(context);
-	}
-
-	@Override
-	protected void drawComponents(DrawingContext context) {
-		// Use the regular drawing routine, if enough space is available
-		if (getHeight() >= getPreferredSize().getHeight()) {
-			super.drawComponents(context);
-			return;
-		}
-
-		for (Drawable drawable : getDrawables()) {
-			Rectangle2D drawableBounds = drawable.getBounds();
-			if (drawableBounds.getMaxY() > getBounds().getMaxY()) {
-				// TODO: Show hint that some fields or methods are not visible
-				break;
-			}
-			drawable.draw(context);
-		}
 	}
 
 	protected void drawBorder(DrawingContext context) {
