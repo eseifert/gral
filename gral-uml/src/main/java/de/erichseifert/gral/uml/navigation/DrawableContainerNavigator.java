@@ -1,13 +1,10 @@
 package de.erichseifert.gral.uml.navigation;
 
-import java.awt.Font;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.erichseifert.gral.graphics.DrawableContainer;
-import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.navigation.AbstractNavigator;
+import de.erichseifert.gral.navigation.NavigationEvent;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -76,7 +73,10 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 
 	@Override
 	public void setCenter(PointND<? extends Number> center) {
+		PointND<? extends Number> centerOld = new PointND<Number>(this.center.get(0), this.center.get(1));
 		this.center.setLocation(center.get(0), center.get(1));
+		NavigationEvent centerChangeEvent = new NavigationEvent(this, centerOld, center);
+		fireCenterChanged(centerChangeEvent);
 	}
 
 	public PointND<? extends Number> toWorldCoordinates(Point2D point, double zoom) {
