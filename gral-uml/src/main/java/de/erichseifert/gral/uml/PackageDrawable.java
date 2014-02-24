@@ -25,9 +25,8 @@ import metamodel.classes.kernel.Package;
 /**
  * Represents a drawable that displays a package in UML class diagrams.
  */
-public class PackageDrawable extends DrawableContainer implements Navigable {
+public class PackageDrawable extends DrawableContainer {
 	private final Package pkg;
-	private final Navigator navigator;
 
 	private final Tab tab;
 	private final Body body;
@@ -84,16 +83,18 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		}
 	}
 
-	public static class Body extends DrawableContainer {
+	public static class Body extends DrawableContainer implements Navigable {
 		private final Label name;
 		// TODO: Make stroke serializable
 		private Stroke borderStroke;
 		private boolean membersDisplayed;
+		private final Navigator navigator;
 
 		public Body(Package pkg) {
 			name = new Label(pkg.getName());
 			borderStroke = new BasicStroke(1f);
 
+			navigator = new DrawableContainerNavigator(this);
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				if (member instanceof metamodel.classes.kernel.Class) {
 					add(new ClassDrawable((Class) member));
@@ -120,6 +121,19 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 				name.setBounds(getBounds());
 				name.draw(context);
 			}
+		}
+
+		@Override
+		protected void drawComponents(DrawingContext context) {
+			Graphics2D g2d = context.getGraphics();
+			AffineTransform txOld = g2d.getTransform();
+			double zoom = navigator.getZoom();
+
+			Point2D origin = navigator.getCenter().getPoint2D();
+			g2d.scale(zoom, zoom);
+			g2d.translate(-origin.getX(), -origin.getY());
+			super.drawComponents(context);
+			g2d.setTransform(txOld);
 		}
 
 		@Override
@@ -162,6 +176,11 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		public void setBorderStroke(Stroke borderStroke) {
 			this.borderStroke = borderStroke;
 		}
+
+		@Override
+		public Navigator getNavigator() {
+			return navigator;
+		}
 	}
 
 	/**
@@ -172,7 +191,6 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
-		navigator = new DrawableContainerNavigator(this);
 
 		tab = new Tab(pkg);
 		tab.setNameVisible(false);
@@ -189,24 +207,6 @@ public class PackageDrawable extends DrawableContainer implements Navigable {
 	 */
 	public Package getPackage() {
 		return pkg;
-	}
-
-	@Override
-	protected void drawComponents(DrawingContext context) {
-		Graphics2D g2d = context.getGraphics();
-		AffineTransform txOld = g2d.getTransform();
-		double zoom = navigator.getZoom();
-
-		Point2D origin = navigator.getCenter().getPoint2D();
-		g2d.scale(zoom, zoom);
-		g2d.translate(-origin.getX(), -origin.getY());
-		super.drawComponents(context);
-		g2d.setTransform(txOld);
-	}
-
-	@Override
-	public Navigator getNavigator() {
-		return navigator;
 	}
 
 	/**
