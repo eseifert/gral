@@ -31,7 +31,6 @@ import metamodel.examples.TypesPackage;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
-import de.erichseifert.gral.uml.PackageDrawable;
 
 public class PackageExample extends JFrame {
 
@@ -43,10 +42,10 @@ public class PackageExample extends JFrame {
 
 		DrawableContainer diagram = new ClassDiagram();
 		PackageRenderer packageRenderer = new PackageRenderer();
-		PackageDrawable typesDrawableCompactView = (PackageDrawable) packageRenderer.getRendererComponent(types);
+		PackageRenderer.PackageDrawable typesDrawableCompactView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableCompactView.setBounds(30, 30, 150, 100);
 		diagram.add(typesDrawableCompactView);
-		PackageDrawable typesDrawableContainerView = (PackageDrawable) packageRenderer.getRendererComponent(types);
+		PackageRenderer.PackageDrawable typesDrawableContainerView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableContainerView.setBounds(300, 100, 150, 400);
 		typesDrawableContainerView.getTab().setNameVisible(true);
 		typesDrawableContainerView.setMembersDisplayed(true);
