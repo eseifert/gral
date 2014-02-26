@@ -18,6 +18,7 @@ import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.util.PointND;
 import metamodel.classes.kernel.*;
 import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.Package;
@@ -70,7 +71,7 @@ public class PackageRenderer {
 	public static class Body extends DrawableContainer implements Navigable {
 		private final Label name;
 		private final PackageRenderer packageRenderer;
-		private final Navigator navigator;
+		private final DrawableContainerNavigator navigator;
 
 		public Body(Package pkg, PackageRenderer packageRenderer) {
 			name = new Label(pkg.getName());
@@ -87,7 +88,9 @@ public class PackageRenderer {
 				}
 				if (drawable != null) {
 					Dimension2D preferredSize = drawable.getPreferredSize();
-					drawable.setBounds(0, 0, preferredSize.getWidth(), preferredSize.getHeight());
+					Point2D bodyPos = new Point2D.Double(getX(), getY());
+					PointND<? extends Number> posNew = navigator.toWorldCoordinates(bodyPos, navigator.getZoom());
+					drawable.setBounds(posNew.get(0).doubleValue(), posNew.get(1).doubleValue(), preferredSize.getWidth(), preferredSize.getHeight());
 					add(drawable);
 				}
 			}
