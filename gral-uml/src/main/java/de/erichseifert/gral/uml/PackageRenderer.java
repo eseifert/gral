@@ -28,11 +28,12 @@ public class PackageRenderer {
 		// TODO: Make stroke serializable
 		private Stroke borderStroke;
 
-		public Tab(metamodel.classes.kernel.Package pkg) {
+		public Tab(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
 			super(pkg);
 			float fontSize = getName().getFont().getSize2D();
 			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
 			borderStroke = new BasicStroke(1f);
+			setNameVisible(packageRenderer.isNameVisible());
 		}
 
 		@Override
@@ -198,8 +199,7 @@ public class PackageRenderer {
 
 			this.pkg = pkg;
 
-			tab = new Tab(pkg);
-			tab.setNameVisible(false);
+			tab = new Tab(pkg, packageRenderer);
 			StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
 			add(tab, layoutConstraints);
 			body = new Body(pkg, packageRenderer);
@@ -230,6 +230,7 @@ public class PackageRenderer {
 	}
 
 	private boolean membersVisible;
+	private boolean nameVisible;
 
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
 		return new PackageDrawable(pkg, this);
@@ -249,5 +250,13 @@ public class PackageRenderer {
 	 */
 	public void setMembersVisible(boolean membersVisible) {
 		this.membersVisible = membersVisible;
+	}
+
+	public boolean isNameVisible() {
+		return nameVisible;
+	}
+
+	public void setNameVisible(boolean nameVisible) {
+		this.nameVisible = nameVisible;
 	}
 }
