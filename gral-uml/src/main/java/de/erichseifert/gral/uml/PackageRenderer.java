@@ -79,15 +79,15 @@ public class PackageRenderer {
 		private final Label name;
 		// TODO: Make stroke serializable
 		private Stroke borderStroke;
-		private boolean membersDisplayed;
+		private final PackageRenderer packageRenderer;
 		private final Navigator navigator;
 
-		public Body(Package pkg) {
+		public Body(Package pkg, PackageRenderer packageRenderer) {
 			name = new Label(pkg.getName());
 			borderStroke = new BasicStroke(1f);
 
 			navigator = new DrawableContainerNavigator(this);
-			PackageRenderer packageRenderer = new PackageRenderer();
+			this.packageRenderer = packageRenderer;
 			ClassRenderer classRenderer = new ClassRenderer();
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				Drawable drawable = null;
@@ -95,7 +95,6 @@ public class PackageRenderer {
 					drawable = classRenderer.getRendererComponent((Class) member);
 				} else if (member instanceof Package) {
 					drawable = packageRenderer.getRendererComponent((Package) member);
-					((PackageDrawable) drawable).setMembersDisplayed(true);
 					((PackageDrawable) drawable).getTab().setNameVisible(true);
 				}
 				if (drawable != null) {
@@ -117,7 +116,7 @@ public class PackageRenderer {
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 
-			if (membersDisplayed) {
+			if (packageRenderer.isMembersVisible()) {
 				drawComponents(context);
 			} else {
 				name.setBounds(getBounds());
@@ -147,7 +146,7 @@ public class PackageRenderer {
 					preferredSize.getHeight() + insets.getTop() + insets.getBottom()
 			);
 
-			if (membersDisplayed) {
+			if (packageRenderer.isMembersVisible()) {
 				double width = 0.0;
 				double height = 0.0;
 				for (Drawable drawable : getDrawables()) {
@@ -165,14 +164,6 @@ public class PackageRenderer {
 				);
 			}
 			return preferredSize;
-		}
-
-		public boolean isMembersDisplayed() {
-			return membersDisplayed;
-		}
-
-		public void setMembersDisplayed(boolean membersDisplayed) {
-			this.membersDisplayed = membersDisplayed;
 		}
 
 		public Stroke getBorderStroke() {
@@ -202,7 +193,7 @@ public class PackageRenderer {
 		 * Creates a drawable used to display the specified package.
 		 * @param pkg Package to be displayed.
 		 */
-		protected PackageDrawable(Package pkg) {
+		protected PackageDrawable(Package pkg, PackageRenderer packageRenderer) {
 			super(new StackedLayout(Orientation.VERTICAL));
 
 			this.pkg = pkg;
@@ -211,7 +202,7 @@ public class PackageRenderer {
 			tab.setNameVisible(false);
 			StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
 			add(tab, layoutConstraints);
-			body = new Body(pkg);
+			body = new Body(pkg, packageRenderer);
 			add(body);
 			// TODO Add support for package URI
 		}
@@ -222,22 +213,6 @@ public class PackageRenderer {
 		 */
 		public Package getPackage() {
 			return pkg;
-		}
-
-		/**
-		 * Returns whether or not the members of the package are displayed.
-		 * @return {@code true} if the members are shown, {@code false} otherwise.
-		 */
-		public boolean isMembersDisplayed() {
-			return body.isMembersDisplayed();
-		}
-
-		/**
-		 * Sets the display behaviour for package members to the specified value.
-		 * @param membersDisplayed Tells whether or not the package members should be displayed.
-		 */
-		public void setMembersDisplayed(boolean membersDisplayed) {
-			body.setMembersDisplayed(membersDisplayed);
 		}
 
 		public Tab getTab() {
@@ -254,7 +229,25 @@ public class PackageRenderer {
 		}
 	}
 
+	private boolean membersVisible;
+
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
-		return new PackageDrawable(pkg);
+		return new PackageDrawable(pkg, this);
+	}
+
+	/**
+	 * Returns whether or not the members of the package are displayed.
+	 * @return {@code true} if the members are shown, {@code false} otherwise.
+	 */
+	public boolean isMembersVisible() {
+		return membersVisible;
+	}
+
+	/**
+	 * Sets the display behaviour for package members to the specified value.
+	 * @param membersVisible Tells whether or not the package members should be displayed.
+	 */
+	public void setMembersVisible(boolean membersVisible) {
+		this.membersVisible = membersVisible;
 	}
 }

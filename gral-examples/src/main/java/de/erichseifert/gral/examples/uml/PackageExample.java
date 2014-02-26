@@ -45,10 +45,10 @@ public class PackageExample extends JFrame {
 		PackageRenderer.PackageDrawable typesDrawableCompactView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableCompactView.setBounds(30, 30, 150, 100);
 		diagram.add(typesDrawableCompactView);
+		packageRenderer.setMembersVisible(true);
 		PackageRenderer.PackageDrawable typesDrawableContainerView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableContainerView.setBounds(300, 100, 150, 400);
 		typesDrawableContainerView.getTab().setNameVisible(true);
-		typesDrawableContainerView.setMembersDisplayed(true);
 		diagram.add(typesDrawableContainerView);
 
 		DrawablePanel panel = new DrawablePanel(diagram);
