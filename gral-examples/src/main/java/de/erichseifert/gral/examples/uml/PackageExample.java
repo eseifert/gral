@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import de.erichseifert.gral.uml.PackageRenderer;
 import metamodel.classes.kernel.Package;
 import metamodel.examples.TypesPackage;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -41,10 +42,11 @@ public class PackageExample extends JFrame {
 		Package types = new TypesPackage();
 
 		DrawableContainer diagram = new ClassDiagram();
-		PackageDrawable typesDrawableCompactView = new PackageDrawable(types);
+		PackageRenderer packageRenderer = new PackageRenderer();
+		PackageDrawable typesDrawableCompactView = (PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableCompactView.setBounds(30, 30, 150, 100);
 		diagram.add(typesDrawableCompactView);
-		PackageDrawable typesDrawableContainerView = new PackageDrawable(types);
+		PackageDrawable typesDrawableContainerView = (PackageDrawable) packageRenderer.getRendererComponent(types);
 		typesDrawableContainerView.setBounds(300, 100, 150, 400);
 		typesDrawableContainerView.getTab().setNameVisible(true);
 		typesDrawableContainerView.setMembersDisplayed(true);

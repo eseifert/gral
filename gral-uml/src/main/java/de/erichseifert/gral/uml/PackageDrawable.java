@@ -199,7 +199,7 @@ public class PackageDrawable extends DrawableContainer {
 	 * Creates a drawable used to display the specified package.
 	 * @param pkg Package to be displayed.
 	 */
-	public PackageDrawable(Package pkg) {
+	protected PackageDrawable(Package pkg) {
 		super(new StackedLayout(Orientation.VERTICAL));
 
 		this.pkg = pkg;
