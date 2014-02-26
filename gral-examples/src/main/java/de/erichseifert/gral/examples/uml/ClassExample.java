@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.ui.DrawablePanel;
-import de.erichseifert.gral.uml.ClassDrawableRenderer;
+import de.erichseifert.gral.uml.ClassRenderer;
 import metamodel.classes.kernel.Package;
 import metamodel.examples.WindowClass;
 
@@ -18,8 +18,8 @@ public class ClassExample extends JFrame {
 		Package defaultPackage = new Package("Default");
 		WindowClass windowClass = new WindowClass(defaultPackage);
 
-		ClassDrawableRenderer classDrawableRenderer = new ClassDrawableRenderer();
-		Drawable classDrawable = classDrawableRenderer.getRendererComponent(windowClass);
+		ClassRenderer classRenderer = new ClassRenderer();
+		Drawable classDrawable = classRenderer.getRendererComponent(windowClass);
 		getContentPane().add(new DrawablePanel(classDrawable));
 	}
 
