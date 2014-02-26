@@ -84,7 +84,6 @@ public class PackageRenderer {
 					drawable = classRenderer.getRendererComponent((Class) member);
 				} else if (member instanceof Package) {
 					drawable = packageRenderer.getRendererComponent((Package) member);
-					((PackageDrawable) drawable).getTab().setNameVisible(true);
 				}
 				if (drawable != null) {
 					Dimension2D preferredSize = drawable.getPreferredSize();
@@ -161,49 +160,6 @@ public class PackageRenderer {
 		}
 	}
 
-	/**
-	 * Represents a drawable that displays a package in UML class diagrams.
-	 */
-	public static class PackageDrawable extends DrawableContainer {
-		private final Package pkg;
-
-		private final Tab tab;
-		private final Body body;
-
-		/**
-		 * Creates a drawable used to display the specified package.
-		 * @param pkg Package to be displayed.
-		 */
-		protected PackageDrawable(Package pkg, PackageRenderer packageRenderer) {
-			super(new StackedLayout(Orientation.VERTICAL));
-
-			this.pkg = pkg;
-
-			tab = new Tab(pkg, packageRenderer);
-			StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
-			add(tab, layoutConstraints);
-			body = new Body(pkg, packageRenderer);
-			add(body);
-			// TODO Add support for package URI
-		}
-
-		/**
-		 * Returns the displayed package.
-		 * @return Displayed Package.
-		 */
-		public Package getPackage() {
-			return pkg;
-		}
-
-		public Tab getTab() {
-			return tab;
-		}
-
-		public Body getBody() {
-			return body;
-		}
-	}
-
 	private boolean membersVisible;
 	private boolean nameVisible;
 	// TODO: Make stroke serializable
@@ -214,7 +170,14 @@ public class PackageRenderer {
 	}
 
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
-		return new PackageDrawable(pkg, this);
+		DrawableContainer packageDrawable = new DrawableContainer(new StackedLayout(Orientation.VERTICAL));
+		Tab tab = new Tab(pkg, this);
+		StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
+		packageDrawable.add(tab, layoutConstraints);
+		Body body = new Body(pkg, this);
+		packageDrawable.add(body);
+		// TODO Add support for package URI
+		return packageDrawable;
 	}
 
 	/**

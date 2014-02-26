@@ -25,12 +25,13 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import de.erichseifert.gral.uml.PackageRenderer;
-import metamodel.classes.kernel.Package;
-import metamodel.examples.TypesPackage;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.uml.ClassDiagram;
+import de.erichseifert.gral.uml.PackageRenderer;
+import metamodel.classes.kernel.Package;
+import metamodel.examples.TypesPackage;
 
 public class PackageExample extends JFrame {
 
@@ -42,12 +43,12 @@ public class PackageExample extends JFrame {
 
 		DrawableContainer diagram = new ClassDiagram();
 		PackageRenderer packageRenderer = new PackageRenderer();
-		PackageRenderer.PackageDrawable typesDrawableCompactView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
+		Drawable typesDrawableCompactView = packageRenderer.getRendererComponent(types);
 		typesDrawableCompactView.setBounds(30, 30, 150, 100);
 		diagram.add(typesDrawableCompactView);
 		packageRenderer.setMembersVisible(true);
 		packageRenderer.setNameVisible(true);
-		PackageRenderer.PackageDrawable typesDrawableContainerView = (PackageRenderer.PackageDrawable) packageRenderer.getRendererComponent(types);
+		Drawable typesDrawableContainerView = packageRenderer.getRendererComponent(types);
 		typesDrawableContainerView.setBounds(300, 100, 150, 400);
 		diagram.add(typesDrawableContainerView);
 
