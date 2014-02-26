@@ -87,12 +87,14 @@ public class PackageRenderer {
 			borderStroke = new BasicStroke(1f);
 
 			navigator = new DrawableContainerNavigator(this);
+			PackageRenderer packageRenderer = new PackageRenderer();
+			ClassRenderer classRenderer = new ClassRenderer();
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				Drawable drawable = null;
 				if (member instanceof metamodel.classes.kernel.Class) {
-					drawable = new ClassDrawable((Class) member);
+					drawable = classRenderer.getRendererComponent((Class) member);
 				} else if (member instanceof Package) {
-					drawable = new PackageDrawable((Package) member);
+					drawable = packageRenderer.getRendererComponent((Package) member);
 					((PackageDrawable) drawable).setMembersDisplayed(true);
 					((PackageDrawable) drawable).getTab().setNameVisible(true);
 				}
