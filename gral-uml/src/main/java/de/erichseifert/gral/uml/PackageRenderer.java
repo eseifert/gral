@@ -24,15 +24,14 @@ import metamodel.classes.kernel.Package;
 
 public class PackageRenderer {
 	public static class Tab extends NamedElementDrawable {
+		private final PackageRenderer packageRenderer;
 		private final Insets2D insets;
-		// TODO: Make stroke serializable
-		private Stroke borderStroke;
 
 		public Tab(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
 			super(pkg);
 			float fontSize = getName().getFont().getSize2D();
+			this.packageRenderer = packageRenderer;
 			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
-			borderStroke = new BasicStroke(1f);
 			setNameVisible(packageRenderer.isNameVisible());
 		}
 
@@ -40,7 +39,7 @@ public class PackageRenderer {
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
 			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(getBorderStroke());
+			g2d.setStroke(packageRenderer.getBorderStroke());
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 
@@ -66,26 +65,15 @@ public class PackageRenderer {
 			);
 			return preferredSize;
 		}
-
-		public Stroke getBorderStroke() {
-			return borderStroke;
-		}
-
-		public void setBorderStroke(Stroke borderStroke) {
-			this.borderStroke = borderStroke;
-		}
 	}
 
 	public static class Body extends DrawableContainer implements Navigable {
 		private final Label name;
-		// TODO: Make stroke serializable
-		private Stroke borderStroke;
 		private final PackageRenderer packageRenderer;
 		private final Navigator navigator;
 
 		public Body(Package pkg, PackageRenderer packageRenderer) {
 			name = new Label(pkg.getName());
-			borderStroke = new BasicStroke(1f);
 
 			navigator = new DrawableContainerNavigator(this);
 			this.packageRenderer = packageRenderer;
@@ -113,7 +101,7 @@ public class PackageRenderer {
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
 			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(getBorderStroke());
+			g2d.setStroke(packageRenderer.getBorderStroke());
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 
@@ -167,14 +155,6 @@ public class PackageRenderer {
 			return preferredSize;
 		}
 
-		public Stroke getBorderStroke() {
-			return borderStroke;
-		}
-
-		public void setBorderStroke(Stroke borderStroke) {
-			this.borderStroke = borderStroke;
-		}
-
 		@Override
 		public Navigator getNavigator() {
 			return navigator;
@@ -222,15 +202,16 @@ public class PackageRenderer {
 		public Body getBody() {
 			return body;
 		}
-
-		public void setBorderStroke(Stroke borderStroke) {
-			getTab().setBorderStroke(borderStroke);
-			getBody().setBorderStroke(borderStroke);
-		}
 	}
 
 	private boolean membersVisible;
 	private boolean nameVisible;
+	// TODO: Make stroke serializable
+	private Stroke borderStroke;
+
+	public PackageRenderer() {
+		borderStroke = new BasicStroke(1f);
+	}
 
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
 		return new PackageDrawable(pkg, this);
@@ -258,5 +239,13 @@ public class PackageRenderer {
 
 	public void setNameVisible(boolean nameVisible) {
 		this.nameVisible = nameVisible;
+	}
+
+	public Stroke getBorderStroke() {
+		return borderStroke;
+	}
+
+	public void setBorderStroke(Stroke borderStroke) {
+		this.borderStroke = borderStroke;
 	}
 }
