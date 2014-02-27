@@ -11,7 +11,6 @@ import java.awt.geom.Rectangle2D;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
@@ -19,8 +18,8 @@ import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.PointND;
-import metamodel.classes.kernel.*;
 import metamodel.classes.kernel.Class;
+import metamodel.classes.kernel.NamedElement;
 import metamodel.classes.kernel.Package;
 
 public class PackageRenderer {
@@ -69,33 +68,33 @@ public class PackageRenderer {
 	}
 
 	protected static class Body extends DrawableContainer implements Navigable {
-		private final Label name;
-		private final PackageRenderer packageRenderer;
+		private final Stroke borderStroke;
 		private final DrawableContainerNavigator navigator;
 
 		public Body(Package pkg, PackageRenderer packageRenderer) {
-			name = new Label(pkg.getName());
-
 			navigator = new DrawableContainerNavigator(this);
-			this.packageRenderer = packageRenderer;
+			this.borderStroke = packageRenderer.getBorderStroke();
 			ClassRenderer classRenderer = packageRenderer.getClassRenderer();
-			for (NamedElement member : pkg.getOwnedMembers()) {
-				Drawable drawable = null;
-				if (member instanceof metamodel.classes.kernel.Class) {
-					drawable = classRenderer.getRendererComponent((Class) member);
-				} else if (member instanceof Package) {
-					drawable = packageRenderer.getRendererComponent((Package) member);
-				}
-				if (drawable != null) {
-					Dimension2D preferredSize = drawable.getPreferredSize();
-					Point2D bodyPos = new Point2D.Double(getX(), getY());
-					PointND<? extends Number> posNew = navigator.toWorldCoordinates(bodyPos, navigator.getZoom());
-					drawable.setBounds(posNew.get(0).doubleValue(), posNew.get(1).doubleValue(), preferredSize.getWidth(), preferredSize.getHeight());
-					add(drawable);
+			if (packageRenderer.isMembersVisible()) {
+				for (NamedElement member : pkg.getOwnedMembers()) {
+					Drawable drawable = null;
+					if (member instanceof metamodel.classes.kernel.Class) {
+						drawable = classRenderer.getRendererComponent((Class) member);
+					} else if (member instanceof Package) {
+						drawable = packageRenderer.getRendererComponent((Package) member);
+					}
+					if (drawable != null) {
+						Dimension2D preferredSize = drawable.getPreferredSize();
+						Point2D bodyPos = new Point2D.Double(getX(), getY());
+						PointND<? extends Number> posNew = navigator.toWorldCoordinates(bodyPos, navigator.getZoom());
+						drawable.setBounds(posNew.get(0).doubleValue(), posNew.get(1).doubleValue(), preferredSize.getWidth(), preferredSize.getHeight());
+						add(drawable);
+					}
 				}
 			}
 
-			double textHeight = name.getTextRectangle().getHeight();
+			// TODO: Use proper reference size
+			double textHeight = 12.0;
 			setInsets(new Insets2D.Double(textHeight));
 		}
 
@@ -103,16 +102,11 @@ public class PackageRenderer {
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
 			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(packageRenderer.getBorderStroke());
+			g2d.setStroke(borderStroke);
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 
-			if (packageRenderer.isMembersVisible()) {
-				drawComponents(context);
-			} else {
-				name.setBounds(getBounds());
-				name.draw(context);
-			}
+			drawComponents(context);
 		}
 
 		@Override
@@ -130,31 +124,22 @@ public class PackageRenderer {
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			Dimension2D preferredSize = name.getPreferredSize();
 			Insets2D insets = getInsets();
-			preferredSize.setSize(
-					preferredSize.getWidth() + insets.getLeft() + insets.getRight(),
-					preferredSize.getHeight() + insets.getTop() + insets.getBottom()
-			);
-
-			if (packageRenderer.isMembersVisible()) {
-				double width = 0.0;
-				double height = 0.0;
-				for (Drawable drawable : getDrawables()) {
-					Rectangle2D bounds = drawable.getBounds();
-					width += bounds.getWidth();
-					height += bounds.getHeight();
-				}
-				// Scale the preferred size according to the current zoom
-				double zoom = getNavigator().getZoom();
-				width *= zoom;
-				height *= zoom;
-				return new de.erichseifert.gral.util.Dimension2D.Double(
-					Math.max(width, preferredSize.getWidth()),
-					Math.max(height, preferredSize.getHeight())
-				);
+			double width = 0.0;
+			double height = 0.0;
+			for (Drawable drawable : getDrawables()) {
+				Rectangle2D bounds = drawable.getBounds();
+				width += bounds.getWidth();
+				height += bounds.getHeight();
 			}
-			return preferredSize;
+			// Scale the preferred size according to the current zoom
+			double zoom = getNavigator().getZoom();
+			width *= zoom;
+			height *= zoom;
+			return new de.erichseifert.gral.util.Dimension2D.Double(
+				Math.max(width, insets.getHorizontal()),
+				Math.max(height, insets.getVertical())
+			);
 		}
 
 		@Override
