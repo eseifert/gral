@@ -25,22 +25,22 @@ import metamodel.classes.kernel.Package;
 
 public class PackageRenderer {
 	protected static class Tab extends NamedElementDrawable {
-		private final PackageRenderer packageRenderer;
+		// TODO: Stroke should be serializable
+		private final Stroke borderStroke;
 		private final Insets2D insets;
 
-		public Tab(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
+		public Tab(metamodel.classes.kernel.Package pkg, Stroke borderStroke) {
 			super(pkg);
 			float fontSize = getName().getFont().getSize2D();
-			this.packageRenderer = packageRenderer;
 			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
-			setNameVisible(packageRenderer.isNameVisible());
+			this.borderStroke = borderStroke;
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
 			Graphics2D g2d = context.getGraphics();
 			Stroke strokeOld = g2d.getStroke();
-			g2d.setStroke(packageRenderer.getBorderStroke());
+			g2d.setStroke(borderStroke);
 			g2d.draw(getBounds());
 			g2d.setStroke(strokeOld);
 
@@ -184,7 +184,8 @@ public class PackageRenderer {
 
 		public PackageDrawable(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
 			super(new StackedLayout(Orientation.VERTICAL));
-			tab = new Tab(pkg, packageRenderer);
+			tab = new Tab(pkg, packageRenderer.getBorderStroke());
+			tab.setNameVisible(packageRenderer.isNameVisible());
 			StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
 			add(tab, layoutConstraints);
 			body = new Body(pkg, packageRenderer);
