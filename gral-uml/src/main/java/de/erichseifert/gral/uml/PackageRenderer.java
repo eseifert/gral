@@ -179,12 +179,14 @@ public class PackageRenderer {
 	}
 
 	protected static class PackageDrawable extends DrawableContainer {
+		private final Package pkg;
 		private final PackageRenderer packageRenderer;
 		private final Tab tab;
 		private final Body body;
 
 		public PackageDrawable(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
 			super(new StackedLayout(Orientation.VERTICAL));
+			this.pkg = pkg;
 			this.packageRenderer = packageRenderer;
 			tab = new Tab(pkg, packageRenderer.getBorderStroke());
 			tab.setNameVisible(packageRenderer.isNameVisible());
@@ -201,6 +203,10 @@ public class PackageRenderer {
 
 		public Body getBody() {
 			return body;
+		}
+
+		public Package getPackage() {
+			return pkg;
 		}
 
 		public PackageRenderer getPackageRenderer() {
