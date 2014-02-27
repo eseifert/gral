@@ -158,6 +158,21 @@ public class PackageRenderer {
 		}
 
 		@Override
+		public void setBounds(double x, double y, double width, double height) {
+			double deltaX = x - getX();
+			double deltaY = y - getY();
+			super.setBounds(x, y, width, height);
+			for (Drawable drawable : getDrawables()) {
+				// TODO: Body should not be dependent on a Navigator of type DrawableContainerNavigator
+				DrawableContainerNavigator navigator = (DrawableContainerNavigator) getNavigator();
+				// TODO: Coordinate transformation should use DrawableContainerNavigator.toWorldCoordinates()
+				double drawableXNew = drawable.getX() + deltaX/navigator.getZoom();
+				double drawableYNew = drawable.getY() + deltaY/navigator.getZoom();
+				drawable.setPosition(drawableXNew, drawableYNew);
+			}
+		}
+
+		@Override
 		public Navigator getNavigator() {
 			return navigator;
 		}
