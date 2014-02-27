@@ -24,7 +24,7 @@ import metamodel.classes.kernel.Class;
 import metamodel.classes.kernel.Package;
 
 public class PackageRenderer {
-	public static class Tab extends NamedElementDrawable {
+	protected static class Tab extends NamedElementDrawable {
 		private final PackageRenderer packageRenderer;
 		private final Insets2D insets;
 
@@ -68,7 +68,7 @@ public class PackageRenderer {
 		}
 	}
 
-	public static class Body extends DrawableContainer implements Navigable {
+	protected static class Body extends DrawableContainer implements Navigable {
 		private final Label name;
 		private final PackageRenderer packageRenderer;
 		private final DrawableContainerNavigator navigator;
@@ -163,6 +163,29 @@ public class PackageRenderer {
 		}
 	}
 
+	protected static class PackageDrawable extends DrawableContainer {
+		private final Tab tab;
+		private final Body body;
+
+		public PackageDrawable(metamodel.classes.kernel.Package pkg, PackageRenderer packageRenderer) {
+			super(new StackedLayout(Orientation.VERTICAL));
+			tab = new Tab(pkg, packageRenderer);
+			StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
+			add(tab, layoutConstraints);
+			body = new Body(pkg, packageRenderer);
+			add(body);
+			// TODO Add support for package URI
+		}
+
+		public Tab getTab() {
+			return tab;
+		}
+
+		public Body getBody() {
+			return body;
+		}
+	}
+
 	private boolean membersVisible;
 	private boolean nameVisible;
 	// TODO: Make stroke serializable
@@ -173,14 +196,7 @@ public class PackageRenderer {
 	}
 
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
-		DrawableContainer packageDrawable = new DrawableContainer(new StackedLayout(Orientation.VERTICAL));
-		Tab tab = new Tab(pkg, this);
-		StackedLayout.Constraints layoutConstraints = new StackedLayout.Constraints(false, 0.0, 0.5);
-		packageDrawable.add(tab, layoutConstraints);
-		Body body = new Body(pkg, this);
-		packageDrawable.add(body);
-		// TODO Add support for package URI
-		return packageDrawable;
+		return new PackageDrawable(pkg, this);
 	}
 
 	/**
