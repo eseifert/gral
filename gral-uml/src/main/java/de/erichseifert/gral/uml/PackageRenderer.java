@@ -78,7 +78,7 @@ public class PackageRenderer {
 
 			navigator = new DrawableContainerNavigator(this);
 			this.packageRenderer = packageRenderer;
-			ClassRenderer classRenderer = new ClassRenderer();
+			ClassRenderer classRenderer = packageRenderer.getClassRenderer();
 			for (NamedElement member : pkg.getOwnedMembers()) {
 				Drawable drawable = null;
 				if (member instanceof metamodel.classes.kernel.Class) {
@@ -206,9 +206,11 @@ public class PackageRenderer {
 	private boolean nameVisible;
 	// TODO: Make stroke serializable
 	private Stroke borderStroke;
+	private ClassRenderer classRenderer;
 
 	public PackageRenderer() {
 		borderStroke = new BasicStroke(1f);
+		classRenderer = new ClassRenderer();
 	}
 
 	public Drawable getRendererComponent(metamodel.classes.kernel.Package pkg) {
@@ -245,5 +247,13 @@ public class PackageRenderer {
 
 	public void setBorderStroke(Stroke borderStroke) {
 		this.borderStroke = borderStroke;
+	}
+
+	public ClassRenderer getClassRenderer() {
+		return classRenderer;
+	}
+
+	public void setClassRenderer(ClassRenderer classRenderer) {
+		this.classRenderer = classRenderer;
 	}
 }
