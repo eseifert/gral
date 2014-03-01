@@ -28,7 +28,7 @@ import javax.swing.JFrame;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
-import de.erichseifert.gral.uml.ClassDiagram;
+import de.erichseifert.gral.uml.ClassDiagramRenderer;
 import de.erichseifert.gral.uml.PackageRenderer;
 import metamodel.classes.kernel.Package;
 import metamodel.examples.TypesPackage;
@@ -41,7 +41,7 @@ public class PackageExample extends JFrame {
 
 		Package types = new TypesPackage();
 
-		DrawableContainer diagram = new ClassDiagram();
+		DrawableContainer diagram = (DrawableContainer) new ClassDiagramRenderer().getRendererComponent();
 		PackageRenderer packageRenderer = new PackageRenderer();
 		Drawable typesDrawableCompactView = packageRenderer.getRendererComponent(types);
 		typesDrawableCompactView.setBounds(30, 30, 150, 100);

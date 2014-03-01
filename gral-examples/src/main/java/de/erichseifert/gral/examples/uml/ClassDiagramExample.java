@@ -7,9 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.uml.ClassDiagram;
+import de.erichseifert.gral.uml.ClassDiagramRenderer;
 import de.erichseifert.gral.uml.ClassRenderer;
 import de.erichseifert.gral.uml.PackageRenderer;
 import metamodel.classes.kernel.Package;
@@ -17,14 +18,15 @@ import metamodel.examples.TypesPackage;
 import metamodel.examples.WindowClass;
 
 public class ClassDiagramExample extends JFrame {
-	private final ClassDiagram classDiagram;
+	private final ClassDiagramRenderer classDiagramRenderer;
 
 	public ClassDiagramExample() {
 		super("Class diagram");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(1024, 768);
 
-		classDiagram = new ClassDiagram();
+		classDiagramRenderer = new ClassDiagramRenderer();
+		DrawableContainer classDiagram = (DrawableContainer) classDiagramRenderer.getRendererComponent();
 		classDiagram.setBounds(0, 0, 1000, 700);
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
 		metamodel.classes.kernel.Class abstractWindow = defaultPackage.addClass("AbstractWindow");
