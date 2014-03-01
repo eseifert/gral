@@ -10,6 +10,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.uml.AssociationRenderer;
 import de.erichseifert.gral.uml.ClassDiagramRenderer;
 import de.erichseifert.gral.uml.ClassRenderer;
 import de.erichseifert.gral.uml.PackageRenderer;
@@ -41,6 +42,9 @@ public class ClassDiagramExample extends JFrame {
 		Drawable windowDrawable = classRenderer.getRendererComponent(windowClass);
 		windowDrawable.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
 		classDiagram.add(windowDrawable);
+
+		AssociationRenderer associationRenderer = classDiagramRenderer.getAssociationRenderer();
+		classDiagram.add(associationRenderer.getRendererComponent(abstractWindowDrawable, windowDrawable));
 
 		Package typesPackage = new TypesPackage();
 		PackageRenderer packageRenderer = new PackageRenderer();
