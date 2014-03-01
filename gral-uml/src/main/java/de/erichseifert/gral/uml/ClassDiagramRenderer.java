@@ -38,10 +38,21 @@ public class ClassDiagramRenderer {
 		}
 	}
 
+	private AssociationRenderer associationRenderer;
+
 	public ClassDiagramRenderer() {
+		associationRenderer = new AssociationRenderer();
 	}
 
 	public Drawable getRendererComponent() {
 		return new ClassDiagram();
+	}
+
+	public AssociationRenderer getAssociationRenderer() {
+		return associationRenderer;
+	}
+
+	public void setAssociationRenderer(AssociationRenderer associationRenderer) {
+		this.associationRenderer = associationRenderer;
 	}
 }
