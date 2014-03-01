@@ -1,5 +1,6 @@
 package de.erichseifert.gral.examples.uml;
 
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JFrame;
@@ -26,15 +27,18 @@ public class ClassDiagramExample extends JFrame {
 		classDiagram = new ClassDiagram();
 		classDiagram.setBounds(0, 0, 1000, 700);
 		metamodel.classes.kernel.Package defaultPackage = new Package("Default");
+		metamodel.classes.kernel.Class abstractWindow = defaultPackage.addClass("AbstractWindow");
 		WindowClass windowClass = new WindowClass(defaultPackage);
+		windowClass.specializes(abstractWindow);
 		ClassRenderer classRenderer = new ClassRenderer();
-		Drawable windowClassDrawable1 = classRenderer.getRendererComponent(windowClass);
-		windowClassDrawable1.setBounds(new Rectangle2D.Double(0.0, 0.0, 100.0, 100.0));
-		classDiagram.add(windowClassDrawable1);
+		Drawable abstractWindowDrawable = classRenderer.getRendererComponent(abstractWindow);
+		Dimension2D preferredSize = abstractWindowDrawable.getPreferredSize();
+		abstractWindowDrawable.setBounds(new Rectangle2D.Double(0.0, 0.0, preferredSize.getWidth(), preferredSize.getHeight()));
+		classDiagram.add(abstractWindowDrawable);
 
-		Drawable windowClassDrawable2 = classRenderer.getRendererComponent(windowClass);
-		windowClassDrawable2.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
-		classDiagram.add(windowClassDrawable2);
+		Drawable windowDrawable = classRenderer.getRendererComponent(windowClass);
+		windowDrawable.setBounds(new Rectangle2D.Double(50.0, 300.0, 150.0, 200.0));
+		classDiagram.add(windowDrawable);
 
 		Package typesPackage = new TypesPackage();
 		PackageRenderer packageRenderer = new PackageRenderer();
