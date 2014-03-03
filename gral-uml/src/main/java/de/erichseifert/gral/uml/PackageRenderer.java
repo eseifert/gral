@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -160,6 +161,13 @@ public class PackageRenderer {
 		@Override
 		public Navigator getNavigator() {
 			return navigator;
+		}
+
+		@Override
+		public List<Drawable> getDrawablesAt(Point2D point) {
+			DrawableContainerNavigator navigator = (DrawableContainerNavigator) getNavigator();
+			PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
+			return super.getDrawablesAt(pointZoomed.getPoint2D());
 		}
 	}
 
