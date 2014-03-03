@@ -147,7 +147,8 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		for (Drawable component : container) {
 			// Check whether the point is in one of the child elements of the container
 			if (component instanceof Container) {
-				getDrawablesAt((Container) component, point, previousResults);
+				List<Drawable> containerDrawables = ((Container) component).getDrawablesAt(point);
+				previousResults.addAll(0, containerDrawables);
 			} else if (component != null && component.getBounds().contains(point)) {
 				previousResults.addFirst(component);
 			}
