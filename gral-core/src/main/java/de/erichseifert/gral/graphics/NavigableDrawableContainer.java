@@ -40,4 +40,11 @@ public class NavigableDrawableContainer extends DrawableContainer implements Nav
 		PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
 		return super.getDrawablesAt(pointZoomed.getPoint2D());
 	}
+
+	public Point2D getPositionOf(Drawable drawable) {
+		DrawableContainerNavigator navigator = getNavigator();
+		PointND<? extends Number> positionZoomed = new PointND<Number>(drawable.getX(), drawable.getY());
+		Point2D positionScreen = navigator.toViewCoordinates(positionZoomed, navigator.getZoom());
+		return positionScreen;
+	}
 }
