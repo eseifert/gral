@@ -3,7 +3,6 @@ package de.erichseifert.gral.uml;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -12,10 +11,9 @@ import java.util.List;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.NavigableDrawableContainer;
 import de.erichseifert.gral.graphics.StackedLayout;
-import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
-import de.erichseifert.gral.uml.navigation.DrawableContainerNavigator;
+import de.erichseifert.gral.navigation.DrawableContainerNavigator;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import de.erichseifert.gral.util.PointND;
@@ -68,12 +66,10 @@ public class PackageRenderer {
 		}
 	}
 
-	protected static class Body extends DrawableContainer implements Navigable {
+	protected static class Body extends NavigableDrawableContainer {
 		private final Stroke borderStroke;
-		private final DrawableContainerNavigator navigator;
 
 		public Body(Package pkg, PackageRenderer packageRenderer) {
-			navigator = new DrawableContainerNavigator(this);
 			this.borderStroke = packageRenderer.getBorderStroke();
 			ClassRenderer classRenderer = packageRenderer.getClassRenderer();
 			if (packageRenderer.isMembersVisible()) {
@@ -87,7 +83,7 @@ public class PackageRenderer {
 					if (drawable != null) {
 						Dimension2D preferredSize = drawable.getPreferredSize();
 						Point2D bodyPos = new Point2D.Double(getX(), getY());
-						PointND<? extends Number> posNew = navigator.toWorldCoordinates(bodyPos, navigator.getZoom());
+						PointND<? extends Number> posNew = ((DrawableContainerNavigator) getNavigator()).toWorldCoordinates(bodyPos, getNavigator().getZoom());
 						drawable.setBounds(posNew.get(0).doubleValue(), posNew.get(1).doubleValue(), preferredSize.getWidth(), preferredSize.getHeight());
 						add(drawable);
 					}
@@ -108,19 +104,6 @@ public class PackageRenderer {
 			g2d.setStroke(strokeOld);
 
 			drawComponents(context);
-		}
-
-		@Override
-		protected void drawComponents(DrawingContext context) {
-			Graphics2D g2d = context.getGraphics();
-			AffineTransform txOld = g2d.getTransform();
-			double zoom = navigator.getZoom();
-
-			Point2D origin = navigator.getCenter().getPoint2D();
-			g2d.scale(zoom, zoom);
-			g2d.translate(-origin.getX(), -origin.getY());
-			super.drawComponents(context);
-			g2d.setTransform(txOld);
 		}
 
 		@Override
@@ -156,18 +139,6 @@ public class PackageRenderer {
 				double drawableYNew = drawable.getY() + deltaY/navigator.getZoom();
 				drawable.setPosition(drawableXNew, drawableYNew);
 			}
-		}
-
-		@Override
-		public Navigator getNavigator() {
-			return navigator;
-		}
-
-		@Override
-		public List<Drawable> getDrawablesAt(Point2D point) {
-			DrawableContainerNavigator navigator = (DrawableContainerNavigator) getNavigator();
-			PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
-			return super.getDrawablesAt(pointZoomed.getPoint2D());
 		}
 	}
 

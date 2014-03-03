@@ -49,7 +49,7 @@ public class ClassDiagramExample extends JFrame {
 		Package typesPackage = new TypesPackage();
 		PackageRenderer packageRenderer = new PackageRenderer();
 		packageRenderer.setMembersVisible(true);
-		packageRenderer.setNameVisible(true);;
+		packageRenderer.setNameVisible(true);
 		Drawable typesPacakgeDrawable = packageRenderer.getRendererComponent(typesPackage);
 		typesPacakgeDrawable.setBounds(new Rectangle2D.Double(300.0, 100.0, 150.0, 80.0));
 		classDiagram.add(typesPacakgeDrawable);

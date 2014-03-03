@@ -1,10 +1,8 @@
-package de.erichseifert.gral.uml.navigation;
+package de.erichseifert.gral.navigation;
 
 import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.graphics.DrawableContainer;
-import de.erichseifert.gral.navigation.AbstractNavigator;
-import de.erichseifert.gral.navigation.NavigationEvent;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
