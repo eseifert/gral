@@ -14,12 +14,13 @@ import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.interfaces.Property;
-import metamodel.classes.kernel.Operation;
-import metamodel.classes.kernel.Parameter;
+import metamodel.classes.kernel.*;
+import metamodel.classes.kernel.Class;
 
 public class ClassRenderer {
 	public static class ClassDrawable extends DrawableContainer {
 		private final Label className;
+		private final metamodel.classes.kernel.Class clazz;
 
 		private static class PropertyLabel extends Label {
 			private final Property property;
@@ -106,6 +107,7 @@ public class ClassRenderer {
 
 		protected ClassDrawable(metamodel.classes.kernel.Class clazz, Stroke borderStroke) {
 			super(new StackedLayout(Orientation.VERTICAL, 0.0, 7.0));
+			this.clazz = clazz;
 			this.borderStroke = borderStroke;
 			className = new Label(clazz.getQualifiedName());
 			Font classNameFont = className.getFont().deriveFont(Font.BOLD);
@@ -154,6 +156,10 @@ public class ClassRenderer {
 
 		public Label getClassName() {
 			return className;
+		}
+
+		public Class getClazz() {
+			return clazz;
 		}
 	}
 
