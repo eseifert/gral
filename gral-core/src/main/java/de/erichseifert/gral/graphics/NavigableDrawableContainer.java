@@ -38,13 +38,18 @@ public class NavigableDrawableContainer extends DrawableContainer implements Nav
 	@Override
 	public List<Drawable> getDrawablesAt(Point2D point) {
 		DrawableContainerNavigator navigator = getNavigator();
-		LinkedList<Drawable> drawablesAtPoint = new LinkedList<Drawable>();
-		// TODO: Is it possible that container appears twice in the return list?
-		if (getBounds().contains(point)) {
+		PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
+		List<Drawable> drawablesAtPoint = getDrawablesAt(this, pointZoomed.getPoint2D(), new LinkedList<Drawable>());
+		/*
+		 * After the query was performed with the transformed point coordinates and
+		 * the container is not part of the result list, try to add the container using
+		 * untransformed coordinates.
+		 * // TODO: This could possibly be fixed by adapting the static method getDrawablesAt(Container, Point2D, LinkedList)
+		 */
+		if (!drawablesAtPoint.contains(this) && getBounds().contains(point)) {
 			drawablesAtPoint.add(this);
 		}
-		PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
-		return getDrawablesAt(this, pointZoomed.getPoint2D(), drawablesAtPoint);
+		return drawablesAtPoint;
 	}
 
 	public Point2D getPositionOf(Drawable drawable) {
