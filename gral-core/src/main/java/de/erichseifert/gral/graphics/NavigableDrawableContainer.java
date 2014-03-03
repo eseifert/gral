@@ -13,7 +13,7 @@ public class NavigableDrawableContainer extends DrawableContainer implements Nav
 	private final DrawableContainerNavigator navigator;
 
 	public NavigableDrawableContainer() {
-		navigator = new DrawableContainerNavigator<DrawableContainer>(this);
+		navigator = new DrawableContainerNavigator(this);
 	}
 
 	@Override

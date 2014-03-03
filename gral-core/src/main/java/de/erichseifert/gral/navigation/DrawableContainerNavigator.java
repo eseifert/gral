@@ -6,12 +6,12 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
-public class DrawableContainerNavigator<T extends DrawableContainer> extends AbstractNavigator {
-	private final T drawableContainer;
+public class DrawableContainerNavigator extends AbstractNavigator {
+	private final DrawableContainer drawableContainer;
 	private double zoom;
 	private final PointND<? extends Number> center;
 
-	public DrawableContainerNavigator(T drawableContainer) {
+	public DrawableContainerNavigator(DrawableContainer drawableContainer) {
 		this.drawableContainer = drawableContainer;
 		zoom = 1.0;
 		setZoomFactor(1.05);
@@ -107,7 +107,7 @@ public class DrawableContainerNavigator<T extends DrawableContainer> extends Abs
 		// TODO: reset center
 	}
 
-	public T getDrawableContainer() {
+	public DrawableContainer getDrawableContainer() {
 		return drawableContainer;
 	}
 }
