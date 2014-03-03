@@ -55,7 +55,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
@@ -88,7 +87,7 @@ import de.erichseifert.gral.util.PointND;
  * PiePlot plot = new PiePlot(data);
  * </pre>
  */
-public class PiePlot extends AbstractPlot implements Navigable {
+public class PiePlot extends AbstractPlot implements Navigable<PiePlot.PiePlotNavigator> {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5486418164040578150L;
 
@@ -943,7 +942,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * Returns a navigator instance that can control the current object.
 	 * @return A navigator instance.
 	 */
-	public Navigator getNavigator() {
+	public PiePlotNavigator getNavigator() {
 		if (navigator == null) {
 			navigator = new PiePlotNavigator(this);
 		}

@@ -7,11 +7,10 @@ import java.util.List;
 
 import de.erichseifert.gral.navigation.DrawableContainerNavigator;
 import de.erichseifert.gral.navigation.Navigable;
-import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.util.PointND;
 
-public class NavigableDrawableContainer extends DrawableContainer implements Navigable {
-	private final Navigator navigator;
+public class NavigableDrawableContainer extends DrawableContainer implements Navigable<DrawableContainerNavigator> {
+	private final DrawableContainerNavigator navigator;
 
 	public NavigableDrawableContainer() {
 		navigator = new DrawableContainerNavigator<DrawableContainer>(this);
@@ -31,13 +30,13 @@ public class NavigableDrawableContainer extends DrawableContainer implements Nav
 	}
 
 	@Override
-	public Navigator getNavigator() {
+	public DrawableContainerNavigator getNavigator() {
 		return navigator;
 	}
 
 	@Override
 	public List<Drawable> getDrawablesAt(Point2D point) {
-		DrawableContainerNavigator navigator = (DrawableContainerNavigator) getNavigator();
+		DrawableContainerNavigator navigator = getNavigator();
 		PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
 		return super.getDrawablesAt(pointZoomed.getPoint2D());
 	}

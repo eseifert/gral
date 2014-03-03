@@ -46,7 +46,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.NavigationDirection;
-import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisListener;
@@ -78,7 +77,7 @@ import de.erichseifert.gral.util.PointND;
  * XYPlot plot = new XYPlot(data);
  * </pre>
  */
-public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
+public class XYPlot extends AbstractPlot implements Navigable<XYPlot.XYPlotNavigator>, AxisListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 4501074701747572783L;
 
@@ -916,7 +915,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * Returns a navigator instance that can control the current object.
 	 * @return A navigator instance.
 	 */
-	public Navigator getNavigator() {
+	public XYPlotNavigator getNavigator() {
 		if (navigator == null) {
 			navigator = new XYPlotNavigator(this);
 		}
