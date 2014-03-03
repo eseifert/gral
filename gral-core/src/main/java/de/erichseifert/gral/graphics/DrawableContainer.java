@@ -140,7 +140,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		return drawableList;
 	}
 
-	private static List<Drawable> getDrawablesAt(Container container, Point2D point, LinkedList<Drawable> previousResults) {
+	protected static List<Drawable> getDrawablesAt(Container container, Point2D point, LinkedList<Drawable> previousResults) {
 		if (container instanceof Drawable && container.getBounds().contains(point)) {
 			previousResults.addFirst((Drawable) container);
 		}

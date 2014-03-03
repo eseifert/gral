@@ -3,6 +3,7 @@ package de.erichseifert.gral.graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.erichseifert.gral.navigation.DrawableContainerNavigator;
@@ -37,8 +38,13 @@ public class NavigableDrawableContainer extends DrawableContainer implements Nav
 	@Override
 	public List<Drawable> getDrawablesAt(Point2D point) {
 		DrawableContainerNavigator navigator = getNavigator();
+		LinkedList<Drawable> drawablesAtPoint = new LinkedList<Drawable>();
+		// TODO: Is it possible that container appears twice in the return list?
+		if (getBounds().contains(point)) {
+			drawablesAtPoint.add(this);
+		}
 		PointND<? extends Number> pointZoomed = navigator.toWorldCoordinates(point, navigator.getZoom());
-		return super.getDrawablesAt(pointZoomed.getPoint2D());
+		return getDrawablesAt(this, pointZoomed.getPoint2D(), drawablesAtPoint);
 	}
 
 	public Point2D getPositionOf(Drawable drawable) {
