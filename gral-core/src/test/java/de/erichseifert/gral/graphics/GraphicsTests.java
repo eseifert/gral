@@ -37,7 +37,8 @@ import org.junit.runners.Suite;
 	// TODO Add test for OuterEdgeLayout
 	StackedLayoutTest.class,
 	TableLayoutTest.class,
-	LabelTest.class
+	LabelTest.class,
+	EditableLabelTest.class
 })
 public class GraphicsTests {
 }
