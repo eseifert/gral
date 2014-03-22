@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 
 public class EditableLabel extends Label {
 	private boolean edited;
+	private int caretPosition;
 
 	public EditableLabel() {
 	}
@@ -25,6 +26,14 @@ public class EditableLabel extends Label {
 		this.edited = edited;
 	}
 
+	protected int getCaretPosition() {
+		return caretPosition;
+	}
+
+	protected void setCaretPosition(int caretPosition) {
+		this.caretPosition = caretPosition;
+	}
+
 	@Override
 	public void draw(DrawingContext context) {
 		super.draw(context);
@@ -37,7 +46,7 @@ public class EditableLabel extends Label {
 		Graphics2D g2d = context.getGraphics();
 		FontRenderContext fontContext = g2d.getFontRenderContext();
 		TextLayout layout = new TextLayout(getText(), getFont(), fontContext);
-		Shape[] caretShapes = layout.getCaretShapes(layout.getCharacterCount());
+		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
 		Shape weakShape = caretShapes[0];
 		AffineTransform txOld = g2d.getTransform();
 		Rectangle2D textBounds = getCachedOutline(isWordWrapEnabled()).getBounds2D();
