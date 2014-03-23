@@ -110,6 +110,13 @@ public class EditableLabel extends Label implements KeyListener {
 			caretPosition = 0;
 		} else if (key == KeyEvent.VK_END) {
 			caretPosition = text.length();
+		} else {
+			char keyChar = e.getKeyChar();
+			if (getFont().canDisplay(keyChar)) {
+				text.insert(caretPosition, keyChar);
+				caretPosition++;
+				invalidate();
+			}
 		}
 		setCaretPosition(caretPosition);
 	}
