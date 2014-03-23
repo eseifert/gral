@@ -16,7 +16,7 @@ public class EditableLabel extends Label implements KeyListener {
 
 	// TODO: Should superclass use StringBuilder?
 	public EditableLabel() {
-		text = new StringBuilder();
+		this("");
 	}
 
 	public EditableLabel(String text) {
@@ -51,11 +51,19 @@ public class EditableLabel extends Label implements KeyListener {
 
 	protected void drawCaret(DrawingContext context) {
 		Graphics2D g2d = context.getGraphics();
-		FontRenderContext fontContext = g2d.getFontRenderContext();
-		TextLayout layout = new TextLayout(getText(), getFont(), fontContext);
-		Shape[] caretShapes = layout.getCaretShapes(getCaretPosition());
-		Shape weakShape = caretShapes[0];
 		AffineTransform txOld = g2d.getTransform();
+		FontRenderContext fontRenderContext = g2d.getFontRenderContext();
+
+		String outlineText = getText();
+		int caretPosition = getCaretPosition();
+		if (outlineText.isEmpty()) {
+			outlineText = EMPTY_LABEL_OUTLINE_STRING;
+			caretPosition = 0;
+		}
+
+		TextLayout layout = new TextLayout(outlineText, getFont(), fontRenderContext);
+		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
+		Shape caretShape = caretShapes[0];
 		Rectangle2D textBounds = getCachedOutline(isWordWrapEnabled()).getBounds2D();
 
 		// FIXME: Code copied from superclass
@@ -72,7 +80,7 @@ public class EditableLabel extends Label implements KeyListener {
 		// Apply positioning
 		g2d.translate(shapePosX, shapePosY);
 
-		g2d.draw(weakShape);
+		g2d.draw(caretShape);
 		g2d.setTransform(txOld);
 	}
 
