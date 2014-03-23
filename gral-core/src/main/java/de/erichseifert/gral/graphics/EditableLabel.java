@@ -97,15 +97,9 @@ public class EditableLabel extends Label implements KeyListener {
 		int key = e.getKeyCode();
 		int caretPosition = getCaretPosition();
 		if (key == KeyEvent.VK_RIGHT) {
-			caretPosition++;
-			if (caretPosition > text.length()) {
-				caretPosition -= text.length() + 1;
-			}
+			caretPosition = Math.min(caretPosition + 1, text.length());
 		} else if (key == KeyEvent.VK_LEFT) {
-			caretPosition--;
-			if (caretPosition < 0) {
-				caretPosition += text.length() + 1;
-			}
+			caretPosition = Math.max(caretPosition - 1, 0);
 		} else if (key == KeyEvent.VK_BACK_SPACE) {
 			if (!getText().isEmpty() && caretPosition > 0) {
 				text.deleteCharAt(caretPosition - 1);
