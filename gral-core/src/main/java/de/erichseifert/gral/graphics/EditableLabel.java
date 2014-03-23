@@ -53,7 +53,6 @@ public class EditableLabel extends Label implements KeyListener {
 		Shape weakShape = caretShapes[0];
 		AffineTransform txOld = g2d.getTransform();
 		Rectangle2D textBounds = getCachedOutline(isWordWrapEnabled()).getBounds2D();
-		g2d.draw(weakShape.getBounds2D());
 
 		// FIXME: Code copied from superclass
 		// Calculate absolute text position:
