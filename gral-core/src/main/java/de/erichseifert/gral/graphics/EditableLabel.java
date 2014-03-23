@@ -24,6 +24,7 @@ public class EditableLabel extends Label {
 
 	public void setEdited(boolean edited) {
 		this.edited = edited;
+		setCaretPosition(getText().length());
 	}
 
 	protected int getCaretPosition() {
@@ -46,7 +47,7 @@ public class EditableLabel extends Label {
 		Graphics2D g2d = context.getGraphics();
 		FontRenderContext fontContext = g2d.getFontRenderContext();
 		TextLayout layout = new TextLayout(getText(), getFont(), fontContext);
-		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
+		Shape[] caretShapes = layout.getCaretShapes(getCaretPosition());
 		Shape weakShape = caretShapes[0];
 		AffineTransform txOld = g2d.getTransform();
 		Rectangle2D textBounds = getCachedOutline(isWordWrapEnabled()).getBounds2D();
