@@ -1,5 +1,8 @@
 package de.erichseifert.gral.examples;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import de.erichseifert.gral.graphics.EditableLabel;
 import de.erichseifert.gral.ui.DrawablePanel;
 import de.erichseifert.gral.ui.InteractivePanel;
@@ -12,7 +15,15 @@ public class EditableLabelExample extends ExamplePanel {
 		label.setFont(getFont().deriveFont(20f));
 		label.setEdited(true);
 
-		DrawablePanel panel = new InteractivePanel(label);
+		final DrawablePanel panel = new InteractivePanel(label);
+		panel.setFocusable(true);
+		panel.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				panel.repaint();
+			}
+		});
+		panel.addKeyListener(label);
 		add(panel);
 	}
 
