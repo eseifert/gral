@@ -2,12 +2,14 @@ package de.erichseifert.gral.graphics;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
-public class EditableLabel extends Label {
+public class EditableLabel extends Label implements KeyListener {
 	private boolean edited;
 	private int caretPosition;
 
@@ -69,5 +71,35 @@ public class EditableLabel extends Label {
 
 		g2d.draw(weakShape);
 		g2d.setTransform(txOld);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (!isEdited()) {
+			return;
+		}
+
+		int key = e.getKeyCode();
+		int caretPosition = getCaretPosition();
+		if (key == KeyEvent.VK_RIGHT) {
+			caretPosition++;
+			if (caretPosition > getText().length()) {
+				caretPosition -= getText().length() + 1;
+			}
+		} else if (key == KeyEvent.VK_LEFT) {
+			caretPosition--;
+			if (caretPosition < 0) {
+				caretPosition += getText().length() + 1;
+			}
+		}
+		setCaretPosition(caretPosition);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }
