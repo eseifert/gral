@@ -21,22 +21,20 @@
  */
 package de.erichseifert.gral.graphics;
 
-import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.util.Dimension2D;
+import org.junit.Before;
+import org.junit.Test;
 
 public class LabelTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -60,6 +58,10 @@ public class LabelTest {
 			super.draw(context);
 			isDrawn = true;
 		}
+
+		public static String getEmptyLabelOutlineString() {
+			return EMPTY_LABEL_OUTLINE_STRING;
+		}
 	}
 
 	@Before
@@ -74,7 +76,8 @@ public class LabelTest {
 		assertEquals(0.0, empty.getY(), DELTA);
 		assertEquals(0.0, empty.getWidth(), DELTA);
 		assertEquals(0.0, empty.getHeight(), DELTA);
-		assertEquals(new Dimension2D.Double(), empty.getPreferredSize());
+		Label defaultStringLabel = new MockLabel(MockLabel.getEmptyLabelOutlineString());
+		assertEquals(defaultStringLabel.getPreferredSize(), empty.getPreferredSize());
 
 		Label text = new MockLabel("foobar");
 		assertEquals("foobar", text.getText());

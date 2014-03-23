@@ -30,8 +30,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.graphics.AbstractDrawable;
-import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -44,6 +42,9 @@ import de.erichseifert.gral.util.MathUtils;
 public class Label extends AbstractDrawable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 374045708533704103L;
+
+	/** String used to determine the text outline when the text is empty. */
+	protected static final String EMPTY_LABEL_OUTLINE_STRING = "M";
 
 	/** Text for this label. */
 	private String text;
@@ -190,8 +191,9 @@ public class Label extends AbstractDrawable {
 				Math.abs(Math.sin(rotation))*getHeight());
 		}
 		double alignment = getTextAlignment();
+		String outlineText = !getText().isEmpty() ? getText() : EMPTY_LABEL_OUTLINE_STRING;
 		Shape outline = GraphicsUtils.getOutline(
-			getText(), font, wrappingWidth, alignment);
+			outlineText, font, wrappingWidth, alignment);
 		return outline;
 	}
 
@@ -201,7 +203,7 @@ public class Label extends AbstractDrawable {
 	 * @return An instance of the outline shape for this label.
 	 */
 	protected Shape getCachedOutline(boolean wordWrap) {
-		if (!isValid() && getText() != null && !getText().isEmpty()) {
+		if (!isValid() && getText() != null) {
 			outlineWrapped = getOutline(true);
 			outlineUnwrapped = getOutline(false);
 		}
