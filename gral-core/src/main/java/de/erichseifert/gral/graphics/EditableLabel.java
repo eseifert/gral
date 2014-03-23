@@ -12,12 +12,16 @@ import java.awt.geom.Rectangle2D;
 public class EditableLabel extends Label implements KeyListener {
 	private boolean edited;
 	private int caretPosition;
+	private StringBuilder text;
 
+	// TODO: Should superclass use StringBuilder?
 	public EditableLabel() {
+		text = new StringBuilder();
 	}
 
 	public EditableLabel(String text) {
 		super(text);
+		this.text = new StringBuilder(text);
 	}
 
 	public boolean isEdited() {
@@ -26,7 +30,7 @@ public class EditableLabel extends Label implements KeyListener {
 
 	public void setEdited(boolean edited) {
 		this.edited = edited;
-		setCaretPosition(getText().length());
+		setCaretPosition(text.length());
 	}
 
 	protected int getCaretPosition() {
@@ -86,13 +90,13 @@ public class EditableLabel extends Label implements KeyListener {
 		int caretPosition = getCaretPosition();
 		if (key == KeyEvent.VK_RIGHT) {
 			caretPosition++;
-			if (caretPosition > getText().length()) {
-				caretPosition -= getText().length() + 1;
+			if (caretPosition > text.length()) {
+				caretPosition -= text.length() + 1;
 			}
 		} else if (key == KeyEvent.VK_LEFT) {
 			caretPosition--;
 			if (caretPosition < 0) {
-				caretPosition += getText().length() + 1;
+				caretPosition += text.length() + 1;
 			}
 		}
 		setCaretPosition(caretPosition);
@@ -100,5 +104,15 @@ public class EditableLabel extends Label implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public String getText() {
+		return text.toString();
+	}
+
+	@Override
+	public void setText(String text) {
+		this.text = new StringBuilder(text);
 	}
 }
