@@ -27,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static de.erichseifert.gral.TestUtils.assertEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
@@ -118,6 +119,8 @@ public class LabelTest {
 			assertTrue(label.isDrawn);
 			if (!label.getText().isEmpty()) {
 				assertNotEmpty(image);
+			} else {
+				assertEmpty(image);
 			}
 		}
 	}

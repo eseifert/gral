@@ -35,9 +35,7 @@ public class EditableLabelTest {
 	public void testDrawEmptyLabel() {
 		label.setText("");
 
-		// Ensure that the label can be drawn while not being edited
-		label.draw(drawingContext);
-		// ... and while being edited
+		// Ensure that the label can be drawn while being edited
 		label.setEdited(true);
 		label.draw(drawingContext);
 	}
