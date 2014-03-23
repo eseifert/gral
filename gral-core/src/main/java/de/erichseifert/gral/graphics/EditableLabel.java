@@ -106,6 +106,12 @@ public class EditableLabel extends Label implements KeyListener {
 			if (caretPosition < 0) {
 				caretPosition += text.length() + 1;
 			}
+		} else if (key == KeyEvent.VK_BACK_SPACE) {
+			if (!getText().isEmpty() && caretPosition > 0) {
+				text.deleteCharAt(caretPosition - 1);
+				invalidate();
+				caretPosition--;
+			}
 		}
 		setCaretPosition(caretPosition);
 	}
