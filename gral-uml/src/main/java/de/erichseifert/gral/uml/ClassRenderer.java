@@ -9,20 +9,21 @@ import java.util.Iterator;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.graphics.Label;
+import de.erichseifert.gral.graphics.EditableLabel;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.interfaces.Property;
-import metamodel.classes.kernel.*;
 import metamodel.classes.kernel.Class;
+import metamodel.classes.kernel.Operation;
+import metamodel.classes.kernel.Parameter;
 
 public class ClassRenderer {
 	public static class ClassDrawable extends DrawableContainer {
-		private final Label className;
+		private final EditableLabel className;
 		private final metamodel.classes.kernel.Class clazz;
 
-		private static class PropertyLabel extends Label {
+		private static class PropertyLabel extends EditableLabel {
 			private final Property property;
 			private boolean visibilityDisplayed;
 			private boolean typeDisplayed;
@@ -63,7 +64,7 @@ public class ClassRenderer {
 			}
 		}
 
-		private static class OperationLabel extends Label {
+		private static class OperationLabel extends EditableLabel {
 			private final Operation operation;
 			private boolean visibilityDisplayed;
 
@@ -109,7 +110,7 @@ public class ClassRenderer {
 			super(new StackedLayout(Orientation.VERTICAL, 0.0, 7.0));
 			this.clazz = clazz;
 			this.borderStroke = borderStroke;
-			className = new Label(clazz.getQualifiedName());
+			className = new EditableLabel(clazz.getQualifiedName());
 			Font classNameFont = className.getFont().deriveFont(Font.BOLD);
 			if (clazz.isAbstract()) {
 				classNameFont = classNameFont.deriveFont(Font.ITALIC);
@@ -154,7 +155,7 @@ public class ClassRenderer {
 			g2d.setStroke(strokeOld);
 		}
 
-		public Label getClassName() {
+		public EditableLabel getClassName() {
 			return className;
 		}
 

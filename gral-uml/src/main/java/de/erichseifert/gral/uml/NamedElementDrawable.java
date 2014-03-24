@@ -4,15 +4,16 @@ import java.awt.geom.Dimension2D;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.EditableLabel;
 import de.erichseifert.gral.graphics.Label;
 import metamodel.classes.kernel.NamedElement;
 
 public abstract class NamedElementDrawable extends AbstractDrawable {
-	private final Label name;
+	private final EditableLabel name;
 	private boolean nameVisible;
 
 	public NamedElementDrawable(NamedElement namedElement, boolean nameVisible) {
-		name = new Label(namedElement.getName());
+		name = new EditableLabel(namedElement.getName());
 		this.nameVisible = nameVisible;
 	}
 
