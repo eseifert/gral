@@ -6,7 +6,6 @@ import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -25,12 +24,11 @@ public class PackageRenderer {
 	protected static class Tab extends NamedElementDrawable {
 		// TODO: Stroke should be serializable
 		private final Stroke borderStroke;
-		private final Insets2D insets;
 
 		public Tab(metamodel.classes.kernel.Package pkg, Stroke borderStroke) {
 			super(pkg);
 			float fontSize = getName().getFont().getSize2D();
-			insets = new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize);
+			setInsets(new Insets2D.Double(fontSize/2f, fontSize, fontSize/2f, fontSize));
 			this.borderStroke = borderStroke;
 		}
 
@@ -43,26 +41,6 @@ public class PackageRenderer {
 			g2d.setStroke(strokeOld);
 
 			super.draw(context);
-		}
-
-		public Insets2D getInsets() {
-			Insets2D insetsCopy = new Insets2D.Double();
-			insetsCopy.setInsets(this.insets);
-			return insetsCopy;
-		}
-
-		public void setInsets(Insets2D insets) {
-			this.insets.setInsets(insets);
-		}
-
-		@Override
-		public Dimension2D getPreferredSize() {
-			Dimension2D preferredSize = super.getPreferredSize();
-			preferredSize.setSize(
-				preferredSize.getWidth() + insets.getHorizontal(),
-				preferredSize.getHeight() + insets.getVertical()
-			);
-			return preferredSize;
 		}
 	}
 
