@@ -110,19 +110,18 @@ public class EditableLabel extends Label implements KeyListener {
 		int key = e.getKeyCode();
 		int caretPosition = getCaretPosition();
 		int markPosition = getMarkPosition();
+		/*
+		 * Bring start and end in correct order. Otherwise StringBuilder.delete will throw
+		 * an ArrayIndexOutOfBoundsException.
+		 */
+		int startIndex = Math.min(markPosition, caretPosition);
+		int endIndex = Math.max(markPosition, caretPosition);
 		if (key == KeyEvent.VK_RIGHT) {
 			caretPosition = Math.min(caretPosition + 1, text.length());
 		} else if (key == KeyEvent.VK_LEFT) {
 			caretPosition = Math.max(caretPosition - 1, 0);
 		} else if (key == KeyEvent.VK_BACK_SPACE) {
 			if (!getText().isEmpty()) {
-				/*
-				 * Bring start and end in correct order. Otherwise StringBuilder.delete will throw
-				 * an ArrayIndexOutOfBoundsException.
-				 */
-				int startIndex = Math.min(markPosition, caretPosition);
-				int endIndex = Math.max(markPosition, caretPosition);
-
 				if (startIndex != endIndex) {
 					// Delete multiple characters
 					text.delete(startIndex, endIndex);
@@ -142,9 +141,9 @@ public class EditableLabel extends Label implements KeyListener {
 		} else {
 			char keyChar = e.getKeyChar();
 			if (getFont().canDisplay(keyChar)) {
-				text.insert(caretPosition, keyChar);
-				caretPosition++;
-				markPosition++;
+				text.replace(startIndex, endIndex, String.valueOf(keyChar));
+				caretPosition = startIndex + 1;
+				markPosition = caretPosition;
 				invalidate();
 			}
 		}
