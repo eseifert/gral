@@ -101,10 +101,25 @@ public class EditableLabel extends Label implements KeyListener {
 		} else if (key == KeyEvent.VK_LEFT) {
 			caretPosition = Math.max(caretPosition - 1, 0);
 		} else if (key == KeyEvent.VK_BACK_SPACE) {
-			if (!getText().isEmpty() && caretPosition > 0) {
-				text.deleteCharAt(caretPosition - 1);
-				invalidate();
-				caretPosition--;
+			if (!getText().isEmpty()) {
+				/*
+				 * Bring start and end in correct order. Otherwise StringBuilder.delete will throw
+				 * an ArrayIndexOutOfBoundsException.
+				 */
+				int startIndex = Math.min(markPosition, caretPosition);
+				int endIndex = Math.max(markPosition, caretPosition);
+
+				if (startIndex != endIndex) {
+					// Delete multiple characters
+					text.delete(startIndex, endIndex);
+					caretPosition = startIndex;
+					invalidate();
+				} else if (startIndex > 0) {
+					// Delete single character
+					text.deleteCharAt(caretPosition - 1);
+					caretPosition--;
+					invalidate();
+				}
 			}
 		} else if (key == KeyEvent.VK_HOME) {
 			caretPosition = 0;
