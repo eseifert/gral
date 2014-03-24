@@ -87,13 +87,15 @@ public class EditableLabel extends Label implements KeyListener {
 		TextLayout layout = new TextLayout(outlineText, getFont(), fontRenderContext);
 		Shape selectionShape = layout.getLogicalHighlightShape(getMarkPosition(), getCaretPosition());
 		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
-		Shape caretShape = caretShapes[0];
 
 		// Apply positioning
 		g2d.translate(0, layout.getAscent());
 
 		GraphicsUtils.fillPaintedShape(g2d, selectionShape, getSelectionBackground(), null);
-		g2d.draw(caretShape);
+		g2d.draw(caretShapes[0]);
+		if (caretShapes[1] != null) {
+			g2d.draw(caretShapes[1]);
+		}
 		g2d.setTransform(txOld);
 	}
 
