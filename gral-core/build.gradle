@@ -4,12 +4,8 @@ dependencies {
 	testCompile(group: "junit", name: "junit", version: "4.10")
 }
 
-buildscript {
-	apply from: "https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle"
-}
-
 task report {
-	dependsOn = ["cobertura", check]
+	dependsOn = [/*"cobertura" TODO: Depend on unit test coverage,*/ check]
 	description = "Generates reports."
 	group = "Report"
 
