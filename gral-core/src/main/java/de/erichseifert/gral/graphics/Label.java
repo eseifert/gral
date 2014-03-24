@@ -143,6 +143,14 @@ public class Label extends AbstractDrawable {
 		// Apply positioning
 		graphics.translate(shapePosX, shapePosY);
 
+		drawComponents(context);
+
+		// Restore previous state
+		graphics.setTransform(txOld);
+	}
+
+	protected void drawComponents(DrawingContext context) {
+		Graphics2D graphics = context.getGraphics();
 		/*
 		 * There can be a text outline even though the label text is empty due to the default
 		 * outline text. See EMPTY_LABEL_OUTLINE_STRING.
@@ -150,11 +158,10 @@ public class Label extends AbstractDrawable {
 		if (!getText().isEmpty()) {
 			// Paint the shape with the color from settings
 			Paint paint = getColor();
+			boolean wordWrap = isWordWrapEnabled();
+			Shape labelShape = getCachedOutline(wordWrap);
 			GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
 		}
-
-		// Restore previous state
-		graphics.setTransform(txOld);
 	}
 
 	@Override

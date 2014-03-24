@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 
 public class EditableLabel extends Label implements KeyListener {
 	private boolean edited;
@@ -42,8 +41,8 @@ public class EditableLabel extends Label implements KeyListener {
 	}
 
 	@Override
-	public void draw(DrawingContext context) {
-		super.draw(context);
+	public void drawComponents(DrawingContext context) {
+		super.drawComponents(context);
 		if (isEdited()) {
 			drawCaret(context);
 		}
@@ -64,21 +63,9 @@ public class EditableLabel extends Label implements KeyListener {
 		TextLayout layout = new TextLayout(outlineText, getFont(), fontRenderContext);
 		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
 		Shape caretShape = caretShapes[0];
-		Rectangle2D textBounds = getCachedOutline(isWordWrapEnabled()).getBounds2D();
 
-		// FIXME: Code copied from superclass
-		// Calculate absolute text position:
-		// First, move the text to the upper left of the bounding rectangle
-		double shapePosX = getX() - textBounds.getX();
-		double shapePosY = getY() - textBounds.getY();
-		// Position the text inside the bounding rectangle using the alignment
-		// settings
-		double alignmentX = getAlignmentX();
-		double alignmentY = getAlignmentY();
-		shapePosX += alignmentX*(getWidth() - textBounds.getWidth());
-		shapePosY += alignmentY*(getHeight() - textBounds.getHeight()) + layout.getAscent();
 		// Apply positioning
-		g2d.translate(shapePosX, shapePosY);
+		g2d.translate(0, layout.getAscent());
 
 		g2d.draw(caretShape);
 		g2d.setTransform(txOld);
