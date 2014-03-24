@@ -10,6 +10,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EditableLabel;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
@@ -23,28 +24,35 @@ public class ClassRenderer {
 		private final EditableLabel className;
 		private final metamodel.classes.kernel.Class clazz;
 
-		private static class PropertyLabel extends EditableLabel {
-			private final Property property;
+		private static class PropertyLabel extends DrawableContainer {
+			private final Label visibility;
+			private final EditableLabel propertyName;
+			private final Label type;
 			private boolean visibilityDisplayed;
 			private boolean typeDisplayed;
 
 			public PropertyLabel(Property property) {
-				this.property = property;
+				super(new StackedLayout(Orientation.HORIZONTAL));
+
+				visibility = new Label(property.getVisibility().getLiteral()+" ");
+				add(visibility);
+				propertyName = new EditableLabel(property.getName());
+				add(propertyName);
+				type = new Label(": "+property.getType().getName());
+				add(type);
 			}
 
 			@Override
-			public String getText() {
-				StringBuilder text = new StringBuilder();
-				if (isVisibilityDisplayed()) {
-					text.append(property.getVisibility().getLiteral());
-					text.append(" ");
+			protected void drawComponents(DrawingContext context) {
+				// TODO: Drawable should support a visibility flag
+				for (Drawable d : this) {
+					if (d.equals(visibility) && !isVisibilityDisplayed()) {
+						continue;
+					} else if (d.equals(type) && !isTypeDisplayed()) {
+						continue;
+					}
+					d.draw(context);
 				}
-				text.append(property.getName());
-				if (isTypeDisplayed()) {
-					text.append(": ");
-					text.append(property.getType().getName());
-				}
-				return text.toString();
 			}
 
 			public boolean isVisibilityDisplayed() {
@@ -64,35 +72,45 @@ public class ClassRenderer {
 			}
 		}
 
-		private static class OperationLabel extends EditableLabel {
-			private final Operation operation;
+		private static class OperationLabel extends DrawableContainer {
+			private final Label visibility;
+			private final EditableLabel operationName;
+			private final Label parameters;
 			private boolean visibilityDisplayed;
 
 			public OperationLabel(Operation operation) {
-				this.operation = operation;
-			}
+				super(new StackedLayout(Orientation.HORIZONTAL));
+				visibility = new Label(operation.getVisibility().getLiteral()+" ");
+				add(visibility);
+				operationName = new EditableLabel(operation.getName());
+				add(operationName);
 
-			@Override
-			public String getText() {
-				StringBuilder text = new StringBuilder();
-				if (isVisibilityDisplayed()) {
-					text.append(operation.getVisibility().getLiteral());
-					text.append(" ");
-				}
-				text.append(operation.getName());
-				text.append("(");
+				StringBuilder parametersText = new StringBuilder();
+				parametersText.append("(");
 				Iterator<Parameter> parameterIterator = operation.getOwnedParameters().iterator();
 				while (parameterIterator.hasNext()) {
 					Parameter parameter = parameterIterator.next();
-					text.append(parameter.getName());
-					text.append(": ");
-					text.append(parameter.getType().getName());
+					parametersText.append(parameter.getName());
+					parametersText.append(": ");
+					parametersText.append(parameter.getType().getName());
 					if (parameterIterator.hasNext()) {
-						text.append(", ");
+						parametersText.append(", ");
 					}
 				}
-				text.append(")");
-				return text.toString();
+				parametersText.append(")");
+				parameters = new Label(parametersText.toString());
+				add(parameters);
+			}
+
+			@Override
+			protected void drawComponents(DrawingContext context) {
+				// TODO: Drawable should support a visibility flag
+				for (Drawable d : this) {
+					if (d.equals(visibility) && !isVisibilityDisplayed()) {
+						continue;
+					}
+					d.draw(context);
+				}
 			}
 
 			public boolean isVisibilityDisplayed() {
@@ -118,18 +136,17 @@ public class ClassRenderer {
 			className.setFont(classNameFont);
 			add(className);
 
+			StackedLayout.Constraints constraints = new StackedLayout.Constraints(false, 0.0, 0.5);
 			for (Property property : clazz.getOwnedAttributes()) {
 				PropertyLabel propertyLabel = new PropertyLabel(property);
 				propertyLabel.setVisibilityDisplayed(true);
 				propertyLabel.setTypeDisplayed(true);
-				propertyLabel.setAlignmentX(0.0);
-				add(propertyLabel);
+				add(propertyLabel, constraints);
 			}
 			for (Operation operation : clazz.getOwnedOperations()) {
 				OperationLabel operationLabel = new OperationLabel(operation);
 				operationLabel.setVisibilityDisplayed(true);
-				operationLabel.setAlignmentX(0.0);
-				add(operationLabel);
+				add(operationLabel, constraints);
 			}
 
 			double textHeight = className.getTextRectangle().getHeight();
