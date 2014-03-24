@@ -130,6 +130,7 @@ public class EditableLabel extends Label implements KeyListener {
 			if (getFont().canDisplay(keyChar)) {
 				text.insert(caretPosition, keyChar);
 				caretPosition++;
+				markPosition++;
 				invalidate();
 			}
 		}
