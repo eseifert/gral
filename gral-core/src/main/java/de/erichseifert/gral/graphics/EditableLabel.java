@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 public class EditableLabel extends Label implements KeyListener {
 	private boolean edited;
 	private int caretPosition;
+	private int markPosition;
 	private StringBuilder text;
 
 	// TODO: Should superclass use StringBuilder?
@@ -30,6 +31,7 @@ public class EditableLabel extends Label implements KeyListener {
 	public void setEdited(boolean edited) {
 		this.edited = edited;
 		setCaretPosition(text.length());
+		setMarkPosition(text.length());
 	}
 
 	protected int getCaretPosition() {
@@ -38,6 +40,14 @@ public class EditableLabel extends Label implements KeyListener {
 
 	protected void setCaretPosition(int caretPosition) {
 		this.caretPosition = caretPosition;
+	}
+
+	protected int getMarkPosition() {
+		return markPosition;
+	}
+
+	protected void setMarkPosition(int markPosition) {
+		this.markPosition = markPosition;
 	}
 
 	@Override
@@ -61,12 +71,14 @@ public class EditableLabel extends Label implements KeyListener {
 		}
 
 		TextLayout layout = new TextLayout(outlineText, getFont(), fontRenderContext);
+		Shape selectionShape = layout.getLogicalHighlightShape(getMarkPosition(), getCaretPosition());
 		Shape[] caretShapes = layout.getCaretShapes(caretPosition);
 		Shape caretShape = caretShapes[0];
 
 		// Apply positioning
 		g2d.translate(0, layout.getAscent());
 
+		g2d.draw(selectionShape);
 		g2d.draw(caretShape);
 		g2d.setTransform(txOld);
 	}
@@ -83,6 +95,7 @@ public class EditableLabel extends Label implements KeyListener {
 
 		int key = e.getKeyCode();
 		int caretPosition = getCaretPosition();
+		int markPosition = getMarkPosition();
 		if (key == KeyEvent.VK_RIGHT) {
 			caretPosition = Math.min(caretPosition + 1, text.length());
 		} else if (key == KeyEvent.VK_LEFT) {
@@ -105,7 +118,11 @@ public class EditableLabel extends Label implements KeyListener {
 				invalidate();
 			}
 		}
+		if (!e.isShiftDown()) {
+			markPosition = caretPosition;
+		}
 		setCaretPosition(caretPosition);
+		setMarkPosition(markPosition);
 	}
 
 	@Override
