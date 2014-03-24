@@ -120,8 +120,14 @@ public class EditableLabel extends Label implements KeyListener {
 		int endIndex = Math.max(markPosition, caretPosition);
 		if (key == KeyEvent.VK_RIGHT) {
 			caretPosition = Math.min(caretPosition + 1, text.length());
+			if (!e.isShiftDown()) {
+				markPosition = caretPosition;
+			}
 		} else if (key == KeyEvent.VK_LEFT) {
 			caretPosition = Math.max(caretPosition - 1, 0);
+			if (!e.isShiftDown()) {
+				markPosition = caretPosition;
+			}
 		} else if (key == KeyEvent.VK_BACK_SPACE) {
 			if (!getText().isEmpty()) {
 				if (startIndex != endIndex) {
@@ -135,10 +141,20 @@ public class EditableLabel extends Label implements KeyListener {
 					caretPosition--;
 					invalidate();
 				}
+				markPosition = caretPosition;
 			}
 		} else if (key == KeyEvent.VK_HOME) {
 			caretPosition = 0;
+			if (!e.isShiftDown()) {
+				markPosition = caretPosition;
+			}
 		} else if (key == KeyEvent.VK_END) {
+			caretPosition = text.length();
+			if (!e.isShiftDown()) {
+				markPosition = caretPosition;
+			}
+		} else if (key == KeyEvent.VK_A && e.isControlDown()) {
+			markPosition = 0;
 			caretPosition = text.length();
 		} else {
 			char keyChar = e.getKeyChar();
@@ -148,9 +164,6 @@ public class EditableLabel extends Label implements KeyListener {
 				markPosition = caretPosition;
 				invalidate();
 			}
-		}
-		if (!e.isShiftDown()) {
-			markPosition = caretPosition;
 		}
 		setCaretPosition(caretPosition);
 		setMarkPosition(markPosition);
