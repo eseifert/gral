@@ -1,6 +1,8 @@
 package de.erichseifert.gral.graphics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,10 +10,13 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
+import de.erichseifert.gral.util.GraphicsUtils;
+
 public class EditableLabel extends Label implements KeyListener {
 	private boolean edited;
 	private int caretPosition;
 	private int markPosition;
+	private Paint selectionBackground;
 	private StringBuilder text;
 
 	// TODO: Should superclass use StringBuilder?
@@ -22,6 +27,7 @@ public class EditableLabel extends Label implements KeyListener {
 	public EditableLabel(String text) {
 		super(text);
 		this.text = new StringBuilder(text);
+		selectionBackground = new Color(100, 199, 233, 120);
 	}
 
 	public boolean isEdited() {
@@ -50,12 +56,20 @@ public class EditableLabel extends Label implements KeyListener {
 		this.markPosition = markPosition;
 	}
 
+	public Paint getSelectionBackground() {
+		return selectionBackground;
+	}
+
+	public void setSelectionBackground(Paint selectionBackground) {
+		this.selectionBackground = selectionBackground;
+	}
+
 	@Override
 	public void drawComponents(DrawingContext context) {
-		super.drawComponents(context);
 		if (isEdited()) {
 			drawCaret(context);
 		}
+		super.drawComponents(context);
 	}
 
 	protected void drawCaret(DrawingContext context) {
@@ -78,7 +92,7 @@ public class EditableLabel extends Label implements KeyListener {
 		// Apply positioning
 		g2d.translate(0, layout.getAscent());
 
-		g2d.draw(selectionShape);
+		GraphicsUtils.fillPaintedShape(g2d, selectionShape, getSelectionBackground(), null);
 		g2d.draw(caretShape);
 		g2d.setTransform(txOld);
 	}
