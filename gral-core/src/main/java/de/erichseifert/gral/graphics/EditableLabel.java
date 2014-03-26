@@ -139,14 +139,14 @@ public class EditableLabel extends Label implements KeyListener {
 					// Delete multiple characters
 					text.delete(startIndex, endIndex);
 					caretPosition = startIndex;
-					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 					invalidate();
+					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 				} else if (startIndex > 0) {
 					// Delete single character
 					text.deleteCharAt(caretPosition - 1);
 					caretPosition--;
-					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 					invalidate();
+					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 				}
 				markPosition = caretPosition;
 			}
