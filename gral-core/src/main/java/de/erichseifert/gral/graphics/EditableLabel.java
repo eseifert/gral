@@ -9,6 +9,8 @@ import java.awt.event.KeyListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import de.erichseifert.gral.util.GraphicsUtils;
 
@@ -18,6 +20,7 @@ public class EditableLabel extends Label implements KeyListener {
 	private int markPosition;
 	private Paint selectionBackground;
 	private StringBuilder text;
+	private PropertyChangeSupport propertyChangeSupport;
 
 	// TODO: Should superclass use StringBuilder?
 	public EditableLabel() {
@@ -28,6 +31,7 @@ public class EditableLabel extends Label implements KeyListener {
 		super(text);
 		this.text = new StringBuilder(text);
 		selectionBackground = new Color(100, 199, 233, 120);
+		propertyChangeSupport = new PropertyChangeSupport(this);
 	}
 
 	public boolean isEdited() {
@@ -130,15 +134,18 @@ public class EditableLabel extends Label implements KeyListener {
 			}
 		} else if (key == KeyEvent.VK_BACK_SPACE) {
 			if (!getText().isEmpty()) {
+				String textOld = getText();
 				if (startIndex != endIndex) {
 					// Delete multiple characters
 					text.delete(startIndex, endIndex);
 					caretPosition = startIndex;
+					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 					invalidate();
 				} else if (startIndex > 0) {
 					// Delete single character
 					text.deleteCharAt(caretPosition - 1);
 					caretPosition--;
+					propertyChangeSupport.firePropertyChange("text", textOld, getText());
 					invalidate();
 				}
 				markPosition = caretPosition;
@@ -159,10 +166,12 @@ public class EditableLabel extends Label implements KeyListener {
 		} else {
 			char keyChar = e.getKeyChar();
 			if (getFont().canDisplay(keyChar)) {
+				String textOld = getText();
 				text.replace(startIndex, endIndex, String.valueOf(keyChar));
 				caretPosition = startIndex + 1;
 				markPosition = caretPosition;
 				invalidate();
+				propertyChangeSupport.firePropertyChange("text", textOld, getText());
 			}
 		}
 		setCaretPosition(caretPosition);
@@ -180,6 +189,24 @@ public class EditableLabel extends Label implements KeyListener {
 
 	@Override
 	public void setText(String text) {
+		String textOld = getText();
 		this.text = new StringBuilder(text);
+		propertyChangeSupport.firePropertyChange("text", textOld, getText());
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+	}
+
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 }
