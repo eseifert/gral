@@ -4,6 +4,8 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
 import de.erichseifert.gral.graphics.Drawable;
@@ -37,6 +39,12 @@ public class ClassRenderer {
 				visibility = new Label(property.getVisibility().getLiteral()+" ");
 				add(visibility);
 				propertyName = new EditableLabel(property.getName());
+				propertyName.addPropertyChangeListener("text", new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						layout();
+					}
+				});
 				add(propertyName);
 				type = new Label(": "+property.getType().getName());
 				add(type);
@@ -83,6 +91,12 @@ public class ClassRenderer {
 				visibility = new Label(operation.getVisibility().getLiteral()+" ");
 				add(visibility);
 				operationName = new EditableLabel(operation.getName());
+				operationName.addPropertyChangeListener("text", new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						layout();
+					}
+				});
 				add(operationName);
 
 				StringBuilder parametersText = new StringBuilder();
