@@ -24,11 +24,15 @@ package de.erichseifert.gral.graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -69,6 +73,9 @@ public class Label extends AbstractDrawable {
 	private transient Shape outlineWrapped;
 	/** Cached outline of the label text without word wrapping. */
 	private transient Shape outlineUnwrapped;
+	/* Filled text outline stored as a bitmap image. */
+	// TODO: There should be a way to enable/disable buffering
+	private transient Drawable textBuffer;
 
 	/**
 	 * Initializes a new empty {@code Label} instance.
@@ -150,17 +157,30 @@ public class Label extends AbstractDrawable {
 	}
 
 	protected void drawComponents(DrawingContext context) {
-		Graphics2D graphics = context.getGraphics();
 		/*
 		 * There can be a text outline even though the label text is empty due to the default
 		 * outline text. See EMPTY_LABEL_OUTLINE_STRING.
 		 */
 		if (!getText().isEmpty()) {
-			// Paint the shape with the color from settings
-			Paint paint = getColor();
-			boolean wordWrap = isWordWrapEnabled();
-			Shape labelShape = getCachedOutline(wordWrap);
-			GraphicsUtils.fillPaintedShape(graphics, labelShape, paint, null);
+			if (textBuffer == null) {
+				// Paint the shape with the color from settings
+				Paint paint = getColor();
+				boolean wordWrap = isWordWrapEnabled();
+				Shape labelShape = getCachedOutline(wordWrap);
+				Rectangle textBounds = labelShape.getBounds();
+				Image textBufferImage = new BufferedImage(
+					textBounds.width, textBounds.height, BufferedImage.TYPE_INT_ARGB
+				);
+				Graphics2D imageGraphics = (Graphics2D) textBufferImage.getGraphics();
+				imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// TODO: Handle settings in DrawingContext
+				imageGraphics.translate(-textBounds.x, -textBounds.y);
+				GraphicsUtils.fillPaintedShape(imageGraphics, labelShape, paint, null);
+				imageGraphics.translate(textBounds.x, textBounds.y);
+				textBuffer = new ImageDrawable(textBufferImage);
+				textBuffer.setBounds(textBounds);
+			}
+			textBuffer.draw(context);
 		}
 	}
 
@@ -258,6 +278,7 @@ public class Label extends AbstractDrawable {
 	protected void invalidate() {
 		outlineWrapped = null;
 		outlineUnwrapped = null;
+		textBuffer = null;
 	}
 
 	/**
