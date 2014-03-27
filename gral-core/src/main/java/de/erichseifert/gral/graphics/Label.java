@@ -32,7 +32,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -75,7 +75,7 @@ public class Label extends AbstractDrawable {
 	private transient Shape outlineUnwrapped;
 	/* Filled text outline stored as a bitmap image. */
 	// TODO: There should be a way to enable/disable buffering
-	private transient Drawable textBuffer;
+	private transient ImageDrawable textBuffer;
 
 	/**
 	 * Initializes a new empty {@code Label} instance.
@@ -168,15 +168,15 @@ public class Label extends AbstractDrawable {
 				boolean wordWrap = isWordWrapEnabled();
 				Shape labelShape = getCachedOutline(wordWrap);
 				Rectangle textBounds = labelShape.getBounds();
-				Image textBufferImage = new BufferedImage(
-					textBounds.width, textBounds.height, BufferedImage.TYPE_INT_ARGB
+				Image textBufferImage = context.getGraphics().getDeviceConfiguration().createCompatibleImage(
+					textBounds.width, textBounds.height, ColorModel.TRANSLUCENT
 				);
 				Graphics2D imageGraphics = (Graphics2D) textBufferImage.getGraphics();
 				imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				// TODO: Handle settings in DrawingContext
 				imageGraphics.translate(-textBounds.x, -textBounds.y);
 				GraphicsUtils.fillPaintedShape(imageGraphics, labelShape, paint, null);
-				imageGraphics.translate(textBounds.x, textBounds.y);
+				imageGraphics.dispose();
 				textBuffer = new ImageDrawable(textBufferImage);
 				textBuffer.setBounds(textBounds);
 			}
