@@ -74,8 +74,8 @@ public class Label extends AbstractDrawable {
 	/** Cached outline of the label text without word wrapping. */
 	private transient Shape outlineUnwrapped;
 	/* Filled text outline stored as a bitmap image. */
-	// TODO: There should be a way to enable/disable buffering
 	private transient ImageDrawable textBuffer;
+	private boolean textCachingEnabled;
 
 	/**
 	 * Initializes a new empty {@code Label} instance.
@@ -98,6 +98,7 @@ public class Label extends AbstractDrawable {
 		color = Color.BLACK;
 		textAlignment = 0.5;
 		wordWrapEnabled = false;
+		textCachingEnabled = false;
 	}
 
 	/**
@@ -162,25 +163,30 @@ public class Label extends AbstractDrawable {
 		 * outline text. See EMPTY_LABEL_OUTLINE_STRING.
 		 */
 		if (!getText().isEmpty()) {
-			if (textBuffer == null) {
-				// Paint the shape with the color from settings
-				Paint paint = getColor();
-				boolean wordWrap = isWordWrapEnabled();
-				Shape labelShape = getCachedOutline(wordWrap);
-				Rectangle textBounds = labelShape.getBounds();
-				Image textBufferImage = context.getGraphics().getDeviceConfiguration().createCompatibleImage(
-					textBounds.width, textBounds.height, ColorModel.TRANSLUCENT
-				);
-				Graphics2D imageGraphics = (Graphics2D) textBufferImage.getGraphics();
-				imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				// TODO: Handle settings in DrawingContext
-				imageGraphics.translate(-textBounds.x, -textBounds.y);
-				GraphicsUtils.fillPaintedShape(imageGraphics, labelShape, paint, null);
-				imageGraphics.dispose();
-				textBuffer = new ImageDrawable(textBufferImage);
-				textBuffer.setBounds(textBounds);
+			// Paint the shape with the color from settings
+			Paint paint = getColor();
+			boolean wordWrap = isWordWrapEnabled();
+			Shape labelShape = getCachedOutline(wordWrap);
+			Rectangle textBounds = labelShape.getBounds();
+
+			if (textCachingEnabled) {
+				if (textBuffer == null) {
+					Image textBufferImage = context.getGraphics().getDeviceConfiguration().createCompatibleImage(
+							textBounds.width, textBounds.height, ColorModel.TRANSLUCENT
+					);
+					Graphics2D imageGraphics = (Graphics2D) textBufferImage.getGraphics();
+					imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					// TODO: Handle settings in DrawingContext
+					imageGraphics.translate(-textBounds.x, -textBounds.y);
+					GraphicsUtils.fillPaintedShape(imageGraphics, labelShape, paint, null);
+					imageGraphics.dispose();
+					textBuffer = new ImageDrawable(textBufferImage);
+					textBuffer.setBounds(textBounds);
+				}
+				textBuffer.draw(context);
+			} else {
+				GraphicsUtils.fillPaintedShape(context.getGraphics(), labelShape, paint, null);
 			}
-			textBuffer.draw(context);
 		}
 	}
 
@@ -443,5 +449,13 @@ public class Label extends AbstractDrawable {
 	 */
 	public void setBackground(Paint background) {
 		this.background = background;
+	}
+
+	public boolean isTextCachingEnabled() {
+		return textCachingEnabled;
+	}
+
+	public void setTextCachingEnabled(boolean textCachingEnabled) {
+		this.textCachingEnabled = textCachingEnabled;
 	}
 }
