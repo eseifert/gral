@@ -32,7 +32,7 @@ import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -133,7 +133,7 @@ public abstract class GraphicsUtils {
 		}
 
 		AffineTransform txLinePos = new AffineTransform();
-		Area outlineAllLines = null;
+		Path2D outlineAllLines = new Path2D.Double();
 		for (TextLayout line : lines) {
 			// Distribute the space that's left
 			double dx = alignment*(wrappingWidth - line.getAdvance());
@@ -141,13 +141,9 @@ public abstract class GraphicsUtils {
 			// Move to baseline
 			txLinePos.translate(dx, line.getAscent());
 			// Get the shape of the current line
-			Area outlineLine = new Area(line.getOutline(txLinePos));
+			Shape outlineLine = line.getOutline(txLinePos);
 			// Add the shape of the line to the shape
-			if (outlineAllLines == null) {
-				outlineAllLines = outlineLine;
-			} else {
-				outlineAllLines.add(outlineLine);
-			}
+			outlineAllLines.append(outlineLine, false);
 
 			// Move to next line
 			txLinePos.translate(-dx, line.getDescent() + line.getLeading());
