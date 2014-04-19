@@ -183,7 +183,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 				}
 				Dimension2D itemBounds = component.getPreferredSize();
 				width += itemBounds.getWidth();
-				h = Math.max(height, itemBounds.getHeight());
+				h = Math.max(h, itemBounds.getHeight());
 			}
 			height += h;
 		} else if (getOrientation() == Orientation.VERTICAL) {
