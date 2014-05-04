@@ -3,6 +3,7 @@ package de.erichseifert.gral.uml;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Stroke;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -14,6 +15,7 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.EditableLabel;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.graphics.StackedLayout;
+import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Orientation;
 import metamodel.classes.interfaces.Property;
@@ -25,6 +27,7 @@ public class ClassRenderer {
 	public static class ClassDrawable extends DrawableContainer {
 		private final EditableLabel className;
 		private final metamodel.classes.kernel.Class clazz;
+		private Paint background;
 
 		private static class PropertyLabel extends DrawableContainer {
 			private final Label visibility;
@@ -171,6 +174,9 @@ public class ClassRenderer {
 
 		@Override
 		public void draw(DrawingContext context) {
+			if (getBackground() != null) {
+				GraphicsUtils.fillPaintedShape(context.getGraphics(), getBounds(), getBackground(), null);
+			}
 			drawBorder(context);
 			drawComponents(context);
 		}
@@ -192,6 +198,14 @@ public class ClassRenderer {
 
 		public Class getClazz() {
 			return clazz;
+		}
+
+		public Paint getBackground() {
+			return background;
+		}
+
+		public void setBackground(Paint background) {
+			this.background = background;
 		}
 	}
 
