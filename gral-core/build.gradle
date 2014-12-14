@@ -5,8 +5,14 @@ dependencies {
 }
 
 buildscript {
-	apply from: "https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.0/coberturainit.gradle"
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "net.saliman:gradle-cobertura-plugin:2.2.5"
+	}
 }
+apply plugin: 'net.saliman.cobertura'
 
 task report {
 	dependsOn = ["cobertura", check]
