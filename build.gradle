@@ -90,11 +90,11 @@ buildscript {
 	repositories {
 		mavenLocal()
 		maven { url "http://mvn.erichseifert.de/maven2" }
-		mavenCentral()
+		jcenter()
 	}
 
 	dependencies {
-		classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.6.+"
+		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.+'
 	}
 }
 

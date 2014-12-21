@@ -233,7 +233,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			events = new DataChangeEvent[cols*rows];
 			for (int row = 0; row < rows; row++) {
 				for (int col = 0; col < cols; col++) {
-					events[col*cols + row] = new DataChangeEvent(
+					events[col + row*cols] = new DataChangeEvent(
 						this, col, row, get(col, row), null);
 				}
 			}
