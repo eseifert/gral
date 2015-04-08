@@ -21,25 +21,24 @@
  */
 package de.erichseifert.gral.graphics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 
 public class DrawableTest {
 	private static final double DELTA = TestUtils.DELTA;
 	private static final Rectangle2D BOUNDS = new Rectangle2D.Double(1.2, 3.4, 56.7, 89.0);
 	private static final Dimension2D PREFERRED_SIZE =
-		new de.erichseifert.gral.util.Dimension2D.Double(12.3, 45.6);
+		new de.erichseifert.gral.graphics.Dimension2D.Double(12.3, 45.6);
 
 	private MockDrawable drawable;
 
@@ -48,7 +47,7 @@ public class DrawableTest {
 		private static final long serialVersionUID = 6148480638542875770L;
 
 		private boolean isDrawn;
-		private final Dimension2D preferredSize = new de.erichseifert.gral.util.Dimension2D.Double();
+		private final Dimension2D preferredSize = new de.erichseifert.gral.graphics.Dimension2D.Double();
 
 		public void draw(DrawingContext context) {
 			isDrawn = true;
@@ -72,7 +71,7 @@ public class DrawableTest {
 		assertEquals(drawable.getBounds().getY(), drawable.getY(), DELTA);
 		assertEquals(drawable.getBounds().getWidth(), drawable.getWidth(), DELTA);
 		assertEquals(drawable.getBounds().getHeight(), drawable.getHeight(), DELTA);
-		assertEquals(new de.erichseifert.gral.util.Dimension2D.Double(), drawable.getPreferredSize());
+		assertEquals(new de.erichseifert.gral.graphics.Dimension2D.Double(), drawable.getPreferredSize());
 	}
 
 	@Test
@@ -84,7 +83,7 @@ public class DrawableTest {
 
 	@Test
 	public void testPreferredSize() {
-		assertEquals(new de.erichseifert.gral.util.Dimension2D.Double(), drawable.getPreferredSize());
+		assertEquals(new de.erichseifert.gral.graphics.Dimension2D.Double(), drawable.getPreferredSize());
 		drawable.preferredSize.setSize(PREFERRED_SIZE);
 		assertEquals(PREFERRED_SIZE, drawable.getPreferredSize());
 	}

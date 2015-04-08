@@ -26,7 +26,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.layout.Layout;
-import de.erichseifert.gral.util.Insets2D;
 
 
 /**

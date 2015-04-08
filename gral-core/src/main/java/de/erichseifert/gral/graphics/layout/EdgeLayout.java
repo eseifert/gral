@@ -28,8 +28,8 @@ import java.util.Map;
 
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Location;
 
 
 /**
@@ -205,7 +205,7 @@ public class EdgeLayout extends AbstractLayout {
 		double height = insets.getTop() + heightNorth + gapNorth + heightCenter +
 			gapSouth + heightSouth + insets.getBottom();
 
-		return new de.erichseifert.gral.util.Dimension2D.Double(
+		return new de.erichseifert.gral.graphics.Dimension2D.Double(
 			width, height
 		);
 	}

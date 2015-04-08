@@ -27,8 +27,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	PointNDTest.class,
-	Dimension2DTest.class,
-	Insets2DTest.class,
 	MathUtilsTest.class,
 	HaltonSequenceTest.class,
 	GeometryUtilsTest.class,

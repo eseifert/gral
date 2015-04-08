@@ -32,9 +32,9 @@ import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 
 
 public class HistogramPlot extends ExamplePanel {

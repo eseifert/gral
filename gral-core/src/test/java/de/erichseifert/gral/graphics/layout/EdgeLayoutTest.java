@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Location;
 
 
 public class EdgeLayoutTest {

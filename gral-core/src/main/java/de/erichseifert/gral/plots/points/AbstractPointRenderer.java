@@ -37,7 +37,7 @@ import java.text.Format;
 
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.util.SerializationUtils;
 
 

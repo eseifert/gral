@@ -386,7 +386,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 				double tickLengthOuter = tickLength*(1.0 - tickAlignment);
 				double labelDistance = renderer.getTickLabelDistanceAbsolute() + tickLengthOuter;
 				double minSize = fontSize + labelDistance + tickLengthOuter;
-				return new de.erichseifert.gral.util.Dimension2D.Double(minSize, minSize);
+				return new de.erichseifert.gral.graphics.Dimension2D.Double(minSize, minSize);
 			}
 		};
 

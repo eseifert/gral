@@ -19,18 +19,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.graphics;
+
+import java.awt.geom.Dimension2D;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.geom.Dimension2D;
-import java.io.IOException;
-
-import org.junit.Test;
-
 import de.erichseifert.gral.TestUtils;
+import org.junit.Test;
 
 public class Dimension2DTest {
 	public static final double DELTA = 1e-15;
@@ -40,20 +39,20 @@ public class Dimension2DTest {
 		Dimension2D dim;
 
 		// Standard constructor
-		dim = new de.erichseifert.gral.util.Dimension2D.Double();
+		dim = new de.erichseifert.gral.graphics.Dimension2D.Double();
 		assertEquals(0.0, dim.getWidth(), DELTA);
 		assertEquals(0.0, dim.getHeight(), DELTA);
 
 		// Constructor with width and height
-		dim = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
+		dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
 		assertEquals(1.0, dim.getWidth(), DELTA);
 		assertEquals(2.0, dim.getHeight(), DELTA);
 	}
 
 	@Test
 	public void testChange() {
-		Dimension2D dim = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
-		Dimension2D dim2 = new de.erichseifert.gral.util.Dimension2D.Double(3.0, 4.0);
+		Dimension2D dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		Dimension2D dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(3.0, 4.0);
 
 		// setSize(Dimension2D)
 		dim.setSize(dim2);
@@ -68,14 +67,14 @@ public class Dimension2DTest {
 
 	@Test
 	public void testToString() {
-		Dimension2D dim = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
+		Dimension2D dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
 		assertEquals("de.erichseifert.gral.util.Dimension2D$Double[width=1.000000, height=2.000000]", dim.toString());
 	}
 
 	@Test
 	public void testEquality() {
-		Dimension2D dim1 = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
-		Dimension2D dim2 = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 2.0);
+		Dimension2D dim1 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		Dimension2D dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
 		// Equals
 		assertTrue(dim1.equals(dim2));
 		assertFalse(dim1.equals(null));
@@ -86,7 +85,7 @@ public class Dimension2DTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Dimension2D original = new de.erichseifert.gral.util.Dimension2D.Double(1.2, 3.4);
+		Dimension2D original = new de.erichseifert.gral.graphics.Dimension2D.Double(1.2, 3.4);
 		Dimension2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getWidth(), deserialized.getWidth(), DELTA);

@@ -30,7 +30,7 @@ import de.erichseifert.gral.graphics.Container;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 
 
 public class AbstractOrientedLayoutTest {
@@ -51,7 +51,7 @@ public class AbstractOrientedLayoutTest {
 
 		@Override
 		public Dimension2D getPreferredSize(Container container) {
-			return new de.erichseifert.gral.util.Dimension2D.Double();
+			return new de.erichseifert.gral.graphics.Dimension2D.Double();
 		}
 	}
 

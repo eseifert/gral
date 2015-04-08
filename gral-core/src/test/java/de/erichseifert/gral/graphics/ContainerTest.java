@@ -40,7 +40,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.util.Insets2D;
 
 
 public class ContainerTest {
@@ -51,7 +50,7 @@ public class ContainerTest {
 		private static final long serialVersionUID = 1802598562530415902L;
 
 		private boolean isDrawn;
-		private final Dimension2D preferredSize = new de.erichseifert.gral.util.Dimension2D.Double();
+		private final Dimension2D preferredSize = new de.erichseifert.gral.graphics.Dimension2D.Double();
 
 		public void draw(DrawingContext context) {
 			isDrawn = true;
@@ -71,7 +70,7 @@ public class ContainerTest {
 	@Test
 	public void testCreate() {
 		assertEquals(new Rectangle2D.Double(), container.getBounds());
-		assertEquals(new de.erichseifert.gral.util.Dimension2D.Double(), container.getPreferredSize());
+		assertEquals(new de.erichseifert.gral.graphics.Dimension2D.Double(), container.getPreferredSize());
 		assertEquals(new Insets2D.Double(), container.getInsets());
 		assertEquals(null, container.getLayout());
 	}

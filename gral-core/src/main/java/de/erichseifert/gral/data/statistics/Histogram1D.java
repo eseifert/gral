@@ -28,7 +28,7 @@ import java.util.*;
 
 import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 
 
 /**

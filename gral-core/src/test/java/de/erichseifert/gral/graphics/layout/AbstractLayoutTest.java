@@ -50,7 +50,7 @@ public class AbstractLayoutTest {
 
 		@Override
 		public Dimension2D getPreferredSize(Container container) {
-			return new de.erichseifert.gral.util.Dimension2D.Double();
+			return new de.erichseifert.gral.graphics.Dimension2D.Double();
 		}
 	}
 

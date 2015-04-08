@@ -43,8 +43,8 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Orientation;
 
 
 public class SimpleXYPlot extends ExamplePanel {
@@ -121,8 +121,8 @@ public class SimpleXYPlot extends ExamplePanel {
 		DiscreteLineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setColor(COLOR1);
 		discreteRenderer.setStroke(new BasicStroke(
-			3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-			10.0f, new float[] {3f, 6f}, 0.0f));
+				3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+				10.0f, new float[] {3f, 6f}, 0.0f));
 		plot.setLineRenderer(seriesLin, discreteRenderer);
 		// Custom gaps for points
 		discreteRenderer.setGap(2.0);

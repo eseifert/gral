@@ -34,7 +34,7 @@ import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.legends.Legend;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Location;
 
 /**
  * <p>Interface for classes that display data in a plot.</p>

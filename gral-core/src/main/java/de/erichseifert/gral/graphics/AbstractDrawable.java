@@ -112,7 +112,7 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 	 * @return horizontal and vertical extent that wants to be reached
 	 */
 	public Dimension2D getPreferredSize() {
-		return new de.erichseifert.gral.util.Dimension2D.Double();
+		return new de.erichseifert.gral.graphics.Dimension2D.Double();
 	}
 
 	@Override

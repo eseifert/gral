@@ -49,9 +49,9 @@ import de.erichseifert.gral.graphics.layout.OrientedLayout;
 import de.erichseifert.gral.graphics.layout.StackedLayout;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Location;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Location;
+import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.util.SerializationUtils;
 
 
@@ -206,8 +206,8 @@ public abstract class AbstractLegend extends DrawableContainer
 		alignmentX = 0.0;
 		alignmentY = 0.0;
 		// TODO: Replace setter call in constructor
-		setGap(new de.erichseifert.gral.util.Dimension2D.Double(2.0, 0.5));
-		symbolSize = new de.erichseifert.gral.util.Dimension2D.Double(2.0, 2.0);
+		setGap(new de.erichseifert.gral.graphics.Dimension2D.Double(2.0, 0.5));
+		symbolSize = new de.erichseifert.gral.graphics.Dimension2D.Double(2.0, 2.0);
 		setLayout(new StackedLayout(orientation, gap.getWidth(), gap.getHeight()));
 		refreshLayout();
 	}

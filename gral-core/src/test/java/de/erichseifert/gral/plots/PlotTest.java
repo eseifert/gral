@@ -48,7 +48,7 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.graphics.Insets2D;
 
 public class PlotTest {
 	private static final double DELTA = 1e-15;

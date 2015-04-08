@@ -34,7 +34,9 @@ import org.junit.runners.Suite;
 	DrawingContextTest.class,
 	DrawableTest.class,
 	ContainerTest.class,
-	LabelTest.class
+	LabelTest.class,
+	Dimension2DTest.class,
+	Insets2DTest.class
 })
 public class GraphicsTests {
 }

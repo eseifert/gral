@@ -32,8 +32,8 @@ import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Location;
 
 
 public class SimpleBarPlot extends ExamplePanel {

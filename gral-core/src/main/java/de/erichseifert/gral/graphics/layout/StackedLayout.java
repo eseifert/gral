@@ -26,8 +26,8 @@ import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.Insets2D;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Orientation;
 
 
 /**
@@ -204,7 +204,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 		height += insets.getBottom();
 
 		Dimension2D bounds =
-			new de.erichseifert.gral.util.Dimension2D.Double(width, height);
+			new de.erichseifert.gral.graphics.Dimension2D.Double(width, height);
 		return bounds;
 	}
 

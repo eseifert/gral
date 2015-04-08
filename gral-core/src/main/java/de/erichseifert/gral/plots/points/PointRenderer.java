@@ -29,7 +29,7 @@ import java.text.Format;
 
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.colors.ColorMapper;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Location;
 
 /**
  * <p>An interface providing functions for rendering points in a plot.

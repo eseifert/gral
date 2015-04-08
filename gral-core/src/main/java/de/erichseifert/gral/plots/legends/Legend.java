@@ -29,7 +29,7 @@ import java.awt.geom.Dimension2D;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 
 /**
  * Interface for a legend that display visual examples of the variables used in

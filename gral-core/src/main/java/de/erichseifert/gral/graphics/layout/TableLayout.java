@@ -28,7 +28,7 @@ import java.util.Map;
 
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.graphics.Insets2D;
 
 
 /**
@@ -224,7 +224,7 @@ public class TableLayout extends AbstractLayout {
 	public Dimension2D getPreferredSize(Container container) {
 		Info[] infos = getInfo(container);
 
-		return new de.erichseifert.gral.util.Dimension2D.Double(
+		return new de.erichseifert.gral.graphics.Dimension2D.Double(
 			infos[COLS].sizeSum + infos[COLS].gapSum + infos[COLS].insetsSum,
 			infos[ROWS].sizeSum + infos[ROWS].gapSum + infos[ROWS].insetsSum
 		);

@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.graphics.layout;
 
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 
 public abstract class AbstractOrientedLayout extends AbstractLayout implements
 		OrientedLayout {

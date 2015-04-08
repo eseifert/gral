@@ -31,7 +31,7 @@ import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.Orientation;
+import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.util.SortedList;
 
 

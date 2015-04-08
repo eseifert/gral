@@ -31,7 +31,7 @@ import de.erichseifert.gral.plots.RasterPlot;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Insets2D;
+import de.erichseifert.gral.graphics.Insets2D;
 
 
 public class SimpleRasterPlot extends ExamplePanel {

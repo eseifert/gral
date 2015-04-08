@@ -284,7 +284,7 @@ public class RasterPlot extends XYPlot {
 	 */
 	public RasterPlot(DataSource data) {
 		offset = new Point2D.Double();
-		distance = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
+		distance = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 1.0);
 		colors = new Grayscale();
 
 		((XYPlotArea2D) getPlotArea()).setMajorGridX(false);
@@ -308,7 +308,7 @@ public class RasterPlot extends XYPlot {
 			// In case we get called before settings defaults have been set,
 			// just set distance to a sane default
 			if (dist == null) {
-				dist = new de.erichseifert.gral.util.Dimension2D.Double(1.0, 1.0);
+				dist = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 1.0);
 			}
 
 			Axis axis = getAxis(axisName);

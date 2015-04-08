@@ -42,7 +42,7 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
-import de.erichseifert.gral.util.Location;
+import de.erichseifert.gral.graphics.Location;
 
 public class XYPlotTest {
 	private static final double DELTA = TestUtils.DELTA;
