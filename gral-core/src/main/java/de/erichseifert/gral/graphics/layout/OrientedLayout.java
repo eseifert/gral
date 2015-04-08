@@ -19,27 +19,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 import de.erichseifert.gral.util.Orientation;
 
-public abstract class AbstractOrientedLayout extends AbstractLayout implements
-		OrientedLayout {
-	/** Orientation in which elements should be laid out. */
-	private Orientation orientation;
+/**
+ * Represents a layout with a specific orientation.
+ * @see Orientation
+ */
+public interface OrientedLayout extends Layout {
+	/**
+	 * Returns the layout direction.
+	 * @return Layout orientation.
+	 */
+	Orientation getOrientation();
 
-	public AbstractOrientedLayout(Orientation orientation, double gapX, double gapY) {
-		super(gapX, gapY);
-		this.orientation = orientation;
-	}
-
-	@Override
-	public Orientation getOrientation() {
-		return orientation;
-	}
-
-	@Override
-	public void setOrientation(Orientation orientation) {
-		this.orientation = orientation;
-	}
+	/**
+	 * Sets the layout direction.
+	 * @param orientation Layout orientation.
+	 */
+	void setOrientation(Orientation orientation);
 }

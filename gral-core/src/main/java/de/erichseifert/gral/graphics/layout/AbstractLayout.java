@@ -19,24 +19,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
-import de.erichseifert.gral.util.Orientation;
+public abstract class AbstractLayout implements Layout {
+	private static final long serialVersionUID = 5961215915010787754L;
 
-/**
- * Represents a layout with a specific orientation.
- * @see Orientation
- */
-public interface OrientedLayout extends Layout {
-	/**
-	 * Returns the layout direction.
-	 * @return Layout orientation.
-	 */
-	Orientation getOrientation();
+	/** Horizontal spacing of components. */
+	private double gapX;
+	/** Vertical spacing of components. */
+	private double gapY;
 
-	/**
-	 * Sets the layout direction.
-	 * @param orientation Layout orientation.
-	 */
-	void setOrientation(Orientation orientation);
+	public AbstractLayout(double gapX, double gapY) {
+		this.gapX = gapX;
+		this.gapY = gapY;
+	}
+
+	@Override
+	public double getGapX() {
+		return gapX;
+	}
+
+	@Override
+	public void setGapX(double gapX) {
+		this.gapX = gapX;
+	}
+
+	@Override
+	public double getGapY() {
+		return gapY;
+	}
+
+	@Override
+	public void setGapY(double gapY) {
+		this.gapY = gapY;
+	}
 }

@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.erichseifert.gral.graphics.layout.EdgeLayout;
+import de.erichseifert.gral.graphics.layout.Layout;
 import org.junit.Before;
 import org.junit.Test;
 

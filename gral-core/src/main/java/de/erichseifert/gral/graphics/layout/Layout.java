@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 import java.awt.geom.Dimension2D;
 import java.io.Serializable;
+
+import de.erichseifert.gral.graphics.Container;
 
 /**
  * Interface that provides basic functions for arranging a layout.

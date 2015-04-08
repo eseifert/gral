@@ -19,42 +19,45 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.erichseifert.gral.graphics.Container;
+import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.util.Insets2D;
 import de.erichseifert.gral.util.Location;
 
 
 /**
  * Implementation of Layout that arranges a {@link Container}'s components
- * inside or in the regions outside of the container. This is similar to
- * {@link EdgeLayout}, but also allows components to be placed outside the
- * container.
+ * according to a certain grid. This is similar to Java's
+ * {@link java.awt.BorderLayout}, but also allows components to be placed in
+ * each of the corners.
  */
-public class OuterEdgeLayout extends AbstractLayout {
+public class EdgeLayout extends AbstractLayout {
 	/** Version id for serialization. */
-	private static final long serialVersionUID = -2238929452967312857L;
+	private static final long serialVersionUID = 3661169796145433549L;
 
 	/**
 	 * Initializes a layout manager object with the specified space between the
-	 * container's edges and the components.
-	 * @param gap Spacing between the container's edges and the components.
+	 * components.
+	 * @param gapH Horizontal gap.
+	 * @param gapV Vertical gap.
 	 */
-	public OuterEdgeLayout(double gap) {
-		super(gap, gap);
+	public EdgeLayout(double gapH, double gapV) {
+		super(gapH, gapV);
 	}
 
 	/**
 	 * Initializes a layout manager object without space between the
 	 * components.
 	 */
-	public OuterEdgeLayout() {
-		this(0.0);
+	public EdgeLayout() {
+		this(0.0, 0.0);
 	}
 
 	/**
@@ -81,10 +84,10 @@ public class OuterEdgeLayout extends AbstractLayout {
 		double heightNorth = getMaxHeight(northWest, north,  northEast);
 		double heightSouth = getMaxHeight(southWest, south,  southEast);
 
-		double gapEast  = (widthEast > 0.0) ? getGapX() : 0.0;
-		double gapWest  = (widthWest > 0.0) ? getGapX() : 0.0;
-		double gapNorth = (heightNorth > 0.0) ? getGapY() : 0.0;
-		double gapSouth = (heightSouth > 0.0) ? getGapY() : 0.0;
+		double gapWest  = (widthWest > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapEast  = (widthEast > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapNorth = (heightNorth > 0.0 && center != null) ? getGapY() : 0.0;
+		double gapSouth = (heightSouth > 0.0 && center != null) ? getGapY() : 0.0;
 
 		Rectangle2D bounds = container.getBounds();
 		Insets2D insets = container.getInsets();
@@ -92,12 +95,17 @@ public class OuterEdgeLayout extends AbstractLayout {
 			insets = new Insets2D.Double();
 		}
 
-		double xWest   = bounds.getMinX() + insets.getLeft() - gapWest - widthWest;
-		double xCenter = bounds.getMinX() + insets.getLeft();
-		double xEast   = bounds.getMaxX() - insets.getRight() + gapEast;
-		double yNorth  = bounds.getMinY() + insets.getTop() - gapNorth - heightNorth;
-		double yCenter = bounds.getMinY() + insets.getTop();
-		double ySouth  = bounds.getMaxY() - insets.getBottom() + gapSouth;
+		double xWest   = bounds.getMinX() + insets.getLeft();
+		double xCenter = xWest + widthWest + gapWest;
+		double xEast   = bounds.getMaxX() - insets.getRight() - widthEast;
+		double yNorth  = bounds.getMinY() + insets.getTop();
+		double yCenter = yNorth + heightNorth + gapNorth;
+		double ySouth  = bounds.getMaxY() - insets.getBottom() - heightSouth;
+
+		double widthAll = widthWest + widthEast;
+		double heightAll = heightNorth + heightSouth;
+		double gapHAll = gapWest + gapEast;
+		double gapVAll = gapNorth - gapSouth;
 
 		layoutComponent(northWest,
 			xWest, yNorth,
@@ -106,7 +114,7 @@ public class OuterEdgeLayout extends AbstractLayout {
 
 		layoutComponent(north,
 			xCenter, yNorth,
-			bounds.getWidth() - insets.getHorizontal(),
+			bounds.getWidth() - insets.getHorizontal() - widthAll - gapHAll,
 			heightNorth
 		);
 
@@ -118,7 +126,7 @@ public class OuterEdgeLayout extends AbstractLayout {
 		layoutComponent(east,
 			xEast, yCenter,
 			widthEast,
-			bounds.getHeight() - insets.getVertical()
+			bounds.getHeight() - insets.getVertical() - heightAll - gapVAll
 		);
 
 		layoutComponent(southEast,
@@ -129,7 +137,7 @@ public class OuterEdgeLayout extends AbstractLayout {
 
 		layoutComponent(south,
 			xCenter, ySouth,
-			bounds.getWidth() - insets.getHorizontal(),
+			bounds.getWidth() - insets.getHorizontal() - widthAll - gapHAll,
 			heightSouth
 		);
 
@@ -142,13 +150,17 @@ public class OuterEdgeLayout extends AbstractLayout {
 		layoutComponent(west,
 			xWest, yCenter,
 			widthWest,
-			bounds.getHeight() - insets.getVertical()
+			bounds.getHeight() - insets.getVertical() - heightAll - gapVAll
 		);
 
 		layoutComponent(center,
-			xCenter + getGapX(), yCenter + getGapY(),
-				bounds.getWidth() - insets.getHorizontal() - 2*getGapX(),
-				bounds.getHeight() - insets.getVertical() - 2*getGapY()
+			xCenter, yCenter,
+				bounds.getWidth()
+					- insets.getLeft() - widthAll
+					- insets.getRight() - gapHAll,
+				bounds.getHeight()
+					- insets.getTop() - heightAll
+					- insets.getBottom() - gapVAll
 		);
 	}
 
@@ -160,17 +172,38 @@ public class OuterEdgeLayout extends AbstractLayout {
 	public Dimension2D getPreferredSize(Container container) {
 		// Fetch components
 		Map<Location, Drawable> comps = getComponentsByLocation(container);
+		Drawable north = comps.get(Location.NORTH);
+		Drawable northEast = comps.get(Location.NORTH_EAST);
+		Drawable east = comps.get(Location.EAST);
+		Drawable southEast = comps.get(Location.SOUTH_EAST);
+		Drawable south = comps.get(Location.SOUTH);
+		Drawable southWest = comps.get(Location.SOUTH_WEST);
+		Drawable west = comps.get(Location.WEST);
+		Drawable northWest = comps.get(Location.NORTH_WEST);
 		Drawable center = comps.get(Location.CENTER);
 
+		// Calculate maximum widths and heights
+		double widthWest    = getMaxWidth(northWest,  west,   southWest);
+		double widthCenter  = getMaxWidth(north,      center, south);
+		double widthEast    = getMaxWidth(northEast,  east,   southEast);
+		double heightNorth  = getMaxHeight(northWest, north,  northEast);
+		double heightCenter = getMaxHeight(west,      center, east);
+		double heightSouth  = getMaxHeight(southWest, south,  southEast);
+
+		double gapEast  = (widthEast > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapWest  = (widthWest > 0.0 && center != null) ? getGapX() : 0.0;
+		double gapNorth = (heightNorth > 0.0 && center != null) ? getGapY() : 0.0;
+		double gapSouth = (heightSouth > 0.0 && center != null) ? getGapY() : 0.0;
 
 		// Calculate preferred dimensions
 		Insets2D insets = container.getInsets();
 		if (insets == null) {
 			insets = new Insets2D.Double();
 		}
-
-		double width = center.getWidth() + insets.getHorizontal() + 2*getGapX();
-		double height = center.getHeight() + insets.getVertical() + 2*getGapY();
+		double width = insets.getLeft() + widthEast + gapEast + widthCenter +
+			gapWest + widthWest + insets.getRight();
+		double height = insets.getTop() + heightNorth + gapNorth + heightCenter +
+			gapSouth + heightSouth + insets.getBottom();
 
 		return new de.erichseifert.gral.util.Dimension2D.Double(
 			width, height

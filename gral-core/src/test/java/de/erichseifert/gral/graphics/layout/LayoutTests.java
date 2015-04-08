@@ -19,22 +19,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 
-import de.erichseifert.gral.graphics.layout.LayoutTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	// Tests for subpackages
-	LayoutTests.class,
 	// Tests for classes
-	DrawingContextTest.class,
-	DrawableTest.class,
-	ContainerTest.class,
-	LabelTest.class
+	AbstractLayoutTest.class,
+	AbstractOrientedLayoutTest.class,
+	EdgeLayoutTest.class,
+	// TODO Add test for OuterEdgeLayout
+	StackedLayoutTest.class,
+	TableLayoutTest.class,
 })
-public class GraphicsTests {
+public class LayoutTests {
 }

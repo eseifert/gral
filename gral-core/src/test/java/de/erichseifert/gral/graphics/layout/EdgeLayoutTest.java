@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,6 +27,10 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
+import de.erichseifert.gral.graphics.AbstractDrawable;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.DrawingContext;
 import org.junit.Before;
 import org.junit.Test;
 

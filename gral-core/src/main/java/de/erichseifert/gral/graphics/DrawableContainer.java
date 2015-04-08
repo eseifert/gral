@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import de.erichseifert.gral.graphics.layout.Layout;
 import de.erichseifert.gral.util.Insets2D;
 
 

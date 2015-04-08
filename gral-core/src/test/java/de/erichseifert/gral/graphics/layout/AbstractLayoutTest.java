@@ -19,29 +19,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.graphics;
+package de.erichseifert.gral.graphics.layout;
 
 import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Dimension2D;
 import java.io.IOException;
 
+import de.erichseifert.gral.graphics.Container;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
-import de.erichseifert.gral.util.Orientation;
 
 
-public class AbstractOrientedLayoutTest {
+public class AbstractLayoutTest {
 	private static final double DELTA = 1e-15;
 	private static final double GAP_H = 5.0;
 	private static final double GAP_V = 10.0;
 
-	private static class MockAbstractOrientedLayout extends AbstractOrientedLayout {
-		private static final long serialVersionUID = -1588960524707247633L;
+	private static class MockAbstractLayout extends AbstractLayout {
+		private static final long serialVersionUID = 5812320021345698270L;
 
-		public MockAbstractOrientedLayout(Orientation orientation, double gapX, double gapY) {
-			super(orientation, gapX, gapY);
+		public MockAbstractLayout(double gapX, double gapY) {
+			super(gapX, gapY);
 		}
 
 		@Override
@@ -56,16 +56,17 @@ public class AbstractOrientedLayoutTest {
 
 	@Test
 	public void testCreate() {
-		AbstractOrientedLayout gapped = new MockAbstractOrientedLayout(Orientation.HORIZONTAL, GAP_H, GAP_V);
+		AbstractLayout gapped = new MockAbstractLayout(GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AbstractOrientedLayout original = new MockAbstractOrientedLayout(Orientation.VERTICAL, GAP_H, GAP_V);
-		AbstractOrientedLayout deserialized = TestUtils.serializeAndDeserialize(original);
+		AbstractLayout original = new MockAbstractLayout(GAP_H, GAP_V);
+		AbstractLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
-		assertEquals(original.getOrientation(), deserialized.getOrientation());
+		assertEquals(original.getGapX(), deserialized.getGapX(), DELTA);
+		assertEquals(original.getGapY(), deserialized.getGapY(), DELTA);
 	}
 }
