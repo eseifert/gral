@@ -22,6 +22,7 @@
 package de.erichseifert.gral.io.plots;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -159,9 +160,14 @@ public class BitmapWriter extends IOCapabilitiesStorage
 			throws IOException {
 		BufferedImage image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
+		Graphics2D imageGraphics = image.createGraphics();
+		imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		imageGraphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		imageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		imageGraphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
 		DrawingContext context =
-			new DrawingContext((Graphics2D) image.getGraphics());
+			new DrawingContext(imageGraphics);
 
 		Iterator<ImageWriter> writers =
 			ImageIO.getImageWritersByMIMEType(getMimeType());
