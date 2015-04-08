@@ -41,6 +41,45 @@ public class KernelTest {
 	}
 
 	@Test
+	public void testBinomial() {
+		Kernel kernel;
+
+		// Small kernel
+		kernel = Kernel.getBinomial(2);
+		assertEquals(2, kernel.size());
+		assertEquals(1, kernel.getOffset());
+		assertEquals(0.00, kernel.get(-2), DELTA);
+		assertEquals(0.50, kernel.get(-1), DELTA);
+		assertEquals(0.50, kernel.get( 0), DELTA);
+		assertEquals(0.00, kernel.get( 1), DELTA);
+		assertEquals(0.00, kernel.get( 2), DELTA);
+
+		// Large kernel
+		kernel = Kernel.getBinomial(13);
+		assertEquals(13, kernel.size());
+		assertEquals(6, kernel.getOffset());
+		assertEquals(0.1933593750, kernel.get(-1), DELTA);
+		assertEquals(0.2255859375, kernel.get( 0), DELTA);
+		assertEquals(0.1933593750, kernel.get( 1), DELTA);
+
+		// Kernel with specified variance
+		kernel = Kernel.getBinomial(1.0);
+		assertEquals(5, kernel.size());
+		assertEquals(2, kernel.getOffset());
+	}
+
+	@Test
+	public void testUniform() {
+		Kernel kernel = Kernel.getUniform(13, 0, 1.0);
+		assertEquals(13, kernel.size());
+		assertEquals(0, kernel.getOffset());
+		assertEquals(0.0, kernel.get(-1), DELTA);
+		assertEquals(1.0, kernel.get( 0), DELTA);
+		assertEquals(1.0, kernel.get(12), DELTA);
+		assertEquals(0.0, kernel.get(13), DELTA);
+	}
+
+	@Test
 	public void testOffset() {
 		Kernel k1 = new Kernel(0, new double[] {1.0, 2.0, 3.0});
 		assertEquals(0.0, k1.get(-1), DELTA);

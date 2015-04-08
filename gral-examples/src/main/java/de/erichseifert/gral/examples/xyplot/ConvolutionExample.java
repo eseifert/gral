@@ -30,7 +30,6 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.filters.Convolution;
 import de.erichseifert.gral.data.filters.Filter;
 import de.erichseifert.gral.data.filters.Kernel;
-import de.erichseifert.gral.data.filters.KernelUtils;
 import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
@@ -65,18 +64,18 @@ public class ConvolutionExample extends ExamplePanel {
 		final double KERNEL_VARIANCE = 5.0;
 
 		// Create a smoothed data series from a binomial (near-gaussian) convolution filter
-		Kernel kernelLowpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize();
+		Kernel kernelLowpass = Kernel.getBinomial(KERNEL_VARIANCE).normalize();
 		Filter dataLowpass = new Convolution(data, kernelLowpass, Filter.Mode.REPEAT, 1);
 		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
 		// Create a derived data series from a binomial convolution filter
-		Kernel kernelHighpass = KernelUtils.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
+		Kernel kernelHighpass = Kernel.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
 		Filter dataHighpass = new Convolution(data, kernelHighpass, Filter.Mode.REPEAT, 1);
 		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
 		// Create a new data series that calculates the moving average using a custom convolution kernel
 		int kernelMovingAverageSize = (int)Math.round(4.0*KERNEL_VARIANCE);
-		Kernel kernelMovingAverage = KernelUtils.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
+		Kernel kernelMovingAverage = Kernel.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
 		Filter dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter.Mode.OMIT, 1);
 		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
