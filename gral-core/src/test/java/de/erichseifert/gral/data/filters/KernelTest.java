@@ -21,16 +21,15 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import de.erichseifert.gral.TestUtils;
+import org.junit.Test;
 
 public class KernelTest {
-	private static final double DELTA = 1e-15;
+	private static final double DELTA = TestUtils.DELTA;
 
 	@Test
 	public void testSimpleKernel() {
