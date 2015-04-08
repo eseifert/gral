@@ -31,7 +31,6 @@ import org.junit.runners.Suite;
 	Insets2DTest.class,
 	MathUtilsTest.class,
 	HaltonSequenceTest.class,
-	KernelUtilsTest.class,
 	GeometryUtilsTest.class,
 	GraphicsUtilsTest.class,
 	SortedListTest.class

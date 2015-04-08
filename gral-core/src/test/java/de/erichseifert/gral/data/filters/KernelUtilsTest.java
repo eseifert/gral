@@ -19,15 +19,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.erichseifert.gral.util;
+package de.erichseifert.gral.data.filters;
 
 import static org.junit.Assert.assertEquals;
 
 import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
-
-import de.erichseifert.gral.data.filters.Kernel;
-import de.erichseifert.gral.data.filters.KernelUtils;
 
 public class KernelUtilsTest {
 	public static final double DELTA = TestUtils.DELTA;

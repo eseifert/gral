@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	KernelTest.class,
+	KernelUtilsTest.class,
 	ConvolutionTest.class,
 	MedianTest.class,
 	ResizeTest.class
