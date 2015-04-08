@@ -276,7 +276,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		DataChangeEvent event = null;
 		synchronized (this) {
 			old = (Comparable<T>) get(col, row);
-			if (!old.equals(value)) {
+			if (old == null || !old.equals(value)) {
 				rows.get(row)[col] = value;
 				event = new DataChangeEvent(this, col, row, old, value);
 			}
