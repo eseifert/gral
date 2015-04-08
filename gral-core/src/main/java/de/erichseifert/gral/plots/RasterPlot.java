@@ -82,7 +82,7 @@ public class RasterPlot extends XYPlot {
 	private ColorMapper colors;
 
 	/**
-	 * Class that renders a box and its whiskers in a box-and-whisker plot.
+	 * Class that renders the grid points of a {@code RasterPlot}.
 	 */
 	protected static class RasterRenderer extends AbstractPointRenderer {
 		/** Version id for serialization. */
