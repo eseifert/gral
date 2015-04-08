@@ -61,7 +61,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.Location;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SerializationUtils;
-import de.erichseifert.gral.util.Tuple;
 
 
 /**
@@ -91,7 +90,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	private final Map<String, Drawable> axisDrawables;
 
 	/** Mapping of data source columns to axes. **/
-	private final Map<Tuple, String> mapping;
+	private final Map<Column, String> mapping;
 	/** Minimum values of axes. **/
 	private final Map<String, Double> axisMin;
 	/** Maximum values of axes. **/
@@ -138,7 +137,7 @@ public abstract class AbstractPlot extends DrawableContainer
 		axisRenderers = new HashMap<String, AxisRenderer>();
 		axisDrawables = new HashMap<String, Drawable>();
 
-		mapping = new HashMap<Tuple, String>();
+		mapping = new HashMap<Column, String>();
 		axisMin = new HashMap<String, Double>();
 		axisMax = new HashMap<String, Double>();
 
@@ -647,8 +646,9 @@ public abstract class AbstractPlot extends DrawableContainer
 		if (!contains(source)) {
 			return null;
 		}
-		Tuple mapKey = new Tuple(source, col);
-		String axisName = mapping.get(mapKey);
+
+		Column column = source.getColumn(col);
+		String axisName = mapping.get(column);
 		return axisName;
 	}
 
@@ -690,8 +690,8 @@ public abstract class AbstractPlot extends DrawableContainer
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
 			if (axisName != null) {
-				Tuple mapKey = new Tuple(source, col);
-				mapping.put(mapKey, axisName);
+				Column column = source.getColumn(col);
+				mapping.put(column, axisName);
 			}
 		}
 		invalidateAxisExtrema();
@@ -845,13 +845,11 @@ public abstract class AbstractPlot extends DrawableContainer
 	 */
 	private void revalidateAxisExtrema() {
 		synchronized (this) {
-			for (Entry<Tuple, String> entry : mapping.entrySet()) {
-				Tuple mapKey = entry.getKey();
-				DataSource s = (DataSource) mapKey.get(0);
-				if (s.getRowCount() == 0) {
+			for (Entry<Column, String> entry : mapping.entrySet()) {
+				Column col = entry.getKey();
+				if (col.size() == 0) {
 					continue;
 				}
-				Column col = s.getColumn((Integer) mapKey.get(1));
 				String axisName = entry.getValue();
 
 				Double min = axisMin.get(axisName);
