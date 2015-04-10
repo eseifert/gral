@@ -27,6 +27,13 @@ import org.junit.Test;
 
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
+		public StubAbstractDataSource() {
+		}
+
+		public StubAbstractDataSource(String name) {
+			super(name);
+		}
+
 		@Override
 		public Comparable<?> get(int col, int row) {
 			return null;
@@ -42,5 +49,8 @@ public class AbstractDataSourceTest {
 	public void testGetName() {
 		StubAbstractDataSource source = new StubAbstractDataSource();
 		assertEquals(null, source.getName());
+
+		source = new StubAbstractDataSource("name");
+		assertEquals("name", source.getName());
 	}
 }
