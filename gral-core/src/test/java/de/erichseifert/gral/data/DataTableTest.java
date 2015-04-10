@@ -21,21 +21,20 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
 import de.erichseifert.gral.data.statistics.Statistics;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DataTableTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -322,7 +321,7 @@ public class DataTableTest {
 		assertNull(listener.updated);
 		assertNotNull(listener.removed);
 
-		assertEquals(cols*rows, listener.removed.length);
+		assertEquals(cols * rows, listener.removed.length);
 	}
 
 	@Test
@@ -353,4 +352,10 @@ public class DataTableTest {
 				DELTA);
 		}
     }
+
+	@Test
+	public void testSetName() {
+		table.setName("name");
+		assertEquals("name", table.getName());
+	}
 }

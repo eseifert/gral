@@ -95,4 +95,10 @@ public interface MutableDataSource extends DataSource {
 	 * @param comparators Comparators used for sorting.
 	 */
 	void sort(final DataComparator... comparators);
+
+	/**
+	 * Sets the name of this series.
+	 * @param name name to be set
+	 */
+	void setName(String name);
 }

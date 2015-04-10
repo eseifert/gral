@@ -39,10 +39,8 @@ public class AbstractDataSourceTest {
 	}
 
 	@Test
-	public void testName() {
+	public void testGetName() {
 		StubAbstractDataSource source = new StubAbstractDataSource();
 		assertEquals(null, source.getName());
-		source.setName("name");
-		assertEquals("name", source.getName());
 	}
 }

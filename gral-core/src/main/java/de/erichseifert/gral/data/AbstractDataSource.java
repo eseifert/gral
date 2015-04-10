@@ -45,9 +45,9 @@ import de.erichseifert.gral.data.statistics.Statistics;
 public abstract class AbstractDataSource implements DataSource, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 9139975565475816812L;
-	/** Name of the data source. */
-	protected String name;
 
+	/** Name of the data source. */
+	private String name;
 	/** Number of columns. */
 	private int columnCount;
 	/** Data types that are allowed in the respective columns. */
@@ -215,8 +215,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		return name;
 	}
 
-	@Override
-	public void setName(String name) {
+	// Allows DataTable to reuse the name property
+	protected void setName(String name) {
 		this.name = name;
 	}
 

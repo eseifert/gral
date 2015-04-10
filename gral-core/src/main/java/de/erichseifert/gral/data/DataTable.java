@@ -306,4 +306,9 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			Collections.sort(rows, comparator);
 		}
 	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+	}
 }

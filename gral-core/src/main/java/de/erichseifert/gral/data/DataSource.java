@@ -77,12 +77,6 @@ public interface DataSource extends Iterable<Comparable<?>> {
 	String getName();
 
 	/**
-	 * Sets the name of this series.
-	 * @param name name to be set
-	 */
-	void setName(String name);
-
-	/**
 	 * Returns the number of columns of the data source.
 	 * @return number of columns in the data source.
 	 */
