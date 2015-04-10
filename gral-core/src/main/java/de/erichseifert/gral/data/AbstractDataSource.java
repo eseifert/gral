@@ -45,6 +45,8 @@ import de.erichseifert.gral.data.statistics.Statistics;
 public abstract class AbstractDataSource implements DataSource, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 9139975565475816812L;
+	/** Name of the data source. */
+	protected String name;
 
 	/** Number of columns. */
 	private int columnCount;
@@ -195,6 +197,16 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 */
 	public Column getColumn(int col) {
 		return new Column(this, col);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

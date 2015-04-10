@@ -109,14 +109,6 @@ public class DataSeriesTest {
 	}
 
 	@Test
-	public void testName() {
-		DataSeries series = new DataSeries(table, 2, 1);
-		assertEquals(null, series.getName());
-		series.setName("name");
-		assertEquals("name", series.getName());
-	}
-
-	@Test
 	public void testToString() {
 		DataSeries series = new DataSeries("name", table, 2, 1);
 		assertEquals("name", series.toString());

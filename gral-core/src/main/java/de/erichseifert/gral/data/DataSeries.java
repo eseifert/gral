@@ -38,8 +38,6 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	private final DataSource data;
 	/** Columns that should be mapped to the series. */
 	private final List<Integer> cols;
-	/** Name of the data series. */
-	private String name;
 
 	/**
 	 * Constructor without name. The first column will be column
@@ -87,22 +85,6 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		}
 
 		setColumnTypes(types);
-	}
-
-	/**
-	 * Returns the name of this series.
-	 * @return a name string
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the name of this series.
-	 * @param name name to be set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
