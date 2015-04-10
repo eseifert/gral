@@ -111,13 +111,24 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
+	 * Initializes a new instance with the specified name, number of columns, and
+	 * column types.
+	 * @param name name of the DataSource
+	 * @param types type for each column
+	 */
+	public AbstractDataSource(String name, Class<? extends Comparable<?>>... types) {
+		this.name = name;
+		setColumnTypes(types);
+		dataListeners = new LinkedHashSet<DataListener>();
+	}
+
+	/**
 	 * Initializes a new instance with the specified number of columns and
 	 * column types.
 	 * @param types type for each column
 	 */
 	public AbstractDataSource(Class<? extends Comparable<?>>... types) {
-		setColumnTypes(types);
-		dataListeners = new LinkedHashSet<DataListener>();
+		this(null, types);
 	}
 
 	/**
