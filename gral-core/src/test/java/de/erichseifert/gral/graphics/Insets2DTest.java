@@ -21,15 +21,14 @@
  */
 package de.erichseifert.gral.graphics;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
-import org.junit.Test;
-
 import de.erichseifert.gral.TestUtils;
+import org.junit.Test;
 
 public class Insets2DTest {
 	public static final double DELTA = TestUtils.DELTA;
@@ -89,7 +88,7 @@ public class Insets2DTest {
 	@Test
 	public void testToString() {
 		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
-		assertEquals("de.erichseifert.gral.util.Insets2D$Double[top=1.000000, left=2.000000, bottom=3.000000, right=4.000000]", insets.toString());
+		assertEquals(insets.getClass().getName() + "[top=1.000000, left=2.000000, bottom=3.000000, right=4.000000]", insets.toString());
 	}
 
 	@Test
