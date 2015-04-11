@@ -438,7 +438,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						double pointY = pos.get(PointND.Y);
 						graphics.translate(pointX, pointY);
 						for (PointRenderer pointRenderer : plot.getPointRenderers(s)) {
-							Drawable pointDrawable = pointRenderer.getPoint(point.data, point.shape);
+							Shape pointShape = pointRenderer.getPointShape(point.data);
+							Drawable pointDrawable = pointRenderer.getPoint(point.data, pointShape);
 							pointDrawable.draw(context);
 						}
 						graphics.setTransform(txOffset);
@@ -450,7 +451,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						double pointY = pos.get(PointND.Y);
 						graphics.translate(pointX, pointY);
 						for (PointRenderer pointRenderer : plot.getPointRenderers(s)) {
-							Drawable labelDrawable = pointRenderer.getValue(point.data, point.shape);
+							Shape pointShape = pointRenderer.getPointShape(point.data);
+							Drawable labelDrawable = pointRenderer.getValue(point.data, pointShape);
 							labelDrawable.draw(context);
 						}
 						graphics.setTransform(txOffset);
