@@ -706,7 +706,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Point2D pos = p2.position.getPoint2D();
 						AffineTransform txOrig = graphics.getTransform();
 						graphics.translate(pos.getX(), pos.getY());
-						Drawable drawable = pointRenderer.getPoint(pointData, p2.shape);
+						Drawable drawable = pointRenderer.getPoint(pointData, shape);
 						drawable.draw(context);
 						graphics.setTransform(txOrig);
 					}
