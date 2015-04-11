@@ -152,6 +152,19 @@ public class XYPlotTest {
 	}
 
 	@Test
+	public void testRemovePointRenderer() {
+		DataSource data = new DummyData(2, 1, 1);
+		MockXYPlot plot = new MockXYPlot();
+		plot.removePointRenderer(null, null);
+		plot.removePointRenderer(data, null);
+
+		PointRenderer renderer = new DefaultPointRenderer2D();
+		plot.addPointRenderer(data, renderer);
+		plot.removePointRenderer(data, renderer);
+		assertTrue(plot.getPointRenderers(data).isEmpty());
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		MockXYPlot original = plots.get(0);
 		MockXYPlot deserialized = TestUtils.serializeAndDeserialize(original);

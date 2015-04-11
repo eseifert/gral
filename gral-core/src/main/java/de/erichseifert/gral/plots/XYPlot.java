@@ -866,6 +866,18 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
+	 * Decouples the specified {@code PointRenderer} from the rendering of the specified data source.
+	 * @param s Data to be rendered no longer.
+	 * @param pointRenderer PointRenderer to be removed.
+	 */
+	public void removePointRenderer(DataSource s, PointRenderer pointRenderer) {
+		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
+		if (pointRenderers != null) {
+			pointRenderers.remove(pointRenderer);
+		}
+	}
+
+	/**
 	 * Sets the {@code PointRenderer} for a certain data source to the
 	 * specified value.
 	 * @param s Data source.
