@@ -87,13 +87,21 @@ public abstract class DataAccessor
 		if (!(obj instanceof DataAccessor)) {
 			return false;
 		}
-		DataAccessor r = (DataAccessor) obj;
+		DataAccessor accessor = (DataAccessor) obj;
 		int size = size();
-		if (r.size() != size) {
+		if (accessor.size() != size) {
 			return false;
 		}
 		for (int i = 0; i < size; i++) {
-			if (!r.get(i).equals(get(i))) {
+			Comparable<?> foreignValue = accessor.get(i);
+			Comparable<?> thisValue = get(i);
+			if (foreignValue == null) {
+				if (thisValue != null) {
+					return false;
+				}
+				continue;
+			}
+			if (!foreignValue.equals(thisValue)) {
 				return false;
 			}
 		}
