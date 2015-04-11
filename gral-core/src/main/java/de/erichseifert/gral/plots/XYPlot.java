@@ -44,6 +44,8 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.NavigationDirection;
 import de.erichseifert.gral.navigation.Navigator;
@@ -60,8 +62,6 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Insets2D;
-import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -92,7 +92,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	public static final String AXIS_Y2 = "y2"; //$NON-NLS-1$
 
 	/** Mapping from data source to point renderer. */
-	private final Map<DataSource, PointRenderer> pointRenderers;
+	private final Map<DataSource, List<PointRenderer>> pointRenderersByDataSource;
 	/** Mapping from data source to line renderer. */
 	private final Map<DataSource, LineRenderer> lineRenderers;
 	/** Mapping from data source to area renderer. */
@@ -689,7 +689,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	public XYPlot(DataSource... data) {
 		super();
 
-		pointRenderers = new HashMap<DataSource, PointRenderer>(data.length);
+		pointRenderersByDataSource = new HashMap<DataSource, List<PointRenderer>>(data.length);
 		lineRenderers = new HashMap<DataSource, LineRenderer>(data.length);
 		areaRenderers = new HashMap<DataSource, AreaRenderer>(data.length);
 
@@ -829,7 +829,11 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * @return PointRenderer.
 	 */
 	public PointRenderer getPointRenderer(DataSource s) {
-		return pointRenderers.get(s);
+		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
+		if (pointRenderers != null) {
+			return pointRenderers.get(0);
+		}
+		return null;
 	}
 
 	/**
@@ -839,7 +843,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * @param pointRenderer PointRenderer to be set.
 	 */
 	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
-		this.pointRenderers.put(s, pointRenderer);
+		this.pointRenderersByDataSource.put(s, Arrays.asList(pointRenderer));
 	}
 
 	/**
