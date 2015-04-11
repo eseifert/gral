@@ -56,6 +56,7 @@ import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SerializationUtils;
@@ -729,8 +730,15 @@ public class BoxPlot extends XYPlot {
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
 
-					BoxWhiskerRenderer pointRenderer =
-							(BoxWhiskerRenderer) plot.getPointRenderer(data);
+					// TODO: Provide a means to set the PointRenderer used for the Legend
+					BoxWhiskerRenderer pointRenderer = null;
+					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+					for (PointRenderer p : pointRenderers) {
+						if (pointRenderer instanceof BoxWhiskerRenderer) {
+							pointRenderer = (BoxWhiskerRenderer) p;
+							break;
+						}
+					}
 					if (pointRenderer == null) {
 						return;
 					}
@@ -862,8 +870,14 @@ public class BoxPlot extends XYPlot {
 		double min = Double.MAX_VALUE;
 		double max = Double.MIN_VALUE;
 		for (DataSource data : sources) {
-			BoxWhiskerRenderer pointRenderer =
-					(BoxWhiskerRenderer) getPointRenderer(data);
+			BoxWhiskerRenderer pointRenderer = null;
+			for (PointRenderer p : getPointRenderers(data)) {
+				if (p instanceof BoxWhiskerRenderer) {
+					pointRenderer = (BoxWhiskerRenderer) p;
+					break;
+				}
+			}
+
 			if (pointRenderer == null) {
 				continue;
 			}

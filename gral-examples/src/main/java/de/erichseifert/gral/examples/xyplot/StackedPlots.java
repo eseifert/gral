@@ -73,7 +73,7 @@ public class StackedPlots extends ExamplePanel {
 		// Create and format lower plot
 		XYPlot plotLower = new XYPlot(data);
 		Color colorLower = COLOR1;
-		PointRenderer pointsLower = plotLower.getPointRenderer(data);
+		PointRenderer pointsLower = plotLower.getPointRenderers(data).get(0);
 		pointsLower.setColor(colorLower);
 		pointsLower.setShape(new Ellipse2D.Double(-3, -3, 6, 6));
 		LineRenderer lineLower = new DefaultLineRenderer2D();

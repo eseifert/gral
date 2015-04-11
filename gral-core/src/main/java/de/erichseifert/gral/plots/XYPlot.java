@@ -369,7 +369,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					continue;
 				}
 
-				PointRenderer pointRenderer = plot.getPointRenderer(s);
 				LineRenderer lineRenderer = plot.getLineRenderer(s);
 				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
 
@@ -406,21 +405,17 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Arrays.asList(axisXRenderer, axisYRenderer),
 						row, colY);
 
-					Shape shape = null;
-					Drawable drawable = null;
-					Drawable labelDrawable = null;
-					if (pointRenderer != null) {
-						shape = pointRenderer.getPointShape(
-							pointData);
-						drawable = pointRenderer.getPoint(
-							pointData, shape);
-						labelDrawable = pointRenderer.getValue(
-							pointData, shape);
-					}
+					List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
+					Collections.reverse(pointRenderers);
+					for (PointRenderer pointRenderer : pointRenderers) {
+						Shape shape = pointRenderer.getPointShape(pointData);
+						Drawable drawable = pointRenderer.getPoint(pointData, shape);
+						Drawable labelDrawable = pointRenderer.getValue(pointData, shape);
 
-					DataPoint dataPoint = new DataPoint(
-						pointData, pos, drawable, shape, labelDrawable);
-					points.add(dataPoint);
+						DataPoint dataPoint = new DataPoint(
+								pointData, pos, drawable, shape, labelDrawable);
+						points.add(dataPoint);
+					}
 				}
 
 				if (areaRenderer != null) {
@@ -433,7 +428,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					Drawable drawable = lineRenderer.getLine(points, line);
 					drawable.draw(context);
 				}
-				if (pointRenderer != null) {
+				if (!plot.getPointRenderers(s).isEmpty()) {
 					// Draw graphics
 					for (DataPoint point : points) {
 						PointND<Double> pos = point.position;
@@ -617,7 +612,12 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
-					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					// TODO: Provide a means to set the PointRenderer used for the Legend
+					PointRenderer pointRenderer = null;
+					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+					if (!pointRenderers.isEmpty()) {
+						pointRenderer = pointRenderers.get(0);
+					}
 					LineRenderer lineRenderer = plot.getLineRenderer(data);
 					AreaRenderer areaRenderer = plot.getAreaRenderer(data);
 
@@ -823,19 +823,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				plotBounds.getHeight()
 			);
 		}
-	}
-
-	/**
-	 * Returns the {@code PointRenderer} for the specified data source.
-	 * @param s Data source.
-	 * @return PointRenderer.
-	 */
-	public PointRenderer getPointRenderer(DataSource s) {
-		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
-		if (pointRenderers != null) {
-			return pointRenderers.get(0);
-		}
-		return null;
 	}
 
 	/**

@@ -55,7 +55,7 @@ public class ScatterPlot extends ExamplePanel {
 		plot.getTitle().setText(getDescription());
 
 		// Format points
-		plot.getPointRenderer(data).setColor(COLOR1);
+		plot.getPointRenderers(data).get(0).setColor(COLOR1);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);

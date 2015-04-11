@@ -61,7 +61,7 @@ public class SimpleBarPlot extends ExamplePanel {
 		plot.setBarWidth(0.075);
 
 		// Format bars
-		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
+		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderers(data).get(0);
 		pointRenderer.setColor(
 			new LinearGradientPaint(0f,0f, 0f,1f,
 					new float[] { 0.0f, 1.0f },

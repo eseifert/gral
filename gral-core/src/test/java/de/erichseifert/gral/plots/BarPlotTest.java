@@ -21,17 +21,14 @@
  */
 package de.erichseifert.gral.plots;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
@@ -39,6 +36,8 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import org.junit.Before;
+import org.junit.Test;
 
 public class BarPlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -67,7 +66,7 @@ public class BarPlotTest {
 		DataSource data = new DummyData(2, 1, 1.0);
 		plot = new MockBarPlot(data);
 
-		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderer(data);
+		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderers(data).get(0);
 		pointRenderer.setBorderStroke(new BasicStroke());
 	}
 
@@ -102,19 +101,21 @@ public class BarPlotTest {
 		List<DataSource> dataSourcesDeserialized = deserialized.getData();
 		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
 		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
-			PointRenderer pointRendererOriginal = original.getPointRenderer(
-							dataSourcesOriginal.get(index));
-			PointRenderer pointRendererDeserialized = deserialized.getPointRenderer(
-							dataSourcesDeserialized.get(index));
-			testPointRendererSerialization(pointRendererOriginal, pointRendererDeserialized);
+			List<PointRenderer> pointRenderersOriginal = original.getPointRenderers(
+					dataSourcesOriginal.get(index));
+			List<PointRenderer> pointRenderersDeserialized = deserialized.getPointRenderers(
+					dataSourcesDeserialized.get(index));
+			testPointRendererSerialization(pointRenderersOriginal, pointRenderersDeserialized);
 		}
     }
 
 	private static void testPointRendererSerialization(
-			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
-		BarRenderer original = (BarRenderer) originalRenderer;
-		BarRenderer deserialized = (BarRenderer) deserializedRenderer;
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
+			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {
+		for (int rendererIndex = 0; rendererIndex < originalRenderers.size(); rendererIndex++) {
+			BarRenderer original = (BarRenderer) originalRenderers.get(rendererIndex);
+			BarRenderer deserialized = (BarRenderer) deserializedRenderers.get(rendererIndex);
+			assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
+			assertEquals(original.getBorderColor(), deserialized.getBorderColor());
+		}
 	}
 }

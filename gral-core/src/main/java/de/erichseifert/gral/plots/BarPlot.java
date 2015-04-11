@@ -399,7 +399,12 @@ public class BarPlot extends XYPlot {
 						Arrays.asList(axisRendererX, axisRendererY),
 						symbolRow, 0);
 
-					PointRenderer pointRenderer = plot.getPointRenderer(data);
+					// TODO: Provide a means to set the PointRenderer used for the Legend
+					PointRenderer pointRenderer = null;
+					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+					if (!pointRenderers.isEmpty()) {
+						pointRenderer = pointRenderers.get(0);
+					}
 					Shape shape = null;
 					Drawable drawable = null;
 					Drawable labelDrawable = null;
