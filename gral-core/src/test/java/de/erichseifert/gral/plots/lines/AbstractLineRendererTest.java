@@ -25,7 +25,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -108,22 +106,6 @@ public class AbstractLineRendererTest {
 	}
 
 	@Test
-	public void testPunch() {
-		MockLineRenderer r = new MockLineRenderer();
-
-		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
-		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0),
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0),
-					new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
-		);
-
-		Shape punched = r.punch(line, points);
-		assertNotSame(line, punched);
-	}
-
-	@Test
 	public void testPunchNullLine() {
 		MockLineRenderer r = new MockLineRenderer();
 
@@ -134,7 +116,7 @@ public class AbstractLineRendererTest {
 				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
 		);
 
-		Shape punched = r.punch(null, points);
+		Shape punched = r.stroke(null);
 		assertNull(punched);
 	}
 

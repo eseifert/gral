@@ -63,7 +63,9 @@ import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -423,7 +425,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				}
 				if (lineRenderer != null) {
 					Shape line = lineRenderer.getLineShape(points);
-					Drawable drawable = lineRenderer.getLine(points, line);
+					Shape punchedLine = punch(line, points, lineRenderer.getGap(), lineRenderer.isGapRounded());
+					Drawable drawable = lineRenderer.getLine(points, punchedLine);
 					drawable.draw(context);
 				}
 				if (!plot.getPointRenderers(s).isEmpty()) {
@@ -461,6 +464,28 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				// Reset clipping
 				graphics.setClip(clipBoundsOld);
 			}
+		}
+
+		/**
+		 * Returns the shape from which the shapes of the specified points are subtracted.
+		 * @param shape Shape to be modified.
+		 * @param dataPoints Data points on the line.
+		 * @param gap Gap between shape and point shapes.
+		 * @param roundedGaps {@code true} if the shape gaps are rounded.
+		 * @return Punched shape.
+		 */
+		protected static Shape punch(Shape shape, List<DataPoint> dataPoints, double gap, boolean roundedGaps) {
+			if (!MathUtils.isCalculatable(gap) || gap == 0.0) {
+				return shape;
+			}
+
+			// Subtract shapes of data points from the line to yield gaps.
+			Area punched = new Area(shape);
+			for (DataPoint p : dataPoints) {
+				punched = GeometryUtils.punch(punched, gap, roundedGaps,
+						p.position.getPoint2D(), p.shape);
+			}
+			return punched;
 		}
 
 		/**

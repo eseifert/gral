@@ -114,7 +114,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 			}
 		}
 
-		return punch(shape, points);
+		return stroke(shape);
 	}
 
 	/**

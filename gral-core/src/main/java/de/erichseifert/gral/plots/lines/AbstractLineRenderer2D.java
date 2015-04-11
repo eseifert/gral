@@ -26,15 +26,11 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.geom.Area;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.GeometryUtils;
-import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SerializationUtils;
 
 
@@ -72,33 +68,17 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 	}
 
 	/**
-	 * Returns the shape of a line from which the shapes of the specified
-	 * points are subtracted.
+	 * Returns the stroked shape of the specified line.
 	 * @param line Shape of the line.
-	 * @param dataPoints Data points on the line.
-	 * @return Punched shape.
+	 * @return Stroked shape.
 	 */
-	protected Shape punch(Shape line, Iterable<DataPoint> dataPoints) {
+	protected Shape stroke(Shape line) {
 		if (line == null) {
 			return null;
 		}
 		Stroke stroke = getStroke();
 		Shape lineShape = stroke.createStrokedShape(line);
-
-		double size = getGap();
-		if (!MathUtils.isCalculatable(size) || size == 0.0) {
-			return lineShape;
-		}
-
-		boolean rounded = isGapRounded();
-
-		// Subtract shapes of data points from the line to yield gaps.
-		Area punched = new Area(lineShape);
-		for (DataPoint p : dataPoints) {
-			punched = GeometryUtils.punch(punched, size, rounded,
-				p.position.getPoint2D(), p.shape);
-		}
-		return punched;
+		return lineShape;
 	}
 
 	/**

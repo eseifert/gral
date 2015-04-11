@@ -109,7 +109,7 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		}
 		addCurve(shape, p0, p1, p2, p3, ctrl1, ctrl2, smoothness);
 
-		return punch(shape, points);
+		return stroke(shape);
 	}
 
 	/**

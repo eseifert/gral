@@ -24,8 +24,12 @@ package de.erichseifert.gral.plots;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +37,7 @@ import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
@@ -41,8 +46,12 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
+import de.erichseifert.gral.plots.axes.Axis;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.util.PointND;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -135,6 +144,32 @@ public class XYPlotTest {
 		assertTrue(renderers.contains(renderer1));
 		assertTrue(renderers.contains(renderer2));
 		assertEquals(renderers.size(), 2);
+	}
+
+	@Test
+	public void testPunch() {
+		XYPlot plot = new XYPlot();
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
+		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
+		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
+		PointData data = new PointData(
+				Arrays.asList(axisX, axisY),
+				Arrays.asList(axisRendererX, axisRendererY),
+				null, 0);
+
+		
+		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
+		List<DataPoint> points = Arrays.asList(
+				new DataPoint(data, new PointND<Double>(0.0, 0.0),
+						new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
+				new DataPoint(data, new PointND<Double>(1.0, 1.0),
+						new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
+		);
+
+		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();
+		Shape punched = plotArea.punch(line, points, 1.0, false);
+		assertNotSame(line, punched);
 	}
 
 	@Test

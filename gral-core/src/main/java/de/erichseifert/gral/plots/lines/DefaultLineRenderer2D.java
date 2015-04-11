@@ -93,6 +93,6 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 				shape.lineTo(pos.getX(), pos.getY());
 			}
 		}
-		return punch(shape, points);
+		return stroke(shape);
 	}
 }
