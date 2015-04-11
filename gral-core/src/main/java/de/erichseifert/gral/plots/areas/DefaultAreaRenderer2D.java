@@ -116,6 +116,6 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 			shape.closePath();
 		}
 
-		return punch(shape, points);
+		return shape;
 	}
 }

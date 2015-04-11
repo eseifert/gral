@@ -420,7 +420,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 				if (areaRenderer != null) {
 					Shape area = areaRenderer.getAreaShape(points);
-					Drawable drawable = areaRenderer.getArea(points, area);
+					Shape punchedArea = punch(area, points, areaRenderer.getGap(), areaRenderer.isGapRounded());
+					Drawable drawable = areaRenderer.getArea(points, punchedArea);
 					drawable.draw(context);
 				}
 				if (lineRenderer != null) {

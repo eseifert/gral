@@ -115,7 +115,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 		}
 
 		Stroke stroke = getStroke();
-		return punch(stroke.createStrokedShape(shape), points);
+		return stroke.createStrokedShape(shape);
 	}
 
 	/**

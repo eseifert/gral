@@ -23,14 +23,7 @@ package de.erichseifert.gral.plots.areas;
 
 import java.awt.Color;
 import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.geom.Area;
 import java.io.Serializable;
-import java.util.List;
-
-import de.erichseifert.gral.plots.DataPoint;
-import de.erichseifert.gral.util.GeometryUtils;
-import de.erichseifert.gral.util.MathUtils;
 
 /**
  * <p>Abstract class that renders an area in two-dimensional space.</p>
@@ -59,30 +52,6 @@ public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable
 		gap = 0.0;
 		gapRounded = false;
 		color = Color.GRAY;
-	}
-
-	/**
-	 * Returns the shape of an area from which the shapes of the specified
-	 * points are subtracted.
-	 * @param shape Shape of the area.
-	 * @param dataPoints Data points on the line.
-	 * @return Punched shape.
-	 */
-	protected Shape punch(Shape shape, List<DataPoint> dataPoints) {
-		double size = getGap();
-		if (!MathUtils.isCalculatable(size) || size == 0.0) {
-			return shape;
-		}
-
-		boolean rounded = isGapRounded();
-
-		// Subtract shapes of data points from the area to yield gaps.
-		Area punched = new Area(shape);
-		for (DataPoint p : dataPoints) {
-			punched = GeometryUtils.punch(punched, size, rounded,
-				p.position.getPoint2D(), p.shape);
-		}
-		return punched;
 	}
 
 	@Override
