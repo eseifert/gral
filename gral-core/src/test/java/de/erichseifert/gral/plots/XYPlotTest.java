@@ -21,11 +21,6 @@
  */
 package de.erichseifert.gral.plots;
 
-import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -34,15 +29,22 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 import de.erichseifert.gral.graphics.Location;
+import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+import de.erichseifert.gral.plots.points.PointRenderer;
+import org.junit.Before;
+import org.junit.Test;
 
 public class XYPlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -117,6 +119,20 @@ public class XYPlotTest {
 			assertTrue(plot.isDrawn());
 			assertNotEmpty(image);
 		}
+	}
+
+	@Test
+	public void testGetPointRenderers() {
+		DataSource data = new DummyData(2, 1, 1.0);
+		MockXYPlot plot = new MockXYPlot(data);
+		PointRenderer renderer = new DefaultPointRenderer2D();
+		plot.setPointRenderer(data, renderer);
+		assertNotNull(plot.getPointRenderers(new DummyData(4, 2, 0.0)));
+		assertNotNull(plot.getPointRenderers(null));
+
+		List<PointRenderer> renderers = plot.getPointRenderers(data);
+		assertTrue(renderers.contains(renderer));
+		assertEquals(renderers.size(), 1);
 	}
 
 	@Test

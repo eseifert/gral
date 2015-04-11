@@ -34,6 +34,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -797,7 +798,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 		Number intersection = renderer.getIntersection();
 		PointND<Double> pos = rendererSecondary.getPosition(
-			axisSecondary, intersection, false, false);
+				axisSecondary, intersection, false, false);
 
 		if (pos == null) {
 			pos = new PointND<Double>(0.0, 0.0);
@@ -834,6 +835,19 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			return pointRenderers.get(0);
 		}
 		return null;
+	}
+
+	/**
+	 * Returns all {@code PointRenderer}s that display the data of the specified data source.
+	 * @param s Data source in question.
+	 * @return Renderers being applied on the specified data source.
+	 */
+	public List<PointRenderer> getPointRenderers(DataSource s) {
+		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
+		if (pointRenderers != null) {
+			return Collections.unmodifiableList(pointRenderers);
+		}
+		return Collections.emptyList();
 	}
 
 	/**
