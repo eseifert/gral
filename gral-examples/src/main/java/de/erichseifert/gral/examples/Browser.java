@@ -39,6 +39,7 @@ import de.erichseifert.gral.examples.rasterplot.SimpleRasterPlot;
 import de.erichseifert.gral.examples.xyplot.AreaPlot;
 import de.erichseifert.gral.examples.xyplot.ConvolutionExample;
 import de.erichseifert.gral.examples.xyplot.MemoryUsage;
+import de.erichseifert.gral.examples.xyplot.MultiplePointRenderers;
 import de.erichseifert.gral.examples.xyplot.ScatterPlot;
 import de.erichseifert.gral.examples.xyplot.SimpleXYPlot;
 import de.erichseifert.gral.examples.xyplot.SpiralPlot;
@@ -77,7 +78,8 @@ public class Browser extends JFrame implements ListSelectionListener {
 		new ScatterPlot(),
 		new SimpleXYPlot(),
 		new SpiralPlot(),
-		new StackedPlots()
+		new StackedPlots(),
+		new MultiplePointRenderers()
 	};
 
 	private final JList examplesList;
