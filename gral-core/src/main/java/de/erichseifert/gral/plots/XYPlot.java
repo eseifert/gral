@@ -33,6 +33,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -851,13 +852,29 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
+	 * Adds a {@code PointRenderer} for the specified data source.
+	 * @param s Data to be rendered.
+	 * @param pointRenderer PointRenderer to be used.
+	 */
+	public void addPointRenderer(DataSource s, PointRenderer pointRenderer) {
+		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
+		if (pointRenderers == null) {
+			pointRenderers = new ArrayList<PointRenderer>();
+			pointRenderersByDataSource.put(s, pointRenderers);
+		}
+		pointRenderers.add(pointRenderer);
+	}
+
+	/**
 	 * Sets the {@code PointRenderer} for a certain data source to the
 	 * specified value.
 	 * @param s Data source.
 	 * @param pointRenderer PointRenderer to be set.
 	 */
 	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
-		this.pointRenderersByDataSource.put(s, Arrays.asList(pointRenderer));
+		List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(1);
+		pointRenderers.add(pointRenderer);
+		this.pointRenderersByDataSource.put(s, pointRenderers);
 	}
 
 	/**

@@ -125,14 +125,30 @@ public class XYPlotTest {
 	public void testGetPointRenderers() {
 		DataSource data = new DummyData(2, 1, 1.0);
 		MockXYPlot plot = new MockXYPlot(data);
-		PointRenderer renderer = new DefaultPointRenderer2D();
-		plot.setPointRenderer(data, renderer);
+		PointRenderer renderer1 = new DefaultPointRenderer2D();
+		PointRenderer renderer2 = new DefaultPointRenderer2D();
+		plot.setPointRenderer(data, renderer1);
+		plot.addPointRenderer(data, renderer2);
 		assertNotNull(plot.getPointRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getPointRenderers(null));
 
 		List<PointRenderer> renderers = plot.getPointRenderers(data);
-		assertTrue(renderers.contains(renderer));
-		assertEquals(renderers.size(), 1);
+		assertTrue(renderers.contains(renderer1));
+		assertTrue(renderers.contains(renderer2));
+		assertEquals(renderers.size(), 2);
+	}
+
+	@Test
+	public void testAddPointRenderer() {
+		DataSource data = new DummyData(2, 1, 1);
+		MockXYPlot plot = new MockXYPlot();
+		assertTrue(plot.getPointRenderers(data).isEmpty());
+
+		PointRenderer renderer = new DefaultPointRenderer2D();
+		plot.addPointRenderer(data, renderer);
+		List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+		assertEquals(pointRenderers.size(), 1);
+		assertEquals(pointRenderers.get(0), renderer);
 	}
 
 	@Test
