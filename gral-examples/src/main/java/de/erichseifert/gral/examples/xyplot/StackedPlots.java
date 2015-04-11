@@ -24,11 +24,13 @@ package de.erichseifert.gral.examples.xyplot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.util.List;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.DrawableContainer;
+import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.layout.TableLayout;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
@@ -38,7 +40,6 @@ import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Insets2D;
 
 public class StackedPlots extends ExamplePanel {
 	/** Version id for serialization. */
@@ -60,7 +61,7 @@ public class StackedPlots extends ExamplePanel {
 		// Create and format upper plot
 		XYPlot plotUpper = new XYPlot(data);
 		Color colorUpper = COLOR1;
-		plotUpper.setPointRenderer(data, null);
+		plotUpper.setPointRenderers(data, (List<PointRenderer>) null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setColor(colorUpper);
 		plotUpper.setLineRenderer(data, lineUpper);

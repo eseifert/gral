@@ -127,8 +127,7 @@ public class XYPlotTest {
 		MockXYPlot plot = new MockXYPlot(data);
 		PointRenderer renderer1 = new DefaultPointRenderer2D();
 		PointRenderer renderer2 = new DefaultPointRenderer2D();
-		plot.setPointRenderer(data, renderer1);
-		plot.addPointRenderer(data, renderer2);
+		plot.setPointRenderers(data, renderer1, renderer2);
 		assertNotNull(plot.getPointRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getPointRenderers(null));
 

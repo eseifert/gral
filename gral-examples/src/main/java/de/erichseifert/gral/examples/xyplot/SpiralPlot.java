@@ -85,7 +85,7 @@ public class SpiralPlot extends ExamplePanel {
 		pointRenderer.setShape(new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
 		pointRenderer.setColor(color);  // color of data points
 		pointRenderer.setColumn(2);  // data column which determines the scaling of data point shapes
-		plot.setPointRenderer(series, pointRenderer);  // Assign the point renderer to the data series
+		plot.setPointRenderers(series, pointRenderer);  // Assign the point renderer to the data series
 
 		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component
 	}

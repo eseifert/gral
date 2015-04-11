@@ -87,7 +87,7 @@ public class AreaPlot extends ExamplePanel {
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
 		PointRenderer point = new DefaultPointRenderer2D();
 		point.setColor(color);
-		plot.setPointRenderer(data, point);
+		plot.setPointRenderers(data, point);
 		LineRenderer line = new DefaultLineRenderer2D();
 		line.setColor(color);
 		line.setGap(3.0);
@@ -101,7 +101,7 @@ public class AreaPlot extends ExamplePanel {
 	private static void formatLineArea(XYPlot plot, DataSource data, Color color) {
 		PointRenderer point = new DefaultPointRenderer2D();
 		point.setColor(color);
-		plot.setPointRenderer(data, point);
+		plot.setPointRenderers(data, point);
 		plot.setLineRenderer(data, null);
 		AreaRenderer area = new LineAreaRenderer2D();
 		area.setGap(3.0);

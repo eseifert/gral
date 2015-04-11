@@ -32,6 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -50,6 +51,7 @@ import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
@@ -187,7 +189,7 @@ public class MemoryUsage extends ExamplePanel {
 		Color color1Dark = GraphicsUtils.deriveDarker(COLOR1);
 
 		// Format first data series
-		plot.setPointRenderer(memSysUsage, null);
+		plot.setPointRenderers(memSysUsage, (List<PointRenderer>) null);
 		AreaRenderer area1 = new DefaultAreaRenderer2D();
 		area1.setColor(new LinearGradientPaint(
 			0f, 0f, 0f, 1f,
@@ -200,13 +202,13 @@ public class MemoryUsage extends ExamplePanel {
 		plot.setAreaRenderer(memSysUsage, area1);
 
 		// Format second data series
-		plot.setPointRenderer(memVm, null);
+		plot.setPointRenderers(memVm, (List<PointRenderer>) null);
 		LineRenderer line2 = new DefaultLineRenderer2D();
 		line2.setColor(GraphicsUtils.deriveWithAlpha(color1Dark, 128));
 		plot.setLineRenderer(memVm, line2);
 
 		// Format third data series
-		plot.setPointRenderer(memVmUsage, null);
+		plot.setPointRenderers(memVmUsage, (List<PointRenderer>) null);
 		AreaRenderer area3 = new DefaultAreaRenderer2D();
 		area3.setColor(new LinearGradientPaint(
 				0f, 0f, 0f, 1f,

@@ -488,7 +488,8 @@ public class BarPlot extends XYPlot {
 		PointRenderer pointRendererDefault = new BarRenderer(this);
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
-		setPointRenderer(source, pointRendererDefault);
+		// FIXME: Overwrites possible present point renderers
+		setPointRenderers(source, pointRendererDefault);
 		setLineRenderer(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
 	}

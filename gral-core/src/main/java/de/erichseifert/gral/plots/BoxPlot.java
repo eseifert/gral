@@ -838,7 +838,8 @@ public class BoxPlot extends XYPlot {
 		}
 		super.add(index, source, visible);
 		setLineRenderer(source, null);
-		setPointRenderer(source, new BoxWhiskerRenderer());
+		// FIXME: Overwrites possible present point renderers
+		setPointRenderers(source, new BoxWhiskerRenderer());
 	}
 
 	@Override

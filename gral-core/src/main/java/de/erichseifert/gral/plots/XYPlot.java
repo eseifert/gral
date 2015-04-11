@@ -878,15 +878,22 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
-	 * Sets the {@code PointRenderer} for a certain data source to the
-	 * specified value.
+	 * Sets the {@code PointRenderer}s for a certain data source to the specified value.
 	 * @param s Data source.
-	 * @param pointRenderer PointRenderer to be set.
+	 * @param pointRenderers PointRenderers to be set.
 	 */
-	public void setPointRenderer(DataSource s, PointRenderer pointRenderer) {
-		List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(1);
-		pointRenderers.add(pointRenderer);
+	public void setPointRenderers(DataSource s, List<PointRenderer> pointRenderers) {
 		this.pointRenderersByDataSource.put(s, pointRenderers);
+	}
+
+	/**
+	 * Sets the {@code PointRenderer}s for a certain data source to the specified value.
+	 * @param s Data source.
+	 * @param pointRenderers PointRenderers to be set.
+	 */
+	public void setPointRenderers(DataSource s, PointRenderer... pointRenderers) {
+		List<PointRenderer> pointRendererList = new ArrayList<PointRenderer>(Arrays.asList(pointRenderers));
+		setPointRenderers(s, pointRendererList);
 	}
 
 	/**
@@ -954,7 +961,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
-		setPointRenderer(source, pointRendererDefault);
+		// FIXME: Overwrites possible present point renderers
+		setPointRenderers(source, pointRendererDefault);
 		setLineRenderer(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
 	}

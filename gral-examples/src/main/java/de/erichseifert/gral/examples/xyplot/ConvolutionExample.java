@@ -23,6 +23,7 @@ package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.List;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataSeries;
@@ -34,6 +35,7 @@ import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
@@ -107,7 +109,7 @@ public class ConvolutionExample extends ExamplePanel {
 	}
 
 	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
-		plot.setPointRenderer(series, null);
+		plot.setPointRenderers(series, (List<PointRenderer>) null);
 		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
 		line.setColor(color);
 		plot.setLineRenderer(series, line);

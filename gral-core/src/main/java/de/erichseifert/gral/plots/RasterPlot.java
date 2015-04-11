@@ -373,7 +373,8 @@ public class RasterPlot extends XYPlot {
 		super.add(index, source, visible);
 		// Adjust rendering
 		setLineRenderer(source, null);
-		setPointRenderer(source, new RasterRenderer(this));
+		// FIXME: Overwrites possible present point renderers
+		setPointRenderers(source, new RasterRenderer(this));
 	}
 
 	/**
