@@ -21,11 +21,6 @@
  */
 package de.erichseifert.gral.plots.areas;
 
-import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -34,8 +29,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
@@ -46,6 +43,8 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
+import org.junit.Before;
+import org.junit.Test;
 
 public class LineAreaRendererTest {
 	private PointData data;
@@ -67,8 +66,8 @@ public class LineAreaRendererTest {
 		// Get line
 		AreaRenderer r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
 		Shape shape = r.getAreaShape(points);
 		Drawable area = r.getArea(points, shape);
@@ -105,8 +104,8 @@ public class LineAreaRendererTest {
 			Arrays.asList((AxisRenderer) null, null),
 			null, 0);
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data2, new PointND<Double>(0.0, 0.0), null, null, null),
-			new DataPoint(data2, new PointND<Double>(1.0, 1.0), null, null, null)
+			new DataPoint(data2, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data2, new PointND<Double>(1.0, 1.0), null, null)
 		);
 		Shape shape = r.getAreaShape(points);
 		assertNotNull(shape);

@@ -21,12 +21,6 @@
  */
 package de.erichseifert.gral.plots.lines;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
@@ -37,8 +31,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
@@ -49,6 +46,8 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
+import org.junit.Before;
+import org.junit.Test;
 
 public class AbstractLineRendererTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -100,8 +99,8 @@ public class AbstractLineRendererTest {
 		// Get line
 		LineRenderer r = new MockLineRenderer();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null, null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null, null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0), null, null),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0), null, null)
 		);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -115,9 +114,9 @@ public class AbstractLineRendererTest {
 		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null),
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null)
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
 		);
 
 		Shape punched = r.punch(line, points);
@@ -130,9 +129,9 @@ public class AbstractLineRendererTest {
 
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<Double>(0.0, 0.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null),
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
 			new DataPoint(data, new PointND<Double>(1.0, 1.0), null,
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50), null)
+				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
 		);
 
 		Shape punched = r.punch(null, points);

@@ -410,10 +410,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					for (PointRenderer pointRenderer : pointRenderers) {
 						Shape shape = pointRenderer.getPointShape(pointData);
 						Drawable drawable = pointRenderer.getPoint(pointData, shape);
-						Drawable labelDrawable = pointRenderer.getValue(pointData, shape);
 
 						DataPoint dataPoint = new DataPoint(
-								pointData, pos, drawable, shape, labelDrawable);
+								pointData, pos, drawable, shape);
 						points.add(dataPoint);
 					}
 				}
@@ -651,15 +650,15 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					DataPoint p1 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getMinX(), bounds.getCenterY()),
-						null, null, null);
+						null, null);
 					DataPoint p2 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
-						null, shape, null);
+						null, shape);
 					DataPoint p3 = new DataPoint(
 						pointData,
 						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()),
-						null, null, null);
+						null, null);
 					List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
 					if (areaRenderer != null) {

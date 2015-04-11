@@ -766,11 +766,10 @@ public class BoxPlot extends XYPlot {
 						symbolRow, 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable drawable = pointRenderer.getPoint(pointData, shape);
-					Drawable labelDrawable = pointRenderer.getValue(pointData, shape);
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-						bounds.getCenterY()), drawable, shape, labelDrawable);
+						bounds.getCenterY()), drawable, shape);
 
 					Graphics2D graphics = context.getGraphics();
 					graphics.draw(bounds);
