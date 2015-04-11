@@ -414,7 +414,7 @@ public class BarPlot extends XYPlot {
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-							bounds.getMinY()), drawable, shape);
+							bounds.getMinY()), shape);
 
 					if (drawable != null) {
 						Graphics2D graphics = context.getGraphics();

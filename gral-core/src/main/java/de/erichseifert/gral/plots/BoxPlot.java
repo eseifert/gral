@@ -765,17 +765,17 @@ public class BoxPlot extends XYPlot {
 						Arrays.asList(axisRendererX, axisRendererY),
 						symbolRow, 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
-					Drawable drawable = pointRenderer.getPoint(pointData, shape);
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-						bounds.getCenterY()), drawable, shape);
+						bounds.getCenterY()), shape);
 
 					Graphics2D graphics = context.getGraphics();
 					graphics.draw(bounds);
 					Point2D pos = point.position.getPoint2D();
 					AffineTransform txOrig = graphics.getTransform();
 					graphics.translate(pos.getX(), pos.getY());
+					Drawable drawable = pointRenderer.getPoint(pointData, shape);
 					drawable.draw(context);
 					graphics.setTransform(txOrig);
 				}
