@@ -416,13 +416,14 @@ public class BarPlot extends XYPlot {
 						new PointND<Double>(bounds.getCenterX(),
 							bounds.getMinY()), drawable, shape);
 
-					Graphics2D graphics = context.getGraphics();
-					Point2D pos = point.position.getPoint2D();
-					AffineTransform txOrig = graphics.getTransform();
-					graphics.translate(pos.getX(), pos.getY());
-					// FIXME: drawable can be null
-					drawable.draw(context);
-					graphics.setTransform(txOrig);
+					if (drawable != null) {
+						Graphics2D graphics = context.getGraphics();
+						Point2D pos = point.position.getPoint2D();
+						AffineTransform txOrig = graphics.getTransform();
+						graphics.translate(pos.getX(), pos.getY());
+						drawable.draw(context);
+						graphics.setTransform(txOrig);
+					}
 				}
 			};
 		}
