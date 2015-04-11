@@ -776,7 +776,7 @@ public class BoxPlot extends XYPlot {
 					Point2D pos = point.position.getPoint2D();
 					AffineTransform txOrig = graphics.getTransform();
 					graphics.translate(pos.getX(), pos.getY());
-					point.drawable.draw(context);
+					drawable.draw(context);
 					graphics.setTransform(txOrig);
 				}
 			};
