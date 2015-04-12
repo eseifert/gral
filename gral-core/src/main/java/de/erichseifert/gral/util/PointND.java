@@ -136,7 +136,7 @@ public class PointND<T extends Number> implements Serializable {
 				if (!dimA.equals(dimB)) {
 					return false;
 				}
-			} else if (!dimA.equals(dimB)) {
+			} else if (dimA != dimB) {
 				return false;
 			}
 		}
