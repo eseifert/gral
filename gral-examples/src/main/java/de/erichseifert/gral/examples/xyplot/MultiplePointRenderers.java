@@ -34,6 +34,8 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
@@ -84,7 +86,7 @@ public class MultiplePointRenderers extends ExamplePanel {
 	public MultiplePointRenderers() {
 		// Generate data
 		DataTable data = new DataTable(Double.class, Double.class);
-		for (double x = 1.0; x <= 100.0; x += 1.0) {
+		for (double x = 1.0; x <= 20.0; x += 1.0) {
 			data.add(x, x*x);
 		}
 
@@ -102,6 +104,10 @@ public class MultiplePointRenderers extends ExamplePanel {
 		plot.setPointRenderers(data, defaultPointRenderer);
 		PointRenderer shadowRenderer = new ShadowPointRenderer(defaultPointRenderer);
 		plot.addPointRenderer(data, shadowRenderer);
+
+		LineRenderer lineRenderer = new DefaultLineRenderer2D();
+		lineRenderer.setGap(2.0);
+		plot.setLineRenderer(data, lineRenderer);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);
