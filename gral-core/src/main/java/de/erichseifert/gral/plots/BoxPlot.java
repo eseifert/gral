@@ -844,8 +844,8 @@ public class BoxPlot extends XYPlot {
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
 		super.add(index, source, visible);
-		setLineRenderer(source, null);
-		// FIXME: Overwrites possible present point renderers
+		// FIXME: Overwrites possible present point and line renderers
+		setLineRenderers(source, null);
 		setPointRenderers(source, new BoxWhiskerRenderer());
 	}
 

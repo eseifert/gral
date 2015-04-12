@@ -1041,9 +1041,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
-		// FIXME: Overwrites possible present point renderers
+		// FIXME: Overwrites possible present point and line renderers
 		setPointRenderers(source, pointRendererDefault);
-		setLineRenderer(source, lineRendererDefault);
+		setLineRenderers(source, lineRendererDefault);
 		setAreaRenderer(source, areaRendererDefault);
 	}
 

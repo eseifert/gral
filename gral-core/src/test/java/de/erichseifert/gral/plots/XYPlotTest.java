@@ -153,7 +153,7 @@ public class XYPlotTest {
 		DataSource data = new DummyData(2, 1, 1.0);
 		MockXYPlot plot = new MockXYPlot(data);
 		LineRenderer renderer = new DefaultLineRenderer2D();
-		plot.setLineRenderer(data, renderer);
+		plot.setLineRenderers(data, renderer);
 		assertNotNull(plot.getLineRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getLineRenderers(null));
 
