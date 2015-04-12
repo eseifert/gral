@@ -98,7 +98,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, List<PointRenderer>> pointRenderersByDataSource;
 	/** Mapping from data source to line renderer. */
-	private final Map<DataSource, LineRenderer> lineRenderers;
+	private final Map<DataSource, List<LineRenderer>> lineRenderersByDataSource;
 	/** Mapping from data source to area renderer. */
 	private final Map<DataSource, AreaRenderer> areaRenderers;
 
@@ -734,7 +734,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		super();
 
 		pointRenderersByDataSource = new HashMap<DataSource, List<PointRenderer>>(data.length);
-		lineRenderers = new HashMap<DataSource, LineRenderer>(data.length);
+		lineRenderersByDataSource = new HashMap<DataSource, List<LineRenderer>>(data.length);
 		areaRenderers = new HashMap<DataSource, AreaRenderer>(data.length);
 
 		setPlotArea(new XYPlotArea2D(this));
@@ -931,7 +931,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * @return {@code LineRenderer}.
 	 */
 	public LineRenderer getLineRenderer(DataSource s) {
-		return lineRenderers.get(s);
+		return lineRenderersByDataSource.get(s).get(0);
 	}
 
 	/**
@@ -941,7 +941,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * @param lineRenderer {@code LineRenderer} to be set.
 	 */
 	public void setLineRenderer(DataSource s, LineRenderer lineRenderer) {
-		lineRenderers.put(s, lineRenderer);
+		List<LineRenderer> lineRenderers = new ArrayList<LineRenderer>(1);
+		lineRenderers.add(lineRenderer);
+		lineRenderersByDataSource.put(s, lineRenderers);
 	}
 
 	/**
