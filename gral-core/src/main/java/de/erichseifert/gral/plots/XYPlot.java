@@ -960,22 +960,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
-	 * Sets the {@code LineRenderer} for a certain data source to the specified
-	 * value.
-	 * @param s Data source.
-	 * @param lineRenderer {@code LineRenderer} to be set.
-	 */
-	public void setLineRenderer(DataSource s, LineRenderer lineRenderer) {
-		if (lineRenderer == null) {
-			lineRenderersByDataSource.put(s, null);
-			return;
-		}
-		List<LineRenderer> lineRenderers = new ArrayList<LineRenderer>(1);
-		lineRenderers.add(lineRenderer);
-		lineRenderersByDataSource.put(s, lineRenderers);
-	}
-
-	/**
 	 * Sets the {@code LineRenderer}s for a certain data source to the specified
 	 * value.
 	 * @param s Data source.
