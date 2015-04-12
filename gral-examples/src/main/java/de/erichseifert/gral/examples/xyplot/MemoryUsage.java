@@ -32,7 +32,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -43,6 +42,8 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
@@ -51,11 +52,8 @@ import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Insets2D;
-import de.erichseifert.gral.graphics.Orientation;
 
 final class UpdateTask implements ActionListener {
 	private final DataTable data;
@@ -189,7 +187,7 @@ public class MemoryUsage extends ExamplePanel {
 		Color color1Dark = GraphicsUtils.deriveDarker(COLOR1);
 
 		// Format first data series
-		plot.setPointRenderers(memSysUsage, (List<PointRenderer>) null);
+		plot.setPointRenderers(memSysUsage, null);
 		AreaRenderer area1 = new DefaultAreaRenderer2D();
 		area1.setColor(new LinearGradientPaint(
 			0f, 0f, 0f, 1f,
@@ -202,13 +200,13 @@ public class MemoryUsage extends ExamplePanel {
 		plot.setAreaRenderer(memSysUsage, area1);
 
 		// Format second data series
-		plot.setPointRenderers(memVm, (List<PointRenderer>) null);
+		plot.setPointRenderers(memVm, null);
 		LineRenderer line2 = new DefaultLineRenderer2D();
 		line2.setColor(GraphicsUtils.deriveWithAlpha(color1Dark, 128));
 		plot.setLineRenderer(memVm, line2);
 
 		// Format third data series
-		plot.setPointRenderers(memVmUsage, (List<PointRenderer>) null);
+		plot.setPointRenderers(memVmUsage, null);
 		AreaRenderer area3 = new DefaultAreaRenderer2D();
 		area3.setColor(new LinearGradientPaint(
 				0f, 0f, 0f, 1f,

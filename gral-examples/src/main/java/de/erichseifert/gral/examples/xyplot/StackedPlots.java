@@ -24,7 +24,6 @@ package de.erichseifert.gral.examples.xyplot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
-import java.util.List;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataTable;
@@ -61,7 +60,7 @@ public class StackedPlots extends ExamplePanel {
 		// Create and format upper plot
 		XYPlot plotUpper = new XYPlot(data);
 		Color colorUpper = COLOR1;
-		plotUpper.setPointRenderers(data, (List<PointRenderer>) null);
+		plotUpper.setPointRenderers(data, null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setColor(colorUpper);
 		plotUpper.setLineRenderer(data, lineUpper);

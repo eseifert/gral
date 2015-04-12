@@ -23,7 +23,6 @@ package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.List;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataSeries;
@@ -33,13 +32,12 @@ import de.erichseifert.gral.data.filters.Filter;
 import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.Median;
 import de.erichseifert.gral.examples.ExamplePanel;
-import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Orientation;
+import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
  * Example that shows how to use convultion filtering.
@@ -109,7 +107,7 @@ public class ConvolutionExample extends ExamplePanel {
 	}
 
 	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
-		plot.setPointRenderers(series, (List<PointRenderer>) null);
+		plot.setPointRenderers(series, null);
 		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
 		line.setColor(color);
 		plot.setLineRenderer(series, line);
