@@ -163,6 +163,20 @@ public class XYPlotTest {
 	}
 
 	@Test
+	public void testSetLineRenderers() {
+		DataSource data = new DummyData(2, 1, 1.0);
+		MockXYPlot plot = new MockXYPlot();
+		LineRenderer renderer1 = new DefaultLineRenderer2D();
+		LineRenderer renderer2 = new DefaultLineRenderer2D();
+		plot.setLineRenderers(data, Arrays.asList(renderer1, renderer2));
+
+		List<LineRenderer> renderers = plot.getLineRenderers(data);
+		assertTrue(renderers.contains(renderer1));
+		assertTrue(renderers.contains(renderer2));
+		assertEquals(renderers.size(), 2);
+	}
+
+	@Test
 	public void testPunch() {
 		XYPlot plot = new XYPlot();
 		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
