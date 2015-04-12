@@ -935,6 +935,19 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
+	 * Returns all {@code LineRenderer}s that display the data of the specified data source.
+	 * @param s Data source in question.
+	 * @return Renderers being applied on the specified data source.
+	 */
+	public List<LineRenderer> getLineRenderers(DataSource s) {
+		List<LineRenderer> lineRenderers = lineRenderersByDataSource.get(s);
+		if (lineRenderers != null) {
+			return Collections.unmodifiableList(lineRenderers);
+		}
+		return Collections.emptyList();
+	}
+
+	/**
 	 * Sets the {@code LineRenderer} for a certain data source to the specified
 	 * value.
 	 * @param s Data source.

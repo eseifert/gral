@@ -48,6 +48,8 @@ import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
+import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
@@ -144,6 +146,20 @@ public class XYPlotTest {
 		assertTrue(renderers.contains(renderer1));
 		assertTrue(renderers.contains(renderer2));
 		assertEquals(renderers.size(), 2);
+	}
+
+	@Test
+	public void testGetLineRenderers() {
+		DataSource data = new DummyData(2, 1, 1.0);
+		MockXYPlot plot = new MockXYPlot(data);
+		LineRenderer renderer = new DefaultLineRenderer2D();
+		plot.setLineRenderer(data, renderer);
+		assertNotNull(plot.getLineRenderers(new DummyData(4, 2, 0.0)));
+		assertNotNull(plot.getLineRenderers(null));
+
+		List<LineRenderer> renderers = plot.getLineRenderers(data);
+		assertTrue(renderers.contains(renderer));
+		assertEquals(renderers.size(), 1);
 	}
 
 	@Test
