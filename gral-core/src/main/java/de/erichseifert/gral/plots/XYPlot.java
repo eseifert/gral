@@ -427,8 +427,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					drawable.draw(context);
 				}
 
-				LineRenderer lineRenderer = plot.getLineRenderer(s);
-				if (lineRenderer != null) {
+				List<LineRenderer> lineRenderers = new ArrayList<LineRenderer>(plot.getLineRenderers(s));
+				Collections.reverse(lineRenderers);
+				for (LineRenderer lineRenderer : lineRenderers) {
 					Shape line = lineRenderer.getLineShape(points);
 					Shape punchedLine = line;
 					for (PointRenderer pointRenderer : pointRenderers) {
