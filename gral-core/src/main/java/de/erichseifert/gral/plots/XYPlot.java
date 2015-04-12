@@ -962,6 +962,10 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * @param lineRenderer {@code LineRenderer} to be set.
 	 */
 	public void setLineRenderer(DataSource s, LineRenderer lineRenderer) {
+		if (lineRenderer == null) {
+			lineRenderersByDataSource.put(s, null);
+			return;
+		}
 		List<LineRenderer> lineRenderers = new ArrayList<LineRenderer>(1);
 		lineRenderers.add(lineRenderer);
 		lineRenderersByDataSource.put(s, lineRenderers);
