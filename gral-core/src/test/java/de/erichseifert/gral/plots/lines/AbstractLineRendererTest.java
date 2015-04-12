@@ -105,7 +105,7 @@ public class AbstractLineRendererTest {
 	}
 
 	@Test
-	public void testPunchNullLine() {
+	public void testStrokeNullLine() {
 		MockLineRenderer r = new MockLineRenderer();
 
 		List<DataPoint> points = Arrays.asList(
