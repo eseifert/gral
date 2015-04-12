@@ -63,7 +63,7 @@ public class StackedPlots extends ExamplePanel {
 		plotUpper.setPointRenderers(data, null);
 		LineRenderer lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setColor(colorUpper);
-		plotUpper.setLineRenderer(data, lineUpper);
+		plotUpper.setLineRenderers(data, lineUpper);
 		AreaRenderer areaUpper = new DefaultAreaRenderer2D();
 		areaUpper.setColor(GraphicsUtils.deriveWithAlpha(colorUpper, 64));
 		plotUpper.setAreaRenderer(data, areaUpper);
@@ -79,7 +79,7 @@ public class StackedPlots extends ExamplePanel {
 		lineLower.setStroke(new BasicStroke(2f));
 		lineLower.setGap(1.0);
 		lineLower.setColor(colorLower);
-		plotLower.setLineRenderer(data, lineLower);
+		plotLower.setLineRenderers(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
 		DrawableContainer plots = new DrawableContainer(new TableLayout(1));

@@ -107,7 +107,7 @@ public class MultiplePointRenderers extends ExamplePanel {
 
 		LineRenderer lineRenderer = new DefaultLineRenderer2D();
 		lineRenderer.setGap(2.0);
-		plot.setLineRenderer(data, lineRenderer);
+		plot.setLineRenderers(data, lineRenderer);
 
 		// Add plot to Swing component
 		add(new InteractivePanel(plot), BorderLayout.CENTER);

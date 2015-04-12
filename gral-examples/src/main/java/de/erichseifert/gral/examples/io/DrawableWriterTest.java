@@ -58,15 +58,15 @@ public class DrawableWriterTest {
 
 		LineRenderer lr1 = new DefaultLineRenderer2D();
 		lr1.setColor(Color.RED);
-		plot.setLineRenderer(s1, lr1);
+		plot.setLineRenderers(s1, lr1);
 
 		LineRenderer lr2 = new DefaultLineRenderer2D();
 		lr2.setColor(Color.GREEN);
-		plot.setLineRenderer(s2, lr2);
+		plot.setLineRenderers(s2, lr2);
 
 		LineRenderer lr3 = new DefaultLineRenderer2D();
 		lr3.setColor(Color.BLUE);
-		plot.setLineRenderer(s3, lr3);
+		plot.setLineRenderers(s3, lr3);
 	}
 
 	public void save() {

@@ -110,7 +110,7 @@ public class ConvolutionExample extends ExamplePanel {
 		plot.setPointRenderers(series, null);
 		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
 		line.setColor(color);
-		plot.setLineRenderer(series, line);
+		plot.setLineRenderers(series, line);
 	}
 
 	@Override

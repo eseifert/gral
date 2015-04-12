@@ -123,7 +123,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		discreteRenderer.setStroke(new BasicStroke(
 				3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
 				10.0f, new float[] {3f, 6f}, 0.0f));
-		plot.setLineRenderer(seriesLin, discreteRenderer);
+		plot.setLineRenderers(seriesLin, discreteRenderer);
 		// Custom gaps for points
 		discreteRenderer.setGap(2.0);
 		discreteRenderer.setGapRounded(true);

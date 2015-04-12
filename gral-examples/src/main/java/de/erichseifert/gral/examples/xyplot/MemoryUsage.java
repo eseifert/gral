@@ -203,7 +203,7 @@ public class MemoryUsage extends ExamplePanel {
 		plot.setPointRenderers(memVm, null);
 		LineRenderer line2 = new DefaultLineRenderer2D();
 		line2.setColor(GraphicsUtils.deriveWithAlpha(color1Dark, 128));
-		plot.setLineRenderer(memVm, line2);
+		plot.setLineRenderers(memVm, line2);
 
 		// Format third data series
 		plot.setPointRenderers(memVmUsage, null);
