@@ -926,10 +926,23 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/**
 	 * Sets the {@code PointRenderer}s for a certain data source to the specified value.
 	 * @param s Data source.
-	 * @param pointRenderers PointRenderers to be set.
+	 * @param pointRendererFirst First PointRenderer.
+	 * @param pointRenderers Remaining PointRenderers to be set.
 	 */
-	public void setPointRenderers(DataSource s, PointRenderer... pointRenderers) {
-		List<PointRenderer> pointRendererList = new ArrayList<PointRenderer>(Arrays.asList(pointRenderers));
+	public void setPointRenderers(DataSource s, PointRenderer pointRendererFirst, PointRenderer... pointRenderers) {
+		List<PointRenderer> pointRendererList = null;
+		if (pointRendererFirst == null) {
+			setPointRenderers(s, pointRendererList);
+			return;
+		}
+		pointRendererList = new ArrayList<PointRenderer>(pointRenderers.length + 1);
+		pointRendererList.add(pointRendererFirst);
+		for (PointRenderer pointRenderer : pointRenderers) {
+			if (pointRenderer == null) {
+				throw new IllegalArgumentException("A PointRenderer for a DataSource cannot be null.");
+			}
+			pointRendererList.add(pointRenderer);
+		}
 		setPointRenderers(s, pointRendererList);
 	}
 
