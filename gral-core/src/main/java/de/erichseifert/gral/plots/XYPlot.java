@@ -658,12 +658,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
-					// TODO: Provide a means to set the PointRenderer used for the Legend
-					PointRenderer pointRenderer = null;
-					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
-					if (!pointRenderers.isEmpty()) {
-						pointRenderer = pointRenderers.get(0);
-					}
 
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
@@ -704,11 +698,24 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Drawable drawable = areaRenderer.getArea(points, area);
 						drawable.draw(context);
 					}
-					LineRenderer lineRenderer = plot.getLineRenderer(data);
+
+					// TODO: Provide a means to set the LineRenderer used for the Legend
+					LineRenderer lineRenderer = null;
+					List<LineRenderer> lineRenderers = plot.getLineRenderers(data);
+					if (!lineRenderers.isEmpty()) {
+						lineRenderer = lineRenderers.get(0);
+					}
 					if (lineRenderer != null) {
 						Shape line = lineRenderer.getLineShape(points);
 						Drawable drawable = lineRenderer.getLine(points, line);
 						drawable.draw(context);
+					}
+
+					// TODO: Provide a means to set the PointRenderer used for the Legend
+					PointRenderer pointRenderer = null;
+					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+					if (!pointRenderers.isEmpty()) {
+						pointRenderer = pointRenderers.get(0);
 					}
 					if (pointRenderer != null) {
 						Graphics2D graphics = context.getGraphics();
