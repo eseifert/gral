@@ -405,16 +405,15 @@ public class BarPlot extends XYPlot {
 					if (!pointRenderers.isEmpty()) {
 						pointRenderer = pointRenderers.get(0);
 					}
-					Shape shape = null;
 					Drawable drawable = null;
 					if (pointRenderer != null) {
-						shape = pointRenderer.getPointShape(pointData);
+						Shape shape = pointRenderer.getPointShape(pointData);
 						drawable = pointRenderer.getPoint(pointData, shape);
 					}
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-							bounds.getMinY()), shape);
+							bounds.getMinY()));
 
 					if (drawable != null) {
 						Graphics2D graphics = context.getGraphics();

@@ -48,6 +48,8 @@ public class Tick extends DataPoint {
 	public final PointND<Double> normal;
 	/** Drawable that will be used to render the tick. */
 	public final Drawable drawable;
+	/** Shape describing the tick. */
+	public final Shape shape;
 	/** Label text associated with this tick mark. */
 	public final String label;
 
@@ -63,10 +65,11 @@ public class Tick extends DataPoint {
 	 */
 	public Tick(TickType type, PointND<Double> position, PointND<Double> normal,
 			Drawable drawable, Shape point, String label) {
-		super(null, position, point);
+		super(null, position);
 		this.type = type;
 		this.normal = normal;
 		this.drawable = drawable;
+		this.shape = point;
 		this.label = label;
 	}
 }

@@ -161,8 +161,8 @@ public class XYPlotTest {
 		
 		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
 		List<DataPoint> points = Arrays.asList(
-				new DataPoint(data, new PointND<Double>(0.0, 0.0), null),
-				new DataPoint(data, new PointND<Double>(1.0, 1.0), null)
+				new DataPoint(data, new PointND<Double>(0.0, 0.0)),
+				new DataPoint(data, new PointND<Double>(1.0, 1.0))
 		);
 
 		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();

@@ -24,7 +24,6 @@ package de.erichseifert.gral.plots.lines;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Arrays;
@@ -97,8 +96,8 @@ public class AbstractLineRendererTest {
 		// Get line
 		LineRenderer r = new MockLineRenderer();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0), null),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0), null)
+			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0))
 		);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -110,10 +109,8 @@ public class AbstractLineRendererTest {
 		MockLineRenderer r = new MockLineRenderer();
 
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0),
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0),
-				new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50))
+			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
+			new DataPoint(data, new PointND<Double>(1.0, 1.0))
 		);
 
 		Shape punched = r.stroke(null);

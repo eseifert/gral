@@ -768,7 +768,7 @@ public class BoxPlot extends XYPlot {
 
 					DataPoint point = new DataPoint(pointData,
 						new PointND<Double>(bounds.getCenterX(),
-						bounds.getCenterY()), shape);
+						bounds.getCenterY()));
 
 					Graphics2D graphics = context.getGraphics();
 					graphics.draw(bounds);

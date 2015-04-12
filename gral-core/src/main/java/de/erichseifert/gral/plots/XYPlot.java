@@ -404,8 +404,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Arrays.asList(axisXRenderer, axisYRenderer),
 						row, colY);
 
-					DataPoint dataPoint = new DataPoint(
-							pointData, pos, null);
+					DataPoint dataPoint = new DataPoint(pointData, pos);
 					points.add(dataPoint);
 				}
 
@@ -665,8 +664,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					if (!pointRenderers.isEmpty()) {
 						pointRenderer = pointRenderers.get(0);
 					}
-					LineRenderer lineRenderer = plot.getLineRenderer(data);
-					AreaRenderer areaRenderer = plot.getAreaRenderer(data);
 
 					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
 					Rectangle2D bounds = getBounds();
@@ -687,30 +684,27 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Arrays.asList(axisRendererX, axisRendererY),
 						symbolRow, 0);
 
-					Shape shape = null;
-					if (pointRenderer != null) {
-						shape = pointRenderer.getPointShape(pointData);
-					}
-
 					DataPoint p1 = new DataPoint(
 						pointData,
-						new PointND<Double>(bounds.getMinX(), bounds.getCenterY()),
-						null);
+						new PointND<Double>(bounds.getMinX(), bounds.getCenterY())
+					);
 					DataPoint p2 = new DataPoint(
 						pointData,
-						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY()),
-						shape);
+						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY())
+					);
 					DataPoint p3 = new DataPoint(
 						pointData,
-						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY()),
-						null);
+						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY())
+					);
 					List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
+					AreaRenderer areaRenderer = plot.getAreaRenderer(data);
 					if (areaRenderer != null) {
 						Shape area = areaRenderer.getAreaShape(points);
 						Drawable drawable = areaRenderer.getArea(points, area);
 						drawable.draw(context);
 					}
+					LineRenderer lineRenderer = plot.getLineRenderer(data);
 					if (lineRenderer != null) {
 						Shape line = lineRenderer.getLineShape(points);
 						Drawable drawable = lineRenderer.getLine(points, line);
@@ -721,6 +715,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Point2D pos = p2.position.getPoint2D();
 						AffineTransform txOrig = graphics.getTransform();
 						graphics.translate(pos.getX(), pos.getY());
+						Shape shape = pointRenderer.getPointShape(pointData);
 						Drawable drawable = pointRenderer.getPoint(pointData, shape);
 						drawable.draw(context);
 						graphics.setTransform(txOrig);
