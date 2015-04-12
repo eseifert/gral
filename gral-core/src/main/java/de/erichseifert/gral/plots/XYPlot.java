@@ -371,9 +371,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					continue;
 				}
 
-				LineRenderer lineRenderer = plot.getLineRenderer(s);
-				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
-
 				String[] axisNames = plot.getMapping(s);
 				Axis axisX = plot.getAxis(axisNames[0]);
 				Axis axisY = plot.getAxis(axisNames[1]);
@@ -407,26 +404,42 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						Arrays.asList(axisXRenderer, axisYRenderer),
 						row, colY);
 
-					List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
-					Collections.reverse(pointRenderers);
-					for (PointRenderer pointRenderer : pointRenderers) {
-						Shape shape = pointRenderer.getPointShape(pointData);
-
-						DataPoint dataPoint = new DataPoint(
-								pointData, pos, shape);
-						points.add(dataPoint);
-					}
+					DataPoint dataPoint = new DataPoint(
+							pointData, pos, null);
+					points.add(dataPoint);
 				}
 
+				List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
+				Collections.reverse(pointRenderers);
+
+				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
 				if (areaRenderer != null) {
 					Shape area = areaRenderer.getAreaShape(points);
-					Shape punchedArea = punch(area, points, areaRenderer.getGap(), areaRenderer.isGapRounded());
+					Shape punchedArea = area;
+					for (PointRenderer pointRenderer : pointRenderers) {
+						List<Shape> punchShapes = new ArrayList<Shape>(points.size());
+						for (DataPoint point : points) {
+							Shape punchShape = pointRenderer.getPointShape(point.data);
+							punchShapes.add(punchShape);
+						}
+						punchedArea = punch(punchedArea, points, punchShapes, areaRenderer.getGap(), areaRenderer.isGapRounded());
+					}
 					Drawable drawable = areaRenderer.getArea(points, punchedArea);
 					drawable.draw(context);
 				}
+
+				LineRenderer lineRenderer = plot.getLineRenderer(s);
 				if (lineRenderer != null) {
 					Shape line = lineRenderer.getLineShape(points);
-					Shape punchedLine = punch(line, points, lineRenderer.getGap(), lineRenderer.isGapRounded());
+					Shape punchedLine = line;
+					for (PointRenderer pointRenderer : pointRenderers) {
+						List<Shape> punchShapes = new ArrayList<Shape>(points.size());
+						for (DataPoint point : points) {
+							Shape punchShape = pointRenderer.getPointShape(point.data);
+							punchShapes.add(punchShape);
+						}
+						punchedLine = punch(punchedLine, points, punchShapes, lineRenderer.getGap(), lineRenderer.isGapRounded());
+					}
 					Drawable drawable = lineRenderer.getLine(points, punchedLine);
 					drawable.draw(context);
 				}
@@ -473,20 +486,22 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * Returns the shape from which the shapes of the specified points are subtracted.
 		 * @param shape Shape to be modified.
 		 * @param dataPoints Data points on the line.
+		 * @param punchShapes Shape used for punching.
 		 * @param gap Gap between shape and point shapes.
 		 * @param roundedGaps {@code true} if the shape gaps are rounded.
 		 * @return Punched shape.
 		 */
-		protected static Shape punch(Shape shape, List<DataPoint> dataPoints, double gap, boolean roundedGaps) {
+		protected static Shape punch(Shape shape, List<DataPoint> dataPoints, List<Shape> punchShapes, double gap, boolean roundedGaps) {
 			if (!MathUtils.isCalculatable(gap) || gap == 0.0) {
 				return shape;
 			}
 
 			// Subtract shapes of data points from the line to yield gaps.
 			Area punched = new Area(shape);
-			for (DataPoint p : dataPoints) {
+			for (int pointIndex = 0; pointIndex < dataPoints.size(); pointIndex++) {
+				DataPoint p = dataPoints.get(pointIndex);
 				punched = GeometryUtils.punch(punched, gap, roundedGaps,
-						p.position.getPoint2D(), p.shape);
+						p.position.getPoint2D(), punchShapes.get(pointIndex));
 			}
 			return punched;
 		}
