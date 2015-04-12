@@ -21,17 +21,16 @@
  */
 package de.erichseifert.gral.util;
 
+import java.awt.geom.Point2D;
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.awt.geom.Point2D;
-import java.io.IOException;
-
-import org.junit.Test;
-
 import de.erichseifert.gral.TestUtils;
+import org.junit.Test;
 
 public class PointNDTest {
 	public static final double DELTA = TestUtils.DELTA;
@@ -90,11 +89,15 @@ public class PointNDTest {
 		PointND<Double> p1 = new PointND<Double>(1.0, 2.0);
 		PointND<Double> p2 = new PointND<Double>(1.0, 2.0);
 		PointND<Double> p3 = new PointND<Double>(1.0, 2.0, 3.0);
+		PointND<Double> p4 = new PointND<Double>(1.0, 2.0, null);
 		// Equals
 		assertTrue(p1.equals(p2));
 		assertFalse(p1.equals(null));
 		assertFalse(p2.equals(null));
 		assertFalse(p1.equals(p3));
+		assertFalse(p3.equals(p1));
+		assertFalse(p4.equals(p3));
+		assertFalse(p3.equals(p4));
 		// Hash code
 		assertEquals(p1.hashCode(), p2.hashCode());
 	}
