@@ -95,9 +95,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/** Key for specifying the secondary y-axis of an xy-plot. */
 	public static final String AXIS_Y2 = "y2"; //$NON-NLS-1$
 
-	/** Mapping from data source to point renderer. */
+	/** Mapping from data source to point renderers. */
 	private final Map<DataSource, List<PointRenderer>> pointRenderersByDataSource;
-	/** Mapping from data source to line renderer. */
+	/** Mapping from data source to line renderers. */
 	private final Map<DataSource, List<LineRenderer>> lineRenderersByDataSource;
 	/** Mapping from data source to area renderer. */
 	private final Map<DataSource, AreaRenderer> areaRenderers;
