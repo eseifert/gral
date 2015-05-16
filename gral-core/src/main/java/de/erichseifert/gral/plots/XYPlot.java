@@ -693,7 +693,12 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					);
 					List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
-					AreaRenderer areaRenderer = plot.getAreaRenderer(data);
+					// TODO: Provide a means to set the AreaRenderer used for the Legend
+					AreaRenderer areaRenderer = null;
+					List<AreaRenderer> areaRenderers = plot.getAreaRenderers(data);
+					if (!areaRenderers.isEmpty()) {
+						areaRenderer = areaRenderers.get(0);
+					}
 					if (areaRenderer != null) {
 						Shape area = areaRenderer.getAreaShape(points);
 						Drawable drawable = areaRenderer.getArea(points, area);
