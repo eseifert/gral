@@ -95,7 +95,7 @@ public class AreaPlot extends ExamplePanel {
 		plot.setLineRenderers(data, line);
 		AreaRenderer area = new DefaultAreaRenderer2D();
 		area.setColor(GraphicsUtils.deriveWithAlpha(color, 64));
-		plot.setAreaRenderer(data, area);
+		plot.setAreaRenderers(data, area);
 	}
 
 	private static void formatLineArea(XYPlot plot, DataSource data, Color color) {
@@ -106,7 +106,7 @@ public class AreaPlot extends ExamplePanel {
 		AreaRenderer area = new LineAreaRenderer2D();
 		area.setGap(3.0);
 		area.setColor(color);
-		plot.setAreaRenderer(data, area);
+		plot.setAreaRenderers(data, area);
 	}
 
 	@Override

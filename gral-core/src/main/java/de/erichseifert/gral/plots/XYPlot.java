@@ -1013,16 +1013,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
-	 * Sets the {@code AreaRenderer} for a certain data source to the specified
-	 * value.
-	 * @param s Data source.
-	 * @param areaRenderer {@code AreaRenderer} to be set.
-	 */
-	public void setAreaRenderer(DataSource s, AreaRenderer areaRenderer) {
-		areaRenderersByDataSource.put(s, Collections.singletonList(areaRenderer));
-	}
-
-	/**
 	 * Sets the {@code AreaRenderer}s for a certain data source to the specified
 	 * value.
 	 * @param s Data source.
@@ -1086,7 +1076,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		// FIXME: Overwrites possible present point and line renderers
 		setPointRenderers(source, pointRendererDefault);
 		setLineRenderers(source, lineRendererDefault);
-		setAreaRenderer(source, areaRendererDefault);
+		setAreaRenderers(source, areaRendererDefault);
 	}
 
 	/**

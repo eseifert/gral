@@ -197,7 +197,7 @@ public class MemoryUsage extends ExamplePanel {
 				GraphicsUtils.deriveWithAlpha(COLOR1, 24)
 			}
 		));
-		plot.setAreaRenderer(memSysUsage, area1);
+		plot.setAreaRenderers(memSysUsage, area1);
 
 		// Format second data series
 		plot.setPointRenderers(memVm, null);
@@ -216,7 +216,7 @@ public class MemoryUsage extends ExamplePanel {
 					GraphicsUtils.deriveWithAlpha(COLOR2, 24)
 				}
 		));
-		plot.setAreaRenderer(memVmUsage, area3);
+		plot.setAreaRenderers(memVmUsage, area3);
 
 		// Add plot to frame
 		InteractivePanel plotPanel = new InteractivePanel(plot);
