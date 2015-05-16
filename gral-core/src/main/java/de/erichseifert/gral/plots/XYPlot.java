@@ -973,7 +973,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * Sets the {@code LineRenderer}s for a certain data source to the specified
 	 * value.
 	 * @param s Data source.
-	 * @param lineRenderers {@code LineRenderer}s to be set.
+	 * @param lineRendererFirst First {@code LineRenderer} to be set.
+	 * @param lineRenderers Remaining {@code LineRenderer}s to be set.
 	 */
 	public void setLineRenderers(DataSource s, LineRenderer lineRendererFirst, LineRenderer... lineRenderers) {
 		List<LineRenderer> lineRendererList = null;
