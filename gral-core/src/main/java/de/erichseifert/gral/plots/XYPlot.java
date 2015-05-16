@@ -411,8 +411,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
 				Collections.reverse(pointRenderers);
 
-				AreaRenderer areaRenderer = plot.getAreaRenderer(s);
-				if (areaRenderer != null) {
+				List<AreaRenderer> areaRenderers = new ArrayList<AreaRenderer>(plot.getAreaRenderers(s));
+				Collections.reverse(areaRenderers);
+				for (AreaRenderer areaRenderer : areaRenderers) {
 					Shape area = areaRenderer.getAreaShape(points);
 					Shape punchedArea = area;
 					for (PointRenderer pointRenderer : pointRenderers) {
