@@ -1002,6 +1002,19 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	}
 
 	/**
+	 * Returns all {@code AreaRenderer}s for the specified data source.
+	 * @param s Data source.
+	 * @return {@code AreaRenderer}s used to render the {@code DataSource}.
+	 */
+	public List<AreaRenderer> getAreaRenderers(DataSource s) {
+		List<AreaRenderer> areaRenderers = areaRenderersByDataSource.get(s);
+		if (areaRenderers != null) {
+			return Collections.unmodifiableList(areaRenderers);
+		}
+		return Collections.emptyList();
+	}
+
+	/**
 	 * Sets the {@code AreaRenderer} for a certain data source to the specified
 	 * value.
 	 * @param s Data source.
