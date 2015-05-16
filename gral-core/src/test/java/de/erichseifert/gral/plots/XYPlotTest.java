@@ -46,6 +46,8 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
+import de.erichseifert.gral.plots.areas.AreaRenderer;
+import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
@@ -171,6 +173,34 @@ public class XYPlotTest {
 		plot.setLineRenderers(data, Arrays.asList(renderer1, renderer2));
 
 		List<LineRenderer> renderers = plot.getLineRenderers(data);
+		assertTrue(renderers.contains(renderer1));
+		assertTrue(renderers.contains(renderer2));
+		assertEquals(renderers.size(), 2);
+	}
+
+	@Test
+	public void testGetAreaRenderers() {
+		DataSource data = new DummyData(2, 1, 1.0);
+		MockXYPlot plot = new MockXYPlot(data);
+		AreaRenderer renderer = new DefaultAreaRenderer2D();
+		plot.setAreaRenderers(data, renderer);
+		assertNotNull(plot.getAreaRenderers(new DummyData(4, 2, 0.0)));
+		assertNotNull(plot.getAreaRenderers(null));
+
+		List<AreaRenderer> renderers = plot.getAreaRenderers(data);
+		assertTrue(renderers.contains(renderer));
+		assertEquals(renderers.size(), 1);
+	}
+
+	@Test
+	public void testSetAreaRenderers() {
+		DataSource data = new DummyData(2, 1, 1.0);
+		MockXYPlot plot = new MockXYPlot();
+		AreaRenderer renderer1 = new DefaultAreaRenderer2D();
+		AreaRenderer renderer2 = new DefaultAreaRenderer2D();
+		plot.setAreaRenderers(data, Arrays.asList(renderer1, renderer2));
+
+		List<AreaRenderer> renderers = plot.getAreaRenderers(data);
 		assertTrue(renderers.contains(renderer1));
 		assertTrue(renderers.contains(renderer2));
 		assertEquals(renderers.size(), 2);
