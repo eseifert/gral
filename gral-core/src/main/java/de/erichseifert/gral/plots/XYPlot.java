@@ -1025,6 +1025,40 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		areaRenderersByDataSource.put(s, Collections.singletonList(areaRenderer));
 	}
 
+	/**
+	 * Sets the {@code AreaRenderer}s for a certain data source to the specified
+	 * value.
+	 * @param s Data source.
+	 * @param areaRenderers {@code AreaRenderer}s to be set.
+	 */
+	public void setAreaRenderers(DataSource s, List<AreaRenderer> areaRenderers) {
+		areaRenderersByDataSource.put(s, areaRenderers);
+	}
+
+	/**
+	 * Sets the {@code AreaRenderer}s for a certain data source to the specified
+	 * value.
+	 * @param s Data source.
+	 * @param areaRendererFirst First {@code AreaRenderer} to be set.
+	 * @param areaRenderers Remaining {@code AreaRenderer}s to be set.
+	 */
+	public void setAreaRenderers(DataSource s, AreaRenderer areaRendererFirst, AreaRenderer... areaRenderers) {
+		List<AreaRenderer> areaRendererList = null;
+		if (areaRendererFirst == null) {
+			setAreaRenderers(s, areaRendererList);
+			return;
+		}
+		areaRendererList = new ArrayList<AreaRenderer>(areaRenderers.length + 1);
+		areaRendererList.add(areaRendererFirst);
+		for (AreaRenderer areaRenderer : areaRenderers) {
+			if (areaRenderer == null) {
+				throw new IllegalArgumentException("An AreaRenderer for a DataSource cannot be null.");
+			}
+			areaRendererList.add(areaRenderer);
+		}
+		setAreaRenderers(s, areaRendererList);
+	}
+
 	@Override
 	public void setAxisRenderer(String axisName, AxisRenderer renderer) {
 		if (renderer != null) {
