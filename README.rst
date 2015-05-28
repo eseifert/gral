@@ -61,3 +61,7 @@ on the Gradle website `http://www.gradle.org/tooling`
 
 Once you have installed an appropriate Gradle plug-in for your IDE you will be
 able to import the GRAL project found in this folder.
+
+Requirements
+============
+To build GRAL from source, you need a Gradle version higher than 1.5 and at least Java 6.
