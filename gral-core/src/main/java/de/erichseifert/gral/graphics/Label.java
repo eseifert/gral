@@ -30,8 +30,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
 
-import de.erichseifert.gral.graphics.AbstractDrawable;
-import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
@@ -409,4 +407,23 @@ public class Label extends AbstractDrawable {
 	public void setBackground(Paint background) {
 		this.background = background;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Label)) {
+			return false;
+		}
+		Label label = (Label) obj;
+		return ((getText() == null && label.getText() == null) || getText().equals(label.getText()))
+				&& (getAlignmentX() == label.getAlignmentX())
+				&& (getAlignmentY() == label.getAlignmentY())
+				&& ((getFont() == null && label.getFont() == null) || getFont().equals(label.getFont()))
+				&& (getRotation() == label.getRotation())
+				&& ((getColor() == null && label.getColor() == null) || getColor().equals(label.getColor()))
+				&& (getTextAlignment() == label.getTextAlignment())
+				&& (isWordWrapEnabled() == label.isWordWrapEnabled())
+				&& ((getBackground() == null && label.getBackground() == null) || getBackground().equals(label.getBackground()));
+	}
+
+	// TODO: Override Object.hashCode()
 }
