@@ -1,3 +1,5 @@
+.. image:: https://eseifert.github.io/logos/GRAL.png
+
 GRAL
 ####
 
