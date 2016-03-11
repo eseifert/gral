@@ -1,3 +1,24 @@
+GRAL
+####
+
+GRAL is a free Java library for displaying plots (graphs, diagrams, and
+charts). The acronym GRAL simply stands for *GRAphing Library*.
+
+Features
+========
+
+- Ready-to-use classes for data management
+- Data processing and filtering (smoothing, rescaling, statistics, histograms)
+- Many different plot types: xy/scatter plot, bubble plot, line plot,
+  area plot, bar plot, pie plot, donut plot, box-and-whisker plot, raster plot
+- Legends: horizontal and vertical
+- Various axis types: linear axes, logarithmic axes, arbitrary number of axes
+- Several file formats are supported as data sources or data sinks (CSV,
+  bitmap image data, audio file data)
+- Exporting plots in bitmap and vector file formats (PNG, GIF, JPEG, EPS, PDF,
+  SVG)
+- Small footprint (about 300 kilobytes)
+
 Building GRAL from source code
 ==============================
 The source package contains all files necessary to build GRAL from scratch using
