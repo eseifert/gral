@@ -56,6 +56,19 @@ Next, you'll have to specify the Maven repository for GRAL:
         </repository>
     </repositories>
 
+Using GRAL with Gradle
+----------------------
+
+.. code:: groovy
+
+	repositories {
+		mavenCentral()
+		maven { url 'http://mvn.erichseifert.de/maven2' }
+	}
+    dependencies {
+        compile group: 'de.erichseifert.gral', name: 'gral-core', version: '0.10'
+    }
+
 Using GRAL with sbt
 -------------------
 
