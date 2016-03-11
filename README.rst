@@ -24,8 +24,6 @@ Features
 Usage
 =====
 
-Depending on your build management system
-
 Without build management system
 -------------------------------
 
