@@ -81,14 +81,16 @@ public class CSVReader extends AbstractDataReader {
 	 * Token types for analyzing CSV or TSV input.
 	 */
 	private static enum CSVTokenType {
+		/** Type for text tokens containing empty content. */
+		EMPTY_SPACE,
 		/** Type for text tokens containing value content. */
 		TEXT,
 		/** Type for quotes that may wrap value content. */
 		QUOTE,
 		/** Type for row separators. */
-		ROW,
+		ROW_SEPARATOR,
 		/** Type for column separators. */
-		COLUMN,
+		COLUMN_SEPARATOR,
 	}
 
 	/**
@@ -107,10 +109,11 @@ public class CSVReader extends AbstractDataReader {
 
 			// Basic Set of rules for analyzing CSV content
 			putRules(
-				new Rule("\n|\r\n|\r", CSVTokenType.ROW),
-				new Rule("\\s*("+Pattern.quote(String.valueOf(separator))+")\\s*",
-					CSVTokenType.COLUMN),
+				new Rule("\n|\r\n|\r", CSVTokenType.ROW_SEPARATOR),
+				new Rule(Pattern.quote(String.valueOf(separator)),
+						CSVTokenType.COLUMN_SEPARATOR),
 				new Rule("\"", CSVTokenType.QUOTE, "quoted"),
+				new Rule("[ \t]+", CSVTokenType.EMPTY_SPACE),
 				new Rule(".", CSVTokenType.TEXT)
 			);
 			// Set of rules that is valid inside quoted content
@@ -158,8 +161,9 @@ public class CSVReader extends AbstractDataReader {
 
 		// Add row token if there was no trailing line break
 		Token lastToken = tokens.get(tokens.size() - 1);
-		if (lastToken.getType() != CSVTokenType.ROW) {
-			Token eof = new Token(lastToken.getEnd(), lastToken.getEnd(), CSVTokenType.ROW, "");
+		if (lastToken.getType() != CSVTokenType.ROW_SEPARATOR) {
+			Token eof = new Token(lastToken.getEnd(), lastToken.getEnd(),
+				CSVTokenType.ROW_SEPARATOR, "");
 			tokens.add(eof);
 		}
 
@@ -184,11 +188,12 @@ public class CSVReader extends AbstractDataReader {
 		int colIndex = 0;
 		String cellContent = "";
 		for (Token token : tokens) {
-			if (token.getType() == CSVTokenType.TEXT) {
+			if (token.getType() == CSVTokenType.TEXT ||
+					token.getType() == CSVTokenType.EMPTY_SPACE) {
 				// Store the token text
-				cellContent = token.getContent();
-			} else if (token.getType() == CSVTokenType.COLUMN ||
-					token.getType() == CSVTokenType.ROW) {
+				cellContent += token.getContent();
+			} else if (token.getType() == CSVTokenType.COLUMN_SEPARATOR ||
+					token.getType() == CSVTokenType.ROW_SEPARATOR) {
 				// Check for a valid number of columns
 				if (colIndex >= types.length) {
 					throw new IllegalArgumentException(MessageFormat.format(
@@ -200,10 +205,11 @@ public class CSVReader extends AbstractDataReader {
 				// rows don't have a trailing column token
 				Class<? extends Comparable<?>> colType = types[colIndex];
 				Method parseMethod = parseMethods.get(colType);
+				Comparable<?> cell = null;
 				try {
-					Comparable<?> cell = (Comparable<?>) parseMethod.invoke(
-						null, cellContent);
-					row.add(cell);
+					cell = (Comparable<?>) parseMethod.invoke(
+						null, cellContent.trim());
+
 				} catch (IllegalArgumentException e) {
 					throw new RuntimeException(MessageFormat.format(
 						"Could not invoke method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
@@ -213,13 +219,16 @@ public class CSVReader extends AbstractDataReader {
 						"Could not access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
 						types[colIndex].getSimpleName(), colIndex));
 				} catch (InvocationTargetException e) {
-					throw new IOException(MessageFormat.format(
-						"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected {3} value.", //$NON-NLS-1$
-						rowIndex + 1, colIndex + 1, cellContent, colType.getSimpleName()));
+					if (!cellContent.isEmpty()) {
+						throw new IOException(MessageFormat.format(
+							"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected {3} value.", //$NON-NLS-1$
+							rowIndex + 1, colIndex + 1, cellContent, colType.getSimpleName()));
+					}
 				}
+				row.add(cell);
 				colIndex++;
 
-				if (token.getType() == CSVTokenType.ROW) {
+				if (token.getType() == CSVTokenType.ROW_SEPARATOR) {
 					// Check for a valid number of columns
 					if (row.size() < types.length) {
 						throw new IllegalArgumentException(MessageFormat.format(
@@ -234,8 +243,8 @@ public class CSVReader extends AbstractDataReader {
 					// Start a new row
 					row.clear();
 					colIndex = 0;
-					cellContent = "";
 				}
+				cellContent = "";
 			}
 		}
 
