@@ -244,4 +244,25 @@ public class CSVReaderTest {
 		assertNull(        data.get(1, 2));
 		assertEquals( 3.0, data.get(2, 2));
 	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testNegativeIntegerValues() throws IOException, ParseException {
+		InputStream input = new ByteArrayInputStream((
+			"-0,-10.0,-20\r\n" +
+			"-1,-11.0,-21\r\n" +
+			"-2,-12.0,-22\r\n"
+		).getBytes());
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
+		assertEquals(  0,   data.get(0, 0));
+		assertEquals( -1,   data.get(0, 1));
+		assertEquals( -2,   data.get(0, 2));
+		assertEquals(-10.0, data.get(1, 0));
+		assertEquals(-11.0, data.get(1, 1));
+		assertEquals(-12.0, data.get(1, 2));
+		assertEquals(-20.0, data.get(2, 0));
+		assertEquals(-21.0, data.get(2, 1));
+		assertEquals(-22.0, data.get(2, 2));
+	}
 }
