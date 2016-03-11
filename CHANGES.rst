@@ -1,16 +1,19 @@
-GRAL 0.11 (Not released yet)
-============================
+GRAL 0.11 (2016-03-11)
+======================
 
 Data:
+    - More robust import of CSV/TSV data
     - Added a name to all data sources
 
 Plotting:
+    - Data sources can have multiple renderers of the same type (point, line,
+      area) now, which will allow effects like shadows, etc.
     - Improved quality of exported bitmap images
 
 General:
 	- Switched from ``mvn.erichseifert.de`` to Maven Central
     - Improved versioning scheme using Git describe
-    - Various clean-ups and bug fixes
+    - Many clean-ups and bug fixes
 
 GRAL 0.10 (2013-12-09)
 ======================

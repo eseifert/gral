@@ -40,31 +40,16 @@ a dependency in your ``pom.xml``:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral-core</artifactId>
-        <version>0.10</version>
+        <version>0.11</version>
     </dependency>
-
-Next, you'll have to specify the Maven repository for GRAL:
-
-.. code:: xml
-
-    <repositories>
-        <repository>
-            <id>erichseifert.de</id>
-            <url>http://mvn.erichseifert.de/maven2</url>
-        </repository>
-    </repositories>
 
 Using GRAL with Gradle
 ----------------------
 
 .. code:: groovy
 
-    repositories {
-        mavenCentral()
-        maven { url 'http://mvn.erichseifert.de/maven2' }
-    }
     dependencies {
-        compile group: 'de.erichseifert.gral', name: 'gral-core', version: '0.10'
+        compile group: 'de.erichseifert.gral', name: 'gral-core', version: '0.11'
     }
 
 Using GRAL with sbt
@@ -72,9 +57,7 @@ Using GRAL with sbt
 
 .. code:: scala
 
-    resolvers += "erichseifert.de" at "http://mvn.erichseifert.de/maven2"
-
-    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.10"
+    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.11"
 
 
 Building GRAL from source code
