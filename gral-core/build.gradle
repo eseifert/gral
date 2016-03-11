@@ -78,7 +78,7 @@ publishing {
 	publications {
 		core(MavenPublication) {
 			from components.java
-			
+
 			artifact sourceJar
 
 			// Add additional information to the pom.xml
@@ -90,7 +90,7 @@ publishing {
 						license.appendNode("name", "GNU Library or Lesser General Public License (LGPL)")
 						license.appendNode("url", "http://www.gnu.org/licenses/lgpl.txt")
 						license.appendNode("distribution", "repo")
-				def issueManagement = root.appendNode("issueManagement") 
+				def issueManagement = root.appendNode("issueManagement")
 					issueManagement.appendNode("system", "trac")
 					issueManagement.appendNode("url", "http://trac.erichseifert.de/gral/")
 				def scm = root.appendNode("scm")
@@ -120,7 +120,6 @@ publishing {
 buildscript {
 	repositories {
 		mavenLocal()
-		maven { url "http://mvn.erichseifert.de/maven2" }
 		mavenCentral()
 	}
 	dependencies {

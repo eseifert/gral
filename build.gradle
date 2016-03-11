@@ -19,11 +19,10 @@ subprojects {
 
 	repositories {
 		mavenLocal()
-		maven { url "http://mvn.erichseifert.de/maven2" }
 		mavenCentral()
 	}
 	dependencies {
-		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.9.1")
+		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.10")
 	}
 
 	apply plugin: "license"
@@ -76,7 +75,7 @@ subprojects {
 	distTar.dependsOn(check)
 	distTar.compression = Compression.BZIP2
 	distTar.extension = "tar.bz2"
-	
+
 	task sourceJar(type: Jar) {
 		description = 'Assembles a jar archive containing the source code of the main classes.'
 		group = 'Build'
@@ -89,7 +88,6 @@ subprojects {
 buildscript {
 	repositories {
 		mavenLocal()
-		maven { url "http://mvn.erichseifert.de/maven2" }
 		jcenter()
 	}
 
