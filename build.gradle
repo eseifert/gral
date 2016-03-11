@@ -1,3 +1,5 @@
+description = 'Free Java library for displaying plots'
+
 allprojects {
 	group = "de.erichseifert.gral"
 	version = getVersionString()
