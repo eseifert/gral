@@ -38,9 +38,9 @@ a dependency in your ``pom.xml``:
 .. code:: xml
 
     <dependency>
-	    <groupId>de.erichseifert.gral</groupId>
-	    <artifactId>gral-core</artifactId>
-	    <version>0.10</version>
+        <groupId>de.erichseifert.gral</groupId>
+        <artifactId>gral-core</artifactId>
+        <version>0.10</version>
     </dependency>
 
 Next, you'll have to specify the Maven repository for GRAL:
@@ -59,10 +59,10 @@ Using GRAL with Gradle
 
 .. code:: groovy
 
-	repositories {
-		mavenCentral()
-		maven { url 'http://mvn.erichseifert.de/maven2' }
-	}
+    repositories {
+        mavenCentral()
+        maven { url 'http://mvn.erichseifert.de/maven2' }
+    }
     dependencies {
         compile group: 'de.erichseifert.gral', name: 'gral-core', version: '0.10'
     }
