@@ -4,6 +4,7 @@ GRAL
 GRAL is a free Java library for displaying plots (graphs, diagrams, and
 charts). The acronym GRAL simply stands for *GRAphing Library*.
 
+
 Features
 ========
 
@@ -18,6 +19,52 @@ Features
 - Exporting plots in bitmap and vector file formats (PNG, GIF, JPEG, EPS, PDF,
   SVG)
 - Small footprint (about 300 kilobytes)
+
+
+Usage
+=====
+
+Depending on your build management system
+
+build management system
+-----------------------
+
+You can just add ``gral-core.jar`` to the classpath of your project.
+
+Using GRAL with Maven
+---------------------
+
+If you want to use GRAL with your Maven project you will have to include it as
+a dependency in your ``pom.xml``:
+
+.. code:: xml
+
+    <dependency>
+	    <groupId>de.erichseifert.gral</groupId>
+	    <artifactId>gral-core</artifactId>
+	    <version>0.10</version>
+    </dependency>
+
+Next, you'll have to specify the Maven repository for GRAL:
+
+.. code:: xml
+
+    <repositories>
+        <repository>
+            <id>erichseifert.de</id>
+            <url>http://mvn.erichseifert.de/maven2</url>
+        </repository>
+    </repositories>
+
+Using GRAL with sbt
+-------------------
+
+.. code:: scala
+
+    resolvers += "erichseifert.de" at "http://mvn.erichseifert.de/maven2"
+
+    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.10"
+
 
 Building GRAL from source code
 ==============================
@@ -63,6 +110,7 @@ The GRAL Gradle project offers three sources for documentation:
 3. A book-like documentation in the reStructuredText format is available in the
    file ``documentation_en.rst``.
 
+
 Using GRAL in an IDE
 ====================
 The Gradle project can also be used in your favorite development environment like
@@ -71,6 +119,7 @@ on the Gradle website `http://www.gradle.org/tooling`
 
 Once you have installed an appropriate Gradle plug-in for your IDE you will be
 able to import the GRAL project found in this folder.
+
 
 Requirements
 ============
