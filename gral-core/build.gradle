@@ -1,7 +1,7 @@
-description = "GRAL core"
+description = 'GRAL core'
 
 dependencies {
-	testCompile(group: "junit", name: "junit", version: "4.10")
+	testCompile(group: 'junit', name: 'junit', version: '4.12')
 }
 
 buildscript {
@@ -9,15 +9,15 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "net.saliman:gradle-cobertura-plugin:2.2.5"
+		classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
 	}
 }
-apply plugin: 'net.saliman.cobertura'
 
+apply plugin: 'net.saliman.cobertura'
 task report {
-	dependsOn = ["cobertura", check]
-	description = "Generates reports."
-	group = "Report"
+	dependsOn = ['cobertura', check]
+	description = 'Generates reports.'
+	group = 'Report'
 
 	tasks.withType(Pmd).each {pmdTask ->
 		pmdTask.ignoreFailures = true
@@ -28,37 +28,9 @@ task report {
 	}
 }
 
-distributions {
-	standard {
-		contents {
-			from(rootDir) {
-				include("CHANGES")
-				include("README")
-			}
-			from(projectDir) {
-				include("src/**")
-			}
-			into("doc") {
-				into("javadoc") {
-					from javadoc
-				}
-				into("rst") {
-					from("${projectDir}/src/rst")
-				}
-			}
-			into("lib") {
-				from jar
-				from configurations.runtime
-			}
-		}
-	}
-}
-distTar.dependsOn("shrink")
-distZip.dependsOn("shrink")
-
-
-task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
-	description = "Uses ProGuard to reduce the code size of this project."
+task shrinkJar(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
+	description = 'Uses ProGuard to reduce the code size of this project.'
+	group = 'Build'
 	// Configure ProGuard
 	configuration("${projectDir}/src/etc/proguard.conf")
 	target(targetCompatibility.toString())
@@ -66,55 +38,77 @@ task shrink(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
 	outjars("${libsDir}/shrunk/${jar.archiveName}")
 	libraryjars(runtimeJar)
 	libraryjars(configurations.runtime)
-
-	doLast {
-		// Use the shrunk jar for all further processing
-		jar.destinationDir = new File("${libsDir}/shrunk/")
-	}
 }
 
-apply plugin: "maven-publish"
-publishing {
-	publications {
-		core(MavenPublication) {
-			from components.java
+task javadocJar(type: Jar) {
+	description = 'Assembles a jar archive containing the API doc.'
+	group = 'Build'
+	from javadoc
+	classifier 'javadoc'
+}
 
-			artifact sourceJar
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-			// Add additional information to the pom.xml
-			pom.withXml {
-				def root = asNode()
-				root.appendNode("inceptionYear", inceptionYear)
-				def licenses = root.appendNode("licenses")
-					def license = licenses.appendNode("license")
-						license.appendNode("name", "GNU Library or Lesser General Public License (LGPL)")
-						license.appendNode("url", "http://www.gnu.org/licenses/lgpl.txt")
-						license.appendNode("distribution", "repo")
-				def issueManagement = root.appendNode("issueManagement")
-					issueManagement.appendNode("system", "trac")
-					issueManagement.appendNode("url", "http://trac.erichseifert.de/gral/")
-				def scm = root.appendNode("scm")
-					scm.appendNode("connection", "scm:git:git://erichseifert.de/gral.git")
-					scm.appendNode("developerConnection", "scm:git:ssh://git@erichseifert.de/gral.git")
-					scm.appendNode("tag", "HEAD")
-			}
-		}
-	}
+artifacts {
+	archives shrinkJar.getOutJarFileCollection().getSingleFile(), sourceJar, javadocJar
+}
 
+signing {
+	sign configurations.archives
+}
+
+uploadArchives {
 	repositories {
-		// Only configure remote maven repository, if the credentials are present
-		if (project.hasProperty("mvnRepoUsername") && project.hasProperty("mvnRepoPassword")) {
-			maven {
-				name = 'erichseifert'
-				url("http://mvn.erichseifert.de/maven2")
-				credentials {
-					username = mvnRepoUsername
-					password = mvnRepoPassword
+		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name rootProject.name
+				packaging 'jar'
+				description rootProject.description
+				url website
+				inceptionYear inceptionYear
+				licenses {
+					license {
+						name 'GNU Library or Lesser General Public License (LGPL)'
+						url 'http://www.gnu.org/licenses/lgpl.txt'
+					}
+				}
+				developers {
+					developer {
+						id owner1_id
+						name owner1_name
+						email owner1_email
+					}
+					developer {
+						id owner2_id
+						name owner2_name
+						email owner2_email
+					}
+				}
+				scm {
+					connection 'scm:git:git://github.com/eseifert/gral.git'
+					developerConnection 'scm:git:git@github.com:eseifert/gral.git'
+					url website
+				}
+				issueManagement {
+					system 'GitHub Issues'
+					url website
 				}
 			}
 		}
 	}
 }
+signArchives.dependsOn(shrinkJar)
 
 // Include the proguard-gradle plugin
 buildscript {
@@ -123,6 +117,6 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath(group: "net.sf.proguard", name: "proguard-gradle", version: "4.+")
+		classpath(group: 'net.sf.proguard', name: 'proguard-gradle', version: '4.+')
 	}
 }

@@ -1,22 +1,33 @@
 description = 'Free Java library for displaying plots'
 
 allprojects {
-	group = "de.erichseifert.gral"
+	group = 'de.erichseifert.gral'
 	version = getVersionString()
 
 	ext.inceptionYear = 2009
 }
 
 subprojects {
-	apply plugin: "java"
+	apply plugin: 'java'
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
 
-	// Determine the location of rt.jar
-	if (System.getProperty("os.name").startsWith("Mac")) {
-		ext.runtimeJar = "${System.getProperty("java.home")}/bundle/Classes/classes.jar"
-	} else {
-		ext.runtimeJar = "${System.getProperty("java.home")}/lib/rt.jar"
+	ext {
+		owner1_id = 'eseifert'
+		owner1_name = 'Erich Seifert'
+		owner1_email = 'dev[at]erichseifert.de'
+		owner2_id = 'mseifert'
+		owner2_name = 'Michael Seifert'
+		owner2_email = 'mseifert[at]error-reports.org'
+
+		website = 'https://github.com/eseifert/gral/'
+
+		// Determine the location of rt.jar (required for ProGuard)
+		if (System.getProperty('os.name').startsWith('Mac')) {
+			runtimeJar = "${System.getProperty('java.home')}/bundle/Classes/classes.jar"
+		} else {
+			runtimeJar = "${System.getProperty('java.home')}/lib/rt.jar"
+		}
 	}
 
 	repositories {
@@ -24,59 +35,41 @@ subprojects {
 		mavenCentral()
 	}
 	dependencies {
-		compile(group: "de.erichseifert.vectorgraphics2d", name: "VectorGraphics2D", version: "0.10")
+		compile(group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version: '0.10')
 	}
 
-	apply plugin: "license"
+	apply plugin: 'license'
 	license {
-		header(rootProject.file("config/license-header.txt"))
+		header(rootProject.file('config/license-header.txt'))
 		strictCheck(true)
 		mapping {
-			java = "SLASHSTAR_STYLE"
+			java = 'SLASHSTAR_STYLE'
 		}
 
 		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
 		ext.year = "${inceptionYear}-${currentYear}"
-		ext.owner1 = "Erich Seifert"
-		ext.email1 = "dev[at]erichseifert.de"
-		ext.owner2 = "Michael Seifert"
-		ext.email2 = "mseifert[at]error-reports.org"
+		ext.owner1 = owner1_name
+		ext.email1 = owner1_email
+		ext.owner2 = owner2_name
+		ext.email2 = owner2_email
 
 		// Exlude certain file types from license checking
 		// https://github.com/hierynomus/license-gradle-plugin/issues/9
 	 	tasks.withType(nl.javadude.gradle.plugins.license.License).each { licenseTask ->
-			licenseTask.exclude "**.properties"
+			licenseTask.exclude '**.properties'
 		}
 	}
 
-	apply plugin: "checkstyle"
+	apply plugin: 'checkstyle'
 	checkstyle.configFile = new File("${rootDir}/config/checkstyle.xml")
 
-	apply plugin: "pmd"
+	apply plugin: 'pmd'
 	pmd {
 		// TODO: Dynamic dependency resolution possible?
-		toolVersion = "5.0.5"
-		ruleSets = ["java-basic"]
+		toolVersion = '5.0.5'
+		ruleSets = ['java-basic']
 		ignoreFailures = true
 	}
-
-	apply plugin: "distribution"
-	distributions {
-		standard {
-			contents {
-				from(rootDir) {
-					include("LICENSE**")
-				}
-				from(projectDir) {
-					include("build.gradle")
-				}
-			}
-		}
-	}
-	distZip.dependsOn(check)
-	distTar.dependsOn(check)
-	distTar.compression = Compression.BZIP2
-	distTar.extension = "tar.bz2"
 
 	task sourceJar(type: Jar) {
 		description = 'Assembles a jar archive containing the source code of the main classes.'

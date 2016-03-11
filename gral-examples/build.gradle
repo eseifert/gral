@@ -1,25 +1,11 @@
-description = "GRAL example applications"
+description = 'GRAL example applications'
 
 dependencies {
-	compile project(":gral-core")
-}
-
-distributions {
-	standard {
-		contents {
-			from(projectDir) {
-				include("src/**")
-			}
-			into("lib") {
-				from jar
-				from configurations.runtime
-			}
-		}
-	}
+	compile project(':gral-core')
 }
 
 jar {
 	manifest {
-		attributes("Main-Class": "de.erichseifert.gral.examples.Browser")
+		attributes('Main-Class': 'de.erichseifert.gral.examples.Browser')
 	}
 }
