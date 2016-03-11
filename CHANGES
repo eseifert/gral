@@ -1,6 +1,17 @@
 GRAL 0.11 (Not released yet)
 ============================
 
+Data:
+    - Added a name to all data sources
+
+Plotting:
+    - Improved quality of exported bitmap images
+
+General:
+	- Switched from mvn.erichseifert.de to Maven Central
+    - Improved versioning scheme using Git describe
+    - Various clean-ups and bug fixes
+
 GRAL 0.10 (2013-12-09)
 ======================
 
