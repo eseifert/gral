@@ -26,8 +26,8 @@ Usage
 
 Depending on your build management system
 
-build management system
------------------------
+Without build management system
+-------------------------------
 
 You can just add ``gral-core.jar`` to the classpath of your project.
 
