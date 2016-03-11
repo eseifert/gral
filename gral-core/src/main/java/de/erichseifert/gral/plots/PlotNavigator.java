@@ -44,10 +44,7 @@ import de.erichseifert.gral.util.PointND;
  * <p>Additionally, the actions can also be bound to a certain direction by
  * defining a more restricted set of axes. The methods {@link #getDirection()}
  * and {@link #setDirection(de.erichseifert.gral.navigation.NavigationDirection)}
- * provide a convenient way for setting predefined sets of axes:</p>
- *
- * <pre>
- *
+ * provide a convenient way for setting predefined sets of axes.</p>
  */
 public abstract class PlotNavigator extends AbstractNavigator {
 	/** AbstractPlot that will be navigated. */

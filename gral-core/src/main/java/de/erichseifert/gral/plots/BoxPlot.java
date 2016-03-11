@@ -65,7 +65,7 @@ import de.erichseifert.gral.util.SerializationUtils;
 /**
  * <p>Class that displays data as a box-and-whisker plot showing summaries of
  * important statistical values. The data source must provide six columns to
- * the {@code BoxPlot}:<p>
+ * the {@code BoxPlot}:</p>
  * <ul>
  *   <li>Box position (for multiple boxes)</li>
  *   <li>Position of the center bar (e.g. median)</li>
@@ -75,7 +75,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  *   <li>Position of the top edge of the box (e.g. third quartile)</li>
  *   <li>Length of the upper whisker and position of the top bar
  *   (e.g. maximum)</li>
- * </li>
+ * </ul>
  * <p>The utility method {@link #createBoxData(DataSource)} can be used to
  * obtain common statistics for these properties from the each column of an
  * existing data source.</p>

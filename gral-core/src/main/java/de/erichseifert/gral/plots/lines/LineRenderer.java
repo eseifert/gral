@@ -33,7 +33,7 @@ import de.erichseifert.gral.plots.DataPoint;
 /**
  * <p>Interface that provides functions for rendering a line in two dimensional
  * space.</p>
- * <p>Functionality includes:<p>
+ * <p>Functionality includes:</p>
  * <ul>
  *   <li>Punching data points out of the line's shape</li>
  *   <li>Administration of settings</li>
