@@ -276,8 +276,9 @@ public class CSVReader extends AbstractDataReader {
 				if (!hasStringParameter) {
 					continue;
 				}
-				boolean parseName = m.getName().startsWith("parse"); //$NON-NLS-1$
-				if (!parseName) {
+				// Check method name for a pattern like "parseInt*" for Integer or
+				// "parseSho*" for Short to avoid collisions
+				if (!m.getName().startsWith("parse" + c.getSimpleName().substring(0, 3))) {  //$NON-NLS-1$
 					continue;
 				}
 				parse = m;
