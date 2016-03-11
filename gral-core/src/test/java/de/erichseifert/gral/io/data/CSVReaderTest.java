@@ -22,6 +22,7 @@
 package de.erichseifert.gral.io.data;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
@@ -221,5 +222,26 @@ public class CSVReaderTest {
 			fail("Expected IllegalArgumentException because there are too many columns.");
 		} catch (IllegalArgumentException e) {
 		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testEmptyValues() throws IOException, ParseException {
+		InputStream input = new ByteArrayInputStream((
+			"0,10.0,\r\n" +
+			"1,,21\r\n" +
+			",,3\r\n"
+		).getBytes());
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
+		assertEquals( 0,   data.get(0, 0));
+		assertEquals(10.0, data.get(1, 0));
+		assertNull(        data.get(2, 0));
+		assertEquals( 1,   data.get(0, 1));
+		assertNull(        data.get(1, 1));
+		assertEquals(21.0, data.get(2, 1));
+		assertNull(        data.get(0, 2));
+		assertNull(        data.get(1, 2));
+		assertEquals( 3.0, data.get(2, 2));
 	}
 }
