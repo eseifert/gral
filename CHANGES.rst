@@ -8,7 +8,7 @@ Plotting:
     - Improved quality of exported bitmap images
 
 General:
-	- Switched from mvn.erichseifert.de to Maven Central
+	- Switched from ``mvn.erichseifert.de`` to Maven Central
     - Improved versioning scheme using Git describe
     - Various clean-ups and bug fixes
 
