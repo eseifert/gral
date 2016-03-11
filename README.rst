@@ -25,17 +25,6 @@ the following command in the ``gral-examples`` directory::
 This will generate a JAR archive for the examples in the ``build/libs`` directory
 which can be used together with the library core to run example applications.
 
-Building the distribution archives
-----------------------------------
-In order to build package archives like the ones available for download you have
-to execute the following command in the project's parent directory::
-
-  $ gradle distTar
-
-This will create a distributions folder in the build directory of both gral-core
-and gral-examples containing the files ``gral-core-<version>.tar.bz2`` or
-``gral-examples-<version>.tar.bz2,`` respectively.
-
 Building the documentation
 --------------------------
 The GRAL Gradle project offers three sources for documentation:
