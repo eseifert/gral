@@ -1,4 +1,4 @@
-.. image:: https://eseifert.github.io/logos/GRAL.png
+.. image:: https://eseifert.github.io/gral/logo.png
 
 GRAL
 ####
