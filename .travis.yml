@@ -5,3 +5,13 @@ language: java
 jdk:
   - openjdk6
   - oraclejdk7
+
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#gral"
+    on_success: change
+    on_failure: always
+    template:
+      - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"
+    skip_join: true
