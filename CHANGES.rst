@@ -11,7 +11,7 @@ Plotting:
     - Improved quality of exported bitmap images
 
 General:
-	- Switched from ``mvn.erichseifert.de`` to Maven Central
+    - Switched from ``mvn.erichseifert.de`` to Maven Central
     - Improved versioning scheme using Git describe
     - Many clean-ups and bug fixes
 
@@ -19,7 +19,7 @@ GRAL 0.10 (2013-12-09)
 ======================
 
 Plotting:
-	- Replaced all plot settings by regular Java properties
+    - Replaced all plot settings by regular Java properties
 
 General:
     - Migrated the version control system from Subversion to git
