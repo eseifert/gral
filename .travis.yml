@@ -9,7 +9,7 @@ jdk:
 notifications:
   irc:
     channels:
-      - "irc.freenode.org#gral"
+      - "chat.freenode.net#gral"
     on_success: change
     on_failure: always
     template:
