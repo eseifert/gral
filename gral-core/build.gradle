@@ -55,7 +55,7 @@ artifacts {
 }
 
 signing {
-	required = { hasProperty('signing.keyId') && gradle.taskGraph.hasTask('uploadArchives') }
+	required { hasProperty('signing.keyId') && gradle.taskGraph.hasTask('uploadArchives') }
 	sign configurations.archives
 }
 
