@@ -1,5 +1,8 @@
 .. image:: https://eseifert.github.io/gral/logo.png
 
+.. image:: https://travis-ci.org/eseifert/gral.svg?branch=master
+    :target: https://travis-ci.org/eseifert/gral
+
 GRAL
 ####
 
