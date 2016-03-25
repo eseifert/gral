@@ -114,10 +114,10 @@ signArchives.dependsOn(shrinkJar)
 // Include the proguard-gradle plugin
 buildscript {
 	repositories {
-		mavenLocal()
 		mavenCentral()
+		jcenter()
 	}
 	dependencies {
-		classpath(group: 'net.sf.proguard', name: 'proguard-gradle', version: '5.2.+')
+		classpath 'net.sf.proguard:proguard-gradle:5.2.+'
 	}
 }
