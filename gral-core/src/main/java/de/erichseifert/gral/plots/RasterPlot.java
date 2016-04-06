@@ -21,15 +21,6 @@
  */
 package de.erichseifert.gral.plots;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -46,6 +37,12 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
+
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 
 /**
@@ -344,9 +341,10 @@ public class RasterPlot extends XYPlot {
 			new DataTable(Double.class, Double.class, Double.class);
 
 		// Generate pixel data with (x, y, value)
-		Statistics stats = data.getStatistics();
-		double min = stats.get(Statistics.MIN);
-		double max = stats.get(Statistics.MAX);
+		double min = ((Number) data.getRowStatistics(Statistics.MIN).
+				getColumnStatistics(Statistics.MIN).get(0, 0)).doubleValue();
+		double max = ((Number) data.getRowStatistics(Statistics.MAX).
+				getColumnStatistics(Statistics.MAX).get(0, 0)).doubleValue();
 		double range = max - min;
 		int i = 0;
 		for (Comparable<?> cell : data) {
