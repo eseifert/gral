@@ -31,7 +31,6 @@ import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.util.SortedList;
 
 
@@ -90,7 +89,7 @@ public class Statistics implements DataListener {
 	public static final String QUARTILE_3 = "quantile75"; //$NON-NLS-1$
 
 	/** Data values that are used to build statistical aggregates. */
-	private final DataSource data;
+	private final Iterable<Comparable<?>> data;
 	/** Table statistics stored by key. */
 	private final Map<String, Double> statistics;
 	/** Column statistics stored by key. */
@@ -116,7 +115,13 @@ public class Statistics implements DataListener {
 		}
 
 		this.data = data;
-		this.data.addDataListener(this);
+	}
+
+	public Statistics(Iterable<Comparable<?>> data) {
+		statistics = new HashMap<String, Double>();
+		this.data = data;
+		this.statisticsByCol = null;
+		this.statisticsByRow = null;
 	}
 
 	/**
@@ -233,34 +238,6 @@ public class Statistics implements DataListener {
 	 */
 	public double get(String key) {
 		return get(data, statistics, key);
-	}
-
-	/**
-	 * Returns the specified information for the offset index in the specified
-	 * direction.
-	 * @param key Requested information.
-	 * @param orientation Direction of the values the statistical is built from.
-	 * @param index Column or row index.
-	 * @return The value for the specified key as  value, or <i>NaN</i>
-	 *         if the specified statistical value does not exist
-	 */
-	public double get(String key, Orientation orientation, int index) {
-		Map<String, Double> stats;
-		Iterable<Comparable<?>> statsData;
-		if (orientation == Orientation.VERTICAL) {
-			if (index >= statisticsByCol.size()) {
-				statisticsByCol.add(new HashMap<String, Double>());
-			}
-			stats = statisticsByCol.get(index);
-			statsData = data.getColumn(index);
-		} else {
-			if (index >= statisticsByRow.size()) {
-				statisticsByRow.add(new HashMap<String, Double>());
-			}
-			stats = statisticsByRow.get(index);
-			statsData = data.getRow(index);
-		}
-		return get(statsData, stats, key);
 	}
 
 	/**

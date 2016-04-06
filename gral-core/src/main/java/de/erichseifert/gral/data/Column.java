@@ -21,10 +21,6 @@
  */
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.graphics.Orientation;
-
-
-
 /**
  * <p>Class for accessing a specific column of a data source. The data of the
  * column can be accessed using the {@code get(int)} method.</p>
@@ -63,12 +59,6 @@ public class Column extends DataAccessor {
 	@Override
 	public int size() {
 		return getSource().getRowCount();
-	}
-
-	@Override
-	public double getStatistics(String key) {
-		return getSource().getStatistics()
-			.get(key, Orientation.VERTICAL, getIndex());
 	}
 
 	/**

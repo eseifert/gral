@@ -26,6 +26,8 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
+import de.erichseifert.gral.data.statistics.Statistics;
+
 /**
  * Abstract base for reading substructures of a data source, i.e. columns or
  * rows. {@code DataAccessor}s are iterable and provide utility methods
@@ -146,7 +148,10 @@ public abstract class DataAccessor
 	 * @param key Requested Statistical information.
 	 * @return Calculated value.
 	 */
-	public abstract double getStatistics(String key);
+	public double getStatistics(String key) {
+		Statistics statistics = new Statistics(this);
+		return statistics.get(key);
+	}
 
     /**
      * Returns an iterator over the elements of this object.

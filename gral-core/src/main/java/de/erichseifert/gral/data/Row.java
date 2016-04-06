@@ -21,10 +21,6 @@
  */
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.graphics.Orientation;
-
-
-
 /**
  * <p>Class for easily accessing a row of a data source.</p>
  *
@@ -62,12 +58,6 @@ public class Row extends DataAccessor {
 	@Override
 	public int size() {
 		return getSource().getColumnCount();
-	}
-
-	@Override
-	public double getStatistics(String key) {
-		return getSource().getStatistics()
-			.get(key, Orientation.HORIZONTAL, getIndex());
 	}
 
 	/**
