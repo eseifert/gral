@@ -97,26 +97,6 @@ public class Statistics implements DataListener {
 	/** Row statistics stored by key. */
 	private final ArrayList<Map<String, Double>> statisticsByRow;
 
-	/**
-	 * Initializes a new object with the specified data source.
-	 * @param data Data source to be analyzed.
-	 */
-	public Statistics(DataSource data) {
-		statistics = new HashMap<String, Double>();
-
-		statisticsByCol = new ArrayList<Map<String, Double>>(data.getColumnCount());
-		for (int col = 0; col < data.getColumnCount(); col++) {
-			statisticsByCol.add(new HashMap<String, Double>());
-		}
-
-		statisticsByRow = new ArrayList<Map<String, Double>>(data.getRowCount());
-		for (int row = 0; row < data.getRowCount(); row++) {
-			statisticsByRow.add(new HashMap<String, Double>());
-		}
-
-		this.data = data;
-	}
-
 	public Statistics(Iterable<Comparable<?>> data) {
 		statistics = new HashMap<String, Double>();
 		this.data = data;
