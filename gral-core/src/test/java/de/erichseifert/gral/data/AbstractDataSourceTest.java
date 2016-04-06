@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -76,15 +75,6 @@ public class AbstractDataSourceTest {
 
 		source = new StubAbstractDataSource("name");
 		assertEquals("name", source.getName());
-	}
-
-	@Test
-	public void testStatisticsNotNull() {
-		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
-		assertThat(rowStatistics, notNullValue());
-
-		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
-		assertThat(columnStatistics, notNullValue());
 	}
 
 	@Test
