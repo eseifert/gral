@@ -21,10 +21,13 @@
  */
 package de.erichseifert.gral.data;
 
+import de.erichseifert.gral.data.statistics.Statistics;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
@@ -59,5 +62,19 @@ public class AbstractDataSourceTest {
 
 		source = new StubAbstractDataSource("name");
 		assertEquals("name", source.getName());
+	}
+
+	@Test
+	public void testStatisticsNotNull() {
+		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		assertThat(rowStatistics, notNullValue());
+
+		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		assertThat(columnStatistics, notNullValue());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testThrowsExceptionWhenOrientationUnknown() {
+		source.getStatistics(DataAccessor.class, Statistics.N);
 	}
 }

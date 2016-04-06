@@ -21,19 +21,12 @@
  */
 package de.erichseifert.gral.data;
 
+import de.erichseifert.gral.data.statistics.Statistics;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
-import de.erichseifert.gral.data.statistics.Statistics;
+import java.util.*;
 
 
 /**
@@ -141,6 +134,28 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 			statistics = new Statistics(this);
 		}
 		return statistics;
+	}
+
+	public DataSource getStatistics(Class<? extends DataAccessor> orientation, String key) {
+		DataTable statisticsTable;
+		if (Row.class.isAssignableFrom(orientation)) {
+			statisticsTable = new DataTable(Double.class);
+			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
+				Row row = getRow(rowIndex);
+				statisticsTable.add(row.getStatistics(key));
+			}
+		} else if (Column.class.isAssignableFrom(orientation)) {
+			Class[] columnTypes = new Class[getColumnCount()];
+			Arrays.fill(columnTypes, Double.class);
+			statisticsTable = new DataTable(columnTypes);
+			for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
+				Column col = getColumn(colIndex);
+				statisticsTable.add(col.getStatistics(key));
+			}
+		} else {
+			throw new IllegalArgumentException("Unknown DataAccessor implementation: "+orientation.getName());
+		}
+		return statisticsTable;
 	}
 
 	/**
