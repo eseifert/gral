@@ -207,31 +207,16 @@ public class Statistics {
 	 *         if the specified statistical value does not exist
 	 */
 	public double get(String key) {
-		return get(data, statistics, key);
-	}
-
-	/**
-	 * Returns the specified information for the specified column or row.
-	 * If the specified statistical value does not exist <i>NaN</i>
-	 * is returned.
-	 * @param data Data values.
-	 * @param stats {@code Map} with statistics.
-	 * @param key Requested information.
-	 * @return The value for the specified key as  value, or <i>NaN</i>
-	 *         if the specified statistical value does not exist
-	 */
-	private double get(Iterable<Comparable<?>> data, Map<String, Double> stats,
-			String key) {
-		if (!stats.containsKey(key)) {
+		if (!statistics.containsKey(key)) {
 			if (MEDIAN.equals(key) || QUARTILE_1.equals(key) ||
 					QUARTILE_2.equals(key) || QUARTILE_3.equals(key)) {
-				createDistributionStats(data, stats);
+				createDistributionStats(data, statistics);
 			} else {
-				createBasicStats(data, stats);
+				createBasicStats(data, statistics);
 			}
 		}
 
-		Double v = stats.get(key);
+		Double v = statistics.get(key);
 		return DataUtils.getValueOrDefault(v, Double.NaN);
 	}
 }
