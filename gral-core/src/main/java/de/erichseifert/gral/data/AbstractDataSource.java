@@ -139,7 +139,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	public DataSource getStatistics(Class<? extends DataAccessor> orientation, String key) {
 		DataTable statisticsTable;
 		if (Row.class.isAssignableFrom(orientation)) {
-			statisticsTable = new DataTable(Double.class);
+			statisticsTable = getRowCount() != 0 ? new DataTable(Double.class) : new DataTable();
 			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
 				Row row = getRow(rowIndex);
 				statisticsTable.add(row.getStatistics(key));

@@ -33,12 +33,14 @@ import static org.junit.Assert.assertThat;
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
 		private int colCount;
+		private int rowCount;
 
 		public StubAbstractDataSource() {
 		}
 
-		public StubAbstractDataSource(int colCount) {
+		public StubAbstractDataSource(int colCount, int rowCount) {
 			this.colCount = colCount;
+			this.rowCount = rowCount;
 		}
 
 		public StubAbstractDataSource(String name) {
@@ -52,7 +54,7 @@ public class AbstractDataSourceTest {
 
 		@Override
 		public int getRowCount() {
-			return 0;
+			return rowCount;
 		}
 
 		@Override
@@ -88,7 +90,7 @@ public class AbstractDataSourceTest {
 	@Test
 	public void testColumnStatisticsContainsColumnForEachColumnInDataSource() {
 		int columnCount = 3;
-		source = new StubAbstractDataSource(columnCount);
+		source = new StubAbstractDataSource(columnCount, 0);
 		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
 		assertThat(columnStatistics.getColumnCount(), is(source.getColumnCount()));
 	}
@@ -96,17 +98,21 @@ public class AbstractDataSourceTest {
 	@Test
 	public void testColumnStatisticsForMultiColumnDataSourceContainsSingleRow() {
 		int columnCount = 5;
-		source = new StubAbstractDataSource(columnCount);
+		source = new StubAbstractDataSource(columnCount, 0);
 		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
 		assertThat(columnStatistics.getRowCount(), is(1));
 	}
 
 	@Test
 	public void testColumnStatisticsForEmptyDataSourceContainsNoRow() {
-		int columnCount = 0;
-		source = new StubAbstractDataSource(columnCount);
 		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
 		assertThat(columnStatistics.getRowCount(), is(0));
+	}
+
+	@Test
+	public void testRowStatisticsForEmptyDataSourceContainsNoColumn() {
+		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		assertThat(rowStatistics.getColumnCount(), is(0));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
