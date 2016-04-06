@@ -80,10 +80,15 @@ public class Histogram1D extends Histogram {
 		if (orientation == Orientation.HORIZONTAL) {
 			count = getData().getRowCount();
 		}
-		Statistics stats = getData().getStatistics();
 		for (int index = 0; index < count; index++) {
-			double min = stats.get(Statistics.MIN, orientation, index);
-			double max = stats.get(Statistics.MAX, orientation, index);
+			double min, max;
+			if (orientation == Orientation.HORIZONTAL) {
+				min = ((Number) getData().getRowStatistics(Statistics.MIN).get(0, index)).doubleValue();
+				max = ((Number) getData().getRowStatistics(Statistics.MAX).get(0, index)).doubleValue();
+			} else {
+				min = ((Number) getData().getColumnStatistics(Statistics.MIN).get(index, 0)).doubleValue();
+				max = ((Number) getData().getColumnStatistics(Statistics.MAX).get(index, 0)).doubleValue();
+			}
 			double delta = (max - min + Double.MIN_VALUE) / breakCount;
 
 			Number[] breaks = new Double[breakCount + 1];
