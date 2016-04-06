@@ -21,14 +21,10 @@
  */
 package de.erichseifert.gral.data.statistics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.erichseifert.gral.data.DataChangeEvent;
-import de.erichseifert.gral.data.DataListener;
-import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.SortedList;
@@ -38,7 +34,7 @@ import de.erichseifert.gral.util.SortedList;
  * A class that computes and stores various statistical information
  * on a data source.
  */
-public class Statistics implements DataListener {
+public class Statistics {
 	/** Key for specifying the total number of elements.
 	This is the zeroth central moment: E((x - µ)^0) */
 	public static final String N = "n"; //$NON-NLS-1$
@@ -92,16 +88,10 @@ public class Statistics implements DataListener {
 	private final Iterable<Comparable<?>> data;
 	/** Table statistics stored by key. */
 	private final Map<String, Double> statistics;
-	/** Column statistics stored by key. */
-	private final ArrayList<Map<String, Double>> statisticsByCol;
-	/** Row statistics stored by key. */
-	private final ArrayList<Map<String, Double>> statisticsByRow;
 
 	public Statistics(Iterable<Comparable<?>> data) {
 		statistics = new HashMap<String, Double>();
 		this.data = data;
-		this.statisticsByCol = null;
-		this.statisticsByRow = null;
 	}
 
 	/**
@@ -243,71 +233,5 @@ public class Statistics implements DataListener {
 
 		Double v = stats.get(key);
 		return DataUtils.getValueOrDefault(v, Double.NaN);
-	}
-
-	/**
-	 * Method that is invoked when data has been added.
-	 * This method is invoked by objects that provide support for
-	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has been changed.
-	 * @param events Optional event object describing the data values that
-	 *        have been added
-	 */
-	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		dataChanged(source, events);
-	}
-
-	/**
-	 * Method that is invoked when data has been updated.
-	 * This method is invoked by objects that provide support for
-	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has been changed.
-	 * @param events Optional event object describing the data values that
-	 *        have been updated.
-	 */
-	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		dataChanged(source, events);
-	}
-
-	/**
-	 * Method that is invoked when data has been removed.
-	 * This method is invoked by objects that provide support for
-	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has been changed.
-	 * @param events Optional event object describing the data values that
-	 *        have been removed.
-	 */
-	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		dataChanged(source, events);
-	}
-
-	/**
-	 * Method that is invoked when data has been added, updated, or removed.
-	 * This method is invoked by objects that provide support for
-	 * {@code DataListener}s and should not be called manually.
-	 * @param source Data source that has changed.
-	 * @param events Optional event object describing the data values that
-	 *        have been removed.
-	 */
-	private void dataChanged(DataSource source, DataChangeEvent... events) {
-		for (DataChangeEvent event : events) {
-			// Mark statistics as invalid
-			invalidate(event.getCol(), event.getRow());
-		}
-	}
-
-	/**
-	 * Invalidates statistics information for a certain data cell.
-	 * @param col Column index of the cell.
-	 * @param row Row index of the cell.
-	 */
-	protected void invalidate(int col, int row) {
-		statistics.clear();
-		if (col < statisticsByCol.size()) {
-			statisticsByCol.get(col).clear();
-		}
-		if (row < statisticsByRow.size()) {
-			statisticsByRow.get(row).clear();
-		}
 	}
 }
