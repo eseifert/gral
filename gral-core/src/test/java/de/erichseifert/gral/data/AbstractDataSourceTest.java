@@ -114,8 +114,9 @@ public class AbstractDataSourceTest {
 
 	@Test
 	public void testRowStatisticsForDataSourceContainsRowForEachRowInDataSource() {
-		source = new StubAbstractDataSource(5, 3);
+		int rowCount = 3;
+		source = new StubAbstractDataSource(5, rowCount);
 		DataSource rowStatistics = source.getRowStatistics(Statistics.N);
-		assertThat(rowStatistics.getRowCount(), is(3));
+		assertThat(rowStatistics.getRowCount(), is(rowCount));
 	}
 }
