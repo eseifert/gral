@@ -25,13 +25,20 @@ import de.erichseifert.gral.data.statistics.Statistics;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
+		private int colCount;
+
 		public StubAbstractDataSource() {
+		}
+
+		public StubAbstractDataSource(int colCount) {
+			this.colCount = colCount;
 		}
 
 		public StubAbstractDataSource(String name) {
@@ -46,6 +53,11 @@ public class AbstractDataSourceTest {
 		@Override
 		public int getRowCount() {
 			return 0;
+		}
+
+		@Override
+		public int getColumnCount() {
+			return colCount;
 		}
 	}
 
@@ -71,6 +83,30 @@ public class AbstractDataSourceTest {
 
 		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
 		assertThat(columnStatistics, notNullValue());
+	}
+
+	@Test
+	public void testColumnStatisticsContainsColumnForEachColumnInDataSource() {
+		int columnCount = 3;
+		source = new StubAbstractDataSource(columnCount);
+		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		assertThat(columnStatistics.getColumnCount(), is(source.getColumnCount()));
+	}
+
+	@Test
+	public void testColumnStatisticsForMultiColumnDataSourceContainsSingleRow() {
+		int columnCount = 5;
+		source = new StubAbstractDataSource(columnCount);
+		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		assertThat(columnStatistics.getRowCount(), is(1));
+	}
+
+	@Test
+	public void testColumnStatisticsForEmptyDataSourceContainsNoRow() {
+		int columnCount = 0;
+		source = new StubAbstractDataSource(columnCount);
+		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		assertThat(columnStatistics.getRowCount(), is(0));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

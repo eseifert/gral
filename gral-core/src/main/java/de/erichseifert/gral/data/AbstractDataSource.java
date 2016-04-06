@@ -148,9 +148,13 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 			Class[] columnTypes = new Class[getColumnCount()];
 			Arrays.fill(columnTypes, Double.class);
 			statisticsTable = new DataTable(columnTypes);
+			List<Double> colStatistics = new ArrayList<Double>(columnTypes.length);
 			for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 				Column col = getColumn(colIndex);
-				statisticsTable.add(col.getStatistics(key));
+				colStatistics.add(col.getStatistics(key));
+			}
+			if (!colStatistics.isEmpty()) {
+				statisticsTable.add(colStatistics);
 			}
 		} else {
 			throw new IllegalArgumentException("Unknown DataAccessor implementation: "+orientation.getName());
