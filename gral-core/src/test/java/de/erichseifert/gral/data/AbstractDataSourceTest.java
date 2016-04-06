@@ -21,9 +21,10 @@
  */
 package de.erichseifert.gral.data;
 
-import static org.junit.Assert.assertEquals;
-
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
@@ -45,9 +46,15 @@ public class AbstractDataSourceTest {
 		}
 	}
 
+	private AbstractDataSource source;
+
+	@Before
+	public void setUp() {
+		source = new StubAbstractDataSource();
+	}
+
 	@Test
 	public void testGetName() {
-		StubAbstractDataSource source = new StubAbstractDataSource();
 		assertEquals(null, source.getName());
 
 		source = new StubAbstractDataSource("name");
