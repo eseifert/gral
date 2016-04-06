@@ -122,6 +122,13 @@ public class AbstractDataSourceTest {
 		assertThat(rowStatistics.getColumnCount(), is(1));
 	}
 
+	@Test
+	public void testRowStatisticsForDataSourceContainsRowForEachRowInDataSource() {
+		source = new StubAbstractDataSource(5, 3);
+		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		assertThat(rowStatistics.getRowCount(), is(3));
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testThrowsExceptionWhenOrientationUnknown() {
 		source.getStatistics(DataAccessor.class, Statistics.N);
