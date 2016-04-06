@@ -64,6 +64,10 @@ public interface DataSource extends Iterable<Comparable<?>> {
 	 */
 	Statistics getStatistics();
 
+	DataSource getColumnStatistics(String key);
+
+	DataSource getRowStatistics(String key);
+
 	/**
 	 * Returns the number of rows of the data source.
 	 * @return number of rows in the data source.
