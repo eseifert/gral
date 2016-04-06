@@ -32,7 +32,7 @@ import de.erichseifert.gral.util.SortedList;
 
 /**
  * A class that computes and stores various statistical information
- * on a data source.
+ * for an Iterable of values.
  */
 public class Statistics {
 	/** Key for specifying the total number of elements.
@@ -89,6 +89,10 @@ public class Statistics {
 	/** Table statistics stored by key. */
 	private final Map<String, Double> statistics;
 
+	/**
+	 * Initializes a new object with the specified data values.
+	 * @param data Data to be analyzed.
+	 */
 	public Statistics(Iterable<Comparable<?>> data) {
 		statistics = new HashMap<String, Double>();
 		this.data = data;
@@ -201,9 +205,9 @@ public class Statistics {
 	}
 
 	/**
-	 * Returns the specified information for the whole data source.
+	 * Returns the specified statistics value.
 	 * @param key Requested information.
-	 * @return The value for the specified key as  value, or <i>NaN</i>
+	 * @return The value for the specified key as value, or <i>NaN</i>
 	 *         if the specified statistical value does not exist
 	 */
 	public double get(String key) {
