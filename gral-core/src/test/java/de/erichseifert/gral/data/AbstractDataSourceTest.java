@@ -81,7 +81,7 @@ public class AbstractDataSourceTest {
 	public void testColumnStatisticsContainsColumnForEachColumnInDataSource() {
 		int columnCount = 3;
 		source = new StubAbstractDataSource(columnCount, 0);
-		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		DataSource columnStatistics = source.getColumnStatistics(Statistics.N);
 		assertThat(columnStatistics.getColumnCount(), is(source.getColumnCount()));
 	}
 
@@ -89,38 +89,33 @@ public class AbstractDataSourceTest {
 	public void testColumnStatisticsForMultiColumnDataSourceContainsSingleRow() {
 		int columnCount = 5;
 		source = new StubAbstractDataSource(columnCount, 0);
-		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		DataSource columnStatistics = source.getColumnStatistics(Statistics.N);
 		assertThat(columnStatistics.getRowCount(), is(1));
 	}
 
 	@Test
 	public void testColumnStatisticsForEmptyDataSourceContainsNoRow() {
-		DataSource columnStatistics = source.getStatistics(Column.class, Statistics.N);
+		DataSource columnStatistics = source.getColumnStatistics(Statistics.N);
 		assertThat(columnStatistics.getRowCount(), is(0));
 	}
 
 	@Test
 	public void testRowStatisticsForEmptyDataSourceContainsNoColumn() {
-		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		DataSource rowStatistics = source.getRowStatistics(Statistics.N);
 		assertThat(rowStatistics.getColumnCount(), is(0));
 	}
 
 	@Test
 	public void testRowStatisticsForDataSourceContainsSingleColumn() {
 		source = new StubAbstractDataSource(5, 3);
-		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		DataSource rowStatistics = source.getRowStatistics(Statistics.N);
 		assertThat(rowStatistics.getColumnCount(), is(1));
 	}
 
 	@Test
 	public void testRowStatisticsForDataSourceContainsRowForEachRowInDataSource() {
 		source = new StubAbstractDataSource(5, 3);
-		DataSource rowStatistics = source.getStatistics(Row.class, Statistics.N);
+		DataSource rowStatistics = source.getRowStatistics(Statistics.N);
 		assertThat(rowStatistics.getRowCount(), is(3));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testThrowsExceptionWhenOrientationUnknown() {
-		source.getStatistics(DataAccessor.class, Statistics.N);
 	}
 }

@@ -136,28 +136,26 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		return statistics;
 	}
 
-	public DataSource getStatistics(Class<? extends DataAccessor> orientation, String key) {
-		DataTable statisticsTable;
-		if (Row.class.isAssignableFrom(orientation)) {
-			statisticsTable = getRowCount() != 0 ? new DataTable(Double.class) : new DataTable();
-			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-				Row row = getRow(rowIndex);
-				statisticsTable.add(row.getStatistics(key));
-			}
-		} else if (Column.class.isAssignableFrom(orientation)) {
-			Class[] columnTypes = new Class[getColumnCount()];
-			Arrays.fill(columnTypes, Double.class);
-			statisticsTable = new DataTable(columnTypes);
-			List<Double> colStatistics = new ArrayList<Double>(columnTypes.length);
-			for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
-				Column col = getColumn(colIndex);
-				colStatistics.add(col.getStatistics(key));
-			}
-			if (!colStatistics.isEmpty()) {
-				statisticsTable.add(colStatistics);
-			}
-		} else {
-			throw new IllegalArgumentException("Unknown DataAccessor implementation: "+orientation.getName());
+	public DataSource getColumnStatistics(String key) {
+		Class[] columnTypes = new Class[getColumnCount()];
+		Arrays.fill(columnTypes, Double.class);
+		DataTable statisticsTable = new DataTable(columnTypes);
+		List<Double> colStatistics = new ArrayList<Double>(columnTypes.length);
+		for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
+			Column col = getColumn(colIndex);
+			colStatistics.add(col.getStatistics(key));
+		}
+		if (!colStatistics.isEmpty()) {
+			statisticsTable.add(colStatistics);
+		}
+		return statisticsTable;
+	}
+
+	public DataSource getRowStatistics(String key) {
+		DataTable statisticsTable = getRowCount() != 0 ? new DataTable(Double.class) : new DataTable();
+		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
+			Row row = getRow(rowIndex);
+			statisticsTable.add(row.getStatistics(key));
 		}
 		return statisticsTable;
 	}
