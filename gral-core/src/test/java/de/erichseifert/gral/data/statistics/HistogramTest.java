@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +61,16 @@ public class HistogramTest {
 		Iterable<Comparable<?>> data = createHistogramData();
 		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
 		assertThat(histogram, hasItems(0, 3, 3, 1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testThrowsExceptionWhenBreakCountLessThanTwo() {
+		Iterable<Comparable<?>> data = createHistogramData();
+		int lessThanTwo = 1;
+		Number[] breaks = new Number[lessThanTwo];
+		Arrays.fill(breaks, new Integer(2));
+
+		new Histogram(data, breaks);
 	}
 
 	private static Iterable<Comparable<?>> createHistogramData() {
