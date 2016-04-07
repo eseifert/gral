@@ -50,21 +50,19 @@ public class HistogramTest {
 
 	@Test
 	public void testBucketsContainValueCounts() {
-		List<Comparable<?>> data = new LinkedList<Comparable<?>>();
-		data.add(1);
-		data.add(1);
-		data.add(2);
-		data.add(2);
-		data.add(5);
-		data.add(1);
-		data.add(2);
-		data.add(4);
+		Iterable<Comparable<?>> data = createHistogramData();
 		Histogram histogram = new Histogram(data, 4);
 		assertThat(histogram, hasItems(3, 3, 0, 1));
 	}
 
 	@Test
 	public void testCustomBinsContainValueCounts() {
+		Iterable<Comparable<?>> data = createHistogramData();
+		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
+		assertThat(histogram, hasItems(0, 3, 3, 1));
+	}
+
+	private static Iterable<Comparable<?>> createHistogramData() {
 		List<Comparable<?>> data = new LinkedList<Comparable<?>>();
 		data.add(1);
 		data.add(1);
@@ -74,7 +72,6 @@ public class HistogramTest {
 		data.add(1);
 		data.add(2);
 		data.add(4);
-		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
-		assertThat(histogram, hasItems(0, 3, 3, 1));
+		return data;
 	}
 }
