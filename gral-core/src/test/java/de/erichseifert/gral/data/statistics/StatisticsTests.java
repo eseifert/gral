@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	HistogramTest.class,
 	StatisticsTest.class,
 	AbstractHistogram2DTest.class
 })
