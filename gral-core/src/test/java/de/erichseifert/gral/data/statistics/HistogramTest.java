@@ -21,10 +21,13 @@
  */
 package de.erichseifert.gral.data.statistics;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.Test;
 
 public class HistogramTest {
@@ -43,5 +46,20 @@ public class HistogramTest {
 		int bucketCount = 0;
 
 		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), bucketCount);
+	}
+
+	@Test
+	public void testBucketsContainValueCounts() {
+		List<Comparable<?>> data = new LinkedList<Comparable<?>>();
+		data.add(1);
+		data.add(1);
+		data.add(2);
+		data.add(2);
+		data.add(5);
+		data.add(1);
+		data.add(2);
+		data.add(4);
+		Histogram histogram = new Histogram(data, 4);
+		assertThat(histogram, hasItems(3, 3, 0, 1));
 	}
 }
