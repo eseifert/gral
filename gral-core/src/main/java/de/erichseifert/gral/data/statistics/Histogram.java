@@ -7,7 +7,6 @@ public class Histogram implements Iterable<Integer> {
 	private Iterable<Comparable<?>> data;
 	private Number[] breaks;
 	private Integer[] bins;
-	private int binCount;
 
 	public Histogram(Iterable<Comparable<?>> data, int binCount) {
 		this(data, getEquidistantBreaks(data, binCount + 1));
@@ -20,7 +19,7 @@ public class Histogram implements Iterable<Integer> {
 		}
 		this.data = data;
 		this.breaks = breaks;
-		binCount = breaks.length - 1;
+		int binCount = breaks.length - 1;
 		bins = new Integer[binCount];
 		Arrays.fill(bins, new Integer(0));
 
@@ -58,7 +57,7 @@ public class Histogram implements Iterable<Integer> {
 	}
 
 	public int size() {
-		return binCount;
+		return breaks.length - 1;
 	}
 
 	@Override
