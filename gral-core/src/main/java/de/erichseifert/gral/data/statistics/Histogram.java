@@ -5,22 +5,22 @@ import java.util.Iterator;
 
 public class Histogram implements Iterable<Integer> {
 	private Integer[] bins;
-	private int breakCount;
+	private int binCount;
 
-	public Histogram(Iterable<Comparable<?>> data, int breakCount) {
-		if (breakCount < 1) {
-			throw new IllegalArgumentException("Invalid bucket count: " + breakCount +
+	public Histogram(Iterable<Comparable<?>> data, int binCount) {
+		if (binCount < 1) {
+			throw new IllegalArgumentException("Invalid bucket count: " + binCount +
 					" A histogram requires a positive bucket count.");
 		}
-		this.breakCount = breakCount;
-		bins = new Integer[breakCount];
+		this.binCount = binCount;
+		bins = new Integer[binCount];
 		Arrays.fill(bins, new Integer(0));
 
 		Statistics statistics = new Statistics(data);
 		double minValue = statistics.get(Statistics.MIN);
 		double maxValue = statistics.get(Statistics.MAX);
 		double range = maxValue - minValue;
-		double binWidth = range / breakCount;
+		double binWidth = range /binCount;
 		for (Comparable<?> value : data) {
 			if (!(value instanceof Number)) {
 				continue;
@@ -37,7 +37,7 @@ public class Histogram implements Iterable<Integer> {
 	}
 
 	public int size() {
-		return breakCount;
+		return binCount;
 	}
 
 	@Override
