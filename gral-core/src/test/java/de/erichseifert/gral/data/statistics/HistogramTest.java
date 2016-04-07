@@ -33,19 +33,19 @@ import org.junit.Test;
 public class HistogramTest {
 
 	@Test
-	public void testHasDesiredNumberOfBuckets() {
-		int bucketCount = 4;
+	public void testHasDesiredNumberOfBins() {
+		int binCount = 4;
 
-		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), bucketCount);
+		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
 
 		assertThat(histogram.size(), is(4));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testThrowsExceptionWhenBreakCountLessThanOne() {
-		int bucketCount = 0;
+	public void testThrowsExceptionWhenBinCountLessThanOne() {
+		int binCount = 0;
 
-		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), bucketCount);
+		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
 	}
 
 	@Test
