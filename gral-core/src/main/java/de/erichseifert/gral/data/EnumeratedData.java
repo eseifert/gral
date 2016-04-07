@@ -29,7 +29,7 @@ package de.erichseifert.gral.data;
  * <p>Example which creates a two column data source from a one column
  * histogram:</p>
  * <pre>
- * DataSource hist = new Histogram1D(data, Orientation.HORIZONTAL, 10);
+ * DataSource hist = new Histogram2D(data, Orientation.HORIZONTAL, 10);
  * DataSource hist2d = new EnumeratedData(hist);
  * </pre>
  *

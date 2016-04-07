@@ -38,7 +38,7 @@ import de.erichseifert.gral.graphics.Orientation;
  * as an array to create unequally sized cells.</p>
  * <p>For ease of use the histogram is a data source itself.</p>
  */
-public class Histogram1D extends Histogram {
+public class Histogram2D extends AbstractHistogram2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4841658606362408312L;
 
@@ -55,7 +55,7 @@ public class Histogram1D extends Histogram {
 	/** Maximum values for cells. */
 	private transient Map<Integer, Long> cacheMax;
 
-	private Histogram1D(DataSource data, Orientation orientation) {
+	private Histogram2D(DataSource data, Orientation orientation) {
 		super(data);
 		this.orientation = orientation;
 		breaks = new ArrayList<Number[]>();
@@ -65,14 +65,14 @@ public class Histogram1D extends Histogram {
 	}
 
 	/**
-	 * Creates a new Histogram object with the specified DataSource and
+	 * Creates a new AbstractHistogram2D object with the specified DataSource and
 	 * cell count.
 	 * @param data DataSource so be analyzed.
 	 * @param orientation Orientation of the histogram values.
 	 * @param breakCount Number of subdivisions for analysis.
 	 */
-	public Histogram1D(DataSource data, Orientation orientation,
-			int breakCount) {
+	public Histogram2D(DataSource data, Orientation orientation,
+					   int breakCount) {
 		this(data, orientation);
 
 		// Create equally spaced breaks
@@ -107,8 +107,8 @@ public class Histogram1D extends Histogram {
 	 * @param orientation Orientation in which the data should be sampled.
 	 * @param breaks Values of where a subdivision should occur.
 	 */
-	public Histogram1D(DataSource data, Orientation orientation,
-			Number[]... breaks) {
+	public Histogram2D(DataSource data, Orientation orientation,
+					   Number[]... breaks) {
 		this(data, orientation);
 		int count = getData().getColumnCount();
 		if (orientation == Orientation.HORIZONTAL) {
@@ -124,7 +124,7 @@ public class Histogram1D extends Histogram {
 	}
 
 	/**
-	 * (Re-)populates the cells of this Histogram.
+	 * (Re-)populates the cells of this AbstractHistogram2D.
 	 */
 	@Override
 	protected void rebuildCells() {

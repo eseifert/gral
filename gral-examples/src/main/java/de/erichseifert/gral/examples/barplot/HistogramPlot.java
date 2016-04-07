@@ -26,7 +26,7 @@ import java.util.Random;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
-import de.erichseifert.gral.data.statistics.Histogram1D;
+import de.erichseifert.gral.data.statistics.Histogram2D;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
@@ -54,7 +54,7 @@ public class HistogramPlot extends ExamplePanel {
 		}
 
 		// Create histogram from data
-		Histogram1D histogram = new Histogram1D(data, Orientation.VERTICAL,
+		Histogram2D histogram = new Histogram2D(data, Orientation.VERTICAL,
 				new Number[] {-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.6, 4.0});
 		// Create a second dimension (x axis) for plotting
 		DataSource histogram2d = new EnumeratedData(histogram, (-4.0 + -3.2)/2.0, 0.8);
@@ -93,12 +93,12 @@ public class HistogramPlot extends ExamplePanel {
 
 	@Override
 	public String getTitle() {
-		return "Histogram plot";
+		return "AbstractHistogram2D plot";
 	}
 
 	@Override
 	public String getDescription() {
-		return String.format("Histogram of %d samples", SAMPLE_COUNT);
+		return String.format("AbstractHistogram2D of %d samples", SAMPLE_COUNT);
 	}
 
 	public static void main(String[] args) {

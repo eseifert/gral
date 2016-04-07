@@ -35,7 +35,7 @@ import de.erichseifert.gral.data.DataSource;
  * with column types.
  * @see AbstractDataSource#setColumnTypes(Class...)
  */
-public abstract class Histogram extends AbstractDataSource
+public abstract class AbstractHistogram2D extends AbstractDataSource
 		implements DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5031290498142366257L;
@@ -48,7 +48,7 @@ public abstract class Histogram extends AbstractDataSource
 	 * @param data Data source to be analyzed.
 	 */
 	@SuppressWarnings("unchecked")
-	public Histogram(DataSource data) {
+	public AbstractHistogram2D(DataSource data) {
 		this.data = data;
 		this.data.addDataListener(this);
 	}
