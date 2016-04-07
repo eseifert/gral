@@ -19,15 +19,7 @@ public class Histogram implements Iterable<Integer> {
 		bins = new Integer[binCount];
 		Arrays.fill(bins, new Integer(0));
 
-		this.breaks = new Number[binCount + 1];
-		Statistics statistics = new Statistics(data);
-		double minValue = statistics.get(Statistics.MIN);
-		double maxValue = statistics.get(Statistics.MAX);
-		double range = maxValue - minValue;
-		double binWidth = range/binCount;
-		for (int breakIndex = 0; breakIndex < breaks.length; breakIndex++) {
-			breaks[breakIndex] = minValue + breakIndex*binWidth;
-		}
+		this.breaks = getEquidistantBreaks(data, binCount + 1);
 
 		computeDistribution();
 	}
@@ -40,6 +32,20 @@ public class Histogram implements Iterable<Integer> {
 		Arrays.fill(bins, new Integer(0));
 
 		computeDistribution();
+	}
+
+	private static Number[] getEquidistantBreaks(Iterable<Comparable<?>> data, int breakCount) {
+		Number[] breaks = new Number[breakCount];
+		Statistics statistics = new Statistics(data);
+		double minValue = statistics.get(Statistics.MIN);
+		double maxValue = statistics.get(Statistics.MAX);
+		double range = maxValue - minValue;
+		int binCount = breakCount - 1;
+		double binWidth = range/binCount;
+		for (int breakIndex = 0; breakIndex < breaks.length; breakIndex++) {
+			breaks[breakIndex] = minValue + breakIndex*binWidth;
+		}
+		return breaks;
 	}
 
 	private void computeDistribution() {
