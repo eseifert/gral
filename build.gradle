@@ -99,7 +99,7 @@ buildscript {
 def getVersionString() {
 	def out = new ByteArrayOutputStream()
 	exec {
-		commandLine('git', 'describe', '--tags')
+		commandLine('git', 'describe', '--tags', '--always')
 		standardOutput = out
 	}
 	return out.toString().trim()
