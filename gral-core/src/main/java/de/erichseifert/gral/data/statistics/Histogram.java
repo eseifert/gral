@@ -10,21 +10,14 @@ public class Histogram implements Iterable<Integer> {
 	private int binCount;
 
 	public Histogram(Iterable<Comparable<?>> data, int binCount) {
-		if (binCount < 1) {
-			throw new IllegalArgumentException("Invalid bucket count: " + binCount +
-					" A histogram requires a positive bucket count.");
-		}
-		this.data = data;
-		this.binCount = binCount;
-		bins = new Integer[binCount];
-		Arrays.fill(bins, new Integer(0));
-
-		this.breaks = getEquidistantBreaks(data, binCount + 1);
-
-		computeDistribution();
+		this(data, getEquidistantBreaks(data, binCount + 1));
 	}
 
 	public Histogram(Iterable<Comparable<?>> data, Number... breaks) {
+		if (breaks.length < 2) {
+			throw new IllegalArgumentException("Invalid break count: " + breaks.length +
+					" A histogram requires at least two breaks to form a bucket.");
+		}
 		this.data = data;
 		this.breaks = breaks;
 		binCount = breaks.length - 1;
