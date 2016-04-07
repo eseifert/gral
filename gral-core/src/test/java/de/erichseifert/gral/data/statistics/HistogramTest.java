@@ -63,6 +63,16 @@ public class HistogramTest {
 		assertThat(histogram, hasItems(0, 3, 3, 1));
 	}
 
+	@Test
+	public void testGetReturnsBinSize() {
+		Iterable<Comparable<?>> data = createHistogramData();
+		Histogram histogram = new Histogram(data, 4);
+
+		int binSize = histogram.get(1);
+
+		assertThat(binSize, is(3));
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testThrowsExceptionWhenBreakCountLessThanTwo() {
 		Iterable<Comparable<?>> data = createHistogramData();

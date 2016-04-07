@@ -60,6 +60,10 @@ public class Histogram implements Iterable<Integer> {
 		return breaks.length - 1;
 	}
 
+	public int get(int binIndex) {
+		return bins[binIndex];
+	}
+
 	@Override
 	public Iterator<Integer> iterator() {
 		return Arrays.asList(bins).iterator();
