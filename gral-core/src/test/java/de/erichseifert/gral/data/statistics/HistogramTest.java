@@ -37,4 +37,11 @@ public class HistogramTest {
 
 		assertThat(histogram.size(), is(4));
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testThrowsExceptionWhenBreakCountLessThanOne() {
+		int bucketCount = 0;
+
+		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), bucketCount);
+	}
 }
