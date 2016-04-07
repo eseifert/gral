@@ -62,4 +62,19 @@ public class HistogramTest {
 		Histogram histogram = new Histogram(data, 4);
 		assertThat(histogram, hasItems(3, 3, 0, 1));
 	}
+
+	@Test
+	public void testCustomBinsContainValueCounts() {
+		List<Comparable<?>> data = new LinkedList<Comparable<?>>();
+		data.add(1);
+		data.add(1);
+		data.add(2);
+		data.add(2);
+		data.add(5);
+		data.add(1);
+		data.add(2);
+		data.add(4);
+		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
+		assertThat(histogram, hasItems(0, 3, 3, 1));
+	}
 }

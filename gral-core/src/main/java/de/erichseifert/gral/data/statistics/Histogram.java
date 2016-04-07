@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class Histogram implements Iterable<Integer> {
+	private Number[] breaks;
 	private Integer[] bins;
 	private int binCount;
 
@@ -28,6 +29,27 @@ public class Histogram implements Iterable<Integer> {
 			for (int binIndex = 0; binIndex < bins.length; binIndex++) {
 				double lowerBinLimit = minValue + binIndex*binWidth;
 				double upperBinLimit = minValue + (binIndex + 1)*binWidth;
+				double doubleValue = ((Number) value).doubleValue();
+				if (doubleValue >= lowerBinLimit && doubleValue < upperBinLimit) {
+					bins[binIndex]++;
+				}
+			}
+		}
+	}
+
+	public Histogram(Iterable<Comparable<?>> data, Number... breaks) {
+		this.breaks = breaks;
+		binCount = breaks.length - 1;
+		bins = new Integer[binCount];
+		Arrays.fill(bins, new Integer(0));
+
+		for (Comparable<?> value : data) {
+			if (!(value instanceof Number)) {
+				continue;
+			}
+			for (int binIndex = 0; binIndex < bins.length; binIndex++) {
+				double lowerBinLimit = breaks[binIndex].doubleValue();
+				double upperBinLimit = breaks[binIndex + 1].doubleValue();
 				double doubleValue = ((Number) value).doubleValue();
 				if (doubleValue >= lowerBinLimit && doubleValue < upperBinLimit) {
 					bins[binIndex]++;
