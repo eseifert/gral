@@ -21,12 +21,13 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class Record implements Iterable<Comparable<?>> {
+public class Record implements Iterable<Comparable<?>>, Serializable {
 	private Comparable[] values;
 
 	public Record(List<Comparable<?>> values) {

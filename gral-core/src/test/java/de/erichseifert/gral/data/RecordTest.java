@@ -24,7 +24,13 @@ package de.erichseifert.gral.data;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -75,5 +81,21 @@ public class RecordTest {
 		Record record = new Record(null, null, null);
 
 		assertThat(record.size(), is(3));
+	}
+
+	@Test
+	public void testIsSerializable() throws IOException {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(out);
+		try {
+			oos.writeObject(record);
+		} catch(NotSerializableException e) {
+			fail("Unable to serialize "+Record.class.getName());
+		} finally {
+			oos.close();
+		}
+		assertTrue(out.size() > 0);
 	}
 }
