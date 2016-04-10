@@ -31,10 +31,11 @@ import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.Record;
 
 public class ComparatorTest {
 	private static DataTable data;
-	private Comparable<?>[] row1, row2, row3, row4;
+	private Record row1, row2, row3, row4;
 
 	@BeforeClass
 	@SuppressWarnings("unchecked")
@@ -48,10 +49,10 @@ public class ComparatorTest {
 
 	@Before
 	public void setUp() {
-		row1 = data.getRow(0).toArray(null);
-		row2 = data.getRow(1).toArray(null);
-		row3 = data.getRow(2).toArray(null);
-		row4 = data.getRow(3).toArray(null);
+		row1 = data.getRecord(0);
+		row2 = data.getRecord(1);
+		row3 = data.getRecord(2);
+		row4 = data.getRecord(3);
 	}
 
 	@Test

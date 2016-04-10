@@ -24,13 +24,15 @@ package de.erichseifert.gral.data.comparators;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import de.erichseifert.gral.data.Record;
+
 /**
- * Abstract implementation of a {@code Comparator} for arrays of column values.
- * This class allows to specify the index at which the arrays should be
+ * Abstract implementation of a {@code Comparator} for {@code Record} objects.
+ * This class allows to specify the index at which the records should be
  * compared.
  * @see de.erichseifert.gral.data.DataTable#sort(DataComparator...)
  */
-public abstract class DataComparator implements Comparator<Comparable<?>[]>, Serializable {
+public abstract class DataComparator implements Comparator<Record>, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -982173906879554838L;
 

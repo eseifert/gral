@@ -45,10 +45,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	private final List<Comparable<?>[]> rows;
 
 	/**
-	 * Comparator class for comparing two arrays containing row data using a
+	 * Comparator class for comparing two records using a
 	 * specified set of {@code DataComparator}s.
 	 */
-	private final class RowComparator implements Comparator<Comparable<?>[]> {
+	private final class RecordComparator implements Comparator<Record> {
 		/** Rules to use for sorting. */
 		private final DataComparator[] comparators;
 
@@ -57,22 +57,22 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		 * {@code DataComparator}s.
 		 * @param comparators Set of {@code DataComparator}s to use as rules.
 		 */
-		public RowComparator(DataComparator[] comparators) {
+		public RecordComparator(DataComparator[] comparators) {
 			this.comparators = comparators;
 		}
 
 		/**
-		 * Compares two rows using the rules defined by the
+		 * Compares two records using the rules defined by the
 		 * {@code DataComparator}s of this instance.
-		 * @param row1 First row to compare.
-		 * @param row2 Second row to compare.
+		 * @param record1 First record to compare.
+		 * @param record2 Second record to compare.
 	     * @return A negative number if first argument is less than the second,
 	     *         zero if first argument is equal to the second,
 	     *         or a positive integer as the greater than the second.
 		 */
-		public int compare(Comparable<?>[] row1, Comparable<?>[] row2) {
+		public int compare(Record record1, Record record2) {
 			for (DataComparator comparator : comparators) {
-				int result = comparator.compare(row1, row2);
+				int result = comparator.compare(record1, record2);
 				if (result != 0) {
 					return result;
 				}
@@ -305,6 +305,26 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		return new Record(getRow(row).toArray(null));
 	}
 
+	private static List<Record> comparablesToRecords(List<Comparable<?>[]> comparables) {
+		List<Record> records = new ArrayList<Record>(comparables.size());
+		for (Comparable[] row : comparables) {
+			records.add(new Record(row));
+		}
+		return records;
+	}
+
+	private static List<Comparable<?>[]> recordsToComparables(List<Record> records) {
+		List<Comparable<?>[]> comparables = new ArrayList<Comparable<?>[]>(records.size());
+		for (Record record : records) {
+			Comparable[] row = new Comparable[record.size()];
+			for (int colIndex = 0; colIndex < row.length; colIndex++) {
+				row[colIndex] = record.get(colIndex);
+			}
+			comparables.add(row);
+		}
+		return comparables;
+	}
+
 	/**
 	 * Sorts the table rows with the specified DataComparators.
 	 * The row values are compared in the way the comparators are specified.
@@ -312,8 +332,11 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 */
 	public void sort(final DataComparator... comparators) {
 		synchronized (rows) {
-			RowComparator comparator = new RowComparator(comparators);
-			Collections.sort(rows, comparator);
+			RecordComparator comparator = new RecordComparator(comparators);
+			List<Record> records = comparablesToRecords(rows);
+			Collections.sort(records, comparator);
+			rows.clear();
+			rows.addAll(recordsToComparables(records));
 		}
 	}
 
