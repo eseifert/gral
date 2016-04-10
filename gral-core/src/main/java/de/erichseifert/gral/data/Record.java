@@ -22,9 +22,14 @@
 package de.erichseifert.gral.data;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Record {
 	private Comparable[] values;
+
+	public Record(List<Comparable<?>> values) {
+		this.values = values.toArray(new Comparable[0]);
+	}
 
 	public Record(Comparable<?>... values) {
 		this.values = Arrays.copyOf(values, values.length);

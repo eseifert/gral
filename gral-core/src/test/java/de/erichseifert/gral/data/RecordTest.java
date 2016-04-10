@@ -25,6 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 
 public class RecordTest {
@@ -36,6 +38,17 @@ public class RecordTest {
 	@Test
 	public void testCreatableFromComparables() {
 		new Record(-3.0, 1, "SomeString", null);
+	}
+
+	@Test
+	public void testCreatableFromList() {
+		List<Comparable<?>> comparables = new ArrayList<Comparable<?>>(4);
+		comparables.add(-3.0);
+		comparables.add(1);
+		comparables.add("SomeString");
+		comparables.add(null);
+
+		new Record(comparables);
 	}
 
 	@Test
