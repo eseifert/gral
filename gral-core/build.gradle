@@ -1,7 +1,20 @@
 description = 'GRAL core'
 
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath 'gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0'
+	}
+}
+apply plugin: 'me.champeau.gradle.jmh'
+
 dependencies {
 	testCompile(group: 'junit', name: 'junit', version: '4.12')
+	jmh(group: 'commons-io', name: 'commons-io', version: '2.4')
 }
 
 buildscript {
