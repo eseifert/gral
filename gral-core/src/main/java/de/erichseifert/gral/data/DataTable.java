@@ -144,23 +144,30 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 					"Wrong number of columns! Expected {0,number,integer}, got {1,number,integer}.", //$NON-NLS-1$
 					getColumnCount(), values.size()));
 		}
-		Comparable<?>[] row = new Comparable<?>[values.size()];
-		events = new DataChangeEvent[row.length];
+
+		// Check row data types
 		Class<? extends Comparable<?>>[] types = getColumnTypes();
-		int rowIndex = 0;
-		synchronized (rows) {
-			int colIndex = 0;
-			for (Comparable<?> value : values) {
-				if ((value != null)
-						&& !(types[colIndex].isAssignableFrom(value.getClass()))) {
-					throw new IllegalArgumentException(MessageFormat.format(
+		for (int colIndex = 0; colIndex < values.size(); colIndex++) {
+			Comparable<?> value = values.get(colIndex);
+			if ((value != null)
+					&& !(types[colIndex].isAssignableFrom(value.getClass()))) {
+				throw new IllegalArgumentException(MessageFormat.format(
 						"Wrong column type! Expected {0}, got {1}.", //$NON-NLS-1$
 						types[colIndex], value.getClass()));
-				}
-				row[colIndex] = value;
-				events[colIndex] = new DataChangeEvent(this, colIndex, rows.size(), null, value);
-				colIndex++;
 			}
+		}
+
+		// Add data to row
+		Comparable<?>[] row = new Comparable<?>[values.size()];
+		events = new DataChangeEvent[row.length];
+		for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
+			Comparable<?> value = values.get(columnIndex);
+			row[columnIndex] = value;
+			events[columnIndex] = new DataChangeEvent(this, columnIndex, rows.size(), null, value);
+		}
+
+		int rowIndex;
+		synchronized (rows) {
 			rows.add(row);
 			rowIndex = rows.size();
 		}
