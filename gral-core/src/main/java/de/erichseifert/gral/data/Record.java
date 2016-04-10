@@ -33,4 +33,8 @@ public class Record {
 	public <T extends Comparable<?>> T get(int index) {
 		return (T) values[index];
 	}
+
+	public int size() {
+		return values.length;
+	}
 }

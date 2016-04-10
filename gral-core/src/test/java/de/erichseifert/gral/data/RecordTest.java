@@ -47,4 +47,11 @@ public class RecordTest {
 		assertThat(record.<String>get(2), is("SomeString"));
 		assertThat(record.get(3), nullValue());
 	}
+
+	@Test
+	public void testSizeReturnsNumberOfElements() {
+		Record record = new Record(null, null, null);
+
+		assertThat(record.size(), is(3));
+	}
 }
