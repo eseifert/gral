@@ -38,6 +38,7 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 	EnumeratedDataTest.class,
 	DummyDataTest.class,
 	RowTest.class,
+	RecordTest.class,
 	ColumnTest.class,
 	JdbcDataTest.class,
 	// Tests for sub-packages
