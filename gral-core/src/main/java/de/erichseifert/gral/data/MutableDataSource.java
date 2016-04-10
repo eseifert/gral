@@ -21,7 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
-import java.util.Collection;
+import java.util.List;
 
 import de.erichseifert.gral.data.comparators.DataComparator;
 
@@ -52,7 +52,7 @@ public interface MutableDataSource extends DataSource {
 	 * @param values values to be added as a row.
 	 * @return Index of the row that has been added.
 	 */
-	int add(Collection<? extends Comparable<?>> values);
+	int add(List<? extends Comparable<?>> values);
 
 	/**
 	 * Adds the specified row to the data sink. The values are added in the

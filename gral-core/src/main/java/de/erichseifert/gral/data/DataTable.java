@@ -24,7 +24,6 @@ package de.erichseifert.gral.data;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -138,7 +137,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 * @param values values to be added as a row
 	 * @return Index of the row that has been added.
 	 */
-	public int add(Collection<? extends Comparable<?>> values) {
+	public int add(List<? extends Comparable<?>> values) {
 		DataChangeEvent[] events;
 		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(MessageFormat.format(
