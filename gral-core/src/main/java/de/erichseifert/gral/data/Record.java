@@ -21,7 +21,16 @@
  */
 package de.erichseifert.gral.data;
 
+import java.util.Arrays;
+
 public class Record {
+	private Comparable[] values;
+
 	public Record(Comparable<?>... values) {
+		this.values = Arrays.copyOf(values, values.length);
+	}
+
+	public <T extends Comparable<?>> T get(int index) {
+		return (T) values[index];
 	}
 }

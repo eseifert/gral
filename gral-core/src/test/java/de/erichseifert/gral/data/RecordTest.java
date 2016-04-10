@@ -21,11 +21,25 @@
  */
 package de.erichseifert.gral.data;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 public class RecordTest {
 	@Test
 	public void testCreatableFromComparables() {
 		new Record(-3.0, 1, "SomeString", null);
+	}
+
+	@Test
+	public void testAllowsRetrievingValues() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		assertThat(record.<Double>get(0), is(-3.0));
+		assertThat(record.<Integer>get(1), is(1));
+		assertThat(record.<String>get(2), is("SomeString"));
+		assertThat(record.get(3), nullValue());
 	}
 }
