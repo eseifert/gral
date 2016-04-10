@@ -30,7 +30,7 @@ import java.util.List;
 public class Record implements Iterable<Comparable<?>>, Serializable {
 	private Comparable[] values;
 
-	public Record(List<Comparable<?>> values) {
+	public Record(List<? extends Comparable<?>> values) {
 		this.values = values.toArray(new Comparable[0]);
 	}
 
