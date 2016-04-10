@@ -21,20 +21,23 @@
  */
 package de.erichseifert.gral.data;
 
-import java.io.IOException;
-
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.Collections;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
 import de.erichseifert.gral.data.statistics.Statistics;
-import org.junit.Before;
-import org.junit.Test;
 
 public class DataTableTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -127,6 +130,17 @@ public class DataTableTest {
 			fail("Expected IllegalArgumentException exception.");
 		} catch (IllegalArgumentException e) {
 		}
+	}
+
+	@Test
+	public void testAddCollectionReturnsInsertedPosition() {
+		DataTable table = new DataTable();
+		table.add();
+		table.add();
+
+		int insertedPosition = table.add(Collections.<Comparable<?>>emptyList());
+
+		assertThat(insertedPosition, is(2));
 	}
 
 	@Test
