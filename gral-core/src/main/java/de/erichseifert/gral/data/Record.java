@@ -21,10 +21,12 @@
  */
 package de.erichseifert.gral.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
-public class Record {
+public class Record implements Iterable<Comparable<?>> {
 	private Comparable[] values;
 
 	public Record(List<Comparable<?>> values) {
@@ -41,5 +43,15 @@ public class Record {
 
 	public int size() {
 		return values.length;
+	}
+
+	@Override
+	public Iterator<Comparable<?>> iterator() {
+		// More readable version using Arrays.asList is prevented by broken Generics system
+		List<Comparable<?>> list = new ArrayList<Comparable<?>>(values.length);
+		for (Comparable value : values) {
+			list.add(value);
+		}
+		return list.iterator();
 	}
 }

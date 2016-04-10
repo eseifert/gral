@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
+import org.hamcrest.CoreMatchers;
+
 public class RecordTest {
 	@Test
 	public void testCreateEmptyRecord() {
@@ -59,6 +61,13 @@ public class RecordTest {
 		assertThat(record.<Integer>get(1), is(1));
 		assertThat(record.<String>get(2), is("SomeString"));
 		assertThat(record.get(3), nullValue());
+	}
+
+	@Test
+	public void testIteratorReturnsValues() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		assertThat(record, CoreMatchers.<Comparable<?>>hasItems(-3.0, 1, "SomeString", null));
 	}
 
 	@Test
