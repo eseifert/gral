@@ -29,6 +29,11 @@ import org.junit.Test;
 
 public class RecordTest {
 	@Test
+	public void testCreateEmptyRecord() {
+		new Record();
+	}
+
+	@Test
 	public void testCreatableFromComparables() {
 		new Record(-3.0, 1, "SomeString", null);
 	}
