@@ -37,6 +37,8 @@ public class PointData {
 	public final List<Axis> axes;
 	/** Renderers for the axes that will be used to project the point. */
 	public final List<? extends AxisRenderer> axisRenderers;
+	/** The index of the row. */
+	public final int index;
 	/** The data row that will get projected. */
 	public final Row row;
 	/** The index of the column in the row that contains the data value. */
@@ -54,6 +56,7 @@ public class PointData {
 		this.axes = Collections.unmodifiableList(axes);
 		this.axisRenderers = Collections.unmodifiableList(axisRenderers);
 		this.row = row;
+		this.index = row != null ? row.getIndex() : 0;
 		this.col = col;
 	}
 }
