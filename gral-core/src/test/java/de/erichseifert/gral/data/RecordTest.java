@@ -118,4 +118,31 @@ public class RecordTest {
 
 		assertThat(equal, is(true));
 	}
+
+	@Test
+	public void testIsNumericReturnsTrueIfValueIsNumber() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		boolean numeric = record.isNumeric(1);
+
+		assertThat(numeric, is(true));
+	}
+
+	@Test
+	public void testIsNumericReturnsFalseIfValueIsNoNumber() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		boolean numeric = record.isNumeric(2);
+
+		assertThat(numeric, is(false));
+	}
+
+	@Test
+	public void testIsNumericReturnsFalseIfValueIsNull() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		boolean numeric = record.isNumeric(3);
+
+		assertThat(numeric, is(false));
+	}
 }

@@ -56,6 +56,10 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 		return list.iterator();
 	}
 
+	public boolean isNumeric(int index) {
+		return values[index] instanceof Number;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Record)) {
