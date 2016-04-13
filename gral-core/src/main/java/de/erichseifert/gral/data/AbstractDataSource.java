@@ -21,12 +21,20 @@
  */
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.data.statistics.Statistics;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import de.erichseifert.gral.data.statistics.Statistics;
 
 
 /**
@@ -230,6 +238,11 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Record getRecord(int row) {
+		return new Record(getRow(row).toArray(null));
 	}
 
 	// Allows DataTable to reuse the name property

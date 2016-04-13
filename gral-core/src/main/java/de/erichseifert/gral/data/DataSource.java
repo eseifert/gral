@@ -104,4 +104,6 @@ public interface DataSource extends Iterable<Comparable<?>> {
 	 * @param dataListener listener to be removed.
 	 */
 	void removeDataListener(DataListener dataListener);
+
+	Record getRecord(int row);
 }

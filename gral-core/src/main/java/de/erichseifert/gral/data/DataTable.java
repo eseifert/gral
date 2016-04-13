@@ -307,10 +307,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		return rows.size();
 	}
 
-	public Record getRecord(int row) {
-		return new Record(getRow(row).toArray(null));
-	}
-
 	/**
 	 * Sorts the table rows with the specified DataComparators.
 	 * The row values are compared in the way the comparators are specified.
