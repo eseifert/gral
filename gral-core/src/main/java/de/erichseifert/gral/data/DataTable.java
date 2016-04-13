@@ -193,6 +193,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		return add(values);
 	}
 
+	public void add(Record row) {
+		rows.add(row);
+	}
+
 	/**
 	 * Removes a specified row from the table.
 	 * @param row Index of the row to remove

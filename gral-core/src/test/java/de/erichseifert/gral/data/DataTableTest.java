@@ -144,6 +144,16 @@ public class DataTableTest {
 	}
 
 	@Test
+	public void testContainsARowAfterAddingARecord() {
+		DataTable table = new DataTable();
+		Record record = new Record();
+
+		table.add(record);
+
+		assertThat(table.getRowCount(), is(1));
+	}
+
+	@Test
 	public void testSet() {
 		int sizeBefore = table.getRowCount();
 
