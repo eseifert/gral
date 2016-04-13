@@ -194,13 +194,11 @@ public class BarPlot extends XYPlot {
 				public void draw(DrawingContext context) {
 					BarRenderer renderer = BarRenderer.this;
 
-					Row row = data.row;
-
 					Rectangle2D paintBoundaries = null;
 					Graphics2D graphics = context.getGraphics();
 
 					ColorMapper colors = renderer.getColor();
-					Paint paint = colors.get(row.getIndex());
+					Paint paint = colors.get(data.index);
 
 					if (plot.isPaintAllBars()) {
 						AffineTransform txOld = graphics.getTransform();

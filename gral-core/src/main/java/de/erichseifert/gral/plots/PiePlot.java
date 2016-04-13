@@ -483,7 +483,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					}
 
 					Slice slice = plot.getSlice(
-						row.getSource(), row.getIndex());
+						row.getSource(), data.index);
 					if (slice == null) {
 						return;
 					}
@@ -502,14 +502,14 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						double coloringRel = 0.0;
 						int rows = row.getSource().getRowCount();
 						if (rows > 1) {
-							double posRel = row.getIndex() / (double)(rows - 1);
+							double posRel = data.index / (double)(rows - 1);
 							double posRelInv = 1.0 - posRel;
 							coloringRel =
 								posRelInv*sliceStartRel + posRel*sliceEndRel;
 						}
 						paint = ((ContinuousColorMapper) colorMapper).get(coloringRel);
 					} else {
-						paint = colorMapper.get(row.getIndex());
+						paint = colorMapper.get(data.index);
 					}
 					GraphicsUtils.fillPaintedShape(
 						context.getGraphics(), shape, paint, null);
@@ -549,7 +549,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				return null;
 			}
 			Slice slice = plot.getSlice(
-				row.getSource(), row.getIndex());
+				row.getSource(), data.index);
 			if (slice == null) {
 				return null;
 			}
@@ -607,7 +607,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @param col Index of the column that will be projected on the axis.
 		 */
 		protected void drawValueLabel(DrawingContext context, Slice slice,
-				double radius, Row row, int col) {
+				double radius, Row row, int rowIndex, int col) {
 			Comparable<?> value = row.get(col);
 
 			// Formatting
@@ -621,7 +621,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 			// Visual settings
 			ColorMapper colors = getValueColor();
-			Paint paint = colors.get(row.getIndex());
+			Paint paint = colors.get(rowIndex);
 			Font font = getValueFont();
 			double fontSize = font.getSize2D();
 
@@ -732,7 +732,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					}
 
 					Slice slice = plot.getSlice(
-						row.getSource(), row.getIndex());
+						row.getSource(), data.index);
 					if (slice == null) {
 						return;
 					}
@@ -745,7 +745,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 					if (renderer.isValueVisible()) {
 						int colValue = renderer.getValueColumn();
-						drawValueLabel(context, slice, radius, row, colValue);
+						drawValueLabel(context, slice, radius, row, data.index, colValue);
 					}
 				}
 			};

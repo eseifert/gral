@@ -595,7 +595,7 @@ public class BoxPlot extends XYPlot {
 						paintBox = ((ContinuousColorMapper) paintBoxMapper)
 							.get(valueX);
 					} else {
-						int index = row.getIndex();
+						int index = data.index;
 						paintBox = paintBoxMapper.get(index);
 					}
 					Paint paintStrokeBox = getBoxBorderColor();
@@ -743,7 +743,7 @@ public class BoxPlot extends XYPlot {
 						return;
 					}
 
-					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Row symbolRow = new Row(DUMMY_DATA, 0);
 					Rectangle2D bounds = getBounds();
 
 					double boxWidthRel = pointRenderer.getBoxWidth();

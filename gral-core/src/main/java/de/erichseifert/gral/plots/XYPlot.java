@@ -661,7 +661,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
 
-					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Row symbolRow = new Row(DUMMY_DATA, 0);
 					Rectangle2D bounds = getBounds();
 
 					Axis axisX = new Axis(0.0, 1.0);
