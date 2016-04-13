@@ -162,8 +162,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	public DataSource getRowStatistics(String key) {
 		DataTable statisticsTable = getRowCount() != 0 ? new DataTable(Double.class) : new DataTable();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-			Row row = getRow(rowIndex);
-			statisticsTable.add(row.getStatistics(key));
+			Record row = getRecord(rowIndex);
+			statisticsTable.add(new Statistics(row).get(key));
 		}
 		return statisticsTable;
 	}
