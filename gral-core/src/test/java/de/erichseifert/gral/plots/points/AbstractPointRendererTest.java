@@ -121,7 +121,7 @@ public class AbstractPointRendererTest {
 
 						g.translate(posX, posY);
 						ColorMapper colors = renderer.getColor();
-						Paint paint = colors.get(row.getIndex());
+						Paint paint = colors.get(data.index);
 						GraphicsUtils.fillPaintedShape(g, shape, paint, null);
 					}
 

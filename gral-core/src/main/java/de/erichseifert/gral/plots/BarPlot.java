@@ -378,7 +378,7 @@ public class BarPlot extends XYPlot {
 				public void draw(DrawingContext context) {
 					DataSource data = row.getSource();
 
-					Row symbolRow = new Row(DUMMY_DATA, row.getIndex());
+					Row symbolRow = new Row(DUMMY_DATA, 0);
 					Rectangle2D bounds = getBounds();
 
 					double barWidthRel = plot.getBarWidth();
