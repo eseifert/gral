@@ -113,7 +113,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	public DataTable(DataSource source) {
 		this(source.getColumnTypes());
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
-			add(source.getRow(rowIndex));
+			add(source.getRecord(rowIndex));
 		}
 	}
 
