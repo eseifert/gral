@@ -54,7 +54,7 @@ public class MedianTest {
 
 	@Test
 	public void testCreate() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter2D.Mode.REPEAT, 0);
 
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
@@ -62,9 +62,9 @@ public class MedianTest {
 
 	@Test
 	public void testMode() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter2D.Mode.REPEAT, 0);
 
-		for (Filter.Mode mode : Filter.Mode.values()) {
+		for (Filter2D.Mode mode : Filter2D.Mode.values()) {
 			filter.setMode(mode);
 			assertEquals(mode, filter.getMode());
 		}
@@ -72,7 +72,7 @@ public class MedianTest {
 
 	@Test
 	public void testWindowSize() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter2D.Mode.REPEAT, 0);
 		assertEquals(3, filter.getWindowSize());
 
 		filter.setWindowSize(1);
@@ -81,7 +81,7 @@ public class MedianTest {
 
 	@Test
 	public void testOffset() {
-		Median filter = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
+		Median filter = new Median(table, 3, 1, Filter2D.Mode.REPEAT, 0);
 		assertEquals(1, filter.getOffset());
 
 		filter.setOffset(0);
@@ -90,8 +90,8 @@ public class MedianTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Filter original = new Median(table, 3, 1, Filter.Mode.REPEAT, 0);
-		Filter deserialized = TestUtils.serializeAndDeserialize(original);
+		Filter2D original = new Median(table, 3, 1, Filter2D.Mode.REPEAT, 0);
+		Filter2D deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata
     	assertEquals(original.getMode(), deserialized.getMode());

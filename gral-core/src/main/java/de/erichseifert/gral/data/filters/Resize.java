@@ -32,11 +32,11 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 
 /**
- * Filter to change the size of equally spaced data sources. All columns of the
+ * Filter2D to change the size of equally spaced data sources. All columns of the
  * data sources must be numeric, otherwise an {@code IllegalArgumentException}
  * will be thrown. The values of the scaled result are created by averaging.
  */
-public class Resize extends Filter {
+public class Resize extends Filter2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -5601162872352170735L;
 

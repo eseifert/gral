@@ -151,8 +151,8 @@ public class ResizeTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Filter original = new Resize(dataDiagonal, 2, 2);
-		Filter deserialized = TestUtils.serializeAndDeserialize(original);
+		Filter2D original = new Resize(dataDiagonal, 2, 2);
+		Filter2D deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata
     	assertEquals(original.getMode(), deserialized.getMode());

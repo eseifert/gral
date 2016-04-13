@@ -37,7 +37,7 @@ import de.erichseifert.gral.util.MathUtils;
  *   <li>Setting and getting window size</li>
  * </ul>
  */
-public class Median extends Filter {
+public class Median extends Filter2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -1645928908580026536L;
 

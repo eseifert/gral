@@ -35,7 +35,7 @@ import de.erichseifert.gral.util.MathUtils;
  *   <li>Getting and setting the {@code Kernel} used for convolution</li>
  * </ul>
  */
-public class Convolution extends Filter {
+public class Convolution extends Filter2D {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 7155205321415314271L;
 

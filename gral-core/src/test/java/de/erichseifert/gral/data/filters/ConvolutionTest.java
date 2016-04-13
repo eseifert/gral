@@ -59,13 +59,13 @@ public class ConvolutionTest {
 
 	@Test
 	public void testCreate() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
 		assertEquals(table.getColumnCount(), filter.getColumnTypes().length);
 
 		try {
-			new Convolution(table, kernel, Filter.Mode.ZERO, 0, 2);
+			new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 2);
 			fail("Filtering a non-numeric column must raise an IllegalArgumentException.");
 		} catch (IllegalArgumentException e) {
 		}
@@ -73,15 +73,15 @@ public class ConvolutionTest {
 
 	@Test
 	public void testKernel() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		assertEquals(kernel, filter.getKernel());
 	}
 
 	@Test
 	public void testMode() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
 
-		for (Filter.Mode mode : Filter.Mode.values()) {
+		for (Filter2D.Mode mode : Filter2D.Mode.values()) {
 			filter.setMode(mode);
 			assertEquals(mode, filter.getMode());
 		}
@@ -89,7 +89,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testColumns() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0);
 
 		assertEquals(3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -102,7 +102,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeOmit() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
 
 		assertTrue(Double.isNaN(((Number) filter.get(0, 0)).doubleValue()));
 		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -115,7 +115,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeZero() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 
 		assertEquals( 3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -128,7 +128,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeRepeat() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.REPEAT, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.REPEAT, 0, 1);
 
 		assertEquals( 4.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -141,7 +141,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeMirror() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.MIRROR, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.MIRROR, 0, 1);
 
 		assertEquals( 5.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -154,7 +154,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeCircular() {
-		Convolution filter = new Convolution(table, kernel, Filter.Mode.CIRCULAR, 0, 1);
+		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.CIRCULAR, 0, 1);
 
 		assertEquals(11.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -167,7 +167,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Convolution original = new Convolution(table, kernel, Filter.Mode.ZERO, 0, 1);
+		Convolution original = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		Convolution deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata

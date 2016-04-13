@@ -50,7 +50,7 @@ import de.erichseifert.gral.util.MathUtils;
  * caches are updated when deserialization is done. This can be done by calling
  * {@code dataUpdated(this)} in a custom deserialization method.</p>
  */
-public abstract class Filter extends AbstractDataSource
+public abstract class Filter2D extends AbstractDataSource
 		implements DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -5004453681128601437L;
@@ -89,7 +89,7 @@ public abstract class Filter extends AbstractDataSource
 	 * @param cols Indexes of numeric columns to be filtered.
 	 */
 	@SuppressWarnings("unchecked")
-	public Filter(DataSource original, Mode mode, int... cols) {
+	public Filter2D(DataSource original, Mode mode, int... cols) {
 		this.rows = new ArrayList<Double[]>(original.getRowCount());
 		this.original = original;
 		this.mode = mode;
@@ -163,14 +163,14 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	/**
-	 * Clears this Filter.
+	 * Clears this Filter2D.
 	 */
 	protected void clear() {
 		rows.clear();
 	}
 
 	/**
-	 * Adds the specified row data to this Filter.
+	 * Adds the specified row data to this Filter2D.
 	 * @param rowData Row data to be added.
 	 */
 	protected void add(Double[] rowData) {
@@ -178,7 +178,7 @@ public abstract class Filter extends AbstractDataSource
 	}
 
 	/**
-	 * Adds the specified row data to this Filter.
+	 * Adds the specified row data to this Filter2D.
 	 * @param rowData Row to be added.
 	 */
 	protected void add(Number[] rowData) {
@@ -347,7 +347,7 @@ public abstract class Filter extends AbstractDataSource
 	protected abstract void filter();
 
 	/**
-	 * Returns the Mode of this Filter.
+	 * Returns the Mode of this Filter2D.
 	 * @return Mode of filtering.
 	 */
 	public Mode getMode() {
