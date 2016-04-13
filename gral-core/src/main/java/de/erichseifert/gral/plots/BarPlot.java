@@ -335,7 +335,7 @@ public class BarPlot extends XYPlot {
 
 					if (renderer.isValueVisible()) {
 						int colValue = renderer.getValueColumn();
-						drawValueLabel(context, shape, row, colValue);
+						drawValueLabel(context, shape, row, data.index, colValue);
 					}
 				}
 			};

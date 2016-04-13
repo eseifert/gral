@@ -76,7 +76,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 				int col = data.col;
 
 				ColorMapper colors = getColor();
-				Paint paint = colors.get(row.getIndex());
+				Paint paint = colors.get(data.index);
 
 				GraphicsUtils.fillPaintedShape(
 					context.getGraphics(), shape, paint, null);
@@ -85,7 +85,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 					int colErrorTop = renderer.getErrorColumnTop();
 					int colErrorBottom = renderer.getErrorColumnBottom();
 					drawErrorBars(context, shape,
-						row, col, colErrorTop, colErrorBottom,
+						row, data.index, col, colErrorTop, colErrorBottom,
 						axisY, axisRendererY);
 				}
 			}
@@ -102,7 +102,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 * @param col Index of the column that will be projected on the axis.
 	 */
 	protected void drawValueLabel(DrawingContext context,
-			Shape point, Row row, int col) {
+			Shape point, Row row, int pointIndex, int col) {
 		Comparable<?> value = row.get(col);
 
 		// Formatting
@@ -116,7 +116,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 		// Visual settings
 		ColorMapper colors = getValueColor();
-		Paint paint = colors.get(row.getIndex());
+		Paint paint = colors.get(pointIndex);
 		Font font = getValueFont();
 		double fontSize = font.getSize2D();
 
@@ -154,6 +154,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 * @param context Environment used for drawing.
 	 * @param point Shape of the point.
 	 * @param row Data row containing the point.
+	 * @param rowIndex Index of the row.
 	 * @param col Index of the column that will be projected on the axis.
 	 * @param colErrorTop Index of the column that contains the upper error value.
 	 * @param colErrorBottom Index of the column that contains the lower error value.
@@ -161,7 +162,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 * @param axisRenderer Axis renderer.
 	 */
 	protected void drawErrorBars(DrawingContext context, Shape point,
-			Row row, int col, int colErrorTop, int colErrorBottom,
+			Row row, int rowIndex, int col, int colErrorTop, int colErrorBottom,
 			Axis axis, AxisRenderer axisRenderer) {
 		if (axisRenderer == null) {
 			return;
@@ -203,7 +204,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		// Draw the error bar
 		Line2D errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
 		ColorMapper colors = getErrorColor();
-		Paint errorPaint = colors.get(row.getIndex());
+		Paint errorPaint = colors.get(rowIndex);
 		Stroke errorStroke = getErrorStroke();
 		GraphicsUtils.drawPaintedShape(
 			graphics, errorBar, errorPaint, null, errorStroke);
@@ -249,7 +250,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 
 				if (renderer.isValueVisible()) {
 					int colValue = renderer.getValueColumn();
-					drawValueLabel(context, shape, row, colValue);
+					drawValueLabel(context, shape, row, data.index, colValue);
 				}
 			}
 		};
