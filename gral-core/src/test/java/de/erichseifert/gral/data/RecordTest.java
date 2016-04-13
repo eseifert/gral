@@ -98,4 +98,24 @@ public class RecordTest {
 		}
 		assertTrue(out.size() > 0);
 	}
+
+	@Test
+	public void testRecordsWithDifferentSizeAreUnequal() {
+		Record shorterRecord = new Record(0, 1);
+		Record longerRecord = new Record(0, 1, 2, 3);
+
+		boolean equal = shorterRecord.equals(longerRecord);
+
+		assertThat(equal, is(false));
+	}
+
+	@Test
+	public void testRecordsWithIdenticalContentsAreEqual() {
+		Record r1 = new Record(-3.0, 1, "SomeString", null);
+		Record r2 = new Record(-3.0, 1, "SomeString", null);
+
+		boolean equal = r1.equals(r2);
+
+		assertThat(equal, is(true));
+	}
 }

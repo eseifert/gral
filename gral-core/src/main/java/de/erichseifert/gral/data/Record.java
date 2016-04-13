@@ -55,4 +55,13 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 		}
 		return list.iterator();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Record)) {
+			return false;
+		}
+		Record record = (Record) obj;
+		return size() == record.size() && Arrays.equals(this.values, record.values);
+	}
 }
