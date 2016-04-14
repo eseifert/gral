@@ -44,7 +44,7 @@ public class WindowIterator<T> implements Iterator<List<T>> {
 
 	@Override
 	public boolean hasNext() {
-		return false;
+		return iterator.hasNext();
 	}
 
 	@Override

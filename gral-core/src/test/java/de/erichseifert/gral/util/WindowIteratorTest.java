@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -39,5 +40,28 @@ public class WindowIteratorTest {
 		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(1, 2, 3));
 		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(2, 3, 4));
 		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(3, 4, 5));
+	}
+
+	@Test
+	public void testHasNextReturnsFalseWhenEndOfInputIsReached() {
+		int windowSize = 3;
+		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2);
+		WindowIterator<Object> windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
+		windowIterator.next();
+
+		boolean hasNext = windowIterator.hasNext();
+
+		assertThat(hasNext, is(false));
+	}
+
+	@Test
+	public void testHasNextReturnsTrueWhenInputHasRemainingItems() {
+		int windowSize = 3;
+		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2, 3);
+		WindowIterator<Object> windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
+
+		boolean hasNext = windowIterator.hasNext();
+
+		assertThat(hasNext, is(true));
 	}
 }
