@@ -31,7 +31,8 @@ import org.junit.runners.Suite;
 	HaltonSequenceTest.class,
 	GeometryUtilsTest.class,
 	GraphicsUtilsTest.class,
-	SortedListTest.class
+	SortedListTest.class,
+	WindowIteratorTest.class
 })
 public class UtilTests {
 }
