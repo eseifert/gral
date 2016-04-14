@@ -248,7 +248,7 @@ public abstract class MathUtils {
 	 * @param a Unsorted array
 	 * @param lower Starting index
 	 * @param upper End index
-	 * @param i Smallness rank of value to search
+	 * @param i Smallness rank of value to search starting at 1
 	 * @return Index of the element that is the <i>i</i>th smallest in array
 	 * <i>a</i>
 	 */
@@ -260,14 +260,14 @@ public abstract class MathUtils {
 		if (lower == upper) {
 			return lower;
 		}
-		int q = randomizedPartition(a, lower, upper);
-		int k = q - lower + 1;
-		if (i == k) {
-			return q;
-		} else if (i < k) {
-			return randomizedSelect(a, lower, q - 1, i);
+		int pivot = randomizedPartition(a, lower, upper);
+		int lowerPartitionElementCount = pivot - lower + 1;
+		if (i == lowerPartitionElementCount) {
+			return pivot;
+		} else if (i < lowerPartitionElementCount) {
+			return randomizedSelect(a, lower, pivot - 1, i);
 		} else {
-			return randomizedSelect(a, q + 1, upper, i - k);
+			return randomizedSelect(a, pivot + 1, upper, i - lowerPartitionElementCount);
 		}
 	}
 
