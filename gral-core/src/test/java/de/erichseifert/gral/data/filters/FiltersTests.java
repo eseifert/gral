@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+	MedianFilterTest.class,
 	KernelTest.class,
 	ConvolutionTest.class,
 	MedianTest.class,
