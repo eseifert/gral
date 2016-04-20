@@ -21,15 +21,14 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.erichseifert.gral.util.MathUtils;
+import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.util.WindowIterator;
 
-public class MedianFilter<T extends Number> implements Iterable<Double> {
+public class MedianFilter<T extends Number & Comparable<T>> implements Iterable<Double> {
 	private final List<Double> filtered;
 	private final Iterator<List<T>> windowIterator;
 
@@ -40,37 +39,10 @@ public class MedianFilter<T extends Number> implements Iterable<Double> {
 
 		while (windowIterator.hasNext()) {
 			List<T> window = windowIterator.next();
-			double median = median(window);
+			Statistics windowStatistics = new Statistics(window);
+			double median = windowStatistics.get(Statistics.MEDIAN);
 			filtered.add(median);
 		}
-	}
-
-	/**
-	 * Calculates the median for the specified values in the window.
-	 * @param w List of values the median will be calculated for.
-	 * @return Median.
-	 */
-	private double median(List<T> w) {
-		if (w.size() == 1) {
-			return w.get(0).doubleValue();
-		}
-		List<Double> window = new ArrayList<Double>(w.size());
-		for (T v : w) {
-			if (!MathUtils.isCalculatable(v)) {
-				return Double.NaN;
-			}
-			window.add(v.doubleValue());
-		}
-		int medianIndex = MathUtils.randomizedSelect(
-				window, 0, window.size() - 1, window.size()/2 + 1);
-		double median = window.get(medianIndex);
-		if ((window.size() & 1) == 0) {
-			int medianUpperIndex = MathUtils.randomizedSelect(
-					window, 0, window.size() - 1, window.size()/2 + 1);
-			double medianUpper = window.get(medianUpperIndex);
-			median = (median + medianUpper)/2.0;
-		}
-		return median;
 	}
 
 	@Override
