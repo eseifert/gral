@@ -22,9 +22,11 @@
 package de.erichseifert.gral.data.filters;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 
 public class MedianFilterTest {
@@ -36,5 +38,16 @@ public class MedianFilterTest {
 		MedianFilter<Integer> medianFilter = new MedianFilter<Integer>(data, windowsSize);
 
 		assertThat(medianFilter, hasItems(5.0, 6.0, 5.0, 6.0));
+	}
+
+	@Test
+	public void testIteratorIsEmptyWhenFilterWindowLargerThanDataToBeFiltered() {
+		List<Integer> data = Arrays.asList(3, 8, 5, 6, 4, 9);
+		int windowSize = data.size() + 1;
+		MedianFilter<Integer> medianFilter = new MedianFilter<Integer>(data, windowSize);
+
+		boolean hasNext = medianFilter.iterator().hasNext();
+
+		assertThat(hasNext, is(false));
 	}
 }
