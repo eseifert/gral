@@ -21,32 +21,5 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.util.WindowIterator;
-
-public class MedianFilter<T extends Number & Comparable<T>> implements Filter<T> {
-	private final List<Double> filtered;
-	private final Iterator<List<T>> windowIterator;
-
-	public MedianFilter(Iterable<T> data, int windowSize) {
-		filtered = new LinkedList<Double>();
-
-		windowIterator = new WindowIterator<T>(data.iterator(), windowSize);
-
-		while (windowIterator.hasNext()) {
-			List<T> window = windowIterator.next();
-			Statistics windowStatistics = new Statistics(window);
-			double median = windowStatistics.get(Statistics.MEDIAN);
-			filtered.add(median);
-		}
-	}
-
-	@Override
-	public Iterator<Double> iterator() {
-		return filtered.iterator();
-	}
+public interface Filter<T extends Comparable<T>> extends Iterable<Double> {
 }

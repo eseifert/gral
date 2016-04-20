@@ -27,7 +27,7 @@ import java.util.List;
 
 import de.erichseifert.gral.util.WindowIterator;
 
-public class ConvolutionFilter<T extends Number & Comparable<T>> implements Iterable<Double> {
+public class ConvolutionFilter<T extends Number & Comparable<T>> implements Filter<T> {
 	private final List<Double> filtered;
 	private final Iterator<List<T>> windowIterator;
 
