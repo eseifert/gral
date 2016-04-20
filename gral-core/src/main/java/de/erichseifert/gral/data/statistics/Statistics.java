@@ -85,7 +85,7 @@ public class Statistics {
 	public static final String QUARTILE_3 = "quantile75"; //$NON-NLS-1$
 
 	/** Data values that are used to build statistical aggregates. */
-	private final Iterable<Comparable<?>> data;
+	private final Iterable<? extends Comparable<?>> data;
 	/** Table statistics stored by key. */
 	private final Map<String, Double> statistics;
 
@@ -93,7 +93,7 @@ public class Statistics {
 	 * Initializes a new object with the specified data values.
 	 * @param data Data to be analyzed.
 	 */
-	public Statistics(Iterable<Comparable<?>> data) {
+	public Statistics(Iterable<? extends Comparable<?>> data) {
 		statistics = new HashMap<String, Double>();
 		this.data = data;
 	}
@@ -108,7 +108,7 @@ public class Statistics {
 	 * @param data Data values used to calculate statistics
 	 * @param stats A {@code Map} that should store the new statistics.
 	 */
-	private void createBasicStats(Iterable<Comparable<?>> data, Map<String, Double> stats) {
+	private void createBasicStats(Iterable<? extends Comparable<?>> data, Map<String, Double> stats) {
 		double n = 0.0;
 		double sum = 0.0;
 		double sum2 = 0.0;
@@ -180,7 +180,7 @@ public class Statistics {
 	 * @param stats {@code Map} for storing results
 	 * @see de.erichseifert.gral.util.MathUtils#quantile(java.util.List,double)
 	 */
-	private void createDistributionStats(Iterable<Comparable<?>> data, Map<String, Double> stats) {
+	private void createDistributionStats(Iterable<? extends Comparable<?>> data, Map<String, Double> stats) {
 		// Create sorted list of data
 		List<Double> values = new SortedList<Double>();
 		for (Comparable<?> cell : data) {
