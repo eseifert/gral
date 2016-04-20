@@ -145,4 +145,13 @@ public class RecordTest {
 
 		assertThat(numeric, is(false));
 	}
+
+	@Test
+	public void testToStringReturnsReadableTuple() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+
+		String string = record.toString();
+
+		assertThat(string, is("("+"-3.0, "+"1, "+"SomeString, "+"null"+")"));
+	}
 }

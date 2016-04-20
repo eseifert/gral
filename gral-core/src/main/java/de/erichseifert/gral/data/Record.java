@@ -68,4 +68,18 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 		Record record = (Record) obj;
 		return size() == record.size() && Arrays.equals(this.values, record.values);
 	}
+
+	@Override
+	public String toString() {
+		String representation = "(";
+		for (int elementIndex = 0; elementIndex < values.length; elementIndex++) {
+			Comparable element = values[elementIndex];
+			representation += element;
+			if (elementIndex != values.length - 1) {
+				representation += ", ";
+			}
+		}
+		representation += ")";
+		return representation;
+	}
 }
