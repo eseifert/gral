@@ -29,7 +29,7 @@ import java.util.Iterator;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.data.Record;
 
 /**
  * Filter2D to change the size of equally spaced data sources. All columns of the
@@ -121,7 +121,7 @@ public class Resize extends Filter2D {
 
 			double step = original.getColumnCount() / (double) getColumnCount();
 			for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
-				Row rowData = data.getRow(rowIndex);
+				Record rowData = data.getRecord(rowIndex);
 				for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 					double start = colIndex*step;
 					double end   = (colIndex + 1)*step;
@@ -133,10 +133,11 @@ public class Resize extends Filter2D {
 		}
 
 		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
-			Row row = data.getRow(rowIndex);
-			Comparable<?>[] rowData = row.toArray(null);
-			Double[] rowValues = new Double[rowData.length];
-			System.arraycopy(rowData, 0, rowValues, 0, rowValues.length);
+			Record row = data.getRecord(rowIndex);
+			Double[] rowValues = new Double[row.size()];
+			for (int columnIndex = 0; columnIndex < rowValues.length; columnIndex++) {
+				rowValues[columnIndex] = row.get(columnIndex);
+			}
 			add(rowValues);
 		}
 	}
