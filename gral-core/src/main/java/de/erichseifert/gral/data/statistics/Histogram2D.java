@@ -24,9 +24,13 @@ package de.erichseifert.gral.data.statistics;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Orientation;
 
@@ -140,11 +144,11 @@ public class Histogram2D extends AbstractHistogram2D {
 			long colMin = Long.MAX_VALUE;
 			long colMax = Long.MIN_VALUE;
 
-			DataAccessor data;
+			Iterable<? extends Comparable<?>> data;
 			if (orientation == Orientation.VERTICAL) {
 				data = getData().getColumn(breakIndex);
 			} else {
-				data = getData().getRow(breakIndex);
+				data = getData().getRecord(breakIndex);
 			}
 
 			// Iterate over data cells
