@@ -24,9 +24,9 @@ package de.erichseifert.gral.data.filters;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import de.erichseifert.gral.data.Column;
-import de.erichseifert.gral.data.DataAccessor;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -154,6 +154,13 @@ public class Resize extends Filter2D {
 		}
 	}
 
+	private static <T> Iterator<T> advance(Iterator<T> iterator, int elementCount) {
+		for (int elementIndex = 0; elementIndex < elementCount; elementIndex++) {
+			iterator.next();
+		}
+		return iterator;
+	}
+
 	/**
 	 * Calculates the arithmetic mean of all values between start and end.
 	 * @param data Values.
@@ -161,15 +168,17 @@ public class Resize extends Filter2D {
 	 * @param end End index.
 	 * @return Arithmetic mean.
 	 */
-	private static double average(DataAccessor data, double start, double end) {
+	private static double average(Iterable<? extends Comparable<?>> data, double start, double end) {
 		int startFloor = (int) Math.floor(start);
 		int startCeil  = (int) Math.ceil(start);
 		int endFloor = (int) Math.floor(end);
 		int endCeil = (int) Math.ceil(end);
 
 		double sum = 0.0;
+		Iterator<? extends Comparable<?>> dataIterator = data.iterator();
+		advance(dataIterator, startFloor);
 		for (int i = startFloor; i < endCeil; i++) {
-			Number number = (Number) data.get(i);
+			Number number = (Number) dataIterator.next();
 			double val = number.doubleValue();
 			if (i == startFloor && startCeil != start) {
 				sum += (startCeil - start) * val;
