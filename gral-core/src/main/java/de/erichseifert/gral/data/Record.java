@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.data;
 
+import static java.util.Arrays.copyOf;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +37,7 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 	}
 
 	public Record(Comparable<?>... values) {
-		this.values = Arrays.copyOf(values, values.length);
+		this.values = copyOf(values, values.length);
 	}
 
 	public <T extends Comparable<?>> T get(int index) {
@@ -81,5 +83,14 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 		}
 		representation += ")";
 		return representation;
+	}
+
+	public Record insert(Comparable<?> value, int position) {
+		List<Comparable<?>> recordCopyAsList = new ArrayList<Comparable<?>>(values.length + 1);
+		for (Comparable<?> v : values) {
+			recordCopyAsList.add(v);
+		}
+		recordCopyAsList.add(position, value);
+		return new Record(recordCopyAsList);
 	}
 }

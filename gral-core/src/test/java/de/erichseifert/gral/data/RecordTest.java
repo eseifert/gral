@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.data;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -153,5 +154,28 @@ public class RecordTest {
 		String string = record.toString();
 
 		assertThat(string, is("("+"-3.0, "+"1, "+"SomeString, "+"null"+")"));
+	}
+
+	@Test
+	public void testInsertDoesNotModifyRecord() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+		Record identicalRecord = new Record(-3.0, 1, "SomeString", null);
+		Comparable<?> someComparable = 5;
+		int somePosition = 2;
+
+		record.insert(someComparable, somePosition);
+
+		assertThat(record, is(identicalRecord));
+	}
+
+	@Test
+	public void testInsertAddsElementAtTheSpecifiedPosition() {
+		Record record = new Record(-3.0, 1, "SomeString", null);
+		Comparable<?> someComparable = 5;
+		int somePosition = 2;
+
+		Record newRecord = record.insert(someComparable, somePosition);
+
+		assertThat(newRecord, hasItems(-3.0, 1, someComparable, "SomeString", null));
 	}
 }
