@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -31,12 +32,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
@@ -92,6 +93,17 @@ public class PiePlotTest {
 			fail();
 		} catch (IllegalArgumentException e) {
 		}
+	}
+
+	@Test
+	public void testCreatePieDataDoublesNumericColumns() {
+		// TODO: Mock DataTable
+		DataSource data = new DataTable(String.class, Double.class, Integer.class, String.class);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		assertArrayEquals(new Class[] {String.class, Double.class, Double.class, Integer.class,
+				Integer.class, String.class}, pieData.getColumnTypes());
 	}
 
 	@Test

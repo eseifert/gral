@@ -21,6 +21,8 @@
  */
 package de.erichseifert.gral.plots;
 
+import static java.util.Arrays.asList;
+
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -48,11 +50,14 @@ import java.util.Map;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Label;
+import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.navigation.AbstractNavigator;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
@@ -68,8 +73,6 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Insets2D;
-import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -315,8 +318,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				}
 				AxisRenderer axisRenderer = plot.getAxisRenderer(axisNames[0]);
 
-				List<Axis> axes = Arrays.asList(axis);
-				List<AxisRenderer> axisRenderers = Arrays.asList(axisRenderer);
+				List<Axis> axes = asList(axis);
+				List<AxisRenderer> axisRenderers = asList(axisRenderer);
 				// Draw graphics
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
@@ -817,8 +820,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					}
 
 					PointData pointData = new PointData(
-						Arrays.asList((Axis) null),
-						Arrays.asList((AxisRenderer) null),
+						asList((Axis) null),
+						asList((AxisRenderer) null),
 						row, 0);
 
 					Drawable drawable = pointRenderer.getPoint(pointData, shape);
@@ -1021,6 +1024,22 @@ public class PiePlot extends AbstractPlot implements Navigable {
             dataSlices.add(slice);
             start += span;
         }
+	}
+
+	public static DataSource createPieData(DataSource data) {
+		List<Class<? extends Comparable<?>>> originalColumnTypes = Arrays.asList(data.getColumnTypes());
+
+		List<Class<? extends Comparable<?>>> pieDataColumnTypes = new ArrayList<Class<? extends Comparable<?>>>();
+		for (Class<? extends Comparable<?>> columnType : originalColumnTypes) {
+			pieDataColumnTypes.add(columnType);
+			if (Number.class.isAssignableFrom(columnType)) {
+				pieDataColumnTypes.add(columnType);
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		DataTable pieData = new DataTable(pieDataColumnTypes.toArray(new Class[0]));
+		return pieData;
 	}
 
 	/**
