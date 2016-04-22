@@ -153,6 +153,14 @@ public class DataTableTest {
 		assertThat(table.getRowCount(), is(1));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testAddRecordThrowsExceptionIfColumnCountDoesNotMatch() {
+		DataTable table = new DataTable(String.class, Double.class);
+		Record record = new Record("1");
+
+		table.add(record);
+	}
+
 	@Test
 	public void testSet() {
 		int sizeBefore = table.getRowCount();

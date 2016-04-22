@@ -194,6 +194,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	public void add(Record row) {
+		if (row.size() != getColumnCount()) {
+			throw new IllegalArgumentException("Invalid element count in Record to be added. " +
+					"Expected: "+getColumnCount()+", got: "+row.size());
+		}
 		rows.add(row);
 	}
 
