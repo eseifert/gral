@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,6 +43,7 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
+import org.hamcrest.CoreMatchers;
 
 public class PiePlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -104,6 +106,18 @@ public class PiePlotTest {
 
 		assertArrayEquals(new Class[] {String.class, Double.class, Double.class, Integer.class,
 				Integer.class, String.class}, pieData.getColumnTypes());
+	}
+
+	@Test
+	public void testCreatePieDataLeavesNonNumericContentsUnchanged() {
+		DataTable data = new DataTable(String.class, Double.class);
+		data.add("1", 1.0);
+		data.add("2", 2.0);
+		data.add("3", 3.0);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		assertThat(pieData.getColumn(0), CoreMatchers.<Comparable<?>>hasItems("1", "2", "3"));
 	}
 
 	@Test

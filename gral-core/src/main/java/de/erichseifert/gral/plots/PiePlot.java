@@ -51,6 +51,7 @@ import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.Record;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -1039,6 +1040,20 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@SuppressWarnings("unchecked")
 		DataTable pieData = new DataTable(pieDataColumnTypes.toArray(new Class[0]));
+		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
+			Record record = data.getRecord(rowIndex);
+			List<Comparable<?>> pieRecordElements = new LinkedList<Comparable<?>>();
+			for (int elementIndex = 0; elementIndex < record.size(); elementIndex++) {
+				Comparable<?> element = record.get(elementIndex);
+				pieRecordElements.add(element);
+				if (element instanceof Number) {
+					pieRecordElements.add(element);
+				}
+			}
+			Record pieRecord = new Record(pieRecordElements);
+			pieData.add(pieRecord);
+		}
+
 		return pieData;
 	}
 
