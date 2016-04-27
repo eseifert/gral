@@ -68,4 +68,8 @@ public class Column extends DataAccessor {
 	public boolean isNumeric() {
 		return getSource().isColumnNumeric(getIndex());
 	}
+
+	public Class<? extends Comparable<?>> getType() {
+		return getSource().getColumnTypes()[getIndex()];
+	}
 }

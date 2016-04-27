@@ -26,7 +26,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -106,5 +105,14 @@ public class ColumnTest {
 		assertEquals(table.getColumnCount(), deserialized.getSource().getColumnCount());
 		assertEquals(table.getRowCount(), deserialized.getSource().getRowCount());
 		assertEquals(1, deserialized.getIndex());
+	}
+
+	@Test
+	public void testGetTypeReturnsDataType() {
+		Column column = new Column(table, 0);
+
+		Class<? extends Comparable<?>> columnType = column.getType();
+
+		assertEquals(Integer.class, columnType);
 	}
 }
