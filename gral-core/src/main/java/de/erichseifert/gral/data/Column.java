@@ -66,7 +66,7 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 	 * @return {@code true} if this column is numeric, otherwise {@code false}.
 	 */
 	public boolean isNumeric() {
-		return getSource().isColumnNumeric(getIndex());
+		return Number.class.isAssignableFrom(getType());
 	}
 
 	public Class<? extends Comparable<?>> getType() {
