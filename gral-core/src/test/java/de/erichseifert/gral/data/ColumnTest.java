@@ -21,12 +21,15 @@
  */
 package de.erichseifert.gral.data;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,6 +46,15 @@ public class ColumnTest {
 	public static void setUpBeforeClass() {
 		col1 = new Column<Integer>(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
 		col2 = new Column<Integer>(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
+	}
+
+	@Test
+	public void testColumnFromIterableContainsValues() {
+		Iterable<Integer> data = Arrays.asList(1, 2, 3, 4);
+
+		Column<Integer> column = new Column<Integer>(Integer.class, data);
+
+		assertThat(column, hasItems(1, 2, 3, 4));
 	}
 
 	@Test

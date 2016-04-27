@@ -22,6 +22,7 @@
 package de.erichseifert.gral.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -50,6 +51,14 @@ public class Column<T extends Comparable<T>> implements Iterable<T>, Serializabl
 	public Column(Class<T> dataType, T... data) {
 		this.dataType = dataType;
 		this.data = Arrays.asList(data);
+	}
+
+	public Column(Class<T> dataType, Iterable<T> data) {
+		this.dataType = dataType;
+		this.data = new ArrayList<T>();
+		for (T item : data) {
+			this.data.add(item);
+		}
 	}
 
 	public Comparable<?> get(int row) {
