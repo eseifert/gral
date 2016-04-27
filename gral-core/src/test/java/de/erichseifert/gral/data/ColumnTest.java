@@ -24,6 +24,7 @@ package de.erichseifert.gral.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import org.junit.BeforeClass;
@@ -70,8 +71,13 @@ public class ColumnTest {
 	}
 
 	@Test
-	public void testEquality() {
-		// TODO Test column equality
+	public void testColumnsWithIdenticalTypesAndValuesAreEqual() {
+		Column col1 = new Column(Integer.class, 1, 2, 3);
+		Column col2 = new Column(Integer.class, 1, 2, 3);
+
+		boolean equal = col1.equals(col2);
+
+		assertTrue(equal);
 	}
 
 	@Test

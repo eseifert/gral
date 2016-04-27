@@ -82,4 +82,9 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 	public int hashCode() {
 		return dataType.hashCode() ^ data.hashCode();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return true;
+	}
 }
