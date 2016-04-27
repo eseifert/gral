@@ -35,19 +35,19 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 public class ColumnTest {
 	private static final double DELTA = TestUtils.DELTA;
-	private static Column col1;
-	private static Column col2;
+	private static Column<Integer> col1;
+	private static Column<Integer> col2;
 
 	@BeforeClass
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
-		col1 = new Column(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
-		col2 = new Column(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
+		col1 = new Column<Integer>(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
+		col2 = new Column<Integer>(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
 	}
 
 	@Test
 	public void testSizeReturnsTheNumberOfElements() {
-		Column column = new Column(Integer.class, 1, 2, 3, 4);
+		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
 
 		int size = column.size();
 
@@ -56,7 +56,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetReturnsValueAtSpecifiedElement() {
-		Column column = new Column(Integer.class, 1, 2, 3, 4);
+		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
 
 		int value = (Integer) column.get(1);
 
@@ -65,15 +65,15 @@ public class ColumnTest {
 
 	@Test
 	public void testGetOnEmptyColumnReturnsNull() {
-		Column col = new Column(Integer.class);
+		Column<Integer> col = new Column<Integer>(Integer.class);
 
 		assertEquals(null, col.get(1));
 	}
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndValuesAreEqual() {
-		Column col1 = new Column(Integer.class, 1, 2, 3);
-		Column col2 = new Column(Integer.class, 1, 2, 3);
+		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> col2 = new Column<Integer>(Integer.class, 1, 2, 3);
 
 		boolean equal = col1.equals(col2);
 
@@ -82,7 +82,7 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnDoesNotEqualANonColumnObject() {
-		Column column = new Column(Integer.class, 1, 2, 3);
+		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3);
 		Object someObject = new Object();
 
 		boolean equal = column.equals(someObject);
@@ -92,8 +92,9 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithDifferentTypesAndIdenticalValuesAreNotEqual() {
-		Column col1 = new Column(Integer.class, 1, 2, 3);
-		Column col2 = new Column(Long.class, 1, 2, 3);
+		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		@SuppressWarnings("unchecked")
+		Column<?> col2 = new Column(Long.class, 1, 2, 3);
 
 		boolean equal = col1.equals(col2);
 
@@ -102,8 +103,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndDifferentValuesAreNotEqual() {
-		Column col1 = new Column(Integer.class, 1, 2, 3);
-		Column col2 = new Column(Integer.class, 3, 2, 1);
+		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> col2 = new Column<Integer>(Integer.class, 3, 2, 1);
 
 		boolean equal = col1.equals(col2);
 
@@ -112,8 +113,8 @@ public class ColumnTest {
 
 	@Test
 	public void testToStringIsIdenticalForIdenticalColumns() {
-		Column col1 = new Column(Integer.class, 1, 2, 3);
-		Column col2 = new Column(Integer.class, 1, 2, 3);
+		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> col2 = new Column<Integer>(Integer.class, 1, 2, 3);
 		assertEquals(col1.toString(), col2.toString());
 	}
 
@@ -137,7 +138,7 @@ public class ColumnTest {
 
 	@Test
 	public void testSerializationPreservesSize() throws IOException, ClassNotFoundException {
-		DataAccessor original = new Column(Integer.class, 1, 2, 3);
+		DataAccessor original = new Column<Integer>(Integer.class, 1, 2, 3);
 		DataAccessor deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.size(), deserialized.size());
@@ -145,7 +146,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetTypeReturnsDataType() {
-		Column column = col1;
+		Column<Integer> column = col1;
 
 		Class<? extends Comparable<?>> columnType = column.getType();
 
