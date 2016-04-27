@@ -41,7 +41,6 @@ import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +50,6 @@ import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.data.Record;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -1028,32 +1026,16 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	public static DataSource createPieData(DataSource data) {
-		List<Class<? extends Comparable<?>>> originalColumnTypes = Arrays.asList(data.getColumnTypes());
-
-		List<Class<? extends Comparable<?>>> pieDataColumnTypes = new ArrayList<Class<? extends Comparable<?>>>();
-		for (Class<? extends Comparable<?>> columnType : originalColumnTypes) {
-			pieDataColumnTypes.add(columnType);
-			if (Number.class.isAssignableFrom(columnType)) {
-				pieDataColumnTypes.add(columnType);
+		List<Column> columns = new LinkedList<Column>();
+		for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
+			Column column = data.getColumn(colIndex);
+			columns.add(column);
+			if (Number.class.isAssignableFrom(column.getType())) {
+				columns.add(column);
 			}
 		}
 
-		@SuppressWarnings("unchecked")
-		DataTable pieData = new DataTable(pieDataColumnTypes.toArray(new Class[0]));
-		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
-			Record record = data.getRecord(rowIndex);
-			List<Comparable<?>> pieRecordElements = new LinkedList<Comparable<?>>();
-			for (int elementIndex = 0; elementIndex < record.size(); elementIndex++) {
-				Comparable<?> element = record.get(elementIndex);
-				pieRecordElements.add(element);
-				if (element instanceof Number) {
-					pieRecordElements.add(element);
-				}
-			}
-			Record pieRecord = new Record(pieRecordElements);
-			pieData.add(pieRecord);
-		}
-
+		DataTable pieData = new DataTable(columns.toArray(new Column[0]));
 		return pieData;
 	}
 
