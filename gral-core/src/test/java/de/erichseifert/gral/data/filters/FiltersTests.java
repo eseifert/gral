@@ -31,7 +31,8 @@ import org.junit.runners.Suite;
 	KernelTest.class,
 	ConvolutionTest.class,
 	MedianTest.class,
-	ResizeTest.class
+	ResizeTest.class,
+	AccumulationTest.class
 })
 public class FiltersTests {
 }
