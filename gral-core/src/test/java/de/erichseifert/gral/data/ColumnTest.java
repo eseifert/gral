@@ -35,10 +35,15 @@ import de.erichseifert.gral.data.statistics.Statistics;
 public class ColumnTest {
 	private static final double DELTA = TestUtils.DELTA;
 	private static DataTable table;
+	private static Column col1;
+	private static Column col2;
 
 	@BeforeClass
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
+		col1 = new Column(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
+		col2 = new Column(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
+
 		table = new DataTable(Integer.class, Integer.class);
 		table.add(1, 1); // 0
 		table.add(2, 3); // 1
@@ -52,26 +57,22 @@ public class ColumnTest {
 
 	@Test
 	public void testCreation() {
-		Column col1 = new Column(table, 0);
-		assertEquals(table, col1.getSource());
-		assertEquals(0, col1.getIndex());
 		assertEquals(table.getRowCount(), col1.size());
 
-		Column col2 = new Column(table, 1);
-		assertEquals(table, col2.getSource());
-		assertEquals(1, col2.getIndex());
 		assertEquals(table.getRowCount(), col2.size());
 	}
 
 	@Test
 	public void testGet() {
-		Column col1 = new Column(table, 0);
 		assertEquals(table.get(0, 0), col1.get(0));
 		assertEquals(table.get(0, 1), col1.get(1));
+	}
 
-		Column col2 = new Column(null, 1);
-		assertEquals(null, col2.get(0));
-		assertEquals(null, col2.get(1));
+	@Test
+	public void testGetOnEmptyColumnReturnsNull() {
+		Column col = new Column(Integer.class);
+
+		assertEquals(null, col.get(1));
 	}
 
 	@Test
@@ -80,36 +81,41 @@ public class ColumnTest {
 	}
 
 	@Test
-	public void testToString() {
-		Column col1 = new Column(table, 1);
-		Column col2 = new Column(table, 1);
-		assertNotNull(col1.toString());
-		assertFalse(col1.toString().isEmpty());
+	public void testToStringIsIdenticalForIdenticalColumns() {
+		Column col1 = new Column(Integer.class, 1, 2, 3);
+		Column col2 = new Column(Integer.class, 1, 2, 3);
 		assertEquals(col1.toString(), col2.toString());
 	}
 
 	@Test
-	public void testStatistics() {
-		Column col1 = new Column(table, 1);
-		assertEquals( 8.0, col1.getStatistics(Statistics.N),   DELTA);
-		assertEquals( 1.0, col1.getStatistics(Statistics.MIN), DELTA);
-		assertEquals(11.0, col1.getStatistics(Statistics.MAX), DELTA);
-		assertEquals(44.0, col1.getStatistics(Statistics.SUM), DELTA);
+	public void testToStringIsNotNull() {
+		assertNotNull(col1.toString());
 	}
 
 	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		DataAccessor original = new Column(table, 1);
+	public void testToStringIsNotEmpty() {
+		assertFalse(col1.toString().isEmpty());
+	}
+
+	@Test
+	public void testStatistics() {
+		assertEquals( 8.0, col2.getStatistics(Statistics.N),   DELTA);
+		assertEquals( 1.0, col2.getStatistics(Statistics.MIN), DELTA);
+		assertEquals(11.0, col2.getStatistics(Statistics.MAX), DELTA);
+		assertEquals(44.0, col2.getStatistics(Statistics.SUM), DELTA);
+	}
+
+	@Test
+	public void testSerializationPreservesSize() throws IOException, ClassNotFoundException {
+		DataAccessor original = new Column(Integer.class, 1, 2, 3);
 		DataAccessor deserialized = TestUtils.serializeAndDeserialize(original);
 
-		assertEquals(table.getColumnCount(), deserialized.getSource().getColumnCount());
-		assertEquals(table.getRowCount(), deserialized.getSource().getRowCount());
-		assertEquals(1, deserialized.getIndex());
+		assertEquals(original.size(), deserialized.size());
 	}
 
 	@Test
 	public void testGetTypeReturnsDataType() {
-		Column column = new Column(table, 0);
+		Column column = col1;
 
 		Class<? extends Comparable<?>> columnType = column.getType();
 

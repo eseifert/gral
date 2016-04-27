@@ -247,7 +247,13 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @return the specified column of the data source
 	 */
 	public Column getColumn(int col) {
-		return new Column(this, col);
+		Class<? extends Comparable<?>> columnType = getColumnTypes()[col];
+		List<Comparable<?>> columnData = new LinkedList<Comparable<?>>();
+		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
+			Record record = getRecord(rowIndex);
+			columnData.add(record.get(col));
+		}
+		return new Column(columnType, columnData.toArray(new Comparable[0]));
 	}
 
 	@Override

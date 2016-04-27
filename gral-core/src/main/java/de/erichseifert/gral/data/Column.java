@@ -21,6 +21,11 @@
  */
 package de.erichseifert.gral.data;
 
+import java.util.Arrays;
+import java.util.List;
+
+import de.erichseifert.gral.data.statistics.Statistics;
+
 /**
  * <p>Class for accessing a specific column of a data source. The data of the
  * column can be accessed using the {@code get(int)} method.</p>
@@ -37,28 +42,23 @@ public class Column extends DataAccessor {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 7380420622890027262L;
 
-	/**
-	 * Initializes a new instance with the specified data source and column
-	 * index.
-	 * @param source Data source.
-	 * @param col Column index.
-	 */
-	public Column(DataSource source, int col) {
-		super(source, col);
+	private final Class<? extends Comparable<?>> dataType;
+	private final List<? extends Comparable<?>> data;
+
+	public Column(Class<? extends Comparable<?>> dataType, Comparable<?>... data) {
+		super(null, -1);
+		this.dataType = dataType;
+		this.data = Arrays.asList(data);
 	}
 
 	@Override
 	public Comparable<?> get(int row) {
-		DataSource source = getSource();
-		if (source == null) {
-			return null;
-		}
-		return source.get(getIndex(), row);
+		return row > data.size() ? null : data.get(row);
 	}
 
 	@Override
 	public int size() {
-		return getSource().getRowCount();
+		return data.size();
 	}
 
 	/**
@@ -70,6 +70,16 @@ public class Column extends DataAccessor {
 	}
 
 	public Class<? extends Comparable<?>> getType() {
-		return getSource().getColumnTypes()[getIndex()];
+		return dataType;
+	}
+
+	@Override
+	public double getStatistics(String key) {
+		return new Statistics(data).get(key);
+	}
+
+	@Override
+	public int hashCode() {
+		return dataType.hashCode() ^ data.hashCode();
 	}
 }
