@@ -88,6 +88,7 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 		if (!(obj instanceof Column)) {
 			return false;
 		}
-		return true;
+		Column<?> column = (Column<?>) obj;
+		return getType().equals(column.getType());
 	}
 }

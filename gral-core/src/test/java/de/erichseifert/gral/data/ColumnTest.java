@@ -91,6 +91,16 @@ public class ColumnTest {
 	}
 
 	@Test
+	public void testColumnsWithDifferentTypesAndIdenticalValuesAreNotEqual() {
+		Column col1 = new Column(Integer.class, 1, 2, 3);
+		Column col2 = new Column(Long.class, 1, 2, 3);
+
+		boolean equal = col1.equals(col2);
+
+		assertFalse(equal);
+	}
+
+	@Test
 	public void testToStringIsIdenticalForIdenticalColumns() {
 		Column col1 = new Column(Integer.class, 1, 2, 3);
 		Column col2 = new Column(Integer.class, 1, 2, 3);
