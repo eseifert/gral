@@ -114,9 +114,9 @@ public class DataTableTest {
 		int someRowIndex = 1;
 		// TODO: Properly mock Column objects
 		DataSource firstColumnData = new DummyData(1, someRowIndex + 1, 1.0);
-		Column firstColumn = firstColumnData.getColumn(0);
+		Column<?> firstColumn = firstColumnData.getColumn(0);
 		DataSource secondColumnData = new DummyData(1, someRowIndex + 1, 2.0);
-		Column secondColumn = secondColumnData.getColumn(0);
+		Column<?> secondColumn = secondColumnData.getColumn(0);
 
 		DataSource table = new DataTable(firstColumn, secondColumn);
 

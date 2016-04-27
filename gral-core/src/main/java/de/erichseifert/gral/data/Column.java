@@ -38,14 +38,14 @@ import de.erichseifert.gral.data.statistics.Statistics;
  *
  * @see DataSource
  */
-public class Column extends DataAccessor {
+public class Column<T extends Comparable<T>> extends DataAccessor {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 7380420622890027262L;
 
-	private final Class<? extends Comparable<?>> dataType;
-	private final List<? extends Comparable<?>> data;
+	private final Class<T> dataType;
+	private final List<T> data;
 
-	public Column(Class<? extends Comparable<?>> dataType, Comparable<?>... data) {
+	public Column(Class<T> dataType, T... data) {
 		super(null, -1);
 		this.dataType = dataType;
 		this.data = Arrays.asList(data);

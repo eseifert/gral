@@ -1005,7 +1005,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			return;
 		}
 		final int colIndex = 0;
-		Column col = source.getColumn(colIndex);
+		Column<?> col = source.getColumn(colIndex);
         List<Slice> dataSlices = new ArrayList<Slice>(col.size());
         slices.put(source, dataSlices);
 

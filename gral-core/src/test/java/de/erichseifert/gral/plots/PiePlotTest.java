@@ -37,6 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
@@ -117,7 +118,7 @@ public class PiePlotTest {
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertThat(pieData.getColumn(0), CoreMatchers.<Comparable<?>>hasItems("1", "2", "3"));
+		assertThat((Column<?>) pieData.getColumn(0), CoreMatchers.<Comparable<?>>hasItems("1", "2", "3"));
 	}
 
 	@Test
