@@ -85,6 +85,9 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (!(obj instanceof Column)) {
+			return false;
+		}
 		return true;
 	}
 }

@@ -81,6 +81,16 @@ public class ColumnTest {
 	}
 
 	@Test
+	public void testColumnDoesNotEqualANonColumnObject() {
+		Column column = new Column(Integer.class, 1, 2, 3);
+		Object someObject = new Object();
+
+		boolean equal = column.equals(someObject);
+
+		assertFalse(equal);
+	}
+
+	@Test
 	public void testToStringIsIdenticalForIdenticalColumns() {
 		Column col1 = new Column(Integer.class, 1, 2, 3);
 		Column col2 = new Column(Integer.class, 1, 2, 3);
