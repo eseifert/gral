@@ -118,7 +118,7 @@ public class PiePlotTest {
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertThat((Column<?>) pieData.getColumn(0), CoreMatchers.<Comparable<?>>hasItems("1", "2", "3"));
+		assertThat((Column<String>) pieData.getColumn(0), CoreMatchers.hasItems("1", "2", "3"));
 	}
 
 	@Test

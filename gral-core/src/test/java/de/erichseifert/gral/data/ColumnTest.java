@@ -113,8 +113,8 @@ public class ColumnTest {
 
 	@Test
 	public void testToStringIsIdenticalForIdenticalColumns() {
-		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
-		Column<Integer> col2 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column col1 = new Column(Integer.class, 1, 2, 3);
+		Column col2 = new Column(Integer.class, 1, 2, 3);
 		assertEquals(col1.toString(), col2.toString());
 	}
 
@@ -138,8 +138,8 @@ public class ColumnTest {
 
 	@Test
 	public void testSerializationPreservesSize() throws IOException, ClassNotFoundException {
-		DataAccessor original = new Column<Integer>(Integer.class, 1, 2, 3);
-		DataAccessor deserialized = TestUtils.serializeAndDeserialize(original);
+		Column<Integer> original = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.size(), deserialized.size());
 	}

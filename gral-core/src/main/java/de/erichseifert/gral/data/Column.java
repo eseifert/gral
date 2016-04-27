@@ -21,7 +21,9 @@
  */
 package de.erichseifert.gral.data;
 
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import de.erichseifert.gral.data.statistics.Statistics;
@@ -38,7 +40,7 @@ import de.erichseifert.gral.data.statistics.Statistics;
  *
  * @see DataSource
  */
-public class Column<T extends Comparable<T>> extends DataAccessor {
+public class Column<T extends Comparable<T>> implements Iterable<T>, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 7380420622890027262L;
 
@@ -46,17 +48,14 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 	private final List<T> data;
 
 	public Column(Class<T> dataType, T... data) {
-		super(null, -1);
 		this.dataType = dataType;
 		this.data = Arrays.asList(data);
 	}
 
-	@Override
 	public Comparable<?> get(int row) {
 		return row > data.size() ? null : data.get(row);
 	}
 
-	@Override
 	public int size() {
 		return data.size();
 	}
@@ -73,7 +72,6 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 		return dataType;
 	}
 
-	@Override
 	public double getStatistics(String key) {
 		return new Statistics(data).get(key);
 	}
@@ -90,5 +88,10 @@ public class Column<T extends Comparable<T>> extends DataAccessor {
 		}
 		Column<?> column = (Column<?>) obj;
 		return getType().equals(column.getType()) && data.equals(column.data);
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return data.iterator();
 	}
 }
