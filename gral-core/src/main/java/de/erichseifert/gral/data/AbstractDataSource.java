@@ -111,6 +111,10 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		}
 	}
 
+	public AbstractDataSource() {
+		this(null, new Class[0]);
+	}
+
 	/**
 	 * Initializes a new instance with the specified name, number of columns, and
 	 * column types.
@@ -130,6 +134,17 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 */
 	public AbstractDataSource(Class<? extends Comparable<?>>... types) {
 		this(null, types);
+	}
+
+	public AbstractDataSource(Column... remainingColumns) {
+		Class<? extends Comparable<?>>[] columnTypes = new Class[remainingColumns.length];
+		for (int columnIndex = 0; columnIndex < remainingColumns.length; columnIndex++) {
+			Column column = remainingColumns[columnIndex];
+			columnTypes[columnIndex] = column.getType();
+		}
+		setColumnTypes(columnTypes);
+
+		dataListeners = new LinkedHashSet<DataListener>();
 	}
 
 	/**

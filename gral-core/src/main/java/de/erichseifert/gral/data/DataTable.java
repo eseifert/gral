@@ -81,6 +81,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		}
 	}
 
+	public DataTable() {
+		rows = new ArrayList<Record>();
+	}
+
 	/**
 	 * Initializes a new instance with the specified number of columns and
 	 * column types.
@@ -114,6 +118,24 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		this(source.getColumnTypes());
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
 			add(source.getRecord(rowIndex));
+		}
+	}
+
+	public DataTable(Column... columns) {
+		super(columns);
+		rows = new ArrayList<Record>();
+
+		int maxRowCount = 0;
+		for (Column column : columns) {
+			maxRowCount = Math.max(maxRowCount, column.size());
+		}
+
+		for (int rowIndex = 0; rowIndex < maxRowCount; rowIndex++) {
+			List<Comparable<?>> rowData = new ArrayList<Comparable<?>>(1 + columns.length);
+			for (Column column : columns) {
+				rowData.add(column.get(rowIndex));
+			}
+			rows.add(new Record(rowData));
 		}
 	}
 
