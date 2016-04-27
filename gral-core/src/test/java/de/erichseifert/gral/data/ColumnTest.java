@@ -34,7 +34,6 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 public class ColumnTest {
 	private static final double DELTA = TestUtils.DELTA;
-	private static DataTable table;
 	private static Column col1;
 	private static Column col2;
 
@@ -43,29 +42,24 @@ public class ColumnTest {
 	public static void setUpBeforeClass() {
 		col1 = new Column(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
 		col2 = new Column(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
-
-		table = new DataTable(Integer.class, Integer.class);
-		table.add(1, 1); // 0
-		table.add(2, 3); // 1
-		table.add(3, 2); // 2
-		table.add(4, 6); // 3
-		table.add(5, 4); // 4
-		table.add(6, 8); // 5
-		table.add(7, 9); // 6
-		table.add(8, 11); // 7
 	}
 
 	@Test
-	public void testCreation() {
-		assertEquals(table.getRowCount(), col1.size());
+	public void testSizeReturnsTheNumberOfElements() {
+		Column column = new Column(Integer.class, 1, 2, 3, 4);
 
-		assertEquals(table.getRowCount(), col2.size());
+		int size = column.size();
+
+		assertEquals(4, size);
 	}
 
 	@Test
-	public void testGet() {
-		assertEquals(table.get(0, 0), col1.get(0));
-		assertEquals(table.get(0, 1), col1.get(1));
+	public void testGetReturnsValueAtSpecifiedElement() {
+		Column column = new Column(Integer.class, 1, 2, 3, 4);
+
+		int value = (Integer) column.get(1);
+
+		assertEquals(2, value);
 	}
 
 	@Test
