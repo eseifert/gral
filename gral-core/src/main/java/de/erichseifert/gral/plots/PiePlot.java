@@ -1026,11 +1026,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	public static DataSource createPieData(DataSource data) {
-		List<Column> columns = new LinkedList<Column>();
+		List<Column<?>> columns = new LinkedList<Column<?>>();
 		for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
-			Column column = data.getColumn(colIndex);
+			Column<?> column = data.getColumn(colIndex);
 			columns.add(column);
-			if (Number.class.isAssignableFrom(column.getType())) {
+			if (column.isNumeric()) {
 				columns.add(column);
 			}
 		}
