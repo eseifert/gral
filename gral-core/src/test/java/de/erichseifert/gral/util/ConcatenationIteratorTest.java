@@ -21,7 +21,10 @@
  */
 package de.erichseifert.gral.util;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -50,5 +53,16 @@ public class ConcatenationIteratorTest {
 		boolean hasNext = concatenationIterator.hasNext();
 
 		assertTrue(hasNext);
+	}
+
+	@Test
+	public void testNextAdvancesTheUnderlyingIterator() {
+		Iterator<Object> iterator = Arrays.<Object>asList(1, 2, 3).iterator();
+		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<Object>(iterator);
+
+		Object firstElement = concatenatedIterator.next();
+		Object secondElement = concatenatedIterator.next();
+
+		assertThat(firstElement, is(not(secondElement)));
 	}
 }

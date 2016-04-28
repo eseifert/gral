@@ -23,9 +23,8 @@ package de.erichseifert.gral.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
-public class ConcatenationIterator<T> implements Iterator<List<T>> {
+public class ConcatenationIterator<T> implements Iterator<T> {
 	private final Iterator<T>[] inputIterators;
 
 	public ConcatenationIterator(Iterator<T>... inputIterators) {
@@ -43,8 +42,8 @@ public class ConcatenationIterator<T> implements Iterator<List<T>> {
 	}
 
 	@Override
-	public List<T> next() {
-		return null;
+	public T next() {
+		return inputIterators[0].next();
 	}
 
 	@Override
