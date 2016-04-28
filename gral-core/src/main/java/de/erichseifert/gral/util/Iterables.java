@@ -49,4 +49,8 @@ public abstract class Iterables {
 	public static <T> Iterable<T> concatenate(Iterable<T>... iterables) {
 		return new ConcatenationIterable<T>(Arrays.asList(iterables));
 	}
+
+	public static <T> Iterable<T> take(Iterable<T> iterable, int elementCount) {
+		return iterable;
+	}
 }

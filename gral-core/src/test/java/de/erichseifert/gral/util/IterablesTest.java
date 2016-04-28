@@ -21,6 +21,7 @@
  */
 package de.erichseifert.gral.util;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -38,5 +39,14 @@ public class IterablesTest {
 		Iterable<Object> concatenatedIterable = Iterables.concatenate(someIterable, emptyIterable, anotherIterable);
 
 		assertThat(concatenatedIterable, CoreMatchers.<Object>hasItems(1, 2, 3, 3, 2, 1));
+	}
+
+	@Test
+	public void testTakeReturnsTheFirstNElementsOfAnIterable() {
+		Iterable<Integer> someIterable = Arrays.asList(1, 2, 3, 4, 5);
+
+		Iterable<Integer> firstElements = Iterables.take(someIterable, 3);
+
+		assertThat(firstElements, hasItems(1, 2, 3));
 	}
 }
