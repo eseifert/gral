@@ -43,7 +43,12 @@ public class ConcatenationIterator<T> implements Iterator<T> {
 
 	@Override
 	public T next() {
-		return inputIterators[0].next();
+		for (Iterator<T> inputIterator : inputIterators) {
+			if (inputIterator.hasNext()) {
+				return inputIterator.next();
+			}
+		}
+		return null;
 	}
 
 	@Override

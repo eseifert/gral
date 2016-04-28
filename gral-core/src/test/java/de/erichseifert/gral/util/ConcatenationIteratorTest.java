@@ -31,6 +31,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import org.junit.Test;
 
+import org.hamcrest.CoreMatchers;
+
 public class ConcatenationIteratorTest {
 	@Test
 	public void testHasNextReturnsFalseWhenAllInputIteratorAreEmpty() {
@@ -64,5 +66,17 @@ public class ConcatenationIteratorTest {
 		Object secondElement = concatenatedIterator.next();
 
 		assertThat(firstElement, is(not(secondElement)));
+	}
+
+	@Test
+	public void testNextReturnsTheFirstElementOfTheFirstNonEmptyIterator() {
+		Iterator<Object> emptyIterator = Arrays.asList().iterator();
+		Iterator<Object> nonEmptyIterator = Arrays.<Object>asList(1, 2).iterator();
+		Iterator<Object> anotherNonEmptyIterator = Arrays.<Object>asList(3, 4).iterator();
+		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<Object>(emptyIterator, nonEmptyIterator, anotherNonEmptyIterator);
+
+		Object firstElement = concatenatedIterator.next();
+
+		assertThat(firstElement, CoreMatchers.<Object>is(1));
 	}
 }
