@@ -32,7 +32,8 @@ import org.junit.runners.Suite;
 	GeometryUtilsTest.class,
 	GraphicsUtilsTest.class,
 	SortedListTest.class,
-	WindowIteratorTest.class
+	WindowIteratorTest.class,
+	ConcatenationIteratorTest.class
 })
 public class UtilTests {
 }
