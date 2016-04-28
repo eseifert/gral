@@ -246,7 +246,8 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param col index of the column to return
 	 * @return the specified column of the data source
 	 */
-	public Column getColumn(int col) {
+	@Override
+	public Column<?> getColumn(int col) {
 		Class<? extends Comparable<?>> columnType = getColumnTypes()[col];
 		List<Comparable<?>> columnData = new LinkedList<Comparable<?>>();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {

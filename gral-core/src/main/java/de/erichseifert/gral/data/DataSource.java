@@ -34,7 +34,9 @@ public interface DataSource extends Iterable<Comparable<?>> {
 	 * @param col index of the column to return
 	 * @return the specified column of the data source
 	 */
-	Column getColumn(int col);
+	// It is not possible to use this function with a generic type parameter,
+	// due to broken type inference prior to Java 8.
+	Column<?> getColumn(int col);
 
 	/**
 	 * Returns the data types of all columns.
