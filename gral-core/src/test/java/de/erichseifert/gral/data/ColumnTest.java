@@ -22,6 +22,7 @@
 package de.erichseifert.gral.data;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -76,10 +77,13 @@ public class ColumnTest {
 	}
 
 	@Test
-	public void testGetOnEmptyColumnReturnsNull() {
-		Column<Integer> col = new Column<Integer>(Integer.class);
+	public void testGetWithIndexOutOfColumnSizeReturnsNull() {
+		Column<Integer> col = new Column<Integer>(Integer.class, 1, 2);
+		int colSize = col.size();
 
-		assertEquals(null, col.get(1));
+		Integer elementOutOfRange = (Integer) col.get(colSize);
+
+		assertThat(elementOutOfRange, nullValue());
 	}
 
 	@Test
