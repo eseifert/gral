@@ -1029,8 +1029,12 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		List<Column<?>> columns = new LinkedList<Column<?>>();
 		for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
 			Column<?> column = data.getColumn(colIndex);
-			columns.add(column);
 			if (column.isNumeric()) {
+				Column<Double> sliceStartColumn = new Column<Double>(Double.class, (Column<Double>) column);
+				Column<Double> sliceEndColumn = new Column<Double>(Double.class, (Column<Double>) column);
+				columns.add(sliceStartColumn);
+				columns.add(sliceEndColumn);
+			} else {
 				columns.add(column);
 			}
 		}
