@@ -32,6 +32,7 @@ import de.erichseifert.gral.data.statistics.StatisticsTests;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	// Tests for classes
+	AbstractDataSourceTest.class,
 	DataTableTest.class,
 	DataSeriesTest.class,
 	RowSubsetTest.class,
