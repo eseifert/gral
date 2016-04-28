@@ -21,13 +21,15 @@
  */
 package de.erichseifert.gral.data;
 
-import de.erichseifert.gral.data.statistics.Statistics;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.erichseifert.gral.data.statistics.Statistics;
 
 public class AbstractDataSourceTest {
 	protected class StubAbstractDataSource extends AbstractDataSource {
@@ -40,6 +42,9 @@ public class AbstractDataSourceTest {
 		public StubAbstractDataSource(int colCount, int rowCount) {
 			this.colCount = colCount;
 			this.rowCount = rowCount;
+			Class<? extends Comparable<?>>[] columnTypes = new Class[colCount];
+			Arrays.fill(columnTypes, Comparable.class);
+			setColumnTypes(columnTypes);
 		}
 
 		public StubAbstractDataSource(String name) {
