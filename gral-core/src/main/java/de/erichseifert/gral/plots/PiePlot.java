@@ -1038,8 +1038,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						Arrays.asList(0.0), Iterables.take(accumulatedColumnData, column.size() - 1)
 				));
 				Column<Double> sliceEndColumn = new Column<Double>(Double.class, accumulatedColumnData);
+				Column<Boolean> sliceVisibleColumn = new Column<Boolean>(Boolean.class, (Column<Boolean>) column);
 				columns.add(sliceStartColumn);
 				columns.add(sliceEndColumn);
+				columns.add(sliceVisibleColumn);
 			} else {
 				columns.add(column);
 			}

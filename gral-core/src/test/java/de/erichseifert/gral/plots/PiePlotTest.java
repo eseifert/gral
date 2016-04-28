@@ -99,14 +99,14 @@ public class PiePlotTest {
 	}
 
 	@Test
-	public void testCreatePieDataReplacesNumericColumnsWithTwoDoubleColumns() {
+	public void testCreatePieDataReplacesNumericColumnsWithTwoDoubleAndOneIntegerColumns() {
 		// TODO: Mock DataTable
 		DataSource data = new DataTable(String.class, Double.class, Integer.class, String.class);
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertArrayEquals(new Class[] {String.class, Double.class, Double.class, Double.class,
-				Double.class, String.class}, pieData.getColumnTypes());
+		assertArrayEquals(new Class[] {String.class, Double.class, Double.class, Boolean.class,
+				Double.class, Double.class, Boolean.class, String.class}, pieData.getColumnTypes());
 	}
 
 	@Test
