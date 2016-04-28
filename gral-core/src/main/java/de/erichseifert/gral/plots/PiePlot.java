@@ -41,6 +41,7 @@ import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +52,7 @@ import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.data.filters.Accumulation;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
@@ -72,6 +74,7 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
+import de.erichseifert.gral.util.Iterables;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -1030,8 +1033,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
 			Column<?> column = data.getColumn(colIndex);
 			if (column.isNumeric()) {
-				Column<Double> sliceStartColumn = new Column<Double>(Double.class, (Column<Double>) column);
-				Column<Double> sliceEndColumn = new Column<Double>(Double.class, (Column<Double>) column);
+				Iterable<Double> accumulatedColumnData = new Accumulation(column);
+				Column<Double> sliceStartColumn = new Column<Double>(Double.class, Iterables.concatenate(
+						Arrays.asList(0.0), Iterables.take(accumulatedColumnData, column.size() - 1)
+				));
+				Column<Double> sliceEndColumn = new Column<Double>(Double.class, accumulatedColumnData);
 				columns.add(sliceStartColumn);
 				columns.add(sliceEndColumn);
 			} else {

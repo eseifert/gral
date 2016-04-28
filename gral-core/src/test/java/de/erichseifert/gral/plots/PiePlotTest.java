@@ -122,6 +122,19 @@ public class PiePlotTest {
 	}
 
 	@Test
+	public void testCreatePieDataContainsPieSliceRanges() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(1);
+		data.add(1);
+		data.add(1);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		assertThat((Column<Double>) pieData.getColumn(0), CoreMatchers.hasItems(0.0, 1.0, 2.0));
+		assertThat((Column<Double>) pieData.getColumn(1), CoreMatchers.hasItems(1.0, 2.0, 3.0));
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		PiePlot original = plot;
 		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);
