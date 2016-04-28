@@ -21,16 +21,24 @@
  */
 package de.erichseifert.gral.util;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class ConcatenationIterator<T> implements Iterator<List<T>> {
+	private final Iterator<T>[] inputIterators;
 
 	public ConcatenationIterator(Iterator<T>... inputIterators) {
+		this.inputIterators = Arrays.copyOf(inputIterators, inputIterators.length);
 	}
 
 	@Override
 	public boolean hasNext() {
+		for (Iterator<T> inputIterator : inputIterators) {
+			if (inputIterator.hasNext()) {
+				return true;
+			}
+		}
 		return false;
 	}
 

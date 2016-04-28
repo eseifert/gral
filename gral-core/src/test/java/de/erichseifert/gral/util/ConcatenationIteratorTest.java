@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -37,5 +38,17 @@ public class ConcatenationIteratorTest {
 		boolean hasNext = concatenationIterator.hasNext();
 
 		assertFalse(hasNext);
+	}
+
+	@Test
+	public void testHasNextReturnsTrueWhenAnyInputIteratorHasRemainingElements() {
+		Iterator<Object> emptyIterator = Arrays.asList().iterator();
+		Iterator<Object> filledIterator = Arrays.<Object>asList(1, 2, 3).iterator();
+		Iterator<Object> emptyIterator2 = Arrays.asList().iterator();
+		ConcatenationIterator<Object> concatenationIterator = new ConcatenationIterator<Object>(emptyIterator, filledIterator, emptyIterator2);
+
+		boolean hasNext = concatenationIterator.hasNext();
+
+		assertTrue(hasNext);
 	}
 }
