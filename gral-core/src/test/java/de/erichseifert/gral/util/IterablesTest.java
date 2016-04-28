@@ -22,6 +22,7 @@
 package de.erichseifert.gral.util;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -48,5 +49,19 @@ public class IterablesTest {
 		Iterable<Integer> firstElements = Iterables.take(someIterable, 3);
 
 		assertThat(firstElements, hasItems(1, 2, 3));
+	}
+
+	@Test
+	public void testTakeReturnsNoMoreThanNElements() {
+		int elementsToTake = 3;
+		Iterable<Integer> someIterable = Arrays.asList(1, 2, 3, 4, 5);
+
+		Iterable<Integer> firstElements = Iterables.take(someIterable, elementsToTake);
+
+		int takenElements = 0;
+		for (Integer element : firstElements) {
+			takenElements++;
+		}
+		assertThat(takenElements, is(elementsToTake));
 	}
 }

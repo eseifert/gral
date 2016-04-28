@@ -50,7 +50,39 @@ public abstract class Iterables {
 		return new ConcatenationIterable<T>(Arrays.asList(iterables));
 	}
 
-	public static <T> Iterable<T> take(Iterable<T> iterable, int elementCount) {
-		return iterable;
+	private static class LengthIterator<T> implements Iterator<T> {
+		private final Iterator<T> inputIterator;
+		private final int maxElementCount;
+		private int retrievedElementCount;
+
+		public LengthIterator(Iterator<T> inputIterator, int elementCount) {
+			this.inputIterator = inputIterator;
+			this.maxElementCount = elementCount;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return retrievedElementCount < maxElementCount && inputIterator.hasNext();
+		}
+
+		@Override
+		public T next() {
+			retrievedElementCount++;
+			return inputIterator.next();
+		}
+
+		@Override
+		public void remove() {
+			inputIterator.remove();
+		}
+	}
+
+	public static <T> Iterable<T> take(final Iterable<T> iterable, final int elementCount) {
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return new LengthIterator<T>(iterable.iterator(), elementCount);
+			}
+		};
 	}
 }
