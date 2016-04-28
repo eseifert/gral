@@ -23,6 +23,7 @@ package de.erichseifert.gral.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ConcatenationIterator<T> implements Iterator<T> {
 	private final Iterator<T>[] inputIterators;
@@ -48,7 +49,7 @@ public class ConcatenationIterator<T> implements Iterator<T> {
 				return inputIterator.next();
 			}
 		}
-		return null;
+		throw new NoSuchElementException("No elements left in concatenated iterator.");
 	}
 
 	@Override

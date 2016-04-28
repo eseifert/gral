@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import org.junit.Test;
 
 import org.hamcrest.CoreMatchers;
@@ -78,5 +79,14 @@ public class ConcatenationIteratorTest {
 		Object firstElement = concatenatedIterator.next();
 
 		assertThat(firstElement, CoreMatchers.<Object>is(1));
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testNextThrowsExceptionWhenAllIteratorsAreEmpty() {
+		Iterator<Object> emptyIterator = Arrays.asList().iterator();
+		Iterator<Object> emptyIterator2 = Arrays.asList().iterator();
+		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<Object>(emptyIterator, emptyIterator2);
+
+		concatenatedIterator.next();
 	}
 }
