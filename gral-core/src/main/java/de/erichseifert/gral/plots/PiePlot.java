@@ -1043,7 +1043,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 				List<Boolean> sliceVisibilityData = new ArrayList<Boolean>(column.size());
 				for (Comparable<?> value : column) {
-					Boolean sliceVisible = Boolean.FALSE;
+					double doubleValue = ((Number) value).doubleValue();
+					Boolean sliceVisible = doubleValue > 0 ? Boolean.TRUE : Boolean.FALSE;
 					sliceVisibilityData.add(sliceVisible);
 				}
 				Column<Boolean> sliceVisibleColumn = new Column<Boolean>(Boolean.class, sliceVisibilityData);

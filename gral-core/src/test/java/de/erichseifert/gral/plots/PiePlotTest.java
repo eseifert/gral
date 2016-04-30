@@ -149,6 +149,19 @@ public class PiePlotTest {
 	}
 
 	@Test
+	public void testCreatePieDatasBooleanColumnContainsTrueForEveryPositiveInputValue() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(2);
+		data.add(-5);
+		data.add(0);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		Column<Boolean> visibilityColumn = (Column<Boolean>) pieData.getColumn(2);
+		assertThat((Boolean) visibilityColumn.get(0), is(true));
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		PiePlot original = plot;
 		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);
