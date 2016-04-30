@@ -90,7 +90,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	private final Map<String, Drawable> axisDrawables;
 
 	/** Mapping of data source columns to axes. **/
-	private final Map<Column, String> mapping;
+	private final Map<DataSource, Map<Integer, String>> columnToAxisMappingByDataSource;
 	/** Minimum values of axes. **/
 	private final Map<String, Double> axisMin;
 	/** Maximum values of axes. **/
@@ -137,7 +137,7 @@ public abstract class AbstractPlot extends DrawableContainer
 		axisRenderers = new HashMap<String, AxisRenderer>();
 		axisDrawables = new HashMap<String, Drawable>();
 
-		mapping = new HashMap<Column, String>();
+		columnToAxisMappingByDataSource = new HashMap<DataSource, Map<Integer, String>>();
 		axisMin = new HashMap<String, Double>();
 		axisMax = new HashMap<String, Double>();
 
@@ -643,12 +643,8 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @return Axis name or {@code null} if no mapping exists.
 	 */
 	private String getMapping(DataSource source, int col) {
-		if (!contains(source)) {
-			return null;
-		}
-
-		Column column = source.getColumn(col);
-		String axisName = mapping.get(column);
+		Map<Integer, String> columnToAxisMapping = columnToAxisMappingByDataSource.get(source);
+		String axisName = columnToAxisMapping != null ? columnToAxisMapping.get(col) : null;
 		return axisName;
 	}
 
@@ -687,13 +683,14 @@ public abstract class AbstractPlot extends DrawableContainer
 				"Data source only has {0,number,integer} column, {1,number,integer} values given.", //$NON-NLS-1$
 				source.getColumnCount(), axisNames.length));
 		}
+		Map<Integer, String> columnToAxisMapping = new HashMap<Integer, String>();
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
 			if (axisName != null) {
-				Column column = source.getColumn(col);
-				mapping.put(column, axisName);
+				columnToAxisMapping.put(col, axisName);
 			}
 		}
+		columnToAxisMappingByDataSource.put(source, columnToAxisMapping);
 		invalidateAxisExtrema();
 	}
 
@@ -845,24 +842,26 @@ public abstract class AbstractPlot extends DrawableContainer
 	 */
 	private void revalidateAxisExtrema() {
 		synchronized (this) {
-			for (Entry<Column, String> entry : mapping.entrySet()) {
-				Column col = entry.getKey();
-				if (col.size() == 0) {
-					continue;
-				}
-				String axisName = entry.getValue();
+			for (Entry<DataSource, Map<Integer, String>> entryByDataSource : columnToAxisMappingByDataSource.entrySet()) {
+				DataSource dataSource = entryByDataSource.getKey();
+				Map<Integer, String> columnToAxisMapping = entryByDataSource.getValue();
+				for (Entry<Integer, String> entry : columnToAxisMapping.entrySet()) {
+					Integer colIndex = entry.getKey();
+					String axisName = entry.getValue();
 
-				Double min = axisMin.get(axisName);
-				Double max = axisMax.get(axisName);
-				if (min == null || max == null) {
-					min = col.getStatistics(Statistics.MIN);
-					max = col.getStatistics(Statistics.MAX);
-				} else {
-					min = Math.min(min, col.getStatistics(Statistics.MIN));
-					max = Math.max(max, col.getStatistics(Statistics.MAX));
+					Column<?> col = dataSource.getColumn(colIndex);
+					Double min = axisMin.get(axisName);
+					Double max = axisMax.get(axisName);
+					if (min == null || max == null) {
+						min = col.getStatistics(Statistics.MIN);
+						max = col.getStatistics(Statistics.MAX);
+					} else {
+						min = Math.min(min, col.getStatistics(Statistics.MIN));
+						max = Math.max(max, col.getStatistics(Statistics.MAX));
+					}
+					axisMin.put(axisName, min);
+					axisMax.put(axisName, max);
 				}
-				axisMin.put(axisName, min);
-				axisMax.put(axisName, max);
 			}
 		}
 	}
