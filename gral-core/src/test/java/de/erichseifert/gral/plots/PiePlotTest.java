@@ -23,6 +23,7 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -132,6 +133,19 @@ public class PiePlotTest {
 
 		assertThat((Column<Double>) pieData.getColumn(0), CoreMatchers.hasItems(0.0, 1.0, 2.0));
 		assertThat((Column<Double>) pieData.getColumn(1), CoreMatchers.hasItems(1.0, 2.0, 3.0));
+	}
+
+	@Test
+	public void testCreatePieDatasBooleanColumnContainsFalseForEveryNegativeInputValue() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(2);
+		data.add(-5);
+		data.add(0);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		Column<Boolean> visibilityColumn = (Column<Boolean>) pieData.getColumn(2);
+		assertThat((Boolean) visibilityColumn.get(1), is(false));
 	}
 
 	@Test
