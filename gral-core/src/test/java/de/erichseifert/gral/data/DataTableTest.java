@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.data;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -39,6 +38,7 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
 import de.erichseifert.gral.data.statistics.Statistics;
+import org.hamcrest.CoreMatchers;
 
 public class DataTableTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -120,7 +120,7 @@ public class DataTableTest {
 
 		DataSource table = new DataTable(firstColumn, secondColumn);
 
-		assertThat(table.getRecord(1), hasItems(firstColumn.get(someRowIndex), secondColumn.get(someRowIndex)));
+		assertThat(table.getRecord(1), CoreMatchers.<Comparable<?>>hasItems(firstColumn.get(someRowIndex), secondColumn.get(someRowIndex)));
 	}
 
 	@Test

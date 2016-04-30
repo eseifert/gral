@@ -71,7 +71,7 @@ public class ColumnTest {
 	public void testGetReturnsValueAtSpecifiedElement() {
 		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
 
-		int value = (Integer) column.get(1);
+		int value = column.get(1);
 
 		assertEquals(2, value);
 	}
@@ -81,7 +81,7 @@ public class ColumnTest {
 		Column<Integer> col = new Column<Integer>(Integer.class, 1, 2);
 		int colSize = col.size();
 
-		Integer elementOutOfRange = (Integer) col.get(colSize);
+		Integer elementOutOfRange = col.get(colSize);
 
 		assertThat(elementOutOfRange, nullValue());
 	}

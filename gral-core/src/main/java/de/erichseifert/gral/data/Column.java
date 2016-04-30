@@ -60,7 +60,7 @@ public class Column<T extends Comparable<T>> implements Iterable<T>, Serializabl
 		}
 	}
 
-	public Comparable<?> get(int row) {
+	public T get(int row) {
 		return row >= data.size() ? null : data.get(row);
 	}
 

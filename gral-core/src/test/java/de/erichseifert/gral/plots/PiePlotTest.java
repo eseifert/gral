@@ -145,7 +145,7 @@ public class PiePlotTest {
 		DataSource pieData = PiePlot.createPieData(data);
 
 		Column<Boolean> visibilityColumn = (Column<Boolean>) pieData.getColumn(2);
-		assertThat((Boolean) visibilityColumn.get(1), is(false));
+		assertThat(visibilityColumn.get(1), is(false));
 	}
 
 	@Test
@@ -158,7 +158,7 @@ public class PiePlotTest {
 		DataSource pieData = PiePlot.createPieData(data);
 
 		Column<Boolean> visibilityColumn = (Column<Boolean>) pieData.getColumn(2);
-		assertThat((Boolean) visibilityColumn.get(0), is(true));
+		assertThat(visibilityColumn.get(0), is(true));
 	}
 
 	@Test
