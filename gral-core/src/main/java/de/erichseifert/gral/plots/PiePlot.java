@@ -361,15 +361,19 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		public final double start;
 		/** Value where the slice ends. */
 		public final double end;
+		/** Whether the slice is visible. */
+		public final boolean visible;
 
 		/**
 		 * Initializes a new slice with start and end value.
 		 * @param start Value where the slice starts.
 		 * @param end Value where the slice ends.
+		 * @param visible Visibility of the slice.
 		 */
-		public Slice(double start, double end) {
+		public Slice(double start, double end, boolean visible) {
 			this.start = start;
 			this.end = end;
+			this.visible = visible;
 		}
 	}
 
@@ -489,7 +493,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 					Slice slice = plot.getSlice(
 						row.getSource(), data.index);
-					if (slice == null) {
+					if (slice == null || !slice.visible) {
 						return;
 					}
 
@@ -555,7 +559,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			}
 			Slice slice = plot.getSlice(
 				row.getSource(), data.index);
-			if (slice == null) {
+			if (slice == null || !slice.visible) {
 				return null;
 			}
 			double sliceStartRel = slice.start/sum;
@@ -738,7 +742,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 					Slice slice = plot.getSlice(
 						row.getSource(), data.index);
-					if (slice == null) {
+					if (slice == null || !slice.visible) {
 						return;
 					}
 
@@ -1022,7 +1026,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
             // abs() is required because negative values cause
             // "empty" slices
             double span = Math.abs(value);
-            Slice slice = new Slice(start, start + span);
+			boolean visible = value > 0.0;
+            Slice slice = new Slice(start, start + span, visible);
             dataSlices.add(slice);
             start += span;
         }
