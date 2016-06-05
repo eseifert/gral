@@ -197,9 +197,7 @@ public class Axis implements Serializable {
 	 *                   scaled to fit the current data.
 	 */
 	public void setAutoscaled(boolean autoscaled) {
-		if (this.autoscaled != autoscaled) {
-			this.autoscaled = autoscaled;
-		}
+		this.autoscaled = autoscaled;
 	}
 
 	/**
