@@ -35,7 +35,7 @@ subprojects {
 		mavenCentral()
 	}
 	dependencies {
-		compile(group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version: '0.10')
+		compile(group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version: '0.11')
 	}
 
 	apply plugin: 'license'
