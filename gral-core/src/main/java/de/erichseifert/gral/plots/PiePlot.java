@@ -102,8 +102,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
-	/** Slice objects with start and end position for each visible data source. */
-	private transient Map<DataSource, List<Slice>> slices;
 	/** Cache for the {@code Navigator} implementation. */
 	private transient PiePlotNavigator navigator;
 
@@ -491,9 +489,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					Slice slice = plot.getSlice(
-						row.getSource(), data.index);
-					if (slice == null || !slice.visible) {
+					Slice slice = plot.getSlice(data);
+					if (!slice.visible) {
 						return;
 					}
 
@@ -533,11 +530,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @return Outline that describes the point's shape.
 		 */
 		public Shape getPointShape(PointData data) {
-			Row row = data.row;
-			int col = data.col;
-			Number valueObj = (Number) row.get(col);
-			if (!MathUtils.isCalculatable(valueObj) ||
-					valueObj.doubleValue() <= 0.0) {
+			Slice slice = plot.getSlice(data);
+			if (!slice.visible) {
 				return null;
 			}
 
@@ -553,13 +547,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double radiusOuter = radius*radiusRelOuter;
 
 			// Construct slice
+			Row row = data.row;
 			double sum = plot.getSum(row.getSource());
 			if (sum == 0.0) {
-				return null;
-			}
-			Slice slice = plot.getSlice(
-				row.getSource(), data.index);
-			if (slice == null || !slice.visible) {
 				return null;
 			}
 			double sliceStartRel = slice.start/sum;
@@ -613,11 +603,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @param slice Pie slice to draw.
 		 * @param radius Radius of pie slice in view units (e.g. pixels).
 		 * @param row Data row containing the point.
-		 * @param col Index of the column that will be projected on the axis.
 		 */
 		protected void drawValueLabel(DrawingContext context, Slice slice,
-				double radius, Row row, int rowIndex, int col) {
-			Comparable<?> value = row.get(col);
+				double radius, Row row, int rowIndex) {
+			Comparable<?> value = slice.end - slice.start;
 
 			// Formatting
 			Format format = getValueFormat();
@@ -740,9 +729,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					Slice slice = plot.getSlice(
-						row.getSource(), data.index);
-					if (slice == null || !slice.visible) {
+					Slice slice = plot.getSlice(data);
+					if (!slice.visible) {
 						return;
 					}
 
@@ -753,8 +741,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double radius = plotAreaSize*radiusRel;
 
 					if (renderer.isValueVisible()) {
-						int colValue = renderer.getValueColumn();
-						drawValueLabel(context, slice, radius, row, data.index, colValue);
+						drawValueLabel(context, slice, radius, row, data.index);
 					}
 				}
 			};
@@ -789,9 +776,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				if (!row.isColumnNumeric(0)) {
 					continue;
 				}
-				Number value = (Number) row.get(0);
-				boolean isGap = value.doubleValue() < 0.0;
-				if (!isGap) {
+				boolean isVisible = (Boolean) row.get(2);
+				if (isVisible) {
 					slices.add(row);
 				}
 			}
@@ -840,6 +826,18 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				}
 			};
 		}
+
+		@Override
+		protected String getLabel(Row row) {
+			Number sliceStart = (Number) row.get(0);
+			Number sliceEnd = (Number) row.get(1);
+			Number sliceWidth = sliceEnd.doubleValue() - sliceStart.doubleValue();
+			Format format = getLabelFormat();
+			if ((format == null)) {
+				format = NumberFormat.getInstance();
+			}
+			return format.format(sliceWidth);
+		}
 	}
 
 	/**
@@ -855,7 +853,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		clockwise = true;
 
 		pointRenderers = new HashMap<DataSource, PointRenderer>();
-		slices = new HashMap<DataSource, List<Slice>>();
 
 		setPlotArea(new PiePlotArea2D(this));
 		setLegend(new PiePlotLegend(this));
@@ -959,30 +956,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		return navigator;
 	}
 
-	/**
-	 * Returns the sum of all absolute values from the specified data source up
-	 * to the row with the specified index. This is used to determine the
-	 * position of pie slices.
-	 * @param source Data source.
-	 * @param index Index of the row.
-	 * @return Sum of all absolute values from the specified data source up
-	 *         to the row with the specified index
-	 */
-	protected Slice getSlice(DataSource source, int index) {
-		if (index < 0) {
-			return null;
-		}
-		List<Slice> dataSlices;
-		synchronized (slices) {
-			if (!slices.containsKey(source)) {
-				createSlices(source);
-			}
-			dataSlices = slices.get(source);
-		}
-		if (dataSlices == null || index >= dataSlices.size()) {
-			return null;
-		}
-		return dataSlices.get(index);
+	protected Slice getSlice(PointData pointData) {
+		double sliceStart = (Double) pointData.row.get(0);
+		double sliceEnd = (Double) pointData.row.get(1);
+		boolean sliceVisible = (Boolean) pointData.row.get(2);
+		return new Slice(sliceStart, sliceEnd, sliceVisible);
 	}
 
 	/**
@@ -992,45 +970,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * @return Sum of all absolute values for the specified data source.
 	 */
 	protected double getSum(DataSource source) {
-		double sum = 0.0;
+		double sum;
 		synchronized (source) {
-			Slice lastSlice = getSlice(source, source.getRowCount() - 1);
-			if (lastSlice != null) {
-				sum = lastSlice.end;
-			}
+			sum = (Double) source.get(1, source.getRowCount() - 1);
 		}
 		return sum;
-	}
-
-	/**
-	 * Creates the slice objects with start and end information for a specified
-	 * data source.
-	 * @param source Data source.
-	 */
-	private void createSlices(DataSource source) {
-		if (!isVisible(source)) {
-			return;
-		}
-		final int colIndex = 0;
-		Column<?> col = source.getColumn(colIndex);
-        List<Slice> dataSlices = new ArrayList<Slice>(col.size());
-        slices.put(source, dataSlices);
-
-        double start = 0.0;
-        for (Comparable<?> cell : col) {
-            Number numericCell = (Number) cell;
-            double value = 0.0;
-            if (MathUtils.isCalculatable(numericCell)) {
-                value = numericCell.doubleValue();
-            }
-            // abs() is required because negative values cause
-            // "empty" slices
-            double span = Math.abs(value);
-			boolean visible = value > 0.0;
-            Slice slice = new Slice(start, start + span, visible);
-            dataSlices.add(slice);
-            start += span;
-        }
 	}
 
 	public static DataSource createPieData(DataSource data) {
@@ -1063,19 +1007,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		return pieData;
 	}
 
-	/**
-	 * Rebuilds cached information for a specified data source.
-	 * @param source Data source.
-	 */
-	protected void revalidate(DataSource source) {
-		slices.remove(source);
-		autoscaleAxes();
-	}
-
 	@Override
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		super.dataChanged(source, events);
-		revalidate(source);
+		autoscaleAxes();
 	}
 
 	/**
@@ -1089,8 +1024,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			throws ClassNotFoundException, IOException {
 		// Default deserialization
 		in.defaultReadObject();
-		// Handle transient fields
-		slices = new HashMap<DataSource, List<Slice>>();
 
 		// Update caches
 		for (DataSource source : getData()) {

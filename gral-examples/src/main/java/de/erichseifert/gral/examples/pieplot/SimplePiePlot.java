@@ -26,13 +26,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Random;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.graphics.Insets2D;
 
 
 public class SimplePiePlot extends ExamplePanel {
@@ -51,9 +52,10 @@ public class SimplePiePlot extends ExamplePanel {
 			int val = random.nextInt(8) + 2;
 			data.add((random.nextDouble() <= 0.15) ? -val : val);
 		}
+		DataSource pieData = PiePlot.createPieData(data);
 
 		// Create new pie plot
-		PiePlot plot = new PiePlot(data);
+		PiePlot plot = new PiePlot(pieData);
 
 		// Format plot
 		plot.getTitle().setText(getDescription());
@@ -65,7 +67,7 @@ public class SimplePiePlot extends ExamplePanel {
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
 
 		PieSliceRenderer pointRenderer =
-				(PieSliceRenderer) plot.getPointRenderer(data);
+				(PieSliceRenderer) plot.getPointRenderer(pieData);
 		// Change relative size of inner region
 		pointRenderer.setInnerRadius(0.4);
 		// Change the width of gaps between segments

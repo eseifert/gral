@@ -72,7 +72,7 @@ public class PiePlotTest {
 
 	@Before
 	public void setUp() {
-		data = new DummyData(1, 3, 1.0);
+		data = PiePlot.createPieData(new DummyData(1, 3, 1.0));
 		plot = new MockPiePlot(data);
 	}
 
