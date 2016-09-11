@@ -763,7 +763,7 @@ public class BoxPlot extends XYPlot {
 					PointData pointData = new PointData(
 						Arrays.asList(axisX, axisY),
 						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, 0);
+						symbolRow, symbolRow.getIndex(), 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 
 					DataPoint point = new DataPoint(pointData,

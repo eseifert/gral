@@ -395,7 +395,7 @@ public class BarPlot extends XYPlot {
 					PointData pointData = new PointData(
 						Arrays.asList(axisX, axisY),
 						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, 0);
+						symbolRow, symbolRow.getIndex(), 0);
 
 					// TODO: Provide a means to set the PointRenderer used for the Legend
 					PointRenderer pointRenderer = null;

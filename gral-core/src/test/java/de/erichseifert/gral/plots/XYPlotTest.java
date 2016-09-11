@@ -21,6 +21,13 @@
  */
 package de.erichseifert.gral.plots;
 
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,13 +39,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
@@ -56,8 +58,6 @@ import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.PointND;
-import org.junit.Before;
-import org.junit.Test;
 
 public class XYPlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -216,7 +216,7 @@ public class XYPlotTest {
 		PointData data = new PointData(
 				Arrays.asList(axisX, axisY),
 				Arrays.asList(axisRendererX, axisRendererY),
-				null, 0);
+				null, 0, 0);
 
 		
 		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);

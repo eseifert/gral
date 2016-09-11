@@ -21,17 +21,19 @@
  */
 package de.erichseifert.gral.plots.areas;
 
+import static de.erichseifert.gral.TestUtils.assertEmpty;
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import static de.erichseifert.gral.TestUtils.assertEmpty;
-import static de.erichseifert.gral.TestUtils.assertNotEmpty;
-import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
+import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
@@ -42,8 +44,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
-import org.junit.Before;
-import org.junit.Test;
 
 public class DefaultAreaRendererTest {
 	private PointData data;
@@ -57,7 +57,7 @@ public class DefaultAreaRendererTest {
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
-			null, 0);
+			null, 0, 0);
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class DefaultAreaRendererTest {
 		PointData data2 = new PointData(
 			data.axes,
 			Arrays.asList((AxisRenderer) null, null),
-			null, 0);
+			null, 0, 0);
 
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();

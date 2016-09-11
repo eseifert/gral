@@ -89,7 +89,7 @@ public class AbstractPointRendererTest {
 		data = new PointData(
 			Arrays.asList(null, axis),
 			Arrays.asList(null, axisRenderer),
-			row, 0);
+			row, row.getIndex(), 0);
 	}
 
 	private static final class MockPointRenderer extends AbstractPointRenderer {

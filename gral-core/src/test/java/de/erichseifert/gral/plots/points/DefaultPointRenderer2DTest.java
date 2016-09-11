@@ -82,7 +82,7 @@ public class DefaultPointRenderer2DTest {
 		data = new PointData(
 			Arrays.asList(null, axis),
 			Arrays.asList(null, axisRenderer),
-			row, 0);
+			row, row.getIndex(), 0);
 
 	}
 

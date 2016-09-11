@@ -402,7 +402,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					PointData pointData = new PointData(
 						Arrays.asList(axisX, axisY),
 						Arrays.asList(axisXRenderer, axisYRenderer),
-						row, colY);
+						row, row.getIndex(), colY);
 
 					DataPoint dataPoint = new DataPoint(pointData, pos);
 					points.add(dataPoint);
@@ -678,7 +678,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					PointData pointData = new PointData(
 						Arrays.asList(axisX, axisY),
 						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, 0);
+						symbolRow, row.getIndex(), 0);
 
 					DataPoint p1 = new DataPoint(
 						pointData,

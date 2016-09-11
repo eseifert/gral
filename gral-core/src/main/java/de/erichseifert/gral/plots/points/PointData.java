@@ -49,14 +49,15 @@ public class PointData {
 	 * @param axes Axes that are used to project the point.
 	 * @param axisRenderers Renderers for the axes.
 	 * @param row Data row containing that will be projected on the axes.
+	 * @param rowIndex Index of the row.
 	 * @param col Index of the column in the row that contains the data value.
 	 */
 	public PointData(List<Axis> axes, List<? extends AxisRenderer> axisRenderers,
-			Row row, int col) {
+			Row row, int rowIndex, int col) {
 		this.axes = Collections.unmodifiableList(axes);
 		this.axisRenderers = Collections.unmodifiableList(axisRenderers);
 		this.row = row;
-		this.index = row != null ? row.getIndex() : 0;
+		this.index = rowIndex;
 		this.col = col;
 	}
 }

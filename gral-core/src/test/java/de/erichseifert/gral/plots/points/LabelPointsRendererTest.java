@@ -62,7 +62,7 @@ public class LabelPointsRendererTest {
 		axisRenderer = new LinearRenderer2D();
 		axisRenderer.setShape(new Line2D.Double(-5.0, 0.0, 5.0, 0.0));
 
-		data = new PointData(Arrays.asList(axis), Arrays.asList(axisRenderer), row, 0);
+		data = new PointData(Arrays.asList(axis), Arrays.asList(axisRenderer), row, row.getIndex(), 0);
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class LabelPointsRendererTest {
 		r.setColumn(1);
 		Row row2 = new Row(table, 1);
 		assertNull(row2.get(1));
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, 0);
+		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}

@@ -324,7 +324,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
 					PointData pointData = new PointData(
-						axes, axisRenderers, row, 0);
+						axes, axisRenderers, row, row.getIndex(), 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable point = pointRenderer.getPoint(pointData, shape);
 					point.setBounds(bounds);
@@ -334,7 +334,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
 					PointData pointData = new PointData(
-						axes, axisRenderers, row, 0);
+						axes, axisRenderers, row, row.getIndex(), 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable point = pointRenderer.getValue(pointData, shape);
 					point.setBounds(bounds);
@@ -814,7 +814,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					PointData pointData = new PointData(
 						asList((Axis) null),
 						asList((AxisRenderer) null),
-						row, 0);
+						row, row.getIndex(), 0);
 
 					Drawable drawable = pointRenderer.getPoint(pointData, shape);
 
