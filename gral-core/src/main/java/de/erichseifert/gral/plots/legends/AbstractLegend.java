@@ -140,8 +140,6 @@ public abstract class AbstractLegend extends DrawableContainer
 		/** Default font used for sub-components and the calculation of relative
 		 sizes. */
 		private Font baseFont;
-		/** Data source that is related to this item. */
-		private final Row row;
 		/** Symbol that should be drawn. */
 		private final Drawable symbol;
 		/** Label string that should be drawn. */
@@ -149,16 +147,14 @@ public abstract class AbstractLegend extends DrawableContainer
 
 		/**
 		 * Creates a new Item object with the specified data source and text.
-		 * @param row Data row to be displayed.
 		 * @param symbol Symbol to be displayed.
 		 * @param labelText Description text.
 		 * @param font Font for the description text.
 		 */
-		public Item(Row row, Drawable symbol, String labelText, Font font) {
+		public Item(Drawable symbol, String labelText, Font font) {
 			double fontSize = font.getSize2D();
 			setLayout(new EdgeLayout(fontSize, 0.0));
 
-			this.row = row;
 			this.symbol = symbol;
 			add(symbol, Location.WEST);
 
@@ -167,14 +163,6 @@ public abstract class AbstractLegend extends DrawableContainer
 			label.setAlignmentX(0.0);
 			label.setAlignmentY(0.5);
 			add(label, Location.CENTER);
-		}
-
-		/**
-		 * Returns the row that is displayed by this item.
-		 * @return Displayed data row.
-		 */
-		public Row getRow() {
-			return row;
 		}
 
 		public Label getLabel() {
@@ -272,7 +260,7 @@ public abstract class AbstractLegend extends DrawableContainer
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
 			Font font = getFont();
-			Item item = new Item(row, getSymbol(row), label, font);
+			Item item = new Item(getSymbol(row), label, font);
 			add(item);
 			components.put(row, item);
 		}
