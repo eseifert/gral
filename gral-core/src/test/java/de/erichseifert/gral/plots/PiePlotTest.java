@@ -148,6 +148,18 @@ public class PiePlotTest {
 	}
 
 	@Test
+	public void testCreatePieDataChangesWhenTheUnderlyingDataSourceChanges() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(2);
+		DataSource pieData = PiePlot.createPieData(data);
+
+		data.add(-5);
+		data.add(0);
+
+		assertThat(pieData.getRowCount(), is(data.getRowCount()));
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		PiePlot original = plot;
 		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);

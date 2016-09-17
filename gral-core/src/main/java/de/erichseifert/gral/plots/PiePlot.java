@@ -40,17 +40,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
+import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.data.filters.Accumulation;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -74,7 +73,6 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.Iterables;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
@@ -973,34 +971,83 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		return sum;
 	}
 
-	public static DataSource createPieData(DataSource data) {
-		List<Column<?>> columns = new LinkedList<Column<?>>();
-		for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
-			Column<?> column = data.getColumn(colIndex);
-			if (column.isNumeric()) {
-				Iterable<Double> accumulatedColumnData = new Accumulation(column);
-				Column<Double> sliceStartColumn = new Column<Double>(Double.class, Iterables.concatenate(
-						Arrays.asList(0.0), Iterables.take(accumulatedColumnData, column.size() - 1)
-				));
-				Column<Double> sliceEndColumn = new Column<Double>(Double.class, accumulatedColumnData);
-				columns.add(sliceStartColumn);
-				columns.add(sliceEndColumn);
+	private static class PieData extends AbstractDataSource {
+		private final DataSource data;
 
-				List<Boolean> sliceVisibilityData = new ArrayList<Boolean>(column.size());
-				for (Comparable<?> value : column) {
-					double doubleValue = ((Number) value).doubleValue();
-					Boolean sliceVisible = doubleValue > 0 ? Boolean.TRUE : Boolean.FALSE;
-					sliceVisibilityData.add(sliceVisible);
+		public PieData(DataSource data) {
+			this.data = data;
+			data.addDataListener(new DataListener() {
+				@Override
+				public void dataAdded(DataSource source, DataChangeEvent... events) {
+					notifyDataAdded(events);
 				}
-				Column<Boolean> sliceVisibleColumn = new Column<Boolean>(Boolean.class, sliceVisibilityData);
-				columns.add(sliceVisibleColumn);
-			} else {
-				columns.add(column);
-			}
+
+				@Override
+				public void dataUpdated(DataSource source, DataChangeEvent... events) {
+					notifyDataUpdated(events);
+				}
+
+				@Override
+				public void dataRemoved(DataSource source, DataChangeEvent... events) {
+					notifyDataRemoved(events);
+				}
+			});
+
+			setColumnTypes(getColumnTypesFor(data).toArray(new Class[] {}));
 		}
 
-		DataTable pieData = new DataTable(columns.toArray(new Column[0]));
-		return pieData;
+		private List<Class<? extends Comparable<?>>> getColumnTypesFor(DataSource data) {
+			List<Class<? extends Comparable<?>>> columnTypes = new LinkedList<Class<? extends Comparable<?>>>();
+			for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
+				Column<?> column = data.getColumn(colIndex);
+				if (column.isNumeric()) {
+					columnTypes.add(Double.class);
+					columnTypes.add(Double.class);
+					columnTypes.add(Boolean.class);
+				} else {
+					columnTypes.add(column.getType());
+				}
+			}
+			return columnTypes;
+		}
+
+		@Override
+		public Comparable<?> get(int col, int row) {
+			Iterable<Double> accumulatedColumnData = new Accumulation(data.getColumn(0));
+			if (col == 0) {
+				if (row == 0) {
+					return 0.0;
+				}
+				return get(accumulatedColumnData, row - 1);
+			} else if (col == 1) {
+				return get(accumulatedColumnData, row);
+			} else if (col == 2) {
+				return ((Number) data.get(0, row)).doubleValue() > 0.0;
+			}
+			return null;
+		}
+
+		@Override
+		public int getRowCount() {
+			return data.getRowCount();
+		}
+
+		private static <T> T get(Iterable<T> iterable, int index) {
+			T element = null;
+			int elementIndex = 0;
+			for (T e : iterable) {
+				if (elementIndex == index) {
+					element = e;
+					break;
+				}
+				elementIndex++;
+			}
+			return element;
+		}
+	}
+
+	public static DataSource createPieData(DataSource data) {
+		return new PieData(data);
 	}
 
 	@Override
