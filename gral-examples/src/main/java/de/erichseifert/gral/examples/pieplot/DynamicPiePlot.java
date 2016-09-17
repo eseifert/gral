@@ -24,19 +24,19 @@ package de.erichseifert.gral.examples.pieplot;
 import java.awt.BorderLayout;
 import java.text.MessageFormat;
 import java.util.Random;
-
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
-import de.erichseifert.gral.graphics.Insets2D;
 
 
 public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
@@ -55,9 +55,10 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 	public DynamicPiePlot() {
 		// Create initial data
 		data = new DataTable(Integer.class);
+		DataSource pieData = PiePlot.createPieData(data);
 
 		// Create new pie plot
-		plot = new PiePlot(data);
+		plot = new PiePlot(pieData);
 		// Change relative size of pie
 		plot.setRadius(0.9);
 		// Change the starting angle of the first pie slice
@@ -66,7 +67,7 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		plot.setInsets(new Insets2D.Double(20.0));
 
 		PieSliceRenderer pointRenderer =
-				(PieSliceRenderer) plot.getPointRenderer(data);
+				(PieSliceRenderer) plot.getPointRenderer(pieData);
 		// Change the width of gaps between segments
 		pointRenderer.setGap(0.2);
 		// Change the colors
