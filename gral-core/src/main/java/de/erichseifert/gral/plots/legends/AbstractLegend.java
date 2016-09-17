@@ -218,9 +218,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	 */
 	@Override
 	public void draw(DrawingContext context) {
-		if (components.isEmpty()) {
-			return;
-		}
 		drawBackground(context);
 		drawBorder(context);
 		drawComponents(context);
