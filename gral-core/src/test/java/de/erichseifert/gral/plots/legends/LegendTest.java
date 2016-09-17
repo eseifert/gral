@@ -54,6 +54,7 @@ public class LegendTest {
 
 		private boolean isDrawn;
 
+		@Override
 		protected Drawable getSymbol(Row data) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */

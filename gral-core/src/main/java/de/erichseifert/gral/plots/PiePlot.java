@@ -784,11 +784,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			return slices;
 		}
 
-		/**
-		 * Returns a symbol for rendering a legend item.
-		 * @param row Data row.
-		 * @return A drawable object that can be used to display the symbol.
-		 */
+		@Override
 		protected Drawable getSymbol(final Row row) {
 			return new AbstractSymbol(this) {
 				/** Version id for serialization. */

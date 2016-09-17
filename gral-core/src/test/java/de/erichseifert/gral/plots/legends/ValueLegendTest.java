@@ -35,6 +35,7 @@ import de.erichseifert.gral.graphics.DrawingContext;
 
 public class ValueLegendTest {
 	private static class MockValueLegend extends ValueLegend {
+		@Override
 		protected Drawable getSymbol(Row data) {
 			return new AbstractDrawable() {
 				public void draw(DrawingContext context) {
