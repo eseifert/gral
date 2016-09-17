@@ -107,20 +107,22 @@ public abstract class AbstractLegend extends DrawableContainer
 		private static final long serialVersionUID = 7475404103140652668L;
 
 		/** Settings for determining the visual of the symbol. */
-		private final Legend legend;
+		private final Font font;
+		private final Dimension2D symbolSize;
 
 		/**
-		 * Initializes a new instances.
-		 * @param legend Legend that determines the appearance of the symbol.
+		 * Initializes a new instance.
+		 * @param font Font used to determine the preferred size.
+		 * @param symbolSize Symbol size
 		 */
-		public AbstractSymbol(Legend legend) {
-			this.legend = legend;
+		public AbstractSymbol(Font font, Dimension2D symbolSize) {
+			this.font = font;
+			this.symbolSize = symbolSize;
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
-			double fontSize = legend.getFont().getSize2D();
-			Dimension2D symbolSize = legend.getSymbolSize();
+			double fontSize = font.getSize2D();
 			Dimension2D size = super.getPreferredSize();
 			size.setSize(symbolSize.getWidth()*fontSize,
 				symbolSize.getHeight()*fontSize);

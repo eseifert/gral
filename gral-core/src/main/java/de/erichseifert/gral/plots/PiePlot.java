@@ -785,7 +785,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(this) {
+			return new AbstractSymbol(getFont(), getSymbolSize()) {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = -5460249256507481057L;
 

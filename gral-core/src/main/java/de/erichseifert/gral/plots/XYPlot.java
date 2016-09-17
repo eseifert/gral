@@ -650,7 +650,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(this) {
+			return new AbstractSymbol(getFont(), getSymbolSize()) {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = 5744026898590787285L;
 
