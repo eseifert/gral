@@ -95,6 +95,7 @@ public class AbstractPointRendererTest {
 	private static final class MockPointRenderer extends AbstractPointRenderer {
 		private static final long serialVersionUID = -3361506388079000948L;
 
+		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				private static final long serialVersionUID = 8239109584500117586L;

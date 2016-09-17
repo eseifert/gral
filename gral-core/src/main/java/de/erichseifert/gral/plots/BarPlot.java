@@ -178,13 +178,6 @@ public class BarPlot extends XYPlot {
 			this.borderColor = color;
 		}
 
-		/**
-		 * Returns the graphical representation to be drawn for the specified data
-		 * value.
-		 * @param data Information on axes, renderers, and values.
-		 * @param shape Outline that describes the point's shape.
-		 * @return Component that can be used to draw the point
-		 */
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {

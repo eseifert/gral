@@ -55,13 +55,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -895832597380598383L;
 
-	/**
-	 * Returns the graphical representation to be drawn for the specified data
-	 * value.
-	 * @param data Information on axes, renderers, and values.
-	 * @param shape Outline that describes the point's shape.
-	 * @return Component that can be used to draw the point
-	 */
+	@Override
 	public Drawable getPoint(final PointData data, final Shape shape) {
 		Drawable drawable = new AbstractDrawable() {
 			/** Version id for serialization. */

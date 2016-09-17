@@ -21,6 +21,15 @@
  */
 package de.erichseifert.gral.plots;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
@@ -37,12 +46,6 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
-
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 /**
@@ -164,13 +167,7 @@ public class RasterPlot extends XYPlot {
 			this.valueColumn = columnIndex;
 		}
 
-		/**
-		 * Returns the graphical representation to be drawn for the specified data
-		 * value.
-		 * @param data Information on axes, renderers, and values.
-		 * @param shape Outline that describes the point's shape.
-		 * @return Component that can be used to draw the point
-		 */
+		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
