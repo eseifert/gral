@@ -100,26 +100,12 @@ public class PiePlotTest {
 	}
 
 	@Test
-	public void testCreatePieDataReplacesNumericColumnsWithTwoDoubleAndOneIntegerColumns() {
-		// TODO: Mock DataTable
-		DataSource data = new DataTable(String.class, Double.class, Integer.class, String.class);
+	public void testCreatePieDataReplacesNumericColumnWithTwoDoubleAndOneIntegerColumns() {
+		DataSource data = new DataTable(Integer.class);
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertArrayEquals(new Class[] {String.class, Double.class, Double.class, Boolean.class,
-				Double.class, Double.class, Boolean.class, String.class}, pieData.getColumnTypes());
-	}
-
-	@Test
-	public void testCreatePieDataLeavesNonNumericContentsUnchanged() {
-		DataTable data = new DataTable(String.class, Double.class);
-		data.add("1", 1.0);
-		data.add("2", 2.0);
-		data.add("3", 3.0);
-
-		DataSource pieData = PiePlot.createPieData(data);
-
-		assertThat((Column<String>) pieData.getColumn(0), CoreMatchers.hasItems("1", "2", "3"));
+		assertArrayEquals(new Class[] {Double.class, Double.class, Boolean.class}, pieData.getColumnTypes());
 	}
 
 	@Test
