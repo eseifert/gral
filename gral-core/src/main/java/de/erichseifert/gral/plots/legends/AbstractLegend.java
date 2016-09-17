@@ -65,7 +65,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * derived classes.</p>
  */
 public abstract class AbstractLegend extends DrawableContainer
-		implements Legend, LegendSymbolRenderer {
+		implements Legend {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -1561976879958765700L;
 
@@ -526,4 +526,11 @@ public abstract class AbstractLegend extends DrawableContainer
 	public void setSymbolSize(Dimension2D symbolSize) {
 		this.symbolSize = symbolSize;
 	}
+
+	/**
+	 * Returns a symbol for rendering a legend item.
+	 * @param row Data row.
+	 * @return A drawable object that can be used to display the symbol.
+	 */
+	protected abstract Drawable getSymbol(Row row);
 }

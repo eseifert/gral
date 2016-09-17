@@ -54,7 +54,7 @@ public class LegendTest {
 
 		private boolean isDrawn;
 
-		public Drawable getSymbol(Row data) {
+		protected Drawable getSymbol(Row data) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = 7336075728956564691L;

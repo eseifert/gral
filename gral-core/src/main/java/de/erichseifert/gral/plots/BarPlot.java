@@ -368,7 +368,7 @@ public class BarPlot extends XYPlot {
 		 * @param row Data row.
 		 * @return A drawable object that can be used to display the symbol.
 		 */
-		public Drawable getSymbol(final Row row) {
+		protected Drawable getSymbol(final Row row) {
 			return new AbstractSymbol(this) {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = 5744026898590787285L;
