@@ -409,6 +409,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			gap = 0.0;
 		}
 
+		private Slice getSlice(PointData pointData) {
+			double sliceStart = (Double) pointData.row.get(0);
+			double sliceEnd = (Double) pointData.row.get(1);
+			boolean sliceVisible = (Boolean) pointData.row.get(2);
+			return new Slice(sliceStart, sliceEnd, sliceVisible);
+		}
+
 		/**
 		 * Returns the value for the outer radius of a pie relative to the
 		 * radius set in the plot.
@@ -487,7 +494,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					Slice slice = plot.getSlice(data);
+					Slice slice = getSlice(data);
 					if (!slice.visible) {
 						return;
 					}
@@ -528,7 +535,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @return Outline that describes the point's shape.
 		 */
 		public Shape getPointShape(PointData data) {
-			Slice slice = plot.getSlice(data);
+			Slice slice = getSlice(data);
 			if (!slice.visible) {
 				return null;
 			}
@@ -727,7 +734,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 						return;
 					}
 
-					Slice slice = plot.getSlice(data);
+					Slice slice = getSlice(data);
 					if (!slice.visible) {
 						return;
 					}
@@ -948,13 +955,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			navigator = new PiePlotNavigator(this);
 		}
 		return navigator;
-	}
-
-	protected Slice getSlice(PointData pointData) {
-		double sliceStart = (Double) pointData.row.get(0);
-		double sliceEnd = (Double) pointData.row.get(1);
-		boolean sliceVisible = (Boolean) pointData.row.get(2);
-		return new Slice(sliceStart, sliceEnd, sliceVisible);
 	}
 
 	/**
