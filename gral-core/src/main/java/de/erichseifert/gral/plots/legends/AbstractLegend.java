@@ -148,18 +148,16 @@ public abstract class AbstractLegend extends DrawableContainer
 		/**
 		 * Creates a new Item object with the specified data source and text.
 		 * @param row Data row to be displayed.
-		 * @param symbolRenderer Renderer for the symbol.
+		 * @param symbol Symbol to be displayed.
 		 * @param labelText Description text.
 		 * @param font Font for the description text.
 		 */
-		public Item(Row row, LegendSymbolRenderer symbolRenderer,
-				String labelText, Font font) {
+		public Item(Row row, Drawable symbol, String labelText, Font font) {
 			double fontSize = font.getSize2D();
 			setLayout(new EdgeLayout(fontSize, 0.0));
 
 			this.row = row;
-
-			symbol = symbolRenderer.getSymbol(row);
+			this.symbol = symbol;
 			add(symbol, Location.WEST);
 
 			label = new Label(labelText);
@@ -275,7 +273,7 @@ public abstract class AbstractLegend extends DrawableContainer
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
 			Font font = getFont();
-			Item item = new Item(row, this, label, font);
+			Item item = new Item(row, getSymbol(row), label, font);
 			add(item);
 			components.put(row, item);
 		}
