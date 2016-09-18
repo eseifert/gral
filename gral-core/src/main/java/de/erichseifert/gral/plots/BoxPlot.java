@@ -679,13 +679,15 @@ public class BoxPlot extends XYPlot {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
+			return new LegendSymbol(plot, row, plot.getPointRenderers(row.getSource()).get(0),
+					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
 		private final BoxPlot plot;
 		private final Row row;
+		private final PointRenderer pointRenderer;
 
 		/** Source for dummy data. */
 		@SuppressWarnings("unchecked")
@@ -721,24 +723,18 @@ public class BoxPlot extends XYPlot {
 			}
 		};
 
-		public LegendSymbol(BoxPlot plot, Row row, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(BoxPlot plot, Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
 			this.plot = plot;
 			this.row = row;
+			this.pointRenderer = pointRenderer;
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
-			DataSource data = row.getSource();
-
-			// TODO: Provide a means to set the PointRenderer used for the Legend
 			BoxWhiskerRenderer pointRenderer = null;
-			List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
-			for (PointRenderer p : pointRenderers) {
-				if (pointRenderer instanceof BoxWhiskerRenderer) {
-					pointRenderer = (BoxWhiskerRenderer) p;
-					break;
-				}
+			if (this.pointRenderer instanceof BoxWhiskerRenderer) {
+				pointRenderer = (BoxWhiskerRenderer) this.pointRenderer;
 			}
 			if (pointRenderer == null) {
 				return;
@@ -842,6 +838,9 @@ public class BoxPlot extends XYPlot {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
+		// By the looks of it, some objects depend on a BoxWhiskerRenderer being present when super.add is called
+		// However, super.add overwrites renderers, so we have to create the BoxWhiskerRenderer twice.
+		setPointRenderers(source, new BoxWhiskerRenderer());
 		super.add(index, source, visible);
 		// FIXME: Overwrites possible present point and line renderers
 		setLineRenderers(source, null);
