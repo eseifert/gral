@@ -67,6 +67,7 @@ import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.QuasiRandomColors;
+import de.erichseifert.gral.plots.legends.AbstractLegend;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
@@ -785,41 +786,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(getFont(), getSymbolSize()) {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = -5460249256507481057L;
-
-				/**
-				 * Draws the {@code Drawable} with the specified drawing context.
-				 * @param context Environment used for drawing
-				 */
-				public void draw(DrawingContext context) {
-					DataSource data = row.getSource();
-
-					Rectangle2D bounds = getBounds();
-
-					PointRenderer pointRenderer = plot.getPointRenderer(data);
-					Shape shape = new Rectangle2D.Double(
-						0.0, 0.0, bounds.getWidth(), bounds.getHeight());
-
-					if (pointRenderer == null) {
-						return;
-					}
-
-					PointData pointData = new PointData(
-						asList((Axis) null),
-						asList((AxisRenderer) null),
-						row, row.getIndex(), 0);
-
-					Drawable drawable = pointRenderer.getPoint(pointData, shape);
-
-					Graphics2D graphics = context.getGraphics();
-					AffineTransform txOrig = graphics.getTransform();
-					graphics.translate(bounds.getX(), bounds.getY());
-					drawable.draw(context);
-					graphics.setTransform(txOrig);
-				}
-			};
+			return new LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 
 		@Override
@@ -832,6 +799,45 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				format = NumberFormat.getInstance();
 			}
 			return format.format(sliceWidth);
+		}
+	}
+
+	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
+		private final PiePlot plot;
+		private final Row row;
+
+		public LegendSymbol(PiePlot plot, Row row, Font font, Dimension2D symbolSize) {
+			super(font, symbolSize);
+			this.plot = plot;
+			this.row = row;
+		}
+
+		@Override
+		public void draw(DrawingContext context) {
+			DataSource data = row.getSource();
+
+			Rectangle2D bounds = getBounds();
+
+			PointRenderer pointRenderer = plot.getPointRenderer(data);
+			Shape shape = new Rectangle2D.Double(
+					0.0, 0.0, bounds.getWidth(), bounds.getHeight());
+
+			if (pointRenderer == null) {
+				return;
+			}
+
+			PointData pointData = new PointData(
+					asList((Axis) null),
+					asList((AxisRenderer) null),
+					row, row.getIndex(), 0);
+
+			Drawable drawable = pointRenderer.getPoint(pointData, shape);
+
+			Graphics2D graphics = context.getGraphics();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(bounds.getX(), bounds.getY());
+			drawable.draw(context);
+			graphics.setTransform(txOrig);
 		}
 	}
 
