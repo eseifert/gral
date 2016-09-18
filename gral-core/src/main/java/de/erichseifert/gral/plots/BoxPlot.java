@@ -840,11 +840,12 @@ public class BoxPlot extends XYPlot {
 		}
 		// By the looks of it, some objects depend on a BoxWhiskerRenderer being present when super.add is called
 		// However, super.add overwrites renderers, so we have to create the BoxWhiskerRenderer twice.
-		setPointRenderers(source, new BoxWhiskerRenderer());
+		BoxWhiskerRenderer renderer = new BoxWhiskerRenderer();
+		setPointRenderers(source, renderer);
 		super.add(index, source, visible);
 		// FIXME: Overwrites possible present point and line renderers
 		setLineRenderers(source, null);
-		setPointRenderers(source, new BoxWhiskerRenderer());
+		setPointRenderers(source, renderer);
 	}
 
 	@Override
