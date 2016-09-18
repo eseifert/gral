@@ -102,14 +102,7 @@ public abstract class ValueLegend extends AbstractLegend
 	@Override
 	public void add(DataSource source) {
 		super.add(source);
-		for (Row row : getEntries(source)) {
-			String label = getLabel(row);
-			Font font = getFont();
-			Item item = new Item(getSymbol(row), label, font);
-			add(item);
-			components.put(row, item);
-		}
-		invalidate();
+		refresh();
 		source.addDataListener(this);
 	}
 
@@ -126,7 +119,7 @@ public abstract class ValueLegend extends AbstractLegend
 				remove(item);
 			}
 		}
-		invalidate();
+		refresh();
 		source.removeDataListener(this);
 	}
 
@@ -175,7 +168,6 @@ public abstract class ValueLegend extends AbstractLegend
 	 *        have been changed.
 	 */
 	private void dataChanged(DataSource source, DataChangeEvent... events) {
-		invalidate();
 		refresh();
 	}
 
@@ -193,7 +185,6 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	public void setLabelColumn(int labelColumn) {
 		this.labelColumn = labelColumn;
-		invalidate();
 		refresh();
 	}
 
@@ -211,7 +202,6 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	public void setLabelFormat(Format labelFormat) {
 		this.labelFormat = labelFormat;
-		invalidate();
 		refresh();
 	}
 
@@ -221,4 +211,20 @@ public abstract class ValueLegend extends AbstractLegend
 	 * @return A drawable object that can be used to display the symbol.
 	 */
 	protected abstract Drawable getSymbol(Row row);
+
+	private void refresh() {
+		for (Drawable drawable : components.values()) {
+			remove(drawable);
+		}
+		components.clear();
+		for (DataSource source : getSources()) {
+			for (Row row : getEntries(source)) {
+				String label = getLabel(row);
+				Font font = getFont();
+				Item item = new Item(getSymbol(row), label, font);
+				add(item);
+				components.put(row, item);
+			}
+		}
+	}
 }

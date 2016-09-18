@@ -69,8 +69,6 @@ public abstract class AbstractLegend extends DrawableContainer
 
 	/** List of data sources displayed in this legend. */
 	private final Set<DataSource> sources;
-	/** Flag that tells whether the data in the legend is up-to-date. */
-	private transient boolean valid;
 
 	/** Default font used for sub-components and the calculation of relative
 	 sizes. */
@@ -276,23 +274,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	}
 
 	/**
-	 * Updates the items for all data sources stored in this legend. The update
-	 * is only performed if the legend is invalid.
-	 * @see #invalidate()
-	 */
-	public void refresh() {
-		if (isValid()) {
-			return;
-		}
-		Set<DataSource> sources = new LinkedHashSet<DataSource>(this.sources);
-		clear();
-		for (DataSource source : sources) {
-			add(source);
-		}
-		valid = true;
-	}
-
-	/**
 	 * Refreshes the layout of the legend. It's currently used to handle new
 	 * gap values.
 	 */
@@ -318,25 +299,6 @@ public abstract class AbstractLegend extends DrawableContainer
 			size.getWidth(),
 			size.getHeight()
 		);
-	}
-
-	/**
-	 * Returns whether this legend's values and layout are valid.
-	 * @return {@code true} if the values and the layout are valid,
-	 *         otherwise {@code false}.
-	 * @see #invalidate()
-	 */
-	protected boolean isValid() {
-		return valid;
-	}
-
-	/**
-	 * Marks this legend's values and layout as invalid. The legend will only
-	 * be refreshed if it's invalid.
-	 * @see #refresh()
-	 */
-	protected void invalidate() {
-		valid = false;
 	}
 
 	/**

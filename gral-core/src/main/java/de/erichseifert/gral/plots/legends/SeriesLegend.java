@@ -59,7 +59,6 @@ public abstract class SeriesLegend extends AbstractLegend {
 		if (drawable != null) {
 			remove(drawable);
 		}
-		invalidate();
 	}
 
 	/**

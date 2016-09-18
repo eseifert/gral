@@ -61,11 +61,6 @@ public interface Legend extends Container, Drawable {
 	void clear();
 
 	/**
-	 * Updates the items for all data sources stored in this legend.
-	 */
-	void refresh();
-
-	/**
 	 * Returns the current font used as a default for sub-components ans for
 	 * calculation of relative sizes.
 	 * @return Current base font.
