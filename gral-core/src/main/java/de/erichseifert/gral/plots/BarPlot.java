@@ -22,11 +22,13 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -43,18 +45,20 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
+import de.erichseifert.gral.plots.legends.AbstractLegend;
+import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 import de.erichseifert.gral.util.SerializationUtils;
@@ -341,8 +345,6 @@ public class BarPlot extends XYPlot {
 	public static class BarPlotLegend extends ValueLegend {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 4752278896167602641L;
-		/** Source for dummy data. */
-		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 
 		/** Plot that contains settings and renderers. */
 		private final BarPlot plot;
@@ -358,60 +360,71 @@ public class BarPlot extends XYPlot {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(getFont(), getSymbolSize()) {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = 5744026898590787285L;
+			return new BarPlot.LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
+		}
+	}
 
-				public void draw(DrawingContext context) {
-					DataSource data = row.getSource();
+	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
+		/** Source for dummy data. */
+		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
+		private final BarPlot plot;
+		private final Row row;
 
-					Row symbolRow = new Row(DUMMY_DATA, 0);
-					Rectangle2D bounds = getBounds();
+		public LegendSymbol(BarPlot plot, Row row, Font font, Dimension2D symbolSize) {
+			super(font, symbolSize);
+			this.plot = plot;
+			this.row = row;
+		}
 
-					double barWidthRel = plot.getBarWidth();
+		@Override
+		public void draw(DrawingContext context) {
+			DataSource data = row.getSource();
 
-					Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
-					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setShape(new Line2D.Double(
-							bounds.getMinX(), bounds.getMaxY(),
-							bounds.getMaxX(), bounds.getMaxY()));
-					Axis axisY = new Axis(0.0, 0.5);
-					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setShape(new Line2D.Double(
-							bounds.getMinX(), bounds.getMaxY(),
-							bounds.getMinX(), bounds.getMinY()));
+			Row symbolRow = new Row(DUMMY_DATA, 0);
+			Rectangle2D bounds = getBounds();
 
-					PointData pointData = new PointData(
-						Arrays.asList(axisX, axisY),
-						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, symbolRow.getIndex(), 0);
+			double barWidthRel = plot.getBarWidth();
 
-					// TODO: Provide a means to set the PointRenderer used for the Legend
-					PointRenderer pointRenderer = null;
-					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
-					if (!pointRenderers.isEmpty()) {
-						pointRenderer = pointRenderers.get(0);
-					}
-					Drawable drawable = null;
-					if (pointRenderer != null) {
-						Shape shape = pointRenderer.getPointShape(pointData);
-						drawable = pointRenderer.getPoint(pointData, shape);
-					}
+			Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
+			AxisRenderer axisRendererX = new LinearRenderer2D();
+			axisRendererX.setShape(new Line2D.Double(
+					bounds.getMinX(), bounds.getMaxY(),
+					bounds.getMaxX(), bounds.getMaxY()));
+			Axis axisY = new Axis(0.0, 0.5);
+			AxisRenderer axisRendererY = new LinearRenderer2D();
+			axisRendererY.setShape(new Line2D.Double(
+					bounds.getMinX(), bounds.getMaxY(),
+					bounds.getMinX(), bounds.getMinY()));
 
-					DataPoint point = new DataPoint(pointData,
-						new PointND<Double>(bounds.getCenterX(),
+			PointData pointData = new PointData(
+					Arrays.asList(axisX, axisY),
+					Arrays.asList(axisRendererX, axisRendererY),
+					symbolRow, symbolRow.getIndex(), 0);
+
+			// TODO: Provide a means to set the PointRenderer used for the Legend
+			PointRenderer pointRenderer = null;
+			List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+			if (!pointRenderers.isEmpty()) {
+				pointRenderer = pointRenderers.get(0);
+			}
+			Drawable drawable = null;
+			if (pointRenderer != null) {
+				Shape shape = pointRenderer.getPointShape(pointData);
+				drawable = pointRenderer.getPoint(pointData, shape);
+			}
+
+			DataPoint point = new DataPoint(pointData,
+					new PointND<Double>(bounds.getCenterX(),
 							bounds.getMinY()));
 
-					if (drawable != null) {
-						Graphics2D graphics = context.getGraphics();
-						Point2D pos = point.position.getPoint2D();
-						AffineTransform txOrig = graphics.getTransform();
-						graphics.translate(pos.getX(), pos.getY());
-						drawable.draw(context);
-						graphics.setTransform(txOrig);
-					}
-				}
-			};
+			if (drawable != null) {
+				Graphics2D graphics = context.getGraphics();
+				Point2D pos = point.position.getPoint2D();
+				AffineTransform txOrig = graphics.getTransform();
+				graphics.translate(pos.getX(), pos.getY());
+				drawable.draw(context);
+				graphics.setTransform(txOrig);
+			}
 		}
 	}
 
@@ -428,7 +441,8 @@ public class BarPlot extends XYPlot {
 		barHeightMin = 0.0;
 		paintAllBars = false;
 
-		setLegend(new BarPlotLegend(this));
+		Legend legend = new BarPlotLegend(this);
+		setLegend(legend);
 
 		autoscaleAxes();
 	}
