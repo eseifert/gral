@@ -102,7 +102,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	/**
 	 * An abstract base class for drawable symbols.
 	 */
-	protected static abstract class AbstractSymbol extends AbstractDrawable {
+	public static abstract class AbstractSymbol extends AbstractDrawable {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 7475404103140652668L;
 
