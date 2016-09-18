@@ -360,7 +360,9 @@ public class BarPlot extends XYPlot {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new BarPlot.LegendSymbol(plot, row, plot.getPointRenderers(row.getSource()).get(0),
+			List<PointRenderer> pointRenderers = plot.getPointRenderers(row.getSource());
+			BarRenderer barRenderer = (BarRenderer) pointRenderers.get(0);
+			return new BarPlot.LegendSymbol(plot, row, barRenderer,
 					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
@@ -370,13 +372,13 @@ public class BarPlot extends XYPlot {
 		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 		private final BarPlot plot;
 		private final Row row;
-		private final PointRenderer pointRenderer;
+		private final BarRenderer barRenderer;
 
-		public LegendSymbol(BarPlot plot, Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(BarPlot plot, Row row, BarRenderer barRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
 			this.plot = plot;
 			this.row = row;
-			this.pointRenderer = pointRenderer;
+			this.barRenderer = barRenderer;
 		}
 
 		@Override
@@ -402,8 +404,8 @@ public class BarPlot extends XYPlot {
 					Arrays.asList(axisRendererX, axisRendererY),
 					symbolRow, symbolRow.getIndex(), 0);
 
-			Shape shape = pointRenderer.getPointShape(pointData);
-			Drawable drawable = pointRenderer.getPoint(pointData, shape);
+			Shape shape = barRenderer.getPointShape(pointData);
+			Drawable drawable = barRenderer.getPoint(pointData, shape);
 
 			DataPoint point = new DataPoint(pointData,
 					new PointND<Double>(bounds.getCenterX(),
