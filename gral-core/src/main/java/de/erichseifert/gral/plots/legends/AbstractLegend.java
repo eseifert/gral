@@ -489,11 +489,4 @@ public abstract class AbstractLegend extends DrawableContainer
 	public void setSymbolSize(Dimension2D symbolSize) {
 		this.symbolSize = symbolSize;
 	}
-
-	/**
-	 * Returns a symbol for rendering a legend item.
-	 * @param row Data row.
-	 * @return A drawable object that can be used to display the symbol.
-	 */
-	protected abstract Drawable getSymbol(Row row);
 }

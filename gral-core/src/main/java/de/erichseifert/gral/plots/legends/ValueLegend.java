@@ -204,4 +204,11 @@ public abstract class ValueLegend extends AbstractLegend
 		invalidate();
 		refresh();
 	}
+
+	/**
+	 * Returns a symbol for rendering a legend item.
+	 * @param row Data row.
+	 * @return A drawable object that can be used to display the symbol.
+	 */
+	protected abstract Drawable getSymbol(Row row);
 }
