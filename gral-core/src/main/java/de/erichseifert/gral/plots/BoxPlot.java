@@ -675,40 +675,32 @@ public class BoxPlot extends XYPlot {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new LegendSymbol(row, plot.getPointRenderers(row.getSource()).get(0),
+			return new LegendSymbol(row, (BoxWhiskerRenderer) plot.getPointRenderers(row.getSource()).get(0),
 					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
 		private final Row row;
-		private final PointRenderer pointRenderer;
+		private final BoxWhiskerRenderer boxWhiskerRenderer;
 
-		public LegendSymbol(Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(Row row, BoxWhiskerRenderer boxWhiskerRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
 			this.row = row;
-			this.pointRenderer = pointRenderer;
+			this.boxWhiskerRenderer = boxWhiskerRenderer;
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
-			BoxWhiskerRenderer pointRenderer = null;
-			if (this.pointRenderer instanceof BoxWhiskerRenderer) {
-				pointRenderer = (BoxWhiskerRenderer) this.pointRenderer;
-			}
-			if (pointRenderer == null) {
-				return;
-			}
-
 			Shape shape = new Rectangle2D.Double(0.0, 0.0, getBounds().getWidth(), getBounds().getHeight());
 
 			Graphics2D graphics = context.getGraphics();
 			AffineTransform txOrig = graphics.getTransform();
 			graphics.translate(getX(), getY());
 			GraphicsUtils.fillPaintedShape(context.getGraphics(), shape,
-					pointRenderer.getBoxBackground().get(row.getIndex()), null);
-			GraphicsUtils.drawPaintedShape(context.getGraphics(), shape, pointRenderer.getBoxBorderColor(),
-					null, pointRenderer.getBoxBorderStroke());
+					boxWhiskerRenderer.getBoxBackground().get(row.getIndex()), null);
+			GraphicsUtils.drawPaintedShape(context.getGraphics(), shape, boxWhiskerRenderer.getBoxBorderColor(),
+					null, boxWhiskerRenderer.getBoxBorderStroke());
 			graphics.setTransform(txOrig);
 		}
 	}
