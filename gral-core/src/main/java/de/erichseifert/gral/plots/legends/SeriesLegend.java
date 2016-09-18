@@ -61,7 +61,7 @@ public abstract class SeriesLegend extends AbstractLegend {
 		for (Row row : getEntries(source)) {
 			String label = getLabel(row);
 			Font font = getFont();
-			Item item = new Item(getSymbol(row), label, font);
+			Item item = new Item(getSymbol(source), label, font);
 			add(item);
 			components.put(row, item);
 		}
@@ -90,8 +90,8 @@ public abstract class SeriesLegend extends AbstractLegend {
 
 	/**
 	 * Returns a symbol for rendering a legend item.
-	 * @param row Data row.
+	 * @param data Data source.
 	 * @return A drawable object that can be used to display the symbol.
 	 */
-	protected abstract Drawable getSymbol(Row row);
+	protected abstract Drawable getSymbol(DataSource data);
 }

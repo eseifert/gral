@@ -648,8 +648,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		}
 
 		@Override
-		protected Drawable getSymbol(final Row row) {
-			return new LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
+		protected Drawable getSymbol(DataSource data) {
+			return new LegendSymbol(plot, data, plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
 
@@ -657,18 +657,16 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		/** Source for dummy data. */
 		private static final DataSource DUMMY_DATA = new DummyData(2, Integer.MAX_VALUE, 0.5);
 		private final XYPlot plot;
-		private final Row row;
+		private final DataSource data;
 
-		public LegendSymbol(XYPlot plot, Row row, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(XYPlot plot, DataSource data, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
 			this.plot = plot;
-			this.row = row;
+			this.data = data;
 		}
 
 		@Override
 		public void draw(DrawingContext context) {
-			DataSource data = row.getSource();
-
 			Row symbolRow = new Row(DUMMY_DATA, 0);
 			Rectangle2D bounds = getBounds();
 
@@ -686,7 +684,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			PointData pointData = new PointData(
 					Arrays.asList(axisX, axisY),
 					Arrays.asList(axisRendererX, axisRendererY),
-					symbolRow, row.getIndex(), 0);
+					symbolRow, symbolRow.getIndex(), 0);
 
 			DataPoint p1 = new DataPoint(
 					pointData,

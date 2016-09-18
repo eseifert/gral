@@ -32,14 +32,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
-import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
@@ -55,7 +53,7 @@ public class LegendTest {
 		private boolean isDrawn;
 
 		@Override
-		protected Drawable getSymbol(Row data) {
+		protected Drawable getSymbol(DataSource data) {
 			return new AbstractDrawable() {
 				/** Version id for serialization. */
 				private static final long serialVersionUID = 7336075728956564691L;
