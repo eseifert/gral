@@ -675,19 +675,17 @@ public class BoxPlot extends XYPlot {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new LegendSymbol(plot, row, plot.getPointRenderers(row.getSource()).get(0),
+			return new LegendSymbol(row, plot.getPointRenderers(row.getSource()).get(0),
 					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
-		private final BoxPlot plot;
 		private final Row row;
 		private final PointRenderer pointRenderer;
 
-		public LegendSymbol(BoxPlot plot, Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
-			this.plot = plot;
 			this.row = row;
 			this.pointRenderer = pointRenderer;
 		}
