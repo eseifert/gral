@@ -59,7 +59,7 @@ public abstract class SeriesLegend extends AbstractLegend {
 	public void add(DataSource source) {
 		super.add(source);
 		for (Row row : getEntries(source)) {
-			String label = getLabel(row);
+			String label = getLabel(source);
 			Font font = getFont();
 			Item item = new Item(getSymbol(source), label, font);
 			add(item);
@@ -84,12 +84,12 @@ public abstract class SeriesLegend extends AbstractLegend {
 	}
 
 	/**
-	 * Returns the label text for the specified row.
-	 * @param row Data row.
+	 * Returns the label text for the specified data source.
+	 * @param data Data source.
 	 * @return Label text.
 	 */
-	protected String getLabel(Row row) {
-		return row.getSource().toString();
+	protected String getLabel(DataSource data) {
+		return data.toString();
 	}
 
 	/**
