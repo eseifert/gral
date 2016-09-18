@@ -23,11 +23,13 @@ package de.erichseifert.gral.plots;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -53,6 +55,7 @@ import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
+import de.erichseifert.gral.plots.legends.AbstractLegend;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.PointData;
@@ -662,6 +665,28 @@ public class BoxPlot extends XYPlot {
 	public static class BoxPlotLegend extends ValueLegend {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = 1517792984459627757L;
+
+		/** Associated plot. */
+		private final BoxPlot plot;
+
+		/**
+		 * Initializes a new instance with the specified plot.
+		 * @param plot Associated plot.
+		 */
+		public BoxPlotLegend(BoxPlot plot) {
+			this.plot = plot;
+		}
+
+		@Override
+		protected Drawable getSymbol(final Row row) {
+			return new LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
+		}
+	}
+
+	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
+		private final BoxPlot plot;
+		private final Row row;
+
 		/** Source for dummy data. */
 		@SuppressWarnings("unchecked")
 		private static final DataSource DUMMY_DATA = new AbstractDataSource(
@@ -671,7 +696,7 @@ public class BoxPlot extends XYPlot {
 			private static final long serialVersionUID = -8233716728143117368L;
 
 			/** Positions of x position, center bar, bottom bar, box bottom,
-			box top, and top bar. */
+			 box top, and top bar. */
 			private final Double[] values = { 0.5, 0.0, 0.0, 1.0, 1.0 };
 
 			/**
@@ -696,80 +721,64 @@ public class BoxPlot extends XYPlot {
 			}
 		};
 
-		/** Associated plot. */
-		private final BoxPlot plot;
-
-		/**
-		 * Initializes a new instance with the specified plot.
-		 * @param plot Associated plot.
-		 */
-		public BoxPlotLegend(BoxPlot plot) {
+		public LegendSymbol(BoxPlot plot, Row row, Font font, Dimension2D symbolSize) {
+			super(font, symbolSize);
 			this.plot = plot;
+			this.row = row;
 		}
 
 		@Override
-		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(getFont(), getSymbolSize()) {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = 1906894939358065143L;
+		public void draw(DrawingContext context) {
+			DataSource data = row.getSource();
 
-				/**
-				 * Draws the {@code Drawable} with the specified drawing context.
-				 * @param context Environment used for drawing
-				 */
-				public void draw(DrawingContext context) {
-					DataSource data = row.getSource();
-
-					// TODO: Provide a means to set the PointRenderer used for the Legend
-					BoxWhiskerRenderer pointRenderer = null;
-					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
-					for (PointRenderer p : pointRenderers) {
-						if (pointRenderer instanceof BoxWhiskerRenderer) {
-							pointRenderer = (BoxWhiskerRenderer) p;
-							break;
-						}
-					}
-					if (pointRenderer == null) {
-						return;
-					}
-
-					Row symbolRow = new Row(DUMMY_DATA, 0);
-					Rectangle2D bounds = getBounds();
-
-					double boxWidthRel = pointRenderer.getBoxWidth();
-
-					double posX = ((Number) row.get(0)).doubleValue();
-					Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
-					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setShape(new Line2D.Double(
-							bounds.getMinX(), bounds.getMaxY(),
-							bounds.getMaxX(), bounds.getMaxY()));
-					Axis axisY = new Axis(1.0, 2.0);
-					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setShape(new Line2D.Double(
-							bounds.getMinX(), bounds.getMaxY(),
-							bounds.getMinX(), bounds.getMinY()));
-
-					PointData pointData = new PointData(
-						Arrays.asList(axisX, axisY),
-						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, symbolRow.getIndex(), 0);
-					Shape shape = pointRenderer.getPointShape(pointData);
-
-					DataPoint point = new DataPoint(pointData,
-						new PointND<Double>(bounds.getCenterX(),
-						bounds.getCenterY()));
-
-					Graphics2D graphics = context.getGraphics();
-					graphics.draw(bounds);
-					Point2D pos = point.position.getPoint2D();
-					AffineTransform txOrig = graphics.getTransform();
-					graphics.translate(pos.getX(), pos.getY());
-					Drawable drawable = pointRenderer.getPoint(pointData, shape);
-					drawable.draw(context);
-					graphics.setTransform(txOrig);
+			// TODO: Provide a means to set the PointRenderer used for the Legend
+			BoxWhiskerRenderer pointRenderer = null;
+			List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+			for (PointRenderer p : pointRenderers) {
+				if (pointRenderer instanceof BoxWhiskerRenderer) {
+					pointRenderer = (BoxWhiskerRenderer) p;
+					break;
 				}
-			};
+			}
+			if (pointRenderer == null) {
+				return;
+			}
+
+			Row symbolRow = new Row(DUMMY_DATA, 0);
+			Rectangle2D bounds = getBounds();
+
+			double boxWidthRel = pointRenderer.getBoxWidth();
+
+			double posX = ((Number) row.get(0)).doubleValue();
+			Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
+			AxisRenderer axisRendererX = new LinearRenderer2D();
+			axisRendererX.setShape(new Line2D.Double(
+					bounds.getMinX(), bounds.getMaxY(),
+					bounds.getMaxX(), bounds.getMaxY()));
+			Axis axisY = new Axis(1.0, 2.0);
+			AxisRenderer axisRendererY = new LinearRenderer2D();
+			axisRendererY.setShape(new Line2D.Double(
+					bounds.getMinX(), bounds.getMaxY(),
+					bounds.getMinX(), bounds.getMinY()));
+
+			PointData pointData = new PointData(
+					Arrays.asList(axisX, axisY),
+					Arrays.asList(axisRendererX, axisRendererY),
+					symbolRow, symbolRow.getIndex(), 0);
+			Shape shape = pointRenderer.getPointShape(pointData);
+
+			DataPoint point = new DataPoint(pointData,
+					new PointND<Double>(bounds.getCenterX(),
+							bounds.getCenterY()));
+
+			Graphics2D graphics = context.getGraphics();
+			graphics.draw(bounds);
+			Point2D pos = point.position.getPoint2D();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(pos.getX(), pos.getY());
+			Drawable drawable = pointRenderer.getPoint(pointData, shape);
+			drawable.draw(context);
+			graphics.setTransform(txOrig);
 		}
 	}
 
