@@ -357,19 +357,17 @@ public class BarPlot extends XYPlot {
 		protected Drawable getSymbol(final Row row) {
 			List<PointRenderer> pointRenderers = plot.getPointRenderers(row.getSource());
 			BarRenderer barRenderer = (BarRenderer) pointRenderers.get(0);
-			return new BarPlot.LegendSymbol(plot, row, barRenderer,
+			return new BarPlot.LegendSymbol(row, barRenderer,
 					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
-		private final BarPlot plot;
 		private final Row row;
 		private final BarRenderer barRenderer;
 
-		public LegendSymbol(BarPlot plot, Row row, BarRenderer barRenderer, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(Row row, BarRenderer barRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
-			this.plot = plot;
 			this.row = row;
 			this.barRenderer = barRenderer;
 		}
