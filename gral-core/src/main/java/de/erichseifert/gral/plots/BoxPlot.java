@@ -31,16 +31,13 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
-import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -51,7 +48,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.ContinuousColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
@@ -689,40 +685,6 @@ public class BoxPlot extends XYPlot {
 		private final Row row;
 		private final PointRenderer pointRenderer;
 
-		/** Source for dummy data. */
-		@SuppressWarnings("unchecked")
-		private static final DataSource DUMMY_DATA = new AbstractDataSource(
-				Double.class, Double.class, Double.class,
-				Double.class, Double.class, Double.class) {
-			/** Version id for serialization. */
-			private static final long serialVersionUID = -8233716728143117368L;
-
-			/** Positions of x position, center bar, bottom bar, box bottom,
-			 box top, and top bar. */
-			private final Double[] values = { 0.5, 0.0, 0.0, 1.0, 1.0 };
-
-			/**
-			 * Returns the number of rows of the data source.
-			 * @return number of rows in the data source.
-			 */
-			public int getRowCount() {
-				return 1;
-			}
-
-			/**
-			 * Returns the value with the specified row and column index.
-			 * @param col index of the column to return
-			 * @param row index of the row to return
-			 * @return the specified value of the data cell
-			 */
-			public Comparable<?> get(int col, int row) {
-				if (col == 0) {
-					return (double) (row + 1);
-				}
-				return values[col - 1];
-			}
-		};
-
 		public LegendSymbol(BoxPlot plot, Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
 			this.plot = plot;
@@ -740,40 +702,15 @@ public class BoxPlot extends XYPlot {
 				return;
 			}
 
-			Row symbolRow = new Row(DUMMY_DATA, 0);
-			Rectangle2D bounds = getBounds();
-
-			double boxWidthRel = pointRenderer.getBoxWidth();
-
-			double posX = ((Number) row.get(0)).doubleValue();
-			Axis axisX = new Axis(posX - boxWidthRel/2.0, posX + boxWidthRel/2.0);
-			AxisRenderer axisRendererX = new LinearRenderer2D();
-			axisRendererX.setShape(new Line2D.Double(
-					bounds.getMinX(), bounds.getMaxY(),
-					bounds.getMaxX(), bounds.getMaxY()));
-			Axis axisY = new Axis(1.0, 2.0);
-			AxisRenderer axisRendererY = new LinearRenderer2D();
-			axisRendererY.setShape(new Line2D.Double(
-					bounds.getMinX(), bounds.getMaxY(),
-					bounds.getMinX(), bounds.getMinY()));
-
-			PointData pointData = new PointData(
-					Arrays.asList(axisX, axisY),
-					Arrays.asList(axisRendererX, axisRendererY),
-					symbolRow, symbolRow.getIndex(), 0);
-			Shape shape = pointRenderer.getPointShape(pointData);
-
-			DataPoint point = new DataPoint(pointData,
-					new PointND<Double>(bounds.getCenterX(),
-							bounds.getCenterY()));
+			Shape shape = new Rectangle2D.Double(0.0, 0.0, getBounds().getWidth(), getBounds().getHeight());
 
 			Graphics2D graphics = context.getGraphics();
-			graphics.draw(bounds);
-			Point2D pos = point.position.getPoint2D();
 			AffineTransform txOrig = graphics.getTransform();
-			graphics.translate(pos.getX(), pos.getY());
-			Drawable drawable = pointRenderer.getPoint(pointData, shape);
-			drawable.draw(context);
+			graphics.translate(getX(), getY());
+			GraphicsUtils.fillPaintedShape(context.getGraphics(), shape,
+					pointRenderer.getBoxBackground().get(row.getIndex()), null);
+			GraphicsUtils.drawPaintedShape(context.getGraphics(), shape, pointRenderer.getBoxBorderColor(),
+					null, pointRenderer.getBoxBorderStroke());
 			graphics.setTransform(txOrig);
 		}
 	}
