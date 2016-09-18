@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -254,6 +255,14 @@ public abstract class AbstractLegend extends DrawableContainer
 	 */
 	public void remove(DataSource source) {
 		sources.remove(source);
+	}
+
+	/**
+	 * Returns all data sources displayed in this legend.
+	 * @return Displayed data sources.
+	 */
+	public Set<DataSource> getSources() {
+		return Collections.unmodifiableSet(sources);
 	}
 
 	/**
