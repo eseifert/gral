@@ -176,6 +176,7 @@ public abstract class ValueLegend extends AbstractLegend
 	 */
 	private void dataChanged(DataSource source, DataChangeEvent... events) {
 		invalidate();
+		refresh();
 	}
 
 	/**

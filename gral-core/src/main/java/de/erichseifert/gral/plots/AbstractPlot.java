@@ -822,9 +822,6 @@ public abstract class AbstractPlot extends DrawableContainer
 	 */
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		invalidateAxisExtrema();
-		if (getLegend() != null) {
-			getLegend().refresh();
-		}
 		autoscaleAxes();
 		layout();
 	}
