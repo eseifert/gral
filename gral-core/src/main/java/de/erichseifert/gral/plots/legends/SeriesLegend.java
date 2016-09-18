@@ -23,12 +23,9 @@ package de.erichseifert.gral.plots.legends;
 
 import java.awt.Font;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
 
 /**
@@ -43,14 +40,6 @@ public abstract class SeriesLegend extends AbstractLegend {
 
 	public SeriesLegend() {
 		drawableByDataSource = new HashMap<DataSource, Drawable>();
-	}
-
-	@Override
-	protected Iterable<Row> getEntries(DataSource source) {
-		List<Row> items = new LinkedList<Row>();
-		Row row = new Row(source, 0);
-		items.add(row);
-		return items;
 	}
 
 	@Override

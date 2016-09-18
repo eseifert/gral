@@ -61,7 +61,12 @@ public abstract class ValueLegend extends AbstractLegend
 		labelColumn = 0;
 	}
 
-	@Override
+	/**
+	 * Returns a sequence of items for the specified data source that should be
+	 * added to the legend.
+	 * @param source Data source.
+	 * @return A sequence of items for the specified data source.
+	 */
 	protected Iterable<Row> getEntries(DataSource source) {
 		List<Row> items = new LinkedList<Row>();
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {

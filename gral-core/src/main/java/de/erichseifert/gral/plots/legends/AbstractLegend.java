@@ -36,7 +36,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
@@ -230,14 +229,6 @@ public abstract class AbstractLegend extends DrawableContainer
 				context.getGraphics(), getBounds(), borderColor, null, stroke);
 		}
 	}
-
-	/**
-	 * Returns a sequence of items for the specified data source that should be
-	 * added to the legend.
-	 * @param source Data source.
-	 * @return A sequence of items for the specified data source.
-	 */
-	protected abstract Iterable<Row> getEntries(DataSource source);
 
 	/**
 	 * Adds the specified data source in order to display it.
