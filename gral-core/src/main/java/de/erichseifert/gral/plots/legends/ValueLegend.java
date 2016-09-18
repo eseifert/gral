@@ -21,15 +21,21 @@
  */
 package de.erichseifert.gral.plots.legends;
 
+import java.awt.Font;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.Drawable;
 
 /**
  * A legend implementation that displays items for all data values of all data
@@ -40,6 +46,8 @@ public abstract class ValueLegend extends AbstractLegend
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4274009997506638823L;
 
+	/** Mapping of data rows to drawable components. */
+	private final Map<Row, Drawable> components;
 	/** Column index containing the labels. */
 	private int labelColumn;
 	/** Format for data to label text conversion. */
@@ -49,6 +57,7 @@ public abstract class ValueLegend extends AbstractLegend
 	 * Initializes a new instance with default values.
 	 */
 	public ValueLegend() {
+		components = new HashMap<Row, Drawable>();
 		labelColumn = 0;
 	}
 
@@ -84,12 +93,31 @@ public abstract class ValueLegend extends AbstractLegend
 	@Override
 	public void add(DataSource source) {
 		super.add(source);
+		for (Row row : getEntries(source)) {
+			String label = getLabel(row);
+			Font font = getFont();
+			Item item = new Item(getSymbol(row), label, font);
+			add(item);
+			components.put(row, item);
+		}
+		invalidate();
 		source.addDataListener(this);
 	}
 
 	@Override
 	public void remove(DataSource source) {
 		super.remove(source);
+		Set<Row> rows = new HashSet<Row>(components.keySet());
+		for (Row row : rows) {
+			if (row.getSource() != source) {
+				continue;
+			}
+			Drawable item = components.remove(row);
+			if (item != null) {
+				remove(item);
+			}
+		}
+		invalidate();
 		source.removeDataListener(this);
 	}
 

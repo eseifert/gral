@@ -31,10 +31,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import de.erichseifert.gral.data.DataSource;
@@ -43,15 +41,15 @@ import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Label;
+import de.erichseifert.gral.graphics.Location;
+import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.graphics.layout.EdgeLayout;
 import de.erichseifert.gral.graphics.layout.Layout;
 import de.erichseifert.gral.graphics.layout.OrientedLayout;
 import de.erichseifert.gral.graphics.layout.StackedLayout;
-import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.graphics.Insets2D;
-import de.erichseifert.gral.graphics.Location;
-import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.util.SerializationUtils;
 
 
@@ -71,8 +69,6 @@ public abstract class AbstractLegend extends DrawableContainer
 
 	/** List of data sources displayed in this legend. */
 	private final Set<DataSource> sources;
-	/** Mapping of data rows to drawable components. */
-	private final Map<Row, Drawable> components;
 	/** Flag that tells whether the data in the legend is up-to-date. */
 	private transient boolean valid;
 
@@ -183,7 +179,6 @@ public abstract class AbstractLegend extends DrawableContainer
 		setInsets(new Insets2D.Double(10.0));
 
 		sources = new LinkedHashSet<DataSource>();
-		components = new HashMap<Row, Drawable>();
 
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
@@ -257,14 +252,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	 */
 	public void add(DataSource source) {
 		sources.add(source);
-		for (Row row : getEntries(source)) {
-			String label = getLabel(row);
-			Font font = getFont();
-			Item item = new Item(getSymbol(row), label, font);
-			add(item);
-			components.put(row, item);
-		}
-		invalidate();
 	}
 
 	/**
@@ -283,17 +270,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	 */
 	public void remove(DataSource source) {
 		sources.remove(source);
-		Set<Row> rows = new HashSet<Row>(components.keySet());
-		for (Row row : rows) {
-			if (row.getSource() != source) {
-				continue;
-			}
-			Drawable item = components.remove(row);
-			if (item != null) {
-				remove(item);
-			}
-		}
-		invalidate();
 	}
 
 	/**
@@ -375,7 +351,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * @param font Font to be set.
 	 */
 	protected final void setDrawableFonts(Font font) {
-		for (Drawable drawable : components.values()) {
+		for (Drawable drawable : this) {
 			if (drawable instanceof Item) {
 				Item item = (Item) drawable;
 				item.label.setFont(font);

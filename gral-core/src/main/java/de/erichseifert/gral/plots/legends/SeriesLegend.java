@@ -21,11 +21,17 @@
  */
 package de.erichseifert.gral.plots.legends;
 
+import java.awt.Font;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
+import de.erichseifert.gral.graphics.Drawable;
 
 /**
  * A legend implementation that displays an item for each data series that are
@@ -34,6 +40,12 @@ import de.erichseifert.gral.data.Row;
 public abstract class SeriesLegend extends AbstractLegend {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1092110896986707546L;
+	/** Mapping of data rows to drawable components. */
+	private final Map<Row, Drawable> components;
+
+	public SeriesLegend() {
+		components = new HashMap<Row, Drawable>();
+	}
 
 	@Override
 	protected Iterable<Row> getEntries(DataSource source) {
@@ -41,6 +53,34 @@ public abstract class SeriesLegend extends AbstractLegend {
 		Row row = new Row(source, 0);
 		items.add(row);
 		return items;
+	}
+
+	@Override
+	public void add(DataSource source) {
+		super.add(source);
+		for (Row row : getEntries(source)) {
+			String label = getLabel(row);
+			Font font = getFont();
+			Item item = new Item(getSymbol(row), label, font);
+			add(item);
+			components.put(row, item);
+		}
+	}
+
+	@Override
+	public void remove(DataSource source) {
+		super.remove(source);
+		Set<Row> rows = new HashSet<Row>(components.keySet());
+		for (Row row : rows) {
+			if (row.getSource() != source) {
+				continue;
+			}
+			Drawable item = components.remove(row);
+			if (item != null) {
+				remove(item);
+			}
+		}
+		invalidate();
 	}
 
 	@Override
