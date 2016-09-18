@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
@@ -58,6 +59,7 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.axes.Tick;
 import de.erichseifert.gral.plots.axes.Tick.TickType;
+import de.erichseifert.gral.plots.legends.AbstractLegend;
 import de.erichseifert.gral.plots.legends.SeriesLegend;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
@@ -633,9 +635,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = -4629928754001372002L;
 
-		/** Source for dummy data. */
-		private static final DataSource DUMMY_DATA = new DummyData(2, Integer.MAX_VALUE, 0.5);
-
 		/** Plot that contains settings and renderers. */
 		private final XYPlot plot;
 
@@ -650,88 +649,99 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new AbstractSymbol(getFont(), getSymbolSize()) {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = 5744026898590787285L;
+			return new LegendSymbol(plot, row, plot.getFont(), plot.getLegend().getSymbolSize());
+		}
+	}
 
-				public void draw(DrawingContext context) {
-					DataSource data = row.getSource();
+	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
+		/** Source for dummy data. */
+		private static final DataSource DUMMY_DATA = new DummyData(2, Integer.MAX_VALUE, 0.5);
+		private final XYPlot plot;
+		private final Row row;
 
-					Row symbolRow = new Row(DUMMY_DATA, 0);
-					Rectangle2D bounds = getBounds();
+		public LegendSymbol(XYPlot plot, Row row, Font font, Dimension2D symbolSize) {
+			super(font, symbolSize);
+			this.plot = plot;
+			this.row = row;
+		}
 
-					Axis axisX = new Axis(0.0, 1.0);
-					AxisRenderer axisRendererX = new LinearRenderer2D();
-					axisRendererX.setShape(new Line2D.Double(
-						bounds.getMinX(), bounds.getCenterY(),
-						bounds.getMaxX(), bounds.getCenterY()));
-					Axis axisY = new Axis(0.0, 1.0);
-					AxisRenderer axisRendererY = new LinearRenderer2D();
-					axisRendererY.setShape(new Line2D.Double(
-						bounds.getCenterX(), bounds.getMaxY(),
-						bounds.getCenterX(), bounds.getMinY()));
+		@Override
+		public void draw(DrawingContext context) {
+			DataSource data = row.getSource();
 
-					PointData pointData = new PointData(
-						Arrays.asList(axisX, axisY),
-						Arrays.asList(axisRendererX, axisRendererY),
-						symbolRow, row.getIndex(), 0);
+			Row symbolRow = new Row(DUMMY_DATA, 0);
+			Rectangle2D bounds = getBounds();
 
-					DataPoint p1 = new DataPoint(
-						pointData,
-						new PointND<Double>(bounds.getMinX(), bounds.getCenterY())
-					);
-					DataPoint p2 = new DataPoint(
-						pointData,
-						new PointND<Double>(bounds.getCenterX(), bounds.getCenterY())
-					);
-					DataPoint p3 = new DataPoint(
-						pointData,
-						new PointND<Double>(bounds.getMaxX(), bounds.getCenterY())
-					);
-					List<DataPoint> points = Arrays.asList(p1, p2, p3);
+			Axis axisX = new Axis(0.0, 1.0);
+			AxisRenderer axisRendererX = new LinearRenderer2D();
+			axisRendererX.setShape(new Line2D.Double(
+					bounds.getMinX(), bounds.getCenterY(),
+					bounds.getMaxX(), bounds.getCenterY()));
+			Axis axisY = new Axis(0.0, 1.0);
+			AxisRenderer axisRendererY = new LinearRenderer2D();
+			axisRendererY.setShape(new Line2D.Double(
+					bounds.getCenterX(), bounds.getMaxY(),
+					bounds.getCenterX(), bounds.getMinY()));
 
-					// TODO: Provide a means to set the AreaRenderer used for the Legend
-					AreaRenderer areaRenderer = null;
-					List<AreaRenderer> areaRenderers = plot.getAreaRenderers(data);
-					if (!areaRenderers.isEmpty()) {
-						areaRenderer = areaRenderers.get(0);
-					}
-					if (areaRenderer != null) {
-						Shape area = areaRenderer.getAreaShape(points);
-						Drawable drawable = areaRenderer.getArea(points, area);
-						drawable.draw(context);
-					}
+			PointData pointData = new PointData(
+					Arrays.asList(axisX, axisY),
+					Arrays.asList(axisRendererX, axisRendererY),
+					symbolRow, row.getIndex(), 0);
 
-					// TODO: Provide a means to set the LineRenderer used for the Legend
-					LineRenderer lineRenderer = null;
-					List<LineRenderer> lineRenderers = plot.getLineRenderers(data);
-					if (!lineRenderers.isEmpty()) {
-						lineRenderer = lineRenderers.get(0);
-					}
-					if (lineRenderer != null) {
-						Shape line = lineRenderer.getLineShape(points);
-						Drawable drawable = lineRenderer.getLine(points, line);
-						drawable.draw(context);
-					}
+			DataPoint p1 = new DataPoint(
+					pointData,
+					new PointND<Double>(bounds.getMinX(), bounds.getCenterY())
+			);
+			DataPoint p2 = new DataPoint(
+					pointData,
+					new PointND<Double>(bounds.getCenterX(), bounds.getCenterY())
+			);
+			DataPoint p3 = new DataPoint(
+					pointData,
+					new PointND<Double>(bounds.getMaxX(), bounds.getCenterY())
+			);
+			List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
-					// TODO: Provide a means to set the PointRenderer used for the Legend
-					PointRenderer pointRenderer = null;
-					List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
-					if (!pointRenderers.isEmpty()) {
-						pointRenderer = pointRenderers.get(0);
-					}
-					if (pointRenderer != null) {
-						Graphics2D graphics = context.getGraphics();
-						Point2D pos = p2.position.getPoint2D();
-						AffineTransform txOrig = graphics.getTransform();
-						graphics.translate(pos.getX(), pos.getY());
-						Shape shape = pointRenderer.getPointShape(pointData);
-						Drawable drawable = pointRenderer.getPoint(pointData, shape);
-						drawable.draw(context);
-						graphics.setTransform(txOrig);
-					}
-				}
-			};
+			// TODO: Provide a means to set the AreaRenderer used for the Legend
+			AreaRenderer areaRenderer = null;
+			List<AreaRenderer> areaRenderers = plot.getAreaRenderers(data);
+			if (!areaRenderers.isEmpty()) {
+				areaRenderer = areaRenderers.get(0);
+			}
+			if (areaRenderer != null) {
+				Shape area = areaRenderer.getAreaShape(points);
+				Drawable drawable = areaRenderer.getArea(points, area);
+				drawable.draw(context);
+			}
+
+			// TODO: Provide a means to set the LineRenderer used for the Legend
+			LineRenderer lineRenderer = null;
+			List<LineRenderer> lineRenderers = plot.getLineRenderers(data);
+			if (!lineRenderers.isEmpty()) {
+				lineRenderer = lineRenderers.get(0);
+			}
+			if (lineRenderer != null) {
+				Shape line = lineRenderer.getLineShape(points);
+				Drawable drawable = lineRenderer.getLine(points, line);
+				drawable.draw(context);
+			}
+
+			// TODO: Provide a means to set the PointRenderer used for the Legend
+			PointRenderer pointRenderer = null;
+			List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
+			if (!pointRenderers.isEmpty()) {
+				pointRenderer = pointRenderers.get(0);
+			}
+			if (pointRenderer != null) {
+				Graphics2D graphics = context.getGraphics();
+				Point2D pos = p2.position.getPoint2D();
+				AffineTransform txOrig = graphics.getTransform();
+				graphics.translate(pos.getX(), pos.getY());
+				Shape shape = pointRenderer.getPointShape(pointData);
+				Drawable drawable = pointRenderer.getPoint(pointData, shape);
+				drawable.draw(context);
+				graphics.setTransform(txOrig);
+			}
 		}
 	}
 
