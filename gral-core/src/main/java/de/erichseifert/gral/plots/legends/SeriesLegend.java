@@ -23,11 +23,9 @@ package de.erichseifert.gral.plots.legends;
 
 import java.awt.Font;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.Row;
@@ -41,10 +39,10 @@ public abstract class SeriesLegend extends AbstractLegend {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 1092110896986707546L;
 	/** Mapping of data rows to drawable components. */
-	private final Map<Row, Drawable> components;
+	private final Map<DataSource, Drawable> drawableByDataSource;
 
 	public SeriesLegend() {
-		components = new HashMap<Row, Drawable>();
+		drawableByDataSource = new HashMap<DataSource, Drawable>();
 	}
 
 	@Override
@@ -58,27 +56,19 @@ public abstract class SeriesLegend extends AbstractLegend {
 	@Override
 	public void add(DataSource source) {
 		super.add(source);
-		for (Row row : getEntries(source)) {
-			String label = getLabel(source);
-			Font font = getFont();
-			Item item = new Item(getSymbol(source), label, font);
-			add(item);
-			components.put(row, item);
-		}
+		String label = getLabel(source);
+		Font font = getFont();
+		Item item = new Item(getSymbol(source), label, font);
+		add(item);
+		drawableByDataSource.put(source, item);
 	}
 
 	@Override
 	public void remove(DataSource source) {
 		super.remove(source);
-		Set<Row> rows = new HashSet<Row>(components.keySet());
-		for (Row row : rows) {
-			if (row.getSource() != source) {
-				continue;
-			}
-			Drawable item = components.remove(row);
-			if (item != null) {
-				remove(item);
-			}
+		Drawable drawable = drawableByDataSource.remove(source);
+		if (drawable != null) {
+			remove(drawable);
 		}
 		invalidate();
 	}
