@@ -29,18 +29,14 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 import de.erichseifert.gral.data.DataSource;
-import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -49,7 +45,6 @@ import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
-import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.legends.AbstractLegend;
 import de.erichseifert.gral.plots.legends.Legend;
@@ -368,8 +363,6 @@ public class BarPlot extends XYPlot {
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
-		/** Source for dummy data. */
-		private static final DataSource DUMMY_DATA = new DummyData(2, 1, 0.5);
 		private final BarPlot plot;
 		private final Row row;
 		private final BarRenderer barRenderer;
@@ -383,42 +376,18 @@ public class BarPlot extends XYPlot {
 
 		@Override
 		public void draw(DrawingContext context) {
-			Row symbolRow = new Row(DUMMY_DATA, 0);
-			Rectangle2D bounds = getBounds();
+			double width = getPreferredSize().getWidth();
+			double height = getPreferredSize().getHeight();
+			Shape shape = barRenderer.getBarShape(0.0, 0.0, width, height);
 
-			double barWidthRel = plot.getBarWidth();
-
-			Axis axisX = new Axis(0.5 - barWidthRel/2.0, 0.5 + barWidthRel/2.0);
-			AxisRenderer axisRendererX = new LinearRenderer2D();
-			axisRendererX.setShape(new Line2D.Double(
-					bounds.getMinX(), bounds.getMaxY(),
-					bounds.getMaxX(), bounds.getMaxY()));
-			Axis axisY = new Axis(0.0, 0.5);
-			AxisRenderer axisRendererY = new LinearRenderer2D();
-			axisRendererY.setShape(new Line2D.Double(
-					bounds.getMinX(), bounds.getMaxY(),
-					bounds.getMinX(), bounds.getMinY()));
-
-			PointData pointData = new PointData(
-					Arrays.asList(axisX, axisY),
-					Arrays.asList(axisRendererX, axisRendererY),
-					symbolRow, symbolRow.getIndex(), 0);
-
-			Shape shape = barRenderer.getPointShape(pointData);
-			Drawable drawable = barRenderer.getPoint(pointData, shape);
-
-			DataPoint point = new DataPoint(pointData,
-					new PointND<Double>(bounds.getCenterX(),
-							bounds.getMinY()));
-
-			if (drawable != null) {
-				Graphics2D graphics = context.getGraphics();
-				Point2D pos = point.position.getPoint2D();
-				AffineTransform txOrig = graphics.getTransform();
-				graphics.translate(pos.getX(), pos.getY());
-				drawable.draw(context);
-				graphics.setTransform(txOrig);
-			}
+			Graphics2D graphics = context.getGraphics();
+			AffineTransform txOrig = graphics.getTransform();
+			graphics.translate(getX(), getY());
+			GraphicsUtils.fillPaintedShape(
+					context.getGraphics(), shape, barRenderer.getColor().get(0), null);
+			GraphicsUtils.drawPaintedShape(
+					context.getGraphics(), shape, barRenderer.getBorderColor(), null, barRenderer.getBorderStroke());
+			graphics.setTransform(txOrig);
 		}
 	}
 
