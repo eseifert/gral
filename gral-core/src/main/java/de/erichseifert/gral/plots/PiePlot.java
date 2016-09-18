@@ -786,7 +786,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		protected Drawable getSymbol(final Row row) {
-			return new LegendSymbol(plot, row, plot.getPointRenderer(row.getSource()),
+			return new LegendSymbol(row, plot.getPointRenderer(row.getSource()),
 					plot.getFont(), plot.getLegend().getSymbolSize());
 		}
 
@@ -804,13 +804,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	}
 
 	private static class LegendSymbol extends AbstractLegend.AbstractSymbol {
-		private final PiePlot plot;
 		private final Row row;
 		private final PointRenderer pointRenderer;
 
-		public LegendSymbol(PiePlot plot, Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
+		public LegendSymbol(Row row, PointRenderer pointRenderer, Font font, Dimension2D symbolSize) {
 			super(font, symbolSize);
-			this.plot = plot;
 			this.row = row;
 			this.pointRenderer = pointRenderer;
 		}
