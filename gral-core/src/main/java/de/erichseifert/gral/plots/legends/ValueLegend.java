@@ -71,7 +71,11 @@ public abstract class ValueLegend extends AbstractLegend
 		return items;
 	}
 
-	@Override
+	/**
+	 * Returns the label text for the specified row.
+	 * @param row Data row.
+	 * @return Label text.
+	 */
 	protected String getLabel(Row row) {
 		int col = getLabelColumn();
 		Comparable<?> value = row.get(col);

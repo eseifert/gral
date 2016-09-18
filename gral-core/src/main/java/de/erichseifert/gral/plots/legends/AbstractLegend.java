@@ -240,13 +240,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	protected abstract Iterable<Row> getEntries(DataSource source);
 
 	/**
-	 * Returns the label text for the specified row.
-	 * @param row Data row.
-	 * @return Label text.
-	 */
-	protected abstract String getLabel(Row row);
-
-	/**
 	 * Adds the specified data source in order to display it.
 	 * @param source data source to be added.
 	 */

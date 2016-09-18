@@ -83,7 +83,11 @@ public abstract class SeriesLegend extends AbstractLegend {
 		invalidate();
 	}
 
-	@Override
+	/**
+	 * Returns the label text for the specified row.
+	 * @param row Data row.
+	 * @return Label text.
+	 */
 	protected String getLabel(Row row) {
 		return row.getSource().toString();
 	}
