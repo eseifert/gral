@@ -44,28 +44,28 @@ public class StackedLayout extends AbstractOrientedLayout {
 	public static class Constraints implements Serializable {
 		private static final long serialVersionUID = -3375316557720116460L;
 		/**
-		 * Whether the component is strechted to the container's width (vertical layout)
+		 * Whether the component is stretched to the container's width (vertical layout)
 		 * or height (horizontal layout).
 		 */
-		private final boolean strechted;
+		private final boolean stretched;
 		/** Horizontal alignment of the component. */
 		private final double alignmentX;
 		/** Vertical alignment of the component. */
 		private final double alignmentY;
 
-		public Constraints(boolean strechted, double alignmentX, double alignmentY) {
-			this.strechted = strechted;
+		public Constraints(boolean stretched, double alignmentX, double alignmentY) {
+			this.stretched = stretched;
 			this.alignmentX = alignmentX;
 			this.alignmentY = alignmentY;
 		}
 
 		/**
-		 * Returns whether the component is strechted to the container's width (vertical layout)
+		 * Returns whether the component is stretched to the container's width (vertical layout)
 		 * or height (horizontal orientation).
-		 * @return {@code true} if the layed out component should be strechted, {@code false} otherwise.
+		 * @return {@code true} if the layed out component should be stretched, {@code false} otherwise.
 		 */
-		public boolean isStrechted() {
-			return strechted;
+		public boolean isStretched() {
+			return stretched;
 		}
 
 		/**
@@ -133,7 +133,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 				Constraints constraints = getConstraints(component, container);
 				double componentHeight;
 				double componentY;
-				if (constraints.isStrechted()) {
+				if (constraints.isStretched()) {
 					componentHeight = height;
 					componentY = yMin;
 				} else {
@@ -153,7 +153,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 				Constraints constraints = getConstraints(component, container);
 				double componentWidth;
 				double componentX;
-				if (constraints.isStrechted()) {
+				if (constraints.isStretched()) {
 					componentWidth = width;
 					componentX = xMin;
 				} else {
