@@ -1283,7 +1283,7 @@ class DummyResultSetMetaData implements ResultSetMetaData {
 			return Types.VARCHAR;
 		}
 
-		throw new IllegalArgumentException(String.format("Unkown java data type: %s", javaType.getName()));
+		throw new IllegalArgumentException(String.format("Unknown java data type: %s", javaType.getName()));
 	}
 
 	public String getColumnTypeName(int column) throws SQLException {
