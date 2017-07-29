@@ -8,7 +8,10 @@ jdk:
   - openjdk6
 
 before_install:
-  - "gradle --version"
+  - sudo add-apt-repository ppa:cwchien/gradle -y
+  - sudo apt-get update -q
+  - sudo apt-get install gradle -y
+  - gradle --version
 
 before_script:
   - "export DISPLAY=:99.0"
