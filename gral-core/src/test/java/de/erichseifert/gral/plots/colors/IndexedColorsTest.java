@@ -68,7 +68,7 @@ public class IndexedColorsTest {
 	}
 
 	@Test
-	public void testGetCiricular() {
+	public void testGetCircular() {
 		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		c.setMode(Mode.CIRCULAR);
 		assertEquals(Color.BLUE,  c.get(-1));
