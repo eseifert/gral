@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
 
 public class MathUtilsTest {
