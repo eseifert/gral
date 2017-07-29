@@ -89,13 +89,10 @@ public class RecordTest {
 		Record record = new Record(-3.0, 1, "SomeString", null);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(out);
-		try {
+		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(record);
-		} catch(NotSerializableException e) {
-			fail("Unable to serialize "+Record.class.getName());
-		} finally {
-			oos.close();
+		} catch (NotSerializableException e) {
+			fail("Unable to serialize " + Record.class.getName());
 		}
 		assertTrue(out.size() > 0);
 	}

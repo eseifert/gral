@@ -196,13 +196,10 @@ public class TestUtils {
 			throws IOException, ClassNotFoundException {
 		// Serialize
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(out);
-		try {
+		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(original);
-		} catch(NotSerializableException e) {
+		} catch (NotSerializableException e) {
 			e.printStackTrace();
-		} finally {
-			oos.close();
 		}
 		assertTrue("Serialization failed.", out.size() > 0);
 
