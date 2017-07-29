@@ -42,7 +42,7 @@ public class Histogram implements Iterable<Integer> {
 		this.breaks = breaks;
 		int binCount = breaks.length - 1;
 		bins = new Integer[binCount];
-		Arrays.fill(bins, new Integer(0));
+		Arrays.fill(bins, 0);
 
 		computeDistribution();
 	}

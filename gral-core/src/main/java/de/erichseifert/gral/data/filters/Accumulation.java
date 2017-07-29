@@ -43,7 +43,7 @@ public class Accumulation<T extends Number & Comparable<T>> implements Filter<T>
 		@Override
 		public Double next() {
 			accumulatedValue += wrappedIterator.next().doubleValue();
-			return Double.valueOf(accumulatedValue);
+			return accumulatedValue;
 		}
 
 		@Override

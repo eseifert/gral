@@ -78,7 +78,7 @@ public class HistogramTest {
 		Iterable<Comparable<?>> data = createHistogramData();
 		int lessThanTwo = 1;
 		Number[] breaks = new Number[lessThanTwo];
-		Arrays.fill(breaks, new Integer(2));
+		Arrays.fill(breaks, 2);
 
 		new Histogram(data, breaks);
 	}
