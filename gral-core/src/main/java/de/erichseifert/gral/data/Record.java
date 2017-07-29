@@ -73,16 +73,16 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 
 	@Override
 	public String toString() {
-		String representation = "(";
+		StringBuilder representation = new StringBuilder("(");
 		for (int elementIndex = 0; elementIndex < values.length; elementIndex++) {
 			Comparable element = values[elementIndex];
-			representation += element;
+			representation.append(element);
 			if (elementIndex != values.length - 1) {
-				representation += ", ";
+				representation.append(", ");
 			}
 		}
-		representation += ")";
-		return representation;
+		representation.append(")");
+		return representation.toString();
 	}
 
 	public Record insert(Comparable<?> value, int position) {

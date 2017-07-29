@@ -186,12 +186,12 @@ public class CSVReader extends AbstractDataReader {
 		List<Comparable<?>> row = new LinkedList<>();
 		int rowIndex = 0;
 		int colIndex = 0;
-		String cellContent = "";
+		StringBuilder cellContent = new StringBuilder();
 		for (Token token : tokens) {
 			if (token.getType() == CSVTokenType.TEXT ||
 					token.getType() == CSVTokenType.EMPTY_SPACE) {
 				// Store the token text
-				cellContent += token.getContent();
+				cellContent.append(token.getContent());
 			} else if (token.getType() == CSVTokenType.COLUMN_SEPARATOR ||
 					token.getType() == CSVTokenType.ROW_SEPARATOR) {
 				// Check for a valid number of columns
@@ -208,7 +208,7 @@ public class CSVReader extends AbstractDataReader {
 				Comparable<?> cell = null;
 				try {
 					cell = (Comparable<?>) parseMethod.invoke(
-						null, cellContent.trim());
+						null, cellContent.toString().trim());
 
 				} catch (IllegalArgumentException e) {
 					throw new RuntimeException(MessageFormat.format(
@@ -219,10 +219,10 @@ public class CSVReader extends AbstractDataReader {
 						"Could not access method for parsing data type {0} in column {1,number,integer}.", //$NON-NLS-1$
 						types[colIndex].getSimpleName(), colIndex));
 				} catch (InvocationTargetException e) {
-					if (!cellContent.isEmpty()) {
+					if (cellContent.length() > 0) {
 						throw new IOException(MessageFormat.format(
 							"Type mismatch in line {0,number,integer}, column {1,number,integer}: got \"{2}\", but expected {3} value.", //$NON-NLS-1$
-							rowIndex + 1, colIndex + 1, cellContent, colType.getSimpleName()));
+							rowIndex + 1, colIndex + 1, cellContent.toString(), colType.getSimpleName()));
 					}
 				}
 				row.add(cell);
@@ -244,7 +244,7 @@ public class CSVReader extends AbstractDataReader {
 					row.clear();
 					colIndex = 0;
 				}
-				cellContent = "";
+				cellContent = new StringBuilder();
 			}
 		}
 
