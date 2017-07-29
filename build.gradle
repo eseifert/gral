@@ -46,7 +46,7 @@ subprojects {
 			java = 'SLASHSTAR_STYLE'
 		}
 
-		def currentYear = new GregorianCalendar().get(Calendar.YEAR);
+		def currentYear = new GregorianCalendar().get(Calendar.YEAR)
 		ext.year = "${inceptionYear}-${currentYear}"
 		ext.owner1 = owner1_name
 		ext.email1 = owner1_email
