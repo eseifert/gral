@@ -166,8 +166,7 @@ public abstract class DataAccessor
 			}
 
 			public Comparable<?> next() {
-				Comparable<?> value = get(i++);
-				return value;
+				return get(i++);
 			}
 
 			public void remove() {

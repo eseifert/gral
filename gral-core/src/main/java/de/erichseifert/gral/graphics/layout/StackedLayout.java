@@ -203,9 +203,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 		width += insets.getRight();
 		height += insets.getBottom();
 
-		Dimension2D bounds =
-			new de.erichseifert.gral.graphics.Dimension2D.Double(width, height);
-		return bounds;
+		return new de.erichseifert.gral.graphics.Dimension2D.Double(width, height);
 	}
 
 	private Constraints getConstraints(Drawable component, Container container) {

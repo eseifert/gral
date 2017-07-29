@@ -717,9 +717,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		public Drawable getValue(final PointData data, final Shape shape) {
-			Drawable drawable = new AbstractDrawable() {
+			return new AbstractDrawable() {
 				/** Version id for serialization. */
-				private static final long serialVersionUID = 8389872806138135038L;
+				private static final long serialVersionUID1 = 8389872806138135038L;
 
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = PieSliceRenderer.this;
@@ -738,14 +738,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 					double plotAreaSize = Math.min(
 						plotArea.getWidth(), plotArea.getHeight())/2.0;
 					double radiusRel = plot.getRadius();
-					double radius = plotAreaSize*radiusRel;
+					double radius1 = plotAreaSize*radiusRel;
 
 					if (renderer.isValueVisible()) {
-						drawValueLabel(context, slice, radius, row, data.index);
+						drawValueLabel(context, slice, radius1, row, data.index);
 					}
 				}
 			};
-			return drawable;
 		}
 	}
 

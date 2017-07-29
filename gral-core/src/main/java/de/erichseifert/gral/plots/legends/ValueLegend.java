@@ -95,8 +95,7 @@ public abstract class ValueLegend extends AbstractLegend
 		}
 
 		// Text to display
-		String text = (format != null) ? format.format(value) : value.toString();
-		return text;
+		return (format != null) ? format.format(value) : value.toString();
 	}
 
 	@Override

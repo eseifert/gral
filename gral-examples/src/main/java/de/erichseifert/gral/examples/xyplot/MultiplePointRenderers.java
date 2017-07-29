@@ -62,7 +62,7 @@ public class MultiplePointRenderers extends ExamplePanel {
 
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
-			Drawable drawable = new AbstractDrawable() {
+			return new AbstractDrawable() {
 				@Override
 				public void draw(DrawingContext context) {
 					Graphics2D graphics2D = context.getGraphics();
@@ -73,7 +73,6 @@ public class MultiplePointRenderers extends ExamplePanel {
 					graphics2D.setTransform(txOld);
 				}
 			};
-			return drawable;
 		}
 
 		@Override

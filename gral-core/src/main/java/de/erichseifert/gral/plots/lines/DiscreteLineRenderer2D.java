@@ -64,9 +64,9 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 * @return Representation of the line.
 	 */
 	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
-		Drawable d = new AbstractDrawable() {
+		return new AbstractDrawable() {
 			/** Version id for serialization. */
-			private static final long serialVersionUID = -1686744943386843195L;
+			private static final long serialVersionUID1 = -1686744943386843195L;
 
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
@@ -79,7 +79,6 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 					context.getGraphics(), shape, paint, null);
 			}
 		};
-		return d;
 	}
 
 	/**

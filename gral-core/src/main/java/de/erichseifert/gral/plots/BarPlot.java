@@ -278,9 +278,8 @@ public class BarPlot extends XYPlot {
 				barHeight = barHeightMin;
 			}
 
-			Shape shape = getBarShape(
+			return getBarShape(
 				barXMin - barX, barY, barWidth, barHeight);
-			return shape;
 		}
 
 		/**
@@ -302,8 +301,7 @@ public class BarPlot extends XYPlot {
 			tx.scale(width/shapeBounds.getWidth(), height/shapeBounds.getHeight());
 			tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
 
-			Shape shapeTransformed = tx.createTransformedShape(shape);
-			return shapeTransformed;
+			return tx.createTransformedShape(shape);
 		}
 
 		/**
@@ -315,9 +313,9 @@ public class BarPlot extends XYPlot {
 		 */
 		@Override
 		public Drawable getValue(final PointData data, final Shape shape) {
-			Drawable drawable = new AbstractDrawable() {
+			return new AbstractDrawable() {
 				/** Version id for serialization. */
-				private static final long serialVersionUID = -1133369168849171793L;
+				private static final long serialVersionUID1 = -1133369168849171793L;
 
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = BarRenderer.this;
@@ -329,7 +327,6 @@ public class BarPlot extends XYPlot {
 					}
 				}
 			};
-			return drawable;
 		}
 	}
 

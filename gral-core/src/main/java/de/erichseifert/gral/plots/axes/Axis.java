@@ -176,9 +176,8 @@ public class Axis implements Serializable {
 		if (value == null) {
 			return null;
 		}
-		double relativePosition = (value.doubleValue() - getMin().doubleValue()) /
+		return (value.doubleValue() - getMin().doubleValue()) /
 				getRange();
-		return relativePosition;
 	}
 
 	/**

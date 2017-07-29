@@ -56,11 +56,10 @@ final class MockNavigator extends AbstractNavigator {
 	}
 
 	public PointND<? extends Number> getCenter() {
-		PointND<Double> center = new PointND<>(
-				this.center.get(PointND.X),
-				this.center.get(PointND.Y)
+		return new PointND<>(
+			this.center.get(PointND.X),
+			this.center.get(PointND.Y)
 		);
-		return center;
 	}
 
 	public void setCenter(PointND<? extends Number> center) {

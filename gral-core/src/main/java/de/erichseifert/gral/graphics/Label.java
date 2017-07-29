@@ -188,9 +188,8 @@ public class Label extends AbstractDrawable {
 				Math.abs(Math.sin(rotation))*getHeight());
 		}
 		double alignment = getTextAlignment();
-		Shape outline = GraphicsUtils.getOutline(
+		return GraphicsUtils.getOutline(
 			getText(), font, wrappingWidth, alignment);
-		return outline;
 	}
 
 	/**

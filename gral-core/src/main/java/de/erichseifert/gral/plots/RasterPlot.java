@@ -260,15 +260,14 @@ public class RasterPlot extends XYPlot {
 		 * @return Component that can be used to draw the value label.
 		 */
 		public Drawable getValue(final PointData data, final Shape shape) {
-			Drawable drawable = new AbstractDrawable() {
+			return new AbstractDrawable() {
 				/** Version id for serialization. */
-				private static final long serialVersionUID = -8402945980942955359L;
+				private static final long serialVersionUID1 = -8402945980942955359L;
 
 				public void draw(DrawingContext context) {
 					// TODO Implement rendering of value label
 				}
 			};
-			return drawable;
 		}
 	}
 

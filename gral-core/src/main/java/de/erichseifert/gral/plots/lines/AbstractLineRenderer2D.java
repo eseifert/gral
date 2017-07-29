@@ -77,8 +77,7 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 			return null;
 		}
 		Stroke stroke = getStroke();
-		Shape lineShape = stroke.createStrokedShape(line);
-		return lineShape;
+		return stroke.createStrokedShape(line);
 	}
 
 	/**

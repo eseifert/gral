@@ -286,9 +286,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @return The data types of all column in the data source
 	 */
 	public Class<? extends Comparable<?>>[] getColumnTypes() {
-		Class<? extends Comparable<?>>[] types =
-			Arrays.copyOf(this.types, this.types.length);
-		return types;
+		return Arrays.copyOf(this.types, this.types.length);
 	}
 
 	/**

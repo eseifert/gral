@@ -63,9 +63,9 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	 * @return Representation of the line.
 	 */
 	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
-		Drawable d = new AbstractDrawable() {
+		return new AbstractDrawable() {
 			/** Version id for serialization. */
-			private static final long serialVersionUID = 3641589240264518755L;
+			private static final long serialVersionUID1 = 3641589240264518755L;
 
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
@@ -78,7 +78,6 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 					context.getGraphics(), shape, paint, null);
 			}
 		};
-		return d;
 	}
 
 	/**

@@ -644,8 +644,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 */
 	private String getMapping(DataSource source, int col) {
 		Map<Integer, String> columnToAxisMapping = columnToAxisMappingByDataSource.get(source);
-		String axisName = columnToAxisMapping != null ? columnToAxisMapping.get(col) : null;
-		return axisName;
+		return columnToAxisMapping != null ? columnToAxisMapping.get(col) : null;
 	}
 
 	/**

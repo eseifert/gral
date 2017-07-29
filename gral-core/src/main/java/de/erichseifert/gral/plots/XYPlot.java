@@ -416,8 +416,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				List<AreaRenderer> areaRenderers = new ArrayList<>(plot.getAreaRenderers(s));
 				Collections.reverse(areaRenderers);
 				for (AreaRenderer areaRenderer : areaRenderers) {
-					Shape area = areaRenderer.getAreaShape(points);
-					Shape punchedArea = area;
+					Shape punchedArea = areaRenderer.getAreaShape(points);
 					for (PointRenderer pointRenderer : pointRenderers) {
 						List<Shape> punchShapes = new ArrayList<>(points.size());
 						for (DataPoint point : points) {
@@ -433,8 +432,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				List<LineRenderer> lineRenderers = new ArrayList<>(plot.getLineRenderers(s));
 				Collections.reverse(lineRenderers);
 				for (LineRenderer lineRenderer : lineRenderers) {
-					Shape line = lineRenderer.getLineShape(points);
-					Shape punchedLine = line;
+					Shape punchedLine = lineRenderer.getLineShape(points);
 					for (PointRenderer pointRenderer : pointRenderers) {
 						List<Shape> punchShapes = new ArrayList<>(points.size());
 						for (DataPoint point : points) {

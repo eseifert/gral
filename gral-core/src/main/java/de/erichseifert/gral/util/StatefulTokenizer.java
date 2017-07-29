@@ -202,8 +202,7 @@ public abstract class StatefulTokenizer {
 				return null;
 			}
 			String content = (m.groupCount() > 0) ? m.group(1) : m.group();
-			Token token = new Token(m.start(), m.end(), tokenType, content);
-			return token;
+			return new Token(m.start(), m.end(), tokenType, content);
 		}
 	}
 
