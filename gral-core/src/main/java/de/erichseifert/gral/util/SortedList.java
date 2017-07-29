@@ -97,9 +97,7 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 	public int indexOf(Object o) {
 		try {
 			return Collections.binarySearch(elements, (T) o);
-		} catch (NullPointerException e) {
-			return -1;
-		} catch (ClassCastException e) {
+		} catch (NullPointerException | ClassCastException e) {
 			return -1;
 		}
 	}

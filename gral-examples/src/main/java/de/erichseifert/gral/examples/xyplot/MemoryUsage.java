@@ -78,8 +78,7 @@ final class UpdateTask implements ActionListener {
 			getFreePhysicalMemorySize = osBean.getClass()
 				.getMethod("getFreePhysicalMemorySize");
 			getFreePhysicalMemorySize.setAccessible(true);
-		} catch (SecurityException ex) {
-		} catch (NoSuchMethodException ex) {
+		} catch (SecurityException | NoSuchMethodException ex) {
 		}
 	}
 
@@ -104,9 +103,7 @@ final class UpdateTask implements ActionListener {
 				memSysTotal = (Long) getTotalPhysicalMemorySize.invoke(osBean);
 				memSysFree = (Long) getFreePhysicalMemorySize.invoke(osBean);
 				memSysUsed = memSysTotal - memSysFree;
-			} catch (IllegalArgumentException ex) {
-			} catch (IllegalAccessException ex) {
-			} catch (InvocationTargetException ex) {
+			} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException ex) {
 			}
 		}
 

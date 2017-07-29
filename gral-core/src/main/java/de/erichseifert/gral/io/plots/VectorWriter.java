@@ -177,17 +177,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 				"getBytes").invoke(g); //$NON-NLS-1$
 			destination.write(data);
 			d.setBounds(boundsOld);
-		} catch (SecurityException e) {
-			throw new IllegalStateException(e);
-		} catch (NoSuchMethodException e) {
-			throw new IllegalStateException(e);
-		} catch (IllegalArgumentException e) {
-			throw new IllegalStateException(e);
-		} catch (InstantiationException e) {
-			throw new IllegalStateException(e);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException(e);
-		} catch (InvocationTargetException e) {
+		} catch (SecurityException | InvocationTargetException | IllegalAccessException | InstantiationException | IllegalArgumentException | NoSuchMethodException e) {
 			throw new IllegalStateException(e);
 		}
 	}
