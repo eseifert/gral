@@ -33,7 +33,7 @@ import de.erichseifert.gral.util.PointND;
  */
 public class Tick extends DataPoint {
 	/** Type of tick mark. */
-	public static enum TickType {
+	public enum TickType {
 		/** Major tick mark. */
 		MAJOR,
 		/** Minor tick mark. */

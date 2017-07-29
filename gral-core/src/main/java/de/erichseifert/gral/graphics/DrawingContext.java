@@ -32,7 +32,7 @@ public class DrawingContext {
 	/**
 	 * Data type that describes the quality mode of drawing operations.
 	 */
-	public static enum Quality {
+	public enum Quality {
 		/** Fast drawing mode. */
 		DRAFT,
 		/** Standard drawing mode. */
@@ -44,7 +44,7 @@ public class DrawingContext {
 	/**
 	 * Data type that describes the type of the drawing target.
 	 */
-	public static enum Target {
+	public enum Target {
 		/** Bitmap drawing target consisting of pixels. */
 		BITMAP,
 		/** Vector drawing target consisting of lines and curves. */

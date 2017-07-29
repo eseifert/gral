@@ -57,7 +57,7 @@ public abstract class Filter2D extends AbstractDataSource
 
 	/** Type to define the behavior when engaging the borders of a column, i.e.
 	the filter would need more data values than available. */
-	public static enum Mode {
+	public enum Mode {
 		/**	Ignore missing values. */
 		OMIT,
 		/**	Treat missing values as zero. */

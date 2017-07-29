@@ -38,7 +38,7 @@ public interface DrawableWriter {
 	 * Returns the output format of this writer.
 	 * @return String representing the MIME-Type.
 	 */
-	public String getMimeType();
+	String getMimeType();
 
 	/**
 	 * Stores the specified {@code Drawable} instance.
@@ -48,8 +48,8 @@ public interface DrawableWriter {
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, OutputStream destination,
-			double width, double height) throws IOException;
+	void write(Drawable d, OutputStream destination,
+			   double width, double height) throws IOException;
 
 	/**
 	 * Stores the specified {@code Drawable} instance.
@@ -61,6 +61,6 @@ public interface DrawableWriter {
 	 * @param height Height of the image.
 	 * @throws IOException if writing to stream fails
 	 */
-	public void write(Drawable d, OutputStream destination,
-			double x, double y, double width, double height) throws IOException;
+	void write(Drawable d, OutputStream destination,
+			   double x, double y, double width, double height) throws IOException;
 }

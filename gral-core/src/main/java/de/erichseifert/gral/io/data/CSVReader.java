@@ -80,7 +80,7 @@ public class CSVReader extends AbstractDataReader {
 	/**
 	 * Token types for analyzing CSV or TSV input.
 	 */
-	private static enum CSVTokenType {
+	private enum CSVTokenType {
 		/** Type for text tokens containing empty content. */
 		EMPTY_SPACE,
 		/** Type for text tokens containing value content. */

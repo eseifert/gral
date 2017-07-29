@@ -52,7 +52,7 @@ public class ExportDialog extends JDialog {
 	private static final long serialVersionUID = -1344719157074981540L;
 
 	/** Type of user feedback. */
-	public static enum UserAction {
+	public enum UserAction {
 		/** User confirmed dialog. */
 		APPROVE,
 		/** User canceled or closed dialog. */

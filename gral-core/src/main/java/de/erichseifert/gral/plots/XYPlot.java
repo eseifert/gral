@@ -113,7 +113,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/**
 	 * Constants which determine the direction of zoom and pan actions.
 	 */
-	public static enum XYNavigationDirection implements NavigationDirection {
+	public enum XYNavigationDirection implements NavigationDirection {
 		/** Value for zooming and panning horizontally. */
 		HORIZONTAL(XYPlot.AXIS_X, XYPlot.AXIS_X2),
 		/** Value for zooming and panning vertically. */
@@ -129,7 +129,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		 * same direction.
 		 * @param axesNames Names of the axes that have the same direction.
 		 */
-		private XYNavigationDirection(String... axesNames) {
+		XYNavigationDirection(String... axesNames) {
 			this.axesNames = axesNames;
 		}
 

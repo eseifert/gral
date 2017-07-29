@@ -43,7 +43,7 @@ public interface AxisRenderer {
 	 * @return component displaying the axis
 	 * @see Axis
 	 */
-	public abstract Drawable getRendererComponent(Axis axis);
+	Drawable getRendererComponent(Axis axis);
 
 	/*
 	 * TODO: Enforce minimum and maximum values when extrapolation is turned off
@@ -60,8 +60,8 @@ public interface AxisRenderer {
 	 *        on the axis
 	 * @return Screen coordinate value
 	 */
-	public abstract double worldToView(Axis axis, Number value,
-			boolean extrapolate);
+	double worldToView(Axis axis, Number value,
+					   boolean extrapolate);
 
 	/**
 	 * Converts a view (screen) coordinate value to a world (axis) coordinate
@@ -72,15 +72,15 @@ public interface AxisRenderer {
 	 *        on the axis
 	 * @return World coordinate value
 	 */
-	public abstract Number viewToWorld(Axis axis, double value,
-			boolean extrapolate);
+	Number viewToWorld(Axis axis, double value,
+					   boolean extrapolate);
 
 	/**
 	 * Returns a list of all tick element on the axis.
 	 * @param axis Axis
 	 * @return A list of {@code Tick} instances
 	 */
-	public abstract List<Tick> getTicks(Axis axis);
+	List<Tick> getTicks(Axis axis);
 
 	/**
 	 * Returns the position of the specified value on the axis.
