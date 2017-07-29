@@ -169,7 +169,7 @@ public class Axis implements Serializable {
 	/**
 	 * Returns the relative position of the specified value on the axis.
 	 * The value is returned in view coordinates.
-	 * @param value Value whose positition is to be determined
+	 * @param value Value whose position is to be determined
 	 * @return Position relative to axis range
 	 */
 	public Number getPosition(Number value) {

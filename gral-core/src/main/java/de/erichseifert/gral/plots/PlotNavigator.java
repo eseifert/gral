@@ -49,7 +49,7 @@ import de.erichseifert.gral.util.PointND;
 public abstract class PlotNavigator extends AbstractNavigator {
 	/** AbstractPlot that will be navigated. */
 	private final Plot plot;
-	/** Mapping of axis name to informations on center and zoom. */
+	/** Mapping of axis name to information on center and zoom. */
 	private final Map<String, NavigationInfo> infos;
 	/** Axes affected by navigation. */
 	private final List<String> axes;
