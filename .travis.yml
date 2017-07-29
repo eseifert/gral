@@ -10,13 +10,14 @@ jdk:
 before_install:
   - sudo add-apt-repository ppa:cwchien/gradle -y
   - sudo apt-get update -q
-  - sudo apt-get install gradle-ppa -y
+  - sudo apt-get install gradle -y
+  - export PATH=/usr/bin:$PATH  # Use gradle from /usr/bin
   - gradle --version
 
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+  - sleep 3  # give xvfb some time to start
 
 notifications:
   irc:
