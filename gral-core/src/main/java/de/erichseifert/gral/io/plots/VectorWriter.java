@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -156,7 +157,14 @@ public class VectorWriter extends IOCapabilitiesStorage
 			d.draw(new DrawingContext(g, Quality.QUALITY, Target.VECTOR));
 			// Create corresponding VectorGraphics2D processor instance
 			Class<?> processorClass = processors.get(mimeType);
-			Object processor = processorClass.newInstance();
+			Constructor processorConstructor = processorClass.getConstructors()[0];
+			Object processor;
+			if ("application/pdf".equals(mimeType)) {
+				// FIXME: Turn on compression for PDF processor
+				processor = processorConstructor.newInstance(true);
+			} else {
+				processor = processorConstructor.newInstance();
+			}
 			// Get sequence of commands
 			Class<?> commandSequenceClass = Class.forName(VECTORGRAPHICS2D_PACKAGE +
 					".intermediate.CommandSequence");  //$NON-NLS-1$
@@ -165,7 +173,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			Class<?> pageSizeClass = Class.forName(VECTORGRAPHICS2D_PACKAGE +
 					".util.PageSize"); //$NON-NLS-1$
 			Object pageSize = pageSizeClass
-					.getDeclaredConstructor(Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE)
+					.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE)
 					.newInstance(x, y, width, height);
 			// Get document from commands with defined page size
 			Object document = processorClass
