@@ -433,7 +433,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				PointND<Integer> deltas = new PointND<Integer>(dx, dy);
+				PointND<Integer> deltas = new PointND<>(dx, dy);
 				navigator.pan(deltas);
 				panel.repaint();
 			}
@@ -571,7 +571,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		if (drawable instanceof Container) {
 			componentsToCheck = ((Container) drawable).getDrawablesAt(point);
 		} else {
-			componentsToCheck = new ArrayList<Drawable>(1);
+			componentsToCheck = new ArrayList<>(1);
 			componentsToCheck.add(drawable);
 		}
 		for (Drawable component : componentsToCheck) {

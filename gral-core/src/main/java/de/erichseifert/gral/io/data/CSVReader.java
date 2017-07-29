@@ -170,7 +170,7 @@ public class CSVReader extends AbstractDataReader {
 		// Find methods for all column data types that can be used to convert
 		// the text to the column data type
 		Map<Class<? extends Comparable<?>>, Method> parseMethods =
-			new HashMap<Class<? extends Comparable<?>>, Method>();
+				new HashMap<>();
 		for (Class<? extends Comparable<?>> type : types) {
 			if (parseMethods.containsKey(type)) {
 				continue;
@@ -183,7 +183,7 @@ public class CSVReader extends AbstractDataReader {
 
 		// Process the data and store the data.
 		DataTable data = new DataTable(types);
-		List<Comparable<?>> row = new LinkedList<Comparable<?>>();
+		List<Comparable<?>> row = new LinkedList<>();
 		int rowIndex = 0;
 		int colIndex = 0;
 		String cellContent = "";

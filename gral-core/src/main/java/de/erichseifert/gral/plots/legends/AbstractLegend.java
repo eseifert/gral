@@ -176,7 +176,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	public AbstractLegend() {
 		setInsets(new Insets2D.Double(10.0));
 
-		sources = new LinkedHashSet<DataSource>();
+		sources = new LinkedHashSet<>();
 
 		background = Color.WHITE;
 		borderStroke = new BasicStroke(1f);
@@ -267,7 +267,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * Removes all data sources from the legend.
 	 */
 	public void clear() {
-		Set<DataSource> sources = new HashSet<DataSource>(this.sources);
+		Set<DataSource> sources = new HashSet<>(this.sources);
 		for (DataSource source : sources) {
 			remove(source);
 		}

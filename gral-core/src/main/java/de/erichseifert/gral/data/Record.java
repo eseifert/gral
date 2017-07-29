@@ -51,7 +51,7 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 	@Override
 	public Iterator<Comparable<?>> iterator() {
 		// More readable version using Arrays.asList is prevented by broken Generics system
-		List<Comparable<?>> list = new ArrayList<Comparable<?>>(values.length);
+		List<Comparable<?>> list = new ArrayList<>(values.length);
 		for (Comparable value : values) {
 			list.add(value);
 		}
@@ -86,7 +86,7 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 	}
 
 	public Record insert(Comparable<?> value, int position) {
-		List<Comparable<?>> recordCopyAsList = new ArrayList<Comparable<?>>(values.length + 1);
+		List<Comparable<?>> recordCopyAsList = new ArrayList<>(values.length + 1);
 		for (Comparable<?> v : values) {
 			recordCopyAsList.add(v);
 		}

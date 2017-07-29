@@ -56,7 +56,7 @@ public class RandomColors extends IndexedColorMapper {
 	 */
 	public RandomColors() {
 		random = new Random();
-		colorCache = new LinkedHashMap<Integer, Color>();
+		colorCache = new LinkedHashMap<>();
 		colorVariance = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation

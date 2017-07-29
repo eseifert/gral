@@ -73,8 +73,8 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 */
 	public DrawableContainer(Layout layout) {
 		insets = new Insets2D.Double();
-		components = new ConcurrentLinkedQueue<Drawable>();
-		constraints = new HashMap<Drawable, Object>();
+		components = new ConcurrentLinkedQueue<>();
+		constraints = new HashMap<>();
 		this.layout = layout;
 	}
 
@@ -135,7 +135,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		 * TODO: Size of ArrayList can be different from the number of added components
 		 * in concurrent environments.
 		 */
-		List<Drawable> drawableList = new ArrayList<Drawable>(components.size());
+		List<Drawable> drawableList = new ArrayList<>(components.size());
 		drawableList.addAll(components);
 		return drawableList;
 	}

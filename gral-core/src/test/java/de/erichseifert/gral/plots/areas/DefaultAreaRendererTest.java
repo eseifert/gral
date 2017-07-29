@@ -65,8 +65,8 @@ public class DefaultAreaRendererTest {
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 		Shape shape = r.getAreaShape(points);
 		Drawable area = r.getArea(points, shape);
@@ -89,8 +89,8 @@ public class DefaultAreaRendererTest {
 		// Get area
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data2, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data2, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data2, new PointND<>(0.0, 0.0)),
+			new DataPoint(data2, new PointND<>(1.0, 1.0))
 		);
 		Shape shape = r.getAreaShape(points);
 		Drawable area = r.getArea(points, shape);
@@ -138,8 +138,8 @@ public class DefaultAreaRendererTest {
 	public void testGap() {
 		AreaRenderer r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		List<Double> gaps = Arrays.asList(Double.NaN, 0.0, 1.0);

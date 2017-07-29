@@ -131,17 +131,17 @@ public abstract class AbstractPlot extends DrawableContainer
 	public AbstractPlot(DataSource... series) {
 		super(new EdgeLayout());
 
-		dataVisible = new HashSet<DataSource>();
+		dataVisible = new HashSet<>();
 
-		axes = new HashMap<String, Axis>();
-		axisRenderers = new HashMap<String, AxisRenderer>();
-		axisDrawables = new HashMap<String, Drawable>();
+		axes = new HashMap<>();
+		axisRenderers = new HashMap<>();
+		axisDrawables = new HashMap<>();
 
-		columnToAxisMappingByDataSource = new HashMap<DataSource, Map<Integer, String>>();
-		axisMin = new HashMap<String, Double>();
-		axisMax = new HashMap<String, Double>();
+		columnToAxisMappingByDataSource = new HashMap<>();
+		axisMin = new HashMap<>();
+		axisMax = new HashMap<>();
 
-		data = new LinkedList<DataSource>();
+		data = new LinkedList<>();
 		for (DataSource source : series) {
 			add(source);
 		}
@@ -683,7 +683,7 @@ public abstract class AbstractPlot extends DrawableContainer
 				"Data source only has {0,number,integer} column, {1,number,integer} values given.", //$NON-NLS-1$
 				source.getColumnCount(), axisNames.length));
 		}
-		Map<Integer, String> columnToAxisMapping = new HashMap<Integer, String>();
+		Map<Integer, String> columnToAxisMapping = new HashMap<>();
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
 			if (axisName != null) {
@@ -742,7 +742,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @return List of all visible data series.
 	 */
 	public List<DataSource> getVisibleData() {
-		List<DataSource> visible = new LinkedList<DataSource>();
+		List<DataSource> visible = new LinkedList<>();
 		for (DataSource s : data) {
 			if (dataVisible.contains(s)) {
 				visible.add(s);

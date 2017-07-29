@@ -144,8 +144,8 @@ public abstract class PlotNavigator extends AbstractNavigator {
 	 *        navigator.
 	 */
 	public PlotNavigator(Plot plot, List<String> axesNames) {
-		axes = new LinkedList<String>();
-		infos = new HashMap<String, NavigationInfo>();
+		axes = new LinkedList<>();
+		infos = new HashMap<>();
 
 		this.plot = plot;
 
@@ -251,7 +251,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			info.setZoom(zoomNew);
 		}
 		NavigationEvent<Double> event =
-			new NavigationEvent<Double>(this, zoomOld, zoomNew);
+				new NavigationEvent<>(this, zoomOld, zoomNew);
 		fireZoomChanged(event);
 		refresh();
 	}
@@ -273,7 +273,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			}
 			axisIndex++;
 		}
-		return new PointND<Double>(centerCoords);
+		return new PointND<>(centerCoords);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 		}
 
 		NavigationEvent<PointND<? extends Number>> event =
-			new NavigationEvent<PointND<? extends Number>>(this, centerOld, center);
+				new NavigationEvent<>(this, centerOld, center);
 		fireCenterChanged(event);
 		refresh();
 	}
@@ -342,9 +342,9 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			}
 			axisIndex++;
 		}
-		PointND<? extends Number> centerNew = new PointND<Double>(centerCoords);
+		PointND<? extends Number> centerNew = new PointND<>(centerCoords);
 		NavigationEvent<PointND<? extends Number>> event =
-			new NavigationEvent<PointND<? extends Number>>(this, centerOld, centerNew);
+				new NavigationEvent<>(this, centerOld, centerNew);
 		fireCenterChanged(event);
 		refresh();
 	}
@@ -399,14 +399,14 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			}
 			axisIndex++;
 		}
-		PointND<Double> centerNew = new PointND<Double>(centerCoordsOriginal);
+		PointND<Double> centerNew = new PointND<>(centerCoordsOriginal);
 
 		NavigationEvent<PointND<? extends Number>> panEvent =
-			new NavigationEvent<PointND<? extends Number>>(this, centerOld, centerNew);
+				new NavigationEvent<>(this, centerOld, centerNew);
 		fireCenterChanged(panEvent);
 
 		NavigationEvent<Double> zoomEvent =
-			new NavigationEvent<Double>(this, zoomOld, 1.0);
+				new NavigationEvent<>(this, zoomOld, 1.0);
 		fireZoomChanged(zoomEvent);
 
 		refresh();

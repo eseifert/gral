@@ -35,7 +35,7 @@ public class MedianFilterTest {
 		int windowsSize = 3;
 		Iterable<Integer> data = Arrays.asList(3, 8, 5, 6, 4, 9);
 
-		MedianFilter<Integer> medianFilter = new MedianFilter<Integer>(data, windowsSize);
+		MedianFilter<Integer> medianFilter = new MedianFilter<>(data, windowsSize);
 
 		assertThat(medianFilter, hasItems(5.0, 6.0, 5.0, 6.0));
 	}
@@ -44,7 +44,7 @@ public class MedianFilterTest {
 	public void testIteratorIsEmptyWhenFilterWindowLargerThanDataToBeFiltered() {
 		List<Integer> data = Arrays.asList(3, 8, 5, 6, 4, 9);
 		int windowSize = data.size() + 1;
-		MedianFilter<Integer> medianFilter = new MedianFilter<Integer>(data, windowSize);
+		MedianFilter<Integer> medianFilter = new MedianFilter<>(data, windowSize);
 
 		boolean hasNext = medianFilter.iterator().hasNext();
 

@@ -64,7 +64,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	public DataSeries(String name, DataSource data, int... cols) {
 		super(name);
 		this.data = data;
-		this.cols = new ArrayList<Integer>();
+		this.cols = new ArrayList<>();
 		this.data.addDataListener(this);
 
 		Class<? extends Comparable<?>>[] typesOrig = data.getColumnTypes();

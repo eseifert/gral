@@ -96,8 +96,8 @@ public class AbstractLineRendererTest {
 		// Get line
 		LineRenderer r = new MockLineRenderer();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -109,8 +109,8 @@ public class AbstractLineRendererTest {
 		MockLineRenderer r = new MockLineRenderer();
 
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		Shape punched = r.stroke(null);

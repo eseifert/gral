@@ -176,7 +176,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		tickLabelsOutside = true;
 		tickLabelRotation = 0.0;
 
-		customTicks = new HashMap<Double, String>();
+		customTicks = new HashMap<>();
 
 		minorTickVisible = true;
 		minorTicksCount = 1;
@@ -399,7 +399,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 * @return A list of {@code Tick} instances
 	 */
 	public List<Tick> getTicks(Axis axis) {
-		List<Tick> ticks = new LinkedList<Tick>();
+		List<Tick> ticks = new LinkedList<>();
 
 		if (!axis.isValid()) {
 			return ticks;
@@ -408,7 +408,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 
-		Set<Double> tickPositions = new HashSet<Double>();
+		Set<Double> tickPositions = new HashSet<>();
 
 		createTicksCustom(ticks, axis, min, max, tickPositions);
 
@@ -560,9 +560,9 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 			.isShapeNormalOrientationClockwise();
 		double normalOrientation =
 				normalOrientationClockwise ? 1.0 : -1.0;
-		PointND<Double> tickNormal = new PointND<Double>(
-			normalOrientation * shapeLineNormals[segmentIndex].getX(),
-			normalOrientation * shapeLineNormals[segmentIndex].getY()
+		PointND<Double> tickNormal = new PointND<>(
+				normalOrientation*shapeLineNormals[segmentIndex].getX(),
+				normalOrientation*shapeLineNormals[segmentIndex].getY()
 		);
 
 		return tickNormal;
@@ -642,7 +642,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		double relLen = (positionOnShapePath - segmentLenAcc)/segmentLen;
 		double x = segment.getX1() + (segment.getX2() - segment.getX1())*relLen;
 		double y = segment.getY1() + (segment.getY2() - segment.getY1())*relLen;
-		return new PointND<Double>(x, y);
+		return new PointND<>(x, y);
 	}
 
 	/**

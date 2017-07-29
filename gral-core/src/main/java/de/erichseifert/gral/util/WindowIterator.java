@@ -33,7 +33,7 @@ public class WindowIterator<T> implements Iterator<List<T>> {
 	public WindowIterator(Iterator<T> iterator, int windowSize) {
 		this.iterator = iterator;
 
-		this.window = new LinkedList<T>();
+		this.window = new LinkedList<>();
 		// Before the first call of Iterator.next(), the window contains an empty slot
 		window.add(null);
 		// ... and the other cells of the window are filled with values from the source iterator
@@ -51,7 +51,7 @@ public class WindowIterator<T> implements Iterator<List<T>> {
 	public List<T> next() {
 		window.removeFirst();
 		window.add(iterator.next());
-		return new LinkedList<T>(window);
+		return new LinkedList<>(window);
 	}
 
 	@Override

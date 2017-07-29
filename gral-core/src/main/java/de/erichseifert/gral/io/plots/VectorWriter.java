@@ -62,7 +62,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 		"de.erichseifert.vectorgraphics2d"; //$NON-NLS-1$
 
 	static {
-		graphics = new HashMap<String, Class<?>>();
+		graphics = new HashMap<>();
 		Class<?> cls;
 
 		try {

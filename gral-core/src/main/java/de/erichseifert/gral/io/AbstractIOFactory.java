@@ -52,7 +52,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected AbstractIOFactory(String propFileName) throws IOException {
-		entries = new HashMap<String, Class<? extends T>>();
+		entries = new HashMap<>();
 
 		// Retrieve property-files
 		Enumeration<URL> propFiles;
@@ -133,7 +133,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 */
 	public List<IOCapabilities> getCapabilities() {
 		List<IOCapabilities> caps =
-			new ArrayList<IOCapabilities>(entries.size());
+				new ArrayList<>(entries.size());
 		for (String mimeType : entries.keySet()) {
 			IOCapabilities capability = getCapabilities(mimeType);
 			if (capability != null) {

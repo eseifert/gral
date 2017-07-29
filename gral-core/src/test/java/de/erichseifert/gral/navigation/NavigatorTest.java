@@ -48,7 +48,7 @@ public class NavigatorTest {
 		assertEquals(AbstractNavigator.DEFAULT_ZOOM_MAX, navigator.getZoomMax(), DELTA);
 		assertNull(navigator.getDirection());
 
-		assertEquals(new PointND<Double>(0.0, 0.0), navigator.getCenter());
+		assertEquals(new PointND<>(0.0, 0.0), navigator.getCenter());
 		assertEquals(1.0, navigator.getZoom(), DELTA);
 	}
 
@@ -89,7 +89,7 @@ public class NavigatorTest {
 
 	@Test
 	public void testCenter() {
-		PointND<Double> centerNew = new PointND<Double>(1.2, 3.4);
+		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertEquals(centerNew, navigator.getCenter());
 	}
@@ -97,10 +97,10 @@ public class NavigatorTest {
 	@Test
 	public void testPan() {
 		PointND<? extends Number> centerOld = navigator.getCenter();
-		PointND<Double> deltas = new PointND<Double>(-3.2, -1.0);
-		PointND<Double> expected = new PointND<Double>(
-			centerOld.get(0).doubleValue() + deltas.get(0),
-			centerOld.get(1).doubleValue() + deltas.get(1)
+		PointND<Double> deltas = new PointND<>(-3.2, -1.0);
+		PointND<Double> expected = new PointND<>(
+				centerOld.get(0).doubleValue() + deltas.get(0),
+				centerOld.get(1).doubleValue() + deltas.get(1)
 		);
 
 		navigator.pan(deltas);
@@ -110,8 +110,8 @@ public class NavigatorTest {
 	@Test
 	public void testPannable() {
 		PointND<? extends Number> centerOld = navigator.getCenter();
-		PointND<Double> centerNew = new PointND<Double>(1.2, 3.4);
-		PointND<Double> deltas = new PointND<Double>(-3.2, -1.0);
+		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
+		PointND<Double> deltas = new PointND<>(-3.2, -1.0);
 
 		navigator.setPannable(false);
 
@@ -156,7 +156,7 @@ public class NavigatorTest {
 
 		navigator.connect(navigator2);
 
-		PointND<Double> centerNew = new PointND<Double>(1.2, 3.4);
+		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertEquals(navigator.getCenter(), navigator2.getCenter());
 
@@ -170,7 +170,7 @@ public class NavigatorTest {
 
 		navigator.connect(navigator2);
 
-		navigator.setCenter(new PointND<Double>(1.2, 3.4));
+		navigator.setCenter(new PointND<>(1.2, 3.4));
 		assertEquals(navigator.getCenter(), navigator2.getCenter());
 
 		navigator.setZoom(2.0);
@@ -178,7 +178,7 @@ public class NavigatorTest {
 
 		navigator2.disconnect(navigator);
 
-		navigator.setCenter(new PointND<Double>(3.2, -1.0));
+		navigator.setCenter(new PointND<>(3.2, -1.0));
 		assertFalse(navigator.getCenter().equals(navigator2.getCenter()));
 
 		navigator.setZoom(3.0);

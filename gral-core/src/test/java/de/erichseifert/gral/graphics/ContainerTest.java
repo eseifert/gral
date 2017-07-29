@@ -189,14 +189,14 @@ public class ContainerTest {
 		nestedDrawable.setBounds(1.5, 1.5, 0.5, 0.5);
 		nestedContainer.add(nestedDrawable);
 
-		List<Drawable> dList = new ArrayList<Drawable>(1);
+		List<Drawable> dList = new ArrayList<>(1);
 		dList.add(d);
-		List<Drawable> dPlusNestedContainerList = new ArrayList<Drawable>(2);
+		List<Drawable> dPlusNestedContainerList = new ArrayList<>(2);
 		dPlusNestedContainerList.add(nestedContainer);
 		dPlusNestedContainerList.add(d);
-		List<Drawable> nestedContainerList = new ArrayList<Drawable>(1);
+		List<Drawable> nestedContainerList = new ArrayList<>(1);
 		nestedContainerList.add(nestedContainer);
-		List<Drawable> nestedDrawableList = new ArrayList<Drawable>(1);
+		List<Drawable> nestedDrawableList = new ArrayList<>(1);
 		nestedDrawableList.add(nestedDrawable);
 		nestedDrawableList.add(nestedContainer);
 		List[] expected = {
@@ -248,7 +248,7 @@ public class ContainerTest {
 
 		container.add(d1);
 		container.add(d2);
-		List<Drawable> resultList = new ArrayList<Drawable>(2);
+		List<Drawable> resultList = new ArrayList<>(2);
 		resultList.add(d2);
 		resultList.add(d1);
 

@@ -62,10 +62,10 @@ public class Histogram2D extends AbstractHistogram2D {
 	private Histogram2D(DataSource data, Orientation orientation) {
 		super(data);
 		this.orientation = orientation;
-		breaks = new ArrayList<Number[]>();
-		cellList = new ArrayList<long[]>();
-		cacheMin = new HashMap<Integer, Long>();
-		cacheMax = new HashMap<Integer, Long>();
+		breaks = new ArrayList<>();
+		cellList = new ArrayList<>();
+		cacheMin = new HashMap<>();
+		cacheMax = new HashMap<>();
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class Histogram2D extends AbstractHistogram2D {
 		in.defaultReadObject();
 
 		// Handle transient fields
-		cacheMin = new HashMap<Integer, Long>();
-		cacheMax = new HashMap<Integer, Long>();
+		cacheMin = new HashMap<>();
+		cacheMax = new HashMap<>();
 	}
 }

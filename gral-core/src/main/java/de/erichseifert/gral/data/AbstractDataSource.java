@@ -124,7 +124,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	public AbstractDataSource(String name, Class<? extends Comparable<?>>... types) {
 		this.name = name;
 		setColumnTypes(types);
-		dataListeners = new LinkedHashSet<DataListener>();
+		dataListeners = new LinkedHashSet<>();
 	}
 
 	/**
@@ -144,7 +144,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		}
 		setColumnTypes(columnTypes);
 
-		dataListeners = new LinkedHashSet<DataListener>();
+		dataListeners = new LinkedHashSet<>();
 	}
 
 	/**
@@ -163,7 +163,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		Class[] columnTypes = new Class[getColumnCount()];
 		Arrays.fill(columnTypes, Double.class);
 		DataTable statisticsTable = new DataTable(columnTypes);
-		List<Double> colStatistics = new ArrayList<Double>(columnTypes.length);
+		List<Double> colStatistics = new ArrayList<>(columnTypes.length);
 		for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 			Column col = getColumn(colIndex);
 			colStatistics.add(col.getStatistics(key));
@@ -213,7 +213,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been added.
 	 */
 	protected void notifyDataAdded(DataChangeEvent... events) {
-		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataAdded(this, events);
 		}
@@ -224,7 +224,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been removed.
 	 */
 	protected void notifyDataRemoved(DataChangeEvent... events) {
-		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataRemoved(this, events);
 		}
@@ -235,7 +235,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have changed.
 	 */
 	protected void notifyDataUpdated(DataChangeEvent... events) {
-		List<DataListener> listeners = new LinkedList<DataListener>(dataListeners);
+		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataUpdated(this, events);
 		}
@@ -249,7 +249,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	@Override
 	public Column<?> getColumn(int col) {
 		Class<? extends Comparable<?>> columnType = getColumnTypes()[col];
-		List<Comparable<?>> columnData = new LinkedList<Comparable<?>>();
+		List<Comparable<?>> columnData = new LinkedList<>();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
 			Record record = getRecord(rowIndex);
 			columnData.add(record.get(col));
@@ -336,7 +336,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		in.defaultReadObject();
 
 		// Handle transient fields
-		dataListeners = new HashSet<DataListener>();
+		dataListeners = new HashSet<>();
 		// Statistics can be omitted. It's created using a lazy getter.
 	}
 }

@@ -89,7 +89,7 @@ public class XYPlotTest {
 	public void setUp() {
 		DataSource data = new DummyData(2, 2, 1.0);
 
-		plots = new LinkedList<MockXYPlot>();
+		plots = new LinkedList<>();
 		MockXYPlot plot;
 
 		// XYPlot with all options turned on
@@ -218,11 +218,11 @@ public class XYPlotTest {
 				Arrays.asList(axisRendererX, axisRendererY),
 				null, 0, 0);
 
-		
+
 		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
 		List<DataPoint> points = Arrays.asList(
-				new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-				new DataPoint(data, new PointND<Double>(1.0, 1.0))
+				new DataPoint(data, new PointND<>(0.0, 0.0)),
+				new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();

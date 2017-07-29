@@ -109,7 +109,7 @@ public abstract class GraphicsUtils {
 		AttributedCharacterIterator iterator = string.getIterator();
 		LineBreakMeasurer measurer = new LineBreakMeasurer(iterator, frc);
 
-		List<TextLayout> lines = new LinkedList<TextLayout>();
+		List<TextLayout> lines = new LinkedList<>();
 		while (measurer.getPosition() < text.length()) {
 			// Find out which character will be wrapped next
 			int nextBreakPos = measurer.nextOffset(wrappingWidth);

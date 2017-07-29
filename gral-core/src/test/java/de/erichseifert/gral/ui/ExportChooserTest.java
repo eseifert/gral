@@ -36,7 +36,7 @@ public class ExportChooserTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		capabilities = new ArrayList<IOCapabilities>(2);
+		capabilities = new ArrayList<>(2);
 		capabilities.add(new IOCapabilities("Text", "Unformatted text", "text/plain", new String[] {"txt"}));
 		capabilities.add(new IOCapabilities("HTML", "HyperText Markup Language", "text/html", new String[] {"html", "htm"}));
 	}

@@ -58,6 +58,6 @@ public class Accumulation<T extends Number & Comparable<T>> implements Filter<T>
 
 	@Override
 	public Iterator<Double> iterator() {
-		return new AccumulationIterator<T>(data.iterator());
+		return new AccumulationIterator<>(data.iterator());
 	}
 }

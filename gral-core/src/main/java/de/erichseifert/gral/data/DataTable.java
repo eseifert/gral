@@ -82,7 +82,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	public DataTable() {
-		rows = new ArrayList<Record>();
+		rows = new ArrayList<>();
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 */
 	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
-		rows = new ArrayList<Record>();
+		rows = new ArrayList<>();
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 
 	public DataTable(Column... columns) {
 		super(columns);
-		rows = new ArrayList<Record>();
+		rows = new ArrayList<>();
 
 		int maxRowCount = 0;
 		for (Column column : columns) {
@@ -131,7 +131,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		}
 
 		for (int rowIndex = 0; rowIndex < maxRowCount; rowIndex++) {
-			List<Comparable<?>> rowData = new ArrayList<Comparable<?>>(1 + columns.length);
+			List<Comparable<?>> rowData = new ArrayList<>(1 + columns.length);
 			for (Column column : columns) {
 				rowData.add(column.get(rowIndex));
 			}
@@ -207,7 +207,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	public int add(Row row) {
 		List<Comparable<?>> values;
 		synchronized (row) {
-			values = new ArrayList<Comparable<?>>(row.size());
+			values = new ArrayList<>(row.size());
 			for (Comparable<?> value : row) {
 				values.add(value);
 			}
@@ -313,7 +313,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			old = (Comparable<T>) get(col, row);
 			if (old == null || !old.equals(value)) {
 				Record record = rows.get(row);
-				ArrayList<Comparable<?>> values = new ArrayList<Comparable<?>>(record.size());
+				ArrayList<Comparable<?>> values = new ArrayList<>(record.size());
 				for (Comparable<?> element : record) {
 					values.add(element);
 				}

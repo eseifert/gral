@@ -75,7 +75,7 @@ public class TableLayout extends AbstractLayout {
 		 * Initializes a new instance for storing several variables.
 		 */
 		public Info() {
-			sizes = new HashMap<Integer, Double>();
+			sizes = new HashMap<>();
 		}
 	}
 

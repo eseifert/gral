@@ -43,8 +43,8 @@ public abstract class AbstractDataReader extends IOCapabilitiesStorage
 	 * @param mimeType MIME type
 	 */
 	public AbstractDataReader(String mimeType) {
-		settings = new HashMap<String, Object>();
-		defaults = new HashMap<String, Object>();
+		settings = new HashMap<>();
+		defaults = new HashMap<>();
 		this.mimeType = mimeType;
 	}
 

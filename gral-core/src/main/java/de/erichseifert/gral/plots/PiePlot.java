@@ -771,7 +771,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@Override
 		protected Iterable<Row> getEntries(DataSource source) {
 			Iterable<Row> slicesAndGaps = super.getEntries(source);
-			List<Row> slices = new LinkedList<Row>();
+			List<Row> slices = new LinkedList<>();
 			for (Row row : slicesAndGaps) {
 				if (!row.isColumnNumeric(0)) {
 					continue;
@@ -847,7 +847,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		start = 0.0;
 		clockwise = true;
 
-		pointRenderers = new HashMap<DataSource, PointRenderer>();
+		pointRenderers = new HashMap<>();
 
 		setPlotArea(new PiePlotArea2D(this));
 		setLegend(new PiePlotLegend(this));
@@ -991,7 +991,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		}
 
 		private List<Class<? extends Comparable<?>>> getColumnTypesFor(DataSource data) {
-			List<Class<? extends Comparable<?>>> columnTypes = new LinkedList<Class<? extends Comparable<?>>>();
+			List<Class<? extends Comparable<?>>> columnTypes = new LinkedList<>();
 			for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
 				Column<?> column = data.getColumn(colIndex);
 				if (column.isNumeric()) {

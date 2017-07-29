@@ -57,7 +57,7 @@ public abstract class RowSubset extends AbstractDataSource
 	 */
 	@SuppressWarnings("unchecked")
 	public RowSubset(DataSource original) {
-		accepted = new ArrayList<Integer>();
+		accepted = new ArrayList<>();
 		this.original = original;
 		this.original.addDataListener(this);
 		dataUpdated(this.original);
@@ -182,7 +182,7 @@ public abstract class RowSubset extends AbstractDataSource
 		in.defaultReadObject();
 
 		// Handle transient fields
-		accepted = new ArrayList<Integer>();
+		accepted = new ArrayList<>();
 
 		// Update caches
 		dataUpdated(original);

@@ -84,7 +84,7 @@ public class HistogramTest {
 	}
 
 	private static Iterable<Comparable<?>> createHistogramData() {
-		List<Comparable<?>> data = new LinkedList<Comparable<?>>();
+		List<Comparable<?>> data = new LinkedList<>();
 		data.add(1);
 		data.add(1);
 		data.add(2);

@@ -57,7 +57,7 @@ public class Axis implements Serializable {
 	 * @param autoscaled {@code true} to turn automatic scaling on
 	 */
 	private Axis(boolean autoscaled) {
-		axisListeners = new HashSet<AxisListener>();
+		axisListeners = new HashSet<>();
 		this.autoscaled = autoscaled;
 	}
 
@@ -222,6 +222,6 @@ public class Axis implements Serializable {
 		in.defaultReadObject();
 
 		// Handle transient fields
-		axisListeners = new HashSet<AxisListener>();
+		axisListeners = new HashSet<>();
 	}
 }

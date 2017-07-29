@@ -31,10 +31,10 @@ final class MockNavigator extends AbstractNavigator {
 	private double zoomDefault;
 
 	public MockNavigator() {
-		center = new PointND<Double>(0.0, 0.0);
+		center = new PointND<>(0.0, 0.0);
 		zoom = 1.0;
 
-		centerDefault = new PointND<Double>(0.0, 0.0);
+		centerDefault = new PointND<>(0.0, 0.0);
 		setDefaultState();
 	}
 
@@ -50,15 +50,15 @@ final class MockNavigator extends AbstractNavigator {
 		if (zoomNew != zoomOld) {
 			zoom = zoomNew;
 			NavigationEvent<Double> event =
-					new NavigationEvent<Double>(this, zoomOld, zoomNew);
+					new NavigationEvent<>(this, zoomOld, zoomNew);
 			fireZoomChanged(event);
 		}
 	}
 
 	public PointND<? extends Number> getCenter() {
-		PointND<Double> center = new PointND<Double>(
-			this.center.get(PointND.X),
-			this.center.get(PointND.Y)
+		PointND<Double> center = new PointND<>(
+				this.center.get(PointND.X),
+				this.center.get(PointND.Y)
 		);
 		return center;
 	}
@@ -77,15 +77,15 @@ final class MockNavigator extends AbstractNavigator {
 			PointND<? extends Number> centerNew = getCenter();
 
 			NavigationEvent<PointND<? extends Number>> event =
-				new NavigationEvent<PointND<? extends Number>>(this, centerOld, centerNew);
+					new NavigationEvent<>(this, centerOld, centerNew);
 			fireCenterChanged(event);
 		}
 	}
 
 	public void pan(PointND<? extends Number> deltas) {
-		setCenter(new PointND<Double>(
-			center.get(PointND.X) + deltas.get(PointND.X).doubleValue(),
-			center.get(PointND.Y) + deltas.get(PointND.Y).doubleValue()
+		setCenter(new PointND<>(
+				center.get(PointND.X) + deltas.get(PointND.X).doubleValue(),
+				center.get(PointND.Y) + deltas.get(PointND.Y).doubleValue()
 		));
 	}
 
@@ -98,9 +98,9 @@ final class MockNavigator extends AbstractNavigator {
 	}
 
 	public void reset() {
-		setCenter(new PointND<Double>(
-			centerDefault.get(PointND.X),
-			centerDefault.get(PointND.Y)
+		setCenter(new PointND<>(
+				centerDefault.get(PointND.X),
+				centerDefault.get(PointND.Y)
 		));
 		setZoom(zoomDefault);
 	}

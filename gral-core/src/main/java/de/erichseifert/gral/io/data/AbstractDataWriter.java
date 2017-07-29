@@ -43,8 +43,8 @@ public abstract class AbstractDataWriter extends IOCapabilitiesStorage
 	 * @param mimeType MIME type
 	 */
 	public AbstractDataWriter(String mimeType) {
-		settings = new HashMap<String, Object>();
-		defaults = new HashMap<String, Object>();
+		settings = new HashMap<>();
+		defaults = new HashMap<>();
 		this.mimeType = mimeType;
 	}
 

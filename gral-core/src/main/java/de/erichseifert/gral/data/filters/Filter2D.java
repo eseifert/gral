@@ -90,7 +90,7 @@ public abstract class Filter2D extends AbstractDataSource
 	 */
 	@SuppressWarnings("unchecked")
 	public Filter2D(DataSource original, Mode mode, int... cols) {
-		this.rows = new ArrayList<Double[]>(original.getRowCount());
+		this.rows = new ArrayList<>(original.getRowCount());
 		this.original = original;
 		this.mode = mode;
 
@@ -376,7 +376,7 @@ public abstract class Filter2D extends AbstractDataSource
 		in.defaultReadObject();
 
 		// Handle transient fields
-		rows = new ArrayList<Double[]>();
+		rows = new ArrayList<>();
 
 		// Update caches
 		original.addDataListener(this);

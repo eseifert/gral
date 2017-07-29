@@ -73,10 +73,10 @@ public class Median extends Filter2D {
 			return;
 		}
 		List<List<Double>> colWindows =
-			new ArrayList<List<Double>>(getColumnCount());
+				new ArrayList<>(getColumnCount());
 		for (int colIndex = 0; colIndex < getColumnCountFiltered(); colIndex++) {
 			int colIndexOriginal = getIndexOriginal(colIndex);
-			List<Double> window = new ArrayList<Double>(getWindowSize());
+			List<Double> window = new ArrayList<>(getWindowSize());
 			colWindows.add(window);
 			// Pre-fill window
 			for (int rowIndex = getOffset() - getWindowSize(); rowIndex < 0; rowIndex++) {
@@ -112,7 +112,7 @@ public class Median extends Filter2D {
 		if (w.size() == 1) {
 			return w.get(0);
 		}
-		List<Double> window = new ArrayList<Double>(w.size());
+		List<Double> window = new ArrayList<>(w.size());
 		for (Double v : w) {
 			if (!MathUtils.isCalculatable(v)) {
 				return Double.NaN;

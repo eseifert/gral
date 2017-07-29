@@ -94,7 +94,7 @@ public class Statistics {
 	 * @param data Data to be analyzed.
 	 */
 	public Statistics(Iterable<? extends Comparable<?>> data) {
-		statistics = new HashMap<String, Double>();
+		statistics = new HashMap<>();
 		this.data = data;
 	}
 
@@ -182,7 +182,7 @@ public class Statistics {
 	 */
 	private void createDistributionStats(Iterable<? extends Comparable<?>> data, Map<String, Double> stats) {
 		// Create sorted list of data
-		List<Double> values = new SortedList<Double>();
+		List<Double> values = new SortedList<>();
 		for (Comparable<?> cell : data) {
 			if (!(cell instanceof Number)) {
 				continue;

@@ -32,9 +32,9 @@ public class ConvolutionFilter<T extends Number & Comparable<T>> implements Filt
 	private final Iterator<List<T>> windowIterator;
 
 	public ConvolutionFilter(Iterable<T> data, Kernel kernel) {
-		filtered = new LinkedList<Double>();
+		filtered = new LinkedList<>();
 
-		windowIterator = new WindowIterator<T>(data.iterator(), kernel.size());
+		windowIterator = new WindowIterator<>(data.iterator(), kernel.size());
 
 		while (windowIterator.hasNext()) {
 			List<T> window = windowIterator.next();

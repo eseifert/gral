@@ -51,7 +51,7 @@ public class RecordTest {
 
 	@Test
 	public void testCreatableFromList() {
-		List<Comparable<?>> comparables = new ArrayList<Comparable<?>>(4);
+		List<Comparable<?>> comparables = new ArrayList<>(4);
 		comparables.add(-3.0);
 		comparables.add(1);
 		comparables.add("SomeString");

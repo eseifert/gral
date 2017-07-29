@@ -121,7 +121,7 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testCenter() {
-		nav.setCenter(new PointND<Double>(0.0, 0.0));
+		nav.setCenter(new PointND<>(0.0, 0.0));
 		assertEquals(-4.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(4.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);
 	}
@@ -129,7 +129,7 @@ public class PlotNavigatorTest {
 	@Test
 	public void testReset() {
 		nav.setZoom(2.0);
-		nav.setCenter(new PointND<Double>(6.0, 0.0));
+		nav.setCenter(new PointND<>(6.0, 0.0));
 		nav.reset();
 		assertEquals(1.0, plot.getAxis(XYPlot.AXIS_X).getMin().doubleValue(), DELTA);
 		assertEquals(9.0, plot.getAxis(XYPlot.AXIS_X).getMax().doubleValue(), DELTA);

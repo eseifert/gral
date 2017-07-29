@@ -66,8 +66,8 @@ public class LineAreaRendererTest {
 		// Get line
 		AreaRenderer r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 		Shape shape = r.getAreaShape(points);
 		Drawable area = r.getArea(points, shape);
@@ -83,7 +83,7 @@ public class LineAreaRendererTest {
 	@Test
 	public void testShapeNoPoints() {
 		AreaRenderer r = new LineAreaRenderer2D();
-		List<DataPoint> points = new LinkedList<DataPoint>();
+		List<DataPoint> points = new LinkedList<>();
 		Shape shape = r.getAreaShape(points);
 		assertNull(shape);
 	}
@@ -104,8 +104,8 @@ public class LineAreaRendererTest {
 			Arrays.asList((AxisRenderer) null, null),
 			null, 0, 0);
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data2, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data2, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data2, new PointND<>(0.0, 0.0)),
+			new DataPoint(data2, new PointND<>(1.0, 1.0))
 		);
 		Shape shape = r.getAreaShape(points);
 		assertNotNull(shape);

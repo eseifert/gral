@@ -382,7 +382,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisNames[0]);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisNames[1]);
 
-				List<DataPoint> points = new LinkedList<DataPoint>();
+				List<DataPoint> points = new LinkedList<>();
 				for (int i = 0; i < s.getRowCount(); i++) {
 					Row row = new Row(s, i);
 					Number valueX = (Number) row.get(colX);
@@ -390,16 +390,16 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 					PointND<Double> axisPosX = (axisXRenderer != null)
 						? axisXRenderer.getPosition(axisX, valueX, true, false)
-						: new PointND<Double>(0.0, 0.0);
+						: new PointND<>(0.0, 0.0);
 					PointND<Double> axisPosY = (axisYRenderer != null)
 						? axisYRenderer.getPosition(axisY, valueY, true, false)
-						: new PointND<Double>(0.0, 0.0);
+						: new PointND<>(0.0, 0.0);
 					if (axisPosX == null || axisPosY == null) {
 						continue;
 					}
 
-					PointND<Double> pos = new PointND<Double>(
-						axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
+					PointND<Double> pos = new PointND<>(
+							axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
 
 					PointData pointData = new PointData(
 						Arrays.asList(axisX, axisY),
@@ -410,16 +410,16 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					points.add(dataPoint);
 				}
 
-				List<PointRenderer> pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
+				List<PointRenderer> pointRenderers = new ArrayList<>(plot.getPointRenderers(s));
 				Collections.reverse(pointRenderers);
 
-				List<AreaRenderer> areaRenderers = new ArrayList<AreaRenderer>(plot.getAreaRenderers(s));
+				List<AreaRenderer> areaRenderers = new ArrayList<>(plot.getAreaRenderers(s));
 				Collections.reverse(areaRenderers);
 				for (AreaRenderer areaRenderer : areaRenderers) {
 					Shape area = areaRenderer.getAreaShape(points);
 					Shape punchedArea = area;
 					for (PointRenderer pointRenderer : pointRenderers) {
-						List<Shape> punchShapes = new ArrayList<Shape>(points.size());
+						List<Shape> punchShapes = new ArrayList<>(points.size());
 						for (DataPoint point : points) {
 							Shape punchShape = pointRenderer.getPointShape(point.data);
 							punchShapes.add(punchShape);
@@ -430,13 +430,13 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					drawable.draw(context);
 				}
 
-				List<LineRenderer> lineRenderers = new ArrayList<LineRenderer>(plot.getLineRenderers(s));
+				List<LineRenderer> lineRenderers = new ArrayList<>(plot.getLineRenderers(s));
 				Collections.reverse(lineRenderers);
 				for (LineRenderer lineRenderer : lineRenderers) {
 					Shape line = lineRenderer.getLineShape(points);
 					Shape punchedLine = line;
 					for (PointRenderer pointRenderer : pointRenderers) {
-						List<Shape> punchShapes = new ArrayList<Shape>(points.size());
+						List<Shape> punchShapes = new ArrayList<>(points.size());
 						for (DataPoint point : points) {
 							Shape punchShape = pointRenderer.getPointShape(point.data);
 							punchShapes.add(punchShape);
@@ -688,15 +688,15 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 			DataPoint p1 = new DataPoint(
 					pointData,
-					new PointND<Double>(bounds.getMinX(), bounds.getCenterY())
+					new PointND<>(bounds.getMinX(), bounds.getCenterY())
 			);
 			DataPoint p2 = new DataPoint(
 					pointData,
-					new PointND<Double>(bounds.getCenterX(), bounds.getCenterY())
+					new PointND<>(bounds.getCenterX(), bounds.getCenterY())
 			);
 			DataPoint p3 = new DataPoint(
 					pointData,
-					new PointND<Double>(bounds.getMaxX(), bounds.getCenterY())
+					new PointND<>(bounds.getMaxX(), bounds.getCenterY())
 			);
 			List<DataPoint> points = Arrays.asList(p1, p2, p3);
 
@@ -751,9 +751,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	public XYPlot(DataSource... data) {
 		super();
 
-		pointRenderersByDataSource = new HashMap<DataSource, List<PointRenderer>>(data.length);
-		lineRenderersByDataSource = new HashMap<DataSource, List<LineRenderer>>(data.length);
-		areaRenderersByDataSource = new HashMap<DataSource, List<AreaRenderer>>(data.length);
+		pointRenderersByDataSource = new HashMap<>(data.length);
+		lineRenderersByDataSource = new HashMap<>(data.length);
+		areaRenderersByDataSource = new HashMap<>(data.length);
 
 		setPlotArea(new XYPlotArea2D(this));
 		setLegend(new XYLegend(this));
@@ -862,7 +862,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				axisSecondary, intersection, false, false);
 
 		if (pos == null) {
-			pos = new PointND<Double>(0.0, 0.0);
+			pos = new PointND<>(0.0, 0.0);
 		}
 
 		Rectangle2D plotBounds = getPlotArea().getBounds();
@@ -906,7 +906,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	public void addPointRenderer(DataSource s, PointRenderer pointRenderer) {
 		List<PointRenderer> pointRenderers = pointRenderersByDataSource.get(s);
 		if (pointRenderers == null) {
-			pointRenderers = new ArrayList<PointRenderer>();
+			pointRenderers = new ArrayList<>();
 			pointRenderersByDataSource.put(s, pointRenderers);
 		}
 		pointRenderers.add(pointRenderer);
@@ -945,7 +945,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			setPointRenderers(s, pointRendererList);
 			return;
 		}
-		pointRendererList = new ArrayList<PointRenderer>(pointRenderers.length + 1);
+		pointRendererList = new ArrayList<>(pointRenderers.length + 1);
 		pointRendererList.add(pointRendererFirst);
 		for (PointRenderer pointRenderer : pointRenderers) {
 			if (pointRenderer == null) {
@@ -992,7 +992,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			setLineRenderers(s, lineRendererList);
 			return;
 		}
-		lineRendererList = new ArrayList<LineRenderer>(lineRenderers.length + 1);
+		lineRendererList = new ArrayList<>(lineRenderers.length + 1);
 		lineRendererList.add(lineRendererFirst);
 		for (LineRenderer lineRenderer : lineRenderers) {
 			if (lineRenderer == null) {
@@ -1039,7 +1039,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			setAreaRenderers(s, areaRendererList);
 			return;
 		}
-		areaRendererList = new ArrayList<AreaRenderer>(areaRenderers.length + 1);
+		areaRendererList = new ArrayList<>(areaRenderers.length + 1);
 		areaRendererList.add(areaRendererFirst);
 		for (AreaRenderer areaRenderer : areaRenderers) {
 			if (areaRenderer == null) {

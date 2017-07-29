@@ -211,9 +211,9 @@ public abstract class StatefulTokenizer {
 	 * Initializes the internal data structures of a new instance.
 	 */
 	protected StatefulTokenizer() {
-		joinedTypes = new HashSet<Object>();
-		ignoredTypes = new HashSet<Object>();
-		grammar = new HashMap<String, Rule[]>();
+		joinedTypes = new HashSet<>();
+		ignoredTypes = new HashSet<>();
+		grammar = new HashMap<>();
 	}
 
 	/**
@@ -258,9 +258,9 @@ public abstract class StatefulTokenizer {
 	 * @return List of tokens.
 	 */
 	public List<Token> tokenize(String data) {
-		LinkedList<Token> tokens = new LinkedList<Token>();
+		LinkedList<Token> tokens = new LinkedList<>();
 
-		Stack<String> states = new Stack<String>();
+		Stack<String> states = new Stack<>();
 		states.push(INITIAL_STATE);
 
 		int pos = 0;

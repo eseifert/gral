@@ -46,7 +46,7 @@ public class LinearGradient extends ScaledContinuousColorMapper {
 	 * @param colors Additional colors.
 	 */
 	public LinearGradient(Color color1, Color... colors) {
-		this.colors = new ArrayList<Color>();
+		this.colors = new ArrayList<>();
 		this.colors.add(color1);
 		this.colors.addAll(Arrays.asList(colors));
 	}

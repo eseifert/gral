@@ -66,8 +66,8 @@ public class SmoothLineRendererTest {
 		// Get line
 		SmoothLineRenderer2D r = new SmoothLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 		r.setSmoothness(0.5);
 		Shape shape = r.getLineShape(points);

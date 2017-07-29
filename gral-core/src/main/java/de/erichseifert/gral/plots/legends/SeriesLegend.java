@@ -39,7 +39,7 @@ public abstract class SeriesLegend extends AbstractLegend {
 	private final Map<DataSource, Drawable> drawableByDataSource;
 
 	public SeriesLegend() {
-		drawableByDataSource = new HashMap<DataSource, Drawable>();
+		drawableByDataSource = new HashMap<>();
 	}
 
 	@Override

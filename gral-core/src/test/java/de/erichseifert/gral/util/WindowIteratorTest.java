@@ -34,7 +34,7 @@ public class WindowIteratorTest {
 	public void testNextReturnsIterables() {
 		int windowSize = 3;
 		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2, 3, 4, 5);
-		WindowIterator<Object> windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
 
 		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(0, 1, 2));
 		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(1, 2, 3));
@@ -46,7 +46,7 @@ public class WindowIteratorTest {
 	public void testHasNextReturnsFalseWhenEndOfInputIsReached() {
 		int windowSize = 3;
 		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2);
-		WindowIterator<Object> windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
 		windowIterator.next();
 
 		boolean hasNext = windowIterator.hasNext();
@@ -58,7 +58,7 @@ public class WindowIteratorTest {
 	public void testHasNextReturnsTrueWhenInputHasRemainingItems() {
 		int windowSize = 3;
 		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2, 3);
-		WindowIterator<Object> windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
 
 		boolean hasNext = windowIterator.hasNext();
 

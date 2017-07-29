@@ -34,7 +34,7 @@ public class ConvolutionFilterTest {
 		Iterable<Integer> data = Arrays.asList(3, 8, 5, 6, 4, 9);
 		Kernel kernel = new Kernel(1.0, 1.0, 1.0);
 
-		ConvolutionFilter<Integer> filter = new ConvolutionFilter<Integer>(data, kernel);
+		ConvolutionFilter<Integer> filter = new ConvolutionFilter<>(data, kernel);
 
 		assertThat(filter, hasItems(16.0, 19.0, 15.0, 19.0));
 	}

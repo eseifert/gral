@@ -57,7 +57,7 @@ public abstract class ValueLegend extends AbstractLegend
 	 * Initializes a new instance with default values.
 	 */
 	public ValueLegend() {
-		components = new HashMap<Row, Drawable>();
+		components = new HashMap<>();
 		labelColumn = 0;
 	}
 
@@ -68,7 +68,7 @@ public abstract class ValueLegend extends AbstractLegend
 	 * @return A sequence of items for the specified data source.
 	 */
 	protected Iterable<Row> getEntries(DataSource source) {
-		List<Row> items = new LinkedList<Row>();
+		List<Row> items = new LinkedList<>();
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
 			Row row = new Row(source, rowIndex);
 			items.add(row);
@@ -109,7 +109,7 @@ public abstract class ValueLegend extends AbstractLegend
 	@Override
 	public void remove(DataSource source) {
 		super.remove(source);
-		Set<Row> rows = new HashSet<Row>(components.keySet());
+		Set<Row> rows = new HashSet<>(components.keySet());
 		for (Row row : rows) {
 			if (row.getSource() != source) {
 				continue;

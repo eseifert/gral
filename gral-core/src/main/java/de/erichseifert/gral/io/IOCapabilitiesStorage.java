@@ -32,7 +32,7 @@ import java.util.Set;
 public abstract class IOCapabilitiesStorage {
 	/** Set of all registered capabilities. */
 	private static final Set<IOCapabilities> capabilities
-		= new HashSet<IOCapabilities>();
+		= new HashSet<>();
 
 	/**
 	 * Initializes a new storage instance.

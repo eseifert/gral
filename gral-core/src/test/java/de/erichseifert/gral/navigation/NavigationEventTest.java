@@ -37,7 +37,7 @@ public class NavigationEventTest {
 
 	@Before
 	public void setUp() {
-		event = new NavigationEvent<Double>(SOURCE, 1.2, 3.4);
+		event = new NavigationEvent<>(SOURCE, 1.2, 3.4);
 	}
 
 	@Test

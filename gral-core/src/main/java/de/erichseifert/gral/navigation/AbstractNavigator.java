@@ -69,7 +69,7 @@ public abstract class AbstractNavigator implements Navigator {
 	 * the axes with the specified names of the specified plot.
 	 */
 	public AbstractNavigator() {
-		navigationListeners = new HashSet<NavigationListener>();
+		navigationListeners = new HashSet<>();
 		zoomFactor = DEFAULT_ZOOM_FACTOR;
 		zoomMin = DEFAULT_ZOOM_MIN;
 		zoomMax = DEFAULT_ZOOM_MAX;

@@ -45,22 +45,22 @@ public class ColumnTest {
 	@BeforeClass
 	@SuppressWarnings("unchecked")
 	public static void setUpBeforeClass() {
-		col1 = new Column<Integer>(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
-		col2 = new Column<Integer>(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
+		col1 = new Column<>(Integer.class, 1, 2, 3, 4, 5, 6, 7, 8);
+		col2 = new Column<>(Integer.class, 1, 3, 2, 6, 4, 8, 9, 11);
 	}
 
 	@Test
 	public void testColumnFromIterableContainsValues() {
 		Iterable<Integer> data = Arrays.asList(1, 2, 3, 4);
 
-		Column<Integer> column = new Column<Integer>(Integer.class, data);
+		Column<Integer> column = new Column<>(Integer.class, data);
 
 		assertThat(column, hasItems(1, 2, 3, 4));
 	}
 
 	@Test
 	public void testSizeReturnsTheNumberOfElements() {
-		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
+		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3, 4);
 
 		int size = column.size();
 
@@ -69,7 +69,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetReturnsValueAtSpecifiedElement() {
-		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
+		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3, 4);
 
 		int value = column.get(1);
 
@@ -78,7 +78,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetWithIndexOutOfColumnSizeReturnsNull() {
-		Column<Integer> col = new Column<Integer>(Integer.class, 1, 2);
+		Column<Integer> col = new Column<>(Integer.class, 1, 2);
 		int colSize = col.size();
 
 		Integer elementOutOfRange = col.get(colSize);
@@ -88,8 +88,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndValuesAreEqual() {
-		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
-		Column<Integer> col2 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
+		Column<Integer> col2 = new Column<>(Integer.class, 1, 2, 3);
 
 		boolean equal = col1.equals(col2);
 
@@ -98,7 +98,7 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnDoesNotEqualANonColumnObject() {
-		Column<Integer> column = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3);
 		Object someObject = new Object();
 
 		boolean equal = column.equals(someObject);
@@ -108,7 +108,7 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithDifferentTypesAndIdenticalValuesAreNotEqual() {
-		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
 		@SuppressWarnings("unchecked")
 		Column<?> col2 = new Column(Long.class, 1, 2, 3);
 
@@ -119,8 +119,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndDifferentValuesAreNotEqual() {
-		Column<Integer> col1 = new Column<Integer>(Integer.class, 1, 2, 3);
-		Column<Integer> col2 = new Column<Integer>(Integer.class, 3, 2, 1);
+		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
+		Column<Integer> col2 = new Column<>(Integer.class, 3, 2, 1);
 
 		boolean equal = col1.equals(col2);
 
@@ -154,7 +154,7 @@ public class ColumnTest {
 
 	@Test
 	public void testSerializationPreservesSize() throws IOException, ClassNotFoundException {
-		Column<Integer> original = new Column<Integer>(Integer.class, 1, 2, 3);
+		Column<Integer> original = new Column<>(Integer.class, 1, 2, 3);
 		Column<Integer> deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.size(), deserialized.size());

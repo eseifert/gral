@@ -54,7 +54,7 @@ public class Column<T extends Comparable<T>> implements Iterable<T>, Serializabl
 
 	public Column(Class<T> dataType, Iterable<T> data) {
 		this.dataType = dataType;
-		this.data = new ArrayList<T>();
+		this.data = new ArrayList<>();
 		for (T item : data) {
 			this.data.add(item);
 		}

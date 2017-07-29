@@ -52,7 +52,7 @@ public class QuasiRandomColors extends IndexedColorMapper {
 	 * Creates a new QuasiRandomColors object with default color variance.
 	 */
 	public QuasiRandomColors() {
-		colorCache = new HashMap<Integer, Color>();
+		colorCache = new HashMap<>();
 		colorVariance = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation

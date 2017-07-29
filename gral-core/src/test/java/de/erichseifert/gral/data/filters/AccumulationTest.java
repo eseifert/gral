@@ -33,7 +33,7 @@ public class AccumulationTest {
 	public void testIteratorReturnsAccumulatedValues() {
 		Iterable<Integer> data = Arrays.asList(-5, 1, 1, 0, 2);
 
-		Accumulation<Integer> accumulatedData = new Accumulation<Integer>(data);
+		Accumulation<Integer> accumulatedData = new Accumulation<>(data);
 
 		assertThat(accumulatedData, hasItems(-5.0, -4.0, -3.0, -3.0, -1.0));
 	}

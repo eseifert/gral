@@ -92,7 +92,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		axisRendererX.setLabel(new Label("Logarithmic axis"));
 		plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 		// Custom tick labels
-		Map<Double, String> labels = new HashMap<Double, String>();
+		Map<Double, String> labels = new HashMap<>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
 		axisRendererX.setCustomTicks(labels);

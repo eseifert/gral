@@ -33,9 +33,9 @@ public class MedianFilter<T extends Number & Comparable<T>> implements Filter<T>
 	private final Iterator<List<T>> windowIterator;
 
 	public MedianFilter(Iterable<T> data, int windowSize) {
-		filtered = new LinkedList<Double>();
+		filtered = new LinkedList<>();
 
-		windowIterator = new WindowIterator<T>(data.iterator(), windowSize);
+		windowIterator = new WindowIterator<>(data.iterator(), windowSize);
 
 		while (windowIterator.hasNext()) {
 			List<T> window = windowIterator.next();

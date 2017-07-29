@@ -60,7 +60,7 @@ public class NavigationListenerTest {
 	@Test
 	public void testCenterChanged() {
 		assertNull(listener.center);
-		PointND<Double> centerNew = new PointND<Double>(1.2, 3.4);
+		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertEquals(centerNew, listener.center);
 	}
@@ -77,7 +77,7 @@ public class NavigationListenerTest {
 	public void testRemove() {
 		navigator.removeNavigationListener(listener);
 
-		PointND<Double> centerNew = new PointND<Double>(1.2, 3.4);
+		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertNull(listener.zoom);
 

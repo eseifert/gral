@@ -51,7 +51,7 @@ public abstract class DataUtils {
 				"Could not create the map because the number of keys and values differs.");
 		}
 		// Fill map with keys and values
-		Map<K, V> map = new HashMap<K, V>();
+		Map<K, V> map = new HashMap<>();
 		for (int i = 0; i < keys.length; i++) {
 			K key = keys[i];
 			V value = values[i];

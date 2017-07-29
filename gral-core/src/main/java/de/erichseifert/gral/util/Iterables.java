@@ -36,7 +36,7 @@ public abstract class Iterables {
 
 		@Override
 		public Iterator<T> iterator() {
-			List<Iterator<T>> iterators = new LinkedList<Iterator<T>>();
+			List<Iterator<T>> iterators = new LinkedList<>();
 			for (Iterable<T> iterable : inputIterables) {
 				iterators.add(iterable.iterator());
 			}
@@ -47,7 +47,7 @@ public abstract class Iterables {
 	}
 
 	public static <T> Iterable<T> concatenate(Iterable<T>... iterables) {
-		return new ConcatenationIterable<T>(Arrays.asList(iterables));
+		return new ConcatenationIterable<>(Arrays.asList(iterables));
 	}
 
 	private static class LengthIterator<T> implements Iterator<T> {
@@ -81,7 +81,7 @@ public abstract class Iterables {
 		return new Iterable<T>() {
 			@Override
 			public Iterator<T> iterator() {
-				return new LengthIterator<T>(iterable.iterator(), elementCount);
+				return new LengthIterator<>(iterable.iterator(), elementCount);
 			}
 		};
 	}

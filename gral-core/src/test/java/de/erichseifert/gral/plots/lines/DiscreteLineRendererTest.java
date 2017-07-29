@@ -66,8 +66,8 @@ public class DiscreteLineRendererTest {
 		// Get line
 		DiscreteLineRenderer2D r = new DiscreteLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
-			new DataPoint(data, new PointND<Double>(0.0, 0.0)),
-			new DataPoint(data, new PointND<Double>(1.0, 1.0))
+			new DataPoint(data, new PointND<>(0.0, 0.0)),
+			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		BufferedImage image = createTestImage();

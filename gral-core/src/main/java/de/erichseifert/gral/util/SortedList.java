@@ -42,7 +42,7 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 	 * @param initialCapacity Initial capacity of the list.
 	 */
 	public SortedList(int initialCapacity) {
-		elements = new ArrayList<T>(initialCapacity);
+		elements = new ArrayList<>(initialCapacity);
 	}
 
 	/**
