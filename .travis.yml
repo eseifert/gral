@@ -10,7 +10,7 @@ jdk:
 before_install:
   - sudo add-apt-repository ppa:cwchien/gradle -y
   - sudo apt-get update -q
-  - sudo apt-get install gradle -y
+  - sudo apt-get install gradle-ppa -y
   - gradle --version
 
 before_script:
