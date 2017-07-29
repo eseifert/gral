@@ -22,10 +22,11 @@
 package de.erichseifert.gral.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeFalse;
 
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.awt.geom.Rectangle2D;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,6 +59,7 @@ public class ExportDialogTest {
 
 	@Before
 	public void setUp() {
+		assumeFalse(GraphicsEnvironment.isHeadless());
 		dialog = new TestExportDialog(null, drawable);
 	}
 
