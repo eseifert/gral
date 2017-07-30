@@ -48,7 +48,6 @@ public class DummyData extends AbstractDataSource {
 	 */
 	@SuppressWarnings("unchecked")
 	public DummyData(int cols, int rows, Comparable<?> value) {
-		value.getClass();
 		this.cols = cols;
 		this.rows = rows;
 		this.value = value;
