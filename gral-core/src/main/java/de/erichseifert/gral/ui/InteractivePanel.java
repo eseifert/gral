@@ -37,13 +37,11 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JFileChooser;
@@ -338,29 +336,14 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 	 */
 	private void export(Drawable component, String mimeType, File file,
 			Rectangle2D documentBounds) {
-		FileOutputStream destination;
-		try {
-			destination = new FileOutputStream(file);
-		} catch (FileNotFoundException ex) {
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
-			return;
-		}
-		DrawableWriter writer = DrawableWriterFactory.getInstance().get(mimeType);
-		try {
+		try (FileOutputStream destination = new FileOutputStream(file)) {
+			DrawableWriter writer = DrawableWriterFactory.getInstance().get(mimeType);
 			writer.write(component, destination,
 				documentBounds.getX(), documentBounds.getY(),
 				documentBounds.getWidth(), documentBounds.getHeight());
-		} catch (IOException ex) {
-			// TODO Auto-generated catch block
-			ex.printStackTrace();
-		} finally {
-			try {
-				destination.close();
-			} catch (IOException ex2) {
-				// TODO Auto-generated catch block
-				ex2.printStackTrace();
-			}
+		} catch (IOException e) {
+			// TODO: Exception handling
+			e.printStackTrace();
 		}
 	}
 
