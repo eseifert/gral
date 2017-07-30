@@ -25,7 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -56,7 +55,7 @@ import de.erichseifert.gral.util.Messages;
 public class VectorWriter extends IOCapabilitiesStorage
 		implements DrawableWriter {
 	/** Mapping of MIME type string to {@code Processor} implementation. */
-	private static final Map<String, Class<?>> processors;
+	private static final Map<String, String> processors;
 	/** Java package that contains the VecorGraphics2D package. */
 	private static final String VECTORGRAPHICS2D_PACKAGE =
 		"de.erichseifert.vectorgraphics2d"; //$NON-NLS-1$
@@ -64,41 +63,29 @@ public class VectorWriter extends IOCapabilitiesStorage
 	static {
 		processors = new HashMap<>();
 
-		try {
-			Class<?> cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".eps.EPSProcessor"); //$NON-NLS-1$
-			addCapabilities(new IOCapabilities(
-				"EPS", //$NON-NLS-1$
-				Messages.getString("ImageIO.epsDescription"), //$NON-NLS-1$
-				"application/postscript", //$NON-NLS-1$
-				new String[] {"eps", "epsf", "epsi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			));
-			processors.put("application/postscript", cls); //$NON-NLS-1$
-		} catch (ClassNotFoundException e) {
-		}
+		addCapabilities(new IOCapabilities(
+			"EPS", //$NON-NLS-1$
+			Messages.getString("ImageIO.epsDescription"), //$NON-NLS-1$
+			"application/postscript", //$NON-NLS-1$
+			new String[] {"eps", "epsf", "epsi"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		));
+		processors.put("application/postscript", "eps"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		try {
-			Class<?> cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".pdf.PDFProcessor"); //$NON-NLS-1$
-			addCapabilities(new IOCapabilities(
-				"PDF", //$NON-NLS-1$
-				Messages.getString("ImageIO.pdfDescription"), //$NON-NLS-1$
-				"application/pdf", //$NON-NLS-1$
-				new String[] {"pdf"} //$NON-NLS-1$
-			));
-			processors.put("application/pdf", cls); //$NON-NLS-1$
-		} catch (ClassNotFoundException e) {
-		}
+		addCapabilities(new IOCapabilities(
+			"PDF", //$NON-NLS-1$
+			Messages.getString("ImageIO.pdfDescription"), //$NON-NLS-1$
+			"application/pdf", //$NON-NLS-1$
+			new String[] {"pdf"} //$NON-NLS-1$
+		));
+		processors.put("application/pdf", "pdf"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		try {
-			Class<?> cls = Class.forName(VECTORGRAPHICS2D_PACKAGE + ".svg.SVGProcessor"); //$NON-NLS-1$
-			addCapabilities(new IOCapabilities(
-				"SVG", //$NON-NLS-1$
-				Messages.getString("ImageIO.svgDescription"), //$NON-NLS-1$
-				"image/svg+xml", //$NON-NLS-1$
-				new String[] {"svg", "svgz"} //$NON-NLS-1$ //$NON-NLS-2$
-			));
-			processors.put("image/svg+xml", cls); //$NON-NLS-1$
-		} catch (ClassNotFoundException e) {
-		}
+		addCapabilities(new IOCapabilities(
+			"SVG", //$NON-NLS-1$
+			Messages.getString("ImageIO.svgDescription"), //$NON-NLS-1$
+			"image/svg+xml", //$NON-NLS-1$
+			new String[] {"svg", "svgz"} //$NON-NLS-1$ //$NON-NLS-2$
+		));
+		processors.put("image/svg+xml", "svg"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** Current data format as MIME type string. */
@@ -155,16 +142,6 @@ public class VectorWriter extends IOCapabilitiesStorage
 			Graphics2D g = (Graphics2D) vg2dClass.newInstance();
 			// Paint the Drawable instance
 			d.draw(new DrawingContext(g, Quality.QUALITY, Target.VECTOR));
-			// Create corresponding VectorGraphics2D processor instance
-			Class<?> processorClass = processors.get(mimeType);
-			Constructor processorConstructor = processorClass.getConstructors()[0];
-			Object processor;
-			if ("application/pdf".equals(mimeType)) {
-				// FIXME: Turn on compression for PDF processor
-				processor = processorConstructor.newInstance(true);
-			} else {
-				processor = processorConstructor.newInstance();
-			}
 			// Get sequence of commands
 			Class<?> commandSequenceClass = Class.forName(VECTORGRAPHICS2D_PACKAGE +
 					".intermediate.CommandSequence");  //$NON-NLS-1$
@@ -175,6 +152,12 @@ public class VectorWriter extends IOCapabilitiesStorage
 			Object pageSize = pageSizeClass
 					.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE, Double.TYPE)
 					.newInstance(x, y, width, height);
+			// Get the corresponding VectorGraphics2D processor instance
+			Class<?> processorsClass = Class.forName(VECTORGRAPHICS2D_PACKAGE +
+					".Processors");  //$NON-NLS-1$
+			Object processor = processorsClass.getMethod("get", String.class) //$NON-NLS-1$
+					.invoke(null, processors.get(mimeType));
+			Class<?> processorClass = processor.getClass();
 			// Get document from commands with defined page size
 			Object document = processorClass
 					.getMethod("getDocument", commandSequenceClass, pageSizeClass) //$NON-NLS-1$
