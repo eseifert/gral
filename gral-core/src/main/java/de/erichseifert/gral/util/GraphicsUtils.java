@@ -171,6 +171,9 @@ public abstract class GraphicsUtils {
 		if (paintBounds == null) {
 			paintBounds = shape.getBounds2D();
 		}
+		if (paintBounds.getWidth() == 0.0 || paintBounds.getHeight() == 0.0) {
+			return;
+		}
 		AffineTransform txOrig = graphics.getTransform();
 		graphics.translate(paintBounds.getX(), paintBounds.getY());
 		graphics.scale(paintBounds.getWidth(), paintBounds.getHeight());
