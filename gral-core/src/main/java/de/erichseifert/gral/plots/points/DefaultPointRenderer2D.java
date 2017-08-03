@@ -91,6 +91,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 * @param context Environment used for drawing.
 	 * @param point Point shape used to layout the label.
 	 * @param row Data row containing the point.
+	 * @param pointIndex Index number used for coloring.
 	 * @param col Index of the column that will be projected on the axis.
 	 */
 	protected void drawValueLabel(DrawingContext context,

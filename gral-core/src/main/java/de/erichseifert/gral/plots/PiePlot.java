@@ -603,6 +603,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 * @param slice Pie slice to draw.
 		 * @param radius Radius of pie slice in view units (e.g. pixels).
 		 * @param row Data row containing the point.
+		 * @param rowIndex Index number used for coloring.
 		 */
 		protected void drawValueLabel(DrawingContext context, Slice slice,
 				double radius, Row row, int rowIndex) {
