@@ -31,11 +31,12 @@ subprojects {
 	}
 
 	repositories {
-		mavenLocal()
-		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
-		compile(group: 'de.erichseifert.vectorgraphics2d', name: 'VectorGraphics2D', version: '0.12')
+		runtime 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.12'
 	}
 
 	apply plugin: 'license'
@@ -82,8 +83,9 @@ subprojects {
 // Include the License Gradle plugin
 buildscript {
 	repositories {
-		mavenLocal()
-		jcenter()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 
 	dependencies {
