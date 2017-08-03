@@ -13,8 +13,9 @@ buildscript {
 apply plugin: 'me.champeau.gradle.jmh'
 
 dependencies {
-	testCompile(group: 'junit', name: 'junit', version: '4.12')
-	jmh(group: 'commons-io', name: 'commons-io', version: '2.4')
+	testCompile 'junit:junit:4.12'
+	jmh 'commons-io:commons-io:2.4'
+	testRuntime 'org.slf4j:slf4j-log4j12:1.7.25'  // Required for Cobertura
 }
 
 buildscript {
@@ -24,11 +25,17 @@ buildscript {
         }
 	}
 	dependencies {
+		classpath 'net.sf.proguard:proguard-gradle:5.2.+'
 		classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
+		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
 	}
 }
 
 apply plugin: 'net.saliman.cobertura'
+cobertura.coverageFormats = ['html', 'xml']
+
+apply plugin: 'com.github.kt3k.coveralls'
+
 task report {
 	dependsOn = ['cobertura', check]
 	description = 'Generates reports.'
@@ -125,14 +132,3 @@ uploadArchives {
 	}
 }
 signArchives.dependsOn(shrinkJar)
-
-// Include the proguard-gradle plugin
-buildscript {
-	repositories {
-		mavenCentral()
-		jcenter()
-	}
-	dependencies {
-		classpath 'net.sf.proguard:proguard-gradle:5.2.+'
-	}
-}
