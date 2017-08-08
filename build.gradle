@@ -36,7 +36,7 @@ subprojects {
 		}
 	}
 	dependencies {
-		runtime 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.12'
+		runtime 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13'
 	}
 
 	apply plugin: 'license'
