@@ -11,7 +11,7 @@ before_install:
 - sudo apt-get update -q
 - sudo apt-get install gradle -y
 - export PATH=/usr/bin:$PATH  # Use gradle from /usr/bin
-- sed -e '/export JAVA_HOME=/ s/^/#/' -i "/usr/bin/gradle"  # Gradle must not overwrite JAVA_HOME
+- sudo sed -e '/export JAVA_HOME=/ s/^/#/' -i "/usr/bin/gradle"  # Gradle must not overwrite JAVA_HOME
 - gradle --version
 
 before_script:
