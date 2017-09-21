@@ -915,9 +915,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
-		super.add(index, source, visible);
+
 		PointRenderer pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
+
+		super.add(index, source, visible);
 		setMapping(source, AXIS_TANGENTIAL);
 	}
 
