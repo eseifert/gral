@@ -65,8 +65,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		}
 		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
 		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
-		return (Math.log10(val) - minLog)*getShapeLength() /
+		double result = (Math.log10(val) - minLog)*getShapeLength() /
 			(maxLog - minLog);
+		return Double.isFinite(result) ? result : 0;
 	}
 
 	/**
@@ -92,8 +93,9 @@ public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 		}
 		double minLog = (min > 0.0) ? Math.log10(min) : 0.0;
 		double maxLog = (max > 0.0) ? Math.log10(max) : 1.0;
-		return Math.pow(10.0,
+		double result = Math.pow(10.0,
 				value*(maxLog - minLog)/getShapeLength() + minLog);
+		return Double.isFinite(result) ? result : 0;
 	}
 
 	@Override
