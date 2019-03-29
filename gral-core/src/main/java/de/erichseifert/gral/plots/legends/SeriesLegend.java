@@ -67,7 +67,7 @@ public abstract class SeriesLegend extends AbstractLegend {
 	 * @return Label text.
 	 */
 	protected String getLabel(DataSource data) {
-		return data.toString();
+		return data.getName();
 	}
 
 	/**
