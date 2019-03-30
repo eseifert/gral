@@ -12,7 +12,7 @@ before_install:
 - echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
 - sudo add-apt-repository ppa:cwchien/gradle -y
 - sudo apt-get update -q
-- sudo apt-get install gradle -y
+- sudo apt-get install gradle=5.1 -y  # Restrict Gradle to 5.1 for JDK7 compatibility
 - export PATH=/usr/bin:$PATH  # Use gradle from /usr/bin
 - gradle --version
 
