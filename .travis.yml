@@ -10,12 +10,10 @@ before_install:
 - sudo wget "https://bouncycastle.org/download/bcprov-ext-jdk15on-158.jar" -O "${JAVA_HOME}/jre/lib/ext/bcprov-ext-jdk15on-158.jar"
 - sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
 - echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
-- sudo add-apt-repository ppa:cwchien/gradle -y
 - sudo apt-get update -q
-- gradle --version
 - gradle wrapper
 - ./gradlew wrapper --gradle-version 5.1  # Restrict Gradle to 5.1 for JDK7 compatibility
-- export PATH=/usr/bin:$PATH  # Use gradle from /usr/bin
+- gradle --version
 
 before_script:
 - "export DISPLAY=:99.0"
