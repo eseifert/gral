@@ -7,7 +7,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'me.champeau.gradle:jmh-gradle-plugin:0.4.4'
+		classpath 'me.champeau.gradle:jmh-gradle-plugin:0.4.8'
 	}
 }
 apply plugin: 'me.champeau.gradle.jmh'
@@ -15,7 +15,7 @@ apply plugin: 'me.champeau.gradle.jmh'
 dependencies {
 	testCompile 'junit:junit:4.12'
 	jmh 'commons-io:commons-io:2.4'
-	testRuntime 'org.slf4j:slf4j-log4j12:1.7.25'  // Required for Cobertura
+	testRuntime 'org.slf4j:slf4j-log4j12:1.7.26'  // Required for Cobertura
 }
 
 buildscript {
@@ -25,9 +25,9 @@ buildscript {
         }
 	}
 	dependencies {
-		classpath 'net.sf.proguard:proguard-gradle:5.2.+'
-		classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
-		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
+		classpath 'net.sf.proguard:proguard-gradle:6.0.+'
+		classpath 'net.saliman:gradle-cobertura-plugin:2.6.+'
+		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.+'
 	}
 }
 
