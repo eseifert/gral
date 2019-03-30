@@ -11,7 +11,6 @@ before_install:
 - sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
 - echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
 - sudo apt-get update -q
-- ./gradlew wrapper --gradle-version 5.1  # Restrict Gradle to 5.1 for JDK7 compatibility
 - gradle --version
 
 before_script:
