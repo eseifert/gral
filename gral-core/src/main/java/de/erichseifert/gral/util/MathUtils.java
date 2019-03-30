@@ -331,7 +331,7 @@ public abstract class MathUtils {
 	/**
 	 * <p>Returns the magnitude of the specified number. Example for magnitude
 	 * base 10:</p>
-	 * <table><caption></caption><tbody>
+	 * <table><tbody>
 	 *   <tr><td align="right"> -0.05</td><td align="right"> -0.01</td></tr>
 	 *   <tr><td align="right">  0.05</td><td align="right">  0.01</td></tr>
 	 *   <tr><td align="right">  3.14</td><td align="right">  1.00</td></tr>
