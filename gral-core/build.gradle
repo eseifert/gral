@@ -73,6 +73,7 @@ task shrinkJar(type: ProGuardTask, dependsOn: jar) {
 		libraryjars "${javaHome}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 		libraryjars "${javaHome}/jmods/java.desktop.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 		libraryjars "${javaHome}/jmods/java.sql.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+		libraryjars "${javaHome}/jmods/java.xml.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 	} 
 }
 
