@@ -60,7 +60,18 @@ task shrinkJar(type: ProGuardTask, dependsOn: jar) {
 	target targetCompatibility.toString()
 	injars jar.archivePath
 	outjars "${libsDir}/shrunk/${jar.archiveName}"
-	libraryjars runtimeJar
+
+	// Determine the location of the Java runtime (required for ProGuard)
+	def javaHome = System.getProperty('java.home')
+	if (file("${javaHome}/jmods/java.base.jmod").exists()) {
+		libraryjars "${javaHome}/jmods/java.base.jmod(!.jar;!module-info.class)"
+		libraryjars "${javaHome}/jmods/java.desktop.jmod(!.jar;!module-info.class)"
+		libraryjars "${javaHome}/jmods/java.sql.jmod(!.jar;!module-info.class)"
+	} else if (file("${javaHome}/lib/rt.jar").exists()) {
+		libraryjars "${javaHome}/lib/rt.jar"
+	} else if (file("${javaHome}/bundle/Classes/classes.jar").exists()) {
+		libraryjars "${javaHome}/bundle/Classes/classes.jar"
+	}
 	libraryjars configurations.runtime
 }
 

@@ -21,19 +21,6 @@ subprojects {
 		owner2_email = 'mseifert[at]error-reports.org'
 
 		website = 'https://github.com/eseifert/gral/'
-
-		// Determine the location of the Java runtime (required for ProGuard)
-		if (file("${System.getProperty('java.home')}/jmods/java.base.jmod").exists()) {
-			runtimeJar = [
-					"${System.getProperty('java.home')}/jmods/java.base.jmod(!.jar;!module-info.class)",
-					"${System.getProperty('java.home')}/jmods/java.desktop.jmod(!.jar;!module-info.class)",
-					"${System.getProperty('java.home')}/jmods/java.sql.jmod(!.jar;!module-info.class)",
-			]
-		} else if (file("${System.getProperty('java.home')}/lib/rt.jar").exists()) {
-			runtimeJar = "${System.getProperty('java.home')}/lib/rt.jar"
-		} else if (file("${System.getProperty('java.home')}/bundle/Classes/classes.jar").exists()) {
-			runtimeJar = "${System.getProperty('java.home')}/bundle/Classes/classes.jar"
-		}
 	}
 
 	repositories {
