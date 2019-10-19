@@ -11,7 +11,7 @@ before_install:
 
 before_script:
 - "export DISPLAY=:99.0"
-- systemctl start xvfb
+- sudo systemctl start xvfb
 - sleep 3   # Give xvfb some time to start
 
 notifications:
