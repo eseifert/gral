@@ -10,6 +10,11 @@ GRAL is a free Java library for displaying plots (graphs, diagrams, and
 charts). The acronym GRAL simply stands for *GRAphing Library*.
 
 
+Maintainer wanted
+================
+GRAL is looking for a new maintainer. If you are interested, please contact `dev@erichseifert.de <mailto:dev@erichseifert.de>`_.
+
+
 Features
 ========
 
