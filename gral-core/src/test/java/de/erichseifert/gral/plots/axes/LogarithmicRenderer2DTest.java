@@ -63,7 +63,7 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testWorldToView() {
-		assertEquals(Double.NEGATIVE_INFINITY, renderer.worldToView(axis, 0.0, true), DELTA);
+		assertEquals(0, renderer.worldToView(axis, 0.0, true), DELTA);
 		assertEquals(Math.log10( 0.1), renderer.worldToView(axis,  0.1, true), DELTA);
 		assertEquals(Math.log10( 1.0), renderer.worldToView(axis,  1.0, true), DELTA);
 		assertEquals(Math.log10( 5.0), renderer.worldToView(axis,  5.0, true), DELTA);
