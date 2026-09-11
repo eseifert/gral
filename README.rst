@@ -59,7 +59,7 @@ Using GRAL with Gradle
 .. code:: groovy
 
     dependencies {
-        compile group: 'de.erichseifert.gral', name: 'gral-core', version: '0.11'
+        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.11'
     }
 
 Using GRAL with sbt
