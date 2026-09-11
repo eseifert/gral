@@ -44,6 +44,7 @@ import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Location;
@@ -255,6 +256,43 @@ public class XYPlotTest {
 		plot.addPointRenderer(data, renderer);
 		plot.removePointRenderer(data, renderer);
 		assertTrue(plot.getPointRenderers(data).isEmpty());
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testRemoveDataSourceUpdatesAxisRange() {
+		DataTable data1 = new DataTable(Double.class, Double.class);
+		data1.add(1.0, 1.0);
+		data1.add(2.0, 2.0);
+		DataTable data2 = new DataTable(Double.class, Double.class);
+		data2.add(10.0, 20.0);
+
+		MockXYPlot plot = new MockXYPlot(data1, data2);
+		plot.remove(data2);
+		plot.autoscaleAxis(XYPlot.AXIS_X);
+		plot.autoscaleAxis(XYPlot.AXIS_Y);
+
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		assertEquals(1.0, axisX.getMin().doubleValue(), DELTA);
+		assertEquals(2.0, axisX.getMax().doubleValue(), DELTA);
+		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
+		assertEquals(1.0, axisY.getMin().doubleValue(), DELTA);
+		assertEquals(2.0, axisY.getMax().doubleValue(), DELTA);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testClearUpdatesAxisRange() {
+		DataTable data = new DataTable(Double.class, Double.class);
+		data.add(10.0, 20.0);
+
+		MockXYPlot plot = new MockXYPlot(data);
+		plot.clear();
+		plot.autoscaleAxis(XYPlot.AXIS_X);
+
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		assertEquals(0.0, axisX.getMin().doubleValue(), DELTA);
+		assertEquals(0.0, axisX.getMax().doubleValue(), DELTA);
 	}
 
 	@Test

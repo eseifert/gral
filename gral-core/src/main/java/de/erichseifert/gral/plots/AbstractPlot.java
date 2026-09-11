@@ -616,6 +616,7 @@ public abstract class AbstractPlot extends DrawableContainer
 			getLegend().remove(source);
 		}
 		boolean existed = data.remove(source);
+		columnToAxisMappingByDataSource.remove(source);
 		invalidateAxisExtrema();
 		return existed;
 	}
@@ -632,6 +633,7 @@ public abstract class AbstractPlot extends DrawableContainer
 			getLegend().clear();
 		}
 		data.clear();
+		columnToAxisMappingByDataSource.clear();
 		invalidateAxisExtrema();
 	}
 
