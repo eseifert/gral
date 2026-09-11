@@ -435,6 +435,12 @@ public class BarPlot extends XYPlot {
 			// Add margin
 			double barWidth = getBarWidth();
 			double margin = barWidth*(max - min)/rowCount;
+			if (margin == 0.0) {
+				// All bars share the same position, e.g. because there is only
+				// a single bar. Use the width of a bar as margin, so that the
+				// axis doesn't collapse to a single point.
+				margin = barWidth;
+			}
 			spacing = margin/2.0;
 		} else {
 			// Make sure 0 is always visible for y axis

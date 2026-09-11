@@ -27,14 +27,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
+import static de.erichseifert.gral.TestUtils.assertNotEmpty;
+import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.BarPlot.BarRenderer;
+import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,6 +83,28 @@ public class BarPlotTest {
 		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(plot.isDrawn);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testDrawSingleBar() {
+		DataTable data = new DataTable(Double.class, Integer.class);
+		data.add(0.1, 1);
+
+		MockBarPlot plot = new MockBarPlot(data);
+		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderers(data).get(0);
+		pointRenderer.setBorderStroke(new BasicStroke());
+
+		// A single bar must not collapse the horizontal axis to a single point
+		Axis axisX = plot.getAxis(BarPlot.AXIS_X);
+		assertTrue(axisX.getMin().doubleValue() < axisX.getMax().doubleValue());
+
+		BufferedImage image = createTestImage();
+		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
+		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		plot.draw(context);
+
+		assertNotEmpty(image);
 	}
 
 	@Test

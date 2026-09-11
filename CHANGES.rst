@@ -16,6 +16,8 @@ Plotting:
     - Removing a data source from a plot, or clearing the plot, updates the
       ranges of auto-scaled axes
     - Hidden data sources no longer determine the ranges of auto-scaled axes
+    - Bar plots with a single bar, or with several bars at the same position,
+      are visible now (#146)
 
 General:
     - Releases are published through the Central Portal publisher API
