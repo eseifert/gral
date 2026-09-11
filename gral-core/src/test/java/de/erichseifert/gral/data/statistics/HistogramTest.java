@@ -53,14 +53,36 @@ public class HistogramTest {
 	public void testBucketsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
 		Histogram histogram = new Histogram(data, 4);
-		assertThat(histogram, hasItems(3, 3, 0, 1));
+		assertThat(histogram, hasItems(3, 3, 0, 2));
 	}
 
 	@Test
 	public void testCustomBinsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
 		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
-		assertThat(histogram, hasItems(0, 3, 3, 1));
+		assertThat(histogram, hasItems(0, 3, 3, 2));
+	}
+
+	@Test
+	public void testLastBinContainsLargestValue() {
+		Iterable<Comparable<?>> data = createHistogramData();
+		Histogram histogram = new Histogram(data, 4);
+
+		// The largest value equals the last break and belongs to the last bin
+		assertThat(histogram.get(3), is(2));
+	}
+
+	@Test
+	public void testAllValuesAreCounted() {
+		Iterable<Comparable<?>> data = createHistogramData();
+		Histogram histogram = new Histogram(data, 4);
+
+		int valueCount = 0;
+		for (int binSize : histogram) {
+			valueCount += binSize;
+		}
+
+		assertThat(valueCount, is(8));
 	}
 
 	@Test

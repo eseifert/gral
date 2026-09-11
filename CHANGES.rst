@@ -7,6 +7,8 @@ Data:
       discards the cached statistics
     - ``Row.hashCode`` is consistent with ``Row.equals``, so that rows can be
       used in hash-based collections
+    - The last bin of ``Histogram`` and the last cell of ``Histogram2D``
+      include their upper limit, so that the largest value is counted
 
 Plotting:
     - Horizontally stacked layouts report the height of their tallest

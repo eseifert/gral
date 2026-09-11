@@ -62,7 +62,7 @@ public class AbstractHistogram2DTest {
 			3L, 5L,  // 1.0-2.0, 1.0-3.0
 			3L, 2L,  // 2.0-3.0, 3.0-5.0
 			0L, 0L,  // 3.0-4.0, 5.0-7.0
-			1L, 0L   // 4.0-5.0, 7.0-9.0
+			2L, 1L   // 4.0-5.0, 7.0-9.0
 		};
 		int i = 0;
 		while (i < expected.length) {
@@ -81,7 +81,7 @@ public class AbstractHistogram2DTest {
 			3L, 5L,  // 1.0-2.0, 1.0-3.0
 			3L, 2L,  // 2.0-3.0, 3.0-5.0
 			0L, 0L,  // 3.0-4.0, 5.0-7.0
-			1L, 0L   // 4.0-5.0, 7.0-9.0
+			2L, 1L   // 4.0-5.0, 7.0-9.0
 		};
 		int i = 0;
 		while (i < expected.length) {
@@ -101,8 +101,18 @@ public class AbstractHistogram2DTest {
 		assertEquals(2L, histogram.get(1, 1));
 		assertEquals(0L, histogram.get(0, 2));
 		assertEquals(0L, histogram.get(1, 2));
-		assertEquals(1L, histogram.get(0, 3));
-		assertEquals(0L, histogram.get(1, 3));
+		assertEquals(2L, histogram.get(0, 3));
+		assertEquals(1L, histogram.get(1, 3));
+	}
+
+	@Test
+	public void testLastCellContainsLargestValue() {
+		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+
+		// The largest values equal the last break of their column and belong
+		// to the last cell
+		assertEquals(2L, histogram.get(0, 3));
+		assertEquals(1L, histogram.get(1, 3));
 	}
 
 	@Test

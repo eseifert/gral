@@ -24,6 +24,14 @@ package de.erichseifert.gral.data.statistics;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * <p>Counts how many of the specified values fall into each of a series of
+ * bins. The bins are defined by their breaks: the first bin reaches from the
+ * first to the second break, the second bin from the second to the third
+ * break, and so on. A bin contains all values that are greater than or equal
+ * to its lower limit and smaller than its upper limit. The last bin also
+ * contains the values that are equal to its upper limit.</p>
+ */
 public class Histogram implements Iterable<Integer> {
 	private Iterable<Comparable<?>> data;
 	private Number[] breaks;
@@ -66,11 +74,17 @@ public class Histogram implements Iterable<Integer> {
 			if (!(value instanceof Number)) {
 				continue;
 			}
+			double doubleValue = ((Number) value).doubleValue();
 			for (int binIndex = 0; binIndex < bins.length; binIndex++) {
 				double lowerBinLimit = breaks[binIndex].doubleValue();
 				double upperBinLimit = breaks[binIndex + 1].doubleValue();
-				double doubleValue = ((Number) value).doubleValue();
-				if (doubleValue >= lowerBinLimit && doubleValue < upperBinLimit) {
+				// All bins but the last one exclude their upper limit. The
+				// last bin includes it, so that the largest value is counted.
+				boolean isLastBin = binIndex == bins.length - 1;
+				boolean isBelowUpperLimit = isLastBin
+					? doubleValue <= upperBinLimit
+					: doubleValue < upperBinLimit;
+				if (doubleValue >= lowerBinLimit && isBelowUpperLimit) {
 					bins[binIndex]++;
 				}
 			}

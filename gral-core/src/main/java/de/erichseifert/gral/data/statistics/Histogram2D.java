@@ -93,7 +93,7 @@ public class Histogram2D extends AbstractHistogram2D {
 				min = ((Number) getData().getColumnStatistics(Statistics.MIN).get(index, 0)).doubleValue();
 				max = ((Number) getData().getColumnStatistics(Statistics.MAX).get(index, 0)).doubleValue();
 			}
-			double delta = (max - min + Double.MIN_VALUE) / breakCount;
+			double delta = (max - min) / breakCount;
 
 			Number[] breaks = new Double[breakCount + 1];
 			for (int i = 0; i < breaks.length; i++) {
@@ -160,9 +160,15 @@ public class Histogram2D extends AbstractHistogram2D {
 				double val = numericCell.doubleValue();
 				// Iterate over histogram rows
 				for (int i = 0; i < brk.length - 1; i++) {
+					// All cells but the last one exclude their upper limit.
+					// The last cell includes it, so that the largest value is
+					// counted.
+					boolean isLastCell = i == brk.length - 2;
+					boolean isBelowUpperLimit = isLastCell
+						? val <= brk[i + 1].doubleValue()
+						: val < brk[i + 1].doubleValue();
 					// Put the value into corresponding class
-					if ((val >= brk[i].doubleValue())
-							&& (val < brk[i + 1].doubleValue())) {
+					if ((val >= brk[i].doubleValue()) && isBelowUpperLimit) {
 						cells[i]++;
 						if (cells[i] > colMax) {
 							colMax = cells[i];
