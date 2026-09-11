@@ -98,28 +98,69 @@ publishing {
 		}
 	}
 
-	repositories {
-		/*
-		 * oss.sonatype.org was shut down in 2025. This is the OSSRH-compatible
-		 * endpoint of its successor, the Central Portal.
-		 */
-		maven {
-			name = 'sonatype'
-			url = version.toString().endsWith('SNAPSHOT')
-				? 'https://central.sonatype.com/repository/maven-snapshots/'
-				: 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
-			credentials {
-				username = project.findProperty('ossrhUsername') ?: ''
-				password = project.findProperty('ossrhPassword') ?: ''
-			}
+	/*
+	 * No remote repository is declared here on purpose. Releases leave the
+	 * build through the Central Portal publisher API, which the NMCP plugin
+	 * configured in settings.gradle drives; see the 'publish' task below.
+	 */
+}
+
+signing {
+	/*
+	 * Signing is required as soon as a key is configured. The condition used to
+	 * inspect the task graph for a PublishToMavenRepository as well, which
+	 * still holds with NMCP, but it ties the correctness of the signatures to
+	 * the shape of the graph and it reads the graph at execution time, which
+	 * the configuration cache does not allow. Ordinary builds are unaffected,
+	 * because 'build' does not depend on the signing tasks.
+	 */
+	required = { project.hasProperty('signing.keyId') }
+	sign publishing.publications.mavenJava
+}
+
+/*
+ * Credentials and publishing mode for the Central Portal. The aggregation task
+ * in the root project reads these from settings.gradle, but the per-project
+ * task used below needs its own configuration.
+ */
+nmcp {
+	publishAllPublicationsToCentralPortal {
+		username = providers.gradleProperty('ossrhUsername')
+		password = providers.gradleProperty('ossrhPassword')
+		publishingType = providers.gradleProperty('centralPublishingType')
+				.getOrElse('AUTOMATIC')
+	}
+}
+
+/*
+ * The version comes from 'git describe', which yields something like
+ * 0.12-7-gdeadbee on a commit that isn't tagged. Such a version is not a
+ * snapshot, so nothing else would stop it from being released to Maven Central
+ * under a coordinate that can never be replaced afterwards.
+ */
+def checkReleaseVersion = tasks.register('checkReleaseVersion') {
+	description = 'Checks that the version was derived from a release tag.'
+	group = 'verification'
+
+	def candidate = project.version.toString()
+	doLast {
+		if (!(candidate ==~ ~/^\d+\.\d+(\.\d+)?$/)) {
+			throw new GradleException(
+				"Refusing to publish version '${candidate}'. Releases have to " +
+				'be built from a release tag, for example 0.13.')
 		}
 	}
 }
 
-signing {
-	required = {
-		project.hasProperty('signing.keyId') &&
-			gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
-	}
-	sign publishing.publications.mavenJava
+def publishToCentralPortal = tasks.named('nmcpPublishAllPublicationsToCentralPortal') {
+	dependsOn(checkReleaseVersion)
+}
+
+/*
+ * Makes the publisher API the default route out of the build, so that a release
+ * is a single 'gradlew :gral-core:publish' and needs no further step in the
+ * Central Portal.
+ */
+tasks.named('publish') {
+	dependsOn(publishToCentralPortal)
 }

@@ -1,3 +1,9 @@
+GRAL 0.13 (unreleased)
+======================
+
+General:
+    - Releases are published through the Central Portal publisher API
+
 GRAL 0.12 (2026-09-11)
 ======================
 

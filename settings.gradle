@@ -1,3 +1,33 @@
+/*
+ * Publishing to Maven Central goes through the Central Portal publisher API.
+ * Sonatype provides no Gradle plugin of its own for it, so NMCP is used: unlike
+ * the alternatives it neither creates publications nor applies 'maven-publish',
+ * it only collects the publications that :gral-core already defines, stages
+ * them, and uploads the resulting bundle. The POM and the signing setup in
+ * gral-core/build.gradle are therefore untouched by it.
+ *
+ * This is the one third-party plugin in the build. It earns the exception
+ * because the alternative is several dozen lines of hand-written multipart
+ * upload and status polling.
+ */
+plugins {
+	id 'com.gradleup.nmcp.settings' version '1.6.2'
+}
+
+nmcpSettings {
+	centralPortal {
+		username = providers.gradleProperty('ossrhUsername')
+		password = providers.gradleProperty('ossrhPassword')
+		/*
+		 * Publish as soon as validation passes, so that a release needs no
+		 * manual step in the Portal. Use -PcentralPublishingType=USER_MANAGED
+		 * to stop after validation and release by hand instead.
+		 */
+		publishingType = providers.gradleProperty('centralPublishingType')
+				.getOrElse('AUTOMATIC')
+	}
+}
+
 rootProject.name = 'GRAL'
 
 include ':gral-core', ':gral-examples'
