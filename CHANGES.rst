@@ -1,6 +1,9 @@
 GRAL 0.13 (unreleased)
 ======================
 
+Data:
+    - ``Kernel.mul`` sets the values outside of the specified kernel to zero
+
 General:
     - Releases are published through the Central Portal publisher API
 

@@ -120,6 +120,29 @@ public class KernelTest {
 	}
 
 	@Test
+	public void testAddSmallerKernelKeepsUncoveredValues() {
+		Kernel k1 = new Kernel(1.0, 2.0);
+		Kernel k2 = new Kernel(3.0);
+
+		k1.add(k2);
+
+		// The smaller kernel is zero at index -1, so the value is unchanged
+		assertEquals(1.0, k1.get(-1), DELTA);
+		assertEquals(5.0, k1.get( 0), DELTA);
+	}
+
+	@Test
+	public void testAddLargerKernelIgnoresUncoveredValues() {
+		Kernel k1 = new Kernel(3.0);
+		Kernel k2 = new Kernel(1.0, 2.0);
+
+		k1.add(k2);
+
+		assertEquals(1, k1.size());
+		assertEquals(5.0, k1.get(0), DELTA);
+	}
+
+	@Test
 	public void testMul() {
 		Kernel k1 = new Kernel(1.0, 2.0);
 		Kernel k2 = new Kernel(3.0);
@@ -129,6 +152,29 @@ public class KernelTest {
 
 		k1.mul(2.0);
 		assertEquals(12.0, k1.get(0), DELTA);
+	}
+
+	@Test
+	public void testMulSmallerKernelZeroesUncoveredValues() {
+		Kernel k1 = new Kernel(1.0, 2.0);
+		Kernel k2 = new Kernel(3.0);
+
+		k1.mul(k2);
+
+		// The smaller kernel is zero at index -1, so the product is zero
+		assertEquals(0.0, k1.get(-1), DELTA);
+		assertEquals(6.0, k1.get( 0), DELTA);
+	}
+
+	@Test
+	public void testMulKernelWithDisjointIndexes() {
+		Kernel k1 = new Kernel(0, new double[] {1.0, 2.0});
+		Kernel k2 = new Kernel(2, new double[] {3.0, 4.0});
+
+		k1.mul(k2);
+
+		assertEquals(0.0, k1.get(0), DELTA);
+		assertEquals(0.0, k1.get(1), DELTA);
 	}
 
 	@Test

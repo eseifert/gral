@@ -185,13 +185,10 @@ public class Kernel implements Serializable {
 	 * @return Kernel with new values.
 	 */
 	public Kernel add(Kernel k) {
-		int min = getMinIndex();
-		int max = getMaxIndex();
-		if (size() > k.size()) {
-			min = k.getMinIndex();
-			max = k.getMaxIndex();
-		}
-		for (int i = min; i <= max; i++) {
+		// Values of the specified kernel that lie outside of this kernel are
+		// discarded, values of this kernel that lie outside of the specified
+		// kernel are left untouched, because Kernel.get returns 0.0 for them
+		for (int i = getMinIndex(); i <= getMaxIndex(); i++) {
 			set(i, get(i) + k.get(i));
 		}
 		return this;
@@ -216,13 +213,9 @@ public class Kernel implements Serializable {
 	 * @return Kernel with new values.
 	 */
 	public Kernel mul(Kernel k) {
-		int min = getMinIndex();
-		int max = getMaxIndex();
-		if (size() > k.size()) {
-			min = k.getMinIndex();
-			max = k.getMaxIndex();
-		}
-		for (int i = min; i <= max; i++) {
+		// Values of this kernel that lie outside of the specified kernel are
+		// multiplied by zero, because Kernel.get returns 0.0 for them
+		for (int i = getMinIndex(); i <= getMaxIndex(); i++) {
 			set(i, get(i) * k.get(i));
 		}
 		return this;
