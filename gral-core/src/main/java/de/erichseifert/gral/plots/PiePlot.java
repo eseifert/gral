@@ -1009,7 +1009,8 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		public Comparable<?> get(int col, int row) {
-			Iterable<Double> accumulatedColumnData = new Accumulation(data.getColumn(0));
+			Iterable<Double> accumulatedColumnData =
+				new Accumulation<>(getAbsoluteValues(data.getColumn(0)));
 			if (col == 0) {
 				if (row == 0) {
 					return 0.0;
@@ -1026,6 +1027,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@Override
 		public int getRowCount() {
 			return data.getRowCount();
+		}
+
+		/**
+		 * Returns the absolute values of the specified column. A pie slice
+		 * always covers a positive part of the pie; the sign of a value only
+		 * decides whether the slice is displayed or left empty.
+		 * @param column Column of the original data source.
+		 * @return Absolute value of each element of the column.
+		 */
+		private static List<Double> getAbsoluteValues(Column<?> column) {
+			List<Double> absoluteValues = new LinkedList<>();
+			for (Comparable<?> value : column) {
+				double numericValue = (value instanceof Number)
+					? ((Number) value).doubleValue() : 0.0;
+				absoluteValues.add(Math.abs(numericValue));
+			}
+			return absoluteValues;
 		}
 
 		private static <T> T get(Iterable<T> iterable, int index) {

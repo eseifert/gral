@@ -24,6 +24,8 @@ Plotting:
       invalidates its axes, which resulted in an empty plot (#112)
     - Zooming, panning and resetting the view work after a new axis renderer
       has been set on a plot (#46)
+    - Pie slices no longer overlap when the data source contains negative
+      values (#148)
 
 Data I/O:
     - ``CSVWriter`` quotes values that contain the column separator, a quote,

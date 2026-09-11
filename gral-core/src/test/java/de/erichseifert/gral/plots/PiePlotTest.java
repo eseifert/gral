@@ -148,6 +148,44 @@ public class PiePlotTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
+	public void testCreatePieDataAccumulatesAbsoluteValues() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(1);
+		data.add(-2);
+		data.add(3);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		assertThat((Column<Double>) pieData.getColumn(0), CoreMatchers.hasItems(0.0, 1.0, 3.0));
+		assertThat((Column<Double>) pieData.getColumn(1), CoreMatchers.hasItems(1.0, 3.0, 6.0));
+	}
+
+	@Test
+	public void testCreatePieDataSlicesDoNotOverlap() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(1);
+		data.add(-2);
+		data.add(3);
+
+		DataSource pieData = PiePlot.createPieData(data);
+
+		// Each slice has to start where the previous one ended and the last
+		// slice has to end at the sum of all slice widths
+		double sliceWidthSum = 0.0;
+		for (int rowIndex = 0; rowIndex < pieData.getRowCount(); rowIndex++) {
+			double sliceStart = (Double) pieData.get(0, rowIndex);
+			double sliceEnd = (Double) pieData.get(1, rowIndex);
+			assertEquals(sliceWidthSum, sliceStart, DELTA);
+			assertTrue("Slice " + rowIndex + " has a negative width.",
+				sliceEnd >= sliceStart);
+			sliceWidthSum += sliceEnd - sliceStart;
+		}
+		assertEquals(sliceWidthSum,
+			(Double) pieData.get(1, pieData.getRowCount() - 1), DELTA);
+	}
+
+	@Test
 	public void testCreatePieDataChangesWhenTheUnderlyingDataSourceChanges() {
 		DataTable data = new DataTable(Integer.class);
 		data.add(2);
