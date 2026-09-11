@@ -243,7 +243,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 					boolean isTickLabelOutside = renderer.isTickLabelsOutside();
 					double tickLabelRotation1 = renderer.getTickLabelRotation();
 					double tickLabelDist = renderer.getTickLabelDistanceAbsolute();
-					Line2D tickShape = new Line2D.Double();
+					var tickShape = new Line2D.Double();
 
 					for (Tick tick : ticks) {
 						// Draw tick
@@ -292,7 +292,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 								tick.type == TickType.CUSTOM)) {
 							String tickLabelText = tick.label;
 							if (tickLabelText != null && !tickLabelText.trim().isEmpty()) {
-								Label tickLabel = new Label(tickLabelText);
+								var tickLabel = new Label(tickLabelText);
 								tickLabel.setFont(renderer.getTickFont());
 								// TODO Allow separate colors for ticks and tick labels?
 								tickLabel.setColor(tickPaint);
@@ -397,7 +397,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 * @return A list of {@code Tick} instances
 	 */
 	public List<Tick> getTicks(Axis axis) {
-		List<Tick> ticks = new LinkedList<>();
+		var ticks = new LinkedList<Tick>();
 
 		if (!axis.isValid()) {
 			return ticks;
@@ -406,7 +406,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 		double min = axis.getMin().doubleValue();
 		double max = axis.getMax().doubleValue();
 
-		Set<Double> tickPositions = new HashSet<>();
+		var tickPositions = new HashSet<Double>();
 
 		createTicksCustom(ticks, axis, min, max, tickPositions);
 

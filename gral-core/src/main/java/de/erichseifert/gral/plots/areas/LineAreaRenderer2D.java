@@ -103,7 +103,7 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 			posYOrigin = axisRendererY.getPosition(
 					axisY, axisYOrigin, true, false).get(PointND.Y);
 		}
-		Path2D shape = new Path2D.Double();
+		var shape = new Path2D.Double();
 		double x = 0.0;
 		double y = 0.0;
 		for (DataPoint p : points) {

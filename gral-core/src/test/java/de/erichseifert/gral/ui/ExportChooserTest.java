@@ -43,10 +43,10 @@ public class ExportChooserTest {
 
 	@Test
 	public void testCreation() {
-		ExportChooser strict = new ExportChooser(true, capabilities);
+		var strict = new ExportChooser(true, capabilities);
 		assertEquals(capabilities.size(), strict.getChoosableFileFilters().length);
 
-		ExportChooser relaxed = new ExportChooser(false, capabilities);
+		var relaxed = new ExportChooser(false, capabilities);
 		assertEquals(capabilities.size() + 1, relaxed.getChoosableFileFilters().length);
 	}
 

@@ -53,14 +53,14 @@ public class ColumnTest {
 	public void testColumnFromIterableContainsValues() {
 		Iterable<Integer> data = Arrays.asList(1, 2, 3, 4);
 
-		Column<Integer> column = new Column<>(Integer.class, data);
+		var column = new Column<Integer>(Integer.class, data);
 
 		assertThat(column, hasItems(1, 2, 3, 4));
 	}
 
 	@Test
 	public void testSizeReturnsTheNumberOfElements() {
-		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3, 4);
+		var column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
 
 		int size = column.size();
 
@@ -69,7 +69,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetReturnsValueAtSpecifiedElement() {
-		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3, 4);
+		var column = new Column<Integer>(Integer.class, 1, 2, 3, 4);
 
 		int value = column.get(1);
 
@@ -78,7 +78,7 @@ public class ColumnTest {
 
 	@Test
 	public void testGetWithIndexOutOfColumnSizeReturnsNull() {
-		Column<Integer> col = new Column<>(Integer.class, 1, 2);
+		var col = new Column<Integer>(Integer.class, 1, 2);
 		int colSize = col.size();
 
 		Integer elementOutOfRange = col.get(colSize);
@@ -88,8 +88,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndValuesAreEqual() {
-		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
-		Column<Integer> col2 = new Column<>(Integer.class, 1, 2, 3);
+		var col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		var col2 = new Column<Integer>(Integer.class, 1, 2, 3);
 
 		boolean equal = col1.equals(col2);
 
@@ -98,8 +98,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnDoesNotEqualANonColumnObject() {
-		Column<Integer> column = new Column<>(Integer.class, 1, 2, 3);
-		Object someObject = new Object();
+		var column = new Column<Integer>(Integer.class, 1, 2, 3);
+		var someObject = new Object();
 
 		boolean equal = column.equals(someObject);
 
@@ -108,7 +108,7 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithDifferentTypesAndIdenticalValuesAreNotEqual() {
-		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
+		var col1 = new Column<Integer>(Integer.class, 1, 2, 3);
 		@SuppressWarnings("unchecked")
 		Column<?> col2 = new Column(Long.class, 1, 2, 3);
 
@@ -119,8 +119,8 @@ public class ColumnTest {
 
 	@Test
 	public void testColumnsWithIdenticalTypesAndDifferentValuesAreNotEqual() {
-		Column<Integer> col1 = new Column<>(Integer.class, 1, 2, 3);
-		Column<Integer> col2 = new Column<>(Integer.class, 3, 2, 1);
+		var col1 = new Column<Integer>(Integer.class, 1, 2, 3);
+		var col2 = new Column<Integer>(Integer.class, 3, 2, 1);
 
 		boolean equal = col1.equals(col2);
 
@@ -129,8 +129,8 @@ public class ColumnTest {
 
 	@Test
 	public void testToStringIsIdenticalForIdenticalColumns() {
-		Column col1 = new Column(Integer.class, 1, 2, 3);
-		Column col2 = new Column(Integer.class, 1, 2, 3);
+		var col1 = new Column(Integer.class, 1, 2, 3);
+		var col2 = new Column(Integer.class, 1, 2, 3);
 		assertEquals(col1.toString(), col2.toString());
 	}
 
@@ -154,7 +154,7 @@ public class ColumnTest {
 
 	@Test
 	public void testSerializationPreservesSize() throws IOException, ClassNotFoundException {
-		Column<Integer> original = new Column<>(Integer.class, 1, 2, 3);
+		var original = new Column<Integer>(Integer.class, 1, 2, 3);
 		Column<Integer> deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.size(), deserialized.size());

@@ -37,7 +37,7 @@ public class HistogramTest {
 	public void testHasDesiredNumberOfBins() {
 		int binCount = 4;
 
-		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
+		var histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
 
 		assertThat(histogram.size(), is(4));
 	}
@@ -46,27 +46,27 @@ public class HistogramTest {
 	public void testThrowsExceptionWhenBinCountLessThanOne() {
 		int binCount = 0;
 
-		Histogram histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
+		var histogram = new Histogram(Collections.<Comparable<?>>emptyList(), binCount);
 	}
 
 	@Test
 	public void testBucketsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
-		Histogram histogram = new Histogram(data, 4);
+		var histogram = new Histogram(data, 4);
 		assertThat(histogram, hasItems(3, 3, 0, 2));
 	}
 
 	@Test
 	public void testCustomBinsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
-		Histogram histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
+		var histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
 		assertThat(histogram, hasItems(0, 3, 3, 2));
 	}
 
 	@Test
 	public void testLastBinContainsLargestValue() {
 		Iterable<Comparable<?>> data = createHistogramData();
-		Histogram histogram = new Histogram(data, 4);
+		var histogram = new Histogram(data, 4);
 
 		// The largest value equals the last break and belongs to the last bin
 		assertThat(histogram.get(3), is(2));
@@ -75,7 +75,7 @@ public class HistogramTest {
 	@Test
 	public void testAllValuesAreCounted() {
 		Iterable<Comparable<?>> data = createHistogramData();
-		Histogram histogram = new Histogram(data, 4);
+		var histogram = new Histogram(data, 4);
 
 		int valueCount = 0;
 		for (int binSize : histogram) {
@@ -88,7 +88,7 @@ public class HistogramTest {
 	@Test
 	public void testGetReturnsBinSize() {
 		Iterable<Comparable<?>> data = createHistogramData();
-		Histogram histogram = new Histogram(data, 4);
+		var histogram = new Histogram(data, 4);
 
 		int binSize = histogram.get(1);
 
@@ -99,7 +99,7 @@ public class HistogramTest {
 	public void testThrowsExceptionWhenBreakCountLessThanTwo() {
 		Iterable<Comparable<?>> data = createHistogramData();
 		int lessThanTwo = 1;
-		Number[] breaks = new Number[lessThanTwo];
+		var breaks = new Number[lessThanTwo];
 		Arrays.fill(breaks, 2);
 
 		new Histogram(data, breaks);

@@ -81,7 +81,7 @@ public class PiePlotTest {
 	public void testDraw() {
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(plot.isDrawn);
 		assertNotEmpty(image);
@@ -102,7 +102,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDataReplacesNumericColumnWithTwoDoubleAndOneIntegerColumns() {
-		DataSource data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 
 		DataSource pieData = PiePlot.createPieData(data);
 
@@ -111,7 +111,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDataContainsPieSliceRanges() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(1);
 		data.add(1);
 		data.add(1);
@@ -124,7 +124,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDatasBooleanColumnContainsFalseForEveryNegativeInputValue() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(2);
 		data.add(-5);
 		data.add(0);
@@ -137,7 +137,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDatasBooleanColumnContainsTrueForEveryPositiveInputValue() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(2);
 		data.add(-5);
 		data.add(0);
@@ -151,7 +151,7 @@ public class PiePlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCreatePieDataAccumulatesAbsoluteValues() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(1);
 		data.add(-2);
 		data.add(3);
@@ -164,7 +164,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDataSlicesDoNotOverlap() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(1);
 		data.add(-2);
 		data.add(3);
@@ -218,11 +218,11 @@ public class PiePlotTest {
 	@SuppressWarnings("unchecked")
 	public void testCreatePieDataReadsEachValueOnlyFewTimes() {
 		int rowCount = 100;
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 			data.add(1);
 		}
-		CountingDataSource countingData = new CountingDataSource(data);
+		var countingData = new CountingDataSource(data);
 		DataSource pieData = PiePlot.createPieData(countingData);
 
 		countingData.readCount = 0;
@@ -240,7 +240,7 @@ public class PiePlotTest {
 
 	@Test
 	public void testCreatePieDataChangesWhenTheUnderlyingDataSourceChanges() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(2);
 		DataSource pieData = PiePlot.createPieData(data);
 

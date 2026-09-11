@@ -47,7 +47,7 @@ public class PointNDTest {
 	@Test
 	public void testGet() {
 		Double[] coordinates = {1.0, 2.0, 3.0, 4.0};
-		PointND<Double> p = new PointND<>(coordinates);
+		var p = new PointND<Double>(coordinates);
 
 		for (int dim = 0; dim < coordinates.length; dim++) {
 			assertEquals(coordinates[dim], p.get(dim));
@@ -57,7 +57,7 @@ public class PointNDTest {
 	@Test
 	public void testSet() {
 		Double[] coordinates = {1.0, 2.0, 3.0, 4.0};
-		PointND<Double> p = new PointND<>(coordinates);
+		var p = new PointND<Double>(coordinates);
 
 		int dim = 1;
 		p.set(dim, 0.0);
@@ -80,16 +80,16 @@ public class PointNDTest {
 
 	@Test
 	public void testToString() {
-		PointND<Double> p = new PointND<>(1.0, 2.0);
+		var p = new PointND<Double>(1.0, 2.0);
 		assertEquals("de.erichseifert.gral.util.PointND[1.0, 2.0]", p.toString());
 	}
 
 	@Test
 	public void testEquality() {
-		PointND<Double> p1 = new PointND<>(1.0, 2.0);
-		PointND<Double> p2 = new PointND<>(1.0, 2.0);
-		PointND<Double> p3 = new PointND<>(1.0, 2.0, 3.0);
-		PointND<Double> p4 = new PointND<>(1.0, 2.0, null);
+		var p1 = new PointND<Double>(1.0, 2.0);
+		var p2 = new PointND<Double>(1.0, 2.0);
+		var p3 = new PointND<Double>(1.0, 2.0, 3.0);
+		var p4 = new PointND<Double>(1.0, 2.0, null);
 		// Equals
 		assertTrue(p1.equals(p2));
 		assertFalse(p1.equals(null));
@@ -104,12 +104,12 @@ public class PointNDTest {
 
 	@Test
 	public void testPoint2D() {
-		PointND<Double> p4 = new PointND<>(1.0, 2.0, 3.0, 4.0);
+		var p4 = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
 
 		assertEquals(new Point2D.Double(1.0, 2.0), p4.getPoint2D());
 		assertEquals(new Point2D.Double(2.0, 3.0), p4.getPoint2D(1, 2));
 
-		PointND<Double> p1 = new PointND<>(1.0);
+		var p1 = new PointND<Double>(1.0);
 		try {
 			p1.getPoint2D();
 			fail("Expected ArrayIndexOutOfBoundsException exception.");
@@ -119,7 +119,7 @@ public class PointNDTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		PointND<Double> original = new PointND<>(1.0, 2.0, 3.0, 4.0);
+		var original = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
 		PointND<Double> deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getDimensions(), deserialized.getDimensions());

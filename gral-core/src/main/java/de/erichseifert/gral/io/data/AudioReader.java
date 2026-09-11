@@ -77,7 +77,7 @@ public class AudioReader extends AbstractDataReader {
 		}
 
 		// FIXME Should the types parameter be used?
-		DataTable data = new DataTable(Double.class);
+		var data = new DataTable(Double.class);
 
 		double factor = this.<Number>getSetting("factor") //$NON-NLS-1$
 			.doubleValue();

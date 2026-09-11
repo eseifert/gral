@@ -36,7 +36,7 @@ public class RainbowColorsTest {
 
 	@Test
 	public void testGet() {
-		RainbowColors c = new RainbowColors();
+		var c = new RainbowColors();
 		for (double i = 0.0; i <= 1.0f; i += 0.1f) {
 			assertEquals(Color.getHSBColor((float) i, 1f, 1f), c.get(i));
 		}
@@ -44,7 +44,7 @@ public class RainbowColorsTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		QuasiRandomColors original = new QuasiRandomColors();
+		var original = new QuasiRandomColors();
 		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

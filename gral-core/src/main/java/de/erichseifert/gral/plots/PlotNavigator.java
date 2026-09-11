@@ -260,8 +260,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			}
 			info.setZoom(zoomNew);
 		}
-		NavigationEvent<Double> event =
-				new NavigationEvent<>(this, zoomOld, zoomNew);
+		var event = new NavigationEvent<Double>(this, zoomOld, zoomNew);
 		fireZoomChanged(event);
 		refresh();
 	}
@@ -273,7 +272,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 	 */
 	public PointND<? extends Number> getCenter() {
 		List<String> axesNames = getAxes();
-		Double[] centerCoords = new Double[axesNames.size()];
+		var centerCoords = new Double[axesNames.size()];
 		int axisIndex = 0;
 		for (String axisName : axesNames) {
 			NavigationInfo info = getInfo(axisName);
@@ -309,8 +308,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			axisIndex++;
 		}
 
-		NavigationEvent<PointND<? extends Number>> event =
-				new NavigationEvent<>(this, centerOld, center);
+		var event = new NavigationEvent<PointND<? extends Number>>(this, centerOld, center);
 		fireCenterChanged(event);
 		refresh();
 	}
@@ -325,7 +323,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			return;
 		}
 		PointND<? extends Number> centerOld = getCenter();
-		Double[] centerCoords = new Double[centerOld.getDimensions()];
+		var centerCoords = new Double[centerOld.getDimensions()];
 		int axisIndex = 0;
 		for (String axisName : getAxes()) {
 			NavigationInfo info = getInfo(axisName);
@@ -353,8 +351,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			axisIndex++;
 		}
 		PointND<? extends Number> centerNew = new PointND<>(centerCoords);
-		NavigationEvent<PointND<? extends Number>> event =
-				new NavigationEvent<>(this, centerOld, centerNew);
+		NavigationEvent<PointND<? extends Number>> event = new NavigationEvent<>(this, centerOld, centerNew);
 		fireCenterChanged(event);
 		refresh();
 	}
@@ -381,7 +378,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 					center = renderer.viewToWorld(axis, (min + max)/2.0, false);
 				}
 			}
-			NavigationInfo info = new NavigationInfo(
+			var info = new NavigationInfo(
 				axis.getMin(), axis.getMax(), center.doubleValue());
 			infos.put(axisName, info);
 		}
@@ -396,7 +393,7 @@ public abstract class PlotNavigator extends AbstractNavigator {
 		PointND<? extends Number> centerOld = getCenter();
 
 		List<String> axesNames = getAxes();
-		Double[] centerCoordsOriginal = new Double[centerOld.getDimensions()];
+		var centerCoordsOriginal = new Double[centerOld.getDimensions()];
 		int axisIndex = 0;
 		for (String axisName : axesNames) {
 			NavigationInfo info = getInfo(axisName);
@@ -409,14 +406,12 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			}
 			axisIndex++;
 		}
-		PointND<Double> centerNew = new PointND<>(centerCoordsOriginal);
+		var centerNew = new PointND<Double>(centerCoordsOriginal);
 
-		NavigationEvent<PointND<? extends Number>> panEvent =
-				new NavigationEvent<>(this, centerOld, centerNew);
+		var panEvent = new NavigationEvent<PointND<? extends Number>>(this, centerOld, centerNew);
 		fireCenterChanged(panEvent);
 
-		NavigationEvent<Double> zoomEvent =
-				new NavigationEvent<>(this, zoomOld, 1.0);
+		var zoomEvent = new NavigationEvent<Double>(this, zoomOld, 1.0);
 		fireZoomChanged(zoomEvent);
 
 		refresh();

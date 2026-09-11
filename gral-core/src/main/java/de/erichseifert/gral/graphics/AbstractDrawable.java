@@ -50,7 +50,7 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 	 * @return a bounding rectangle
 	 */
 	public Rectangle2D getBounds() {
-		Rectangle2D b = new Rectangle2D.Double();
+		var b = new Rectangle2D.Double();
 		b.setFrame(bounds);
 		return b;
 	}

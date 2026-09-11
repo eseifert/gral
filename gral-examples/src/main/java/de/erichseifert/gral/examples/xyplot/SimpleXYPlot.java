@@ -27,7 +27,6 @@ import java.awt.Color;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataSeries;
@@ -39,7 +38,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -57,7 +55,7 @@ public class SimpleXYPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public SimpleXYPlot() {
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class, Double.class,
+		var data = new DataTable(Double.class, Double.class, Double.class,
 				Double.class, Double.class, Double.class);
 		for (double x = 1.0; x <= 400.0; x *= 1.5) {
 			double x2 = x/5.0;
@@ -66,11 +64,11 @@ public class SimpleXYPlot extends ExamplePanel {
 		}
 
 		// Create data series
-		DataSeries seriesLog = new DataSeries(data, 0, 2, 3, 4);
-		DataSeries seriesLin = new DataSeries(data, 0, 1, 5);
+		var seriesLog = new DataSeries(data, 0, 2, 3, 4);
+		var seriesLin = new DataSeries(data, 0, 1, 5);
 
 		// Create new xy-plot
-		XYPlot plot = new XYPlot(seriesLog, seriesLin);
+		var plot = new XYPlot(seriesLog, seriesLin);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
@@ -87,19 +85,19 @@ public class SimpleXYPlot extends ExamplePanel {
 		plot.getPlotArea().setBorderStroke(null);
 
 		// Format axes
-		AxisRenderer axisRendererX = new LogarithmicRenderer2D();
+		var axisRendererX = new LogarithmicRenderer2D();
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
 		axisRendererX.setLabel(new Label("Logarithmic axis"));
 		plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
 		// Custom tick labels
-		Map<Double, String> labels = new HashMap<>();
+		var labels = new HashMap<Double, String>();
 		labels.put(2.0, "Two");
 		labels.put(1.5, "OnePointFive");
 		axisRendererX.setCustomTicks(labels);
 		// Custom stroke for the x-axis
-		BasicStroke stroke = new BasicStroke(2f);
+		var stroke = new BasicStroke(2f);
 		axisRendererX.setShapeStroke(stroke);
-		Label linearAxisLabel = new Label("Linear axis");
+		var linearAxisLabel = new Label("Linear axis");
 		linearAxisLabel.setRotation(90);
 		axisRendererY.setLabel(linearAxisLabel);
 		// Change intersection point of Y axis
@@ -108,17 +106,17 @@ public class SimpleXYPlot extends ExamplePanel {
 		axisRendererX.setTickSpacing(2.0);
 
 		// Format rendering of data points
-		PointRenderer sizeablePointRenderer = new SizeablePointRenderer();
+		var sizeablePointRenderer = new SizeablePointRenderer();
 		sizeablePointRenderer.setColor(GraphicsUtils.deriveDarker(COLOR1));
 		plot.setPointRenderers(seriesLin, sizeablePointRenderer);
-		PointRenderer defaultPointRenderer = new DefaultPointRenderer2D();
+		var defaultPointRenderer = new DefaultPointRenderer2D();
 		defaultPointRenderer.setColor(GraphicsUtils.deriveDarker(COLOR2));
 		defaultPointRenderer.setErrorVisible(true);
 		defaultPointRenderer.setErrorColor(COLOR2);
 		plot.setPointRenderers(seriesLog, defaultPointRenderer);
 
 		// Format data lines
-		DiscreteLineRenderer2D discreteRenderer = new DiscreteLineRenderer2D();
+		var discreteRenderer = new DiscreteLineRenderer2D();
 		discreteRenderer.setColor(COLOR1);
 		discreteRenderer.setStroke(new BasicStroke(
 				3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,

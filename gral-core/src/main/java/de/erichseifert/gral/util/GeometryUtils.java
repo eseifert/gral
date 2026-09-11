@@ -23,7 +23,6 @@ package de.erichseifert.gral.util;
 
 import java.awt.BasicStroke;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.FlatteningPathIterator;
@@ -34,7 +33,6 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -63,9 +61,8 @@ public abstract class GeometryUtils {
 	 * @return Array of lines.
 	 */
 	public static Line2D[] shapeToLines(Shape path, boolean swapped) {
-		Deque<Line2D> lines = new ArrayDeque<>();
-		PathIterator i =
-			new FlatteningPathIterator(path.getPathIterator(null), 0.5);
+		var lines = new ArrayDeque<Line2D>();
+		var i = new FlatteningPathIterator(path.getPathIterator(null), 0.5);
 
 		double[] coords = new double[6];
 		double[] coordsPrev = new double[6];
@@ -105,9 +102,7 @@ public abstract class GeometryUtils {
 			System.arraycopy(coords, 0, coordsPrev, 0, 6);
 			i.next();
 		}
-		Line2D[] linesArray = new Line2D[lines.size()];
-		lines.toArray(linesArray);
-		return linesArray;
+		return lines.toArray(new Line2D[0]);
 	}
 
 	/**
@@ -118,7 +113,7 @@ public abstract class GeometryUtils {
      * no intersections were found
      */
     public static List<Point2D> intersection(final Shape s1, final Shape s2) {
-    	List<Point2D> intersections = new ArrayList<>(2);
+    	var intersections = new ArrayList<Point2D>(2);
     	Line2D[] lines1 = shapeToLines(s1, false);
     	Line2D[] lines2 = shapeToLines(s2, false);
 
@@ -143,11 +138,11 @@ public abstract class GeometryUtils {
      */
     public static Point2D intersection(final Line2D l1, final Line2D l2) {
     	Point2D p0 = l1.getP1();
-		Point2D d0 = new Point2D.Double(l1.getX2() - p0.getX(), l1.getY2() - p0.getY());
+		var d0 = new Point2D.Double(l1.getX2() - p0.getX(), l1.getY2() - p0.getY());
 		Point2D p1 = l2.getP1();
-		Point2D d1 = new Point2D.Double(l2.getX2() - p1.getX(), l2.getY2() - p1.getY());
+		var d1 = new Point2D.Double(l2.getX2() - p1.getX(), l2.getY2() - p1.getY());
 
-		Point2D e = new Point2D.Double(p1.getX() - p0.getX(), p1.getY() - p0.getY());
+		var e = new Point2D.Double(p1.getX() - p0.getX(), p1.getY() - p0.getY());
 		double kross = d0.getX()*d1.getY() - d0.getY()*d1.getX();
 		double sqrKross = kross*kross;
 		double sqrLen0 = d0.distanceSq(0.0, 0.0);
@@ -199,15 +194,15 @@ public abstract class GeometryUtils {
      */
     public static Area grow(final Shape s, final double offset, int join,
     		float miterlimit) {
-    	Area shape = new Area(s);
+    	var shape = new Area(s);
 
     	if (MathUtils.almostEqual(offset, 0.0, EPSILON)) {
     		return shape;
     	}
 
-    	Stroke stroke = new BasicStroke((float)Math.abs(2.0*offset),
+    	var stroke = new BasicStroke((float)Math.abs(2.0*offset),
     			BasicStroke.CAP_SQUARE, join, miterlimit);
-    	Area strokeShape = new Area(stroke.createStrokedShape(s));
+    	var strokeShape = new Area(stroke.createStrokedShape(s));
 
     	if (offset > 0.0) {
     		shape.add(strokeShape);
@@ -289,7 +284,7 @@ public abstract class GeometryUtils {
 
     	Point2D pointStart = null, pointEnd = null;
 		double[] coords = new double[6];
-		List<PathSegment> segments = new LinkedList<>();
+		var segments = new LinkedList<PathSegment>();
 		while (!path.isDone()) {
 			int type = path.currentSegment(coords);
 
@@ -301,7 +296,7 @@ public abstract class GeometryUtils {
 				pointEnd = new Point2D.Double(coords[4], coords[5]);
 			}
 
-			PathSegment segment = new PathSegment(type, pointStart, pointEnd, coords);
+			var segment = new PathSegment(type, pointStart, pointEnd, coords);
 			segments.add(segment);
 
 			pointStart = pointEnd;
@@ -333,8 +328,7 @@ public abstract class GeometryUtils {
      * @return A geometric shape.
      */
     private static Shape getShapeDouble(List<PathSegment> segments) {
-		Path2D.Double path =
-			new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
+		var path = new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
 		for (PathSegment segment : segments) {
 			double[] coords = segment.coords;
 			if (segment.type == PathIterator.SEG_MOVETO) {
@@ -362,8 +356,7 @@ public abstract class GeometryUtils {
      * @return A geometric shape.
      */
 	private static Shape getShapeFloat(List<PathSegment> segments) {
-		Path2D.Float path =
-			new Path2D.Float(Path2D.WIND_NON_ZERO, segments.size());
+		var path = new Path2D.Float(Path2D.WIND_NON_ZERO, segments.size());
 		for (PathSegment segment : segments) {
 			float[] coords = new float[segment.coords.length];
 			for (int i = 0; i < coords.length; i++) {
@@ -397,8 +390,7 @@ public abstract class GeometryUtils {
     	List<PathSegment> segments = getSegments(shape);
 
 		boolean closed = false;
-		Path2D reversed =
-			new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
+		var reversed = new Path2D.Double(Path2D.WIND_NON_ZERO, segments.size());
 		ListIterator<PathSegment> i = segments.listIterator(segments.size());
 		while (i.hasPrevious()) {
 			PathSegment segment = i.previous();

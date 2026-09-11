@@ -48,7 +48,7 @@ public class ImageReaderTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		BufferedImage image = new BufferedImage(3, 4, BufferedImage.TYPE_BYTE_GRAY);
+		var image = new BufferedImage(3, 4, BufferedImage.TYPE_BYTE_GRAY);
 		int[] rgbData = {
 			rgb(255.0), rgb(  0.0), rgb(  0.0),
 			rgb(  0.0), rgb(255.0), rgb(  0.0),
@@ -56,7 +56,7 @@ public class ImageReaderTest {
 			rgb(127.0), rgb(127.0), rgb(127.0)
 		};
 		image.setRGB(0, 0, image.getWidth(), image.getHeight(), rgbData, 0, image.getWidth());
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		var out = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(image, "png", out);
 		} catch (IOException e) {

@@ -57,7 +57,7 @@ public class AbstractIoFactoryTest {
 			fail("Creation of IOFactory failed: "+e);
 		}
 		List<IOCapabilities> caps = f.getCapabilities();
-		assertTrue(caps.size() > 0);
+		assertFalse(caps.isEmpty());
 	}
 
 	@Test

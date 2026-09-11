@@ -71,7 +71,7 @@ public class PlotAreaTest {
 
 		BufferedImage image = createTestImage();
 		plotArea.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plotArea.draw(context);
 		assertTrue(plotArea.isDrawn);
 		assertNotEmpty(image);

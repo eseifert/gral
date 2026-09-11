@@ -517,7 +517,7 @@ scale the class ``LogarithmicRenderer2D`` is used:
 
 .. code:: java
 
-    Map<Double, String> labels = new HashMap<Double, String>();
+    Map<Double, String> labels = new HashMap<>();
     labels.put(2.0, "Doubled");
     labels.put(1.5, "One and a half times");
     axisRendererX.setCustomTicks(labels);
@@ -670,9 +670,10 @@ and vector formats like SVG, PDF, or EPS.
 
     XYPlot plot = new XYPlot(data);
     DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/svg+xml");
-    FileOutputStream file = new FileOutputStream("xyplot.svg");
     double width = 320.0, height = 240.0;
-    writer.write(plot, file, width, height);
+    try (OutputStream file = new FileOutputStream("xyplot.svg")) {
+        writer.write(plot, file, width, height);
+    }
 
 Extending GRAL
 ==============

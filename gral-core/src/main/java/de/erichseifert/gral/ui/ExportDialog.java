@@ -25,10 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
@@ -87,59 +84,52 @@ public class ExportDialog extends JDialog {
 		documentBounds.setFrame(drawable.getBounds());
 		setUserAction(UserAction.CANCEL);
 
-		JPanel cp = new JPanel(new BorderLayout());
+		var cp = new JPanel(new BorderLayout());
 		cp.setBorder(new EmptyBorder(10, 10, 10, 10));
 		setContentPane(cp);
 
-		DecimalFormat formatMm = new DecimalFormat();
+		var formatMm = new DecimalFormat();
 		formatMm.setMinimumFractionDigits(2);
 
-		JPanel options = new JPanel(new GridLayout(4, 2, 10, 2));
+		var options = new JPanel(new GridLayout(4, 2, 10, 2));
 		getContentPane().add(options, BorderLayout.NORTH);
 
-		PropertyChangeListener docBoundsListener =
-			new PropertyChangeListener() {
-				public void propertyChange(PropertyChangeEvent evt) {
-					setDocumentBounds(
-						((Number) inputX.getValue()).doubleValue(),
-						((Number) inputY.getValue()).doubleValue(),
-						((Number) inputW.getValue()).doubleValue(),
-						((Number) inputH.getValue()).doubleValue());
-				}
-			};
 		inputX = new JFormattedTextField(formatMm);
+		inputY = new JFormattedTextField(formatMm);
+		inputW = new JFormattedTextField(formatMm);
+		inputH = new JFormattedTextField(formatMm);
+
+		PropertyChangeListener docBoundsListener = evt -> setDocumentBounds(
+				((Number) inputX.getValue()).doubleValue(),
+				((Number) inputY.getValue()).doubleValue(),
+				((Number) inputW.getValue()).doubleValue(),
+				((Number) inputH.getValue()).doubleValue());
+
 		addInputField(inputX, Messages.getString("ExportDialog.left"), //$NON-NLS-1$
 				options, documentBounds.getX(), docBoundsListener);
-		inputY = new JFormattedTextField(formatMm);
 		addInputField(inputY, Messages.getString("ExportDialog.top"), //$NON-NLS-1$
 				options, documentBounds.getY(), docBoundsListener);
-		inputW = new JFormattedTextField(formatMm);
 		addInputField(inputW, Messages.getString("ExportDialog.width"), //$NON-NLS-1$
 				options, documentBounds.getWidth(), docBoundsListener);
-		inputH = new JFormattedTextField(formatMm);
 		addInputField(inputH, Messages.getString("ExportDialog.height"), //$NON-NLS-1$
 				options, documentBounds.getHeight(), docBoundsListener);
 
-		JPanel controls = new JPanel(new FlowLayout());
+		var controls = new JPanel(new FlowLayout());
 		cp.add(controls, BorderLayout.SOUTH);
 
-		JButton buttonConfirm = new JButton(
+		var buttonConfirm = new JButton(
 				Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
-		buttonConfirm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setUserAction(UserAction.APPROVE);
-				dispose();
-			}
+		buttonConfirm.addActionListener(e -> {
+			setUserAction(UserAction.APPROVE);
+			dispose();
 		});
 		controls.add(buttonConfirm);
 
-		JButton buttonCancel = new JButton(
+		var buttonCancel = new JButton(
 				Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
-		buttonCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setUserAction(UserAction.CANCEL);
-				dispose();
-			}
+		buttonCancel.addActionListener(e -> {
+			setUserAction(UserAction.CANCEL);
+			dispose();
 		});
 		controls.add(buttonCancel);
 
@@ -160,7 +150,7 @@ public class ExportDialog extends JDialog {
 	private static void addInputField(JFormattedTextField input,
 			String labelText, java.awt.Container cont, Object initialValue,
 			PropertyChangeListener pcl) {
-		JLabel label = new JLabel(labelText);
+		var label = new JLabel(labelText);
 		label.setHorizontalAlignment(JLabel.RIGHT);
 		cont.add(label);
 		input.setValue(initialValue);
@@ -175,7 +165,7 @@ public class ExportDialog extends JDialog {
 	 * @return Document bounds that should be used to export the plot
 	 */
 	public Rectangle2D getDocumentBounds() {
-		Rectangle2D bounds = new Rectangle2D.Double();
+		var bounds = new Rectangle2D.Double();
 		bounds.setFrame(documentBounds);
 		return bounds;
 	}

@@ -57,14 +57,14 @@ public class AbstractOrientedLayoutTest {
 
 	@Test
 	public void testCreate() {
-		AbstractOrientedLayout gapped = new MockAbstractOrientedLayout(Orientation.HORIZONTAL, GAP_H, GAP_V);
+		var gapped = new MockAbstractOrientedLayout(Orientation.HORIZONTAL, GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AbstractOrientedLayout original = new MockAbstractOrientedLayout(Orientation.VERTICAL, GAP_H, GAP_V);
+		var original = new MockAbstractOrientedLayout(Orientation.VERTICAL, GAP_H, GAP_V);
 		AbstractOrientedLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getOrientation(), deserialized.getOrientation());

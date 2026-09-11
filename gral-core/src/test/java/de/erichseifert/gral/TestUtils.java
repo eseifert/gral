@@ -32,7 +32,6 @@ import java.awt.image.DataBufferInt;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -195,7 +194,7 @@ public class TestUtils {
 	public static <T> T serializeAndDeserialize(T original)
 			throws IOException, ClassNotFoundException {
 		// Serialize
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		var out = new ByteArrayOutputStream();
 		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(original);
 		} catch (NotSerializableException e) {
@@ -205,8 +204,8 @@ public class TestUtils {
 
 		// Deserialize
 	    byte[] serializedData = out.toByteArray();
-	    InputStream in = new ByteArrayInputStream(serializedData);
-	    ObjectInputStream ois = new ObjectInputStream(in);
+	    var in = new ByteArrayInputStream(serializedData);
+	    var ois = new ObjectInputStream(in);
 	    Object o = ois.readObject();
 	    assertNotSame(original, o);
 

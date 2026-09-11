@@ -45,7 +45,7 @@ public class SimpleRasterPlot extends ExamplePanel {
 		setPreferredSize(new Dimension(600, 600));
 
 		// Create example data
-		DataTable raster = new DataTable(SIZE, Double.class);
+		var raster = new DataTable(SIZE, Double.class);
 		for (int rowIndex = 0; rowIndex < raster.getColumnCount(); rowIndex++) {
 			Comparable<?>[] row = new Comparable<?>[raster.getColumnCount()];
 			double y = ZOOM*rowIndex;
@@ -62,14 +62,14 @@ public class SimpleRasterPlot extends ExamplePanel {
 		DataSource valuesByCoord = RasterPlot.createRasterData(raster);
 
 		// Create new bar plot
-		RasterPlot plot = new RasterPlot(valuesByCoord);
+		var plot = new RasterPlot(valuesByCoord);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
 		plot.setColors(new LinearGradient(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
 
 		// Add plot to Swing component
-		InteractivePanel panel = new InteractivePanel(plot);
+		var panel = new InteractivePanel(plot);
 		panel.setPannable(false);
 		panel.setZoomable(false);
 		add(panel);

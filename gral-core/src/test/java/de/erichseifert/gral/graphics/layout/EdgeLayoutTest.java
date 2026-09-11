@@ -93,11 +93,11 @@ public class EdgeLayoutTest {
 
 	@Test
 	public void testCreate() {
-		EdgeLayout noGap = new EdgeLayout();
+		var noGap = new EdgeLayout();
 		assertEquals(0.0, noGap.getGapX(), DELTA);
 		assertEquals(0.0, noGap.getGapY(), DELTA);
 
-		EdgeLayout gapped = new EdgeLayout(GAP_H, GAP_V);
+		var gapped = new EdgeLayout(GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
 	}
@@ -111,7 +111,7 @@ public class EdgeLayoutTest {
 
 	@Test
 	public void testLayout() {
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
@@ -141,7 +141,7 @@ public class EdgeLayoutTest {
 
 	@Test
 	public void testLayoutSizes() {
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 

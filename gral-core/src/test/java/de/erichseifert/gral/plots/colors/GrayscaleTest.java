@@ -33,7 +33,7 @@ import de.erichseifert.gral.TestUtils;
 public class GrayscaleTest {
 	@Test
 	public void testGet() {
-		Grayscale c = new Grayscale();
+		var c = new Grayscale();
 		assertEquals(new Color(  0,   0,   0), c.get(0.0));
 		assertEquals(new Color(119, 119, 119), c.get(0.5));
 		assertEquals(new Color(255, 255, 255), c.get(1.0));
@@ -41,7 +41,7 @@ public class GrayscaleTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		ScaledContinuousColorMapper original = new Grayscale();
+		var original = new Grayscale();
 		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

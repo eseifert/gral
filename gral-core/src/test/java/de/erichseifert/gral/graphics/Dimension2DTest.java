@@ -51,8 +51,8 @@ public class Dimension2DTest {
 
 	@Test
 	public void testChange() {
-		Dimension2D dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
-		Dimension2D dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(3.0, 4.0);
+		var dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		var dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(3.0, 4.0);
 
 		// setSize(Dimension2D)
 		dim.setSize(dim2);
@@ -67,14 +67,14 @@ public class Dimension2DTest {
 
 	@Test
 	public void testToString() {
-		Dimension2D dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		var dim = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
 		assertEquals(dim.getClass().getName() + "[width=1.000000, height=2.000000]", dim.toString());
 	}
 
 	@Test
 	public void testEquality() {
-		Dimension2D dim1 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
-		Dimension2D dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		var dim1 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
+		var dim2 = new de.erichseifert.gral.graphics.Dimension2D.Double(1.0, 2.0);
 		// Equals
 		assertTrue(dim1.equals(dim2));
 		assertFalse(dim1.equals(null));
@@ -85,7 +85,7 @@ public class Dimension2DTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Dimension2D original = new de.erichseifert.gral.graphics.Dimension2D.Double(1.2, 3.4);
+		var original = new de.erichseifert.gral.graphics.Dimension2D.Double(1.2, 3.4);
 		Dimension2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getWidth(), deserialized.getWidth(), DELTA);

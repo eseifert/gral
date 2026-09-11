@@ -165,7 +165,7 @@ public class AbstractPointRendererTest {
 	}
 
 	private static void layout(BufferedImage image, AxisRenderer axisRenderer) {
-		Line2D axisShape = new Line2D.Double(
+		var axisShape = new Line2D.Double(
 			image.getWidth()/2.0, 0.0,
 			image.getWidth()/2.0, image.getHeight()
 		);
@@ -174,7 +174,7 @@ public class AbstractPointRendererTest {
 
 	@Test
 	public void testDraw() {
-		AxisRenderer axisRenderer = new LinearRenderer2D();
+		var axisRenderer = new LinearRenderer2D();
 
 		// Get point
 		Drawable point = r.getPoint(data, r.getPointShape(data));
@@ -182,7 +182,7 @@ public class AbstractPointRendererTest {
 
 		// Draw point
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		layout(image, axisRenderer);
 		point.draw(context);
 		assertNotEmpty(image);

@@ -24,7 +24,6 @@ package de.erichseifert.gral.examples.io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import javax.swing.JFileChooser;
 
@@ -46,18 +45,18 @@ public class DataWriterTest {
 	}
 
 	public void save() throws IOException {
-		JFileChooser chooser = new JFileChooser();
+		var chooser = new JFileChooser();
 		int option = chooser.showSaveDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			 OutputStream output = new FileOutputStream(file);
+			 var output = new FileOutputStream(file);
 			DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 			writer.write(data, output);
 		}
 	}
 
 	public static void main(String[] args) {
-		DataWriterTest test = new DataWriterTest();
+		var test = new DataWriterTest();
 		try {
 			test.save();
 		} catch (IOException e) {

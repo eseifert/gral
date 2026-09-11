@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataChangeEvent;
@@ -449,7 +450,7 @@ public abstract class AbstractPlot extends DrawableContainer
 			absoluteLegendDistance = legendDistance*font.getSize2D();
 		}
 
-		OuterEdgeLayout layout = new OuterEdgeLayout(absoluteLegendDistance);
+		var layout = new OuterEdgeLayout(absoluteLegendDistance);
 		legendContainer.setLayout(layout);
 	}
 
@@ -659,7 +660,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	 *         or {@code null} if no mapping exists for the column.
 	 */
 	public String[] getMapping(DataSource source) {
-		String[] mapping = new String[source.getColumnCount()];
+		var mapping = new String[source.getColumnCount()];
 		for (int col = 0; col < mapping.length; col++) {
 			mapping[col] = getMapping(source, col);
 		}
@@ -684,7 +685,7 @@ public abstract class AbstractPlot extends DrawableContainer
 				"Data source only has {0,number,integer} column, {1,number,integer} values given.", //$NON-NLS-1$
 				source.getColumnCount(), axisNames.length));
 		}
-		Map<Integer, String> columnToAxisMapping = new HashMap<>();
+		var columnToAxisMapping = new HashMap<Integer, String>();
 		for (int col = 0; col < axisNames.length; col++) {
 			String axisName = axisNames[col];
 			if (axisName != null) {
@@ -743,13 +744,9 @@ public abstract class AbstractPlot extends DrawableContainer
 	 * @return List of all visible data series.
 	 */
 	public List<DataSource> getVisibleData() {
-		List<DataSource> visible = new LinkedList<>();
-		for (DataSource s : data) {
-			if (dataVisible.contains(s)) {
-				visible.add(s);
-			}
-		}
-		return visible;
+		return data.stream()
+				.filter(dataVisible::contains)
+				.collect(Collectors.toList());
 	}
 
 	/**

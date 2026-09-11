@@ -39,7 +39,7 @@ public class RandomColorsTest {
 
 	@Test
 	public void testCreation() {
-		RandomColors c = new RandomColors();
+		var c = new RandomColors();
 		float[] expected = new float[] {
 			0.00f, 1.00f,  // Hue
 			0.75f, 0.25f,  // Saturation
@@ -54,8 +54,8 @@ public class RandomColorsTest {
 
 	@Test
 	public void testCreationInt() {
-		RandomColors c1 = new RandomColors(0);
-		RandomColors c2 = new RandomColors(0);
+		var c1 = new RandomColors(0);
+		var c2 = new RandomColors(0);
 		for (int i = 0; i <= 10; i++) {
 			assertEquals(c1.get(i), c2.get(i));
 		}
@@ -63,10 +63,10 @@ public class RandomColorsTest {
 
 	@Test
 	public void testGet() {
-		RandomColors c = new RandomColors();
+		var c = new RandomColors();
 
 		int STEPS = 10;
-		Paint[] actual = new Paint[STEPS];
+		var actual = new Paint[STEPS];
 
 		// Test two runs in order to hit cache
 		for (int run = 0; run < 2; run++) {
@@ -87,7 +87,7 @@ public class RandomColorsTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		QuasiRandomColors original = new QuasiRandomColors();
+		var original = new QuasiRandomColors();
 		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

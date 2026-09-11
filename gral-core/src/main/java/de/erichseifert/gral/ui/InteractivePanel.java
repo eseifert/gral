@@ -416,7 +416,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			posPrev = pos;
 
 			if (Math.abs(dx) > MIN_DRAG || Math.abs(dy) > MIN_DRAG) {
-				PointND<Integer> deltas = new PointND<>(dx, dy);
+				var deltas = new PointND<Integer>(dx, dy);
 				navigator.pan(deltas);
 				panel.repaint();
 			}
@@ -446,7 +446,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		graphics.scale(MM_PER_PX, MM_PER_PX);
 
 		Rectangle2D boundsOld = getDrawable().getBounds();
-		Rectangle2D pageBounds = new Rectangle2D.Double(
+		var pageBounds = new Rectangle2D.Double(
 			pageFormat.getImageableX()/MM_PER_PX,
 			pageFormat.getImageableY()/MM_PER_PX,
 			pageFormat.getImageableWidth()/MM_PER_PX,

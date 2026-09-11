@@ -49,7 +49,7 @@ public class EnumeratedDataTest {
 	@Test
 	public void testCreate() {
 		// without parameters
-		EnumeratedData withoutParams = new EnumeratedData(table);
+		var withoutParams = new EnumeratedData(table);
 		assertEquals(table.getColumnCount() + 1, withoutParams.getColumnCount());
 		assertEquals(table.getRowCount(), withoutParams.getRowCount());
 		assertEquals(0.0, ((Number) withoutParams.get(0, 0)).doubleValue(), DELTA);
@@ -57,7 +57,7 @@ public class EnumeratedDataTest {
 		assertEquals(2.0, ((Number) withoutParams.get(0, 2)).doubleValue(), DELTA);
 
 		// with parameters
-		EnumeratedData withParams = new EnumeratedData(table, -1, 2.0);
+		var withParams = new EnumeratedData(table, -1, 2.0);
 		assertEquals(table.getColumnCount() + 1, withParams.getColumnCount());
 		assertEquals(table.getRowCount(), withParams.getRowCount());
 		assertEquals(-1.0, ((Number) withParams.get(0, 0)).doubleValue(), DELTA);
@@ -67,7 +67,7 @@ public class EnumeratedDataTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		DataSource original = new EnumeratedData(table);
+		var original = new EnumeratedData(table);
 		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata

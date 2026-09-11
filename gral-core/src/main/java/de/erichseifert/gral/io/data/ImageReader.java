@@ -104,15 +104,15 @@ public class ImageReader extends AbstractDataReader {
 		int w = image.getWidth();
 		int h = image.getHeight();
 
-		Class[] colTypes = new Class[w];
+		var colTypes = new Class[w];
 		Arrays.fill(colTypes, Double.class);
-		DataTable data = new DataTable(colTypes);
+		var data = new DataTable(colTypes);
 
 		double factor = this.<Number>getSetting("factor").doubleValue(); //$NON-NLS-1$
 		double offset = this.<Number>getSetting("offset").doubleValue(); //$NON-NLS-1$
 
 		int[] pixelData = new int[w];
-		Double[] rowData = new Double[w];
+		var rowData = new Double[w];
 		for (int y = 0; y < h; y++) {
 			image.getRGB(0, y, pixelData.length, 1, pixelData, 0, 0);
 			for (int x = 0; x < pixelData.length; x++) {

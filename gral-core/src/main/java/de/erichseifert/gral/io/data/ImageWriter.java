@@ -118,8 +118,7 @@ public class ImageWriter extends AbstractDataWriter {
 			}
 		}
 
-        BufferedImage image =
-        	new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+        var image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
         image.getRaster().setDataElements(0, 0, w, h, pixelData);
 
         Iterator<javax.imageio.ImageWriter> writers =

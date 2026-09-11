@@ -58,10 +58,10 @@ public class GeometryUtilsTest {
 
 	@Test
 	public void testIntersectionShapeShape() {
-		Shape s1 = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
-		Shape s2 = new Rectangle2D.Double(0.5, 0.5, 1.0, 1.0);
-		Point2D expected1 = new Point2D.Double(1.0, 0.5);
-		Point2D expected2 = new Point2D.Double(0.5, 1.0);
+		var s1 = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+		var s2 = new Rectangle2D.Double(0.5, 0.5, 1.0, 1.0);
+		var expected1 = new Point2D.Double(1.0, 0.5);
+		var expected2 = new Point2D.Double(0.5, 1.0);
 
 		List<Point2D> intersections = GeometryUtils.intersection(s1, s2);
 		assertTrue(intersections.contains(expected1));
@@ -70,7 +70,7 @@ public class GeometryUtilsTest {
 
 	@Test
 	public void testGrow() {
-		Shape normal = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+		var normal = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
 		Shape grown = GeometryUtils.grow(normal, 0.5);
 		Rectangle2D normalBounds = normal.getBounds2D();
 		Rectangle2D grownBounds = grown.getBounds2D();

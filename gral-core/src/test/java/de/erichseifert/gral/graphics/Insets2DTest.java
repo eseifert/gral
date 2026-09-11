@@ -61,8 +61,8 @@ public class Insets2DTest {
 
 	@Test
 	public void testChange() {
-		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
-		Insets2D insets2 = new Insets2D.Double(10.0, 20.0, 30.0, 40.0);
+		var insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		var insets2 = new Insets2D.Double(10.0, 20.0, 30.0, 40.0);
 
 		// setInsets(Insets2D)
 		insets.setInsets(insets2);
@@ -87,14 +87,14 @@ public class Insets2DTest {
 
 	@Test
 	public void testToString() {
-		Insets2D insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		var insets = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
 		assertEquals(insets.getClass().getName() + "[top=1.000000, left=2.000000, bottom=3.000000, right=4.000000]", insets.toString());
 	}
 
 	@Test
 	public void testEquality() {
-		Insets2D insets1 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
-		Insets2D insets2 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		var insets1 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		var insets2 = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
 		// Equals
 		assertTrue(insets1.equals(insets2));
 		assertFalse(insets1.equals(null));
@@ -105,7 +105,7 @@ public class Insets2DTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Insets2D original = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
+		var original = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
 		Insets2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getTop(), deserialized.getTop(), DELTA);

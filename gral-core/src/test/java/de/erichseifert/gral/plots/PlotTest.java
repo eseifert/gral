@@ -145,8 +145,8 @@ public class PlotTest {
 		assertNull(plot.getAxis("a"));
 		assertNull(plot.getAxis("b"));
 		// Set
-		Axis a = new Axis();
-		Axis b = new Axis();
+		var a = new Axis();
+		var b = new Axis();
 		a.setRange(0.0, 1.0);
 		b.setRange(2.0, 3.0);
 		plot.setAxis("a", a);
@@ -168,7 +168,7 @@ public class PlotTest {
 
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(((MockPlot) plot).isDrawn());
 		assertNotEmpty(image);
@@ -220,7 +220,7 @@ public class PlotTest {
 		int sizeBefore, size;
 
 		// Append
-		DataSeries series3 = new DataSeries("series3", table, 0, 2);
+		var series3 = new DataSeries("series3", table, 0, 2);
 		sizeBefore = plot.getData().size();
 		plot.add(series3);
 		size = plot.getData().size();
@@ -228,7 +228,7 @@ public class PlotTest {
 		assertEquals(series3, plot.get(size - 1));
 
 		// Insert
-		DataSeries series4 = new DataSeries("series4", table, 0);
+		var series4 = new DataSeries("series4", table, 0);
 		sizeBefore = plot.getData().size();
 		plot.add(0, series4, false);
 		size = plot.getData().size();

@@ -182,7 +182,7 @@ public abstract class Filter2D extends AbstractDataSource
 	 * @param rowData Row to be added.
 	 */
 	protected void add(Number[] rowData) {
-		Double[] doubleData = new Double[rowData.length];
+		var doubleData = new Double[rowData.length];
 		int i = 0;
 		for (Number value : rowData) {
 			doubleData[i++] = value.doubleValue();

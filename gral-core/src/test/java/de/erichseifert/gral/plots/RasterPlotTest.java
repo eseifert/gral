@@ -76,7 +76,7 @@ public class RasterPlotTest {
 		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(plot.isDrawn);
 		assertNotEmpty(image);

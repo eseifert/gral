@@ -46,7 +46,7 @@ public class SpiralPlot extends ExamplePanel {
 		setPreferredSize(new Dimension(600, 600));
 
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class, Double.class);
 		for (double alpha = 0.0, r = 0.0; r <= 10.0; alpha -= 1.0, r += 0.05) {
 			double x = r*Math.cos(alpha);
 			double y = r*Math.sin(alpha);
@@ -55,10 +55,10 @@ public class SpiralPlot extends ExamplePanel {
 		}
 
 		// Create a new data series (optional)
-		DataSeries series = new DataSeries("Spiral", data);
+		var series = new DataSeries("Spiral", data);
 
 		// Create a new xy-plot
-		XYPlot plot = new XYPlot(series);
+		var plot = new XYPlot(series);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0));  // Add a margin to the plot
@@ -81,7 +81,7 @@ public class SpiralPlot extends ExamplePanel {
 
 		// Format data series
 		Color color = GraphicsUtils.deriveWithAlpha(COLOR1, 96);
-		SizeablePointRenderer pointRenderer = new SizeablePointRenderer();
+		var pointRenderer = new SizeablePointRenderer();
 		pointRenderer.setShape(new Ellipse2D.Double(-0.5, -0.5, 1.0, 1.0));  // shape of data points
 		pointRenderer.setColor(color);  // color of data points
 		pointRenderer.setColumn(2);  // data column which determines the scaling of data point shapes

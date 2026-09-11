@@ -33,7 +33,7 @@ import de.erichseifert.gral.TestUtils;
 public class HeatMapTest {
 	@Test
 	public void testGet() {
-		HeatMap c = new HeatMap();
+		var c = new HeatMap();
 		assertEquals(new Color(  0,   0,   0), c.get(0.00));
 		assertEquals(new Color( 67,  13, 109), c.get(0.25));
 		assertEquals(new Color(175,  80,  80), c.get(0.50));
@@ -43,7 +43,7 @@ public class HeatMapTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		ScaledContinuousColorMapper original = new HeatMap();
+		var original = new HeatMap();
 		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

@@ -34,7 +34,6 @@ import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
@@ -43,34 +42,34 @@ public class DrawableWriterTest {
 
 	@SuppressWarnings("unchecked")
 	public DrawableWriterTest() {
-		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		data.add(1.0, 4.5, 4.3, 4.0);
 		data.add(1.5, 5.5, 5.3, 5.0);
 		data.add(3.0, 3.5, 3.7, 4.0);
 		data.add(4.0, 4.7, 4.5, 4.3);
 
-		DataSeries s1 = new DataSeries(data, 0, 1);
-		DataSeries s2 = new DataSeries(data, 0, 2);
-		DataSeries s3 = new DataSeries(data, 0, 3);
+		var s1 = new DataSeries(data, 0, 1);
+		var s2 = new DataSeries(data, 0, 2);
+		var s3 = new DataSeries(data, 0, 3);
 
 		plot = new XYPlot(s1, s2, s3);
 		plot.setInsets(new Insets2D.Double(20, 50, 50, 20));
 
-		LineRenderer lr1 = new DefaultLineRenderer2D();
+		var lr1 = new DefaultLineRenderer2D();
 		lr1.setColor(Color.RED);
 		plot.setLineRenderers(s1, lr1);
 
-		LineRenderer lr2 = new DefaultLineRenderer2D();
+		var lr2 = new DefaultLineRenderer2D();
 		lr2.setColor(Color.GREEN);
 		plot.setLineRenderers(s2, lr2);
 
-		LineRenderer lr3 = new DefaultLineRenderer2D();
+		var lr3 = new DefaultLineRenderer2D();
 		lr3.setColor(Color.BLUE);
 		plot.setLineRenderers(s3, lr3);
 	}
 
 	public void save() {
-		JFileChooser chooser = new JFileChooser();
+		var chooser = new JFileChooser();
 		int option = chooser.showSaveDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
@@ -84,7 +83,7 @@ public class DrawableWriterTest {
 	}
 
 	public static void main(String[] args) {
-		DrawableWriterTest test = new DrawableWriterTest();
+		var test = new DrawableWriterTest();
 		test.save();
 	}
 

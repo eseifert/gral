@@ -63,7 +63,7 @@ public class JdbcDataTest {
 
 	@Test
 	public void testCreate() {
-		JdbcData data = new JdbcData(connection, "foobar");
+		var data = new JdbcData(connection, "foobar");
 		assertEquals(10, data.getColumnCount());
 		assertEquals(8, data.getRowCount());
 		Class<? extends Comparable<?>>[] typesExpected = table.getColumnTypes();
@@ -74,7 +74,7 @@ public class JdbcDataTest {
 
 	@Test
 	public void testGetIntInt() {
-		JdbcData data = new JdbcData(connection, "foobar");
+		var data = new JdbcData(connection, "foobar");
 		for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
 			for (int colIndex = 0; colIndex < table.getColumnCount(); colIndex++) {
 				Comparable<?> expected = table.get(colIndex, rowIndex);
@@ -94,7 +94,7 @@ public class JdbcDataTest {
 	@Test(expected=UnsupportedOperationException.class)
 	@SuppressWarnings("unused")
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		DataSource original = new JdbcData(connection, "foobar");
+		var original = new JdbcData(connection, "foobar");
 		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
     }
 }

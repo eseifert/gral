@@ -548,34 +548,34 @@ public class BoxPlot extends XYPlot {
 
 					// Create shapes
 					// The origin of all shapes is (boxX, boxY)
-					Rectangle2D boxBounds = new Rectangle2D.Double(
+					var boxBounds = new Rectangle2D.Double(
 						boxXMin - boxX, boxYTop - barYCenter,
 						boxWidth, Math.abs(boxYTop - boxYBottom));
 					Rectangle2D shapeBounds = shape.getBounds2D();
-					AffineTransform tx = new AffineTransform();
+					var tx = new AffineTransform();
 					tx.translate(boxBounds.getX(), boxBounds.getY());
 					tx.scale(boxBounds.getWidth()/shapeBounds.getWidth(),
 						boxBounds.getHeight()/shapeBounds.getHeight());
 					tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
 					Shape box = tx.createTransformedShape(shape);
 
-					Line2D whiskerMax = new Line2D.Double(
+					var whiskerMax = new Line2D.Double(
 						0.0, boxYTop - barYCenter,
 						0.0, barYTop - barYCenter
 					);
-					Line2D whiskerMin = new Line2D.Double(
+					var whiskerMin = new Line2D.Double(
 						0.0, boxYBottom - barYCenter,
 						0.0, barYbottom - barYCenter
 					);
-					Line2D barMax = new Line2D.Double(
+					var barMax = new Line2D.Double(
 						barXMin - boxX, barYTop - barYCenter,
 						barXMax - boxX, barYTop - barYCenter
 					);
-					Line2D barMin = new Line2D.Double(
+					var barMin = new Line2D.Double(
 						barXMin - boxX, barYbottom - barYCenter,
 						barXMax - boxX, barYbottom - barYCenter
 					);
-					Line2D barCenter = new Line2D.Double(
+					var barCenter = new Line2D.Double(
 						boxXMin - boxX, 0.0,
 						boxXMax - boxX, 0.0
 					);
@@ -691,7 +691,7 @@ public class BoxPlot extends XYPlot {
 
 		@Override
 		public void draw(DrawingContext context) {
-			Shape shape = new Rectangle2D.Double(0.0, 0.0, getBounds().getWidth(), getBounds().getHeight());
+			var shape = new Rectangle2D.Double(0.0, 0.0, getBounds().getWidth(), getBounds().getHeight());
 
 			Graphics2D graphics = context.getGraphics();
 			AffineTransform txOrig = graphics.getTransform();
@@ -737,7 +737,7 @@ public class BoxPlot extends XYPlot {
 				"Cannot extract statistics from null data source.");
 		}
 
-		DataTable stats = new DataTable(Integer.class, Double.class,
+		var stats = new DataTable(Integer.class, Double.class,
 			Double.class, Double.class, Double.class, Double.class);
 
 		// Generate statistical values for each column
@@ -760,13 +760,13 @@ public class BoxPlot extends XYPlot {
 
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
-		if (getData().size() > 0) {
+		if (!getData().isEmpty()) {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
 		// By the looks of it, some objects depend on a BoxWhiskerRenderer being present when super.add is called
 		// However, super.add overwrites renderers, so we have to create the BoxWhiskerRenderer twice.
-		BoxWhiskerRenderer renderer = new BoxWhiskerRenderer();
+		var renderer = new BoxWhiskerRenderer();
 		setPointRenderers(source, renderer);
 		super.add(index, source, visible);
 		// FIXME: Overwrites possible present point and line renderers

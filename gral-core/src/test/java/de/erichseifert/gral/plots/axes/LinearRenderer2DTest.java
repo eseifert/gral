@@ -54,7 +54,7 @@ public class LinearRenderer2DTest {
 		Drawable d = renderer.getRendererComponent(axis);
 		assertNotNull(d);
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		d.draw(context);
 		assertNotEmpty(image);
 	}

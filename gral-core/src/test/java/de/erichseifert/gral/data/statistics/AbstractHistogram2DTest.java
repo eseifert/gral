@@ -48,7 +48,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testCreate() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 
 		assertEquals(table.getColumnCount(), histogram.getColumnCount());
 		assertEquals(4, histogram.getRowCount());
@@ -56,7 +56,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testEqualBreaks() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 
 		long[] expected = {
 			3L, 5L,  // 1.0-2.0, 1.0-3.0
@@ -93,7 +93,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testGet() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 
 		assertEquals(3L, histogram.get(0, 0));
 		assertEquals(5L, histogram.get(1, 0));
@@ -107,7 +107,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testLastCellContainsLargestValue() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 
 		// The largest values equal the last break of their column and belong
 		// to the last cell
@@ -117,7 +117,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testCellLimits() {
-		Histogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 		Number[][] expected = new Number[][] {{1.0, 2.0, 3.0, 4.0, 5.0}, {1.0, 3.0, 5.0, 7.0, 9.0}};
 
 		for (int colIndex = 0; colIndex < histogram.getColumnCount(); colIndex++) {
@@ -132,7 +132,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testDataAdd() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 		assertEquals(3L, histogram.get(0, 0));
 		table.add(1, 1);
 		assertEquals(4L, histogram.get(0, 0));
@@ -140,7 +140,7 @@ public class AbstractHistogram2DTest {
 
 	@Test
 	public void testDataRemove() {
-		AbstractHistogram2D histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
+		var histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 		assertEquals(3L, histogram.get(0, 0));
 		table.remove(0);
 		assertEquals(2L, histogram.get(0, 0));

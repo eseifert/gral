@@ -78,11 +78,11 @@ public class TableLayoutTest {
 
 	@Test
 	public void testCreate() {
-		TableLayout noGap = new TableLayout(1);
+		var noGap = new TableLayout(1);
 		assertEquals(0.0, noGap.getGapX(), DELTA);
 		assertEquals(0.0, noGap.getGapY(), DELTA);
 
-		TableLayout gapped = new TableLayout(1, GAP_X, GAP_Y);
+		var gapped = new TableLayout(1, GAP_X, GAP_Y);
 		assertEquals(GAP_X, gapped.getGapX(), DELTA);
 		assertEquals(GAP_Y, gapped.getGapY(), DELTA);
 	}
@@ -104,7 +104,7 @@ public class TableLayoutTest {
 
 	@Test
 	public void testPreferredSizeVertical() {
-		Layout layout = new TableLayout(1, GAP_X, GAP_Y);
+		var layout = new TableLayout(1, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(COMP_WIDTH, size.getWidth(), DELTA);
 		assertEquals(3.0*COMP_HEIGHT + 2.0*GAP_Y, size.getHeight(), DELTA);
@@ -112,7 +112,7 @@ public class TableLayoutTest {
 
 	@Test
 	public void testPreferredSizeHorizontal() {
-		Layout layout = new TableLayout(3, GAP_X, GAP_Y);
+		var layout = new TableLayout(3, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(3.0*COMP_WIDTH + 2.0*GAP_X, size.getWidth(), DELTA);
 		assertEquals(COMP_HEIGHT, size.getHeight(), DELTA);
@@ -120,8 +120,8 @@ public class TableLayoutTest {
 
 	@Test
 	public void testLayoutVertical() {
-		Layout layout = new TableLayout(1, GAP_X, GAP_Y);
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var layout = new TableLayout(1, GAP_X, GAP_Y);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
@@ -140,8 +140,8 @@ public class TableLayoutTest {
 
 	@Test
 	public void testLayoutHorizontal() {
-		Layout layout = new TableLayout(3, GAP_X, GAP_Y);
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var layout = new TableLayout(3, GAP_X, GAP_Y);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
@@ -160,7 +160,7 @@ public class TableLayoutTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		TableLayout original = new TableLayout(3, GAP_X, GAP_Y);
+		var original = new TableLayout(3, GAP_X, GAP_Y);
 		TableLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumns(), deserialized.getColumns());

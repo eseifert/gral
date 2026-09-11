@@ -27,9 +27,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.erichseifert.gral.data.DataChangeEvent;
 import de.erichseifert.gral.data.DataListener;
@@ -68,9 +66,9 @@ public abstract class ValueLegend extends AbstractLegend
 	 * @return A sequence of items for the specified data source.
 	 */
 	protected Iterable<Row> getEntries(DataSource source) {
-		List<Row> items = new LinkedList<>();
+		var items = new LinkedList<Row>();
 		for (int rowIndex = 0; rowIndex < source.getRowCount(); rowIndex++) {
-			Row row = new Row(source, rowIndex);
+			var row = new Row(source, rowIndex);
 			items.add(row);
 		}
 		return items;
@@ -108,7 +106,7 @@ public abstract class ValueLegend extends AbstractLegend
 	@Override
 	public void remove(DataSource source) {
 		super.remove(source);
-		Set<Row> rows = new HashSet<>(components.keySet());
+		var rows = new HashSet<Row>(components.keySet());
 		for (Row row : rows) {
 			if (row.getSource() != source) {
 				continue;
@@ -220,7 +218,7 @@ public abstract class ValueLegend extends AbstractLegend
 			for (Row row : getEntries(source)) {
 				String label = getLabel(row);
 				Font font = getFont();
-				Item item = new Item(getSymbol(row), label, font);
+				var item = new Item(getSymbol(row), label, font);
 				add(item);
 				components.put(row, item);
 			}

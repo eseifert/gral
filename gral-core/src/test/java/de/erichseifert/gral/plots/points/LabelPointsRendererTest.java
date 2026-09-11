@@ -67,14 +67,14 @@ public class LabelPointsRendererTest {
 
 	@Test
 	public void testPointPath() {
-		PointRenderer r = new LabelPointRenderer();
+		var r = new LabelPointRenderer();
 		Shape path = r.getPointShape(data);
 		assertNotNull(path);
 	}
 
 	@Test
 	public void testInvalidColumn() {
-		LabelPointRenderer r = new LabelPointRenderer();
+		var r = new LabelPointRenderer();
 		r.setColumn(table.getColumnCount());
 		Shape path = r.getPointShape(data);
 		assertNull(path);
@@ -82,18 +82,18 @@ public class LabelPointsRendererTest {
 
 	@Test
 	public void testNullLabel() {
-		LabelPointRenderer r = new LabelPointRenderer();
+		var r = new LabelPointRenderer();
 		r.setColumn(1);
-		Row row2 = new Row(table, 1);
+		var row2 = new Row(table, 1);
 		assertNull(row2.get(1));
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
+		var data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		LabelPointRenderer original = new LabelPointRenderer();
+		var original = new LabelPointRenderer();
 		LabelPointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumn(), deserialized.getColumn());

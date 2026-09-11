@@ -97,12 +97,12 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testCreate() {
-		StackedLayout noGap = new StackedLayout(Orientation.VERTICAL);
+		var noGap = new StackedLayout(Orientation.VERTICAL);
 		assertEquals(Orientation.VERTICAL, noGap.getOrientation());
 		assertEquals(0.0, noGap.getGapX(), DELTA);
 		assertEquals(0.0, noGap.getGapY(), DELTA);
 
-		StackedLayout gapped = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		var gapped = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
 		assertEquals(Orientation.HORIZONTAL, gapped.getOrientation());
 		assertEquals(GAP_X, gapped.getGapX(), DELTA);
 		assertEquals(GAP_Y, gapped.getGapY(), DELTA);
@@ -110,7 +110,7 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testPreferredSizeVertical() {
-		Layout layout = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
+		var layout = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(COMP_WIDTH, size.getWidth(), DELTA);
 		assertEquals(3.0*COMP_HEIGHT + 2.0*GAP_Y, size.getHeight(), DELTA);
@@ -118,7 +118,7 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testPreferredSizeHorizontal() {
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		var layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(3.0*COMP_WIDTH + 2.0*GAP_X, size.getWidth(), DELTA);
 		assertEquals(COMP_HEIGHT, size.getHeight(), DELTA);
@@ -126,11 +126,11 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testPreferredSizeHorizontalUsesTallestComponent() {
-		DrawableContainer container = new DrawableContainer(null);
+		var container = new DrawableContainer(null);
 		container.add(new TestDrawable(COMP_WIDTH, 3.0*COMP_HEIGHT));
 		container.add(new TestDrawable(COMP_WIDTH, COMP_HEIGHT));
 
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		var layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 
 		assertEquals(2.0*COMP_WIDTH + GAP_X, size.getWidth(), DELTA);
@@ -139,13 +139,13 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testPreferredSizeHorizontalCountsInsetsOnce() {
-		DrawableContainer container = new DrawableContainer(null);
+		var container = new DrawableContainer(null);
 		container.setInsets(new Insets2D.Double(
 			INSET_TOP, INSET_LEFT, INSET_BOTTOM, INSET_RIGHT));
 		container.add(new TestDrawable());
 		container.add(new TestDrawable());
 
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		var layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
 		Dimension2D size = layout.getPreferredSize(container);
 
 		assertEquals(2.0*COMP_WIDTH + GAP_X + INSET_LEFT + INSET_RIGHT,
@@ -156,8 +156,8 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testLayoutVertical() {
-		Layout layout = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var layout = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
@@ -175,8 +175,8 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testLayoutHorizontal() {
-		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
-		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		var layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		var bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
 		container.setBounds(bounds);
 		layout.layout(container);
 
@@ -218,7 +218,7 @@ public class StackedLayoutTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		StackedLayout original = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
+		var original = new StackedLayout(Orientation.VERTICAL, GAP_X, GAP_Y);
 		StackedLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getOrientation(), deserialized.getOrientation());

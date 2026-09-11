@@ -83,7 +83,7 @@ public class AxisTest {
 
 	@Test
 	public void testAxisListeners() {
-		AxisListenerTest l = new AxisListenerTest();
+		var l = new AxisListenerTest();
 
 		axis.addAxisListener(l);
 		axis.setRange(0.0, 1.0);

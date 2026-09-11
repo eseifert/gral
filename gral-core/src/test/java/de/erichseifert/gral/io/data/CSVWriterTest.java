@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -65,7 +64,7 @@ public class CSVWriterTest {
 
 		for (int i = 0; i < formats.length; i++) {
 			DataWriter writer = DataWriterFactory.getInstance().get(formats[i]);
-			OutputStream output = new ByteArrayOutputStream();
+			var output = new ByteArrayOutputStream();
 			writer.write(data, output);
 
 			assertEquals(expected[i], output.toString());
@@ -75,10 +74,10 @@ public class CSVWriterTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testQuotesValuesContainingSpecialCharacters() throws IOException {
-		DataTable data = new DataTable(String.class, String.class);
+		var data = new DataTable(String.class, String.class);
 		data.add("a,b", "say \"hi\"");
 
-		OutputStream output = new ByteArrayOutputStream();
+		var output = new ByteArrayOutputStream();
 		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 		writer.write(data, output);
 
@@ -88,10 +87,10 @@ public class CSVWriterTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testWrittenValuesCanBeReadAgain() throws IOException {
-		DataTable data = new DataTable(String.class, String.class);
+		var data = new DataTable(String.class, String.class);
 		data.add("a,b", "say \"hi\"");
 
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		var output = new ByteArrayOutputStream();
 		DataWriterFactory.getInstance().get("text/csv").write(data, output);
 
 		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
@@ -106,7 +105,7 @@ public class CSVWriterTest {
 
 	@Test
 	public void testSeparator() throws IOException {
-		OutputStream output = new ByteArrayOutputStream();
+		var output = new ByteArrayOutputStream();
 
 		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
 		writer.setSetting(CSVWriter.SEPARATOR_CHAR, ';');

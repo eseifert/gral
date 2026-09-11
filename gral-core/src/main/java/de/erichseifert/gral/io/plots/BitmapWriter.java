@@ -158,7 +158,7 @@ public class BitmapWriter extends IOCapabilitiesStorage
 	public void write(Drawable d, OutputStream destination,
 			double x, double y, double width, double height)
 			throws IOException {
-		BufferedImage image = new BufferedImage(
+		var image = new BufferedImage(
 				(int)Math.ceil(width), (int)Math.ceil(height), rasterFormat);
 		Graphics2D imageGraphics = image.createGraphics();
 		imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -166,24 +166,22 @@ public class BitmapWriter extends IOCapabilitiesStorage
 		imageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		imageGraphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-		DrawingContext context =
-			new DrawingContext(imageGraphics);
+		var context = new DrawingContext(imageGraphics);
 
 		Iterator<ImageWriter> writers =
 			ImageIO.getImageWritersByMIMEType(getMimeType());
 		if (writers.hasNext()) {
 			ImageWriter writer = writers.next();
-			ImageOutputStream ios =
-				ImageIO.createImageOutputStream(destination);
-			writer.setOutput(ios);
-			Rectangle2D boundsOld = d.getBounds();
-			d.setBounds(x, y, width, height);
-			try {
-				d.draw(context);
-				writer.write(image);
-			} finally {
-				d.setBounds(boundsOld);
-				ios.close();
+			try (ImageOutputStream ios = ImageIO.createImageOutputStream(destination)) {
+				writer.setOutput(ios);
+				Rectangle2D boundsOld = d.getBounds();
+				d.setBounds(x, y, width, height);
+				try {
+					d.draw(context);
+					writer.write(image);
+				} finally {
+					d.setBounds(boundsOld);
+				}
 			}
 		}
 	}

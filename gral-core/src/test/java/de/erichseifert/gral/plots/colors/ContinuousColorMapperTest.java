@@ -53,13 +53,13 @@ public class ContinuousColorMapperTest {
 
 	@Test
 	public void testGetNumber() {
-		MockContinuousColorMapper c = new MockContinuousColorMapper();
+		var c = new MockContinuousColorMapper();
 		assertEquals(c.get(0.5), c.get(0.5f));
 	}
 
 	@Test
 	public void testGetOmit() {
-		MockContinuousColorMapper c = new MockContinuousColorMapper();
+		var c = new MockContinuousColorMapper();
 		c.setMode(Mode.OMIT);
 		assertNull(c.get(-0.5));
 		assertEquals(new Color(  0,   0,   0), c.get( 0.0));
@@ -70,7 +70,7 @@ public class ContinuousColorMapperTest {
 
 	@Test
 	public void testGetRepeat() {
-		MockContinuousColorMapper c = new MockContinuousColorMapper();
+		var c = new MockContinuousColorMapper();
 		c.setMode(Mode.REPEAT);
 		assertEquals(new Color(  0,   0,   0), c.get(-0.5));
 		assertEquals(new Color(  0,   0,   0), c.get( 0.0));
@@ -81,7 +81,7 @@ public class ContinuousColorMapperTest {
 
 	@Test
 	public void testGetCircular() {
-		MockContinuousColorMapper c = new MockContinuousColorMapper();
+		var c = new MockContinuousColorMapper();
 		c.setMode(Mode.CIRCULAR);
 		assertEquals(new Color(128, 128, 128), c.get(-0.5));
 		assertEquals(new Color(  0,   0,   0), c.get( 0.0));
@@ -92,7 +92,7 @@ public class ContinuousColorMapperTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		MockContinuousColorMapper original = new MockContinuousColorMapper();
+		var original = new MockContinuousColorMapper();
 		MockContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

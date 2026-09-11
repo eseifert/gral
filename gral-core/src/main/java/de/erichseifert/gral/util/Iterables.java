@@ -24,7 +24,6 @@ package de.erichseifert.gral.util;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 public abstract class Iterables {
 	private static class ConcatenationIterable<T> implements Iterable<T> {
@@ -36,7 +35,7 @@ public abstract class Iterables {
 
 		@Override
 		public Iterator<T> iterator() {
-			List<Iterator<T>> iterators = new LinkedList<>();
+			var iterators = new LinkedList<Iterator<T>>();
 			for (Iterable<T> iterable : inputIterables) {
 				iterators.add(iterable.iterator());
 			}
@@ -77,12 +76,7 @@ public abstract class Iterables {
 		}
 	}
 
-	public static <T> Iterable<T> take(final Iterable<T> iterable, final int elementCount) {
-		return new Iterable<T>() {
-			@Override
-			public Iterator<T> iterator() {
-				return new LengthIterator<>(iterable.iterator(), elementCount);
-			}
-		};
+	public static <T> Iterable<T> take(Iterable<T> iterable, int elementCount) {
+		return () -> new LengthIterator<>(iterable.iterator(), elementCount);
 	}
 }

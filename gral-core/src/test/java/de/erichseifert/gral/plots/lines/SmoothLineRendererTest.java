@@ -41,7 +41,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
@@ -51,10 +50,10 @@ public class SmoothLineRendererTest {
 
 	@Before
 	public void setUp() {
-		Axis axisX = new Axis(-5.0, 5.0);
-		Axis axisY = new Axis(-5.0, 5.0);
-		AxisRenderer axisRendererX = new LinearRenderer2D();
-		AxisRenderer axisRendererY = new LinearRenderer2D();
+		var axisX = new Axis(-5.0, 5.0);
+		var axisY = new Axis(-5.0, 5.0);
+		var axisRendererX = new LinearRenderer2D();
+		var axisRendererY = new LinearRenderer2D();
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
@@ -64,7 +63,7 @@ public class SmoothLineRendererTest {
 	@Test
 	public void testLine() {
 		// Get line
-		SmoothLineRenderer2D r = new SmoothLineRenderer2D();
+		var r = new SmoothLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
@@ -76,7 +75,7 @@ public class SmoothLineRendererTest {
 
 		// Draw line
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		line.draw(context);
 		assertNotEmpty(image);
 	}
@@ -84,7 +83,7 @@ public class SmoothLineRendererTest {
 	@Test
 	public void testNullPoint() {
 		// Get line
-		LineRenderer r = new SmoothLineRenderer2D();
+		var r = new SmoothLineRenderer2D();
 		List<DataPoint> points = Arrays.asList((DataPoint) null);
 		Shape shape = r.getLineShape(points);
 		Drawable line = r.getLine(points, shape);
@@ -92,7 +91,7 @@ public class SmoothLineRendererTest {
 
 		// Draw line
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		line.draw(context);
 		assertEmpty(image);
 	}
@@ -100,21 +99,21 @@ public class SmoothLineRendererTest {
 	@Test
 	public void testEmptyShape() {
 		// Get line
-		LineRenderer r = new SmoothLineRenderer2D();
+		var r = new SmoothLineRenderer2D();
 		List<DataPoint> points = Arrays.asList();
 		Drawable line = r.getLine(points, null);
 		assertNotNull(line);
 
 		// Draw line
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		line.draw(context);
 		assertEmpty(image);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		SmoothLineRenderer2D original = new SmoothLineRenderer2D();
+		var original = new SmoothLineRenderer2D();
 		SmoothLineRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getSmoothness(), deserialized.getSmoothness());

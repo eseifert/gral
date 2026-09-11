@@ -35,7 +35,7 @@ public class HaltonSequenceTest {
 
 	@Test
 	public void testHasNext() {
-		HaltonSequence seq = new HaltonSequence();
+		var seq = new HaltonSequence();
 		for (int i = 0; i < 20; i++) {
 			assertTrue(seq.hasNext());
 		}
@@ -43,7 +43,7 @@ public class HaltonSequenceTest {
 
 	@Test
 	public void testBase2() {
-		HaltonSequence seq = new HaltonSequence();
+		var seq = new HaltonSequence();
 		assertEquals(0.5000, seq.next(), DELTA);
 		assertEquals(0.2500, seq.next(), DELTA);
 		assertEquals(0.7500, seq.next(), DELTA);
@@ -58,7 +58,7 @@ public class HaltonSequenceTest {
 
 	@Test
 	public void testBase3() {
-		HaltonSequence seq = new HaltonSequence(3);
+		var seq = new HaltonSequence(3);
 		assertEquals(0.3333333333333333, seq.next(), DELTA);
 		assertEquals(0.6666666666666666, seq.next(), DELTA);
 		assertEquals(0.1111111111111111, seq.next(), DELTA);
@@ -73,7 +73,7 @@ public class HaltonSequenceTest {
 
 	@Test
 	public void testBase5() {
-		HaltonSequence seq = new HaltonSequence(5);
+		var seq = new HaltonSequence(5);
 		assertEquals(0.20, seq.next(), DELTA);
 		assertEquals(0.40, seq.next(), DELTA);
 		assertEquals(0.60, seq.next(), DELTA);
@@ -88,7 +88,7 @@ public class HaltonSequenceTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		HaltonSequence original = new HaltonSequence(3);
+		var original = new HaltonSequence(3);
 		HaltonSequence deserialized = TestUtils.serializeAndDeserialize(original);
 
 		for (int i = 0; i < 10; i++) {

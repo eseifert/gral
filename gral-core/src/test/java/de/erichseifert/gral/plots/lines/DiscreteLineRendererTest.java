@@ -41,7 +41,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
@@ -51,10 +50,10 @@ public class DiscreteLineRendererTest {
 
 	@Before
 	public void setUp() {
-		Axis axisX = new Axis(-5.0, 5.0);
-		Axis axisY = new Axis(-5.0, 5.0);
-		AxisRenderer axisRendererX = new LinearRenderer2D();
-		AxisRenderer axisRendererY = new LinearRenderer2D();
+		var axisX = new Axis(-5.0, 5.0);
+		var axisY = new Axis(-5.0, 5.0);
+		var axisRendererX = new LinearRenderer2D();
+		var axisRendererY = new LinearRenderer2D();
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
@@ -64,14 +63,14 @@ public class DiscreteLineRendererTest {
 	@Test
 	public void testLine() {
 		// Get line
-		DiscreteLineRenderer2D r = new DiscreteLineRenderer2D();
+		var r = new DiscreteLineRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		for (Orientation dir : Orientation.values()) {
 			r.setAscentDirection(dir);
 			Shape shape = r.getLineShape(points);
@@ -84,7 +83,7 @@ public class DiscreteLineRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		DiscreteLineRenderer2D original = new DiscreteLineRenderer2D();
+		var original = new DiscreteLineRenderer2D();
 		DiscreteLineRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getAscentDirection(), deserialized.getAscentDirection());

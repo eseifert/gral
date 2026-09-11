@@ -75,7 +75,7 @@ public class SizeablePointsRendererTest {
 
 	@Test
 	public void testUnsized() {
-		PointRenderer r = new SizeablePointRenderer();
+		var r = new SizeablePointRenderer();
 		r.setShape(shape);
 		Shape expected = shape;
 		Shape path = r.getPointShape(data);
@@ -84,48 +84,48 @@ public class SizeablePointsRendererTest {
 
 	@Test
 	public void testSized() {
-		PointRenderer r = new SizeablePointRenderer();
+		var r = new SizeablePointRenderer();
 		r.setShape(shape);
 		Shape expected = AffineTransform.getScaleInstance(2.0, 2.0)
 			.createTransformedShape(shape);
-		Row row2 = new Row(table, 1);
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
+		var row2 = new Row(table, 1);
+		var data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertEquals(expected.getBounds2D(), path.getBounds2D());
 	}
 
 	@Test
 	public void testNegativeSize() {
-		PointRenderer r = new SizeablePointRenderer();
+		var r = new SizeablePointRenderer();
 		r.setShape(shape);
-		Row row2 = new Row(table, 2);
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
+		var row2 = new Row(table, 2);
+		var data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
 	@Test
 	public void testZeroSize() {
-		PointRenderer r = new SizeablePointRenderer();
-		Row row2 = new Row(table, 3);
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
+		var r = new SizeablePointRenderer();
+		var row2 = new Row(table, 3);
+		var data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
 	@Test
 	public void testNullSize() {
-		PointRenderer r = new SizeablePointRenderer();
+		var r = new SizeablePointRenderer();
 		r.setShape(shape);
-		Row row2 = new Row(table, 4);
-		PointData data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
+		var row2 = new Row(table, 4);
+		var data2 = new PointData(data.axes, data.axisRenderers, row2, row2.getIndex(), 0);
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
 
 	@Test
 	public void testInvalidColumn() {
-		SizeablePointRenderer r = new SizeablePointRenderer();
+		var r = new SizeablePointRenderer();
 		r.setShape(shape);
 		Shape path;
 
@@ -142,7 +142,7 @@ public class SizeablePointsRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		SizeablePointRenderer original = new SizeablePointRenderer();
+		var original = new SizeablePointRenderer();
 		SizeablePointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColumn(), deserialized.getColumn());

@@ -259,7 +259,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					Shape shapeX = axisXRenderer.getShape();
 					Rectangle2D shapeBoundsX = shapeX.getBounds2D();
 					List<Tick> ticksX = axisXRenderer.getTicks(axisX);
-					Line2D gridLineVert = new Line2D.Double(
+					var gridLineVert = new Line2D.Double(
 						-shapeBoundsX.getMinX(),
 						-shapeBoundsX.getMinY(),
 						-shapeBoundsX.getMinX(),
@@ -295,7 +295,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					Shape shapeY = axisYRenderer.getShape();
 					Rectangle2D shapeBoundsY = shapeY.getBounds2D();
 					List<Tick> ticksY = axisYRenderer.getTicks(axisY);
-					Line2D gridLineHoriz = new Line2D.Double(
+					var gridLineHoriz = new Line2D.Double(
 						-shapeBoundsY.getMinX(), -shapeBoundsY.getMinY(),
 						bounds.getWidth() - shapeBoundsY.getMinX(), -shapeBoundsY.getMinY()
 					);
@@ -345,7 +345,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				// Take care of old clipping region. This is used when getting
 				// scrolled in a JScrollPane for example.
 				if (clipBoundsOld != null) {
-					Area clipBoundsNew = new Area(clipBoundsOld);
+					var clipBoundsNew = new Area(clipBoundsOld);
 					clipBoundsNew.intersect(new Area(clipBounds));
 					clipBounds = clipBoundsNew;
 				}
@@ -382,9 +382,9 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 				AxisRenderer axisXRenderer = plot.getAxisRenderer(axisNames[0]);
 				AxisRenderer axisYRenderer = plot.getAxisRenderer(axisNames[1]);
 
-				List<DataPoint> points = new LinkedList<>();
+				var points = new LinkedList<DataPoint>();
 				for (int i = 0; i < s.getRowCount(); i++) {
-					Row row = new Row(s, i);
+					var row = new Row(s, i);
 					Number valueX = (Number) row.get(colX);
 					Number valueY = (Number) row.get(colY);
 
@@ -398,27 +398,27 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 						continue;
 					}
 
-					PointND<Double> pos = new PointND<>(
+					var pos = new PointND<Double>(
 							axisPosX.get(PointND.X), axisPosY.get(PointND.Y));
 
-					PointData pointData = new PointData(
+					var pointData = new PointData(
 						Arrays.asList(axisX, axisY),
 						Arrays.asList(axisXRenderer, axisYRenderer),
 						row, row.getIndex(), colY);
 
-					DataPoint dataPoint = new DataPoint(pointData, pos);
+					var dataPoint = new DataPoint(pointData, pos);
 					points.add(dataPoint);
 				}
 
-				List<PointRenderer> pointRenderers = new ArrayList<>(plot.getPointRenderers(s));
+				var pointRenderers = new ArrayList<PointRenderer>(plot.getPointRenderers(s));
 				Collections.reverse(pointRenderers);
 
-				List<AreaRenderer> areaRenderers = new ArrayList<>(plot.getAreaRenderers(s));
+				var areaRenderers = new ArrayList<AreaRenderer>(plot.getAreaRenderers(s));
 				Collections.reverse(areaRenderers);
 				for (AreaRenderer areaRenderer : areaRenderers) {
 					Shape punchedArea = areaRenderer.getAreaShape(points);
 					for (PointRenderer pointRenderer : pointRenderers) {
-						List<Shape> punchShapes = new ArrayList<>(points.size());
+						var punchShapes = new ArrayList<Shape>(points.size());
 						for (DataPoint point : points) {
 							Shape punchShape = pointRenderer.getPointShape(point.data);
 							punchShapes.add(punchShape);
@@ -429,12 +429,12 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 					drawable.draw(context);
 				}
 
-				List<LineRenderer> lineRenderers = new ArrayList<>(plot.getLineRenderers(s));
+				var lineRenderers = new ArrayList<LineRenderer>(plot.getLineRenderers(s));
 				Collections.reverse(lineRenderers);
 				for (LineRenderer lineRenderer : lineRenderers) {
 					Shape punchedLine = lineRenderer.getLineShape(points);
 					for (PointRenderer pointRenderer : pointRenderers) {
-						List<Shape> punchShapes = new ArrayList<>(points.size());
+						var punchShapes = new ArrayList<Shape>(points.size());
 						for (DataPoint point : points) {
 							Shape punchShape = pointRenderer.getPointShape(point.data);
 							punchShapes.add(punchShape);
@@ -498,7 +498,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			}
 
 			// Subtract shapes of data points from the line to yield gaps.
-			Area punched = new Area(shape);
+			var punched = new Area(shape);
 			for (int pointIndex = 0; pointIndex < dataPoints.size(); pointIndex++) {
 				DataPoint p = dataPoints.get(pointIndex);
 				punched = GeometryUtils.punch(punched, gap, roundedGaps,
@@ -665,21 +665,21 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 
 		@Override
 		public void draw(DrawingContext context) {
-			Row symbolRow = new Row(DUMMY_DATA, 0);
+			var symbolRow = new Row(DUMMY_DATA, 0);
 			Rectangle2D bounds = getBounds();
 
-			Axis axisX = new Axis(0.0, 1.0);
-			AxisRenderer axisRendererX = new LinearRenderer2D();
+			var axisX = new Axis(0.0, 1.0);
+			var axisRendererX = new LinearRenderer2D();
 			axisRendererX.setShape(new Line2D.Double(
 					bounds.getMinX(), bounds.getCenterY(),
 					bounds.getMaxX(), bounds.getCenterY()));
-			Axis axisY = new Axis(0.0, 1.0);
-			AxisRenderer axisRendererY = new LinearRenderer2D();
+			var axisY = new Axis(0.0, 1.0);
+			var axisRendererY = new LinearRenderer2D();
 			axisRendererY.setShape(new Line2D.Double(
 					bounds.getCenterX(), bounds.getMaxY(),
 					bounds.getCenterX(), bounds.getMinY()));
 
-			PointData pointData = new PointData(
+			var pointData = new PointData(
 					Arrays.asList(axisX, axisY),
 					Arrays.asList(axisRendererX, axisRendererY),
 					symbolRow, symbolRow.getIndex(), 0);
@@ -774,8 +774,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	@Override
 	protected void createDefaultAxes() {
 		// Create x axis and y axis by default
-		Axis axisX = new Axis();
-		Axis axisY = new Axis();
+		var axisX = new Axis();
+		var axisY = new Axis();
 		setAxis(AXIS_X, axisX);
 		setAxis(AXIS_Y, axisY);
 	}
@@ -783,8 +783,8 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	@Override
 	protected void createDefaultAxisRenderers() {
 		// Create renderers for x and y axes by default
-		AxisRenderer axisXRenderer = new LinearRenderer2D();
-		AxisRenderer axisYRenderer = new LinearRenderer2D();
+		var axisXRenderer = new LinearRenderer2D();
+		var axisYRenderer = new LinearRenderer2D();
 		setAxisRenderer(AXIS_X, axisXRenderer);
 		setAxisRenderer(AXIS_Y, axisYRenderer);
 	}
@@ -1077,7 +1077,7 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		autoscaleAxes();
 
 		// Assign default renderers
-		PointRenderer pointRendererDefault = new DefaultPointRenderer2D();
+		var pointRendererDefault = new DefaultPointRenderer2D();
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
 		// FIXME: Overwrites possible present point and line renderers

@@ -150,7 +150,7 @@ public class EnumeratedData extends AbstractDataSource
 				new DataChangeEvent(this, 0, 0, null, null)
 			};
 		}
-		DataChangeEvent[] eventsTx = new DataChangeEvent[events.length + 1];
+		var eventsTx = new DataChangeEvent[events.length + 1];
 		for (int i = 0; i < eventsTx.length; i++) {
 			DataChangeEvent event;
 			int col, row;

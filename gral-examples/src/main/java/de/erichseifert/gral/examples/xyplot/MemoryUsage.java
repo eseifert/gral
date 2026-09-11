@@ -38,7 +38,6 @@ import javax.swing.Timer;
 
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSeries;
-import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.examples.ExamplePanel;
@@ -47,11 +46,9 @@ import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.plots.Plot;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
-import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
@@ -144,21 +141,21 @@ public class MemoryUsage extends ExamplePanel {
 
 	@SuppressWarnings("unchecked")
 	public MemoryUsage() {
-		DataTable data = new DataTable(Double.class, Long.class, Long.class, Long.class);
+		var data = new DataTable(Double.class, Long.class, Long.class, Long.class);
 		double time = System.currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
 			data.add(time - i*INTERVAL, null, null, null);
 		}
 
 		// Use columns 0 and 1 for physical system memory
-		DataSource memSysUsage = new DataSeries("Used by system", data, 0, 1);
+		var memSysUsage = new DataSeries("Used by system", data, 0, 1);
 		// Use columns 0 and 2 for JVM memory
-		DataSource memVm = new DataSeries("Allocated by Java VM", data, 0, 2);
+		var memVm = new DataSeries("Allocated by Java VM", data, 0, 2);
 		// Use columns 0 and 2 for JVM memory usage
-		DataSource memVmUsage = new DataSeries("Used by Java VM", data, 0, 3);
+		var memVmUsage = new DataSeries("Used by Java VM", data, 0, 3);
 
 		// Create new xy-plot
-		XYPlot plot = new XYPlot(memSysUsage, memVm, memVmUsage);
+		var plot = new XYPlot(memSysUsage, memVm, memVmUsage);
 
 		// Format  plot
 		plot.setInsets(new Insets2D.Double(20.0, 90.0, 40.0, 20.0));
@@ -185,7 +182,7 @@ public class MemoryUsage extends ExamplePanel {
 
 		// Format first data series
 		plot.setPointRenderers(memSysUsage, null);
-		AreaRenderer area1 = new DefaultAreaRenderer2D();
+		var area1 = new DefaultAreaRenderer2D();
 		area1.setColor(new LinearGradientPaint(
 			0f, 0f, 0f, 1f,
 			new float[] {0f, 1f},
@@ -198,13 +195,13 @@ public class MemoryUsage extends ExamplePanel {
 
 		// Format second data series
 		plot.setPointRenderers(memVm, null);
-		LineRenderer line2 = new DefaultLineRenderer2D();
+		var line2 = new DefaultLineRenderer2D();
 		line2.setColor(GraphicsUtils.deriveWithAlpha(color1Dark, 128));
 		plot.setLineRenderers(memVm, line2);
 
 		// Format third data series
 		plot.setPointRenderers(memVmUsage, null);
-		AreaRenderer area3 = new DefaultAreaRenderer2D();
+		var area3 = new DefaultAreaRenderer2D();
 		area3.setColor(new LinearGradientPaint(
 				0f, 0f, 0f, 1f,
 				new float[] {0f, 1f},
@@ -216,14 +213,14 @@ public class MemoryUsage extends ExamplePanel {
 		plot.setAreaRenderers(memVmUsage, area3);
 
 		// Add plot to frame
-		InteractivePanel plotPanel = new InteractivePanel(plot);
+		var plotPanel = new InteractivePanel(plot);
 		plotPanel.setPannable(false);
 		plotPanel.setZoomable(false);
 		add(plotPanel, BorderLayout.CENTER);
 
 		// Start watching memory
-		UpdateTask updateTask = new UpdateTask(data, plot, plotPanel);
-		Timer updateTimer = new Timer(INTERVAL, updateTask);
+		var updateTask = new UpdateTask(data, plot, plotPanel);
+		var updateTimer = new Timer(INTERVAL, updateTask);
 		updateTimer.setCoalesce(false);
 		updateTimer.start();
 	}

@@ -59,7 +59,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testCreate() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		assertEquals(table.getColumnCount(), filter.getColumnCount());
 		assertEquals(table.getRowCount(), filter.getRowCount());
 		assertEquals(table.getColumnCount(), filter.getColumnTypes().length);
@@ -73,13 +73,13 @@ public class ConvolutionTest {
 
 	@Test
 	public void testKernel() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		assertEquals(kernel, filter.getKernel());
 	}
 
 	@Test
 	public void testMode() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
 
 		for (Filter2D.Mode mode : Filter2D.Mode.values()) {
 			filter.setMode(mode);
@@ -89,7 +89,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testColumns() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0);
 
 		assertEquals(3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -102,7 +102,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeOmit() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
 
 		assertTrue(Double.isNaN(((Number) filter.get(0, 0)).doubleValue()));
 		assertEquals(6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -115,7 +115,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeZero() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 
 		assertEquals( 3.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -128,7 +128,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeRepeat() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.REPEAT, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.REPEAT, 0, 1);
 
 		assertEquals( 4.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -141,7 +141,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeMirror() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.MIRROR, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.MIRROR, 0, 1);
 
 		assertEquals( 5.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -154,7 +154,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testModeCircular() {
-		Convolution filter = new Convolution(table, kernel, Filter2D.Mode.CIRCULAR, 0, 1);
+		var filter = new Convolution(table, kernel, Filter2D.Mode.CIRCULAR, 0, 1);
 
 		assertEquals(11.0, ((Number) filter.get(0, 0)).doubleValue(), DELTA);
 		assertEquals( 6.0, ((Number) filter.get(0, 1)).doubleValue(), DELTA);
@@ -167,7 +167,7 @@ public class ConvolutionTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Convolution original = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
+		var original = new Convolution(table, kernel, Filter2D.Mode.ZERO, 0, 1);
 		Convolution deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata

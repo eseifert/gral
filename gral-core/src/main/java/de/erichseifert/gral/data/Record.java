@@ -28,12 +28,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Record implements Iterable<Comparable<?>>, Serializable {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -4745244626788459039L;
 
-	private Comparable[] values;
+	private Comparable<?>[] values;
 
 	public Record(List<? extends Comparable<?>> values) {
 		this.values = values.toArray(new Comparable[0]);
@@ -53,12 +54,7 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 
 	@Override
 	public Iterator<Comparable<?>> iterator() {
-		// More readable version using Arrays.asList is prevented by broken Generics system
-		List<Comparable<?>> list = new ArrayList<>(values.length);
-		for (Comparable value : values) {
-			list.add(value);
-		}
-		return list.iterator();
+		return Arrays.asList(values).iterator();
 	}
 
 	public boolean isNumeric(int index) {
@@ -81,23 +77,13 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder representation = new StringBuilder("(");
-		for (int elementIndex = 0; elementIndex < values.length; elementIndex++) {
-			Comparable element = values[elementIndex];
-			representation.append(element);
-			if (elementIndex != values.length - 1) {
-				representation.append(", ");
-			}
-		}
-		representation.append(")");
-		return representation.toString();
+		return Arrays.stream(values)
+				.map(String::valueOf)
+				.collect(Collectors.joining(", ", "(", ")"));
 	}
 
 	public Record insert(Comparable<?> value, int position) {
-		List<Comparable<?>> recordCopyAsList = new ArrayList<>(values.length + 1);
-		for (Comparable<?> v : values) {
-			recordCopyAsList.add(v);
-		}
+		var recordCopyAsList = new ArrayList<Comparable<?>>(Arrays.asList(values));
 		recordCopyAsList.add(position, value);
 		return new Record(recordCopyAsList);
 	}

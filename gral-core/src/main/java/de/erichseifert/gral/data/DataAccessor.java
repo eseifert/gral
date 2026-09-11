@@ -156,7 +156,7 @@ public abstract class DataAccessor
 	 * @return Calculated value.
 	 */
 	public double getStatistics(String key) {
-		Statistics statistics = new Statistics(this);
+		var statistics = new Statistics(this);
 		return statistics.get(key);
 	}
 

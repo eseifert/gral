@@ -35,7 +35,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.junit.Test;
 
 import org.hamcrest.CoreMatchers;
@@ -64,7 +63,7 @@ public class RecordTest {
 
 	@Test
 	public void testAllowsRetrievingValues() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		assertThat(record.<Double>get(0), is(-3.0));
 		assertThat(record.<Integer>get(1), is(1));
@@ -74,23 +73,23 @@ public class RecordTest {
 
 	@Test
 	public void testIteratorReturnsValues() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		assertThat(record, CoreMatchers.<Comparable<?>>hasItems(-3.0, 1, "SomeString", null));
 	}
 
 	@Test
 	public void testSizeReturnsNumberOfElements() {
-		Record record = new Record(null, null, null);
+		var record = new Record(null, null, null);
 
 		assertThat(record.size(), is(3));
 	}
 
 	@Test
 	public void testIsSerializable() throws IOException {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		var out = new ByteArrayOutputStream();
 		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(record);
 		} catch (NotSerializableException e) {
@@ -101,8 +100,8 @@ public class RecordTest {
 
 	@Test
 	public void testRecordsWithDifferentSizeAreUnequal() {
-		Record shorterRecord = new Record(0, 1);
-		Record longerRecord = new Record(0, 1, 2, 3);
+		var shorterRecord = new Record(0, 1);
+		var longerRecord = new Record(0, 1, 2, 3);
 
 		boolean equal = shorterRecord.equals(longerRecord);
 
@@ -111,8 +110,8 @@ public class RecordTest {
 
 	@Test
 	public void testRecordsWithIdenticalContentsAreEqual() {
-		Record r1 = new Record(-3.0, 1, "SomeString", null);
-		Record r2 = new Record(-3.0, 1, "SomeString", null);
+		var r1 = new Record(-3.0, 1, "SomeString", null);
+		var r2 = new Record(-3.0, 1, "SomeString", null);
 
 		boolean equal = r1.equals(r2);
 
@@ -121,8 +120,8 @@ public class RecordTest {
 
 	@Test
 	public void testEqualRecordsHaveEqualHashCodes() {
-		Record r1 = new Record(-3.0, 1, "SomeString", null);
-		Record r2 = new Record(-3.0, 1, "SomeString", null);
+		var r1 = new Record(-3.0, 1, "SomeString", null);
+		var r2 = new Record(-3.0, 1, "SomeString", null);
 
 		assertThat(r1, is(r2));
 		assertThat(r1.hashCode(), is(r2.hashCode()));
@@ -130,7 +129,7 @@ public class RecordTest {
 
 	@Test
 	public void testRecordsCanBeUsedInHashBasedCollections() {
-		Set<Record> records = new HashSet<>();
+		var records = new HashSet<Record>();
 		records.add(new Record(-3.0, 1, "SomeString", null));
 
 		assertThat(records.contains(new Record(-3.0, 1, "SomeString", null)), is(true));
@@ -139,7 +138,7 @@ public class RecordTest {
 
 	@Test
 	public void testIsNumericReturnsTrueIfValueIsNumber() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		boolean numeric = record.isNumeric(1);
 
@@ -148,7 +147,7 @@ public class RecordTest {
 
 	@Test
 	public void testIsNumericReturnsFalseIfValueIsNoNumber() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		boolean numeric = record.isNumeric(2);
 
@@ -157,7 +156,7 @@ public class RecordTest {
 
 	@Test
 	public void testIsNumericReturnsFalseIfValueIsNull() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		boolean numeric = record.isNumeric(3);
 
@@ -166,7 +165,7 @@ public class RecordTest {
 
 	@Test
 	public void testToStringReturnsReadableTuple() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 
 		String string = record.toString();
 
@@ -175,8 +174,8 @@ public class RecordTest {
 
 	@Test
 	public void testInsertDoesNotModifyRecord() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
-		Record identicalRecord = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
+		var identicalRecord = new Record(-3.0, 1, "SomeString", null);
 		Comparable<?> someComparable = 5;
 		int somePosition = 2;
 
@@ -187,7 +186,7 @@ public class RecordTest {
 
 	@Test
 	public void testInsertAddsElementAtTheSpecifiedPosition() {
-		Record record = new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
 		Comparable<?> someComparable = 5;
 		int somePosition = 2;
 

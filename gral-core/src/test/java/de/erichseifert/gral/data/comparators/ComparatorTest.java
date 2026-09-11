@@ -79,7 +79,7 @@ public class ComparatorTest {
 		};
 
 		for (int i = 0; i < data.getColumnCount(); i++) {
-			DataComparator comparator = new Ascending(i);
+			var comparator = new Ascending(i);
 			assertEquals(expected[0][i], comparator.compare(row1, row2));
 			assertEquals(expected[1][i], comparator.compare(row2, row3));
 			assertEquals(expected[2][i], comparator.compare(row3, row1));
@@ -101,7 +101,7 @@ public class ComparatorTest {
 		};
 
 		for (int i = 0; i < data.getColumnCount(); i++) {
-			DataComparator comparator = new Descending(i);
+			var comparator = new Descending(i);
 			assertEquals(expected[0][i], comparator.compare(row1, row2));
 			assertEquals(expected[1][i], comparator.compare(row2, row3));
 			assertEquals(expected[2][i], comparator.compare(row3, row1));
@@ -115,14 +115,14 @@ public class ComparatorTest {
 
 	@Test
 	public void testAscendingSerialization() throws IOException, ClassNotFoundException {
-		DataComparator original = new Ascending(0);
+		var original = new Ascending(0);
 		DataComparator deserialized = TestUtils.serializeAndDeserialize(original);
 		assertEquals(original.getColumn(), deserialized.getColumn());
     }
 
 	@Test
 	public void testDescendingSerialization() throws IOException, ClassNotFoundException {
-		DataComparator original = new Descending(0);
+		var original = new Descending(0);
 		DataComparator deserialized = TestUtils.serializeAndDeserialize(original);
 		assertEquals(original.getColumn(), deserialized.getColumn());
     }

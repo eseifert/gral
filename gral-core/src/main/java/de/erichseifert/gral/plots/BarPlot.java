@@ -47,7 +47,6 @@ import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.legends.AbstractLegend;
-import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.plots.legends.ValueLegend;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
@@ -296,7 +295,7 @@ public class BarPlot extends XYPlot {
 			Shape shape = getShape();
 			Rectangle2D shapeBounds = shape.getBounds2D();
 
-			AffineTransform tx = new AffineTransform();
+			var tx = new AffineTransform();
 			tx.translate(x, y);
 			tx.scale(width/shapeBounds.getWidth(), height/shapeBounds.getHeight());
 			tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
@@ -399,7 +398,7 @@ public class BarPlot extends XYPlot {
 		barHeightMin = 0.0;
 		paintAllBars = false;
 
-		Legend legend = new BarPlotLegend(this);
+		var legend = new BarPlotLegend(this);
 		setLegend(legend);
 
 		autoscaleAxes();
@@ -455,7 +454,7 @@ public class BarPlot extends XYPlot {
 		super.add(index, source, visible);
 
 		// Assign default renderers
-		PointRenderer pointRendererDefault = new BarRenderer(this);
+		var pointRendererDefault = new BarRenderer(this);
 		LineRenderer lineRendererDefault = null;
 		AreaRenderer areaRendererDefault = null;
 		// FIXME: Overwrites possible present point and line renderers

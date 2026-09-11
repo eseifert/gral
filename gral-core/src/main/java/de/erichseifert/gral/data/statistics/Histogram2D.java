@@ -95,7 +95,7 @@ public class Histogram2D extends AbstractHistogram2D {
 			}
 			double delta = (max - min) / breakCount;
 
-			Number[] breaks = new Double[breakCount + 1];
+			var breaks = new Double[breakCount + 1];
 			for (int i = 0; i < breaks.length; i++) {
 				breaks[i] = min + i*delta;
 			}

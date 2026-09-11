@@ -92,7 +92,7 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 					axisY, axisYOrigin, true, false);
 		}
 
-		Path2D shape = new Path2D.Double();
+		var shape = new Path2D.Double();
 		if (posOrigin == null) {
 			return shape;
 		}

@@ -22,7 +22,6 @@
 package de.erichseifert.gral.data.statistics;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.erichseifert.gral.util.DataUtils;
@@ -131,12 +130,8 @@ public class Statistics {
 			}
 			double val = numericCell.doubleValue();
 
-			if (!stats.containsKey(MIN) || val < stats.get(MIN)) {
-				stats.put(MIN, val);
-			}
-			if (!stats.containsKey(MAX) || val > stats.get(MAX)) {
-				stats.put(MAX, val);
-			}
+			stats.merge(MIN, val, Math::min);
+			stats.merge(MAX, val, Math::max);
 
 			n++;
 
@@ -184,7 +179,7 @@ public class Statistics {
 	 */
 	private void createDistributionStats(Iterable<? extends Comparable<?>> data, Map<String, Double> stats) {
 		// Create sorted list of data
-		List<Double> values = new SortedList<>();
+		var values = new SortedList<Double>();
 		for (Comparable<?> cell : data) {
 			if (!(cell instanceof Number)) {
 				continue;
@@ -196,7 +191,7 @@ public class Statistics {
 			}
 		}
 
-		if (values.size() <= 0) {
+		if (values.isEmpty()) {
 			return;
 		}
 

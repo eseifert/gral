@@ -51,10 +51,10 @@ public class LineAreaRendererTest {
 
 	@Before
 	public void setUp() {
-		Axis axisX = new Axis(-5.0, 5.0);
-		Axis axisY = new Axis(-5.0, 5.0);
-		AxisRenderer axisRendererX = new LinearRenderer2D();
-		AxisRenderer axisRendererY = new LinearRenderer2D();
+		var axisX = new Axis(-5.0, 5.0);
+		var axisY = new Axis(-5.0, 5.0);
+		var axisRendererX = new LinearRenderer2D();
+		var axisRendererY = new LinearRenderer2D();
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
@@ -64,7 +64,7 @@ public class LineAreaRendererTest {
 	@Test
 	public void testArea() {
 		// Get line
-		AreaRenderer r = new LineAreaRenderer2D();
+		var r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
@@ -75,22 +75,22 @@ public class LineAreaRendererTest {
 
 		// Draw area
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertNotEmpty(image);
 	}
 
 	@Test
 	public void testShapeNoPoints() {
-		AreaRenderer r = new LineAreaRenderer2D();
-		List<DataPoint> points = new LinkedList<>();
+		var r = new LineAreaRenderer2D();
+		var points = new LinkedList<DataPoint>();
 		Shape shape = r.getAreaShape(points);
 		assertNull(shape);
 	}
 
 	@Test
 	public void testShapeNullPoints() {
-		AreaRenderer r = new LineAreaRenderer2D();
+		var r = new LineAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList((DataPoint) null);
 		Shape shape = r.getAreaShape(points);
 		assertNull(shape);
@@ -98,8 +98,8 @@ public class LineAreaRendererTest {
 
 	@Test
 	public void testShapeNullRenderer() {
-		AreaRenderer r = new LineAreaRenderer2D();
-		PointData data2 = new PointData(
+		var r = new LineAreaRenderer2D();
+		var data2 = new PointData(
 			data.axes,
 			Arrays.asList((AxisRenderer) null, null),
 			null, 0, 0);
@@ -113,7 +113,7 @@ public class LineAreaRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AreaRenderer original = new DefaultAreaRenderer2D();
+		var original = new DefaultAreaRenderer2D();
 		@SuppressWarnings("unused")
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
     }

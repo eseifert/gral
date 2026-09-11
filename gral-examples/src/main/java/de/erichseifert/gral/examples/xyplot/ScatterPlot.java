@@ -42,13 +42,13 @@ public class ScatterPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public ScatterPlot() {
 		// Generate 100,000 data points
-		DataTable data = new DataTable(Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class);
 		for (int i = 0; i <= SAMPLE_COUNT; i++) {
 			data.add(random.nextGaussian()*2.0,  random.nextGaussian()*2.0);
 		}
 
 		// Create a new xy-plot
-		XYPlot plot = new XYPlot(data);
+		var plot = new XYPlot(data);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));

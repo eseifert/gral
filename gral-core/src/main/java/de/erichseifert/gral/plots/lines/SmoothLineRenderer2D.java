@@ -89,11 +89,11 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		double smoothness = getSmoothness().doubleValue();
 
 		// Construct shape
-		Path2D shape = new Path2D.Double();
+		var shape = new Path2D.Double();
 
 		Point2D p0 = null, p1 = null, p2 = null, p3 = null;
-		Point2D ctrl1 = new Point2D.Double();
-		Point2D ctrl2 = new Point2D.Double();
+		var ctrl1 = new Point2D.Double();
+		var ctrl2 = new Point2D.Double();
 		for (DataPoint point : points) {
 			if (point == null) {
 				continue;
@@ -164,13 +164,13 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 			p3 = p2;
 		}
 
-		Point2D c1 = new Point2D.Double(
+		var c1 = new Point2D.Double(
 			(p0.getX() + p1.getX()) / 2.0,
 			(p0.getY() + p1.getY()) / 2.0);
-		Point2D c2 = new Point2D.Double(
+		var c2 = new Point2D.Double(
 			(p1.getX() + p2.getX()) / 2.0,
 			(p1.getY() + p2.getY()) / 2.0);
-		Point2D c3 = new Point2D.Double(
+		var c3 = new Point2D.Double(
 			(p2.getX() + p3.getX()) / 2.0,
 			(p2.getY() + p3.getY()) / 2.0);
 
@@ -181,10 +181,10 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 		double k1 = len1 / (len1 + len2);
 		double k2 = len2 / (len2 + len3);
 
-		Point2D m1 = new Point2D.Double(
+		var m1 = new Point2D.Double(
 			c1.getX() + (c2.getX() - c1.getX()) * k1,
 			c1.getY() + (c2.getY() - c1.getY()) * k1);
-		Point2D m2 = new Point2D.Double(
+		var m2 = new Point2D.Double(
 			c2.getX() + (c3.getX() - c2.getX()) * k2,
 			c2.getY() + (c3.getY() - c2.getY()) * k2);
 

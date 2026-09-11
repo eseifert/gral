@@ -21,13 +21,13 @@
  */
 package de.erichseifert.gral.util;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -257,9 +257,9 @@ public abstract class StatefulTokenizer {
 	 * @return List of tokens.
 	 */
 	public List<Token> tokenize(String data) {
-		LinkedList<Token> tokens = new LinkedList<>();
+		var tokens = new LinkedList<Token>();
 
-		Stack<String> states = new Stack<>();
+		var states = new ArrayDeque<String>();
 		states.push(INITIAL_STATE);
 
 		int pos = 0;

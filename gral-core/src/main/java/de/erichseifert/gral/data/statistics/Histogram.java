@@ -56,8 +56,8 @@ public class Histogram implements Iterable<Integer> {
 	}
 
 	private static Number[] getEquidistantBreaks(Iterable<Comparable<?>> data, int breakCount) {
-		Number[] breaks = new Number[breakCount];
-		Statistics statistics = new Statistics(data);
+		var breaks = new Number[breakCount];
+		var statistics = new Statistics(data);
 		double minValue = statistics.get(Statistics.MIN);
 		double maxValue = statistics.get(Statistics.MAX);
 		double range = maxValue - minValue;

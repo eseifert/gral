@@ -28,7 +28,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 
 public class DrawableWriterTest {
@@ -45,9 +44,9 @@ public class DrawableWriterTest {
 
 	@Test
 	public void testWrite() {
-		Drawable d = new DrawableContainer();
+		var d = new DrawableContainer();
 		for (String format : FORMATS) {
-			ByteArrayOutputStream dest = new ByteArrayOutputStream();
+			var dest = new ByteArrayOutputStream();
 			DrawableWriter writer = DrawableWriterFactory.getInstance().get(format);
 			try {
 				writer.write(d, dest, 320, 240);

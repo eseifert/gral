@@ -81,7 +81,7 @@ public class DataTableTest {
 	@SuppressWarnings("unchecked")
 	public void testCreate() {
 		// Constructor with types
-		DataTable table1 = new DataTable(Integer.class, Double.class, Long.class, Float.class);
+		var table1 = new DataTable(Integer.class, Double.class, Long.class, Float.class);
 		assertEquals(4, table1.getColumnCount());
 		assertEquals(0, table1.getRowCount());
 		Class<? extends Comparable<?>>[] types1 = table1.getColumnTypes();
@@ -91,7 +91,7 @@ public class DataTableTest {
 		assertEquals(Float.class, types1[3]);
 
 		// Constructor with single type
-		DataTable table2 = new DataTable(3, Double.class);
+		var table2 = new DataTable(3, Double.class);
 		assertEquals(3, table2.getColumnCount());
 		assertEquals(0, table1.getRowCount());
 		Class<? extends Comparable<?>>[] types2 = table2.getColumnTypes();
@@ -100,7 +100,7 @@ public class DataTableTest {
 		}
 
 		// Copy constructor
-		DataTable table3 = new DataTable(table1);
+		var table3 = new DataTable(table1);
 		assertEquals(table1.getColumnCount(), table3.getColumnCount());
 		assertEquals(table1.getRowCount(), table3.getRowCount());
 		Class<? extends Comparable<?>>[] types3 = table1.getColumnTypes();
@@ -113,12 +113,12 @@ public class DataTableTest {
 	public void testDataTableCreatedFromColumnsContainsValuesInColumnOrder() {
 		int someRowIndex = 1;
 		// TODO: Properly mock Column objects
-		DataSource firstColumnData = new DummyData(1, someRowIndex + 1, 1.0);
+		var firstColumnData = new DummyData(1, someRowIndex + 1, 1.0);
 		Column<?> firstColumn = firstColumnData.getColumn(0);
-		DataSource secondColumnData = new DummyData(1, someRowIndex + 1, 2.0);
+		var secondColumnData = new DummyData(1, someRowIndex + 1, 2.0);
 		Column<?> secondColumn = secondColumnData.getColumn(0);
 
-		DataSource table = new DataTable(firstColumn, secondColumn);
+		var table = new DataTable(firstColumn, secondColumn);
 
 		assertThat(table.getRecord(1), CoreMatchers.<Comparable<?>>hasItems(firstColumn.get(someRowIndex), secondColumn.get(someRowIndex)));
 	}
@@ -149,7 +149,7 @@ public class DataTableTest {
 
 	@Test
 	public void testAddCollectionReturnsInsertedPosition() {
-		DataTable table = new DataTable();
+		var table = new DataTable();
 		table.add();
 		table.add();
 
@@ -160,8 +160,8 @@ public class DataTableTest {
 
 	@Test
 	public void testContainsARowAfterAddingARecord() {
-		DataTable table = new DataTable();
-		Record record = new Record();
+		var table = new DataTable();
+		var record = new Record();
 
 		table.add(record);
 
@@ -170,7 +170,7 @@ public class DataTableTest {
 
 	@Test
 	public void testEventsAddRecord() {
-		MockDataListener listener = new MockDataListener();
+		var listener = new MockDataListener();
 		table.addDataListener(listener);
 
 		int row = table.getRowCount();
@@ -193,7 +193,7 @@ public class DataTableTest {
 
 	@Test
 	public void testAddRecordInvalidatesStatistics() {
-		DataTable table = new DataTable(Integer.class);
+		var table = new DataTable(Integer.class);
 		table.add(new Record(1));
 		assertEquals(1.0, table.getStatistics().get(Statistics.N), DELTA);
 
@@ -203,8 +203,8 @@ public class DataTableTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddRecordThrowsExceptionIfColumnCountDoesNotMatch() {
-		DataTable table = new DataTable(String.class, Double.class);
-		Record record = new Record("1");
+		var table = new DataTable(String.class, Double.class);
+		var record = new Record("1");
 
 		table.add(record);
 	}
@@ -269,7 +269,7 @@ public class DataTableTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testSort() {
-		DataTable table = new DataTable(Integer.class, Integer.class, Integer.class);
+		var table = new DataTable(Integer.class, Integer.class, Integer.class);
 		int[] original = {
 				9,	1,	3,
 				4,	4,	2,
@@ -314,7 +314,7 @@ public class DataTableTest {
 	public void testEventsAdd() {
 		table.add(12, 34);
 
-		MockDataListener listener = new MockDataListener();
+		var listener = new MockDataListener();
 		table.addDataListener(listener);
 		assertNull(listener.added);
 		assertNull(listener.updated);
@@ -340,7 +340,7 @@ public class DataTableTest {
 	public void testEventsUpdate() {
 		int row = table.add(12, 34);
 
-		MockDataListener listener = new MockDataListener();
+		var listener = new MockDataListener();
 		table.addDataListener(listener);
 		assertNull(listener.added);
 		assertNull(listener.updated);
@@ -364,7 +364,7 @@ public class DataTableTest {
 	public void testEventsRemove() {
 		int row = table.add(12, 34);
 
-		MockDataListener listener = new MockDataListener();
+		var listener = new MockDataListener();
 		table.addDataListener(listener);
 		assertNull(listener.added);
 		assertNull(listener.updated);
@@ -388,7 +388,7 @@ public class DataTableTest {
 
 	@Test
 	public void testEventsClear() {
-		MockDataListener listener = new MockDataListener();
+		var listener = new MockDataListener();
 		table.addDataListener(listener);
 		assertNull(listener.added);
 		assertNull(listener.updated);
@@ -442,7 +442,7 @@ public class DataTableTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testStatisticsAreUpdatedAfterDataChanges() {
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		data.add(1);
 		data.add(2);
 
@@ -468,9 +468,9 @@ public class DataTableTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testDerivedDataSourceStatisticsAreUpdatedAfterDataChanges() {
-		DataTable data = new DataTable(Integer.class, Integer.class);
+		var data = new DataTable(Integer.class, Integer.class);
 		data.add(1, 2);
-		DataSeries series = new DataSeries(data, 1);
+		var series = new DataSeries(data, 1);
 
 		assertEquals(2.0, series.getStatistics().get(Statistics.SUM), DELTA);
 

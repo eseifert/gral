@@ -28,7 +28,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
@@ -271,7 +270,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				// Take care of old clipping region. This is used when getting
 				// scrolled in a JScrollPane for example.
 				if (clipBoundsOld != null) {
-					Area clipBoundsNew = new Area(clipBoundsOld);
+					var clipBoundsNew = new Area(clipBoundsOld);
 					clipBoundsNew.intersect(new Area(clipBounds));
 					clipBounds = clipBoundsNew;
 				}
@@ -323,7 +322,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				// Draw graphics
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
-					PointData pointData = new PointData(
+					var pointData = new PointData(
 						axes, axisRenderers, row, row.getIndex(), 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable point = pointRenderer.getPoint(pointData, shape);
@@ -333,7 +332,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				// Draw labels
 				for (int rowIndex = 0; rowIndex < s.getRowCount(); rowIndex++) {
 					Row row = s.getRow(rowIndex);
-					PointData pointData = new PointData(
+					var pointData = new PointData(
 						axes, axisRenderers, row, row.getIndex(), 0);
 					Shape shape = pointRenderer.getPointShape(pointData);
 					Drawable point = pointRenderer.getValue(pointData, shape);
@@ -573,25 +572,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				sliceStart, sliceSpan,
 				Arc2D.PIE
 			);
-			Area doughnutSlice = new Area(pieSlice);
+			var doughnutSlice = new Area(pieSlice);
 
 			double gap = getGap();
 			if (gap > 0.0) {
-				Stroke sliceStroke =
-					new BasicStroke((float) (gap*fontSize));
-				Area sliceContour =
-					new Area(sliceStroke.createStrokedShape(pieSlice));
+				var sliceStroke = new BasicStroke((float) (gap*fontSize));
+				var sliceContour = new Area(sliceStroke.createStrokedShape(pieSlice));
 				doughnutSlice.subtract(sliceContour);
 			}
 
 			double radiusRelInner = getInnerRadius();
 			if (radiusRelInner > 0.0 && radiusRelInner < radiusRelOuter) {
 				double radiusInner = radius*radiusRelInner;
-				Ellipse2D inner = new Ellipse2D.Double(
+				var inner = new Ellipse2D.Double(
 					-radiusInner, -radiusInner,
 					2.0*radiusInner, 2.0*radiusInner
 				);
-				Area hole = new Area(inner);
+				var hole = new Area(inner);
 				doughnutSlice.subtract(hole);
 			}
 
@@ -687,7 +684,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			double dirY = Math.sin(angle);
 
 			// Create a label with the settings
-			Label label = new Label(text);
+			var label = new Label(text);
 			label.setAlignmentX(1.0 - 0.5*dirX - 0.5);
 			label.setAlignmentY(0.5*dirY + 0.5);
 			label.setRotation(rotation);
@@ -772,7 +769,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@Override
 		protected Iterable<Row> getEntries(DataSource source) {
 			Iterable<Row> slicesAndGaps = super.getEntries(source);
-			List<Row> slices = new LinkedList<>();
+			var slices = new LinkedList<Row>();
 			for (Row row : slicesAndGaps) {
 				if (!row.isColumnNumeric(0)) {
 					continue;
@@ -818,10 +815,10 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		public void draw(DrawingContext context) {
 			Rectangle2D bounds = getBounds();
 
-			Shape shape = new Rectangle2D.Double(
+			var shape = new Rectangle2D.Double(
 					0.0, 0.0, bounds.getWidth(), bounds.getHeight());
 
-			PointData pointData = new PointData(
+			var pointData = new PointData(
 					asList((Axis) null),
 					asList((AxisRenderer) null),
 					row, row.getIndex(), 0);
@@ -864,7 +861,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	@Override
 	protected void createDefaultAxes() {
 		// Create x axis and y axis by default
-		Axis axisPie = new Axis();
+		var axisPie = new Axis();
 		setAxis(AXIS_TANGENTIAL, axisPie);
 	}
 
@@ -900,9 +897,9 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	@Override
 	protected void createDefaultAxisRenderers() {
 		// Create a linear renderer for the pie slices by default
-		AxisRenderer renderer = new LinearRenderer2D();
+		var renderer = new LinearRenderer2D();
 		// Create a circle with radius 1.0 as shape for the axis
-		Shape shape = new Ellipse2D.Double(-1.0, -1.0, 2.0, 2.0);
+		var shape = new Ellipse2D.Double(-1.0, -1.0, 2.0, 2.0);
 		renderer.setShape(shape);
 		// Don't show axis
 		renderer.setShapeVisible(false);
@@ -917,7 +914,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
 
-		PointRenderer pointRendererDefault = new PieSliceRenderer(this);
+		var pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
 
 		super.add(index, source, visible);
@@ -995,11 +992,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 				}
 			});
 
-			setColumnTypes(getColumnTypesFor(data).toArray(new Class[] {}));
+			setColumnTypes(getColumnTypesFor(data).toArray(new Class[0]));
 		}
 
 		private List<Class<? extends Comparable<?>>> getColumnTypesFor(DataSource data) {
-			List<Class<? extends Comparable<?>>> columnTypes = new LinkedList<>();
+			var columnTypes = new LinkedList<Class<? extends Comparable<?>>>();
 			for (int colIndex = 0; colIndex < data.getColumnCount(); colIndex++) {
 				Column<?> column = data.getColumn(colIndex);
 				if (column.isNumeric()) {
@@ -1056,15 +1053,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		 */
 		private List<Double> getSliceEnds() {
 			if (sliceEnds == null) {
-				List<Double> absoluteValues =
-					new ArrayList<>(data.getRowCount());
+				var absoluteValues = new ArrayList<Double>(data.getRowCount());
 				for (Comparable<?> value : data.getColumn(0)) {
 					double numericValue = (value instanceof Number)
 						? ((Number) value).doubleValue() : 0.0;
 					absoluteValues.add(Math.abs(numericValue));
 				}
-				List<Double> accumulatedValues =
-					new ArrayList<>(absoluteValues.size());
+				var accumulatedValues = new ArrayList<Double>(absoluteValues.size());
 				for (Double accumulatedValue : new Accumulation<>(absoluteValues)) {
 					accumulatedValues.add(accumulatedValue);
 				}

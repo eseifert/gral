@@ -51,41 +51,42 @@ public class ConvolutionExample extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public ConvolutionExample() {
 		// Generate 200 data points
-		DataTable data = new DataTable(Double.class, Double.class);
-		Random r = new Random();
+		var data = new DataTable(Double.class, Double.class);
+		var r = new Random();
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			double x = i/2.0/Math.PI;
 			double yError = Math.sqrt(3.0*0.1)*r.nextGaussian();
 			double y = 10.0*Math.sin(x/5.0) + yError*yError*yError;
 			data.add(x, y);
 		}
-		DataSeries ds = new DataSeries("Data", data, 0, 1);
+		var ds = new DataSeries("Data", data, 0, 1);
 
 		final double KERNEL_VARIANCE = 5.0;
 
 		// Create a smoothed data series from a binomial (near-gaussian) convolution filter
 		Kernel kernelLowpass = Kernel.getBinomial(KERNEL_VARIANCE).normalize();
-		Filter2D dataLowpass = new Convolution(data, kernelLowpass, Filter2D.Mode.REPEAT, 1);
-		DataSeries dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
+		var dataLowpass = new Convolution(data, kernelLowpass, Filter2D.Mode.REPEAT, 1);
+		var dsLowpass = new DataSeries("Lowpass", dataLowpass, 0, 1);
 
 		// Create a derived data series from a binomial convolution filter
 		Kernel kernelHighpass = Kernel.getBinomial(KERNEL_VARIANCE).normalize().negate().add(new Kernel(1.0));
-		Filter2D dataHighpass = new Convolution(data, kernelHighpass, Filter2D.Mode.REPEAT, 1);
-		DataSeries dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
+		var dataHighpass = new Convolution(data, kernelHighpass, Filter2D.Mode.REPEAT, 1);
+		var dsHighpass = new DataSeries("Highpass", dataHighpass, 0, 1);
 
 		// Create a new data series that calculates the moving average using a custom convolution kernel
 		int kernelMovingAverageSize = (int)Math.round(4.0*KERNEL_VARIANCE);
 		Kernel kernelMovingAverage = Kernel.getUniform(kernelMovingAverageSize, kernelMovingAverageSize - 1, 1.0).normalize();
-		Filter2D dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter2D.Mode.OMIT, 1);
-		DataSeries dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
+		var dataMovingAverage = new Convolution(data, kernelMovingAverage, Filter2D.Mode.OMIT, 1);
+		var dsMovingAverage = new DataSeries("Moving Average", dataMovingAverage, 0, 1);
 
 		// Create a new data series that calculates the moving median
 		int kernelMovingMedianSize = (int)Math.round(4.0*KERNEL_VARIANCE);
-		Filter2D dataMovingMedian = new Median(data, kernelMovingMedianSize, kernelMovingMedianSize - 1, Filter2D.Mode.OMIT, 1);
-		DataSeries dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
+		var dataMovingMedian = new Median(data, kernelMovingMedianSize,
+				kernelMovingMedianSize - 1, Filter2D.Mode.OMIT, 1);
+		var dsMovingMedian = new DataSeries("Moving Median", dataMovingMedian, 0, 1);
 
 		// Create a new xy-plot
-		XYPlot plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
+		var plot = new XYPlot(ds, dsLowpass, dsHighpass, dsMovingAverage, dsMovingMedian);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 40.0, 40.0));
@@ -108,7 +109,7 @@ public class ConvolutionExample extends ExamplePanel {
 
 	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
 		plot.setPointRenderers(series, null);
-		DefaultLineRenderer2D line = new DefaultLineRenderer2D();
+		var line = new DefaultLineRenderer2D();
 		line.setColor(color);
 		plot.setLineRenderers(series, line);
 	}

@@ -55,7 +55,7 @@ public class DrawingContextTest {
 
 	@Test
 	public void testCreateParams() {
-		DrawingContext context = new DrawingContext(graphics, Quality.QUALITY, Target.VECTOR);
+		var context = new DrawingContext(graphics, Quality.QUALITY, Target.VECTOR);
 		assertEquals(graphics, context.getGraphics());
 		assertEquals(Quality.QUALITY, context.getQuality());
 		assertEquals(Target.VECTOR, context.getTarget());

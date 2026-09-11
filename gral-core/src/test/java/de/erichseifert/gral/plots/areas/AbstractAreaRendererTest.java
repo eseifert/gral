@@ -66,7 +66,7 @@ public class AbstractAreaRendererTest {
 		boolean gapRounded = true;
 		Color color = Color.RED;
 
-		MockAbstractAreaRenderer r = new MockAbstractAreaRenderer();
+		var r = new MockAbstractAreaRenderer();
 		r.setGap(gap);
 		r.setGapRounded(gapRounded);
 		r.setColor(color);
@@ -78,7 +78,7 @@ public class AbstractAreaRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AreaRenderer original = new MockAbstractAreaRenderer();
+		var original = new MockAbstractAreaRenderer();
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getGap(), deserialized.getGap(), DELTA);

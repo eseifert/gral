@@ -27,13 +27,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Abstract implementation of {@code IOFactory} which provides basic
@@ -61,17 +62,11 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 			throw new IOException(MessageFormat.format(
 				"Property file not found: {0}", propFileName)); //$NON-NLS-1$
 		}
-		Properties props = new Properties();
+		var props = new Properties();
 		while (propFiles.hasMoreElements()) {
 			URL propURL = propFiles.nextElement();
-			InputStream stream = null;
-			try {
-				stream = propURL.openStream();
+			try (InputStream stream = propURL.openStream()) {
 				props.load(stream);
-			} finally {
-				if (stream != null) {
-					stream.close();
-				}
 			}
 			// Parse property files and register entries as items
 			for (Map.Entry<Object, Object> prop : props.entrySet()) {
@@ -120,15 +115,10 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 * @return Supported capabilities.
 	 */
 	public List<IOCapabilities> getCapabilities() {
-		List<IOCapabilities> caps =
-				new ArrayList<>(entries.size());
-		for (String mimeType : entries.keySet()) {
-			IOCapabilities capability = getCapabilities(mimeType);
-			if (capability != null) {
-				caps.add(capability);
-			}
-		}
-		return caps;
+		return entries.keySet().stream()
+				.map(this::getCapabilities)
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -136,9 +126,7 @@ public abstract class AbstractIOFactory<T> implements IOFactory<T> {
 	 * @return Supported formats.
 	 */
 	public String[] getSupportedFormats() {
-		String[] formats = new String[entries.size()];
-		entries.keySet().toArray(formats);
-		return formats;
+		return entries.keySet().toArray(new String[0]);
 	}
 
 	/**

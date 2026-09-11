@@ -43,7 +43,7 @@ public class SimpleBarPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public SimpleBarPlot() {
 		// Create example data
-		DataTable data = new DataTable(Double.class, Integer.class, String.class);
+		var data = new DataTable(Double.class, Integer.class, String.class);
 		data.add(0.1,  1, "January");
 		data.add(0.2,  3, "February");
 		data.add(0.3, -2, "March");
@@ -54,7 +54,7 @@ public class SimpleBarPlot extends ExamplePanel {
 		data.add(0.8, 11, "August");
 
 		// Create new bar plot
-		BarPlot plot = new BarPlot(data);
+		var plot = new BarPlot(data);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(40.0, 40.0, 40.0, 40.0));

@@ -94,7 +94,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 		exampleScrollPane = new JScrollPane();
 		setExample(examples[0]);
 
-		JSplitPane listExamplesSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		var listExamplesSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		listExamplesSplitter.setLeftComponent(examplesList);
 		listExamplesSplitter.setRightComponent(exampleScrollPane);
 		listExamplesSplitter.setOneTouchExpandable(true);
@@ -121,7 +121,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new Browser();
+		var frame = new Browser();
 		frame.setVisible(true);
 	}
 }

@@ -32,10 +32,8 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.layout.TableLayout;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -50,7 +48,7 @@ public class StackedPlots extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public StackedPlots() {
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class);
 		double x=0.0, y=0.0;
 		for (x=0.0; x<100.0; x+=2.0) {
 			y += 10.0*random.nextGaussian();
@@ -58,38 +56,38 @@ public class StackedPlots extends ExamplePanel {
 		}
 
 		// Create and format upper plot
-		XYPlot plotUpper = new XYPlot(data);
+		var plotUpper = new XYPlot(data);
 		Color colorUpper = COLOR1;
 		plotUpper.setPointRenderers(data, null);
-		LineRenderer lineUpper = new DefaultLineRenderer2D();
+		var lineUpper = new DefaultLineRenderer2D();
 		lineUpper.setColor(colorUpper);
 		plotUpper.setLineRenderers(data, lineUpper);
-		AreaRenderer areaUpper = new DefaultAreaRenderer2D();
+		var areaUpper = new DefaultAreaRenderer2D();
 		areaUpper.setColor(GraphicsUtils.deriveWithAlpha(colorUpper, 64));
 		plotUpper.setAreaRenderers(data, areaUpper);
 		plotUpper.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
 		// Create and format lower plot
-		XYPlot plotLower = new XYPlot(data);
+		var plotLower = new XYPlot(data);
 		Color colorLower = COLOR1;
 		PointRenderer pointsLower = plotLower.getPointRenderers(data).get(0);
 		pointsLower.setColor(colorLower);
 		pointsLower.setShape(new Ellipse2D.Double(-3, -3, 6, 6));
-		LineRenderer lineLower = new DefaultLineRenderer2D();
+		var lineLower = new DefaultLineRenderer2D();
 		lineLower.setStroke(new BasicStroke(2f));
 		lineLower.setGap(1.0);
 		lineLower.setColor(colorLower);
 		plotLower.setLineRenderers(data, lineLower);
 		plotLower.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
 
-		DrawableContainer plots = new DrawableContainer(new TableLayout(1));
+		var plots = new DrawableContainer(new TableLayout(1));
 		plots.add(plotUpper);
 		plots.add(plotLower);
 
 		// Connect the two plots, i.e. user (mouse) actions affect both plots
 		plotUpper.getNavigator().connect(plotLower.getNavigator());
 
-		InteractivePanel panel = new InteractivePanel(plots);
+		var panel = new InteractivePanel(plots);
 		add(panel);
 	}
 

@@ -53,21 +53,21 @@ public class DataSeriesTest {
 	@Test
 	public void testCreate() {
 		// without name
-		DataSeries unnamed = new DataSeries(table, 2, 1);
+		var unnamed = new DataSeries(table, 2, 1);
 		assertEquals(2, unnamed.getColumnCount());
 		assertEquals(table.getRowCount(), unnamed.getRowCount());
 		assertEquals(unnamed.getColumnCount(), unnamed.getColumnTypes().length);
 		assertEquals(null, unnamed.getName());
 
 		// with name
-		DataSeries named = new DataSeries("foo", table, 2, 1);
+		var named = new DataSeries("foo", table, 2, 1);
 		assertEquals(2, named.getColumnCount());
 		assertEquals(table.getRowCount(), named.getRowCount());
 		assertEquals(named.getColumnCount(), named.getColumnTypes().length);
 		assertEquals("foo", named.getName());
 
 		// without columns
-		DataSeries allCols = new DataSeries("bar", table);
+		var allCols = new DataSeries("bar", table);
 		assertEquals(table.getColumnCount(), allCols.getColumnCount());
 		assertEquals(table.getRowCount(), allCols.getRowCount());
 		assertEquals(allCols.getColumnCount(), allCols.getColumnTypes().length);
@@ -76,7 +76,7 @@ public class DataSeriesTest {
 
 	@Test
 	public void testGetInt() {
-		DataSeries series = new DataSeries(table, 2, 1);
+		var series = new DataSeries(table, 2, 1);
 
 		for (int row = 0; row < series.getRowCount(); row++) {
 			Record rowTable = table.getRecord(row);
@@ -94,7 +94,7 @@ public class DataSeriesTest {
 
 	@Test
 	public void testGetIntInt() {
-		DataSeries series = new DataSeries(table, 2, 1);
+		var series = new DataSeries(table, 2, 1);
 
 		for (int row = 0; row < series.getRowCount(); row++) {
 			assertEquals(table.get(2, row), series.get(0, row));
@@ -109,7 +109,7 @@ public class DataSeriesTest {
 
 	@Test
 	public void testGetColumnCount() {
-		DataSeries series = new DataSeries(table, 2, 1);
+		var series = new DataSeries(table, 2, 1);
 		assertEquals(2, series.getColumnCount());
 	}
 
@@ -134,9 +134,9 @@ public class DataSeriesTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testDataChangeEventsAreMappedToSeriesColumns() {
-		DataTable source = new DataTable(Integer.class, Integer.class, Integer.class);
-		DataSeries series = new DataSeries(source, 2, 0);
-		RecordingDataListener listener = new RecordingDataListener();
+		var source = new DataTable(Integer.class, Integer.class, Integer.class);
+		var series = new DataSeries(source, 2, 0);
+		var listener = new RecordingDataListener();
 		series.addDataListener(listener);
 
 		source.add(1, 2, 3);
@@ -175,9 +175,9 @@ public class DataSeriesTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testDataChangeEventsAreMappedForRepeatedColumns() {
-		DataTable source = new DataTable(Integer.class, Integer.class);
-		DataSeries series = new DataSeries(source, 1, 1);
-		RecordingDataListener listener = new RecordingDataListener();
+		var source = new DataTable(Integer.class, Integer.class);
+		var series = new DataSeries(source, 1, 1);
+		var listener = new RecordingDataListener();
 		series.addDataListener(listener);
 
 		source.add(1, 2);
@@ -188,7 +188,7 @@ public class DataSeriesTest {
 
 	@Test
 	public void testToString() {
-		DataSeries series = new DataSeries("name", table, 2, 1);
+		var series = new DataSeries("name", table, 2, 1);
 		assertEquals("name", series.toString());
 		assertEquals(series.getName(), series.toString());
 	}

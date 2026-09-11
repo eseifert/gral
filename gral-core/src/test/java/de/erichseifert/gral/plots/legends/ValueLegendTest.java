@@ -46,7 +46,7 @@ public class ValueLegendTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		ValueLegend original = new MockValueLegend();
+		var original = new MockValueLegend();
 		ValueLegend deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getLabelColumn(), deserialized.getLabelColumn());

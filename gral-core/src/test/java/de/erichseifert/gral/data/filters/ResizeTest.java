@@ -67,7 +67,7 @@ public class ResizeTest {
 	}
 
 	private void assertFiltered(DataSource data, int cols, int rows, double[] expected) {
-		Resize filter = new Resize(data, cols, rows);
+		var filter = new Resize(data, cols, rows);
 		assertEquals((cols > 0) ? cols : data.getColumnCount(), filter.getColumnCount());
 		assertEquals((rows > 0) ? rows : data.getRowCount(), filter.getRowCount());
 		for (int i = 0; i < expected.length; i++) {
@@ -151,7 +151,7 @@ public class ResizeTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Filter2D original = new Resize(dataDiagonal, 2, 2);
+		var original = new Resize(dataDiagonal, 2, 2);
 		Filter2D deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata

@@ -23,7 +23,6 @@ package de.erichseifert.gral.examples.barplot;
 
 import java.util.Random;
 
-import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.data.statistics.Histogram2D;
@@ -47,8 +46,8 @@ public class HistogramPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public HistogramPlot() {
 		// Create example data
-		Random random = new Random();
-		DataTable data = new DataTable(Double.class);
+		var random = new Random();
+		var data = new DataTable(Double.class);
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			data.add(random.nextGaussian());
 		}
@@ -57,10 +56,10 @@ public class HistogramPlot extends ExamplePanel {
 		Histogram2D histogram = new Histogram2D(data, Orientation.VERTICAL,
 				new Number[] {-4.0, -3.2, -2.4, -1.6, -0.8, 0.0, 0.8, 1.6, 2.4, 3.6, 4.0});
 		// Create a second dimension (x axis) for plotting
-		DataSource histogram2d = new EnumeratedData(histogram, (-4.0 + -3.2)/2.0, 0.8);
+		var histogram2d = new EnumeratedData(histogram, (-4.0 + -3.2)/2.0, 0.8);
 
 		// Create new bar plot
-		BarPlot plot = new BarPlot(histogram2d);
+		var plot = new BarPlot(histogram2d);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 65.0, 50.0, 40.0));
@@ -85,7 +84,7 @@ public class HistogramPlot extends ExamplePanel {
 		barRenderer.setValueVisible(true);
 
 		// Add plot to Swing component
-		InteractivePanel panel = new InteractivePanel(plot);
+		var panel = new InteractivePanel(plot);
 		panel.setPannable(false);
 		panel.setZoomable(false);
 		add(panel);

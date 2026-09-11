@@ -56,14 +56,14 @@ public class AbstractLayoutTest {
 
 	@Test
 	public void testCreate() {
-		AbstractLayout gapped = new MockAbstractLayout(GAP_H, GAP_V);
+		var gapped = new MockAbstractLayout(GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
 	}
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AbstractLayout original = new MockAbstractLayout(GAP_H, GAP_V);
+		var original = new MockAbstractLayout(GAP_H, GAP_V);
 		AbstractLayout deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getGapX(), deserialized.getGapX(), DELTA);

@@ -67,7 +67,7 @@ public abstract class ExamplePanel extends JPanel {
 	 * @return the frame instance used for displaying the example.
 	 */
 	protected JFrame showInFrame() {
-		JFrame frame = new JFrame(getTitle());
+		var frame = new JFrame(getTitle());
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(getPreferredSize());

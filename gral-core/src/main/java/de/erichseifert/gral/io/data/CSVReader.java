@@ -29,7 +29,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -151,42 +150,35 @@ public class CSVReader extends AbstractDataReader {
 	public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
 			throws IOException {
 		// Read all contents from the input stream
-		Scanner scanner = new Scanner(input).useDelimiter("\\Z");
+		var scanner = new Scanner(input).useDelimiter("\\Z");
 		String content = scanner.next();
 
 		// Tokenize the string
 		Character separator = getSetting(SEPARATOR_CHAR);
-		CSVTokenizer tokenizer = new CSVTokenizer(separator);
+		var tokenizer = new CSVTokenizer(separator);
 		List<Token> tokens = tokenizer.tokenize(content);
 
 		// Add row token if there was no trailing line break
 		Token lastToken = tokens.get(tokens.size() - 1);
 		if (lastToken.getType() != CSVTokenType.ROW_SEPARATOR) {
-			Token eof = new Token(lastToken.getEnd(), lastToken.getEnd(),
+			var eof = new Token(lastToken.getEnd(), lastToken.getEnd(),
 				CSVTokenType.ROW_SEPARATOR, "");
 			tokens.add(eof);
 		}
 
 		// Find methods for all column data types that can be used to convert
 		// the text to the column data type
-		Map<Class<? extends Comparable<?>>, Method> parseMethods =
-				new HashMap<>();
+		var parseMethods = new HashMap<Class<? extends Comparable<?>>, Method>();
 		for (Class<? extends Comparable<?>> type : types) {
-			if (parseMethods.containsKey(type)) {
-				continue;
-			}
-			Method parseMethod = getParseMethod(type);
-			if (parseMethod != null) {
-				parseMethods.put(type, parseMethod);
-			}
+			parseMethods.computeIfAbsent(type, CSVReader::getParseMethod);
 		}
 
 		// Process the data and store the data.
-		DataTable data = new DataTable(types);
-		List<Comparable<?>> row = new LinkedList<>();
+		var data = new DataTable(types);
+		var row = new LinkedList<Comparable<?>>();
 		int rowIndex = 0;
 		int colIndex = 0;
-		StringBuilder cellContent = new StringBuilder();
+		var cellContent = new StringBuilder();
 		for (Token token : tokens) {
 			if (token.getType() == CSVTokenType.TEXT ||
 					token.getType() == CSVTokenType.EMPTY_SPACE) {

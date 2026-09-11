@@ -171,7 +171,7 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private DataChangeEvent[] mapEvents(DataChangeEvent... events) {
-		List<DataChangeEvent> mappedEvents = new ArrayList<>(events.length);
+		var mappedEvents = new ArrayList<DataChangeEvent>(events.length);
 		for (DataChangeEvent event : events) {
 			for (int col = 0; col < cols.size(); col++) {
 				if (cols.get(col).intValue() != event.getCol()) {

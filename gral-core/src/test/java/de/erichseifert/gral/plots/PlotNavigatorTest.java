@@ -93,8 +93,8 @@ public class PlotNavigatorTest {
 
 	@Test
 	public void testZoomWithoutLayoutKeepsAxisRange() {
-		Plot plot = new XYPlot(series1, series2);
-		PlotNavigator nav = new XYPlot.XYPlotNavigator((XYPlot) plot);
+		var plot = new XYPlot(series1, series2);
+		var nav = new XYPlot.XYPlotNavigator((XYPlot) plot);
 		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 		double minBefore = axisX.getMin().doubleValue();
 		double maxBefore = axisX.getMax().doubleValue();

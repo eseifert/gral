@@ -165,7 +165,7 @@ public class StatisticsTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testSkewnessOfSymmetricDistribution() {
-		DataTable symmetric = new DataTable(Integer.class);
+		var symmetric = new DataTable(Integer.class);
 		symmetric.add(1);
 		symmetric.add(2);
 		symmetric.add(3);

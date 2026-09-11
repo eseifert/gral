@@ -29,13 +29,10 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.areas.LineAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
@@ -50,7 +47,7 @@ public class AreaPlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public AreaPlot() {
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class, Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class, Double.class, Double.class);
 		for (double x=0.0; x<2.5*Math.PI; x+=Math.PI/15.0) {
 			double y1 = Double.NaN, y2 = Double.NaN, y3 = Double.NaN;
 			if (x>=0.00*Math.PI && x<2.25*Math.PI) {
@@ -66,12 +63,12 @@ public class AreaPlot extends ExamplePanel {
 		}
 
 		// Create data series
-		DataSeries data1 = new DataSeries("red", data, 0, 1);
-		DataSeries data2 = new DataSeries("blue 1", data, 0, 2);
-		DataSeries data3 = new DataSeries("blue 2", data, 0, 3);
+		var data1 = new DataSeries("red", data, 0, 1);
+		var data2 = new DataSeries("blue 1", data, 0, 2);
+		var data3 = new DataSeries("blue 2", data, 0, 3);
 
 		// Create new xy-plot
-		XYPlot plot = new XYPlot(data1, data2, data3);
+		var plot = new XYPlot(data1, data2, data3);
 		plot.setLegendVisible(true);
 		plot.setInsets(new Insets2D.Double(20.0, 40.0, 20.0, 20.0));
 
@@ -85,25 +82,25 @@ public class AreaPlot extends ExamplePanel {
 	}
 
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
-		PointRenderer point = new DefaultPointRenderer2D();
+		var point = new DefaultPointRenderer2D();
 		point.setColor(color);
 		plot.setPointRenderers(data, point);
-		LineRenderer line = new DefaultLineRenderer2D();
+		var line = new DefaultLineRenderer2D();
 		line.setColor(color);
 		line.setGap(3.0);
 		line.setGapRounded(true);
 		plot.setLineRenderers(data, line);
-		AreaRenderer area = new DefaultAreaRenderer2D();
+		var area = new DefaultAreaRenderer2D();
 		area.setColor(GraphicsUtils.deriveWithAlpha(color, 64));
 		plot.setAreaRenderers(data, area);
 	}
 
 	private static void formatLineArea(XYPlot plot, DataSource data, Color color) {
-		PointRenderer point = new DefaultPointRenderer2D();
+		var point = new DefaultPointRenderer2D();
 		point.setColor(color);
 		plot.setPointRenderers(data, point);
 		plot.setLineRenderers(data, null);
-		AreaRenderer area = new LineAreaRenderer2D();
+		var area = new LineAreaRenderer2D();
 		area.setGap(3.0);
 		area.setColor(color);
 		plot.setAreaRenderers(data, area);

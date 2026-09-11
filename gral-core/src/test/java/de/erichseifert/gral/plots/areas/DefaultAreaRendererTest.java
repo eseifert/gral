@@ -50,10 +50,10 @@ public class DefaultAreaRendererTest {
 
 	@Before
 	public void setUp() {
-		Axis axisX = new Axis(-5.0, 5.0);
-		Axis axisY = new Axis(-5.0, 5.0);
-		AxisRenderer axisRendererX = new LinearRenderer2D();
-		AxisRenderer axisRendererY = new LinearRenderer2D();
+		var axisX = new Axis(-5.0, 5.0);
+		var axisY = new Axis(-5.0, 5.0);
+		var axisRendererX = new LinearRenderer2D();
+		var axisRendererY = new LinearRenderer2D();
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
@@ -63,7 +63,7 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testArea() {
 		// Get area
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		var r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
@@ -74,20 +74,20 @@ public class DefaultAreaRendererTest {
 
 		// Draw area
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertNotEmpty(image);
 	}
 
 	@Test
 	public void testNullRenderer() {
-		PointData data2 = new PointData(
+		var data2 = new PointData(
 			data.axes,
 			Arrays.asList((AxisRenderer) null, null),
 			null, 0, 0);
 
 		// Get area
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		var r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data2, new PointND<>(0.0, 0.0)),
 			new DataPoint(data2, new PointND<>(1.0, 1.0))
@@ -98,7 +98,7 @@ public class DefaultAreaRendererTest {
 
 		// Draw area
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertEmpty(image);
 	}
@@ -106,14 +106,14 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testEmptyShape() {
 		// Get area
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		var r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList();
 		Drawable area = r.getArea(points, null);
 		assertNotNull(area);
 
 		// Draw area
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertEmpty(image);
 	}
@@ -121,7 +121,7 @@ public class DefaultAreaRendererTest {
 	@Test
 	public void testNullPoint() {
 		// Get area
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		var r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList((DataPoint) null);
 		Shape shape = r.getAreaShape(points);
 		Drawable area = r.getArea(points, shape);
@@ -129,14 +129,14 @@ public class DefaultAreaRendererTest {
 
 		// Draw area
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		area.draw(context);
 		assertEmpty(image);
 	}
 
 	@Test
 	public void testGap() {
-		AreaRenderer r = new DefaultAreaRenderer2D();
+		var r = new DefaultAreaRenderer2D();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
@@ -158,7 +158,7 @@ public class DefaultAreaRendererTest {
 				assertNotNull(area);
 
 				BufferedImage image = createTestImage();
-				DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+				var context = new DrawingContext((Graphics2D) image.getGraphics());
 				area.draw(context);
 				assertNotEmpty(image);
 			}
@@ -167,7 +167,7 @@ public class DefaultAreaRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		AreaRenderer original = new DefaultAreaRenderer2D();
+		var original = new DefaultAreaRenderer2D();
 		@SuppressWarnings("unused")
 		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
     }

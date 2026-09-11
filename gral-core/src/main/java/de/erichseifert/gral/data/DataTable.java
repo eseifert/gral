@@ -24,7 +24,6 @@ package de.erichseifert.gral.data;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,43 +42,6 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 
 	/** All values stored as rows of column arrays. */
 	private final List<Record> rows;
-
-	/**
-	 * Comparator class for comparing two records using a
-	 * specified set of {@code DataComparator}s.
-	 */
-	private final class RecordComparator implements Comparator<Record> {
-		/** Rules to use for sorting. */
-		private final DataComparator[] comparators;
-
-		/**
-		 * Initializes a new instance with a specified set of
-		 * {@code DataComparator}s.
-		 * @param comparators Set of {@code DataComparator}s to use as rules.
-		 */
-		public RecordComparator(DataComparator[] comparators) {
-			this.comparators = comparators;
-		}
-
-		/**
-		 * Compares two records using the rules defined by the
-		 * {@code DataComparator}s of this instance.
-		 * @param record1 First record to compare.
-		 * @param record2 Second record to compare.
-	     * @return A negative number if first argument is less than the second,
-	     *         zero if first argument is equal to the second,
-	     *         or a positive integer as the greater than the second.
-		 */
-		public int compare(Record record1, Record record2) {
-			for (DataComparator comparator : comparators) {
-				int result = comparator.compare(record1, record2);
-				if (result != 0) {
-					return result;
-				}
-			}
-			return 0;
-		}
-	}
 
 	public DataTable() {
 		rows = new ArrayList<>();
@@ -125,13 +87,13 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		super(columns);
 		rows = new ArrayList<>();
 
-		int maxRowCount = 0;
-		for (Column column : columns) {
-			maxRowCount = Math.max(maxRowCount, column.size());
-		}
+		int maxRowCount = Arrays.stream(columns)
+				.mapToInt(Column::size)
+				.max()
+				.orElse(0);
 
 		for (int rowIndex = 0; rowIndex < maxRowCount; rowIndex++) {
-			List<Comparable<?>> rowData = new ArrayList<>(1 + columns.length);
+			var rowData = new ArrayList<Comparable<?>>(1 + columns.length);
 			for (Column column : columns) {
 				rowData.add(column.get(rowIndex));
 			}
@@ -180,7 +142,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		}
 
 		// Add data to row
-		Record row = new Record(values);
+		var row = new Record(values);
 		events = new DataChangeEvent[row.size()];
 		for (int columnIndex = 0; columnIndex < row.size(); columnIndex++) {
 			Comparable<?> value = values.get(columnIndex);
@@ -221,7 +183,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 					"Expected: "+getColumnCount()+", got: "+row.size());
 		}
 
-		DataChangeEvent[] events = new DataChangeEvent[row.size()];
+		var events = new DataChangeEvent[row.size()];
 		synchronized (rows) {
 			int rowIndex = rows.size();
 			for (int columnIndex = 0; columnIndex < row.size(); columnIndex++) {
@@ -240,7 +202,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	public void remove(int row) {
 		DataChangeEvent[] events;
 		synchronized (rows) {
-			Row r = new Row(this, row);
+			var r = new Row(this, row);
 			events = new DataChangeEvent[getColumnCount()];
 			for (int col = 0; col < events.length; col++) {
 				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
@@ -257,7 +219,7 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		DataChangeEvent[] events;
 		synchronized (this) {
 			int row = getRowCount() - 1;
-			Row r = new Row(this, row);
+			var r = new Row(this, row);
 			events = new DataChangeEvent[getColumnCount()];
 			for (int col = 0; col < events.length; col++) {
 				events[col] = new DataChangeEvent(this, col, row, r.get(col), null);
@@ -323,12 +285,12 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			old = (Comparable<T>) get(col, row);
 			if (old == null || !old.equals(value)) {
 				Record record = rows.get(row);
-				ArrayList<Comparable<?>> values = new ArrayList<>(record.size());
+				var values = new ArrayList<Comparable<?>>(record.size());
 				for (Comparable<?> element : record) {
 					values.add(element);
 				}
 				values.set(col, value);
-				Record updatedRecord = new Record(values);
+				var updatedRecord = new Record(values);
 				rows.set(row, updatedRecord);
 				event = new DataChangeEvent(this, col, row, old, value);
 			}
@@ -352,10 +314,16 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 * The row values are compared in the way the comparators are specified.
 	 * @param comparators comparators used for sorting
 	 */
-	public void sort(final DataComparator... comparators) {
+	public void sort(DataComparator... comparators) {
+		if (comparators.length == 0) {
+			return;
+		}
+		Comparator<Record> comparator = comparators[0];
+		for (int i = 1; i < comparators.length; i++) {
+			comparator = comparator.thenComparing(comparators[i]);
+		}
 		synchronized (rows) {
-			RecordComparator comparator = new RecordComparator(comparators);
-			Collections.sort(rows, comparator);
+			rows.sort(comparator);
 		}
 	}
 

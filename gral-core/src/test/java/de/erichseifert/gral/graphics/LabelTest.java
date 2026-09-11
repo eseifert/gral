@@ -68,7 +68,7 @@ public class LabelTest {
 
 	@Test
 	public void testCreation() {
-		Label empty = new MockLabel();
+		var empty = new MockLabel();
 		assertEquals("", empty.getText());
 		assertEquals(0.0, empty.getX(), DELTA);
 		assertEquals(0.0, empty.getY(), DELTA);
@@ -76,7 +76,7 @@ public class LabelTest {
 		assertEquals(0.0, empty.getHeight(), DELTA);
 		assertEquals(new Dimension2D.Double(), empty.getPreferredSize());
 
-		Label text = new MockLabel("foobar");
+		var text = new MockLabel("foobar");
 		assertEquals("foobar", text.getText());
 		assertEquals(0.0, text.getX(), DELTA);
 		assertEquals(0.0, text.getY(), DELTA);
@@ -86,7 +86,7 @@ public class LabelTest {
 
 	@Test
 	public void testSettings() {
-		Label label = new MockLabel("foobar");
+		var label = new MockLabel("foobar");
 		assertEquals(0.5, label.getAlignmentX(), DELTA);
 		assertEquals(0.5, label.getAlignmentY(), DELTA);
 		assertEquals(Color.BLACK, label.getColor());
@@ -100,9 +100,9 @@ public class LabelTest {
 
 	@Test
 	public void testDraw() {
-		MockLabel empty = new MockLabel();
-		MockLabel text = new MockLabel("foobar");
-		MockLabel rotated = new MockLabel("foobar");
+		var empty = new MockLabel();
+		var text = new MockLabel("foobar");
+		var rotated = new MockLabel("foobar");
 		rotated.setRotation(45.0);
 
 		MockLabel[] labels = { empty, text, rotated };
@@ -110,7 +110,7 @@ public class LabelTest {
 		for (MockLabel label : labels) {
 			BufferedImage image = createTestImage();
 			label.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			var context = new DrawingContext((Graphics2D) image.getGraphics());
 			label.draw(context);
 			assertTrue(label.isDrawn);
 			if (!label.getText().isEmpty()) {
@@ -121,13 +121,13 @@ public class LabelTest {
 
 	@Test
 	public void testEqualsWithNullProperties() {
-		Label label = new Label();
+		var label = new Label();
 		label.setText(null);
 		label.setFont(null);
 		label.setColor(null);
 		label.setBackground(null);
 
-		Label other = new Label("foobar");
+		var other = new Label("foobar");
 		other.setFont(Font.decode(null));
 		other.setColor(Color.RED);
 		other.setBackground(Color.BLUE);
@@ -136,7 +136,7 @@ public class LabelTest {
 		assertFalse(label.equals(other));
 		assertFalse(other.equals(label));
 
-		Label emptyCopy = new Label();
+		var emptyCopy = new Label();
 		emptyCopy.setText(null);
 		emptyCopy.setFont(null);
 		emptyCopy.setColor(null);
@@ -146,15 +146,15 @@ public class LabelTest {
 
 	@Test
 	public void testHashCode() {
-		Label label = new Label("foobar");
+		var label = new Label("foobar");
 		label.setColor(Color.RED);
-		Label copy = new Label("foobar");
+		var copy = new Label("foobar");
 		copy.setColor(Color.RED);
 
 		assertEquals(label, copy);
 		assertEquals(label.hashCode(), copy.hashCode());
 
-		Label nullProperties = new Label();
+		var nullProperties = new Label();
 		nullProperties.setText(null);
 		nullProperties.setFont(null);
 		nullProperties.setColor(null);
@@ -165,7 +165,7 @@ public class LabelTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		Label original = new MockLabel("foobar");
+		var original = new MockLabel("foobar");
 		Label deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);

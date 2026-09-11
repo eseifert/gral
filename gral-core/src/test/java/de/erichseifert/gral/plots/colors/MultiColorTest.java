@@ -36,7 +36,7 @@ public class MultiColorTest {
 
 	@Test
 	public void testCreation() {
-		LinearGradient c = new LinearGradient(Color.WHITE, Color.BLACK);
+		var c = new LinearGradient(Color.WHITE, Color.BLACK);
 		List<Color> colors = c.getColors();
 		assertEquals(2, colors.size());
 		assertEquals(Color.WHITE, colors.get(0));
@@ -45,7 +45,7 @@ public class MultiColorTest {
 
 	@Test
 	public void testColor() {
-		LinearGradient c = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
 		List<Color> colors = c.getColors();
 		assertEquals(3, colors.size());
 		assertEquals(new Color(255,   0,   0), c.get(0.00));
@@ -57,7 +57,7 @@ public class MultiColorTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		ScaledContinuousColorMapper original = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
+		var original = new LinearGradient(Color.RED, Color.GREEN, Color.BLUE);
 		ScaledContinuousColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

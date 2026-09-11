@@ -24,7 +24,6 @@ package de.erichseifert.gral.examples.boxplot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Stroke;
 import java.util.Random;
 
 import de.erichseifert.gral.data.DataSource;
@@ -34,7 +33,6 @@ import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.XYPlot.XYNavigationDirection;
 import de.erichseifert.gral.plots.colors.LinearGradient;
-import de.erichseifert.gral.plots.colors.ScaledContinuousColorMapper;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
@@ -52,7 +50,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 		setPreferredSize(new Dimension(400, 600));
 
 		// Create example data
-		DataTable data = new DataTable(Integer.class, Integer.class, Integer.class);
+		var data = new DataTable(Integer.class, Integer.class, Integer.class);
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			int x = (int) Math.round(5.0*random.nextGaussian());
 			int y = (int) Math.round(5.0*random.nextGaussian());
@@ -62,7 +60,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 
 		// Create new box-and-whisker plot
 		DataSource boxData = BoxPlot.createBoxData(data);
-		BoxPlot plot = new BoxPlot(boxData);
+		var plot = new BoxPlot(boxData);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 50.0, 40.0, 20.0));
@@ -76,9 +74,8 @@ public class SimpleBoxPlot extends ExamplePanel {
 		);
 
 		// Format boxes
-		Stroke stroke = new BasicStroke(2f);
-		ScaledContinuousColorMapper colors =
-			new LinearGradient(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
+		var stroke = new BasicStroke(2f);
+		var colors = new LinearGradient(GraphicsUtils.deriveBrighter(COLOR1), Color.WHITE);
 		colors.setRange(1.0, 3.0);
 
 		BoxWhiskerRenderer pointRenderer =
@@ -93,7 +90,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 		plot.getNavigator().setDirection(XYNavigationDirection.VERTICAL);
 
 		// Add plot to Swing component
-		InteractivePanel panel = new InteractivePanel(plot);
+		var panel = new InteractivePanel(plot);
 		add(panel);
 	}
 

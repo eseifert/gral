@@ -47,7 +47,7 @@ public abstract class SeriesLegend extends AbstractLegend {
 		super.add(source);
 		String label = getLabel(source);
 		Font font = getFont();
-		Item item = new Item(getSymbol(source), label, font);
+		var item = new Item(getSymbol(source), label, font);
 		add(item);
 		drawableByDataSource.put(source, item);
 	}

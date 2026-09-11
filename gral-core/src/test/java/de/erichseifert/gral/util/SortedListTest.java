@@ -34,14 +34,14 @@ public class SortedListTest {
 
 	@Test
 	public void testCreation() {
-		SortedList<Double> standard = new SortedList<>();
+		var standard = new SortedList<Double>();
 		assertEquals(0, standard.size());
 
-		SortedList<Double> capacity = new SortedList<>(20);
+		var capacity = new SortedList<Double>(20);
 		assertEquals(0, capacity.size());
 
 		List<Double> data = Arrays.asList(0.0, 2.0, 1.0);
-		SortedList<Double> collection = new SortedList<>(data);
+		var collection = new SortedList<Double>(data);
 		assertEquals(3, collection.size());
 		assertEquals(0.0, collection.get(0), DELTA);
 		assertEquals(1.0, collection.get(1), DELTA);
@@ -50,7 +50,7 @@ public class SortedListTest {
 
 	@Test
 	public void testSize() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		assertEquals(0, l.size());
 		l.add(0.0);
 		assertEquals(1, l.size());
@@ -62,7 +62,7 @@ public class SortedListTest {
 
 	@Test
 	public void testAdd() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(2.0);
 		l.add(1.0);
 		l.add(2.0);
@@ -74,7 +74,7 @@ public class SortedListTest {
 
 	@Test
 	public void testGet() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(2.0);
 		l.add(1.0);
 		l.add(2.0);
@@ -87,7 +87,7 @@ public class SortedListTest {
 
 	@Test
 	public void testIndexOf() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(0.0);
 		l.add(0.0);
 		l.add(1.0);
@@ -100,7 +100,7 @@ public class SortedListTest {
 
 	@Test
 	public void testIndexOfReturnsMinusOneForValuesBetweenExistingElements() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(0.0);
 		l.add(2.0);
 		l.add(4.0);
@@ -111,7 +111,7 @@ public class SortedListTest {
 
 	@Test
 	public void testContainsUsesIndexOf() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(0.0);
 		l.add(2.0);
 		assertEquals(true, l.contains(2.0));
@@ -120,7 +120,7 @@ public class SortedListTest {
 
 	@Test
 	public void testRemove() {
-		SortedList<Double> l = new SortedList<>();
+		var l = new SortedList<Double>();
 		l.add(0.0);
 		l.add(0.0);
 		l.add(1.0);

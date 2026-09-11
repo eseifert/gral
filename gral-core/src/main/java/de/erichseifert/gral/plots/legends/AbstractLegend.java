@@ -267,7 +267,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * Removes all data sources from the legend.
 	 */
 	public void clear() {
-		Set<DataSource> sources = new HashSet<>(this.sources);
+		var sources = new HashSet<DataSource>(this.sources);
 		for (DataSource source : sources) {
 			remove(source);
 		}

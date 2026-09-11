@@ -35,7 +35,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
@@ -84,13 +83,13 @@ public class MultiplePointRenderers extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public MultiplePointRenderers() {
 		// Generate data
-		DataTable data = new DataTable(Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class);
 		for (double x = 1.0; x <= 20.0; x += 1.0) {
 			data.add(x, x*x);
 		}
 
 		// Create new xy-plot
-		XYPlot plot = new XYPlot(data);
+		var plot = new XYPlot(data);
 
 		// Format plot
 		plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 40.0));
@@ -98,13 +97,13 @@ public class MultiplePointRenderers extends ExamplePanel {
 		plot.getTitle().setText(getDescription());
 
 		// Format rendering of data points
-		PointRenderer defaultPointRenderer = new DefaultPointRenderer2D();
+		var defaultPointRenderer = new DefaultPointRenderer2D();
 		defaultPointRenderer.setColor(GraphicsUtils.deriveDarker(COLOR1));
 		plot.setPointRenderers(data, defaultPointRenderer);
-		PointRenderer shadowRenderer = new ShadowPointRenderer(defaultPointRenderer);
+		var shadowRenderer = new ShadowPointRenderer(defaultPointRenderer);
 		plot.addPointRenderer(data, shadowRenderer);
 
-		LineRenderer lineRenderer = new DefaultLineRenderer2D();
+		var lineRenderer = new DefaultLineRenderer2D();
 		lineRenderer.setGap(2.0);
 		plot.setLineRenderers(data, lineRenderer);
 

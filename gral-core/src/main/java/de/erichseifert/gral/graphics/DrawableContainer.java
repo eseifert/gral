@@ -135,7 +135,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 		 * TODO: Size of ArrayList can be different from the number of added components
 		 * in concurrent environments.
 		 */
-		List<Drawable> drawableList = new ArrayList<>(components.size());
+		var drawableList = new ArrayList<Drawable>(components.size());
 		drawableList.addAll(components);
 		return drawableList;
 	}
@@ -180,7 +180,7 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	 * @return The insets of this DrawableContainer
 	 */
 	public Insets2D getInsets() {
-		Insets2D insets = new Insets2D.Double();
+		var insets = new Insets2D.Double();
 		insets.setInsets(this.insets);
 		return insets;
 	}

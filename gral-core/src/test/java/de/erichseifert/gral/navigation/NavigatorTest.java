@@ -89,7 +89,7 @@ public class NavigatorTest {
 
 	@Test
 	public void testCenter() {
-		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
+		var centerNew = new PointND<Double>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertEquals(centerNew, navigator.getCenter());
 	}
@@ -97,8 +97,8 @@ public class NavigatorTest {
 	@Test
 	public void testPan() {
 		PointND<? extends Number> centerOld = navigator.getCenter();
-		PointND<Double> deltas = new PointND<>(-3.2, -1.0);
-		PointND<Double> expected = new PointND<>(
+		var deltas = new PointND<Double>(-3.2, -1.0);
+		var expected = new PointND<Double>(
 				centerOld.get(0).doubleValue() + deltas.get(0),
 				centerOld.get(1).doubleValue() + deltas.get(1)
 		);
@@ -110,8 +110,8 @@ public class NavigatorTest {
 	@Test
 	public void testPannable() {
 		PointND<? extends Number> centerOld = navigator.getCenter();
-		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
-		PointND<Double> deltas = new PointND<>(-3.2, -1.0);
+		var centerNew = new PointND<Double>(1.2, 3.4);
+		var deltas = new PointND<Double>(-3.2, -1.0);
 
 		navigator.setPannable(false);
 
@@ -152,11 +152,11 @@ public class NavigatorTest {
 
 	@Test
 	public void testConnect() {
-		Navigator navigator2 = new MockNavigator();
+		var navigator2 = new MockNavigator();
 
 		navigator.connect(navigator2);
 
-		PointND<Double> centerNew = new PointND<>(1.2, 3.4);
+		var centerNew = new PointND<Double>(1.2, 3.4);
 		navigator.setCenter(centerNew);
 		assertEquals(navigator.getCenter(), navigator2.getCenter());
 
@@ -166,7 +166,7 @@ public class NavigatorTest {
 
 	@Test
 	public void testDisconnect() {
-		Navigator navigator2 = new MockNavigator();
+		var navigator2 = new MockNavigator();
 
 		navigator.connect(navigator2);
 

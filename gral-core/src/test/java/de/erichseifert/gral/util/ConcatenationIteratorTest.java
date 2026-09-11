@@ -39,7 +39,7 @@ public class ConcatenationIteratorTest {
 	public void testHasNextReturnsFalseWhenAllInputIteratorAreEmpty() {
 		Iterator<Object> emptyIterator = Arrays.asList().iterator();
 		Iterator<Object> emptyIterator2 = Arrays.asList().iterator();
-		ConcatenationIterator<Object> concatenationIterator = new ConcatenationIterator<>(emptyIterator, emptyIterator2);
+		var concatenationIterator = new ConcatenationIterator<Object>(emptyIterator, emptyIterator2);
 
 		boolean hasNext = concatenationIterator.hasNext();
 
@@ -51,7 +51,7 @@ public class ConcatenationIteratorTest {
 		Iterator<Object> emptyIterator = Arrays.asList().iterator();
 		Iterator<Object> filledIterator = Arrays.<Object>asList(1, 2, 3).iterator();
 		Iterator<Object> emptyIterator2 = Arrays.asList().iterator();
-		ConcatenationIterator<Object> concatenationIterator = new ConcatenationIterator<>(emptyIterator, filledIterator, emptyIterator2);
+		var concatenationIterator = new ConcatenationIterator<Object>(emptyIterator, filledIterator, emptyIterator2);
 
 		boolean hasNext = concatenationIterator.hasNext();
 
@@ -61,7 +61,7 @@ public class ConcatenationIteratorTest {
 	@Test
 	public void testNextAdvancesTheUnderlyingIterator() {
 		Iterator<Object> iterator = Arrays.<Object>asList(1, 2, 3).iterator();
-		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<>(iterator);
+		var concatenatedIterator = new ConcatenationIterator<Object>(iterator);
 
 		Object firstElement = concatenatedIterator.next();
 		Object secondElement = concatenatedIterator.next();
@@ -74,7 +74,8 @@ public class ConcatenationIteratorTest {
 		Iterator<Object> emptyIterator = Arrays.asList().iterator();
 		Iterator<Object> nonEmptyIterator = Arrays.<Object>asList(1, 2).iterator();
 		Iterator<Object> anotherNonEmptyIterator = Arrays.<Object>asList(3, 4).iterator();
-		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<>(emptyIterator, nonEmptyIterator, anotherNonEmptyIterator);
+		var concatenatedIterator = new ConcatenationIterator<Object>(
+				emptyIterator, nonEmptyIterator, anotherNonEmptyIterator);
 
 		Object firstElement = concatenatedIterator.next();
 
@@ -85,7 +86,7 @@ public class ConcatenationIteratorTest {
 	public void testNextThrowsExceptionWhenAllIteratorsAreEmpty() {
 		Iterator<Object> emptyIterator = Arrays.asList().iterator();
 		Iterator<Object> emptyIterator2 = Arrays.asList().iterator();
-		ConcatenationIterator<Object> concatenatedIterator = new ConcatenationIterator<>(emptyIterator, emptyIterator2);
+		var concatenatedIterator = new ConcatenationIterator<Object>(emptyIterator, emptyIterator2);
 
 		concatenatedIterator.next();
 	}

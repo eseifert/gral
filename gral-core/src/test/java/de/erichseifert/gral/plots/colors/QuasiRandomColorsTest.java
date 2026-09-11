@@ -38,7 +38,7 @@ public class QuasiRandomColorsTest {
 
 	@Test
 	public void testGet() {
-		QuasiRandomColors c = new QuasiRandomColors();
+		var c = new QuasiRandomColors();
 		final int STEPS = 10;
 
 		Paint prv = null;
@@ -52,7 +52,7 @@ public class QuasiRandomColorsTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		QuasiRandomColors original = new QuasiRandomColors();
+		var original = new QuasiRandomColors();
 		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

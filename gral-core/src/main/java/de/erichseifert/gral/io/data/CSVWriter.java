@@ -91,7 +91,7 @@ public class CSVWriter extends AbstractDataWriter {
 	 */
 	public void write(DataSource data, OutputStream output) throws IOException {
 		Character separator = getSetting(SEPARATOR_CHAR);
-		OutputStreamWriter writer = new OutputStreamWriter(output);
+		var writer = new OutputStreamWriter(output);
 
 		int i = 0;
 		int colCount = data.getColumnCount();

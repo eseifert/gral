@@ -126,7 +126,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		}
 
 		// Create a label with the settings
-		Label label = new Label(text);
+		var label = new Label(text);
 		label.setAlignmentX(alignX);
 		label.setAlignmentY(alignY);
 		label.setRotation(rotation);
@@ -134,8 +134,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		label.setFont(font);
 
 		Rectangle2D boundsPoint = point.getBounds2D();
-		DrawableContainer labelContainer =
-			new DrawableContainer(new OuterEdgeLayout(distance));
+		var labelContainer = new DrawableContainer(new OuterEdgeLayout(distance));
 		labelContainer.add(label, location);
 
 		labelContainer.setBounds(boundsPoint);
@@ -195,7 +194,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		double posYBottom = pointBottom.get(PointND.Y) - posY;
 
 		// Draw the error bar
-		Line2D errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
+		var errorBar = new Line2D.Double(0.0, posYTop, 0.0, posYBottom);
 		ColorMapper colors = getErrorColor();
 		Paint errorPaint = colors.get(rowIndex);
 		Stroke errorStroke = getErrorStroke();
@@ -205,7 +204,7 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 		// Draw the shapes at the end of the error bars
 		Shape endShape = getErrorShape();
 		graphics.translate(0.0, posYTop);
-		Stroke endShapeStroke = new BasicStroke(1f);
+		var endShapeStroke = new BasicStroke(1f);
 		GraphicsUtils.drawPaintedShape(
 			graphics, endShape, errorPaint, null, endShapeStroke);
 		graphics.setTransform(txOld);

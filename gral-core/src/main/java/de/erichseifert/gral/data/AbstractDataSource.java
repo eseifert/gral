@@ -30,7 +30,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -160,10 +159,10 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	public DataSource getColumnStatistics(String key) {
-		Class[] columnTypes = new Class[getColumnCount()];
+		var columnTypes = new Class[getColumnCount()];
 		Arrays.fill(columnTypes, Double.class);
-		DataTable statisticsTable = new DataTable(columnTypes);
-		List<Double> colStatistics = new ArrayList<>(columnTypes.length);
+		var statisticsTable = new DataTable(columnTypes);
+		var colStatistics = new ArrayList<Double>(columnTypes.length);
 		for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 			Column col = getColumn(colIndex);
 			colStatistics.add(col.getStatistics(key));
@@ -214,7 +213,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 */
 	protected void notifyDataAdded(DataChangeEvent... events) {
 		invalidateStatistics();
-		List<DataListener> listeners = new LinkedList<>(dataListeners);
+		var listeners = new LinkedList<DataListener>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataAdded(this, events);
 		}
@@ -226,7 +225,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 */
 	protected void notifyDataRemoved(DataChangeEvent... events) {
 		invalidateStatistics();
-		List<DataListener> listeners = new LinkedList<>(dataListeners);
+		var listeners = new LinkedList<DataListener>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataRemoved(this, events);
 		}
@@ -238,7 +237,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 */
 	protected void notifyDataUpdated(DataChangeEvent... events) {
 		invalidateStatistics();
-		List<DataListener> listeners = new LinkedList<>(dataListeners);
+		var listeners = new LinkedList<DataListener>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataUpdated(this, events);
 		}
@@ -261,7 +260,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	@Override
 	public Column<?> getColumn(int col) {
 		Class<? extends Comparable<?>> columnType = getColumnTypes()[col];
-		List<Comparable<?>> columnData = new LinkedList<>();
+		var columnData = new LinkedList<Comparable<?>>();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
 			Record record = getRecord(rowIndex);
 			columnData.add(record.get(col));

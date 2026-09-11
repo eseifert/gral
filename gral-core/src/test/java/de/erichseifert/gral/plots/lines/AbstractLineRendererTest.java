@@ -41,7 +41,6 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.plots.DataPoint;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.util.PointND;
@@ -72,10 +71,10 @@ public class AbstractLineRendererTest {
 
 	@Before
 	public void setUp() {
-		Axis axisX = new Axis(-5.0, 5.0);
-		Axis axisY = new Axis(-5.0, 5.0);
-		AxisRenderer axisRendererX = new LinearRenderer2D();
-		AxisRenderer axisRendererY = new LinearRenderer2D();
+		var axisX = new Axis(-5.0, 5.0);
+		var axisY = new Axis(-5.0, 5.0);
+		var axisRendererX = new LinearRenderer2D();
+		var axisRendererY = new LinearRenderer2D();
 		data = new PointData(
 			Arrays.asList(axisX, axisY),
 			Arrays.asList(axisRendererX, axisRendererY),
@@ -84,7 +83,7 @@ public class AbstractLineRendererTest {
 
 	@Test
 	public void testCreate() {
-		LineRenderer r = new MockLineRenderer();
+		var r = new MockLineRenderer();
 		assertTrue(r.getStroke() instanceof BasicStroke);
 		assertEquals(0.0, r.getGap(), DELTA);
 		assertEquals(false, r.isGapRounded());
@@ -94,7 +93,7 @@ public class AbstractLineRendererTest {
 	@Test
 	public void testLine() {
 		// Get line
-		LineRenderer r = new MockLineRenderer();
+		var r = new MockLineRenderer();
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
 			new DataPoint(data, new PointND<>(1.0, 1.0))
@@ -106,7 +105,7 @@ public class AbstractLineRendererTest {
 
 	@Test
 	public void testStrokeNullLine() {
-		MockLineRenderer r = new MockLineRenderer();
+		var r = new MockLineRenderer();
 
 		List<DataPoint> points = Arrays.asList(
 			new DataPoint(data, new PointND<>(0.0, 0.0)),
@@ -120,9 +119,9 @@ public class AbstractLineRendererTest {
 	@Test
 	public void testProperties() {
 		Color color = Color.RED;
-		BasicStroke stroke = new BasicStroke(1.5f);
+		var stroke = new BasicStroke(1.5f);
 
-		MockLineRenderer r = new MockLineRenderer();
+		var r = new MockLineRenderer();
 		r.setColor(color);
 		r.setStroke(stroke);
 
@@ -132,7 +131,7 @@ public class AbstractLineRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		LineRenderer original = new MockLineRenderer();
+		var original = new MockLineRenderer();
 		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getStroke(), deserialized.getStroke());

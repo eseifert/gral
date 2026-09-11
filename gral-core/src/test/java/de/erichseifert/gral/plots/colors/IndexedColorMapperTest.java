@@ -53,13 +53,13 @@ public class IndexedColorMapperTest {
 
 	@Test
 	public void testGetNumber() {
-		MockIndexedColorMapper c = new MockIndexedColorMapper();
+		var c = new MockIndexedColorMapper();
 		assertEquals(c.get(128), c.get(128.0));
 	}
 
 	@Test
 	public void testGetOmit() {
-		MockIndexedColorMapper c = new MockIndexedColorMapper();
+		var c = new MockIndexedColorMapper();
 		c.setMode(Mode.OMIT);
 		assertNull(c.get(-128));
 		assertEquals(new Color(0, 0, 0), c.get(0));
@@ -70,7 +70,7 @@ public class IndexedColorMapperTest {
 
 	@Test
 	public void testGetRepeat() {
-		MockIndexedColorMapper c = new MockIndexedColorMapper();
+		var c = new MockIndexedColorMapper();
 		c.setMode(Mode.REPEAT);
 		assertEquals(new Color(0, 0, 0), c.get(-128));
 		assertEquals(new Color(0, 0, 0), c.get(0));
@@ -81,7 +81,7 @@ public class IndexedColorMapperTest {
 
 	@Test
 	public void testGetCircular() {
-		MockIndexedColorMapper c = new MockIndexedColorMapper();
+		var c = new MockIndexedColorMapper();
 		c.setMode(Mode.CIRCULAR);
 		assertEquals(new Color(128, 128, 128), c.get(-128));
 		assertEquals(new Color(0, 0, 0), c.get(0));
@@ -92,7 +92,7 @@ public class IndexedColorMapperTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		MockIndexedColorMapper original = new MockIndexedColorMapper();
+		var original = new MockIndexedColorMapper();
 		MockIndexedColorMapper deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

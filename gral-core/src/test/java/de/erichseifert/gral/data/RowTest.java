@@ -54,12 +54,12 @@ public class RowTest {
 
 	@Test
 	public void testCreation() {
-		Row row1 = new Row(table, 0);
+		var row1 = new Row(table, 0);
 		assertEquals(table, row1.getSource());
 		assertEquals(0, row1.getIndex());
 		assertEquals(table.getColumnCount(), row1.size());
 
-		Row row2 = new Row(table, 1);
+		var row2 = new Row(table, 1);
 		assertEquals(table, row2.getSource());
 		assertEquals(1, row2.getIndex());
 		assertEquals(table.getColumnCount(), row2.size());
@@ -67,11 +67,11 @@ public class RowTest {
 
 	@Test
 	public void testGet() {
-		Row row1 = new Row(table, 1);
+		var row1 = new Row(table, 1);
 		assertEquals(table.get(0, 1), row1.get(0));
 		assertEquals(table.get(1, 1), row1.get(1));
 
-		Row row2 = new Row(null, 1);
+		var row2 = new Row(null, 1);
 		assertEquals(null, row2.get(0));
 		assertEquals(null, row2.get(1));
 	}
@@ -79,9 +79,9 @@ public class RowTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testEquality() {
-		Row row1 = new Row(table, 1);
-		Row row2 = new Row(table, 1);
-		Row row3 = new Row(table, 2);
+		var row1 = new Row(table, 1);
+		var row2 = new Row(table, 1);
+		var row3 = new Row(table, 2);
 
 		assertTrue(row1.equals(row2));
 
@@ -90,17 +90,17 @@ public class RowTest {
 		assertFalse(row1.equals(new Object()));
 
 		// Different data source shouldn't matter
-		DataTable table1 = new DataTable(Integer.class, Integer.class);
+		var table1 = new DataTable(Integer.class, Integer.class);
 		table1.add(2, 3);
 		assertTrue(row1.equals(new Row(table1, 0)));
 
 		// Different column count should yield error
-		DataTable table2 = new DataTable(Integer.class, Integer.class, Integer.class);
+		var table2 = new DataTable(Integer.class, Integer.class, Integer.class);
 		table2.add(2, 3, 0);
 		assertFalse(row1.equals(new Row(table2, 0)));
 
 		// Different data types should yield error
-		DataTable table3 = new DataTable(Integer.class, Double.class);
+		var table3 = new DataTable(Integer.class, Double.class);
 		table3.add(2, 3.0);
 		assertFalse(row1.equals(new Row(table3, 0)));
 	}
@@ -108,24 +108,24 @@ public class RowTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testHashCodeIsConsistentWithEquality() {
-		Row row1 = new Row(table, 1);
+		var row1 = new Row(table, 1);
 
 		// Equal rows of the same data source must share their hash code
 		assertEquals(row1.hashCode(), new Row(table, 1).hashCode());
 
 		// Equal rows of different data sources must share it, too, because
 		// equals ignores the data source
-		DataTable table1 = new DataTable(Integer.class, Integer.class);
+		var table1 = new DataTable(Integer.class, Integer.class);
 		table1.add(2, 3);
-		Row row2 = new Row(table1, 0);
+		var row2 = new Row(table1, 0);
 		assertTrue(row1.equals(row2));
 		assertEquals(row1.hashCode(), row2.hashCode());
 	}
 
 	@Test
 	public void testHashCodeDiffersForDifferentValues() {
-		Row row1 = new Row(table, 1);
-		Row row2 = new Row(table, 2);
+		var row1 = new Row(table, 1);
+		var row2 = new Row(table, 2);
 
 		assertFalse(row1.equals(row2));
 		assertFalse(row1.hashCode() == row2.hashCode());
@@ -133,8 +133,8 @@ public class RowTest {
 
 	@Test
 	public void testToString() {
-		Row row1 = new Row(table, 1);
-		Row row2 = new Row(table, 1);
+		var row1 = new Row(table, 1);
+		var row2 = new Row(table, 1);
 		assertNotNull(row1.toString());
 		assertFalse(row1.toString().isEmpty());
 		assertEquals(row1.toString(), row2.toString());
@@ -142,7 +142,7 @@ public class RowTest {
 
 	@Test
 	public void testStatistics() {
-		Row row1 = new Row(table, 1);
+		var row1 = new Row(table, 1);
 		assertEquals( 2.0, row1.getStatistics(Statistics.N),   DELTA);
 		assertEquals( 2.0, row1.getStatistics(Statistics.MIN), DELTA);
 		assertEquals( 3.0, row1.getStatistics(Statistics.MAX), DELTA);
@@ -151,7 +151,7 @@ public class RowTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		DataAccessor original = new Row(table, 1);
+		var original = new Row(table, 1);
 		DataAccessor deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(table.getColumnCount(), deserialized.getSource().getColumnCount());

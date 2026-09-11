@@ -111,7 +111,7 @@ public class TableLayout extends AbstractLayout {
 	 * @see #ROWS
 	 */
 	private Info[] getInfo(Container container) {
-		Info[] infos = new Info[2];
+		var infos = new Info[2];
 		infos[COLS] = new Info();
 		infos[ROWS] = new Info();
 

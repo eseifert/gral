@@ -89,7 +89,7 @@ public class XYPlotTest {
 
 	@Before
 	public void setUp() {
-		DataSource data = new DummyData(2, 2, 1.0);
+		var data = new DummyData(2, 2, 1.0);
 
 		plots = new LinkedList<>();
 		MockXYPlot plot;
@@ -129,7 +129,7 @@ public class XYPlotTest {
 		for (MockXYPlot plot : plots) {
 			BufferedImage image = createTestImage();
 			plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			var context = new DrawingContext((Graphics2D) image.getGraphics());
 			plot.draw(context);
 			assertTrue(plot.isDrawn());
 			assertNotEmpty(image);
@@ -138,10 +138,10 @@ public class XYPlotTest {
 
 	@Test
 	public void testGetPointRenderers() {
-		DataSource data = new DummyData(2, 1, 1.0);
-		MockXYPlot plot = new MockXYPlot(data);
-		PointRenderer renderer1 = new DefaultPointRenderer2D();
-		PointRenderer renderer2 = new DefaultPointRenderer2D();
+		var data = new DummyData(2, 1, 1.0);
+		var plot = new MockXYPlot(data);
+		var renderer1 = new DefaultPointRenderer2D();
+		var renderer2 = new DefaultPointRenderer2D();
 		plot.setPointRenderers(data, renderer1, renderer2);
 		assertNotNull(plot.getPointRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getPointRenderers(null));
@@ -154,9 +154,9 @@ public class XYPlotTest {
 
 	@Test
 	public void testGetLineRenderers() {
-		DataSource data = new DummyData(2, 1, 1.0);
-		MockXYPlot plot = new MockXYPlot(data);
-		LineRenderer renderer = new DefaultLineRenderer2D();
+		var data = new DummyData(2, 1, 1.0);
+		var plot = new MockXYPlot(data);
+		var renderer = new DefaultLineRenderer2D();
 		plot.setLineRenderers(data, renderer);
 		assertNotNull(plot.getLineRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getLineRenderers(null));
@@ -168,10 +168,10 @@ public class XYPlotTest {
 
 	@Test
 	public void testSetLineRenderers() {
-		DataSource data = new DummyData(2, 1, 1.0);
-		MockXYPlot plot = new MockXYPlot();
-		LineRenderer renderer1 = new DefaultLineRenderer2D();
-		LineRenderer renderer2 = new DefaultLineRenderer2D();
+		var data = new DummyData(2, 1, 1.0);
+		var plot = new MockXYPlot();
+		var renderer1 = new DefaultLineRenderer2D();
+		var renderer2 = new DefaultLineRenderer2D();
 		plot.setLineRenderers(data, Arrays.asList(renderer1, renderer2));
 
 		List<LineRenderer> renderers = plot.getLineRenderers(data);
@@ -182,9 +182,9 @@ public class XYPlotTest {
 
 	@Test
 	public void testGetAreaRenderers() {
-		DataSource data = new DummyData(2, 1, 1.0);
-		MockXYPlot plot = new MockXYPlot(data);
-		AreaRenderer renderer = new DefaultAreaRenderer2D();
+		var data = new DummyData(2, 1, 1.0);
+		var plot = new MockXYPlot(data);
+		var renderer = new DefaultAreaRenderer2D();
 		plot.setAreaRenderers(data, renderer);
 		assertNotNull(plot.getAreaRenderers(new DummyData(4, 2, 0.0)));
 		assertNotNull(plot.getAreaRenderers(null));
@@ -196,10 +196,10 @@ public class XYPlotTest {
 
 	@Test
 	public void testSetAreaRenderers() {
-		DataSource data = new DummyData(2, 1, 1.0);
-		MockXYPlot plot = new MockXYPlot();
-		AreaRenderer renderer1 = new DefaultAreaRenderer2D();
-		AreaRenderer renderer2 = new DefaultAreaRenderer2D();
+		var data = new DummyData(2, 1, 1.0);
+		var plot = new MockXYPlot();
+		var renderer1 = new DefaultAreaRenderer2D();
+		var renderer2 = new DefaultAreaRenderer2D();
 		plot.setAreaRenderers(data, Arrays.asList(renderer1, renderer2));
 
 		List<AreaRenderer> renderers = plot.getAreaRenderers(data);
@@ -210,36 +210,36 @@ public class XYPlotTest {
 
 	@Test
 	public void testPunch() {
-		XYPlot plot = new XYPlot();
+		var plot = new XYPlot();
 		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
 		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
 		AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
 		AxisRenderer axisRendererY = plot.getAxisRenderer(XYPlot.AXIS_Y);
-		PointData data = new PointData(
+		var data = new PointData(
 				Arrays.asList(axisX, axisY),
 				Arrays.asList(axisRendererX, axisRendererY),
 				null, 0, 0);
 
 
-		Shape line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
+		var line = new Line2D.Double(-1.0, -1.0, 2.0, 2.0);
 		List<DataPoint> points = Arrays.asList(
 				new DataPoint(data, new PointND<>(0.0, 0.0)),
 				new DataPoint(data, new PointND<>(1.0, 1.0))
 		);
 
 		XYPlotArea2D plotArea = (XYPlotArea2D) plot.getPlotArea();
-		Shape punchShape = new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50);
+		var punchShape = new Ellipse2D.Double(-0.25, -0.25, 0.50, 0.50);
 		Shape punched = plotArea.punch(line, points, Arrays.asList(punchShape, punchShape), 1.0, false);
 		assertNotSame(line, punched);
 	}
 
 	@Test
 	public void testAddPointRenderer() {
-		DataSource data = new DummyData(2, 1, 1);
-		MockXYPlot plot = new MockXYPlot();
+		var data = new DummyData(2, 1, 1);
+		var plot = new MockXYPlot();
 		assertTrue(plot.getPointRenderers(data).isEmpty());
 
-		PointRenderer renderer = new DefaultPointRenderer2D();
+		var renderer = new DefaultPointRenderer2D();
 		plot.addPointRenderer(data, renderer);
 		List<PointRenderer> pointRenderers = plot.getPointRenderers(data);
 		assertEquals(pointRenderers.size(), 1);
@@ -248,12 +248,12 @@ public class XYPlotTest {
 
 	@Test
 	public void testRemovePointRenderer() {
-		DataSource data = new DummyData(2, 1, 1);
-		MockXYPlot plot = new MockXYPlot();
+		var data = new DummyData(2, 1, 1);
+		var plot = new MockXYPlot();
 		plot.removePointRenderer(null, null);
 		plot.removePointRenderer(data, null);
 
-		PointRenderer renderer = new DefaultPointRenderer2D();
+		var renderer = new DefaultPointRenderer2D();
 		plot.addPointRenderer(data, renderer);
 		plot.removePointRenderer(data, renderer);
 		assertTrue(plot.getPointRenderers(data).isEmpty());
@@ -262,13 +262,13 @@ public class XYPlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testRemoveDataSourceUpdatesAxisRange() {
-		DataTable data1 = new DataTable(Double.class, Double.class);
+		var data1 = new DataTable(Double.class, Double.class);
 		data1.add(1.0, 1.0);
 		data1.add(2.0, 2.0);
-		DataTable data2 = new DataTable(Double.class, Double.class);
+		var data2 = new DataTable(Double.class, Double.class);
 		data2.add(10.0, 20.0);
 
-		MockXYPlot plot = new MockXYPlot(data1, data2);
+		var plot = new MockXYPlot(data1, data2);
 		plot.remove(data2);
 		plot.autoscaleAxis(XYPlot.AXIS_X);
 		plot.autoscaleAxis(XYPlot.AXIS_Y);
@@ -284,10 +284,10 @@ public class XYPlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testClearUpdatesAxisRange() {
-		DataTable data = new DataTable(Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class);
 		data.add(10.0, 20.0);
 
-		MockXYPlot plot = new MockXYPlot(data);
+		var plot = new MockXYPlot(data);
 		plot.clear();
 		plot.autoscaleAxis(XYPlot.AXIS_X);
 
@@ -299,13 +299,13 @@ public class XYPlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testHiddenDataSourceIsIgnoredByAutoscaling() {
-		DataTable data1 = new DataTable(Double.class, Double.class);
+		var data1 = new DataTable(Double.class, Double.class);
 		data1.add(1.0, 1.0);
 		data1.add(2.0, 2.0);
-		DataTable data2 = new DataTable(Double.class, Double.class);
+		var data2 = new DataTable(Double.class, Double.class);
 		data2.add(10.0, 20.0);
 
-		MockXYPlot plot = new MockXYPlot(data1, data2);
+		var plot = new MockXYPlot(data1, data2);
 		plot.setVisible(data2, false);
 		plot.autoscaleAxis(XYPlot.AXIS_X);
 		plot.autoscaleAxis(XYPlot.AXIS_Y);
@@ -327,11 +327,11 @@ public class XYPlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testNavigationUsesNewAxisRenderer() {
-		DataTable data = new DataTable(Double.class, Double.class);
+		var data = new DataTable(Double.class, Double.class);
 		data.add(1.0, 1.0);
 		data.add(8.0, 8.0);
 
-		MockXYPlot plot = new MockXYPlot(data);
+		var plot = new MockXYPlot(data);
 		drawPlot(plot);
 
 		plot.setAxisRenderer(XYPlot.AXIS_X, new LogarithmicRenderer2D());

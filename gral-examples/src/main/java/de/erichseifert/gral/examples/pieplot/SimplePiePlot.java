@@ -47,7 +47,7 @@ public class SimplePiePlot extends ExamplePanel {
 	@SuppressWarnings("unchecked")
 	public SimplePiePlot() {
 		// Create data
-		DataTable data = new DataTable(Integer.class);
+		var data = new DataTable(Integer.class);
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			int val = random.nextInt(8) + 2;
 			data.add((random.nextDouble() <= 0.15) ? -val : val);
@@ -55,7 +55,7 @@ public class SimplePiePlot extends ExamplePanel {
 		DataSource pieData = PiePlot.createPieData(data);
 
 		// Create new pie plot
-		PiePlot plot = new PiePlot(pieData);
+		var plot = new PiePlot(pieData);
 
 		// Format plot
 		plot.getTitle().setText(getDescription());
@@ -73,7 +73,7 @@ public class SimplePiePlot extends ExamplePanel {
 		// Change the width of gaps between segments
 		pointRenderer.setGap(0.2);
 		// Change the colors
-		LinearGradient colors = new LinearGradient(COLOR1, COLOR2);
+		var colors = new LinearGradient(COLOR1, COLOR2);
 		pointRenderer.setColor(colors);
 		// Show labels
 		pointRenderer.setValueVisible(true);

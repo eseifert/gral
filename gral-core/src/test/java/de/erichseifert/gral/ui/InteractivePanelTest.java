@@ -74,7 +74,7 @@ public class InteractivePanelTest {
 	@Test
 	public void testPrint() throws PrinterException {
 		BufferedImage image;
-		PageFormat page = new PageFormat();
+		var page = new PageFormat();
 		int ret;
 
 		// Test valid page

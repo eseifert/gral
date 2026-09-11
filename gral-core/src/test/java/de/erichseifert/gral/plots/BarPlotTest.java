@@ -67,7 +67,7 @@ public class BarPlotTest {
 
 	@Before
 	public void setUp() {
-		DataSource data = new DummyData(2, 1, 1.0);
+		var data = new DummyData(2, 1, 1.0);
 		plot = new MockBarPlot(data);
 
 		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderers(data).get(0);
@@ -78,9 +78,9 @@ public class BarPlotTest {
 	public void testDraw() {
 		plot.getAxis(BarPlot.AXIS_X).setRange(-1.0, 3.0);
 		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
-		BufferedImage image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		var image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(plot.isDrawn);
 	}
@@ -88,10 +88,10 @@ public class BarPlotTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testDrawSingleBar() {
-		DataTable data = new DataTable(Double.class, Integer.class);
+		var data = new DataTable(Double.class, Integer.class);
 		data.add(0.1, 1);
 
-		MockBarPlot plot = new MockBarPlot(data);
+		var plot = new MockBarPlot(data);
 		BarRenderer pointRenderer = (BarRenderer) plot.getPointRenderers(data).get(0);
 		pointRenderer.setBorderStroke(new BasicStroke());
 
@@ -101,7 +101,7 @@ public class BarPlotTest {
 
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 
 		assertNotEmpty(image);

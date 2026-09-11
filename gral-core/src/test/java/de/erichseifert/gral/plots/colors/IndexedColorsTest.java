@@ -35,19 +35,19 @@ import de.erichseifert.gral.plots.colors.ColorMapper.Mode;
 public class IndexedColorsTest {
 	@Test
 	public void testCreate() {
-		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		assertEquals(3, c.getColors().size());
 	}
 
 	@Test
 	public void testColor() {
-		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		assertEquals(3, c.getColors().size());
 	}
 
 	@Test
 	public void testGetOmit() {
-		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		c.setMode(Mode.OMIT);
 		assertNull(c.get(-1));
 		assertEquals(Color.RED,   c.get(0));
@@ -58,7 +58,7 @@ public class IndexedColorsTest {
 
 	@Test
 	public void testGetRepeat() {
-		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		c.setMode(Mode.REPEAT);
 		assertEquals(Color.RED,   c.get(-1));
 		assertEquals(Color.RED,   c.get(0));
@@ -69,7 +69,7 @@ public class IndexedColorsTest {
 
 	@Test
 	public void testGetCircular() {
-		IndexedColors c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var c = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		c.setMode(Mode.CIRCULAR);
 		assertEquals(Color.BLUE,  c.get(-1));
 		assertEquals(Color.RED,   c.get(0));
@@ -80,7 +80,7 @@ public class IndexedColorsTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		IndexedColors original = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
+		var original = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
 		IndexedColors deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getMode(), deserialized.getMode());

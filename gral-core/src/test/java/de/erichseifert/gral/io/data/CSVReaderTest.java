@@ -27,7 +27,6 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class CSVReaderTest {
 
 		for (int i = 0; i < formats.length; i++) {
 			DataReader reader = DataReaderFactory.getInstance().get(formats[i]);
-			ByteArrayInputStream input = new ByteArrayInputStream(dataStrings[i].getBytes());
+			var input = new ByteArrayInputStream(dataStrings[i].getBytes());
 			DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
 			assertEquals( 0,   data.get(0, 0));
 			assertEquals( 1,   data.get(0, 1));
@@ -72,7 +71,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testSeparator() throws IOException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"0;10.0;20\r\n" +
 			"1;11.0;21\r\n" +
 			"2;12.0;22\r\n"
@@ -96,7 +95,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testQuotedNumbers() throws IOException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"\"0\",\"10.0\",\"20\"\r\n" +
 			"\"1\",\"11.0\",\"21\"\r\n" +
 			"\"2\",\"12.0\",\"22\"\r\n"
@@ -118,7 +117,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testQuotedString() throws IOException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"\"foo\tbar\"\tfoo bar\r\n" +
 			"foobar\t\"foo \"\"the\"\" bar\"\r\n"
 		).getBytes());
@@ -162,7 +161,7 @@ public class CSVReaderTest {
 
 		for (String dataString : dataStrings) {
 			DataReader reader = DataReaderFactory.getInstance().get("text/csv");
-			ByteArrayInputStream input = new ByteArrayInputStream(dataString.getBytes());
+			var input = new ByteArrayInputStream(dataString.getBytes());
 			DataSource data = reader.read(input, Integer.class, Double.class, Double.class);
 			assertEquals( 0,   data.get(0, 0));
 			assertEquals( 1,   data.get(0, 1));
@@ -179,7 +178,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testIllegalType() throws IOException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"0.0,10.0,20\r\n" +
 			"1,11.0,21\r\n" +
 			"2,12.0,22\r\n"
@@ -195,7 +194,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testNotEnoughColumns() throws IOException, ParseException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"0,10.0,20\r\n" +
 			"1,11.0\r\n" +
 			"2,12.0,22\r\n"
@@ -211,7 +210,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testTooManyColumns() throws IOException, ParseException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"0,10.0,20\r\n" +
 			"1,11.0,21,42\r\n" +
 			"2,12.0,22\r\n"
@@ -227,7 +226,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testEmptyValues() throws IOException, ParseException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"0,10.0,\r\n" +
 			"1,,21\r\n" +
 			",,3\r\n"
@@ -248,7 +247,7 @@ public class CSVReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testNegativeIntegerValues() throws IOException, ParseException {
-		InputStream input = new ByteArrayInputStream((
+		var input = new ByteArrayInputStream((
 			"-0,-10.0,-20\r\n" +
 			"-1,-11.0,-21\r\n" +
 			"-2,-12.0,-22\r\n"

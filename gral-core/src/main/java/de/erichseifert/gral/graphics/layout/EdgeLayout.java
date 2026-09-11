@@ -218,7 +218,7 @@ public class EdgeLayout extends AbstractLayout {
 	 *         the specified container.
 	 */
 	private static Map<Location, Drawable> getComponentsByLocation(Container container) {
-		Map<Location, Drawable> drawablesByLocation = new HashMap<>();
+		var drawablesByLocation = new HashMap<Location, Drawable>();
 		for (Drawable d: container) {
 			Object constraints = container.getConstraints(d);
 			if (constraints instanceof Location) {

@@ -54,7 +54,7 @@ public class GraphicsUtilsTest {
 	@Test
 	public void testPaintedShape() {
 		BufferedImage image;
-		Shape shape = new Rectangle2D.Double(10.0, 10.0, 300.0, 220.0);
+		var shape = new Rectangle2D.Double(10.0, 10.0, 300.0, 220.0);
 		Paint paint = Color.red;
 
 		image = createTestImage();
@@ -70,7 +70,7 @@ public class GraphicsUtilsTest {
 		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, null);
 		assertNotEmpty(image);
 
-		BasicStroke stroke = new BasicStroke(2f);
+		var stroke = new BasicStroke(2f);
 		image = createTestImage();
 		GraphicsUtils.drawPaintedShape((Graphics2D) image.getGraphics(), shape, paint, paintBounds, stroke);
 		assertNotEmpty(image);

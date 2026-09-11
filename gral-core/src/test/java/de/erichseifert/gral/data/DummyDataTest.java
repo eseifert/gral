@@ -39,7 +39,7 @@ public class DummyDataTest {
 		Comparable<?>[] expected = {42, 1.23, "foobar" };
 
 		for (Comparable<?> value : expected) {
-			DummyData integer = new DummyData(2, 3, value);
+			var integer = new DummyData(2, 3, value);
 			assertEquals(2, integer.getColumnCount());
 			assertEquals(3, integer.getRowCount());
 			assertEquals(integer.getColumnCount(), integer.getColumnTypes().length);
@@ -51,7 +51,7 @@ public class DummyDataTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		DataSource original = new DummyData(2, 3, "foobar");
+		var original = new DummyData(2, 3, "foobar");
 		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
 
     	// Test metadata

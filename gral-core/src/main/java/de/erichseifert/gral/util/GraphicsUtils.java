@@ -37,7 +37,6 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Abstract class that contains utility functions for working with graphics.
@@ -104,12 +103,12 @@ public abstract class GraphicsUtils {
 			wrappingWidth = Float.MAX_VALUE;
 		}
 
-		AttributedString string = new AttributedString(text);
+		var string = new AttributedString(text);
 		string.addAttribute(TextAttribute.FONT, font);
 		AttributedCharacterIterator iterator = string.getIterator();
-		LineBreakMeasurer measurer = new LineBreakMeasurer(iterator, frc);
+		var measurer = new LineBreakMeasurer(iterator, frc);
 
-		List<TextLayout> lines = new LinkedList<>();
+		var lines = new LinkedList<TextLayout>();
 		while (measurer.getPosition() < text.length()) {
 			// Find out which character will be wrapped next
 			int nextBreakPos = measurer.nextOffset(wrappingWidth);
@@ -132,7 +131,7 @@ public abstract class GraphicsUtils {
 			wrappingWidth = advanceMax;
 		}
 
-		AffineTransform txLinePos = new AffineTransform();
+		var txLinePos = new AffineTransform();
 		Area outlineAllLines = null;
 		for (TextLayout line : lines) {
 			// Distribute the space that's left
@@ -141,7 +140,7 @@ public abstract class GraphicsUtils {
 			// Move to baseline
 			txLinePos.translate(dx, line.getAscent());
 			// Get the shape of the current line
-			Area outlineLine = new Area(line.getOutline(txLinePos));
+			var outlineLine = new Area(line.getOutline(txLinePos));
 			// Add the shape of the line to the shape
 			if (outlineAllLines == null) {
 				outlineAllLines = outlineLine;

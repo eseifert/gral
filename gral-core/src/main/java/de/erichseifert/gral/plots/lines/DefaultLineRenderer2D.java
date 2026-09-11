@@ -82,7 +82,7 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Shape getLineShape(List<DataPoint> points) {
 		// Construct shape
-		Path2D shape = new Path2D.Double(
+		var shape = new Path2D.Double(
 			Path2D.WIND_NON_ZERO, INITIAL_LINE_CAPACITY);
 		for (DataPoint point : points) {
 			Point2D pos = point.position.getPoint2D();

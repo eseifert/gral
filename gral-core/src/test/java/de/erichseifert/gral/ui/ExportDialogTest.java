@@ -71,7 +71,7 @@ public class ExportDialogTest {
 
 	@Test
 	public void testDocumentBounds() {
-		Rectangle2D expected = new Rectangle2D.Double(0.0, 1.0, 2.0, 3.0);
+		var expected = new Rectangle2D.Double(0.0, 1.0, 2.0, 3.0);
 
 		for (int run = 0; run < 2; run++) {
 			dialog.setDocumentBounds(

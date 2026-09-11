@@ -51,12 +51,12 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testDraw() {
-		Axis axis = new Axis();
+		var axis = new Axis();
 		axis.setRange(0.1, 10.0);
 		Drawable d = renderer.getRendererComponent(axis);
 		assertNotNull(d);
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		d.draw(context);
 		assertNotEmpty(image);
 	}
@@ -116,7 +116,7 @@ public class LogarithmicRenderer2DTest {
 
 	@Test
 	public void testTicks() {
-		Axis axis = new Axis(0.2, 10.0);
+		var axis = new Axis(0.2, 10.0);
 		List<Tick> ticks = renderer.getTicks(axis);
 		assertEquals(36, ticks.size());  // 18 major ticks, 18 minor ticks
 	}

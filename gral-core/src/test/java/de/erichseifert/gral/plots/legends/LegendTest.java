@@ -72,7 +72,7 @@ public class LegendTest {
 
 	@Test
 	public void testDataSources() {
-		DataSource source = new DummyData(1, 1, 1.0);
+		var source = new DummyData(1, 1, 1.0);
 		assertFalse(legend.contains(source));
 		legend.add(source);
 		assertTrue(legend.contains(source));
@@ -88,7 +88,7 @@ public class LegendTest {
 
 		BufferedImage image = createTestImage();
 		legend.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		legend.draw(context);
 		assertTrue(legend.isDrawn);
 		assertNotEmpty(image);

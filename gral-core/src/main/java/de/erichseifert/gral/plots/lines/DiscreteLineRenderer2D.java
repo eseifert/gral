@@ -91,7 +91,7 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 		double ascendingPoint = getAscendingPoint().doubleValue();
 
 		// Construct shape
-		Path2D shape = new Path2D.Double();
+		var shape = new Path2D.Double();
 		for (DataPoint point : points) {
 			Point2D pos = point.position.getPoint2D();
 			if (shape.getCurrentPoint() == null) {

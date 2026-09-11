@@ -34,13 +34,13 @@ public class SingleColorTest {
 
 	@Test
 	public void testCreate() {
-		SingleColor c = new SingleColor(Color.WHITE);
+		var c = new SingleColor(Color.WHITE);
 		assertEquals(Color.WHITE, c.getColor());
 	}
 
 	@Test
 	public void testColor() {
-		SingleColor c = new SingleColor(Color.BLUE);
+		var c = new SingleColor(Color.BLUE);
 		// Get
 		assertEquals(Color.BLUE, c.getColor());
 		// Set
@@ -50,7 +50,7 @@ public class SingleColorTest {
 
 	@Test
 	public void testGet() {
-		SingleColor c = new SingleColor(Color.BLUE);
+		var c = new SingleColor(Color.BLUE);
 		for (int i = 0; i <= 10; i++) {
 			assertEquals(Color.BLUE, c.get(i));
 		}
@@ -58,7 +58,7 @@ public class SingleColorTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		SingleColor original = new SingleColor(new Color(0.12f, 0.34f, 0.56f, 0.78f));
+		var original = new SingleColor(new Color(0.12f, 0.34f, 0.56f, 0.78f));
 		SingleColor deserialized = TestUtils.serializeAndDeserialize(original);
 
 		assertEquals(original.getColor(), deserialized.getColor());

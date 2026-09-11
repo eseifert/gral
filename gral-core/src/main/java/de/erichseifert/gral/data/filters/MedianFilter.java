@@ -39,7 +39,7 @@ public class MedianFilter<T extends Number & Comparable<T>> implements Filter<T>
 
 		while (windowIterator.hasNext()) {
 			List<T> window = windowIterator.next();
-			Statistics windowStatistics = new Statistics(window);
+			var windowStatistics = new Statistics(window);
 			double median = windowStatistics.get(Statistics.MEDIAN);
 			filtered.add(median);
 		}

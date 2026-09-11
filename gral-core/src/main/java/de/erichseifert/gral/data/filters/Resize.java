@@ -96,9 +96,9 @@ public class Resize extends Filter2D {
 
 		DataSource data = original;
 		if (getRowCount() != original.getRowCount()) {
-			Class[] dataTypes = new Class[original.getColumnCount()];
+			var dataTypes = new Class[original.getColumnCount()];
 			Arrays.fill(dataTypes, Double.class);
-			DataTable avgRows = new DataTable(dataTypes);
+			var avgRows = new DataTable(dataTypes);
 			fillWithEmptyRows(avgRows, getRowCount());
 
 			double step = original.getRowCount() / (double) getRowCount();
@@ -114,9 +114,9 @@ public class Resize extends Filter2D {
 			data = avgRows;
 		}
 		if (getColumnCount() != original.getColumnCount()) {
-			Class[] dataTypes = new Class[getColumnCount()];
+			var dataTypes = new Class[getColumnCount()];
 			Arrays.fill(dataTypes, Double.class);
-			DataTable avgCols = new DataTable(dataTypes);
+			var avgCols = new DataTable(dataTypes);
 			fillWithEmptyRows(avgCols, data.getRowCount());
 
 			double step = original.getColumnCount() / (double) getColumnCount();
@@ -134,7 +134,7 @@ public class Resize extends Filter2D {
 
 		for (int rowIndex = 0; rowIndex < data.getRowCount(); rowIndex++) {
 			Record row = data.getRecord(rowIndex);
-			Double[] rowValues = new Double[row.size()];
+			var rowValues = new Double[row.size()];
 			for (int columnIndex = 0; columnIndex < rowValues.length; columnIndex++) {
 				rowValues[columnIndex] = row.get(columnIndex);
 			}
@@ -149,7 +149,7 @@ public class Resize extends Filter2D {
 	 */
 	private static void fillWithEmptyRows(DataTable data, int count) {
 		while (data.getRowCount() < count) {
-			Double[] emptyRow = new Double[data.getColumnCount()];
+			var emptyRow = new Double[data.getColumnCount()];
 			Arrays.fill(emptyRow, 0.0);
 			data.add(emptyRow);
 		}

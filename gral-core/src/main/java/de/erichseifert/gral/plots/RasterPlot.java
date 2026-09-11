@@ -218,7 +218,7 @@ public class RasterPlot extends XYPlot {
 					// Create shape for pixel
 					// The origin of all shapes is (boxX, boxY)
 					Rectangle2D shapeBounds = shape.getBounds2D();
-					AffineTransform tx = new AffineTransform();
+					var tx = new AffineTransform();
 					tx.scale(width/shapeBounds.getWidth(), height/shapeBounds.getHeight());
 					tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
 					Shape pixel = tx.createTransformedShape(shape);
@@ -333,8 +333,7 @@ public class RasterPlot extends XYPlot {
 			throw new NullPointerException("Cannot convert null data source.");
 		}
 
-		DataTable coordsValueData =
-			new DataTable(Double.class, Double.class, Double.class);
+		var coordsValueData = new DataTable(Double.class, Double.class, Double.class);
 
 		// Generate pixel data with (x, y, value)
 		double min = ((Number) data.getRowStatistics(Statistics.MIN).
@@ -359,7 +358,7 @@ public class RasterPlot extends XYPlot {
 
 	@Override
 	public void add(int index, DataSource source, boolean visible) {
-		if (getData().size() > 0) {
+		if (!getData().isEmpty()) {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}

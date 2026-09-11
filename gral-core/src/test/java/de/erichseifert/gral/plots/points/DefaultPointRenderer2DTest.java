@@ -92,7 +92,7 @@ public class DefaultPointRenderer2DTest {
 	}
 
 	private static void layout(BufferedImage image, AxisRenderer axisRenderer) {
-		Line2D axisShape = new Line2D.Double(
+		var axisShape = new Line2D.Double(
 			image.getWidth()/2.0, 0.0,
 			image.getWidth()/2.0, image.getHeight()
 		);
@@ -106,7 +106,7 @@ public class DefaultPointRenderer2DTest {
 
 		// Draw point
 		BufferedImage image = createTestImage();
-		DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		point.draw(context);
 		assertNotEmpty(image);
 	}
@@ -151,7 +151,7 @@ public class DefaultPointRenderer2DTest {
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			var context = new DrawingContext((Graphics2D) image.getGraphics());
 			layout(image, axisRenderer);
 			point.draw(context);
 			assertNotEmpty(image);
@@ -168,7 +168,7 @@ public class DefaultPointRenderer2DTest {
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			var context = new DrawingContext((Graphics2D) image.getGraphics());
 			layout(image, axisRenderer);
 			point.draw(context);
 			assertNotEmpty(image);
@@ -177,7 +177,7 @@ public class DefaultPointRenderer2DTest {
 
 	@Test
 	public void testValueLocation() {
-		Location[] locations = new Location[Location.values().length + 1];
+		var locations = new Location[Location.values().length + 1];
 		System.arraycopy(Location.values(), 0, locations, 1, locations.length - 1);
 
 		r.setValueVisible(true);
@@ -187,7 +187,7 @@ public class DefaultPointRenderer2DTest {
 			Drawable point = r.getValue(data, r.getPointShape(data));
 			assertNotNull(point);
 			BufferedImage image = createTestImage();
-			DrawingContext context = new DrawingContext((Graphics2D) image.getGraphics());
+			var context = new DrawingContext((Graphics2D) image.getGraphics());
 			layout(image, axisRenderer);
 			AffineTransform txOld = context.getGraphics().getTransform();
 			context.getGraphics().translate(image.getWidth()/2.0, image.getHeight()/2.0);

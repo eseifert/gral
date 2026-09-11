@@ -81,8 +81,9 @@ public class RandomColors extends IndexedColorMapper {
 	@Override
 	public Paint get(int index) {
 		Integer key = index;
-		if (colorCache.containsKey(key)) {
-			return colorCache.get(key);
+		Color cached = colorCache.get(key);
+		if (cached != null) {
+			return cached;
 		}
 
 		// Use the same random numbers for the same input value

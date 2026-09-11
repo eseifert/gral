@@ -49,8 +49,7 @@ final class MockNavigator extends AbstractNavigator {
 		double zoomOld = zoom;
 		if (zoomNew != zoomOld) {
 			zoom = zoomNew;
-			NavigationEvent<Double> event =
-					new NavigationEvent<>(this, zoomOld, zoomNew);
+			var event = new NavigationEvent<Double>(this, zoomOld, zoomNew);
 			fireZoomChanged(event);
 		}
 	}

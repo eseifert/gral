@@ -47,7 +47,7 @@ public class TestUtilsTest {
 
 	@Test
 	public void testAssertNonEmptyImage() {
-		BufferedImage image = new BufferedImage(40, 30, BufferedImage.TYPE_INT_ARGB);
+		var image = new BufferedImage(40, 30, BufferedImage.TYPE_INT_ARGB);
 
 		// Assert must fail on empty image
 		try {
@@ -64,7 +64,7 @@ public class TestUtilsTest {
 
 	@Test
 	public void testAssertEqualsShape() {
-		Rectangle2D s1 = new Rectangle2D.Double();
+		var s1 = new Rectangle2D.Double();
 		try {
 			TestUtils.assertEquals(s1, null);
 			fail();
@@ -75,7 +75,7 @@ public class TestUtilsTest {
 			fail();
 		} catch (AssertionError e) {
 		}
-		Rectangle2D s2 = new Rectangle2D.Double();
+		var s2 = new Rectangle2D.Double();
 		TestUtils.assertEquals(s1, s2);
 		TestUtils.assertEquals(s2, s1);
 
@@ -98,7 +98,7 @@ public class TestUtilsTest {
 
 	@Test
 	public void testAssertEqualsLine2D() {
-		Line2D l1 = new Line2D.Double();
+		var l1 = new Line2D.Double();
 		try {
 			TestUtils.assertEquals(l1, null);
 			fail();
@@ -109,7 +109,7 @@ public class TestUtilsTest {
 			fail();
 		} catch (AssertionError e) {
 		}
-		Line2D l2 = new Line2D.Double();
+		var l2 = new Line2D.Double();
 		TestUtils.assertEquals(l1, l2);
 		TestUtils.assertEquals(l2, l1);
 

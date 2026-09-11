@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.layout.EdgeLayout;
-import de.erichseifert.gral.graphics.layout.Layout;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,7 +78,7 @@ public class ContainerTest {
 	public void testAdd() {
 		assertEquals(0, container.size());
 
-		Drawable d = new MockDrawable();
+		var d = new MockDrawable();
 		container.add(d);
 		assertEquals(1, container.size());
 	}
@@ -94,12 +93,12 @@ public class ContainerTest {
 		// TODO: Allow null values?
 		assertFalse(container.contains(container));
 
-		Drawable d1 = new MockDrawable();
+		var d1 = new MockDrawable();
 		assertFalse(container.contains(d1));
 		container.add(d1);
 		assertTrue(container.contains(d1));
 
-		Drawable d2 = new MockDrawable();
+		var d2 = new MockDrawable();
 		container.add(d2);
 		assertTrue(container.contains(d1));
 		assertTrue(container.contains(d2));
@@ -111,7 +110,7 @@ public class ContainerTest {
 
 	@Test
 	public void testConstraints() {
-		Drawable d = new MockDrawable();
+		var d = new MockDrawable();
 		container.add(d, "foo");
 		assertEquals("foo", container.getConstraints(d));
 	}
@@ -120,7 +119,7 @@ public class ContainerTest {
 	public void testRemove() {
 		assertEquals(0, container.size());
 
-		Drawable d = new MockDrawable();
+		var d = new MockDrawable();
 		container.add(d);
 		assertEquals(1, container.size());
 
@@ -130,7 +129,7 @@ public class ContainerTest {
 
 	@Test
 	public void testDraw() {
-		Drawable d = new MockDrawable();
+		var d = new MockDrawable();
 		container.add(d);
 
 		for (Drawable c : container) {
@@ -147,7 +146,7 @@ public class ContainerTest {
 	@Test
 	public void testInsets() {
 		assertEquals(new Insets2D.Double(), container.getInsets());
-		Insets2D insets = new Insets2D.Double(1.2, 3.4, 5.6, 7.8);
+		var insets = new Insets2D.Double(1.2, 3.4, 5.6, 7.8);
 		container.setInsets(insets);
 		assertEquals(insets, container.getInsets());
 		container.setInsets(insets);
@@ -158,7 +157,7 @@ public class ContainerTest {
 	public void testLayout() {
 		assertEquals(null, container.getLayout());
 
-		Layout layout = new EdgeLayout();
+		var layout = new EdgeLayout();
 		container.setLayout(layout);
 		assertEquals(layout, container.getLayout());
 	}
@@ -178,25 +177,25 @@ public class ContainerTest {
 			assertEquals(Collections.emptyList(), container.getDrawablesAt(point));
 		}
 
-		MockDrawable d = new MockDrawable();
+		var d = new MockDrawable();
 		d.setBounds(0.0, 0.0, 1.0, 1.0);
 		container.add(d);
 
-		DrawableContainer nestedContainer = new DrawableContainer();
+		var nestedContainer = new DrawableContainer();
 		nestedContainer.setBounds(1.0, 1.0, 1.0, 1.0);
 		container.add(nestedContainer);
-		MockDrawable nestedDrawable = new MockDrawable();
+		var nestedDrawable = new MockDrawable();
 		nestedDrawable.setBounds(1.5, 1.5, 0.5, 0.5);
 		nestedContainer.add(nestedDrawable);
 
-		List<Drawable> dList = new ArrayList<>(1);
+		var dList = new ArrayList<Drawable>(1);
 		dList.add(d);
-		List<Drawable> dPlusNestedContainerList = new ArrayList<>(2);
+		var dPlusNestedContainerList = new ArrayList<Drawable>(2);
 		dPlusNestedContainerList.add(nestedContainer);
 		dPlusNestedContainerList.add(d);
-		List<Drawable> nestedContainerList = new ArrayList<>(1);
+		var nestedContainerList = new ArrayList<Drawable>(1);
 		nestedContainerList.add(nestedContainer);
-		List<Drawable> nestedDrawableList = new ArrayList<>(1);
+		var nestedDrawableList = new ArrayList<Drawable>(1);
 		nestedDrawableList.add(nestedDrawable);
 		nestedDrawableList.add(nestedContainer);
 		List[] expected = {
@@ -218,13 +217,13 @@ public class ContainerTest {
 		assertNotNull(container.getDrawables());
 		assertTrue(container.getDrawables().isEmpty());
 
-		Drawable d1 = new MockDrawable();
+		var d1 = new MockDrawable();
 		container.add(d1);
 		List<Drawable> drawables = container.getDrawables();
 		assertEquals(1, drawables.size());
 		assertEquals(d1, drawables.get(0));
 
-		Drawable d2 = new MockDrawable();
+		var d2 = new MockDrawable();
 		container.add(d2);
 		drawables = container.getDrawables();
 		assertEquals(2, drawables.size());
@@ -240,19 +239,19 @@ public class ContainerTest {
 	@Test
 	public void testGetDrawableAtOrder() {
 		// Create two overlapping drawables
-		MockDrawable d1 = new MockDrawable();
-		MockDrawable d2 = new MockDrawable();
-		Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
+		var d1 = new MockDrawable();
+		var d2 = new MockDrawable();
+		var bounds = new Rectangle2D.Double(0.0, 0.0, 1.0, 1.0);
 		d1.setBounds(bounds);
 		d2.setBounds(bounds);
 
 		container.add(d1);
 		container.add(d2);
-		List<Drawable> resultList = new ArrayList<>(2);
+		var resultList = new ArrayList<Drawable>(2);
 		resultList.add(d2);
 		resultList.add(d1);
 
-		Point2D point = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+		var point = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 		assertEquals(resultList, container.getDrawablesAt(point));
 
 		// Clear container

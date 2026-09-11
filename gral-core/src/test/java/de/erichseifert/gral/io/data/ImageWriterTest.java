@@ -52,11 +52,11 @@ public class ImageWriterTest {
 
 	@Test
 	public void testWriter() throws IOException {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		var output = new ByteArrayOutputStream();
 		DataWriter writer = DataWriterFactory.getInstance().get("image/png");
 		writer.write(data, output);
 
-		ByteArrayInputStream input = new ByteArrayInputStream(output.toByteArray());
+		var input = new ByteArrayInputStream(output.toByteArray());
 		BufferedImage image = ImageIO.read(input);
 		assertEquals(data.getColumnCount(), image.getWidth());
 		assertEquals(data.getRowCount(), image.getHeight());
