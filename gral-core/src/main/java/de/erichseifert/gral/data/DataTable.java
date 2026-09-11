@@ -220,7 +220,17 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 			throw new IllegalArgumentException("Invalid element count in Record to be added. " +
 					"Expected: "+getColumnCount()+", got: "+row.size());
 		}
-		rows.add(row);
+
+		DataChangeEvent[] events = new DataChangeEvent[row.size()];
+		synchronized (rows) {
+			int rowIndex = rows.size();
+			for (int columnIndex = 0; columnIndex < row.size(); columnIndex++) {
+				events[columnIndex] = new DataChangeEvent(
+					this, columnIndex, rowIndex, null, row.get(columnIndex));
+			}
+			rows.add(row);
+		}
+		notifyDataAdded(events);
 	}
 
 	/**

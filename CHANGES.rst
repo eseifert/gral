@@ -3,6 +3,8 @@ GRAL 0.13 (unreleased)
 
 Data:
     - ``Kernel.mul`` sets the values outside of the specified kernel to zero
+    - ``DataTable.add(Record)`` notifies the registered data listeners and
+      discards the cached statistics
 
 Plotting:
     - Horizontally stacked layouts report the height of their tallest

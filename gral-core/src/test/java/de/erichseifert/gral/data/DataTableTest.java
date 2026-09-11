@@ -168,6 +168,39 @@ public class DataTableTest {
 		assertThat(table.getRowCount(), is(1));
 	}
 
+	@Test
+	public void testEventsAddRecord() {
+		MockDataListener listener = new MockDataListener();
+		table.addDataListener(listener);
+
+		int row = table.getRowCount();
+		table.add(new Record(56, 78));
+
+		assertNotNull(listener.added);
+		assertNull(listener.updated);
+		assertNull(listener.removed);
+
+		assertEquals(2, listener.added.length);
+		assertEquals(0, listener.added[0].getCol());
+		assertEquals(row, listener.added[0].getRow());
+		assertNull(listener.added[0].getOld());
+		assertEquals(56, listener.added[0].getNew());
+		assertEquals(1, listener.added[1].getCol());
+		assertEquals(row, listener.added[1].getRow());
+		assertNull(listener.added[1].getOld());
+		assertEquals(78, listener.added[1].getNew());
+	}
+
+	@Test
+	public void testAddRecordInvalidatesStatistics() {
+		DataTable table = new DataTable(Integer.class);
+		table.add(new Record(1));
+		assertEquals(1.0, table.getStatistics().get(Statistics.N), DELTA);
+
+		table.add(new Record(2));
+		assertEquals(2.0, table.getStatistics().get(Statistics.N), DELTA);
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddRecordThrowsExceptionIfColumnCountDoesNotMatch() {
 		DataTable table = new DataTable(String.class, Double.class);
