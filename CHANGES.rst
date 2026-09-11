@@ -15,6 +15,7 @@ Plotting:
       central row, so that its components no longer overlap the bottom row
     - Removing a data source from a plot, or clearing the plot, updates the
       ranges of auto-scaled axes
+    - Hidden data sources no longer determine the ranges of auto-scaled axes
 
 General:
     - Releases are published through the Central Portal publisher API

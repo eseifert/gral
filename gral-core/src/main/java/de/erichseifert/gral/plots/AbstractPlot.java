@@ -842,6 +842,10 @@ public abstract class AbstractPlot extends DrawableContainer
 		synchronized (this) {
 			for (Entry<DataSource, Map<Integer, String>> entryByDataSource : columnToAxisMappingByDataSource.entrySet()) {
 				DataSource dataSource = entryByDataSource.getKey();
+				// Hidden data sources must not influence the axis ranges
+				if (!isVisible(dataSource)) {
+					continue;
+				}
 				Map<Integer, String> columnToAxisMapping = entryByDataSource.getValue();
 				for (Entry<Integer, String> entry : columnToAxisMapping.entrySet()) {
 					Integer colIndex = entry.getKey();

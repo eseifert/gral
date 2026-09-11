@@ -296,6 +296,34 @@ public class XYPlotTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
+	public void testHiddenDataSourceIsIgnoredByAutoscaling() {
+		DataTable data1 = new DataTable(Double.class, Double.class);
+		data1.add(1.0, 1.0);
+		data1.add(2.0, 2.0);
+		DataTable data2 = new DataTable(Double.class, Double.class);
+		data2.add(10.0, 20.0);
+
+		MockXYPlot plot = new MockXYPlot(data1, data2);
+		plot.setVisible(data2, false);
+		plot.autoscaleAxis(XYPlot.AXIS_X);
+		plot.autoscaleAxis(XYPlot.AXIS_Y);
+
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		assertEquals(2.0, axisX.getMax().doubleValue(), DELTA);
+		Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
+		assertEquals(2.0, axisY.getMax().doubleValue(), DELTA);
+
+		// Showing the data source again has to restore the old range
+		plot.setVisible(data2, true);
+		plot.autoscaleAxis(XYPlot.AXIS_X);
+		plot.autoscaleAxis(XYPlot.AXIS_Y);
+
+		assertEquals(10.0, axisX.getMax().doubleValue(), DELTA);
+		assertEquals(20.0, axisY.getMax().doubleValue(), DELTA);
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		MockXYPlot original = plots.get(0);
 		MockXYPlot deserialized = TestUtils.serializeAndDeserialize(original);
