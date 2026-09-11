@@ -38,6 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.data.AbstractDataSource;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -183,6 +184,58 @@ public class PiePlotTest {
 		}
 		assertEquals(sliceWidthSum,
 			(Double) pieData.get(1, pieData.getRowCount() - 1), DELTA);
+	}
+
+	/**
+	 * A data source that counts how often its values are read.
+	 */
+	private static final class CountingDataSource extends AbstractDataSource {
+		/** Version id for serialization. */
+		private static final long serialVersionUID = 1L;
+
+		private final DataSource data;
+		private int readCount;
+
+		@SuppressWarnings("unchecked")
+		public CountingDataSource(DataSource data) {
+			super(data.getColumnTypes());
+			this.data = data;
+		}
+
+		@Override
+		public Comparable<?> get(int col, int row) {
+			readCount++;
+			return data.get(col, row);
+		}
+
+		@Override
+		public int getRowCount() {
+			return data.getRowCount();
+		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCreatePieDataReadsEachValueOnlyFewTimes() {
+		int rowCount = 100;
+		DataTable data = new DataTable(Integer.class);
+		for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+			data.add(1);
+		}
+		CountingDataSource countingData = new CountingDataSource(data);
+		DataSource pieData = PiePlot.createPieData(countingData);
+
+		countingData.readCount = 0;
+		for (int rowIndex = 0; rowIndex < pieData.getRowCount(); rowIndex++) {
+			pieData.get(0, rowIndex);
+			pieData.get(1, rowIndex);
+			pieData.get(2, rowIndex);
+		}
+
+		// Accumulating the values for every single cell would need a number
+		// of reads that grows with the square of the row count
+		assertTrue("Read " + countingData.readCount + " values for " +
+			rowCount + " rows.", countingData.readCount <= 4*rowCount);
 	}
 
 	@Test

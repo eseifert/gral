@@ -26,6 +26,9 @@ Plotting:
       has been set on a plot (#46)
     - Pie slices no longer overlap when the data source contains negative
       values (#148)
+    - The slices of a pie plot are accumulated once per change of the data
+      instead of once per read value, which made drawing a pie plot take a
+      time that grows with the square of the number of values
 
 Data I/O:
     - ``CSVWriter`` quotes values that contain the column separator, a quote,

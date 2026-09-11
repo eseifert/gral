@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -969,22 +970,27 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 	private static class PieData extends AbstractDataSource {
 		private final DataSource data;
+		/** Cached end values of all slices. */
+		private transient List<Double> sliceEnds;
 
 		public PieData(DataSource data) {
 			this.data = data;
 			data.addDataListener(new DataListener() {
 				@Override
 				public void dataAdded(DataSource source, DataChangeEvent... events) {
+					invalidateSliceEnds();
 					notifyDataAdded(events);
 				}
 
 				@Override
 				public void dataUpdated(DataSource source, DataChangeEvent... events) {
+					invalidateSliceEnds();
 					notifyDataUpdated(events);
 				}
 
 				@Override
 				public void dataRemoved(DataSource source, DataChangeEvent... events) {
+					invalidateSliceEnds();
 					notifyDataRemoved(events);
 				}
 			});
@@ -1009,15 +1015,13 @@ public class PiePlot extends AbstractPlot implements Navigable {
 
 		@Override
 		public Comparable<?> get(int col, int row) {
-			Iterable<Double> accumulatedColumnData =
-				new Accumulation<>(getAbsoluteValues(data.getColumn(0)));
 			if (col == 0) {
 				if (row == 0) {
 					return 0.0;
 				}
-				return get(accumulatedColumnData, row - 1);
+				return getSliceEnd(row - 1);
 			} else if (col == 1) {
-				return get(accumulatedColumnData, row);
+				return getSliceEnd(row);
 			} else if (col == 2) {
 				return ((Number) data.get(0, row)).doubleValue() > 0.0;
 			}
@@ -1030,33 +1034,50 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		}
 
 		/**
-		 * Returns the absolute values of the specified column. A pie slice
-		 * always covers a positive part of the pie; the sign of a value only
-		 * decides whether the slice is displayed or left empty.
-		 * @param column Column of the original data source.
-		 * @return Absolute value of each element of the column.
+		 * Returns the value where the slice with the specified index ends, or
+		 * {@code null} if there is no such slice.
+		 * @param sliceIndex Index of the slice.
+		 * @return End value of the slice.
 		 */
-		private static List<Double> getAbsoluteValues(Column<?> column) {
-			List<Double> absoluteValues = new LinkedList<>();
-			for (Comparable<?> value : column) {
-				double numericValue = (value instanceof Number)
-					? ((Number) value).doubleValue() : 0.0;
-				absoluteValues.add(Math.abs(numericValue));
+		private Double getSliceEnd(int sliceIndex) {
+			List<Double> sliceEnds = getSliceEnds();
+			if (sliceIndex < 0 || sliceIndex >= sliceEnds.size()) {
+				return null;
 			}
-			return absoluteValues;
+			return sliceEnds.get(sliceIndex);
 		}
 
-		private static <T> T get(Iterable<T> iterable, int index) {
-			T element = null;
-			int elementIndex = 0;
-			for (T e : iterable) {
-				if (elementIndex == index) {
-					element = e;
-					break;
+		/**
+		 * Returns the end values of all slices. A pie slice always covers a
+		 * positive part of the pie, so the absolute values are accumulated;
+		 * the sign of a value only decides whether the slice is displayed or
+		 * left empty. The values are cached until the data changes.
+		 * @return End value of each slice.
+		 */
+		private List<Double> getSliceEnds() {
+			if (sliceEnds == null) {
+				List<Double> absoluteValues =
+					new ArrayList<>(data.getRowCount());
+				for (Comparable<?> value : data.getColumn(0)) {
+					double numericValue = (value instanceof Number)
+						? ((Number) value).doubleValue() : 0.0;
+					absoluteValues.add(Math.abs(numericValue));
 				}
-				elementIndex++;
+				List<Double> accumulatedValues =
+					new ArrayList<>(absoluteValues.size());
+				for (Double accumulatedValue : new Accumulation<>(absoluteValues)) {
+					accumulatedValues.add(accumulatedValue);
+				}
+				sliceEnds = accumulatedValues;
 			}
-			return element;
+			return sliceEnds;
+		}
+
+		/**
+		 * Discards the cached end values of the slices.
+		 */
+		private void invalidateSliceEnds() {
+			sliceEnds = null;
 		}
 	}
 
