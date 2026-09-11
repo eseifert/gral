@@ -1,7 +1,18 @@
 GRAL 0.12 (unreleased)
 ======================
 
+Data:
+    - Data change events of ``DataSeries`` use the series' columns now (#178)
+    - Fixed skewness, which was off by a constant value of three
+    - Statistics of a data source are updated when its values change
+    - Added ``Record.hashCode`` and an explicit ``serialVersionUID``
+    - Median and convolution filters no longer fail on short or empty data
+
+Plotting:
+    - ``Label.equals`` no longer fails for unset text, font, or color
+
 General:
+    - ``SortedList.indexOf`` returns -1 for absent elements now
     - Modernized the build: Gradle 9, JDK 17 or later to build
     - The library is now compiled for Java 11 instead of Java 7
     - The published JAR is no longer processed by ProGuard, so it keeps its
