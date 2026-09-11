@@ -23,6 +23,7 @@ package de.erichseifert.gral.io.data;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,6 +31,7 @@ import java.io.OutputStream;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 
 public class CSVWriterTest {
@@ -68,6 +70,38 @@ public class CSVWriterTest {
 
 			assertEquals(expected[i], output.toString());
 		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testQuotesValuesContainingSpecialCharacters() throws IOException {
+		DataTable data = new DataTable(String.class, String.class);
+		data.add("a,b", "say \"hi\"");
+
+		OutputStream output = new ByteArrayOutputStream();
+		DataWriter writer = DataWriterFactory.getInstance().get("text/csv");
+		writer.write(data, output);
+
+		assertEquals("\"a,b\",\"say \"\"hi\"\"\"\r\n", output.toString());
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testWrittenValuesCanBeReadAgain() throws IOException {
+		DataTable data = new DataTable(String.class, String.class);
+		data.add("a,b", "say \"hi\"");
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataWriterFactory.getInstance().get("text/csv").write(data, output);
+
+		DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+		DataSource read = reader.read(
+			new ByteArrayInputStream(output.toByteArray()),
+			String.class, String.class);
+
+		assertEquals(1, read.getRowCount());
+		assertEquals("a,b", read.get(0, 0));
+		assertEquals("say \"hi\"", read.get(1, 0));
 	}
 
 	@Test

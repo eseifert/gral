@@ -25,6 +25,10 @@ Plotting:
     - Zooming, panning and resetting the view work after a new axis renderer
       has been set on a plot (#46)
 
+Data I/O:
+    - ``CSVWriter`` quotes values that contain the column separator, a quote,
+      or a line break, so that they can be read again
+
 General:
     - Releases are published through the Central Portal publisher API
 

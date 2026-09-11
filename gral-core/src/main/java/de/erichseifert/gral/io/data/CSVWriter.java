@@ -96,7 +96,7 @@ public class CSVWriter extends AbstractDataWriter {
 		int i = 0;
 		int colCount = data.getColumnCount();
 		for (Comparable<?> cell : data) {
-			writer.write(String.valueOf(cell));
+			writer.write(escape(String.valueOf(cell), separator));
 
 			int col = i % colCount;
 			if (col < colCount - 1) {
@@ -108,6 +108,24 @@ public class CSVWriter extends AbstractDataWriter {
 		}
 
 		writer.close();
+	}
+
+	/**
+	 * Wraps a value in quotes if it contains a character that would otherwise
+	 * end the value or the row. Quotes inside such a value are doubled.
+	 * @param value Value to be written.
+	 * @param separator Character that separates the columns.
+	 * @return Value as it has to appear in the output.
+	 */
+	private static String escape(String value, char separator) {
+		boolean mustBeQuoted = value.indexOf(separator) >= 0
+			|| value.indexOf('"') >= 0
+			|| value.indexOf('\r') >= 0
+			|| value.indexOf('\n') >= 0;
+		if (!mustBeQuoted) {
+			return value;
+		}
+		return '"' + value.replace("\"", "\"\"") + '"'; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 }
