@@ -7,6 +7,8 @@ Data:
 Plotting:
     - Horizontally stacked layouts report the height of their tallest
       component as preferred height
+    - Edge layouts subtract both vertical gaps from the height of their
+      central row, so that its components no longer overlap the bottom row
 
 General:
     - Releases are published through the Central Portal publisher API

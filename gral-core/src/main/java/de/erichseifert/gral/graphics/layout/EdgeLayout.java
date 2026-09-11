@@ -105,7 +105,7 @@ public class EdgeLayout extends AbstractLayout {
 		double widthAll = widthWest + widthEast;
 		double heightAll = heightNorth + heightSouth;
 		double gapHAll = gapWest + gapEast;
-		double gapVAll = gapNorth - gapSouth;
+		double gapVAll = gapNorth + gapSouth;
 
 		layoutComponent(northWest,
 			xWest, yNorth,

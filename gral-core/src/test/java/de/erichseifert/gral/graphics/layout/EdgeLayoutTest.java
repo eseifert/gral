@@ -140,6 +140,30 @@ public class EdgeLayoutTest {
 	}
 
 	@Test
+	public void testLayoutSizes() {
+		Rectangle2D bounds = new Rectangle2D.Double(5.0, 5.0, 50.0, 50.0);
+		container.setBounds(bounds);
+		layout.layout(container);
+
+		double widthCenter =
+			bounds.getWidth() - 2.0*COMP_WIDTH - 2.0*GAP_H;
+		double heightCenter =
+			bounds.getHeight() - 2.0*COMP_HEIGHT - 2.0*GAP_V;
+
+		// The central column has to leave room for both gaps
+		assertEquals(widthCenter, nn.getWidth(), DELTA);
+		assertEquals(widthCenter, ce.getWidth(), DELTA);
+		assertEquals(widthCenter, ss.getWidth(), DELTA);
+		// The central row has to leave room for both gaps, too
+		assertEquals(heightCenter, ww.getHeight(), DELTA);
+		assertEquals(heightCenter, ce.getHeight(), DELTA);
+		assertEquals(heightCenter, ee.getHeight(), DELTA);
+
+		// Components must not overlap their neighbours
+		assertEquals(ss.getY(), ce.getY() + ce.getHeight() + GAP_V, DELTA);
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		EdgeLayout original = layout;
 		EdgeLayout deserialized = TestUtils.serializeAndDeserialize(original);
