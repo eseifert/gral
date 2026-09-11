@@ -10,11 +10,6 @@ GRAL is a free Java library for displaying plots (graphs, diagrams, and
 charts). The acronym GRAL simply stands for *GRAphing Library*.
 
 
-Maintainer wanted
-================
-GRAL is looking for a new maintainer. If you are interested, please contact `dev@erichseifert.de <mailto:dev@erichseifert.de>`_.
-
-
 Features
 ========
 
@@ -50,7 +45,7 @@ a dependency in your ``pom.xml``:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral-core</artifactId>
-        <version>0.11</version>
+        <version>0.12</version>
     </dependency>
 
 Using GRAL with Gradle
@@ -59,7 +54,7 @@ Using GRAL with Gradle
 .. code:: groovy
 
     dependencies {
-        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.11'
+        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.12'
     }
 
 Using GRAL with sbt
@@ -67,7 +62,7 @@ Using GRAL with sbt
 
 .. code:: scala
 
-    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.11"
+    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.12"
 
 
 Building GRAL from source code
