@@ -1,7 +1,7 @@
 .. image:: https://eseifert.github.io/gral/logo.png
 
-.. image:: https://travis-ci.org/eseifert/gral.svg?branch=master
-    :target: https://travis-ci.org/eseifert/gral
+.. image:: https://github.com/eseifert/gral/actions/workflows/build.yml/badge.svg?branch=master
+    :target: https://github.com/eseifert/gral/actions/workflows/build.yml
 
 GRAL
 ####
@@ -77,25 +77,45 @@ the `Gradle <http://www.gradle.org>`__ software project management and
 comprehension tool. Like ``Makefile`` files the ``build.gradle`` files are used by
 Gradle to generate various distribution or documentation files.
 
+All commands below use the Gradle wrapper ``./gradlew`` (``gradlew.bat`` on
+Windows), which downloads the required Gradle version automatically. No
+separate Gradle installation is needed.
+
 Building a JAR file of the library core
 ---------------------------------------
 In case you just want to build the core of the library to get started execute
-the following command in the ``gral-core`` directory::
+the following command in the project directory::
 
-  $ gradle assemble
+  $ ./gradlew :gral-core:assemble
 
-This will generate a JAR archive named ``gral-core`` in the ``build/libs`` directory.
-This JAR file can be added to the class path of your application.
+This will generate a JAR archive named ``gral-core`` in the
+``gral-core/build/libs`` directory. This JAR file can be added to the class path
+of your application.
 
 Building a JAR file of the examples
 -----------------------------------
-In case you just want to build the core of the library to get started execute
-the following command in the ``gral-examples`` directory::
+The example applications are built with::
 
-  $ gradle assemble
+  $ ./gradlew :gral-examples:assemble
 
-This will generate a JAR archive for the examples in the ``build/libs`` directory
-which can be used together with the library core to run example applications.
+This will generate a JAR archive for the examples in the
+``gral-examples/build/libs`` directory which can be used together with the
+library core to run example applications. Alternatively, the example browser can
+be started directly with::
+
+  $ ./gradlew :gral-examples:run
+
+Running the tests
+-----------------
+::
+
+  $ ./gradlew build
+
+A handful of tests in ``de.erichseifert.gral.ui`` need a display and skip
+themselves when none is available. To run them on a headless machine, use a
+virtual frame buffer::
+
+  $ xvfb-run --auto-servernum ./gradlew build
 
 Building the documentation
 --------------------------
@@ -103,13 +123,13 @@ The GRAL Gradle project offers three sources for documentation:
 
 1. The JavaDoc files that can be generated with::
 
-     $ gradle javadoc
+     $ ./gradlew javadoc
 
 2. The reports found in ``build/reports`` containing a project various
    information like test results, test coverage, etc. To build these files
    just execute::
 
-     $ gradle report
+     $ ./gradlew :gral-core:report
 
 3. A book-like documentation in the reStructuredText format is available in the
    file ``documentation_en.rst``.
@@ -127,4 +147,14 @@ able to import the GRAL project found in this folder.
 
 Requirements
 ============
-To build GRAL from source, you need a Gradle version higher than 4.0 and at least Java 7.
+Using GRAL requires Java 11 or later.
+
+Building GRAL from source requires a JDK 17 or later, because that is what the
+Gradle version used by the build needs. The library itself is still compiled for
+Java 11, independently of the JDK used to build it.
+
+Export to the vector formats EPS, PDF and SVG additionally requires
+`VectorGraphics2D <https://github.com/eseifert/vectorgraphics2d>`__ on the
+runtime class path. It is declared as a runtime dependency, so build tools pick
+it up automatically. GRAL loads it reflectively and simply does not offer those
+formats when it is missing.

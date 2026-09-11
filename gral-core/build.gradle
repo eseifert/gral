@@ -1,149 +1,125 @@
-import proguard.gradle.ProGuardTask
-
 description = 'GRAL core'
 
-buildscript {
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath 'me.champeau.gradle:jmh-gradle-plugin:0.4.8'
+dependencies {
+	testImplementation 'junit:junit:4.13.2'
+}
+
+jar {
+	manifest {
+		attributes(
+			'Automatic-Module-Name': 'de.erichseifert.gral',
+			'Implementation-Title': rootProject.name,
+			'Implementation-Version': project.version,
+			'Implementation-Vendor': owner1_name,
+		)
 	}
 }
-apply plugin: 'me.champeau.gradle.jmh'
+
+/*
+ * JMH benchmarks. Previously handled by the jmh-gradle-plugin, which is not
+ * needed for the single benchmark in this project.
+ */
+sourceSets {
+	jmh {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
+}
 
 dependencies {
-	testCompile 'junit:junit:4.12'
-	jmh 'commons-io:commons-io:2.4'
-	testRuntime 'org.slf4j:slf4j-log4j12:1.7.26'  // Required for Cobertura
+	jmhImplementation 'org.openjdk.jmh:jmh-core:1.37'
+	jmhAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }
 
-buildscript {
-	repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-	}
-	dependencies {
-		classpath 'net.sf.proguard:proguard-gradle:6.0.+'
-		classpath 'net.saliman:gradle-cobertura-plugin:2.6.+'
-		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.+'
+tasks.register('jmh', JavaExec) {
+	description = 'Runs the JMH benchmarks.'
+	group = 'Verification'
+	classpath = sourceSets.jmh.runtimeClasspath
+	mainClass = 'org.openjdk.jmh.Main'
+}
+
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
 	}
 }
 
-apply plugin: 'net.saliman.cobertura'
-cobertura.coverageFormats = ['html', 'xml']
-
-apply plugin: 'com.github.kt3k.coveralls'
-
-task report {
-	dependsOn = ['cobertura', check]
+tasks.register('report') {
 	description = 'Generates reports.'
 	group = 'Report'
-
-	tasks.withType(Pmd).each {pmdTask ->
-		pmdTask.ignoreFailures = true
-	}
-	tasks.withType(Checkstyle).each {checkstyleTask ->
-		checkstyleTask.ignoreFailures = true
-		checkstyleTask.showViolations = false
-	}
+	dependsOn(tasks.named('jacocoTestReport'), tasks.named('check'))
 }
 
-task shrinkJar(type: ProGuardTask, dependsOn: jar) {
-	description = 'Uses ProGuard to reduce the code size of this project.'
-	group = 'Build'
-	// Configure ProGuard
-	configuration "${projectDir}/src/etc/proguard.conf"
-	target targetCompatibility.toString()
-	injars configurations.runtimeClasspath.resolve(), filter: '!META-INF/**'
-	injars jar.archivePath
-	outjars "${libsDir}/shrunk/${jar.archiveName}"
-	// Determine the location of the Java runtime (required for ProGuard)
-	def javaHome = System.getProperty('java.home')
-	if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
-		if (file("${javaHome}/lib/rt.jar").exists()) {
-			libraryjars "${javaHome}/lib/rt.jar"
-		} else if (file("${javaHome}/bundle/Classes/classes.jar").exists()) {
-			libraryjars "${javaHome}/bundle/Classes/classes.jar"
-		}
-	} else {
-		libraryjars "${javaHome}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
-		libraryjars "${javaHome}/jmods/java.desktop.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
-		libraryjars "${javaHome}/jmods/java.sql.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
-		libraryjars "${javaHome}/jmods/java.xml.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
-	} 
-}
-
-task javadocJar(type: Jar) {
-	description = 'Assembles a jar archive containing the API doc.'
-	group = 'Build'
-	from javadoc
-	classifier 'javadoc'
-}
-
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-artifacts {
-	archives shrinkJar.getOutJarFileCollection().getSingleFile(), sourceJar, javadocJar
-}
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
 
-signing {
-	required { hasProperty('signing.keyId') && gradle.taskGraph.hasTask('uploadArchives') }
-	sign configurations.archives
-}
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-			repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-				authentication(userName: project.hasProperty('ossrhUsername')?ossrhUsername:'', password: project.hasProperty('ossrhPassword')?ossrhPassword:'')
-			}
-
-			snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-				authentication(userName: project.hasProperty('ossrhUsername')?ossrhUsername:'', password: project.hasProperty('ossrhPassword')?ossrhPassword:'')
-			}
-
-			pom.project {
-				name rootProject.name
-				packaging 'jar'
-				description rootProject.description
-				url website
-				inceptionYear inceptionYear
+			pom {
+				name = rootProject.name
+				description = rootProject.description
+				url = website
+				inceptionYear = project.inceptionYear.toString()
 				licenses {
 					license {
-						name 'GNU Library or Lesser General Public License (LGPL)'
-						url 'http://www.gnu.org/licenses/lgpl.txt'
+						name = 'GNU Library or Lesser General Public License (LGPL)'
+						url = 'http://www.gnu.org/licenses/lgpl.txt'
 					}
 				}
 				developers {
 					developer {
-						id owner1_id
-						name owner1_name
-						email owner1_email
+						id = owner1_id
+						name = owner1_name
+						email = owner1_email
 					}
 					developer {
-						id owner2_id
-						name owner2_name
-						email owner2_email
+						id = owner2_id
+						name = owner2_name
+						email = owner2_email
 					}
 				}
 				scm {
-					connection 'scm:git:git://github.com/eseifert/gral.git'
-					developerConnection 'scm:git:git@github.com:eseifert/gral.git'
-					url website
+					connection = 'scm:git:git://github.com/eseifert/gral.git'
+					developerConnection = 'scm:git:git@github.com:eseifert/gral.git'
+					url = website
 				}
 				issueManagement {
-					system 'GitHub Issues'
-					url website
+					system = 'GitHub Issues'
+					url = website
 				}
 			}
 		}
 	}
+
+	repositories {
+		/*
+		 * oss.sonatype.org was shut down in 2025. This is the OSSRH-compatible
+		 * endpoint of its successor, the Central Portal.
+		 */
+		maven {
+			name = 'sonatype'
+			url = version.toString().endsWith('SNAPSHOT')
+				? 'https://central.sonatype.com/repository/maven-snapshots/'
+				: 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+			credentials {
+				username = project.findProperty('ossrhUsername') ?: ''
+				password = project.findProperty('ossrhPassword') ?: ''
+			}
+		}
+	}
 }
-signArchives.dependsOn(shrinkJar)
+
+signing {
+	required = {
+		project.hasProperty('signing.keyId') &&
+			gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
+	}
+	sign publishing.publications.mavenJava
+}

@@ -1,11 +1,22 @@
 description = 'GRAL example applications'
 
+apply plugin: 'application'
+
 dependencies {
-	compile project(':gral-core')
+	implementation project(':gral-core')
+}
+
+application {
+	mainClass = 'de.erichseifert.gral.examples.Browser'
 }
 
 jar {
 	manifest {
-		attributes('Main-Class': 'de.erichseifert.gral.examples.Browser')
+		attributes(
+			'Main-Class': application.mainClass.get(),
+			'Automatic-Module-Name': 'de.erichseifert.gral.examples',
+			'Implementation-Title': project.description,
+			'Implementation-Version': project.version,
+		)
 	}
 }

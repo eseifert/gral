@@ -139,7 +139,7 @@ public class VectorWriter extends IOCapabilitiesStorage
 			// Create an instance of Graphics2D implementation
 			Class<?> vg2dClass = Class.forName(VECTORGRAPHICS2D_PACKAGE +
 					".VectorGraphics2D"); //$NON-NLS-1$
-			Graphics2D g = (Graphics2D) vg2dClass.newInstance();
+			Graphics2D g = (Graphics2D) vg2dClass.getDeclaredConstructor().newInstance();
 			// Paint the Drawable instance
 			d.draw(new DrawingContext(g, Quality.QUALITY, Target.VECTOR));
 			// Get sequence of commands

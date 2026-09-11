@@ -1,0 +1,56 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Gradle itself needs Java 17 or later. The library is compiled for
+        # Java 11 regardless of the JDK used here.
+        java: ['17', '21', '25']
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The project version is derived from git describe --tags.
+          fetch-depth: 0
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # A few tests in de.erichseifert.gral.ui need a real display. They skip
+      # themselves when none is available, so run them under Xvfb to keep them
+      # covered.
+      - name: Install Xvfb
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends xvfb
+
+      - name: Build
+        run: xvfb-run --auto-servernum ./gradlew build --stacktrace
+
+      - name: Coverage report
+        if: matrix.java == '21'
+        run: xvfb-run --auto-servernum ./gradlew :gral-core:jacocoTestReport
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-java${{ matrix.java }}
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+          retention-days: 14

@@ -1,3 +1,18 @@
+GRAL 0.12 (unreleased)
+======================
+
+General:
+    - Modernized the build: Gradle 9, JDK 17 or later to build
+    - The library is now compiled for Java 11 instead of Java 7
+    - The published JAR is no longer processed by ProGuard, so it keeps its
+      ``SourceFile`` attributes and IDEs can attach the sources JAR again
+      (#139). Dropping ProGuard also removes the build failure on JDK 11 and
+      later (#183)
+    - VectorGraphics2D is a declared runtime dependency now, so EPS, PDF and
+      SVG export no longer depend on the user adding it manually (#181)
+    - Added ``Automatic-Module-Name`` to the JARs for use on the module path
+    - Replaced Cobertura with JaCoCo (#66) and Travis CI with GitHub Actions
+
 GRAL 0.11 (2016-03-11)
 ======================
 

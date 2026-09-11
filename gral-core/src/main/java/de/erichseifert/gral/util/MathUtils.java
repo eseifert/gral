@@ -332,11 +332,11 @@ public abstract class MathUtils {
 	 * <p>Returns the magnitude of the specified number. Example for magnitude
 	 * base 10:</p>
 	 * <table><caption>Examples of number and corresponding magnitude</caption><tbody>
-	 *   <tr><td align="right"> -0.05</td><td align="right"> -0.01</td></tr>
-	 *   <tr><td align="right">  0.05</td><td align="right">  0.01</td></tr>
-	 *   <tr><td align="right">  3.14</td><td align="right">  1.00</td></tr>
-	 *   <tr><td align="right"> 54.32</td><td align="right"> 10.00</td></tr>
-	 *   <tr><td align="right">123.45</td><td align="right">100.00</td></tr>
+	 *   <tr><td style="text-align:right"> -0.05</td><td style="text-align:right"> -0.01</td></tr>
+	 *   <tr><td style="text-align:right">  0.05</td><td style="text-align:right">  0.01</td></tr>
+	 *   <tr><td style="text-align:right">  3.14</td><td style="text-align:right">  1.00</td></tr>
+	 *   <tr><td style="text-align:right"> 54.32</td><td style="text-align:right"> 10.00</td></tr>
+	 *   <tr><td style="text-align:right">123.45</td><td style="text-align:right">100.00</td></tr>
 	 * </tbody></table>
 	 * @param base Base.
 	 * @param n Number.

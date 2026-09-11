@@ -3,8 +3,8 @@
 
     GRAL: GRAphing Library for Java(R)
 
-    (C) Copyright 2009-2015 Erich Seifert <dev[at]erichseifert.de>,
-    Michael Seifert <michael[at]erichseifert.de>
+    (C) Copyright 2009-2026 Erich Seifert <dev[at]erichseifert.de>,
+    Michael Seifert <mseifert[at]error-reports.org>
 
     This file is part of GRAL.
 
@@ -23,8 +23,8 @@
 
 -->
 <!DOCTYPE module PUBLIC
-    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
-    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="${checkstyle.severity}" default="warning"/>
@@ -33,24 +33,31 @@
         <property name="severity" value="info"/>
     </module>
 
+    <!-- LineLength moved out of TreeWalker in Checkstyle 8.24. -->
+    <module name="LineLength">
+        <property name="severity" value="info"/>
+        <property name="max" value="100"/>
+    </module>
+    <module name="LineLength">
+        <property name="max" value="120"/>
+    </module>
+
     <module name="TreeWalker">
         <property name="tabWidth" value="4"/>
         <module name="JavadocType">
             <property name="scope" value="protected"/>
         </module>
-        <module name="JavadocMethod">
+        <!--
+            JavadocMethod lost its scope and allowUndeclaredRTE properties in
+            Checkstyle 8. Presence is now checked by MissingJavadocMethod,
+            while JavadocMethod only validates the Javadoc that is there.
+        -->
+        <module name="JavadocMethod"/>
+        <module name="MissingJavadocMethod">
             <property name="scope" value="protected"/>
-            <property name="allowUndeclaredRTE" value="true"/>
         </module>
         <module name="JavadocVariable">
-            <property name="scope" value="protected"/>
-        </module>
-        <module name="LineLength">
-            <property name="severity" value="info"/>
-            <property name="max" value="100"/>
-        </module>
-        <module name="LineLength">
-            <property name="max" value="120"/>
+            <property name="accessModifiers" value="public,protected"/>
         </module>
         <module name="NeedBraces"/>
         <module name="Regexp">

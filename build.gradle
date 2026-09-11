@@ -1,16 +1,47 @@
 description = 'Free Java library for displaying plots'
 
+/*
+ * The version is derived from the tags in the git repository, so the build has
+ * to run inside the work tree.
+ */
+def gitVersion = providers.exec {
+	commandLine('git', 'describe', '--tags', '--always')
+}.standardOutput.asText.get().trim()
+
+/*
+ * Turns the plain-text license template into the block comment that is
+ * expected at the top of every Java source file. Defined as closures rather
+ * than methods, so that the subprojects below don't have to look them up in
+ * the parent project.
+ */
+def renderLicenseHeader = { String template, Map<String, String> values ->
+	String text = template
+	values.each { key, value -> text = text.replace('${' + key + '}', value) }
+	String body = text.readLines()
+			.collect { line -> line.trim().isEmpty() ? ' *' : ' * ' + line }
+			.join('\n')
+	return "/*\n${body}\n */\n"
+}
+
+/*
+ * Hides the differences that don't matter when comparing license headers: the
+ * end year of the copyright range, and the CRLF line endings that some of the
+ * source files have always used.
+ */
+def normalizeLicenseText = { String text ->
+	return text.replace('\r\n', '\n')
+			.replaceAll(/\(C\) Copyright \d{4}-\d{4}/, '(C) Copyright <years>')
+}
+
 allprojects {
 	group = 'de.erichseifert.gral'
-	version = getVersionString()
+	version = gitVersion
 
 	ext.inceptionYear = 2009
 }
 
 subprojects {
-	apply plugin: 'java'
-	sourceCompatibility = JavaVersion.VERSION_1_7
-	targetCompatibility = JavaVersion.VERSION_1_7
+	apply plugin: 'java-library'
 
 	ext {
 		owner1_id = 'eseifert'
@@ -21,81 +52,112 @@ subprojects {
 		owner2_email = 'mseifert[at]error-reports.org'
 
 		website = 'https://github.com/eseifert/gral/'
+
+		/*
+		 * Lowest Java release the library is compiled for. The build itself
+		 * needs a much newer JDK (Gradle 9 requires Java 17 or later), but the
+		 * produced class files stay usable on older runtimes.
+		 */
+		javaRelease = 11
 	}
 
 	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
+		mavenCentral()
 	}
+
 	dependencies {
-		runtime 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13'
+		/*
+		 * VectorGraphics2D is loaded reflectively by
+		 * de.erichseifert.gral.io.plots.VectorWriter, so it must stay off the
+		 * compile classpath. Without it GRAL simply doesn't offer EPS, PDF and
+		 * SVG export.
+		 */
+		runtimeOnly 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13'
 	}
 
-	apply plugin: 'license'
-	license {
-		header(rootProject.file('config/license-header.txt'))
-		strictCheck(true)
-		mapping {
-			java = 'SLASHSTAR_STYLE'
-		}
+	java {
+		withSourcesJar()
+		withJavadocJar()
+	}
 
-		def currentYear = new GregorianCalendar().get(Calendar.YEAR)
-		ext.year = "${inceptionYear}-${currentYear}"
-		ext.owner1 = owner1_name
-		ext.email1 = owner1_email
-		ext.owner2 = owner2_name
-		ext.email2 = owner2_email
+	tasks.withType(JavaCompile).configureEach {
+		options.release = javaRelease
+		options.encoding = 'UTF-8'
+	}
 
-		// Exlude certain file types from license checking
-		// https://github.com/hierynomus/license-gradle-plugin/issues/9
-	 	tasks.withType(nl.javadude.gradle.plugins.license.License).each { licenseTask ->
-			licenseTask.exclude '**.properties'
+	tasks.withType(Javadoc).configureEach {
+		options.encoding = 'UTF-8'
+		options.docEncoding = 'UTF-8'
+		options.charSet = 'UTF-8'
+		options.source = javaRelease.toString()
+		// Javadoc of private members is not part of the published API docs.
+		options.addStringOption('Xdoclint:all,-missing', '-quiet')
+	}
+
+	tasks.withType(Test).configureEach {
+		useJUnit()
+		testLogging {
+			exceptionFormat = 'full'
 		}
 	}
 
 	apply plugin: 'checkstyle'
-	checkstyle.configFile = new File("${rootDir}/config/checkstyle.xml")
+	checkstyle {
+		toolVersion = '10.26.1'
+		configFile = rootProject.file('config/checkstyle.xml')
+	}
 
 	apply plugin: 'pmd'
 	pmd {
-		// TODO: Dynamic dependency resolution possible?
-		toolVersion = '5.0.5'
-		ruleSets = ['java-basic']
+		toolVersion = '7.27.0'
+		// Closest modern equivalent of the PMD 5 'java-basic' rule set.
+		ruleSets = ['category/java/errorprone.xml']
 		ignoreFailures = true
 	}
 
-	task sourceJar(type: Jar) {
-		description = 'Assembles a jar archive containing the source code of the main classes.'
-		group = 'Build'
-		from sourceSets.main.allJava
-		classifier 'sources'
-	}
-}
+	/*
+	 * Replacement for the license-gradle-plugin, which relies on Gradle APIs
+	 * that no longer exist. Unlike the plugin this check accepts any end year
+	 * in the copyright line, so the headers don't have to be rewritten every
+	 * January.
+	 */
+	def licenseHeaderFile = rootProject.file('config/license-header.txt')
+	def licenseValues = [
+		year  : "${inceptionYear}-${new GregorianCalendar().get(Calendar.YEAR)}".toString(),
+		owner1: owner1_name,
+		email1: owner1_email,
+		owner2: owner2_name,
+		email2: owner2_email,
+	]
 
-// Include the License Gradle plugin
-buildscript {
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
+	def licenseCheck = tasks.register('licenseCheck') {
+		description = 'Checks that all Java sources start with the license header.'
+		group = 'verification'
+
+		def sources = files { sourceSets.collect { it.allJava.files } }
+		def reportFile = layout.buildDirectory.file('reports/license/licenseCheck.txt')
+		inputs.files(sources).withPropertyName('sources').skipWhenEmpty()
+		inputs.file(licenseHeaderFile).withPropertyName('licenseHeader')
+		outputs.file(reportFile)
+
+		doLast {
+			def expected = normalizeLicenseText(
+					renderLicenseHeader(licenseHeaderFile.getText('UTF-8'), licenseValues))
+			def offenders = sources.files.findAll { source ->
+				!normalizeLicenseText(source.getText('UTF-8')).startsWith(expected)
+			}.sort()
+
+			def report = reportFile.get().asFile
+			report.parentFile.mkdirs()
+			report.setText(offenders.collect { it.path }.join('\n'), 'UTF-8')
+
+			if (!offenders.isEmpty()) {
+				throw new GradleException(
+					"Missing or outdated license header in ${offenders.size()} file(s):\n" +
+					offenders.collect { "  ${it}" }.join('\n') +
+					"\nCopy the header from config/license-header.txt or a neighbouring file.")
+			}
 		}
 	}
-
-	dependencies {
-		classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.15.+'
-	}
-}
-
-/*
- * This method must not be named getVersion, because it would
- * overwrite the implicit getter of the version property in the
- * current Project object.
- */
-def getVersionString() {
-	def out = new ByteArrayOutputStream()
-	exec {
-		commandLine('git', 'describe', '--tags', '--always')
-		standardOutput = out
-	}
-	return out.toString().trim()
+	tasks.named('check') { dependsOn(licenseCheck) }
 }
