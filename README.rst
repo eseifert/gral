@@ -28,7 +28,7 @@ Features
   bitmap image data, audio file data)
 - Exporting plots in bitmap and vector file formats (PNG, GIF, JPEG, EPS, PDF,
   SVG)
-- Small footprint (about 300 kilobytes)
+- Small footprint (about 350 kilobytes)
 
 
 Usage
@@ -154,7 +154,16 @@ Gradle version used by the build needs. The library itself is still compiled for
 Java 11, independently of the JDK used to build it.
 
 Export to the vector formats EPS, PDF and SVG additionally requires
-`VectorGraphics2D <https://github.com/eseifert/vectorgraphics2d>`__ on the
-runtime class path. It is declared as a runtime dependency, so build tools pick
-it up automatically. GRAL loads it reflectively and simply does not offer those
-formats when it is missing.
+VectorGraphics2D on the runtime class path. GRAL loads it reflectively, so those
+formats are simply unavailable when it is missing. Two variants of the library
+are supported, and whichever is found will be used:
+
+- `VectorGraphics2D <https://github.com/eseifert/vectorgraphics2d>`__
+  (``de.erichseifert.vectorgraphics2d:VectorGraphics2D``) is the original
+  library. It is licensed under the LGPL and is the variant that GRAL declares
+  as a runtime dependency, so build tools pick it up automatically. It has been
+  archived and is no longer maintained.
+- `Eclipse SWTChart <https://github.com/eclipse/swtchart>`__
+  (``org.eclipse.swtchart:org.eclipse.swtchart.vectorgraphics2d``) continues the
+  library. It is licensed under the EPL-2.0 and pulls in Apache PDFBox for PDF
+  output. To use it, exclude the original dependency and add this one instead.

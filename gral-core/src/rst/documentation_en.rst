@@ -103,7 +103,7 @@ Another way of filtering is to filter data sources by rows. This way a data
 subset which matches certain criteria can be extracted. For example, this could
 be used to form clusters which could then be plotted or processed separately.
 
-In order to use the ``DataSubset`` a new class has to be created which
+In order to use the ``RowSubset`` a new class has to be created which
 implements the method ``accept(Row)``. This method is used to decide whether
 a certain row should be kept in the subset.
 
@@ -154,9 +154,6 @@ measures for columns using the class Statistics. It is part of every
 
 ``MEAN``
     The arithmetic mean describing the average value of the column.
-
-``MEAN_DEVIATION``
-    The mean deviation describing the dispersion of the column's values.
 
 ``MEDIAN``
     The median value which divides the column values in two equal
@@ -310,7 +307,7 @@ The components of a plot in GRAL are:
 - Each plot has one or more instances of ``DataSource``
 
 - The area where the actual data is plotted is called plot area and the class
-  used to display the area is ``PlotArea2D``, correspondingly.
+  used to display the area is ``PlotArea``, correspondingly.
 
 - Depending on its type a plot can have an arbitrary number of axes which are
   created with the class Axis. Each Axis is displayed by an instance of
@@ -463,14 +460,14 @@ whole plot.
     );
     plot.setBackground(gradient);
 
-The ``PlotArea2D`` is the container for plotting the data. It must be fetched
+The ``PlotArea`` is the container for plotting the data. It must be fetched
 from a plot with the method, ``getPlotArea`` as each ``Plot`` type can also have
 its own plot area type. In the following example you can see how to hide the
 plot area itself completely.
 
 .. code:: java
 
-    PlotArea2D plotArea = plot.getPlotArea();
+    PlotArea plotArea = plot.getPlotArea();
     plotArea.setBackground(null);
     plotArea.setBorder(null);
 
@@ -737,7 +734,7 @@ Writing a data importer
         }
 
         @Override
-        public DataSource read(InputStream input, Class<? extends Number>... types)
+        public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
                 throws IOException, ParseException;
             ...
         }

@@ -10,6 +10,9 @@ General:
       later (#183)
     - VectorGraphics2D is a declared runtime dependency now, so EPS, PDF and
       SVG export no longer depend on the user adding it manually (#181)
+    - Added support for the VectorGraphics2D variant that is continued as part
+      of Eclipse SWTChart. Both variants can be used; the LGPL-licensed original
+      stays the declared dependency
     - Added ``Automatic-Module-Name`` to the JARs for use on the module path
     - Replaced Cobertura with JaCoCo (#66) and Travis CI with GitHub Actions
 
