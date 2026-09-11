@@ -95,10 +95,20 @@ public class SortedList<T extends Comparable<T>> extends AbstractList<T> {
 	@Override
 	@SuppressWarnings("unchecked")
 	public int indexOf(Object o) {
+		int index;
 		try {
-			return Collections.binarySearch(elements, (T) o);
+			index = Collections.binarySearch(elements, (T) o);
 		} catch (NullPointerException | ClassCastException e) {
 			return -1;
 		}
+		if (index < 0) {
+			return -1;
+		}
+		// A binary search may return any of several equal elements, but the
+		// contract of List.indexOf demands the lowest index
+		while (index > 0 && elements.get(index - 1).equals(o)) {
+			index--;
+		}
+		return index;
 	}
 }

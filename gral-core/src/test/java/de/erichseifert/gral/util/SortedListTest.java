@@ -91,11 +91,31 @@ public class SortedListTest {
 		l.add(0.0);
 		l.add(0.0);
 		l.add(1.0);
-		assertEquals(1, l.indexOf(0.0));
+		assertEquals(0, l.indexOf(0.0));
 		assertEquals(2, l.indexOf(1.0));
 		assertEquals(-1, l.indexOf(-1.0));
 		assertEquals(-1, l.indexOf(null));
-		assertEquals(-4, l.indexOf(Double.NaN));
+		assertEquals(-1, l.indexOf(Double.NaN));
+	}
+
+	@Test
+	public void testIndexOfReturnsMinusOneForValuesBetweenExistingElements() {
+		SortedList<Double> l = new SortedList<>();
+		l.add(0.0);
+		l.add(2.0);
+		l.add(4.0);
+		assertEquals(-1, l.indexOf(1.0));
+		assertEquals(-1, l.indexOf(3.0));
+		assertEquals(-1, l.indexOf(5.0));
+	}
+
+	@Test
+	public void testContainsUsesIndexOf() {
+		SortedList<Double> l = new SortedList<>();
+		l.add(0.0);
+		l.add(2.0);
+		assertEquals(true, l.contains(2.0));
+		assertEquals(false, l.contains(1.0));
 	}
 
 	@Test
