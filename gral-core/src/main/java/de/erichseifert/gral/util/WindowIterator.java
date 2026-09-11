@@ -25,11 +25,19 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class WindowIterator<T> implements Iterator<List<T>> {
 	private final Iterator<T> iterator;
 	private final Deque<T> window;
 
+	/**
+	 * Initializes a new instance that returns sliding windows of the specified
+	 * size. If the source iterator provides fewer values than the window size,
+	 * no window can be built and the new instance is empty.
+	 * @param iterator Source iterator.
+	 * @param windowSize Number of values in a window.
+	 */
 	public WindowIterator(Iterator<T> iterator, int windowSize) {
 		this.iterator = iterator;
 
@@ -38,17 +46,26 @@ public class WindowIterator<T> implements Iterator<List<T>> {
 		window.add(null);
 		// ... and the other cells of the window are filled with values from the source iterator
 		for (int windowIndex = 0; windowIndex < windowSize - 1; windowIndex++) {
+			if (!iterator.hasNext()) {
+				// The source iterator provides too few values for a complete
+				// window
+				window.clear();
+				break;
+			}
 			window.add(iterator.next());
 		}
 	}
 
 	@Override
 	public boolean hasNext() {
-		return iterator.hasNext();
+		return !window.isEmpty() && iterator.hasNext();
 	}
 
 	@Override
 	public List<T> next() {
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
 		window.removeFirst();
 		window.add(iterator.next());
 		return new LinkedList<>(window);

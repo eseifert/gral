@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 
@@ -38,6 +39,24 @@ public class MedianFilterTest {
 		MedianFilter<Integer> medianFilter = new MedianFilter<>(data, windowsSize);
 
 		assertThat(medianFilter, hasItems(5.0, 6.0, 5.0, 6.0));
+	}
+
+	@Test
+	public void testIteratorIsEmptyForEmptyData() {
+		List<Integer> data = Collections.emptyList();
+
+		MedianFilter<Integer> medianFilter = new MedianFilter<>(data, 3);
+
+		assertThat(medianFilter.iterator().hasNext(), is(false));
+	}
+
+	@Test
+	public void testIteratorIsEmptyWhenFilterWindowMuchLargerThanDataToBeFiltered() {
+		List<Integer> data = Arrays.asList(3, 8);
+
+		MedianFilter<Integer> medianFilter = new MedianFilter<>(data, 8);
+
+		assertThat(medianFilter.iterator().hasNext(), is(false));
 	}
 
 	@Test

@@ -25,6 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.NoSuchElementException;
 import org.junit.Test;
 
 import org.hamcrest.CoreMatchers;
@@ -52,6 +54,33 @@ public class WindowIteratorTest {
 		boolean hasNext = windowIterator.hasNext();
 
 		assertThat(hasNext, is(false));
+	}
+
+	@Test
+	public void testHasNextReturnsFalseForEmptyInput() {
+		int windowSize = 3;
+		Iterable<Object> iterable = Collections.emptyList();
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
+
+		assertThat(windowIterator.hasNext(), is(false));
+	}
+
+	@Test
+	public void testHasNextReturnsFalseWhenInputIsShorterThanWindow() {
+		int windowSize = 4;
+		Iterable<Object> iterable = Arrays.<Object>asList(0, 1);
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
+
+		assertThat(windowIterator.hasNext(), is(false));
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testNextThrowsExceptionWhenInputIsShorterThanWindow() {
+		int windowSize = 4;
+		Iterable<Object> iterable = Arrays.<Object>asList(0, 1);
+		WindowIterator<Object> windowIterator = new WindowIterator<>(iterable.iterator(), windowSize);
+
+		windowIterator.next();
 	}
 
 	@Test

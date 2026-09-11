@@ -22,10 +22,12 @@
 package de.erichseifert.gral.data.filters;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Collections;
 import org.junit.Test;
 
 public class ConvolutionFilterTest {
@@ -37,5 +39,25 @@ public class ConvolutionFilterTest {
 		ConvolutionFilter<Integer> filter = new ConvolutionFilter<>(data, kernel);
 
 		assertThat(filter, hasItems(16.0, 19.0, 15.0, 19.0));
+	}
+
+	@Test
+	public void testIteratorIsEmptyWhenKernelLargerThanDataToBeFiltered() {
+		Iterable<Integer> data = Arrays.asList(3, 8);
+		Kernel kernel = new Kernel(1.0, 1.0, 1.0, 1.0, 1.0);
+
+		ConvolutionFilter<Integer> filter = new ConvolutionFilter<>(data, kernel);
+
+		assertThat(filter.iterator().hasNext(), is(false));
+	}
+
+	@Test
+	public void testIteratorIsEmptyForEmptyData() {
+		Iterable<Integer> data = Collections.emptyList();
+		Kernel kernel = new Kernel(1.0, 1.0, 1.0);
+
+		ConvolutionFilter<Integer> filter = new ConvolutionFilter<>(data, kernel);
+
+		assertThat(filter.iterator().hasNext(), is(false));
 	}
 }
