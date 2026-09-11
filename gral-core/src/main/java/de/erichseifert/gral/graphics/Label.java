@@ -29,6 +29,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Objects;
 
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
@@ -413,16 +414,21 @@ public class Label extends AbstractDrawable {
 			return false;
 		}
 		Label label = (Label) obj;
-		return ((getText() == null && label.getText() == null) || getText().equals(label.getText()))
+		return Objects.equals(getText(), label.getText())
 				&& (getAlignmentX() == label.getAlignmentX())
 				&& (getAlignmentY() == label.getAlignmentY())
-				&& ((getFont() == null && label.getFont() == null) || getFont().equals(label.getFont()))
+				&& Objects.equals(getFont(), label.getFont())
 				&& (getRotation() == label.getRotation())
-				&& ((getColor() == null && label.getColor() == null) || getColor().equals(label.getColor()))
+				&& Objects.equals(getColor(), label.getColor())
 				&& (getTextAlignment() == label.getTextAlignment())
 				&& (isWordWrapEnabled() == label.isWordWrapEnabled())
-				&& ((getBackground() == null && label.getBackground() == null) || getBackground().equals(label.getBackground()));
+				&& Objects.equals(getBackground(), label.getBackground());
 	}
 
-	// TODO: Override Object.hashCode()
+	@Override
+	public int hashCode() {
+		return Objects.hash(getText(), getAlignmentX(), getAlignmentY(),
+			getFont(), getRotation(), getColor(), getTextAlignment(),
+			isWordWrapEnabled(), getBackground());
+	}
 }

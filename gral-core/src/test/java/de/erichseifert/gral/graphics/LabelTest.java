@@ -24,6 +24,7 @@ package de.erichseifert.gral.graphics;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
@@ -116,6 +117,50 @@ public class LabelTest {
 				assertNotEmpty(image);
 			}
 		}
+	}
+
+	@Test
+	public void testEqualsWithNullProperties() {
+		Label label = new Label();
+		label.setText(null);
+		label.setFont(null);
+		label.setColor(null);
+		label.setBackground(null);
+
+		Label other = new Label("foobar");
+		other.setFont(Font.decode(null));
+		other.setColor(Color.RED);
+		other.setBackground(Color.BLUE);
+
+		// Comparing null properties with non-null properties must not throw
+		assertFalse(label.equals(other));
+		assertFalse(other.equals(label));
+
+		Label emptyCopy = new Label();
+		emptyCopy.setText(null);
+		emptyCopy.setFont(null);
+		emptyCopy.setColor(null);
+		emptyCopy.setBackground(null);
+		assertEquals(label, emptyCopy);
+	}
+
+	@Test
+	public void testHashCode() {
+		Label label = new Label("foobar");
+		label.setColor(Color.RED);
+		Label copy = new Label("foobar");
+		copy.setColor(Color.RED);
+
+		assertEquals(label, copy);
+		assertEquals(label.hashCode(), copy.hashCode());
+
+		Label nullProperties = new Label();
+		nullProperties.setText(null);
+		nullProperties.setFont(null);
+		nullProperties.setColor(null);
+		nullProperties.setBackground(null);
+		// Must not throw for null properties
+		nullProperties.hashCode();
 	}
 
 	@Test
