@@ -31,6 +31,7 @@ import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.graphics.Insets2D;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,6 +45,10 @@ public class StackedLayoutTest {
 	private static final double GAP_Y = 10.0;
 	private static final double COMP_WIDTH = 10.0;
 	private static final double COMP_HEIGHT = 5.0;
+	private static final double INSET_TOP = 1.0;
+	private static final double INSET_LEFT = 2.0;
+	private static final double INSET_BOTTOM = 3.0;
+	private static final double INSET_RIGHT = 4.0;
 
 	private DrawableContainer container;
 	private Drawable a, b, c;
@@ -52,13 +57,27 @@ public class StackedLayoutTest {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = -5549638074327301904L;
 
+		/** Width returned as preferred width. */
+		private final double width;
+		/** Height returned as preferred height. */
+		private final double height;
+
+		public TestDrawable() {
+			this(COMP_WIDTH, COMP_HEIGHT);
+		}
+
+		public TestDrawable(double width, double height) {
+			this.width = width;
+			this.height = height;
+		}
+
 		public void draw(DrawingContext context) {
 		}
 
 		@Override
 		public Dimension2D getPreferredSize() {
 			Dimension2D size = super.getPreferredSize();
-			size.setSize(COMP_WIDTH, COMP_HEIGHT);
+			size.setSize(width, height);
 			return size;
 		}
 	}
@@ -103,6 +122,36 @@ public class StackedLayoutTest {
 		Dimension2D size = layout.getPreferredSize(container);
 		assertEquals(3.0*COMP_WIDTH + 2.0*GAP_X, size.getWidth(), DELTA);
 		assertEquals(COMP_HEIGHT, size.getHeight(), DELTA);
+	}
+
+	@Test
+	public void testPreferredSizeHorizontalUsesTallestComponent() {
+		DrawableContainer container = new DrawableContainer(null);
+		container.add(new TestDrawable(COMP_WIDTH, 3.0*COMP_HEIGHT));
+		container.add(new TestDrawable(COMP_WIDTH, COMP_HEIGHT));
+
+		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		Dimension2D size = layout.getPreferredSize(container);
+
+		assertEquals(2.0*COMP_WIDTH + GAP_X, size.getWidth(), DELTA);
+		assertEquals(3.0*COMP_HEIGHT, size.getHeight(), DELTA);
+	}
+
+	@Test
+	public void testPreferredSizeHorizontalCountsInsetsOnce() {
+		DrawableContainer container = new DrawableContainer(null);
+		container.setInsets(new Insets2D.Double(
+			INSET_TOP, INSET_LEFT, INSET_BOTTOM, INSET_RIGHT));
+		container.add(new TestDrawable());
+		container.add(new TestDrawable());
+
+		Layout layout = new StackedLayout(Orientation.HORIZONTAL, GAP_X, GAP_Y);
+		Dimension2D size = layout.getPreferredSize(container);
+
+		assertEquals(2.0*COMP_WIDTH + GAP_X + INSET_LEFT + INSET_RIGHT,
+			size.getWidth(), DELTA);
+		assertEquals(COMP_HEIGHT + INSET_TOP + INSET_BOTTOM,
+			size.getHeight(), DELTA);
 	}
 
 	@Test

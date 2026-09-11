@@ -4,6 +4,10 @@ GRAL 0.13 (unreleased)
 Data:
     - ``Kernel.mul`` sets the values outside of the specified kernel to zero
 
+Plotting:
+    - Horizontally stacked layouts report the height of their tallest
+      component as preferred height
+
 General:
     - Releases are published through the Central Portal publisher API
 
