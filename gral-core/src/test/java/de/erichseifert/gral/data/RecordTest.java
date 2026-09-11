@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.Test;
 
 import org.hamcrest.CoreMatchers;
@@ -115,6 +117,24 @@ public class RecordTest {
 		boolean equal = r1.equals(r2);
 
 		assertThat(equal, is(true));
+	}
+
+	@Test
+	public void testEqualRecordsHaveEqualHashCodes() {
+		Record r1 = new Record(-3.0, 1, "SomeString", null);
+		Record r2 = new Record(-3.0, 1, "SomeString", null);
+
+		assertThat(r1, is(r2));
+		assertThat(r1.hashCode(), is(r2.hashCode()));
+	}
+
+	@Test
+	public void testRecordsCanBeUsedInHashBasedCollections() {
+		Set<Record> records = new HashSet<>();
+		records.add(new Record(-3.0, 1, "SomeString", null));
+
+		assertThat(records.contains(new Record(-3.0, 1, "SomeString", null)), is(true));
+		assertThat(records.contains(new Record(-3.0, 1, "OtherString", null)), is(false));
 	}
 
 	@Test

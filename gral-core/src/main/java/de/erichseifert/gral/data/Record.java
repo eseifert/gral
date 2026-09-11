@@ -30,6 +30,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Record implements Iterable<Comparable<?>>, Serializable {
+	/** Version id for serialization. */
+	private static final long serialVersionUID = -4745244626788459039L;
+
 	private Comparable[] values;
 
 	public Record(List<? extends Comparable<?>> values) {
@@ -69,6 +72,11 @@ public class Record implements Iterable<Comparable<?>>, Serializable {
 		}
 		Record record = (Record) obj;
 		return size() == record.size() && Arrays.equals(this.values, record.values);
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(values);
 	}
 
 	@Override
