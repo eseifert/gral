@@ -405,4 +405,43 @@ public class DataTableTest {
 		table.setName("name");
 		assertEquals("name", table.getName());
 	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testStatisticsAreUpdatedAfterDataChanges() {
+		DataTable data = new DataTable(Integer.class);
+		data.add(1);
+		data.add(2);
+
+		assertEquals(2.0, data.getStatistics().get(Statistics.N), DELTA);
+		assertEquals(3.0, data.getStatistics().get(Statistics.SUM), DELTA);
+		assertEquals(2.0, data.getStatistics().get(Statistics.MAX), DELTA);
+
+		data.add(9);
+		assertEquals(3.0, data.getStatistics().get(Statistics.N), DELTA);
+		assertEquals(12.0, data.getStatistics().get(Statistics.SUM), DELTA);
+		assertEquals(9.0, data.getStatistics().get(Statistics.MAX), DELTA);
+
+		data.set(0, 0, 4);
+		assertEquals(3.0, data.getStatistics().get(Statistics.N), DELTA);
+		assertEquals(15.0, data.getStatistics().get(Statistics.SUM), DELTA);
+
+		data.remove(2);
+		assertEquals(2.0, data.getStatistics().get(Statistics.N), DELTA);
+		assertEquals(6.0, data.getStatistics().get(Statistics.SUM), DELTA);
+		assertEquals(4.0, data.getStatistics().get(Statistics.MAX), DELTA);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testDerivedDataSourceStatisticsAreUpdatedAfterDataChanges() {
+		DataTable data = new DataTable(Integer.class, Integer.class);
+		data.add(1, 2);
+		DataSeries series = new DataSeries(data, 1);
+
+		assertEquals(2.0, series.getStatistics().get(Statistics.SUM), DELTA);
+
+		data.add(3, 4);
+		assertEquals(6.0, series.getStatistics().get(Statistics.SUM), DELTA);
+	}
 }

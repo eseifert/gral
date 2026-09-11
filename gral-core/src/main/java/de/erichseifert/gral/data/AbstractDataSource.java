@@ -213,6 +213,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been added.
 	 */
 	protected void notifyDataAdded(DataChangeEvent... events) {
+		invalidateStatistics();
 		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataAdded(this, events);
@@ -224,6 +225,7 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have been removed.
 	 */
 	protected void notifyDataRemoved(DataChangeEvent... events) {
+		invalidateStatistics();
 		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataRemoved(this, events);
@@ -235,10 +237,20 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	 * @param events Event objects describing all values that have changed.
 	 */
 	protected void notifyDataUpdated(DataChangeEvent... events) {
+		invalidateStatistics();
 		List<DataListener> listeners = new LinkedList<>(dataListeners);
 		for (DataListener dataListener : listeners) {
 			dataListener.dataUpdated(this, events);
 		}
+	}
+
+	/**
+	 * Discards the cached statistical information. The statistics are rebuilt
+	 * from the current data values on the next call of
+	 * {@link #getStatistics()}.
+	 */
+	private void invalidateStatistics() {
+		statistics = null;
 	}
 
 	/**
