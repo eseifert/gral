@@ -106,6 +106,32 @@ public class RowTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
+	public void testHashCodeIsConsistentWithEquality() {
+		Row row1 = new Row(table, 1);
+
+		// Equal rows of the same data source must share their hash code
+		assertEquals(row1.hashCode(), new Row(table, 1).hashCode());
+
+		// Equal rows of different data sources must share it, too, because
+		// equals ignores the data source
+		DataTable table1 = new DataTable(Integer.class, Integer.class);
+		table1.add(2, 3);
+		Row row2 = new Row(table1, 0);
+		assertTrue(row1.equals(row2));
+		assertEquals(row1.hashCode(), row2.hashCode());
+	}
+
+	@Test
+	public void testHashCodeDiffersForDifferentValues() {
+		Row row1 = new Row(table, 1);
+		Row row2 = new Row(table, 2);
+
+		assertFalse(row1.equals(row2));
+		assertFalse(row1.hashCode() == row2.hashCode());
+	}
+
+	@Test
 	public void testToString() {
 		Row row1 = new Row(table, 1);
 		Row row2 = new Row(table, 1);

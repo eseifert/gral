@@ -112,7 +112,14 @@ public abstract class DataAccessor
 
 	@Override
 	public int hashCode() {
-		return source.hashCode() ^ index;
+		// The hash code must only be based on the values, because equals
+		// compares the values and ignores data source and index
+		int hashCode = 1;
+		for (int i = 0; i < size(); i++) {
+			Comparable<?> value = get(i);
+			hashCode = 31*hashCode + ((value == null) ? 0 : value.hashCode());
+		}
+		return hashCode;
 	}
 
 	@Override

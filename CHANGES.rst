@@ -5,6 +5,8 @@ Data:
     - ``Kernel.mul`` sets the values outside of the specified kernel to zero
     - ``DataTable.add(Record)`` notifies the registered data listeners and
       discards the cached statistics
+    - ``Row.hashCode`` is consistent with ``Row.equals``, so that rows can be
+      used in hash-based collections
 
 Plotting:
     - Horizontally stacked layouts report the height of their tallest
