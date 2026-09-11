@@ -1059,6 +1059,11 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 			}
 		}
 		super.setAxisRenderer(axisName, renderer);
+		// The navigator stores the center of an axis in world units, which is
+		// derived from the view coordinates of the axis renderer. A new
+		// renderer uses a different transformation, so the default state has
+		// to be determined again.
+		navigatorInitialized = false;
 	}
 
 	@Override

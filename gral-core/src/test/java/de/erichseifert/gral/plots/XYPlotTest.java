@@ -53,6 +53,7 @@ import de.erichseifert.gral.plots.areas.AreaRenderer;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.Axis;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.lines.LineRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
@@ -321,6 +322,34 @@ public class XYPlotTest {
 
 		assertEquals(10.0, axisX.getMax().doubleValue(), DELTA);
 		assertEquals(20.0, axisY.getMax().doubleValue(), DELTA);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testNavigationUsesNewAxisRenderer() {
+		DataTable data = new DataTable(Double.class, Double.class);
+		data.add(1.0, 1.0);
+		data.add(8.0, 8.0);
+
+		MockXYPlot plot = new MockXYPlot(data);
+		drawPlot(plot);
+
+		plot.setAxisRenderer(XYPlot.AXIS_X, new LogarithmicRenderer2D());
+		drawPlot(plot);
+
+		plot.getNavigator().setZoom(2.0);
+
+		// On a logarithmic axis the zoomed range has to stay centered around
+		// the geometric center of the original range
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		assertEquals(Math.pow(8.0, 0.25), axisX.getMin().doubleValue(), 1e-9);
+		assertEquals(Math.pow(8.0, 0.75), axisX.getMax().doubleValue(), 1e-9);
+	}
+
+	private static void drawPlot(Plot plot) {
+		BufferedImage image = createTestImage();
+		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
+		plot.draw(new DrawingContext((Graphics2D) image.getGraphics()));
 	}
 
 	@Test

@@ -22,6 +22,8 @@ Plotting:
       are visible now (#146)
     - Zooming or panning a plot that hasn't been laid out yet no longer
       invalidates its axes, which resulted in an empty plot (#112)
+    - Zooming, panning and resetting the view work after a new axis renderer
+      has been set on a plot (#46)
 
 General:
     - Releases are published through the Central Portal publisher API
