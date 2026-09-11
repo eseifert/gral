@@ -148,20 +148,37 @@ public class StatisticsTest {
 	 */
 	@Test
 	public void testSkewness() {
-		assertEquals(  -2.1597406540506, stats.get(Statistics.SKEWNESS), DELTA);
+		assertEquals(   0.8402593459494, stats.get(Statistics.SKEWNESS), DELTA);
 		// Horizontal
-		assertEquals(  -3.0000000000000, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(  -3.7071067811865, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(  -2.2928932188134, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 2)).doubleValue(), DELTA);
+		assertEquals(   0.0000000000000, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
+		assertEquals(  -0.7071067811865, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 1)).doubleValue(), DELTA);
+		assertEquals(   0.7071067811865, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 2)).doubleValue(), DELTA);
 		// Vertical
-		assertEquals(  -2.3823830637406, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(  -1.3159758018366, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(  -3.0000000000000, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(2, 0)).doubleValue(), DELTA);
+		assertEquals(   0.6176169362594, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
+		assertEquals(   1.6840241981634, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(1, 0)).doubleValue(), DELTA);
+		assertEquals(   0.0000000000000, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(2, 0)).doubleValue(), DELTA);
+	}
+
+	/**
+	 * Tests that a symmetric distribution has a skewness of zero.
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testSkewnessOfSymmetricDistribution() {
+		DataTable symmetric = new DataTable(Integer.class);
+		symmetric.add(1);
+		symmetric.add(2);
+		symmetric.add(3);
+		symmetric.add(4);
+		symmetric.add(5);
+
+		assertEquals(0.0, symmetric.getStatistics().get(Statistics.SKEWNESS), DELTA);
 	}
 
 	/**
 	 * Tests kurtosis of a table, of its rows, and its columns for correctness.
-	 * The results of R "moments" package are used for validation.
+	 * The kurtosis is the excess kurtosis, i.e. the results of the R "moments"
+	 * package minus three.
 	 */
 	@Test
 	public void testKurtosis() {

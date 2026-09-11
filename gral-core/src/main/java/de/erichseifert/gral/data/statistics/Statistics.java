@@ -70,9 +70,11 @@ public class Statistics {
 	/** Key for specifying the population variance. Formula:
 	{@code 1/N * sumOfSquares} */
 	public static final String POPULATION_VARIANCE = "population variance"; //$NON-NLS-1$
-	/** Key for specifying the skewness. */
+	/** Key for specifying the skewness. Formula:
+	{@code (M3/N)/(M2/N)^(3/2)} */
 	public static final String SKEWNESS = "skewness"; //$NON-NLS-1$
-	/** Key for specifying the kurtosis. */
+	/** Key for specifying the excess kurtosis, i.e. the kurtosis of a normal
+	distribution is zero. Formula: {@code (M4/N)/(M2/N)^2 - 3} */
 	public static final String KURTOSIS = "kurtosis"; //$NON-NLS-1$
 
 	/** Key for specifying the median (or 50% quantile). */
@@ -169,7 +171,7 @@ public class Statistics {
 		stats.put(VARIANCE, sumOfDiffSquares/(n - 1.0));
 		stats.put(POPULATION_VARIANCE, sumOfDiffSquares/n);
 		stats.put(SKEWNESS,
-			(sumOfDiffCubics/n)/Math.pow(sumOfDiffSquares/n, 3.0/2.0) - 3.0);
+			(sumOfDiffCubics/n)/Math.pow(sumOfDiffSquares/n, 3.0/2.0));
 		stats.put(KURTOSIS,
 			(n*sumOfDiffQuads)/(sumOfDiffSquares*sumOfDiffSquares) - 3.0);
 	}

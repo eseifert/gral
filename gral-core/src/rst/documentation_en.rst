@@ -167,8 +167,9 @@ measures for columns using the class Statistics. It is part of every
     distribution of the column's values.
 
 ``KURTOSIS``
-    The kurtosis value describing the "peakedness" of the probability
-    distribution of the column's values.
+    The excess kurtosis value describing the "peakedness" of the probability
+    distribution of the column's values. It is zero for a normal
+    distribution.
 
 ``QUARTILE_1``
     The value that delimits the lower 25% of all data values.
