@@ -124,7 +124,10 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 *        have been added.
 	 */
 	public void dataAdded(DataSource source, DataChangeEvent... events) {
-		notifyDataAdded(events);
+		DataChangeEvent[] mappedEvents = mapEvents(events);
+		if (mappedEvents.length > 0) {
+			notifyDataAdded(mappedEvents);
+		}
 	}
 
 	/**
@@ -136,7 +139,10 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 *        have been updated.
 	 */
 	public void dataUpdated(DataSource source, DataChangeEvent... events) {
-		notifyDataUpdated(events);
+		DataChangeEvent[] mappedEvents = mapEvents(events);
+		if (mappedEvents.length > 0) {
+			notifyDataUpdated(mappedEvents);
+		}
 	}
 
 	/**
@@ -148,7 +154,34 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	 *        have been removed.
 	 */
 	public void dataRemoved(DataSource source, DataChangeEvent... events) {
-		notifyDataRemoved(events);
+		DataChangeEvent[] mappedEvents = mapEvents(events);
+		if (mappedEvents.length > 0) {
+			notifyDataRemoved(mappedEvents);
+		}
+	}
+
+	/**
+	 * Translates change events of the underlying data source to change events
+	 * of this data series. Events for columns that aren't part of this series
+	 * are discarded, the remaining events are re-created with this series as
+	 * source and with the column index mapped to the series. A column that is
+	 * mapped more than once yields one event per occurrence.
+	 * @param events Change events of the underlying data source.
+	 * @return Change events of this data series.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private DataChangeEvent[] mapEvents(DataChangeEvent... events) {
+		List<DataChangeEvent> mappedEvents = new ArrayList<>(events.length);
+		for (DataChangeEvent event : events) {
+			for (int col = 0; col < cols.size(); col++) {
+				if (cols.get(col).intValue() != event.getCol()) {
+					continue;
+				}
+				mappedEvents.add(new DataChangeEvent(this, col, event.getRow(),
+					(Comparable) event.getOld(), (Comparable) event.getNew()));
+			}
+		}
+		return mappedEvents.toArray(new DataChangeEvent[0]);
 	}
 
 	@Override

@@ -24,6 +24,11 @@ package de.erichseifert.gral.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -106,6 +111,79 @@ public class DataSeriesTest {
 	public void testGetColumnCount() {
 		DataSeries series = new DataSeries(table, 2, 1);
 		assertEquals(2, series.getColumnCount());
+	}
+
+	private static class RecordingDataListener implements DataListener {
+		public final List<DataChangeEvent> added = new ArrayList<>();
+		public final List<DataChangeEvent> updated = new ArrayList<>();
+		public final List<DataChangeEvent> removed = new ArrayList<>();
+
+		public void dataAdded(DataSource source, DataChangeEvent... events) {
+			added.addAll(Arrays.asList(events));
+		}
+
+		public void dataUpdated(DataSource source, DataChangeEvent... events) {
+			updated.addAll(Arrays.asList(events));
+		}
+
+		public void dataRemoved(DataSource source, DataChangeEvent... events) {
+			removed.addAll(Arrays.asList(events));
+		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testDataChangeEventsAreMappedToSeriesColumns() {
+		DataTable source = new DataTable(Integer.class, Integer.class, Integer.class);
+		DataSeries series = new DataSeries(source, 2, 0);
+		RecordingDataListener listener = new RecordingDataListener();
+		series.addDataListener(listener);
+
+		source.add(1, 2, 3);
+		assertEquals(2, listener.added.size());
+		for (DataChangeEvent event : listener.added) {
+			assertEquals(series, event.getSource());
+			assertTrue(event.getCol() < series.getColumnCount());
+		}
+		// The relative order of the original events is kept: source column 0
+		// is mapped to series column 1, source column 2 to series column 0.
+		assertEquals(1, listener.added.get(0).getCol());
+		assertEquals(1, listener.added.get(0).getNew());
+		assertEquals(0, listener.added.get(1).getCol());
+		assertEquals(3, listener.added.get(1).getNew());
+
+		// Changes to columns outside of the series must not be forwarded
+		source.set(1, 0, 8);
+		assertTrue(listener.updated.isEmpty());
+
+		// Changes to columns of the series are forwarded with mapped indexes
+		source.set(2, 0, 9);
+		assertEquals(1, listener.updated.size());
+		assertEquals(series, listener.updated.get(0).getSource());
+		assertEquals(0, listener.updated.get(0).getCol());
+		assertEquals(0, listener.updated.get(0).getRow());
+		assertEquals(9, listener.updated.get(0).getNew());
+
+		source.remove(0);
+		assertEquals(2, listener.removed.size());
+		for (DataChangeEvent event : listener.removed) {
+			assertEquals(series, event.getSource());
+			assertTrue(event.getCol() < series.getColumnCount());
+		}
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testDataChangeEventsAreMappedForRepeatedColumns() {
+		DataTable source = new DataTable(Integer.class, Integer.class);
+		DataSeries series = new DataSeries(source, 1, 1);
+		RecordingDataListener listener = new RecordingDataListener();
+		series.addDataListener(listener);
+
+		source.add(1, 2);
+		assertEquals(2, listener.added.size());
+		assertEquals(0, listener.added.get(0).getCol());
+		assertEquals(1, listener.added.get(1).getCol());
 	}
 
 	@Test
