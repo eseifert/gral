@@ -187,6 +187,13 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			double maxOrig = renderer.worldToView(
 				axis, info.getMaxOriginal(), true);
 			double rangeOrig = maxOrig - minOrig;
+			if (!MathUtils.isCalculatable(rangeOrig) || rangeOrig == 0.0) {
+				// The axis hasn't been laid out yet, so its shape has no
+				// length and view coordinates can't be converted back to
+				// world coordinates. The navigation information is kept and
+				// will be applied as soon as the axis has a shape.
+				continue;
+			}
 
 			// New axis scale
 			double zoom = info.getZoom();
@@ -194,6 +201,9 @@ public abstract class PlotNavigator extends AbstractNavigator {
 			double center = renderer.worldToView(axis, info.getCenter(), true);
 			Number min = renderer.viewToWorld(axis, center - 0.5*range, true);
 			Number max = renderer.viewToWorld(axis, center + 0.5*range, true);
+			if (!MathUtils.isCalculatable(min) || !MathUtils.isCalculatable(max)) {
+				continue;
+			}
 
 			// Change axis
 			axis.setRange(min, max);

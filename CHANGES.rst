@@ -20,6 +20,8 @@ Plotting:
     - Hidden data sources no longer determine the ranges of auto-scaled axes
     - Bar plots with a single bar, or with several bars at the same position,
       are visible now (#146)
+    - Zooming or panning a plot that hasn't been laid out yet no longer
+      invalidates its axes, which resulted in an empty plot (#112)
 
 General:
     - Releases are published through the Central Portal publisher API

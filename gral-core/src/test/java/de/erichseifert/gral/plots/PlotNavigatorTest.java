@@ -22,6 +22,7 @@
 package de.erichseifert.gral.plots;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -88,6 +89,22 @@ public class PlotNavigatorTest {
 			fail("Expected NullPointerException.");
 		} catch (NullPointerException e) {
 		}
+	}
+
+	@Test
+	public void testZoomWithoutLayoutKeepsAxisRange() {
+		Plot plot = new XYPlot(series1, series2);
+		PlotNavigator nav = new XYPlot.XYPlotNavigator((XYPlot) plot);
+		Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+		double minBefore = axisX.getMin().doubleValue();
+		double maxBefore = axisX.getMax().doubleValue();
+
+		// The plot hasn't been laid out, so the axes have no shape
+		nav.setZoom(2.0);
+
+		assertTrue(axisX.isValid());
+		assertEquals(minBefore, axisX.getMin().doubleValue(), DELTA);
+		assertEquals(maxBefore, axisX.getMax().doubleValue(), DELTA);
 	}
 
 	@Test
