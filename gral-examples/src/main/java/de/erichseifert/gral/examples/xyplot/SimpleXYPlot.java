@@ -45,6 +45,13 @@ import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Orientation;
 
 
+/**
+ * <p>An xy-plot that exercises most of the styling options at once.</p>
+ *
+ * <p>Shows a logarithmic x axis, custom tick labels, a moved axis intersection,
+ * error bars, value-dependent point sizes, a step line, and a gradient
+ * background for the plot area.</p>
+ */
 public class SimpleXYPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -5263057758564264676L;
@@ -52,6 +59,9 @@ public class SimpleXYPlot extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public SimpleXYPlot() {
 		// Generate data
@@ -143,6 +153,10 @@ public class SimpleXYPlot extends ExamplePanel {
 		return "Styled x-y plot with example data";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new SimpleXYPlot().showInFrame();
 	}

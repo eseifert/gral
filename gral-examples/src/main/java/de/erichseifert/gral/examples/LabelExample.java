@@ -29,8 +29,20 @@ import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.ui.InteractivePanel;
 
 
+/**
+ * <p>A single {@link de.erichseifert.gral.graphics.Label} displayed on its
+ * own.</p>
+ *
+ * <p>A reminder that a plot is not the only thing that can be drawn: any
+ * {@link de.erichseifert.gral.graphics.Drawable} can be put into a
+ * {@link de.erichseifert.gral.ui.DrawablePanel}. Shows the alignment, rotation
+ * and background settings of a label.</p>
+ */
 public class LabelExample extends ExamplePanel {
 
+	/**
+	 * Creates the example and its label.
+	 */
 	public LabelExample() {
 		var label = new Label("TestLabel");
 		label.setFont(getFont().deriveFont(20f));
@@ -53,6 +65,10 @@ public class LabelExample extends ExamplePanel {
 		return "Label with colored background";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new LabelExample().showInFrame();
 	}

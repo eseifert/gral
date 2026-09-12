@@ -37,6 +37,14 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
+/**
+ * <p>Three series drawn as filled areas over a common x axis.</p>
+ *
+ * <p>Shows how the point, line and area layers of an
+ * {@link de.erichseifert.gral.plots.XYPlot} are switched on and styled
+ * independently for each series, including translucent fills so that
+ * overlapping areas stay readable.</p>
+ */
 public class AreaPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 3287044991898775949L;
@@ -44,6 +52,9 @@ public class AreaPlot extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public AreaPlot() {
 		// Generate data
@@ -116,6 +127,10 @@ public class AreaPlot extends ExamplePanel {
 		return "Area plot of three series with different styling";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new AreaPlot().showInFrame();
 	}

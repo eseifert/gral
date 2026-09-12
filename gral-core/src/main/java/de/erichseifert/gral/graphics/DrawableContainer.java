@@ -36,13 +36,35 @@ import de.erichseifert.gral.graphics.layout.Layout;
 
 
 /**
- * Implementation of {@code Container} that is a {@code Drawable}
- * itself and stores instances of {@code Drawable} as components.
- * It takes care of laying out, managing insets for and painting the
- * components.
+ * <p>A {@link Drawable} that holds other drawables and arranges them with a
+ * {@link Layout}. Drawing the container draws all of its components, in the
+ * order they were added. This is the base class of
+ * {@link de.erichseifert.gral.plots.AbstractPlot}, which is why a plot is a
+ * container of a plot area, a title, a legend and the axis components.</p>
+ *
+ * <pre>
+ * DrawableContainer container = new DrawableContainer(new EdgeLayout(5.0, 5.0));
+ * container.setInsets(new Insets2D.Double(10.0));
+ * // The kind of constraint depends on the layout; EdgeLayout expects a Location.
+ * container.add(plot, Location.CENTER);
+ * container.add(caption, Location.SOUTH);
+ * container.setBounds(0.0, 0.0, 800.0, 600.0);
+ * </pre>
+ *
+ * <p>The layout runs immediately whenever something that affects it changes: a
+ * component is added or removed, the layout or the insets are replaced, or the
+ * bounds change. Nothing is deferred, so components have valid bounds as soon
+ * as they are added to a container that has a size. Without a layout,
+ * components keep whatever bounds they were given.</p>
+ *
+ * <p>The {@link Insets2D} of the container are space the layout must keep free
+ * at its edges. A container without a layout ignores them, and so does its
+ * preferred size, which then falls back to the empty default of
+ * {@link AbstractDrawable}.</p>
  *
  * @see Drawable
  * @see Container
+ * @see Layout
  */
 public class DrawableContainer extends AbstractDrawable implements Container {
 	/** Version id for serialization. */
@@ -59,17 +81,17 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	private final Map<Drawable, Object> constraints;
 
 	/**
-	 * Creates a new container for {@code Drawable}s without layout
-	 * manager.
+	 * Creates an empty container without a layout manager. Components added to
+	 * it keep the bounds they are given.
 	 */
 	public DrawableContainer() {
 		this(null);
 	}
 
 	/**
-	 * Creates a new container for {@code Drawable}s with the specified
-	 * layout manager.
-	 * @param layout Layout manager to be set.
+	 * Creates an empty container that arranges its components with the
+	 * specified layout manager.
+	 * @param layout Layout manager to be set, or {@code null} for none.
 	 */
 	public DrawableContainer(Layout layout) {
 		insets = new Insets2D.Double();
@@ -97,17 +119,24 @@ public class DrawableContainer extends AbstractDrawable implements Container {
 	}
 
 	/**
-	 * Adds a new component to this container.
+	 * Adds a component without layout constraints, and lays the container out
+	 * again.
 	 * @param drawable Component
+	 * @throws IllegalArgumentException if the container is added to itself.
 	 */
 	public void add(Drawable drawable) {
 		add(drawable, null);
 	}
 
 	/**
-	 * Adds a new component to this container.
+	 * Adds a component with the specified layout constraints, and lays the
+	 * container out again. What kind of object the constraints have to be is
+	 * decided by the layout: {@link de.erichseifert.gral.graphics.layout.EdgeLayout}
+	 * expects a {@link Location}, {@link de.erichseifert.gral.graphics.layout.StackedLayout}
+	 * its own {@code Constraints} class, and others none at all.
 	 * @param drawable Component
 	 * @param constraints Additional information (e.g. for layout)
+	 * @throws IllegalArgumentException if the container is added to itself.
 	 */
 	public void add(Drawable drawable, Object constraints) {
 		if (drawable == this) {

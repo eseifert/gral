@@ -24,14 +24,33 @@ package de.erichseifert.gral.io;
 import java.util.List;
 
 /**
- * Interface for factories producing input (reader) or output (writer) classes.
- * This is be used to create a extensible plug-in system for reading or writing
- * data.
+ * <p>Looks up a reader or writer by MIME type. This is the entry point of
+ * GRAL's format plug-in system: the mapping from MIME type to implementation
+ * class is read from properties files on the classpath, so a separate JAR can
+ * add a format without any change to GRAL.</p>
+ *
+ * <pre>
+ * DataWriterFactory factory = DataWriterFactory.getInstance();
+ * if (factory.isFormatSupported("text/csv")) {
+ *     DataWriter writer = factory.get("text/csv");
+ *     …
+ * }
+ * </pre>
+ *
+ * <p>The three implementations are
+ * {@link de.erichseifert.gral.io.data.DataReaderFactory},
+ * {@link de.erichseifert.gral.io.data.DataWriterFactory} and
+ * {@link de.erichseifert.gral.io.plots.DrawableWriterFactory}, each a singleton
+ * obtained through its own {@code getInstance()} method.</p>
+ *
  * @param <T> Class of the objects produced by the factory.
+ * @see AbstractIOFactory
  */
 public interface IOFactory<T> {
 	/**
-	 * Returns an object for reading or writing the specified format.
+	 * Returns a new object for reading or writing the specified format. Each
+	 * call creates a fresh instance, so settings applied to one do not affect
+	 * another.
 	 * @param mimeType MIME type.
 	 * @return Reader or writer for the specified MIME type.
 	 */

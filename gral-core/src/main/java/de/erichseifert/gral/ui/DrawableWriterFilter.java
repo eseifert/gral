@@ -30,8 +30,15 @@ import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.util.Messages;
 
 /**
- * File filter that extracts files that can be read with a certain set of
- * {@link de.erichseifert.gral.io.IOCapabilities}.
+ * <p>A {@code javax.swing.filechooser.FileFilter} for one output format,
+ * accepting the file name extensions that its
+ * {@link de.erichseifert.gral.io.IOCapabilities} declares. One of these is
+ * created per supported format by {@link ExportChooser}.</p>
+ *
+ * <p>Directories are always accepted, so that a chooser can still be navigated;
+ * {@link #getWriterCapabilities()} returns the format the filter stands for,
+ * which is how the chooser knows which writer to use for the selected
+ * filter.</p>
  */
 public class DrawableWriterFilter extends FileFilter {
 	/** Capabilities that describe the data formats that can be processed by

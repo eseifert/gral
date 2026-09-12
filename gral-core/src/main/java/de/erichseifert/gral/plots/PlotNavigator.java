@@ -36,15 +36,31 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * <p>Abstract base class that can be used to control the zoom and panning of a
- * plot. The navigator translates the interaction to operations on a defined
- * set of axes: Zooming is translated as scaling, panning is done by uniformly
- * changing the minimum and maximum values of the axes.</p>
+ * <p>The {@link de.erichseifert.gral.navigation.Navigator} implementation for
+ * plots. It works entirely through the axes: zooming scales their ranges around
+ * the center of view, and panning shifts minimum and maximum by the same
+ * amount. Nothing is transformed at the pixel level, so the axis labels and
+ * tick marks follow of their own accord.</p>
  *
- * <p>Additionally, the actions can also be bound to a certain direction by
- * defining a more restricted set of axes. The methods {@link #getDirection()}
- * and {@link #setDirection(de.erichseifert.gral.navigation.NavigationDirection)}
- * provide a convenient way for setting predefined sets of axes.</p>
+ * <pre>
+ * Navigator navigator = plot.getNavigator();
+ * navigator.setZoom(2.0);
+ * navigator.setDirection(XYPlot.XYNavigationDirection.HORIZONTAL);
+ * navigator.reset();
+ * </pre>
+ *
+ * <p>Which axes are affected is what a
+ * {@link de.erichseifert.gral.navigation.NavigationDirection} selects: a
+ * direction is simply a set of axis names, so restricting interaction to the
+ * horizontal is the same thing as navigating only the x axes. See
+ * {@link #getDirection()} and
+ * {@link #setDirection(de.erichseifert.gral.navigation.NavigationDirection)}.</p>
+ *
+ * <p>The default state that {@link #reset()} returns to is the axis ranges as
+ * they were when the navigator was created, unless
+ * {@link #setDefaultState()} has recorded a new one since. Zoom levels are
+ * clamped to the limits inherited from
+ * {@link de.erichseifert.gral.navigation.AbstractNavigator}.</p>
  */
 public abstract class PlotNavigator extends AbstractNavigator {
 	/** AbstractPlot that will be navigated. */

@@ -38,8 +38,19 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Default two-dimensional implementation of the {@code AreaRenderer}
- * interface.
+ * <p>The standard {@link AreaRenderer}: it fills the region between the data
+ * points and the baseline of the y axis.</p>
+ *
+ * <pre>
+ * DefaultAreaRenderer2D area = new DefaultAreaRenderer2D();
+ * area.setColor(new Color(0, 0, 255, 64));
+ * plot.setAreaRenderers(series, area);
+ * </pre>
+ *
+ * <p>The baseline is the position of the value zero, clamped into the range of
+ * the axis. An axis that does not include zero therefore has its baseline at
+ * whichever end is nearer, and the area is filled down to the edge of the plot
+ * rather than to an invisible line outside it.</p>
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 	/** Version id for serialization. */

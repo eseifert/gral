@@ -25,6 +25,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Static helpers for composing {@code Iterable}s. The class is not meant to be
+ * instantiated or extended.
+ */
 public abstract class Iterables {
 	private static class ConcatenationIterable<T> implements Iterable<T> {
 		private final Iterable<Iterable<T>> inputIterables;
@@ -45,6 +49,14 @@ public abstract class Iterables {
 		}
 	}
 
+	/**
+	 * Returns a view that iterates the specified iterables one after another.
+	 * The sources are not copied, so the view reflects later changes to them,
+	 * and each traversal of the result traverses the sources again.
+	 * @param <T> Type of the elements.
+	 * @param iterables Sources to be visited in the given order.
+	 * @return A view over the concatenated sources.
+	 */
 	public static <T> Iterable<T> concatenate(Iterable<T>... iterables) {
 		return new ConcatenationIterable<>(Arrays.asList(iterables));
 	}
@@ -76,6 +88,15 @@ public abstract class Iterables {
 		}
 	}
 
+	/**
+	 * Returns a view of at most the first {@code elementCount} elements of the
+	 * specified iterable. A shorter source simply yields fewer elements; it is
+	 * not padded.
+	 * @param <T> Type of the elements.
+	 * @param iterable Source to be truncated.
+	 * @param elementCount Maximum number of elements to return.
+	 * @return A view over the first elements of the source.
+	 */
 	public static <T> Iterable<T> take(Iterable<T> iterable, int elementCount) {
 		return () -> new LengthIterator<>(iterable.iterator(), elementCount);
 	}

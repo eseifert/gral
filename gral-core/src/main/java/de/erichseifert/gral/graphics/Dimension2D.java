@@ -25,9 +25,18 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * <p>Class that stores the horizontal and vertical extent of an object.</p>
- * <p>This implementation adds support of double values to
- * {@code java.awt.geom.Dimension2D}.</p>
+ * <p>A width and a height in {@code double} precision. The JDK declares
+ * {@code java.awt.geom.Dimension2D} as abstract but ships only the integer
+ * {@code java.awt.Dimension} as an implementation, so GRAL provides its own.</p>
+ *
+ * <pre>
+ * Dimension2D size = new de.erichseifert.gral.graphics.Dimension2D.Double(
+ *     100.0, 50.0);
+ * </pre>
+ *
+ * <p>This is what {@link Drawable#getPreferredSize()} returns. Note that the
+ * name collides with {@code java.awt.geom.Dimension2D}, which is its
+ * superclass, so one of the two usually has to be qualified.</p>
  */
 public abstract class Dimension2D extends java.awt.geom.Dimension2D
 		implements Serializable {

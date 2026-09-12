@@ -32,9 +32,20 @@ import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Record;
 
 /**
- * Filter2D to change the size of equally spaced data sources. All columns of the
- * data sources must be numeric, otherwise an {@code IllegalArgumentException}
- * will be thrown. The values of the scaled result are created by averaging.
+ * <p>A {@link Filter2D} that resamples a data source to a different number of
+ * columns and rows, averaging the values that fall into each new cell. It
+ * treats the source as a regular grid, which is what makes it useful for the
+ * matrix data behind a {@link de.erichseifert.gral.plots.RasterPlot} &mdash; it
+ * is, in effect, image scaling.</p>
+ *
+ * <pre>
+ * // Halve a 200x100 grid to 100x50, averaging each 2x2 block.
+ * DataSource smaller = new Resize(data, 100, 50);
+ * </pre>
+ *
+ * <p>A size of zero in either direction keeps that dimension unchanged. All
+ * columns of the source must be numeric, or an
+ * {@code IllegalArgumentException} is thrown.</p>
  */
 public class Resize extends Filter2D {
 	/** Version id for serialization. */

@@ -34,7 +34,40 @@ import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Interface for generic renderers of axes.
+ * <p>Everything about an axis except its value range: how it is drawn, where
+ * its ticks are, and &mdash; most importantly &mdash; how a data value becomes
+ * a position on screen. The range itself lives in the {@link Axis} that is
+ * passed to each method, so one renderer can serve several axes.</p>
+ *
+ * <p>The coordinate transform is the part the rest of the library depends on:</p>
+ * <pre>
+ * Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+ * AxisRenderer rendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
+ *
+ * double pixels = rendererX.worldToView(axisX, 4.2, false);
+ * Number value  = rendererX.viewToWorld(axisX, pixels, false);
+ * </pre>
+ *
+ * <p>{@code worldToView} returns a distance along the axis shape, measured from
+ * its start, not an absolute screen coordinate; {@link #getPosition(Axis,
+ * Number, boolean, boolean)} gives the actual point. The {@code extrapolate}
+ * flag decides what happens to values outside the axis range: with
+ * {@code false} the result is clamped to the ends of the axis, with
+ * {@code true} the transform continues beyond them, which is what lets a line
+ * be drawn up to the edge of the plot area and then clipped.</p>
+ *
+ * <p>Because the scale is a property of the renderer and not of the axis,
+ * switching between a linear and a logarithmic axis means substituting one
+ * object:</p>
+ * <pre>
+ * plot.setAxisRenderer(XYPlot.AXIS_X, new LogarithmicRenderer2D());
+ * </pre>
+ *
+ * <p>A custom scale is written by extending
+ * {@link AbstractAxisRenderer2D} and overriding {@code worldToView} and
+ * {@code viewToWorld}; {@link LinearRenderer2D} and
+ * {@link LogarithmicRenderer2D} are the two shipped implementations and show
+ * how little that takes.</p>
  */
 public interface AxisRenderer {
 	/**

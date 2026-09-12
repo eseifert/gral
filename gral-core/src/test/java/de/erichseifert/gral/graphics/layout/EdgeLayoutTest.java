@@ -159,7 +159,7 @@ public class EdgeLayoutTest {
 		assertEquals(heightCenter, ce.getHeight(), DELTA);
 		assertEquals(heightCenter, ee.getHeight(), DELTA);
 
-		// Components must not overlap their neighbours
+		// Components must not overlap their neighbors
 		assertEquals(ss.getY(), ce.getY() + ce.getHeight() + GAP_V, DELTA);
 	}
 

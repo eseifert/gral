@@ -23,9 +23,21 @@ package de.erichseifert.gral.plots.colors;
 
 
 /**
- * An abstract base class for implementations of {@code ContinuousColorMapper}
- * that allow to apply a a scaling factor to the values passed to
- * {@link #get(double)}.
+ * <p>Base class for gradients that are defined over the interval from 0.0 to
+ * 1.0 and rescale their input into it. Rather than having to normalize the data
+ * first, the range of interest is declared once:</p>
+ *
+ * <pre>
+ * HeatMap colors = new HeatMap();
+ * colors.setRange(-20.0, 40.0);   // maps -20 to the start of the gradient,
+ *                                 // 40 to its end
+ * </pre>
+ *
+ * <p>{@link #setRange(double, double)} is a convenience over
+ * {@link #setOffset(double)} and {@link #setScale(double)}, which set the
+ * subtracted offset and the divisor separately. Values that still fall outside
+ * the interval after scaling are handled according to the
+ * {@link ColorMapper.Mode}.</p>
  */
 public abstract class ScaledContinuousColorMapper
 		extends ContinuousColorMapper {

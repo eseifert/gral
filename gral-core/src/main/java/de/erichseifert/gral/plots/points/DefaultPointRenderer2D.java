@@ -49,7 +49,23 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Class that creates {@code Drawable}s for a row of data.
+ * <p>The standard {@link PointRenderer}: it draws the same shape at every data
+ * point, in a color that may depend on the value.</p>
+ *
+ * <pre>
+ * DefaultPointRenderer2D points = new DefaultPointRenderer2D();
+ * points.setShape(new Rectangle2D.Double(-3.0, -3.0, 6.0, 6.0));
+ * points.setColor(Color.BLUE);
+ * plot.setPointRenderers(series, points);
+ * </pre>
+ *
+ * <p>It can additionally draw error bars, taken from two further columns of the
+ * series and switched on with {@code setErrorVisible(true)}, and the value of
+ * the point as a text label, switched on with {@code setValueVisible(true)}.
+ * Both are off by default.</p>
+ *
+ * <p>Shapes are given in the coordinate system of the point, so a shape centered
+ * on the data point is offset by half its size, as above.</p>
  */
 public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	/** Version id for serialization. */

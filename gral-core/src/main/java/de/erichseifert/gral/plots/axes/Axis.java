@@ -30,12 +30,34 @@ import java.util.Set;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * <p>Class that represents an arbitrary axis.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Different ways of setting and getting the range of this axis</li>
- *   <li>Administration of {@link AxisListener AxisListeners}</li>
- * </ul>
+ * <p>The value range that is currently displayed along one axis of a plot. An
+ * {@code Axis} holds nothing but a minimum, a maximum, an auto-scaling flag and
+ * a list of listeners; it does not know how it is drawn, and it cannot convert
+ * a value to a pixel position. That is the job of the
+ * {@link AxisRenderer} registered for the same axis name.</p>
+ *
+ * <pre>
+ * // A fixed range: auto-scaling is off, so the plot leaves it alone.
+ * plot.setAxis(XYPlot.AXIS_Y, new Axis(0.0, 100.0));
+ *
+ * // Back to a range derived from the data.
+ * Axis axisY = plot.getAxis(XYPlot.AXIS_Y);
+ * axisY.setAutoscaled(true);
+ * plot.autoscaleAxis(XYPlot.AXIS_Y);
+ * </pre>
+ *
+ * <p>An axis created with {@link #Axis()} auto-scales; one created with
+ * {@link #Axis(Number, Number)} does not. Note that
+ * {@link #setRange(Number, Number)} does <em>not</em> turn auto-scaling off by
+ * itself: a range set by hand on an auto-scaled axis is replaced the next time
+ * the plot rescales, so call {@link #setAutoscaled(boolean) setAutoscaled(false)}
+ * as well. Until a range has been set, {@link #getMin()} and {@link #getMax()}
+ * return {@code null} and {@link #isValid()} is {@code false}.</p>
+ *
+ * <p>Every change of the range notifies the registered
+ * {@link AxisListener}s, which is how a plot learns that it has to repaint. A
+ * minimum greater than the maximum is allowed and reverses the direction of the
+ * axis.</p>
  */
 public class Axis implements Serializable {
 	/** Version id for serialization. */

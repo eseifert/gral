@@ -28,10 +28,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Resizable implementation of the {@code List} interface that automatically
- * sorts all values. It implements the methods {@code get}, {@code size},
- * {@code add}, and {@code size}. The stored elements must implement the
- * interface {@code Comparable}.
+ * <p>A {@code List} that keeps its elements in ascending order. Each
+ * {@link #add(Comparable)} inserts the element at the position its natural
+ * ordering dictates, found by binary search, so the list is sorted at all times
+ * rather than only after an explicit sort.</p>
+ *
+ * <p>Because the position of an element is decided by its value,
+ * {@code add(int, T)} and {@code set(int, T)} are not supported and the
+ * inherited implementations throw. The main use in GRAL is
+ * {@link de.erichseifert.gral.data.statistics.Statistics}, which needs sorted
+ * values in order to compute quantiles.</p>
+ *
  * @param <T> Data type of stored elements.
  */
 public class SortedList<T extends Comparable<T>> extends AbstractList<T> {

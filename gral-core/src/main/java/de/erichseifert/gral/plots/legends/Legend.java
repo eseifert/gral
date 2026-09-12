@@ -32,8 +32,28 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.Orientation;
 
 /**
- * Interface for a legend that display visual examples of the variables used in
- * a plot.
+ * <p>The key of a plot: a {@link Container} of entries that pair a small symbol
+ * with a label, so that a reader can tell the series apart.</p>
+ *
+ * <p>A plot creates and maintains its own legend and adds every visible data
+ * source to it, so this interface is rarely implemented and mostly configured.
+ * The text of an entry is the name of the data source, which makes naming the
+ * series the one step that is easy to forget:</p>
+ *
+ * <pre>
+ * DataSeries series = new DataSeries("Temperature", data, 0, 1);
+ * XYPlot plot = new XYPlot(series);
+ * plot.setLegendVisible(true);                       // off by default
+ * plot.setLegendLocation(Location.NORTH_EAST);
+ * plot.getLegend().setOrientation(Orientation.HORIZONTAL);
+ * </pre>
+ *
+ * <p>How many entries a data source contributes, and what symbol is drawn for
+ * each, is decided by the implementation:
+ * {@link SeriesLegend} produces one entry per data source, while
+ * {@link ValueLegend} produces one per row, which is what a pie plot needs.
+ * Both extend {@link AbstractLegend}, which handles the layout and the
+ * styling.</p>
  */
 public interface Legend extends Container, Drawable {
 	/**

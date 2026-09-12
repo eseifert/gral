@@ -19,7 +19,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
- * Unit tests.
+ * <p>Unit tests, mirroring the package structure of the main sources. Each
+ * package has a {@code *Tests} suite class, and
+ * {@link de.erichseifert.gral.AllTests} aggregates all of them.</p>
+ *
+ * <p>{@link de.erichseifert.gral.TestUtils} holds the shared helpers and, with
+ * them, the local conventions: rendering is checked by drawing into a test
+ * image and asserting that pixels were painted rather than by comparing against
+ * reference images, and anything serializable gets a round-trip test. There is
+ * no mocking framework; tests use
+ * {@link de.erichseifert.gral.data.DummyData} and small local subclasses
+ * instead.</p>
  */
 package de.erichseifert.gral;

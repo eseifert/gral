@@ -25,8 +25,26 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Abstract class that provides utility functions which are useful for
- * mathematical calculations.
+ * <p>Mathematical helpers used throughout the library. The class is not meant
+ * to be instantiated.</p>
+ *
+ * <p>Several of them exist because plotting needs answers the JDK does not
+ * give:</p>
+ * <ul>
+ *   <li>{@link #round(double, double)}, {@link #floor(double, double)} and
+ *   {@link #ceil(double, double)} round to a multiple of an arbitrary value,
+ *   which is how tick positions are found;</li>
+ *   <li>{@link #limit(double, double, double)} clamps a value to a range;</li>
+ *   <li>{@link #almostEqual(double, double, double)} compares floating-point
+ *   numbers with a tolerance, and
+ *   {@link #isCalculatable(double)} rejects {@code NaN} and infinities in one
+ *   call;</li>
+ *   <li>{@link #magnitude(double, double)} returns the largest power of a base
+ *   that is not greater than a value, which is what a logarithmic axis needs
+ *   to place its decades;</li>
+ *   <li>{@link #quantile(java.util.List, double)} and
+ *   {@link #binarySearch(double[], double)} work on sorted data.</li>
+ * </ul>
  */
 public abstract class MathUtils {
 	/** Instance for random values. */

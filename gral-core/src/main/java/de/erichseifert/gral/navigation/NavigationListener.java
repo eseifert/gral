@@ -25,22 +25,28 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * An interface for classes that want to be notified on navigation changes like
- * panning or zooming.
+ * <p>Receives notifications when an object is zoomed or panned. A
+ * {@link Navigator} is itself a listener, which is how two navigators are
+ * linked by {@link Navigator#connect(Navigator)}; an application implements
+ * this interface to react to navigation, for example to keep a status bar in
+ * step with the visible range.</p>
+ *
+ * <p>Notifications arrive only when a value has really changed, so a listener
+ * does not have to filter out no-op events. A listener that changes the
+ * navigator again from within a callback has to guard against looping
+ * itself.</p>
  *
  * @see Navigator
  */
 public interface NavigationListener {
 	/**
-	 * A method that gets called after the center of an object in the
-	 * {@code PlotNavigator} has changed.
+	 * Called after the center of view has changed, i.e. after panning.
 	 * @param event An object describing the change event.
 	 */
 	void centerChanged(NavigationEvent<PointND<? extends Number>> event);
 
 	/**
-	 * A method that gets called after the zoom level of an object in the
-	 * {@code PlotNavigator} has changed.
+	 * Called after the zoom level has changed.
 	 * @param event An object describing the change event.
 	 */
 	void zoomChanged(NavigationEvent<Double> event);

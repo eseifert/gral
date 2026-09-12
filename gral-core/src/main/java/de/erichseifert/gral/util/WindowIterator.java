@@ -27,8 +27,33 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * <p>An iterator that turns a sequence of values into a sequence of
+ * overlapping windows. Each call of {@link #next()} shifts the window by one
+ * value and returns a new list of the current contents.</p>
+ *
+ * <pre>
+ * Iterator&lt;List&lt;Integer&gt;&gt; windows =
+ *     new WindowIterator&lt;&gt;(Arrays.asList(1, 2, 3, 4).iterator(), 2);
+ * // yields [1, 2], then [2, 3], then [3, 4]
+ * </pre>
+ *
+ * <p>There is no padding at the ends: <i>m</i> input values and a window of
+ * <i>n</i> produce <i>m&nbsp;&minus;&nbsp;n&nbsp;+&nbsp;1</i> windows, and no
+ * window at all if the source is shorter than <i>n</i>. This is what the
+ * window-based filters in {@link de.erichseifert.gral.data.filters} are built
+ * on.</p>
+ *
+ * <p>Each returned list is a fresh copy, so it may be kept and modified. As
+ * with {@link ConcatenationIterator}, {@link #remove()} is a no-op for
+ * backwards compatibility rather than an exception.</p>
+ *
+ * @param <T> Type of the values.
+ */
 public class WindowIterator<T> implements Iterator<List<T>> {
+	/** Source of the values. */
 	private final Iterator<T> iterator;
+	/** Values of the window that {@link #next()} will return. */
 	private final Deque<T> window;
 
 	/**
@@ -71,6 +96,10 @@ public class WindowIterator<T> implements Iterator<List<T>> {
 		return new LinkedList<>(window);
 	}
 
+	/**
+	 * Does nothing. See the class documentation for why this is not an
+	 * {@code UnsupportedOperationException}.
+	 */
 	@Override
 	public void remove() {
 	}

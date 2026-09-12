@@ -23,15 +23,23 @@ package de.erichseifert.gral.data;
 
 
 /**
- * <p>Class that creates a new data source which adds a leading column
- * containing the row number.</p>
+ * <p>A view that prepends a column of row numbers to another data source. This
+ * turns a table that holds only values into one an {@link
+ * de.erichseifert.gral.plots.XYPlot} can draw, by supplying the missing x
+ * coordinate.</p>
  *
- * <p>Example which creates a two column data source from a one column
- * histogram:</p>
  * <pre>
+ * // A histogram has counts but no positions; enumerate them.
  * DataSource hist = new Histogram2D(data, Orientation.HORIZONTAL, 10);
- * DataSource hist2d = new EnumeratedData(hist);
+ * DataSource plottable = new EnumeratedData(hist);
  * </pre>
+ *
+ * <p>The numbering starts at 0 and steps by 1 by default; the constructor
+ * taking two arguments sets a different start and step, for example to label
+ * the rows with the actual x values of an equally spaced measurement.</p>
+ *
+ * <p>Like the other views this one reads through to the original and forwards
+ * its change notifications.</p>
  *
  * @see DataSource
  */

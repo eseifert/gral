@@ -37,10 +37,20 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
+/**
+ * <p>A bubble plot whose points are arranged in a spiral.</p>
+ *
+ * <p>Shows {@link de.erichseifert.gral.plots.points.SizeablePointRenderer},
+ * which takes the size of each mark from a further column, so that a third
+ * variable is shown without a third axis.</p>
+ */
 public class SpiralPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 995084910079463763L;
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public SpiralPlot() {
 		setPreferredSize(new Dimension(600, 600));
@@ -100,6 +110,10 @@ public class SpiralPlot extends ExamplePanel {
 		return "Bubble plot showing data points in a spiral-like shape";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new SpiralPlot().showInFrame();
 	}

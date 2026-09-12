@@ -28,7 +28,17 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates shades of gray for values between 0.0 and 1.0.
+ * <p>A gradient from black to white: 0.0 is black, 1.0 is white, and values in
+ * between are the corresponding shades of gray.</p>
+ *
+ * <pre>
+ * Grayscale colors = new Grayscale();
+ * colors.setRange(0.0, 100.0);
+ * pointRenderer.setColor(colors);
+ * </pre>
+ *
+ * <p>Useful where a figure has to survive being printed without color, or
+ * where color is already carrying some other meaning.</p>
  */
 public class Grayscale extends ScaledContinuousColorMapper {
 	/** Version id for serialization. */

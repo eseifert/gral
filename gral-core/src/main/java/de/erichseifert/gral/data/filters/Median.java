@@ -31,11 +31,23 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * <p>Class that calculates the median of a data sequence.</p>
- * <ul>
- *   <li>Setting and getting offset</li>
- *   <li>Setting and getting window size</li>
- * </ul>
+ * <p>A {@link Filter2D} that replaces each value of the filtered columns by the
+ * median of a window of neighboring values. Unlike averaging, this removes
+ * isolated outliers without smearing them into their neighbors.</p>
+ *
+ * <pre>
+ * // Window of 3 values, offset 1, filtering column 0 only.
+ * DataSource smoothed = new Median(data, 3, 1, Filter2D.Mode.REPEAT, 0);
+ * </pre>
+ *
+ * <p>The window ends at the row {@code row - offset + windowSize}, so it covers
+ * the rows from {@code row - offset + 1} to that position: an offset of 1
+ * therefore looks ahead, and larger offsets shift the window back over the
+ * values that precede the current row. Values beyond the ends of the column are
+ * supplied according to the {@link Filter2D.Mode}.</p>
+ *
+ * <p>{@link MedianFilter} is the iterator-based equivalent, which needs no mode
+ * because it simply yields fewer values.</p>
  */
 public class Median extends Filter2D {
 	/** Version id for serialization. */

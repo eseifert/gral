@@ -60,14 +60,33 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * <p>Abstract class that provides function for rendering axes in
- * two-dimensional space.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Calculating tick positions of an axis</li>
- *   <li>Calculating tick normals</li>
- *   <li>Administration of settings</li>
- * </ul>
+ * <p>Base class for {@link AxisRenderer} implementations in two dimensions. It
+ * does everything except the scale itself: it holds the shape the axis follows,
+ * generates the major, minor and custom ticks, formats their labels, computes
+ * tick positions and normals along the shape, and returns the
+ * {@link de.erichseifert.gral.graphics.Drawable} that paints the axis together
+ * with its ticks and its label.</p>
+ *
+ * <p>Writing a custom scale therefore comes down to two methods:</p>
+ * <pre>
+ * public class SqrtRenderer2D extends AbstractAxisRenderer2D {
+ *     public double worldToView(Axis axis, Number value, boolean extrapolate) {
+ *         // Distance along the axis shape, measured from its start.
+ *     }
+ *
+ *     public Number viewToWorld(Axis axis, double value, boolean extrapolate) {
+ *         // The inverse of the above.
+ *     }
+ * }
+ * </pre>
+ * <p>The two must be inverses of each other, or interaction breaks: panning and
+ * zooming convert screen positions back to values. {@link LinearRenderer2D} and
+ * {@link LogarithmicRenderer2D} are the two shipped implementations and show
+ * how short that is in practice.</p>
+ *
+ * <p>The axis shape does not have to be a straight line; the positions and
+ * normals are computed by walking the segments of whatever {@code Shape} is
+ * set, which is what {@link de.erichseifert.gral.plots.PiePlot} relies on.</p>
  */
 public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializable {
 	/** Version id for serialization. */

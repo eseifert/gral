@@ -29,10 +29,18 @@ import java.util.Locale;
 import de.erichseifert.gral.data.statistics.Statistics;
 
 /**
- * Abstract base for reading substructures of a data source, i.e. columns or
- * rows. {@code DataAccessor}s are iterable and provide utility methods
- * for statistics and array conversion.
+ * <p>Base class for one-dimensional live views on a data source. It stores the
+ * source and one index &mdash; a row number or a column number &mdash; and adds
+ * iteration, statistics and conversion to an array on top of the
+ * {@link #get(int)} and {@link #size()} a subclass provides.</p>
+ *
+ * <p>{@link Row} is the only subclass in the library. Being a view, an accessor
+ * reads through to its source, so it reflects later changes to the data and
+ * refers to whatever now sits at its index if rows are inserted or removed
+ * before it.</p>
+ *
  * @see DataSource
+ * @see Row
  */
 public abstract class DataAccessor
 		implements Iterable<Comparable<?>>, Serializable {
@@ -45,10 +53,10 @@ public abstract class DataAccessor
 	private final int index;
 
 	/**
-	 * Initializes a new instance with the specified data source and an access
-	 * index.
-	 * @param source Data source.
-	 * @param index Column index.
+	 * Initializes a new view on the specified data source. The index is not
+	 * validated here; an invalid one only shows when the accessor is read.
+	 * @param source Data source to read through to.
+	 * @param index Index of the row or column this accessor provides.
 	 */
 	public DataAccessor(DataSource source, int index) {
 		this.source = source;

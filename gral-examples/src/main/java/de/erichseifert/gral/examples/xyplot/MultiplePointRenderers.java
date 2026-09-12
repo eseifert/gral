@@ -43,6 +43,14 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
+/**
+ * <p>Data points drawn with a drop shadow.</p>
+ *
+ * <p>Shows that a series may have more than one renderer of the same kind:
+ * two {@link de.erichseifert.gral.plots.points.PointRenderer}s are set for the
+ * series, the first drawing the offset shadow and the second the point
+ * itself.</p>
+ */
 public class MultiplePointRenderers extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -5263057758564264677L;
@@ -80,6 +88,9 @@ public class MultiplePointRenderers extends ExamplePanel {
 		}
 	}
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public MultiplePointRenderers() {
 		// Generate data
@@ -121,6 +132,10 @@ public class MultiplePointRenderers extends ExamplePanel {
 		return "Plot with point shadows";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new MultiplePointRenderers().showInFrame();
 	}

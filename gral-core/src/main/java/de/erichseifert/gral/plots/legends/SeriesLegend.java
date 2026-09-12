@@ -29,8 +29,17 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.graphics.Drawable;
 
 /**
- * A legend implementation that displays an item for each data series that are
- * added to the legend.
+ * <p>A legend that shows one entry per data source, labeled with the name of
+ * that source. This is what the ordinary plot types use, since there one data
+ * source is one series.</p>
+ *
+ * <p>Subclasses supply the symbol drawn beside the label by implementing
+ * {@link #getSymbol(DataSource)}, which is how a plot makes the symbol look
+ * like the marks and lines it actually draws; {@link #getLabel(DataSource)} can
+ * be overridden to derive the text from something other than the name of the
+ * source.</p>
+ *
+ * @see ValueLegend
  */
 public abstract class SeriesLegend extends AbstractLegend {
 	/** Version id for serialization. */
@@ -38,6 +47,9 @@ public abstract class SeriesLegend extends AbstractLegend {
 	/** Mapping of data rows to drawable components. */
 	private final Map<DataSource, Drawable> drawableByDataSource;
 
+	/**
+	 * Initializes a new, empty legend.
+	 */
 	public SeriesLegend() {
 		drawableByDataSource = new HashMap<>();
 	}

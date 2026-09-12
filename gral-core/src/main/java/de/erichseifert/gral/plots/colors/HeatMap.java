@@ -27,7 +27,20 @@ import java.awt.Paint;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates different color shades for values between 0.0 and 1.0.
+ * <p>A gradient through the colors of a heat map for values between 0.0 and
+ * 1.0: black at the low end, then blue, red and yellow, and white at the high
+ * end. The colors are blended as a Bézier curve, so the transitions are
+ * smooth rather than piecewise linear.</p>
+ *
+ * <pre>
+ * HeatMap colors = new HeatMap();
+ * colors.setRange(0.0, 250.0);
+ * rasterPlot.setColors(colors);
+ * </pre>
+ *
+ * <p>Unlike {@link RainbowColors} the perceived brightness rises with the
+ * value, so the order of the colors stays readable in grayscale and to
+ * color-blind readers.</p>
  */
 public class HeatMap extends ScaledContinuousColorMapper {
 	/** Version id for serialization. */

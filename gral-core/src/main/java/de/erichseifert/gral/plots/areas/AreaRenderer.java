@@ -29,7 +29,25 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.DataPoint;
 
 /**
- * Interface for renderers that display areas in plots.
+ * <p>Fills the region between a data series and the baseline of the dependent
+ * axis. Like a {@link de.erichseifert.gral.plots.lines.LineRenderer}, an area
+ * renderer receives the already projected {@link DataPoint}s and works in view
+ * coordinates.</p>
+ *
+ * <p>Rendering happens in two steps: {@link #getAreaShape(List)} builds the
+ * geometry and {@link #getArea(List, Shape)} wraps it in a {@link Drawable}
+ * that fills it.</p>
+ *
+ * <pre>
+ * DefaultAreaRenderer2D area = new DefaultAreaRenderer2D();
+ * area.setColor(new Color(0, 0, 255, 64));
+ * area.setGap(2.0);          // keep a hole around each data point
+ * plot.setAreaRenderers(series, area);
+ * </pre>
+ *
+ * <p>Areas are drawn before lines and points, so a translucent fill does not
+ * hide the marks on top of it. As with the other renderers, one instance serves
+ * the whole series and must not keep per-point state.</p>
  */
 public interface AreaRenderer {
 	/**
@@ -48,15 +66,16 @@ public interface AreaRenderer {
 	 */
 	Drawable getArea(List<DataPoint> points, Shape shape);
 
-	// TODO: Mention which unit the Gap property has (pixels?)
 	/**
-	 * Returns the value for the gap between the area and a data point.
+	 * Returns the size of the hole that is punched out of the area around each
+	 * data point, in view units (pixels). A value of 0.0 means no hole.
 	 * @return Gap between area and data point.
 	 */
 	double getGap();
 
 	/**
-	 * Sets the value for the gap between the area and a data point.
+	 * Sets the size of the hole that is punched out of the area around each
+	 * data point, in view units (pixels). A value of 0.0 means no hole.
 	 * @param gap Gap between area and data point.
 	 */
 	void setGap(double gap);

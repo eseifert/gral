@@ -36,11 +36,25 @@ import de.erichseifert.gral.graphics.Orientation;
 
 
 /**
- * <p>View that aggregates the column values of an other data source into
- * a histogram with cells. The cells size can be equally sized by defining
- * a number of cells or breakpoints between histogram cells can be passed
- * as an array to create unequally sized cells.</p>
- * <p>For ease of use the histogram is a data source itself.</p>
+ * <p>A histogram that is itself a {@link DataSource}, so its bin counts can be
+ * passed to a plot directly. The bins may be equally wide, given a number of
+ * them, or defined by explicit breakpoints.</p>
+ *
+ * <pre>
+ * // Count the values of each column into 10 equally wide bins.
+ * DataSource histogram = new Histogram2D(data, Orientation.VERTICAL, 10);
+ *
+ * // A histogram has one column of counts per aggregated column, but no
+ * // x values; EnumeratedData adds the bin index as a leading column.
+ * BarPlot plot = new BarPlot(new EnumeratedData(histogram));
+ * </pre>
+ *
+ * <p>The {@link de.erichseifert.gral.graphics.Orientation} decides the
+ * direction in which values are aggregated: vertically means one histogram per
+ * column of the original, horizontally one per row.</p>
+ *
+ * <p>{@link Histogram} is the simpler, newer variant: it counts a plain
+ * sequence of values and is not a data source.</p>
  */
 public class Histogram2D extends AbstractHistogram2D {
 	/** Version id for serialization. */

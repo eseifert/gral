@@ -27,7 +27,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that represents a view on several columns of a {@code DataSource}.
+ * <p>A view that selects columns of another data source, optionally reordering
+ * them, and gives the result a name. This is how a table that holds several
+ * variables is split into the series of a plot, and the name is what a legend
+ * displays.</p>
+ *
+ * <pre>
+ * // Columns of the table: time, temperature, humidity
+ * DataTable data = new DataTable(Double.class, Double.class, Double.class);
+ * …
+ * // Two series over the same x column. The series columns are numbered from 0
+ * // again, so in both series column 0 is the time and column 1 the value.
+ * DataSeries temperature = new DataSeries("Temperature", data, 0, 1);
+ * DataSeries humidity    = new DataSeries("Humidity",    data, 0, 2);
+ *
+ * XYPlot plot = new XYPlot(temperature, humidity);
+ * </pre>
+ *
+ * <p>The same column of the original may be used more than once, and columns
+ * may appear in any order. Passing no column indexes at all selects every
+ * column of the original.</p>
+ *
+ * <p>A series is a view, not a copy: it reads through to the original data
+ * source and forwards its change notifications, so a plot showing the series
+ * updates when the underlying table is modified.</p>
+ *
  * @see DataSource
  */
 public class DataSeries extends AbstractDataSource implements DataListener {
@@ -40,25 +64,25 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 	private final List<Integer> cols;
 
 	/**
-	 * Constructor without name. The first column will be column
-	 * {@code 0}, the second column {@code 1} and so on,
-	 * whereas the value of the specified columns is the column number
-	 * in the data source.
-	 * @param data Data source
-	 * @param cols Column numbers
+	 * Creates an unnamed series. The columns of the series are numbered from
+	 * {@code 0} in the order they are listed here, while the values given are
+	 * the column numbers in the original data source.
+	 * @param data Data source to select columns from.
+	 * @param cols Column numbers in {@code data}. If empty, all columns are
+	 *        selected.
 	 */
 	public DataSeries(DataSource data, int... cols) {
 		this(null, data, cols);
 	}
 
 	/**
-	 * Constructor that initializes a named data series. The first column will
-	 * be column {@code 0}, the second column {@code 1} and so on,
-	 * whereas the value of the specified columns is the column number in the
-	 * data source.
-	 * @param name Descriptive name
-	 * @param data Data source
-	 * @param cols Column numbers
+	 * Creates a named series. The columns of the series are numbered from
+	 * {@code 0} in the order they are listed here, while the values given are
+	 * the column numbers in the original data source.
+	 * @param name Descriptive name, shown by legends.
+	 * @param data Data source to select columns from.
+	 * @param cols Column numbers in {@code data}. If empty, all columns are
+	 *        selected.
 	 */
 	@SuppressWarnings("unchecked")
 	public DataSeries(String name, DataSource data, int... cols) {

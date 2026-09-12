@@ -31,20 +31,29 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * <p>Class that writes all values of a {@code DataSource} to a character
- * separated file. The file then stores the values separated by a certain
- * delimiter character. The delimiter is chosen based on the file type but can
- * also be set manually. By default the comma character will be used as a
- * delimiter for separating columns. Lines end with a carriage return and a
- * line feed character.</p>
- * <p>{@code CSVWriter} instances should be obtained by the
- * {@link DataWriterFactory} rather than being created manually:</p>
+ * <p>Writes the values of a {@link de.erichseifert.gral.data.DataSource} to a
+ * text file, one line per row, with the values separated by a delimiter
+ * character. The delimiter follows from the MIME type &mdash; a comma for
+ * {@code text/csv}, a tab for {@code text/tab-separated-values} &mdash; and can
+ * be overridden with the {@link #SEPARATOR_CHAR} setting. Lines end with a
+ * carriage return and a line feed.</p>
+ *
+ * <p>Instances should be obtained from the {@link DataWriterFactory} rather
+ * than created directly:</p>
  * <pre>
  * DataWriterFactory factory = DataWriterFactory.getInstance();
  * DataWriter writer = factory.get("text/csv");
  * writer.write(data, new FileOutputStream(filename));
  * </pre>
+ *
+ * <p>Values are written with {@code String.valueOf}. A value that contains the
+ * delimiter, a double quote or a line break is enclosed in double quotes, and
+ * quotes inside it are doubled, so that {@link CSVReader} can read the file
+ * back. No header line is written; the column types have to be supplied again
+ * when reading.</p>
+ *
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
+ * @see CSVReader
  */
 public class CSVWriter extends AbstractDataWriter {
 	/** Key for specifying a {@link Character} value that defines the
@@ -84,7 +93,8 @@ public class CSVWriter extends AbstractDataWriter {
 	}
 
 	/**
-	 * Stores the specified data source.
+	 * Writes all values of the data source, one line per row. Note that this
+	 * implementation closes the output stream when it is done.
 	 * @param data DataSource to be stored.
 	 * @param output OutputStream to be written to.
 	 * @throws IOException if writing the data failed

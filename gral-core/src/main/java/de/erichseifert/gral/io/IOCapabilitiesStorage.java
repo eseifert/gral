@@ -26,8 +26,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Abstract class that provides the basic functions to store capabilities of
- * a reader or a writer implementation.
+ * <p>Base class of every reader and writer, and the registry of what formats
+ * exist. An implementation announces the formats it handles from a static
+ * initializer:</p>
+ *
+ * <pre>
+ * static {
+ *     addCapabilities(new IOCapabilities(
+ *         "CSV", "Comma separated values", "text/csv",
+ *         new String[] {"csv", "txt"}));
+ * }
+ * </pre>
+ *
+ * <p>The registry is static and shared by all readers and writers, so
+ * {@link #getCapabilities()} only reports the formats whose classes have
+ * already been loaded. That is why an {@link IOFactory} calls this method
+ * reflectively on each class it knows about, rather than reading the set
+ * directly.</p>
  */
 public abstract class IOCapabilitiesStorage {
 	/** Set of all registered capabilities. */

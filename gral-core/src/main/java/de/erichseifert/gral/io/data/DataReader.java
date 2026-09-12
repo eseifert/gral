@@ -28,13 +28,33 @@ import de.erichseifert.gral.data.DataSource;
 
 
 /**
- * Interface that provides a function to retrieve a data source.
+ * <p>Reads a {@link DataSource} from an input stream. Obtain an instance from
+ * {@link DataReaderFactory} rather than constructing one, so that the format
+ * stays exchangeable:</p>
+ *
+ * <pre>
+ * DataReader reader = DataReaderFactory.getInstance().get("text/csv");
+ * reader.setSetting(CSVReader.SEPARATOR_CHAR, ';');
+ * try (InputStream in = new FileInputStream("values.csv")) {
+ *     DataSource data = reader.read(in, Double.class, Double.class);
+ * }
+ * </pre>
+ *
+ * <p>The column types have to be supplied by the caller, since a text file
+ * does not carry them. How the text of a cell is converted to a value of that
+ * type is up to the reader; {@link CSVReader} looks for a static
+ * {@code parse…(String)} method on the type, which the wrapper classes of the
+ * primitives and {@code String} all provide.</p>
+ *
+ * @see DataReaderFactory
+ * @see DataWriter
  */
 public interface DataReader {
 	/**
-	 * Returns a data source that contains the imported data.
+	 * Reads a data source from the specified stream. The stream is not closed
+	 * by this method.
 	 * @param input Input to be read.
-	 * @param types Types for the columns of the data source.
+	 * @param types Types for the columns of the data source, in column order.
 	 * @return Imported data.
 	 * @throws IOException when the file format is not valid or when
 	 *         experiencing an error during file operations.
@@ -43,15 +63,18 @@ public interface DataReader {
 		throws IOException;
 
 	/**
-	 * Returns the setting for the specified key.
+	 * Returns the value of a format-specific setting, for example
+	 * {@link CSVReader#SEPARATOR_CHAR}. The available keys are declared as
+	 * constants on the concrete reader.
 	 * @param <T> return type
 	 * @param key key of the setting
-	 * @return the value of the setting
+	 * @return the value of the setting, or {@code null} if it is unknown
 	 */
 	<T> T getSetting(String key);
 
 	/**
-	 * Sets the setting for the specified key.
+	 * Changes a format-specific setting. Settings have to be applied before
+	 * {@link #read(InputStream, Class...)} is called.
 	 * @param <T> value type
 	 * @param key key of the setting
 	 * @param value value of the setting

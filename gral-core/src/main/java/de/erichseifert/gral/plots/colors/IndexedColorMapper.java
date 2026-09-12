@@ -26,9 +26,15 @@ import java.awt.Paint;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that maps integer numbers to Paint objects. This can be used to
- * generate colors or gradients for various elements in a plot, e.g. lines,
- * areas, etc.
+ * <p>Base class for color mappers addressed by a whole number, i.e. palettes
+ * of distinct colors rather than gradients. This is what gives consecutive
+ * data series or pie slices their different colors.</p>
+ *
+ * <p>A subclass implements {@link #get(int)}. Input arriving through
+ * {@link #get(Number)} is truncated towards zero, so a mapper of this kind can
+ * be used wherever a {@link ColorMapper} is expected.</p>
+ *
+ * @see ContinuousColorMapper
  */
 public abstract class IndexedColorMapper
 		extends AbstractColorMapper<Integer> {

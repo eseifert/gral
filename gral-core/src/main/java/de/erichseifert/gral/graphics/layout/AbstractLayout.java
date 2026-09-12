@@ -21,7 +21,15 @@
  */
 package de.erichseifert.gral.graphics.layout;
 
+/**
+ * Base class for {@link Layout} implementations. It stores the horizontal and
+ * vertical gaps between components and leaves
+ * {@link Layout#layout(de.erichseifert.gral.graphics.Container)} and
+ * {@link Layout#getPreferredSize(de.erichseifert.gral.graphics.Container)} to
+ * subclasses.
+ */
 public abstract class AbstractLayout implements Layout {
+	/** Version id for serialization. */
 	private static final long serialVersionUID = 5961215915010787754L;
 
 	/** Horizontal spacing of components. */
@@ -29,6 +37,11 @@ public abstract class AbstractLayout implements Layout {
 	/** Vertical spacing of components. */
 	private double gapY;
 
+	/**
+	 * Initializes a layout with the specified space between components.
+	 * @param gapX Horizontal gap in pixels.
+	 * @param gapY Vertical gap in pixels.
+	 */
 	public AbstractLayout(double gapX, double gapY) {
 		this.gapX = gapX;
 		this.gapY = gapY;

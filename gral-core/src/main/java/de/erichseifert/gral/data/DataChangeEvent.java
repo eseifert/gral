@@ -24,8 +24,19 @@ package de.erichseifert.gral.data;
 import java.util.EventObject;
 
 /**
- * Class that stores information on a change of a specific data value in a
- * data source.
+ * <p>Describes the change of a single cell of a data source: where it is, what
+ * it held before, and what it holds now. One modification usually produces
+ * several of these &mdash; adding a row reports one event per column &mdash;
+ * and they are passed to a {@link DataListener} as an array.</p>
+ *
+ * <p>Whether the old or the new value is {@code null} follows from the kind of
+ * change: an added value has no old value, a removed one has no new value. A
+ * {@code null} is therefore not necessarily a cell that is empty.</p>
+ *
+ * <p>The event extends {@code java.util.EventObject}, so
+ * {@link java.util.EventObject#getSource()} returns the data source that
+ * changed.</p>
+ *
  * @see DataListener
  * @see DataSource
  */

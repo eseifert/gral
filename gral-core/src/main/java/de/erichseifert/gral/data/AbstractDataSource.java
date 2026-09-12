@@ -37,10 +37,28 @@ import de.erichseifert.gral.data.statistics.Statistics;
 
 
 /**
- * Abstract implementation of the {@code DataSource} interface.
- * This class provides access to statistical information,
- * administration and notification of listeners and supports
- * iteration of data values.
+ * <p>Base class for {@link DataSource} implementations. It takes care of the
+ * parts that are the same for every source: the name, the column types and
+ * count, the list of listeners, lazily built statistics, and iteration over all
+ * cells.</p>
+ *
+ * <p>A subclass has to supply the values themselves by implementing
+ * {@link DataSource#get(int, int)} and {@link DataSource#getRowCount()}, and to
+ * declare its columns by passing their types to a constructor or by calling
+ * {@link #setColumnTypes(Class...)}. Everything else has a working default,
+ * although implementations that can do better than cell-by-cell access usually
+ * override {@link #getColumn(int)} or {@link #getRecord(int)}.</p>
+ *
+ * <p>Whenever the values change, the subclass must call one of
+ * {@link #notifyDataAdded(DataChangeEvent...)},
+ * {@link #notifyDataRemoved(DataChangeEvent...)} or
+ * {@link #notifyDataUpdated(DataChangeEvent...)}. Besides informing the
+ * listeners, these discard the cached statistics; skipping them leaves plots
+ * showing stale values.</p>
+ *
+ * <p>The listener set and the statistics are {@code transient}: a deserialized
+ * data source has no listeners, and its statistics are rebuilt on first
+ * access.</p>
  */
 public abstract class AbstractDataSource implements DataSource, Serializable {
 	/** Version id for serialization. */
@@ -110,15 +128,20 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		}
 	}
 
+	/**
+	 * Initializes a new instance without a name and without columns. A
+	 * subclass using this constructor is expected to declare its columns later
+	 * with {@link #setColumnTypes(Class...)}.
+	 */
 	public AbstractDataSource() {
 		this(null, new Class[0]);
 	}
 
 	/**
-	 * Initializes a new instance with the specified name, number of columns, and
-	 * column types.
-	 * @param name name of the DataSource
-	 * @param types type for each column
+	 * Initializes a new instance with the specified name and column types. The
+	 * number of columns is the number of types given.
+	 * @param name name of the DataSource, or {@code null} for no name
+	 * @param types type for each column, in column order
 	 */
 	public AbstractDataSource(String name, Class<? extends Comparable<?>>... types) {
 		this.name = name;
@@ -127,14 +150,21 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
-	 * Initializes a new instance with the specified number of columns and
-	 * column types.
-	 * @param types type for each column
+	 * Initializes a new, unnamed instance with the specified column types. The
+	 * number of columns is the number of types given.
+	 * @param types type for each column, in column order
 	 */
 	public AbstractDataSource(Class<? extends Comparable<?>>... types) {
 		this(null, types);
 	}
 
+	/**
+	 * Initializes a new, unnamed instance whose column types are taken from the
+	 * specified columns. Only the types are used; the values of the columns are
+	 * not stored by this class.
+	 * @param remainingColumns Columns whose types define the columns of this
+	 *        data source.
+	 */
 	public AbstractDataSource(Column... remainingColumns) {
 		Class<? extends Comparable<?>>[] columnTypes = new Class[remainingColumns.length];
 		for (int columnIndex = 0; columnIndex < remainingColumns.length; columnIndex++) {
@@ -147,8 +177,9 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
-	 * Retrieves a object instance that contains various statistical
-	 * information on the current data source.
+	 * Returns statistical measures over all values of this data source. The
+	 * object is created on first access and kept until the data changes, so
+	 * repeated calls are cheap and the result is never stale.
 	 * @return statistical information
 	 */
 	public Statistics getStatistics() {
@@ -158,6 +189,16 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		return statistics;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The result is a new {@link DataTable} with one {@code Double} column
+	 * per column of this data source and a single row holding the measure. An
+	 * empty data source yields a table with no rows.</p>
+	 * @param key Name of the measure, see
+	 *        {@link de.erichseifert.gral.data.statistics.Statistics}.
+	 * @return Single-row data source holding the measure for each column.
+	 */
 	public DataSource getColumnStatistics(String key) {
 		var columnTypes = new Class[getColumnCount()];
 		Arrays.fill(columnTypes, Double.class);
@@ -173,6 +214,17 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		return statisticsTable;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The result is a new {@link DataTable} with a single {@code Double}
+	 * column and one row per row of this data source. Each value is computed
+	 * across the whole row, so it only makes sense when the columns are
+	 * comparable quantities.</p>
+	 * @param key Name of the measure, see
+	 *        {@link de.erichseifert.gral.data.statistics.Statistics}.
+	 * @return Single-column data source holding the measure for each row.
+	 */
 	public DataSource getRowStatistics(String key) {
 		DataTable statisticsTable = getRowCount() != 0 ? new DataTable(Double.class) : new DataTable();
 		for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
@@ -208,7 +260,9 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
-	 * Notifies all registered listeners that data values have been added.
+	 * Notifies all registered listeners that data values have been added, and
+	 * discards the cached statistics. Subclasses must call this after adding
+	 * values.
 	 * @param events Event objects describing all values that have been added.
 	 */
 	protected void notifyDataAdded(DataChangeEvent... events) {
@@ -220,7 +274,9 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
-	 * Notifies all registered listeners that data values have been removed.
+	 * Notifies all registered listeners that data values have been removed, and
+	 * discards the cached statistics. Subclasses must call this after removing
+	 * values.
 	 * @param events Event objects describing all values that have been removed.
 	 */
 	protected void notifyDataRemoved(DataChangeEvent... events) {
@@ -232,7 +288,9 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 	}
 
 	/**
-	 * Notifies all registered listeners that data values have changed.
+	 * Notifies all registered listeners that data values have changed, and
+	 * discards the cached statistics. Subclasses must call this after changing
+	 * values.
 	 * @param events Event objects describing all values that have changed.
 	 */
 	protected void notifyDataUpdated(DataChangeEvent... events) {
@@ -278,6 +336,12 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 		return new Record(getRow(row).toArray(null));
 	}
 
+	/**
+	 * Sets the name of this data source. This is {@code protected} because
+	 * renaming is not part of the {@link DataSource} contract;
+	 * {@link DataTable} re-exposes it as a public method.
+	 * @param name New name, or {@code null} for no name.
+	 */
 	// Allows DataTable to reuse the name property
 	protected void setName(String name) {
 		this.name = name;
@@ -315,8 +379,10 @@ public abstract class AbstractDataSource implements DataSource, Serializable {
 
 	/**
 	 * Sets the data types of all columns. This also changes the number of
-	 * columns.
-	 * @param types Data types.
+	 * columns to the number of types given. The array is copied. Existing
+	 * values are not converted or discarded, so this should be called before a
+	 * subclass starts holding data.
+	 * @param types Data types, in column order.
 	 */
 	protected void setColumnTypes(Class<? extends Comparable<?>>... types) {
 		this.types = Arrays.copyOf(types, types.length);

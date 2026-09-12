@@ -36,7 +36,23 @@ import de.erichseifert.gral.graphics.Orientation;
 
 
 /**
- * Class that connects {@code DataPoint}s with a stair-like line.
+ * <p>A {@link LineRenderer} that connects data points with horizontal and
+ * vertical segments only, producing a step function. This suits data that is
+ * constant between measurements &mdash; a state over time, a running count
+ * &mdash; where a straight connection would imply a change that did not
+ * happen.</p>
+ *
+ * <pre>
+ * DiscreteLineRenderer2D steps = new DiscreteLineRenderer2D();
+ * steps.setAscentDirection(Orientation.HORIZONTAL);
+ * steps.setAscendingPoint(0.5);  // step in the middle between two points
+ * plot.setLineRenderers(series, steps);
+ * </pre>
+ *
+ * <p>The ascent direction decides which leg comes first: horizontal means the
+ * line runs sideways and then turns to reach the next value. The ascending
+ * point, from 0.0 to 1.0, says where along the way that turn happens, so 0.0
+ * steps immediately and 1.0 at the very end.</p>
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */

@@ -25,7 +25,23 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * Singleton class that globally provides translated message texts.
+ * <p>Lookup of the user-facing texts of the library, translated according to
+ * the default locale. The texts live in {@code messages.properties} and its
+ * per-language variants such as {@code messages_de.properties} in the
+ * resources of the library.</p>
+ *
+ * <pre>
+ * String description = Messages.getString("DataIO.csvDescription");
+ * </pre>
+ *
+ * <p>A key that is not in the bundle yields the key itself between exclamation
+ * marks rather than an exception, so a missing translation shows up in the
+ * interface instead of breaking it. The bundle is resolved once, when the class
+ * is loaded, so changing the default locale afterwards has no effect.</p>
+ *
+ * <p>Strings that are deliberately not translated &mdash; MIME types, format
+ * names, property keys &mdash; are marked in the source with a
+ * {@code //$NON-NLS-1$} comment.</p>
  */
 public abstract class Messages {
 	/** Name of resource bundle that contains message texts. */

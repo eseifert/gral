@@ -27,9 +27,30 @@ import java.io.Serializable;
 
 
 /**
- * Abstract implementation of the {@link Drawable} interface.
- * This class implements common functionality like the different ways for
- * getting and setting the bounding rectangle of the drawable object.
+ * <p>Base class for {@link Drawable} implementations. It stores the bounding
+ * rectangle and implements every accessor for it, so that a subclass only has
+ * to provide {@link #draw(DrawingContext)} and, in most cases,
+ * {@link #getPreferredSize()}.</p>
+ *
+ * <pre>
+ * public class Cross extends AbstractDrawable {
+ *     public void draw(DrawingContext context) {
+ *         Graphics2D graphics = context.getGraphics();
+ *         graphics.draw(new Line2D.Double(
+ *             getX(), getY(), getX() + getWidth(), getY() + getHeight()));
+ *         graphics.draw(new Line2D.Double(
+ *             getX(), getY() + getHeight(), getX() + getWidth(), getY()));
+ *     }
+ *
+ *     public Dimension2D getPreferredSize() {
+ *         return new de.erichseifert.gral.graphics.Dimension2D.Double(10.0, 10.0);
+ *     }
+ * }
+ * </pre>
+ *
+ * <p>A subclass that has to react to a change of size or position should
+ * override {@link #setBounds(double, double, double, double)}, which the other
+ * bounds setters delegate to, and call the super implementation.</p>
  */
 public abstract class AbstractDrawable implements Drawable, Serializable {
 	/** Version id for serialization. */
@@ -39,14 +60,16 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 	private final Rectangle2D bounds;
 
 	/**
-	 * Creates an AbstractDrawable.
+	 * Creates a drawable with empty bounds at the origin. An owner is expected
+	 * to set the bounds before the drawable is painted.
 	 */
 	public AbstractDrawable() {
 		bounds = new Rectangle2D.Double();
 	}
 
 	/**
-	 * Returns the bounds of this {@code Drawable}.
+	 * Returns the area this {@code Drawable} occupies. The returned rectangle
+	 * is a fresh copy, so modifying it does not move the drawable.
 	 * @return a bounding rectangle
 	 */
 	public Rectangle2D getBounds() {
@@ -96,8 +119,9 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 			bounds.getWidth(), bounds.getHeight());
 	}
 	/**
-	 * Sets the bounds to the specified coordinates, width and height.
-	 * This method should be used when overriding functionality.
+	 * Sets the bounds to the specified coordinates, width and height. All other
+	 * ways of changing the bounds end up here, so this is the method to
+	 * override in order to react to a change of size or position.
 	 * @param x horizontal position of the upper-left corner
 	 * @param y vertical position of the upper-left corner
 	 * @param width horizontal extent
@@ -108,8 +132,10 @@ public abstract class AbstractDrawable implements Drawable, Serializable {
 	}
 
 	/**
-	 * Returns the preferred size of the {@code Drawable}.
-	 * @return horizontal and vertical extent that wants to be reached
+	 * Returns the size this {@code Drawable} would like to have. The default is
+	 * an empty size, which tells a layout that the drawable makes no demand;
+	 * subclasses that know their natural size should override this.
+	 * @return horizontal and vertical extent the drawable asks for
 	 */
 	public Dimension2D getPreferredSize() {
 		return new de.erichseifert.gral.graphics.Dimension2D.Double();

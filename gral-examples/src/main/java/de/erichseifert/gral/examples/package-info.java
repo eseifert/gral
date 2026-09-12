@@ -19,7 +19,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
- * Small example applications.
+ * <p>Runnable examples for every plot type of the library. Each one is a
+ * self-contained {@code JPanel} with a {@code main} method, so it can be
+ * started on its own, and {@link de.erichseifert.gral.examples.Browser}
+ * collects all of them in one window:</p>
+ *
+ * <pre>
+ * ./gradlew :gral-examples:run
+ * </pre>
+ *
+ * <p>{@link de.erichseifert.gral.examples.xyplot.ScatterPlot} is the shortest
+ * complete example and the best place to start reading. The examples are
+ * grouped by plot type in the sub-packages; those under
+ * {@link de.erichseifert.gral.examples.io} need no display at all and write
+ * their output to files.</p>
  */
 package de.erichseifert.gral.examples;

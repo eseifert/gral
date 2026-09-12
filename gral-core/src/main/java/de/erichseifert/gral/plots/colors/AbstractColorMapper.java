@@ -25,8 +25,19 @@ import java.io.Serializable;
 
 
 /**
- * Interface that maps numbers to Paint objects. This can be used to generate
- * colors or gradients for various elements in a plot, e.g. lines, areas, etc.
+ * <p>Base class for {@link ColorMapper} implementations. It holds the
+ * {@link ColorMapper.Mode} and implements the handling of values outside the
+ * mapping range, which subclasses apply through
+ * {@link #applyMode(Number, Number, Number)} before looking up a color.</p>
+ *
+ * <p>The mode defaults to {@link ColorMapper.Mode#REPEAT}. Note that
+ * {@link #setMode(ColorMapper.Mode)} is {@code protected} here: a subclass that
+ * wants the mode to be configurable has to re-declare it as public, which the
+ * shipped mappers do.</p>
+ *
+ * <p>Extend {@link ContinuousColorMapper} or {@link IndexedColorMapper} rather
+ * than this class directly; they fix the input type and are what the rest of
+ * the library expects.</p>
  *
  * @param <T> Data type of input values.
  */

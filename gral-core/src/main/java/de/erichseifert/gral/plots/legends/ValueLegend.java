@@ -36,8 +36,16 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
 
 /**
- * A legend implementation that displays items for all data values of all data
- * series that are added to the legend.
+ * <p>A legend that shows one entry per <em>row</em> of a data source rather
+ * than one per source. This is what a {@link de.erichseifert.gral.plots.PiePlot}
+ * needs, since there each row is a slice and the source as a whole has no
+ * single symbol.</p>
+ *
+ * <p>The label text of an entry is taken from a configurable column of the row
+ * and formatted with a {@code java.text.Format}, so a pie can be labeled with
+ * a separate column of names instead of with its values.</p>
+ *
+ * @see SeriesLegend
  */
 public abstract class ValueLegend extends AbstractLegend
 		implements DataListener {

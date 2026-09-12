@@ -29,7 +29,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * Abstract base class for all visual examples.
+ * <p>Base class of the visual examples. It supplies the parts that are the same
+ * everywhere &mdash; a white 800x600 panel, the two colors the examples share,
+ * and {@link #showInFrame()} for running one on its own &mdash; so that each
+ * example is left with nothing but the plot it is meant to demonstrate.</p>
+ *
+ * <p>A subclass builds its plot in the constructor, adds the resulting
+ * component to itself, and returns a title and a description that
+ * {@link Browser} lists it under.</p>
  */
 public abstract class ExamplePanel extends JPanel {
 	/** Version id for serialization. */

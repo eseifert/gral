@@ -31,7 +31,20 @@ import java.util.Random;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates pseudo-random colors for specified index values.
+ * <p>An {@link IndexedColorMapper} that assigns a pseudo-random color to each
+ * index, keeping a minimum distance between the colors it has already handed
+ * out so that neighboring series stay distinguishable.</p>
+ *
+ * <pre>
+ * // Reproducible from run to run.
+ * RandomColors colors = new RandomColors(42L);
+ * </pre>
+ *
+ * <p>Without a seed the sequence differs on every run, which means a plot drawn
+ * twice comes out in different colors; pass a seed where that matters. The
+ * permitted spread of hue, saturation and brightness is set with
+ * {@link #setColorVariance(float[])}. {@link QuasiRandomColors} reaches a
+ * similar result deterministically and without rejection sampling.</p>
  */
 public class RandomColors extends IndexedColorMapper {
 	/** Version id for serialization. */

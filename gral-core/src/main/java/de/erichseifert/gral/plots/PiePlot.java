@@ -79,18 +79,45 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * <p>Class that displays data as segments of a pie plot. Empty segments are
- * displayed for negative values.</p>
- * <p>To create a new {@code PiePlot} simply create a new instance using
- * a data source. Example:</p>
+ * <p>Data drawn as the slices of a pie. Unlike the other plot types this one
+ * does not extend {@link XYPlot} and has no visible axes: one row of a
+ * single-column data source becomes one slice, sized by its share of the
+ * total.</p>
+ *
+ * <p>The data source must be prepared with {@link #createPieData(DataSource)},
+ * which computes the running total the renderer needs:</p>
  * <pre>
- * DataTable data = new DataTable(Integer.class, Double.class);
+ * DataTable data = new DataTable(Double.class);
  * data.add(-23.50);
  * data.add(100.00);
  * data.add( 60.25);
  *
- * PiePlot plot = new PiePlot(data);
+ * PiePlot plot = new PiePlot(PiePlot.createPieData(data));
+ * plot.setRadius(0.9);
+ * plot.setLegendVisible(true);
  * </pre>
+ *
+ * <p>A slice always covers a positive part of the pie, so values are taken by
+ * absolute value when the sizes are computed. The sign decides only how the
+ * slice is drawn: a negative value leaves its slice empty rather than filling
+ * it, which keeps the remaining slices at the share they would have had.
+ * Non-numeric values count as zero.</p>
+ *
+ * <p>The slice geometry &mdash; the size of the hole in the middle, the gap
+ * between slices, and the labels &mdash; belongs to
+ * {@link PiePlot.PieSliceRenderer}:</p>
+ * <pre>
+ * PieSliceRenderer slices = (PieSliceRenderer) plot.getPointRenderer(pieData);
+ * slices.setInnerRadius(0.4);  // turns the pie into a ring
+ * slices.setGap(0.2);
+ * slices.setValueVisible(true);
+ * </pre>
+ *
+ * <p>Position and extent of the pie itself are set on the plot:
+ * {@link #setCenter(java.awt.geom.Point2D)} and {@link #setRadius(double)} are
+ * relative to the plot area, {@link #setStart(double)} is the angle of the
+ * first slice in degrees, and {@link #setClockwise(boolean)} its
+ * direction.</p>
  */
 public class PiePlot extends AbstractPlot implements Navigable {
 	/** Version id for serialization. */
@@ -1076,6 +1103,15 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		}
 	}
 
+	/**
+	 * Prepares a data source for display in a pie plot. The result has one row
+	 * per row of the original and holds the accumulated absolute values, i.e.
+	 * the point at which each slice ends; the name and the change notifications
+	 * of the original are passed through, so the plot follows later changes to
+	 * the data.
+	 * @param data Data source whose first column holds one value per slice.
+	 * @return A data source that can be passed to {@link #PiePlot(DataSource)}.
+	 */
 	public static DataSource createPieData(DataSource data) {
 		return new PieData(data);
 	}

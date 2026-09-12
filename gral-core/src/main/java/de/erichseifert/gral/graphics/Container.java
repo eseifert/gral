@@ -29,9 +29,20 @@ import de.erichseifert.gral.graphics.layout.Layout;
 
 
 /**
- * An interface that provides functions to build a group of multiple components
- * of {@link Drawable}. It is also responsible for managing layout of its
- * components using a {@link Layout} and layout constraints for each component.
+ * <p>A group of {@link Drawable}s that are positioned by a {@link Layout}. Each
+ * component may carry a constraint object whose type is decided by the layout
+ * &mdash; a {@link Location} for an
+ * {@link de.erichseifert.gral.graphics.layout.EdgeLayout}, for instance.</p>
+ *
+ * <p>A container also reserves {@link Insets2D} at its edges that the layout has
+ * to keep free. Iterating a container visits its components in the order they
+ * were added, which is also the order in which they are drawn.</p>
+ *
+ * <p>{@link DrawableContainer} is the implementation, and it is a
+ * {@code Drawable} itself, so containers nest.</p>
+ *
+ * @see DrawableContainer
+ * @see Layout
  */
 public interface Container extends Iterable<Drawable> {
 	/**
@@ -115,9 +126,10 @@ public interface Container extends Iterable<Drawable> {
 	List<Drawable> getDrawables();
 
 	/**
-	 * Return additional information on component
+	 * Returns the layout constraints the specified component was added with.
 	 * @param drawable Component
-	 * @return Information object or {@code null}
+	 * @return Constraints object, or {@code null} if the component was added
+	 *         without any or is not in this container
 	 */
 	Object getConstraints(Drawable drawable);
 

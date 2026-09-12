@@ -35,8 +35,26 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that reads a data source from a binary image file. This class
- * shouldn't be used directly but using the {@link DataReaderFactory}.
+ * <p>Reads a bitmap image into a
+ * {@link de.erichseifert.gral.data.DataSource}: one column per pixel column,
+ * one row per pixel row. That is the matrix form
+ * {@link de.erichseifert.gral.plots.RasterPlot} works on, so this is how an
+ * image is displayed as a plot.</p>
+ *
+ * <p>Instances should be obtained from the {@link DataReaderFactory}:</p>
+ * <pre>
+ * DataReader reader = DataReaderFactory.getInstance().get("image/png");
+ * reader.setSetting("factor", 1.0/255.0);   // scale to the range 0..1
+ * try (InputStream in = new FileInputStream("image.png")) {
+ *     DataSource data = reader.read(in);
+ * }
+ * </pre>
+ *
+ * <p>Only the red channel of each pixel is read, as a value from 0 to 255,
+ * which gives the expected result for a grayscale image. Each value is then
+ * multiplied by the {@code factor} setting and shifted by {@code offset},
+ * which default to 1.0 and 0.0. The column types passed to {@code read} are
+ * ignored; every column is a {@code Double}.</p>
  */
 public class ImageReader extends AbstractDataReader {
 	static {

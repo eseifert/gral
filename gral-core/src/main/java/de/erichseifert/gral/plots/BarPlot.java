@@ -59,9 +59,11 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * <p>Class that displays data in a bar plot.</p>
- * <p>To create a new {@code BarPlot} simply create a new instance
- * using one or more data sources. Example:</p>
+ * <p>An {@link XYPlot} that draws a bar from a baseline to each data value
+ * instead of a point mark. The first mapped column is the position of the bar
+ * on the x axis, the second its height. Negative values produce bars below the
+ * baseline.</p>
+ *
  * <pre>
  * DataTable data = new DataTable(Integer.class, Double.class);
  * data.add(2010, -5.00);
@@ -70,7 +72,18 @@ import de.erichseifert.gral.util.SerializationUtils;
  * data.add(2012,  4.00);
  *
  * BarPlot plot = new BarPlot(data);
+ * plot.setBarWidth(0.75);
  * </pre>
+ *
+ * <p>The bar width is given in axis units, not in pixels, so it keeps its
+ * meaning when the plot is zoomed or resized: the default of 1.0 makes
+ * neighboring bars at integer positions touch. The minimum bar <em>height</em>
+ * set by {@link #setBarHeightMin(double)} is the exception &mdash; it is in
+ * pixels, and keeps a bar visible when its value is close to zero.</p>
+ *
+ * <p>Drawing is done by {@link BarPlot.BarRenderer}, which is an ordinary
+ * {@link de.erichseifert.gral.plots.points.PointRenderer}; it can be replaced
+ * or configured like any other.</p>
  */
 public class BarPlot extends XYPlot {
 	/** Version id for serialization. */

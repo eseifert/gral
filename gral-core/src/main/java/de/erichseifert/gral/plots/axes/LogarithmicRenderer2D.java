@@ -28,7 +28,26 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that renders axes with a logarithmic scale in two dimensional space.
+ * <p>An {@link AxisRenderer} with a base-10 logarithmic scale: each decade
+ * takes the same distance on screen, which is what makes data spanning several
+ * orders of magnitude readable.</p>
+ *
+ * <pre>
+ * plot.setAxisRenderer(XYPlot.AXIS_X, new LogarithmicRenderer2D());
+ * plot.getAxis(XYPlot.AXIS_X).setRange(1.0, 1000.0);
+ * </pre>
+ *
+ * <p>Ticks are laid out per decade rather than at a fixed distance: a major
+ * tick at each power of ten, with the minor ticks distributed over the decade
+ * that follows it. The tick spacing and the minor tick count are therefore
+ * interpreted relative to a decade, not in axis units as they are on a linear
+ * axis.</p>
+ *
+ * <p>A logarithm is only defined for positive values, so the axis range must
+ * not be negative: converting a value against a negative minimum or maximum
+ * throws {@code IllegalStateException}. A minimum of zero is tolerated but
+ * unhelpful, since zero is infinitely far from any positive value on this
+ * scale; start the range at a small positive number instead.</p>
  */
 public class LogarithmicRenderer2D extends AbstractAxisRenderer2D {
 	/** Version id for serialization. */

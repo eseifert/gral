@@ -32,8 +32,21 @@ import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
- * Class that provides {@code Drawable}s, which display specified data
- * values as labels.
+ * <p>A {@link DefaultPointRenderer2D} that draws the value of a column as text
+ * instead of a shape, so that the data points themselves carry their
+ * labels.</p>
+ *
+ * <pre>
+ * LabelPointRenderer labels = new LabelPointRenderer();
+ * labels.setColumn(2);                        // column holding the text
+ * labels.setFormat(new DecimalFormat("0.0")); // ignored for text columns
+ * plot.setPointRenderers(series, labels);
+ * </pre>
+ *
+ * <p>The column defaults to 1, which is the y value of an {@code XYPlot}; a
+ * separate column of names or categories is the more usual choice. Numbers are
+ * rendered with the configured {@code java.text.Format}, other values with
+ * their {@code toString}.</p>
  */
 public class LabelPointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */

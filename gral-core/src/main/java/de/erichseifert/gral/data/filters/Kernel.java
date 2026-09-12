@@ -25,15 +25,33 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * <p>Class that represents an one dimensional array of coefficients for a
- * weighted filtering.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Adding of other kernels or scalars</li>
- *   <li>Multiplication with other kernels or scalars</li>
- *   <li>Normalization</li>
- *   <li>Negation</li>
- * </ul>
+ * <p>The weight vector of a convolution: a row of coefficients together with an
+ * offset that says which of them sits on the value being computed. It is used
+ * by both filter generations, {@link ConvolutionFilter} and
+ * {@link Convolution}.</p>
+ *
+ * <pre>
+ * // Three equal weights, centered: a moving average of three values.
+ * Kernel average = new Kernel(1.0, 1.0, 1.0).normalize();
+ *
+ * // A smoothing kernel with binomial coefficients, already normalized.
+ * Kernel smooth = Kernel.getBinomial(5);
+ *
+ * // Explicit offset: all weights lie before the current value.
+ * Kernel trailing = new Kernel(2, new double[] {1.0, 1.0, 1.0}).normalize();
+ * </pre>
+ *
+ * <p>The single-argument constructor centers the kernel by putting the offset
+ * at half its size, rounded down. Unless the weights sum to one the filter
+ * scales the data as well as smoothing it, which is what
+ * {@link #normalize()} prevents.</p>
+ *
+ * <p>A kernel is immutable: {@link #add(Kernel)}, {@link #mul(double)},
+ * {@link #normalize()} and {@link #negate()} all return a new kernel and leave
+ * this one unchanged. Indexes passed to {@link #get(int)} are relative to the
+ * offset, so index 0 is the weight of the current value and negative indexes
+ * address the values before it; an index outside the kernel yields 0.0 rather
+ * than an exception.</p>
  */
 public class Kernel implements Serializable {
 	/** Version id for serialization. */

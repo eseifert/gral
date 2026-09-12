@@ -40,8 +40,19 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Default two-dimensional implementation of the {@code AreaRenderer} interface
- * that draws lines from data points to the main axis.
+ * <p>An {@link AreaRenderer} that draws one stroked line per data point, from
+ * the point down to the baseline of the y axis, instead of filling a contiguous
+ * region. The result is an impulse or stem plot.</p>
+ *
+ * <pre>
+ * LineAreaRenderer2D stems = new LineAreaRenderer2D();
+ * stems.setStroke(new BasicStroke(2f));
+ * stems.setColor(Color.DARK_GRAY);
+ * plot.setAreaRenderers(series, stems);
+ * </pre>
+ *
+ * <p>As with {@link DefaultAreaRenderer2D}, the baseline is the position of the
+ * value zero clamped into the range of the axis.</p>
  */
 public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	/** Version id for serialization. */

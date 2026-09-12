@@ -31,7 +31,19 @@ import java.util.List;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Linearly blends different colors for values between 0.0 and 1.0.
+ * <p>A gradient through a sequence of colors given at construction time. The
+ * colors are spaced evenly over the interval from 0.0 to 1.0 and blended
+ * linearly in between.</p>
+ *
+ * <pre>
+ * // 0.0 is blue, 0.5 white, 1.0 red — a diverging scale around a midpoint.
+ * LinearGradient colors = new LinearGradient(
+ *     Color.BLUE, Color.WHITE, Color.RED);
+ * colors.setRange(-50.0, 50.0);
+ * </pre>
+ *
+ * <p>Passing a single color produces a constant mapping; for that,
+ * {@link SingleColor} is more direct.</p>
  */
 public class LinearGradient extends ScaledContinuousColorMapper {
 	/** Version id for serialization. */

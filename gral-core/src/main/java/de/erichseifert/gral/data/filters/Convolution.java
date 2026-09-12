@@ -29,11 +29,23 @@ import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * <p>Class that applies a specified kernel to a data source to convolve it.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Getting and setting the {@code Kernel} used for convolution</li>
- * </ul>
+ * <p>A {@link Filter2D} that replaces each value of the filtered columns by a
+ * weighted sum of a window of neighboring values. The weights and the position
+ * of the window are given as a {@link Kernel}.</p>
+ *
+ * <pre>
+ * // Smooth column 1 with a binomial kernel of five values.
+ * DataSource smoothed = new Convolution(
+ *     data, Kernel.getBinomial(5), Filter2D.Mode.REPEAT, 1);
+ * </pre>
+ *
+ * <p>An unnormalized kernel scales the data as well as filtering it, so a
+ * smoothing kernel should sum to one; see {@link Kernel#normalize()}. Values
+ * beyond the ends of a column are supplied according to the
+ * {@link Filter2D.Mode}.</p>
+ *
+ * <p>{@link ConvolutionFilter} is the iterator-based equivalent, which needs no
+ * mode because it simply yields fewer values.</p>
  */
 public class Convolution extends Filter2D {
 	/** Version id for serialization. */

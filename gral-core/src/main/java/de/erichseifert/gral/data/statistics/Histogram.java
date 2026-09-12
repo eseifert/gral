@@ -30,17 +30,60 @@ import java.util.Iterator;
  * first to the second break, the second bin from the second to the third
  * break, and so on. A bin contains all values that are greater than or equal
  * to its lower limit and smaller than its upper limit. The last bin also
- * contains the values that are equal to its upper limit.</p>
+ * contains the values that are equal to its upper limit, so that the largest
+ * value is counted.</p>
+ *
+ * <pre>
+ * Iterable&lt;Comparable&lt;?&gt;&gt; values =
+ *     Arrays.&lt;Comparable&lt;?&gt;&gt;asList(0.5, 1.5, 1.7, 3.0);
+ *
+ * // Four equally wide bins spanning the range of the data.
+ * Histogram equal = new Histogram(values, 4);
+ *
+ * // Three bins with explicit, unequal limits: [0,1), [1,2), [2,3].
+ * Histogram custom = new Histogram(values, 0.0, 1.0, 2.0, 3.0);
+ * for (int count : custom) {
+ *     // 1, 2, 1
+ * }
+ * </pre>
+ *
+ * <p>The counts are computed once, in the constructor; a histogram is a
+ * snapshot and does not follow later changes to the data. Non-numeric and
+ * {@code null} values are skipped. Iterating a histogram visits the bin counts
+ * in order.</p>
+ *
+ * <p>{@link Histogram2D} is the older variant that is itself a
+ * {@link de.erichseifert.gral.data.DataSource} and can therefore be passed
+ * straight to a plot.</p>
  */
 public class Histogram implements Iterable<Integer> {
 	private Iterable<Comparable<?>> data;
 	private Number[] breaks;
 	private Integer[] bins;
 
+	/**
+	 * Initializes a new histogram with the specified number of equally wide
+	 * bins, spanning the range from the smallest to the largest value of the
+	 * data. The counts are computed immediately.
+	 * @param data Values to be counted. Non-numeric and {@code null} entries
+	 *        are ignored.
+	 * @param binCount Number of bins, at least one.
+	 * @throws IllegalArgumentException if fewer than one bin is requested.
+	 */
 	public Histogram(Iterable<Comparable<?>> data, int binCount) {
 		this(data, getEquidistantBreaks(data, binCount + 1));
 	}
 
+	/**
+	 * Initializes a new histogram with bins of the specified, possibly unequal,
+	 * widths. Each pair of consecutive breaks forms one bin, so <i>n</i> breaks
+	 * define <i>n</i>&nbsp;&minus;&nbsp;1 bins. Values outside the outermost
+	 * breaks are not counted anywhere. The counts are computed immediately.
+	 * @param data Values to be counted. Non-numeric and {@code null} entries
+	 *        are ignored.
+	 * @param breaks Bin limits in ascending order, at least two of them.
+	 * @throws IllegalArgumentException if fewer than two breaks are given.
+	 */
 	public Histogram(Iterable<Comparable<?>> data, Number... breaks) {
 		if (breaks.length < 2) {
 			throw new IllegalArgumentException("Invalid break count: " + breaks.length +
@@ -91,10 +134,20 @@ public class Histogram implements Iterable<Integer> {
 		}
 	}
 
+	/**
+	 * Returns the number of bins, which is one less than the number of breaks.
+	 * @return Number of bins.
+	 */
 	public int size() {
 		return breaks.length - 1;
 	}
 
+	/**
+	 * Returns how many values fell into the specified bin.
+	 * @param binIndex Index of the bin, from 0 to {@link #size()}&nbsp;&minus;&nbsp;1.
+	 * @return Number of values in that bin.
+	 * @throws ArrayIndexOutOfBoundsException if the bin does not exist.
+	 */
 	public int get(int binIndex) {
 		return bins[binIndex];
 	}

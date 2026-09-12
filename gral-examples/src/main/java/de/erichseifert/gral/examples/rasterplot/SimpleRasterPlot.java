@@ -34,6 +34,14 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
+/**
+ * <p>A raster plot, i.e. a heat map, of a matrix of random values.</p>
+ *
+ * <p>Shows how {@link de.erichseifert.gral.plots.RasterPlot#createRasterData(
+ * de.erichseifert.gral.data.DataSource)} converts a matrix into the
+ * (x, y, value) form the plot expects, and how the colors are chosen with a
+ * {@link de.erichseifert.gral.plots.colors.ColorMapper}.</p>
+ */
 public class SimpleRasterPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2515812178479580541L;
@@ -41,6 +49,9 @@ public class SimpleRasterPlot extends ExamplePanel {
 	private static final int SIZE = 64;
 	private static final double ZOOM = 0.3;
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	public SimpleRasterPlot() {
 		setPreferredSize(new Dimension(600, 600));
 
@@ -85,6 +96,10 @@ public class SimpleRasterPlot extends ExamplePanel {
 		return String.format("Raster plot of %d×%d values", SIZE, SIZE);
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new SimpleRasterPlot().showInFrame();
 	}

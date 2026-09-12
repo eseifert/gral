@@ -28,20 +28,40 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 
+/**
+ * <p>Measures how long it takes to append a row to a {@link DataTable}. Adding
+ * rows is the hot path when a plot is fed from live data, and it does more than
+ * a list insertion: the number of values and each of their types are checked
+ * against the columns, and one {@link DataChangeEvent} per column is built and
+ * dispatched to the listeners.</p>
+ *
+ * <p>Run with {@code ./gradlew :gral-core:jmh}.</p>
+ */
 @State(Scope.Benchmark)
 public class DataTableBenchmark {
+	/** Table that rows are appended to. */
 	private DataTable table;
 
+	/**
+	 * Creates the table that the benchmark appends to, once per trial.
+	 */
 	@Setup(Level.Trial)
 	public void createTable() {
 		table = new DataTable(6, Double.class);
 	}
 
+	/**
+	 * Empties the table after each iteration, so that measurements are not
+	 * distorted by a table that keeps growing.
+	 */
 	@TearDown(Level.Iteration)
 	public void clearTable() {
 		table.clear();
 	}
 
+	/**
+	 * Appends one row of six values to the table.
+	 */
 	@Benchmark
 	public void addRecord() {
 		table.add(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);

@@ -26,6 +26,52 @@ Features
 - Small footprint (about 350 kilobytes)
 
 
+Getting started
+===============
+
+A plot is built in three steps: put the values into a table, say which columns
+form a series, and hand the series to a plot.
+
+.. code:: java
+
+    // 1. One column per variable.
+    DataTable data = new DataTable(Double.class, Double.class);
+    for (double x = 0.0; x < 10.0; x += 0.25) {
+        data.add(x, Math.sin(x));
+    }
+
+    // 2. Column 0 is x, column 1 is y. The name shows up in the legend.
+    DataSeries series = new DataSeries("sin(x)", data, 0, 1);
+
+    // 3. Create the plot and configure it with plain bean setters.
+    XYPlot plot = new XYPlot(series);
+    plot.setLineRenderers(series, new DefaultLineRenderer2D());
+    plot.setLegendVisible(true);
+
+Displaying it in a window takes an adapter, because a GRAL plot is not a Swing
+component:
+
+.. code:: java
+
+    JFrame frame = new JFrame("Example");
+    frame.getContentPane().add(new InteractivePanel(plot));
+    frame.setSize(600, 400);
+    frame.setVisible(true);
+
+Writing it to a file needs no window, no display and no toolkit, which is what
+makes GRAL usable for generating figures on a server:
+
+.. code:: java
+
+    DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/png");
+    try (OutputStream out = new FileOutputStream("plot.png")) {
+        writer.write(plot, out, 600.0, 400.0);
+    }
+
+The ``gral-examples`` module contains a runnable example for every plot type;
+``./gradlew :gral-examples:run`` opens a browser for all of them.
+
+
 Usage
 =====
 

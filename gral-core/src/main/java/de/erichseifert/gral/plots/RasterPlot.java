@@ -49,26 +49,38 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * <p>Class that displays two coordinate values and a value as a raster of
- * boxes. The data source must provide at least three columns:</p>
- * <ul>
- *   <li>x coordinate</li>
- *   <li>y coordinate</li>
- *   <li>value</li>
- * </ul>
- * <p>The method {@link #createRasterData(DataSource)} can be used to convert
- * a matrix of values to the (coordinates, value) format.</p>
+ * <p>An {@link XYPlot} that draws a grid of colored cells &mdash; a heat map.
+ * Each row of the data source is one cell and must provide three columns, in
+ * this order: the x coordinate of the cell, its y coordinate, and the value
+ * that decides its color.</p>
  *
- * <p>To create a new {@code RasterPlot} simply create a new instance using
- * a suitable data source. Example:</p>
+ * <p>A matrix of values, where the position of a value is its position in the
+ * table rather than a pair of coordinates, is converted to that layout by
+ * {@link #createRasterData(DataSource)}:</p>
  * <pre>
+ * // A 2-column, 3-row matrix becomes 6 cells.
  * DataTable data = new DataTable(Double.class, Double.class);
  * data.add(10.98, -12.34);
  * data.add( 7.65,  45.67);
  * data.add(43.21,  89.01);
+ *
  * DataSource rasterData = RasterPlot.createRasterData(data);
  * RasterPlot plot = new RasterPlot(rasterData);
  * </pre>
+ * <p>That conversion also rescales the values to the range from 0 to 1, so the
+ * color mapper does not have to know the range of the original data.
+ * Non-numeric cells become {@code NaN} and are left blank.</p>
+ *
+ * <p>The colors are chosen by a
+ * {@link de.erichseifert.gral.plots.colors.ColorMapper}, which is what turns
+ * the raster into a grayscale image, a heat map or a custom palette:</p>
+ * <pre>
+ * plot.setColors(new de.erichseifert.gral.plots.colors.HeatMap());
+ * </pre>
+ *
+ * <p>An image file can be read straight into the matrix form with
+ * {@link de.erichseifert.gral.io.data.ImageReader}, which is how a bitmap is
+ * displayed as a raster plot.</p>
  */
 public class RasterPlot extends XYPlot {
 	/** Version id for serialization. */

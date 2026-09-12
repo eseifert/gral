@@ -22,7 +22,32 @@
 package de.erichseifert.gral.data;
 
 /**
- * Interface that can be implemented to listen for changes in data sources.
+ * <p>Receives notifications when the values of a {@link DataSource} change.
+ * Plots register themselves on their data sources this way, which is why
+ * modifying a {@link DataTable} that is already on screen updates the
+ * display.</p>
+ *
+ * <pre>
+ * data.addDataListener(new DataListener() {
+ *     public void dataAdded(DataSource source, DataChangeEvent... events) {
+ *         System.out.println(events.length + " values added");
+ *     }
+ *     public void dataUpdated(DataSource source, DataChangeEvent... events) { }
+ *     public void dataRemoved(DataSource source, DataChangeEvent... events) { }
+ * });
+ * </pre>
+ *
+ * <p>The three methods are called by the data source itself and should not be
+ * invoked by application code. One modification may report many events: adding
+ * a row to a table of five columns produces five
+ * {@link DataChangeEvent}s, one per cell. A source may also pass no events at
+ * all, so implementations must not assume the array is non-empty and should
+ * treat that as "something changed, re-read everything".</p>
+ *
+ * <p>Notifications arrive on whichever thread made the change. Because
+ * {@code DataListener} has three methods it cannot be a lambda; an anonymous
+ * class is required.</p>
+ *
  * @see DataSource
  */
 public interface DataListener {

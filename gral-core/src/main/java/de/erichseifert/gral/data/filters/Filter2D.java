@@ -35,38 +35,53 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * <p>Abstract class that provides basic functions for filtering arbitrary
- * columns of a DataSource, in other words a set of one-dimensional data.</p>
+ * <p>A {@link DataSource} that presents a filtered view of another one. It has
+ * the same shape as the original: the columns named at construction time are
+ * replaced by their filtered values, and the remaining columns are passed
+ * through unchanged. Because the result is itself a data source, it can be
+ * handed straight to a plot.</p>
  *
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Different modes for filtering (see {@link Mode})</li>
- *   <li>Support for listening for changes of the original data</li>
- *   <li>Filtering of multiple columns</li>
- * </ul>
+ * <pre>
+ * // Smooth column 1; columns 0 and 2 come through untouched.
+ * DataSource smoothed = new Median(data, 3, 1, Filter2D.Mode.REPEAT, 1);
+ * XYPlot plot = new XYPlot(smoothed);
+ * </pre>
  *
- * <p>Values of filtered columns are buffered. Access to unfiltered columns is
- * delegated to the original data source. Derived classes must make sure the
- * caches are updated when deserialization is done. This can be done by calling
- * {@code dataUpdated(this)} in a custom deserialization method.</p>
+ * <p>The filtered columns must be numeric, or the constructor throws
+ * {@code IllegalArgumentException}. Their values are computed once and
+ * buffered; the filter listens to the original source and recomputes whenever
+ * it changes, so a plot of a filtered table follows edits to the table.</p>
+ *
+ * <p>Since every row of the original has to yield a row of the result, a filter
+ * that looks at neighboring values needs something to stand in for the
+ * neighbors that are missing at the start and the end of a column. That is
+ * what {@link Mode} decides. This is the difference to the newer
+ * {@link Filter} API, which simply produces fewer values than it consumes.</p>
+ *
+ * <p>Subclasses implement {@link #filter()} and fill the buffer with
+ * {@link #add(Double[])}. They also have to make sure the buffer is rebuilt
+ * after deserialization, since it is {@code transient}; calling
+ * {@code dataUpdated(this)} from a custom {@code readObject} does that.</p>
+ *
+ * @see Filter
  */
 public abstract class Filter2D extends AbstractDataSource
 		implements DataListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -5004453681128601437L;
 
-	/** Type to define the behavior when engaging the borders of a column, i.e.
-	the filter would need more data values than available. */
+	/** What stands in for the values a filter would need beyond the first or
+	the last row of a column. */
 	public enum Mode {
-		/**	Ignore missing values. */
+		/**	No value at all, so the filtered value becomes {@code null}. */
 		OMIT,
-		/**	Treat missing values as zero. */
+		/**	Zero. */
 		ZERO,
-		/**	Repeat the last value. */
+		/**	The first or last value of the column, repeated. */
 		REPEAT,
-		/**	Mirror values at the last value. */
+		/**	The values of the column mirrored at its first or last value. */
 		MIRROR,
-		/**	Repeat the data. */
+		/**	The values from the other end of the column, as if it were a ring. */
 		CIRCULAR
 	}
 

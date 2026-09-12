@@ -40,7 +40,13 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
- * Example that shows how to use convultion filtering.
+ * <p>A noisy series together with several filtered versions of it.</p>
+ *
+ * <p>Shows how {@link de.erichseifert.gral.data.filters.Kernel} and
+ * {@link de.erichseifert.gral.data.filters.Convolution} smooth data, how the
+ * kernel decides the effect, and how a filtered data source can be plotted
+ * beside the original because it is a
+ * {@link de.erichseifert.gral.data.DataSource} itself.</p>
  */
 public class ConvolutionExample extends ExamplePanel {
 	/** Version id for serialization. */
@@ -48,6 +54,9 @@ public class ConvolutionExample extends ExamplePanel {
 
 	private static final int SAMPLE_COUNT = 200;
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public ConvolutionExample() {
 		// Generate 200 data points
@@ -124,6 +133,10 @@ public class ConvolutionExample extends ExamplePanel {
 		return "Line plot showing various ways of filtering data with convolution";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new ConvolutionExample().showInFrame();
 	}

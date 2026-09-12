@@ -22,12 +22,26 @@
 package de.erichseifert.gral.navigation;
 
 /**
- * Interface for classes that can provide a {@code Navigator} which translates
- * navigational actions.
+ * <p>Implemented by objects that can be zoomed and panned. The object itself
+ * does not carry the zoom level or the center of view; it hands out a
+ * {@link Navigator} that holds them and applies them:</p>
+ *
+ * <pre>
+ * Navigator navigator = plot.getNavigator();
+ * navigator.setZoom(2.0);
+ * </pre>
+ *
+ * <p>Implementations are expected to return the same navigator on every call,
+ * so that the state of the view is not lost between calls and so that two
+ * navigators can be {@link Navigator#connect(Navigator) connected}
+ * reliably.</p>
+ *
+ * @see Navigator
  */
 public interface Navigable {
 	/**
-	 * Returns a navigator instance that can control the current object.
+	 * Returns the navigator that controls the view of this object. The same
+	 * instance is returned on every call.
 	 * @return A navigator instance.
 	 */
 	Navigator getNavigator();

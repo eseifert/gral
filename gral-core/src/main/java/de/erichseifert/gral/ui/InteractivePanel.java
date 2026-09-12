@@ -62,8 +62,37 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * A panel implementation that displays a {@code Drawable} instance as a
- * rich Swing component.
+ * <p>A {@link DrawablePanel} with the interaction expected of a plot on screen.
+ * Using it is no different from using the plain panel:</p>
+ *
+ * <pre>
+ * frame.getContentPane().add(new InteractivePanel(plot));
+ * </pre>
+ *
+ * <p>What it adds:</p>
+ * <ul>
+ *   <li>dragging with the left mouse button pans the view;</li>
+ *   <li>the mouse wheel and a double click zoom in and out;</li>
+ *   <li>a right click opens a context menu with <i>reset view</i>,
+ *   <i>export image</i> and <i>print</i>;</li>
+ *   <li>exporting offers every format registered with
+ *   {@link de.erichseifert.gral.io.plots.DrawableWriterFactory}, through
+ *   {@link ExportDialog}; the exported size is independent of the size on
+ *   screen;</li>
+ *   <li>the panel implements {@code java.awt.print.Printable}, so it can also
+ *   be printed by an application without going through the menu.</li>
+ * </ul>
+ *
+ * <p>Panning and zooming require the displayed drawable to be
+ * {@link de.erichseifert.gral.navigation.Navigable}, which the plots are; for
+ * anything else the panel silently behaves like a {@code DrawablePanel}. Both
+ * can be switched off with {@link #setPannable(boolean)} and
+ * {@link #setZoomable(boolean)}, and the context menu with
+ * {@link #setPopupMenuEnabled(boolean)}.</p>
+ *
+ * <p>Interaction is applied through the
+ * {@link de.erichseifert.gral.navigation.Navigator} of the drawable, so
+ * connecting the navigators of two panels makes them move together.</p>
  */
 public class InteractivePanel extends DrawablePanel implements Printable {
 	/** Version id for serialization. */

@@ -26,12 +26,14 @@ import java.awt.Paint;
 import java.io.Serializable;
 
 /**
- * <p>Abstract class that renders an area in two-dimensional space.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Punching data points out of the area's shape</li>
- *   <li>Administration of settings</li>
- * </ul>
+ * <p>Base class for {@link AreaRenderer} implementations. It holds the gap and
+ * color settings and punches a hole around every data point out of the shape
+ * produced by the subclass, so that the marks remain visible on top of the
+ * fill.</p>
+ *
+ * <p>A subclass has to implement
+ * {@link AreaRenderer#getAreaShape(java.util.List)} and
+ * {@link AreaRenderer#getArea(java.util.List, java.awt.Shape)}.</p>
  */
 public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable {
 	/** Version id for serialization. */

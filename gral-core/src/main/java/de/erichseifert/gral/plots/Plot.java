@@ -37,28 +37,57 @@ import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.graphics.Location;
 
 /**
- * <p>Interface for classes that display data in a plot.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Adding axes to the plot</li>
- *   <li>Adding a title to the plot</li>
- *   <li>Adding a legend to the plot</li>
- *   <li>Administration of settings</li>
- * </ul>
+ * <p>A {@link Drawable} that displays one or more {@link DataSource}s. Since a
+ * plot is also a {@link Container}, it can be drawn into a Swing panel, an
+ * image or a vector document like any other drawable, and it holds its title,
+ * legend, plot area and axis components as children.</p>
+ *
+ * <p>Axes are addressed by name rather than by number. The names are string
+ * constants on the concrete plot class &mdash; {@link XYPlot#AXIS_X},
+ * {@link XYPlot#AXIS_Y}, {@link XYPlot#AXIS_X2} and {@link XYPlot#AXIS_Y2} for
+ * an {@code XYPlot} &mdash; and each name is associated with two things: an
+ * {@link Axis}, which is the value range, and an {@link AxisRenderer}, which
+ * decides how that range is drawn and how values are projected to pixels.
+ * Adding a further axis is a matter of using a further name.</p>
+ *
+ * <p>Which column of which data source is shown on which axis is recorded with
+ * {@link #setMapping(DataSource, String...)}; the axis names are listed in
+ * column order, and {@code null} leaves a column unmapped.</p>
+ *
+ * <pre>
+ * // Columns 0 and 1 of the series are the x and y coordinates.
+ * plot.setMapping(series, XYPlot.AXIS_X, XYPlot.AXIS_Y);
+ *
+ * // Put a second series on the secondary y axis.
+ * plot.setAxis(XYPlot.AXIS_Y2, new Axis(0.0, 100.0));
+ * plot.setAxisRenderer(XYPlot.AXIS_Y2, new LinearRenderer2D());
+ * plot.setMapping(otherSeries, XYPlot.AXIS_X, XYPlot.AXIS_Y2);
+ * </pre>
+ *
+ * <p>An axis that is set to auto-scale takes its range from the data; see
+ * {@link #autoscaleAxis(String)} and {@link Axis#setAutoscaled(boolean)}. A
+ * plot listens to its data sources, so a range recomputes and the plot
+ * repaints when the data changes.</p>
+ *
+ * @see AbstractPlot
+ * @see XYPlot
  */
 public interface Plot extends Drawable, Container {
 	/**
-	 * Returns the axis with the specified name.
-	 * @param name Name of the axis.
-	 * @return Axis.
+	 * Returns the axis registered under the specified name.
+	 * @param name Name of the axis, e.g. {@link XYPlot#AXIS_X}.
+	 * @return The axis, or {@code null} if no axis is registered under that
+	 *         name.
 	 */
 	Axis getAxis(String name);
 
 	/**
-	 * Sets the axis with the specified name and the associated
-	 * {@code AxisRenderer}.
-	 * @param name Name of the axis.
-	 * @param axis Axis.
+	 * Registers an axis under the specified name, replacing any axis that was
+	 * registered under it before. An axis renderer has to be set separately
+	 * with {@link #setAxisRenderer(String, AxisRenderer)}; without one the axis
+	 * holds a range but is not drawn and cannot project values.
+	 * @param name Name of the axis, e.g. {@link XYPlot#AXIS_X}.
+	 * @param axis Axis. Passing {@code null} removes the axis.
 	 */
 	void setAxis(String name, Axis axis);
 
@@ -75,8 +104,9 @@ public interface Plot extends Drawable, Container {
 	Collection<String> getAxesNames();
 
 	/**
-	 * Tries to automatically set the ranges of the axes specified by the name
-	 * if it is set to auto-scale.
+	 * Recomputes the range of the named axis from the values of every column
+	 * mapped to it. Axes that are not set to auto-scale are left alone, so
+	 * calling this does not undo a range that was set by hand.
 	 * @param axisName Name of the axis that should be scaled.
 	 * @see Axis#setAutoscaled(boolean)
 	 */
@@ -97,19 +127,25 @@ public interface Plot extends Drawable, Container {
 	void setAxisRenderer(String axisName, AxisRenderer renderer);
 
 	/**
-	 * Returns the drawing area of this plot.
-	 * @return {@code PlotArea2D}.
+	 * Returns the region in which the data itself is drawn, i.e. the plot
+	 * without its title, legend and axes. Its background, border and clipping
+	 * are configured on the returned object.
+	 * @return The plot area of this plot.
 	 */
 	PlotArea getPlotArea();
 
 	/**
-	 * Returns the title component of this plot.
+	 * Returns the title of this plot. The title is always present; it is simply
+	 * empty and takes no space until text is set on it with
+	 * {@link Label#setText(String)}.
 	 * @return Label representing the title.
 	 */
 	Label getTitle();
 
 	/**
-	 * Returns the legend component.
+	 * Returns the legend of this plot. The legend is filled automatically from
+	 * the visible data sources, but only shown if
+	 * {@link #setLegendVisible(boolean)} was called with {@code true}.
 	 * @return Legend.
 	 */
 	Legend getLegend();

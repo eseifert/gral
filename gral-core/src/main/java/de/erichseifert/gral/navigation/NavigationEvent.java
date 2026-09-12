@@ -22,7 +22,14 @@
 package de.erichseifert.gral.navigation;
 
 /**
- * Data class that describes a navigational event, like zooming or panning.
+ * <p>Describes a single change made by a {@link Navigator}: which navigator
+ * made it, and the value before and after. A {@link NavigationListener}
+ * receives one of these for a change of the center
+ * ({@code NavigationEvent<PointND<? extends Number>>}) and one for a change of
+ * the zoom level ({@code NavigationEvent<Double>}).</p>
+ *
+ * <p>The source is what lets connected navigators avoid an endless loop: a
+ * navigator ignores an event that it caused itself.</p>
  *
  * @param <T> Data type of the value that has been changed.
  */

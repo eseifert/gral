@@ -24,13 +24,38 @@ package de.erichseifert.gral.graphics;
 import java.awt.Graphics2D;
 
 /**
- * Class that stores an object for drawing and additional context information
- * that may be necessary to determine how to draw the object. This includes
- * information on drawing quality and the target media (screen, paper, etc.).
+ * <p>Everything a {@link Drawable} needs in order to paint itself: the
+ * {@code Graphics2D} to paint on, plus two hints about where the output is
+ * going.</p>
+ *
+ * <p>The {@link Target} tells a renderer whether it is producing pixels or
+ * vector geometry. That matters because some effects &mdash; gradients,
+ * transparency, clipping against a complex shape &mdash; have to be rasterized
+ * for a vector document, while for a bitmap target the {@code Graphics2D} can
+ * do them directly:</p>
+ * <pre>
+ * public void draw(DrawingContext context) {
+ *     if (context.getTarget() == DrawingContext.Target.VECTOR) {
+ *         // Emit plain geometry that a PDF or SVG can represent.
+ *     } else {
+ *         // Free to use image-based effects.
+ *     }
+ * }
+ * </pre>
+ *
+ * <p>The {@link Quality} hint says how much effort is wanted; a renderer may
+ * use it to skip expensive detail while a plot is being dragged. Both hints are
+ * advisory: ignoring them produces a correct, if less well adapted,
+ * drawing.</p>
+ *
+ * <p>A context is immutable and cheap to create. The default constructor
+ * assumes {@link Quality#NORMAL} and {@link Target#BITMAP}, which is what a
+ * Swing component wants.</p>
  */
 public class DrawingContext {
 	/**
-	 * Data type that describes the quality mode of drawing operations.
+	 * How much effort should be spent on drawing. This is a hint; a renderer
+	 * that ignores it still produces correct output.
 	 */
 	public enum Quality {
 		/** Fast drawing mode. */
@@ -42,7 +67,8 @@ public class DrawingContext {
 	}
 
 	/**
-	 * Data type that describes the type of the drawing target.
+	 * What kind of output the drawing ends up in. Renderers check this to
+	 * decide whether an effect has to be rasterized first.
 	 */
 	public enum Target {
 		/** Bitmap drawing target consisting of pixels. */
@@ -59,7 +85,7 @@ public class DrawingContext {
 	private final Target target;
 
 	/**
-	 * Initializes a new context with a {@code Graphics2D} object.
+	 * Initializes a new context for drawing on a bitmap with normal quality.
 	 * @param graphics Object for drawing geometry.
 	 */
 	public DrawingContext(Graphics2D graphics) {
@@ -67,7 +93,7 @@ public class DrawingContext {
 	}
 
 	/**
-	 * Initializes a new context with a {@code Graphics2D} object.
+	 * Initializes a new context with the specified quality and target.
 	 * @param graphics Object for drawing geometry.
 	 * @param quality Drawing quality.
 	 * @param target Target media.

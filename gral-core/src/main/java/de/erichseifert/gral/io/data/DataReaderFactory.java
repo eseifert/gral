@@ -36,8 +36,15 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * <pre>
  * DataReaderFactory factory = DataReaderFactory.getInstance();
  * DataReader reader = factory.get("text/csv");
- * DataSource = reader.read(new FileInputStream(filename), Double.class);
+ * DataSource data = reader.read(
+ *     new FileInputStream(filename), Double.class, Double.class);
  * </pre>
+ * <p>The supported MIME types are {@code text/csv},
+ * {@code text/tab-separated-values}, the bitmap types {@code image/png},
+ * {@code image/jpeg}, {@code image/bmp}, {@code image/gif} and
+ * {@code image/vnd.wap.wbmp}, and {@code audio/wav}. Asking for an unsupported
+ * type throws {@code IllegalArgumentException}, which
+ * {@link #isFormatSupported(String)} can be used to avoid.</p>
  */
 public final class DataReaderFactory extends AbstractIOFactory<DataReader> {
 	/** Singleton instance. */

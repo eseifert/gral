@@ -37,12 +37,23 @@ import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.graphics.Orientation;
 
 
+/**
+ * <p>Builds a histogram from random values and displays it as a bar plot.</p>
+ *
+ * <p>Shows how {@link de.erichseifert.gral.data.statistics.Histogram2D} counts
+ * the values of a column into bins, how
+ * {@link de.erichseifert.gral.data.EnumeratedData} supplies the missing x
+ * coordinate, and how the bar width is chosen so that the bars touch.</p>
+ */
 public class HistogramPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 4458280577519421950L;
 
 	private static final int SAMPLE_COUNT = 1000;
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public HistogramPlot() {
 		// Create example data
@@ -100,6 +111,10 @@ public class HistogramPlot extends ExamplePanel {
 		return String.format("AbstractHistogram2D of %d samples", SAMPLE_COUNT);
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new HistogramPlot().showInFrame();
 	}

@@ -23,11 +23,23 @@ package de.erichseifert.gral.graphics.layout;
 
 import de.erichseifert.gral.graphics.Orientation;
 
+/**
+ * Base class for layouts that arrange their components along a direction. In
+ * addition to what {@link AbstractLayout} provides, it stores the
+ * {@link Orientation}.
+ */
 public abstract class AbstractOrientedLayout extends AbstractLayout implements
 		OrientedLayout {
 	/** Orientation in which elements should be laid out. */
 	private Orientation orientation;
 
+	/**
+	 * Initializes a layout with the specified direction and space between
+	 * components.
+	 * @param orientation Direction in which components are arranged.
+	 * @param gapX Horizontal gap in pixels.
+	 * @param gapY Vertical gap in pixels.
+	 */
 	public AbstractOrientedLayout(Orientation orientation, double gapX, double gapY) {
 		super(gapX, gapY);
 		this.orientation = orientation;

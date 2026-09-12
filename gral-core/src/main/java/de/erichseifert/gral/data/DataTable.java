@@ -30,8 +30,33 @@ import java.util.List;
 import de.erichseifert.gral.data.comparators.DataComparator;
 
 /**
- * An in-memory, random access implementation of a mutable data source using
- * arrays to store its values.
+ * <p>The ordinary in-memory data source: a list of {@link Record}s with a fixed
+ * set of typed columns. This is where most programs put their numbers.</p>
+ *
+ * <pre>
+ * // One class per column; the number of classes is the number of columns.
+ * DataTable data = new DataTable(Double.class, Double.class, String.class);
+ * data.add(1.0, 4.0, "first");
+ * data.add(2.0, 5.0, "second");
+ *
+ * data.set(2, 0, "1st");               // column 2 of row 0
+ * Comparable&lt;?&gt; value = data.get(1, 1); // 5.0
+ * data.remove(0);
+ * </pre>
+ *
+ * <p>Adding a row checks both the number of values and their types against the
+ * columns and throws {@code IllegalArgumentException} on a mismatch; a
+ * {@code null} value is accepted in any column. Every successful modification
+ * notifies the registered {@link DataListener}s, which is what lets a plot
+ * follow a table that is still being filled.</p>
+ *
+ * <p>Rows are stored in insertion order until {@link #sort(DataComparator...)}
+ * is called. Access by index is constant time; removing a row from the middle
+ * shifts the rows after it, so their indexes change.</p>
+ *
+ * <p>Individual modifications are synchronized, but a sequence of them is not
+ * atomic, and reading while another thread writes is not guarded. Treat the
+ * table as single-threaded unless all access is externally coordinated.</p>
  *
  * @see DataSource
  * @see MutableDataSource
@@ -43,14 +68,18 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	/** All values stored as rows of column arrays. */
 	private final List<Record> rows;
 
+	/**
+	 * Initializes a new table without any columns. Columns cannot be added
+	 * afterwards, so this is only useful for an empty placeholder.
+	 */
 	public DataTable() {
 		rows = new ArrayList<>();
 	}
 
 	/**
-	 * Initializes a new instance with the specified number of columns and
-	 * column types.
-	 * @param types Type for each column
+	 * Initializes a new, empty table with one column per specified type. The
+	 * types are enforced when rows are added.
+	 * @param types Type for each column, in column order.
 	 */
 	public DataTable(Class<? extends Comparable<?>>... types) {
 		super(types);
@@ -58,10 +87,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Initializes a new instance with the specified number of columns and
-	 * a single column type.
-	 * @param cols Number of columns
-	 * @param type Data type for all columns
+	 * Initializes a new, empty table with the specified number of columns, all
+	 * of the same type.
+	 * @param cols Number of columns.
+	 * @param type Data type for all columns.
 	 */
 	@SuppressWarnings("unchecked")
 	public DataTable(int cols, Class<? extends Comparable<?>> type) {
@@ -72,8 +101,10 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Initializes a new instance with the column types, and data of another
-	 * data source.
+	 * Initializes a new table that copies the column types and all values of
+	 * another data source. The copy is independent: later changes to the
+	 * original are not reflected here. Use {@link DataSeries} or
+	 * {@link RowSubset} instead if a live view is wanted.
 	 * @param source Data source to clone.
 	 */
 	public DataTable(DataSource source) {
@@ -83,6 +114,13 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		}
 	}
 
+	/**
+	 * Initializes a new table from the specified columns, taking both the
+	 * column types and the values from them. If the columns differ in length,
+	 * the table gets as many rows as the longest one and the shorter columns
+	 * are padded with {@code null}.
+	 * @param columns Columns that make up the table, in column order.
+	 */
 	public DataTable(Column... columns) {
 		super(columns);
 		rows = new ArrayList<>();
@@ -102,24 +140,26 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Adds a row with the specified comparable values to the table.
-	 * The values are added in the order they are specified. If the types of
-	 * the table columns and the values do not match, an
-	 * {@code IllegalArgumentException} is thrown.
+	 * Adds a row with the specified values at the end of the table. The values
+	 * are assigned to the columns in the order given. A {@code null} is
+	 * accepted in any column.
 	 * @param values values to be added as a row
 	 * @return Index of the row that has been added.
+	 * @throws IllegalArgumentException if the number of values differs from the
+	 *         number of columns, or a value does not fit its column type.
 	 */
 	public int add(Comparable<?>... values) {
 		return add(Arrays.asList(values));
 	}
 
 	/**
-	 * Adds a row with the specified container's elements to the table.
-	 * The values are added in the order they are specified. If the types of
-	 * the table columns and the values do not match, an
-	 * {@code IllegalArgumentException} is thrown.
+	 * Adds a row with the elements of the specified list at the end of the
+	 * table. The values are assigned to the columns in list order. A
+	 * {@code null} is accepted in any column.
 	 * @param values values to be added as a row
 	 * @return Index of the row that has been added.
+	 * @throws IllegalArgumentException if the number of values differs from the
+	 *         number of columns, or a value does not fit its column type.
 	 */
 	public int add(List<? extends Comparable<?>> values) {
 		DataChangeEvent[] events;
@@ -159,12 +199,12 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Adds the specified row to the table.
-	 * The values are added in the order they are specified. If the types of
-	 * the table columns and the values do not match, an
-	 * {@code IllegalArgumentException} is thrown.
+	 * Copies the values of the specified row into a new row at the end of the
+	 * table. The row may come from another data source.
 	 * @param row Row to be added
 	 * @return Index of the row that has been added.
+	 * @throws IllegalArgumentException if the number of values differs from the
+	 *         number of columns, or a value does not fit its column type.
 	 */
 	public int add(Row row) {
 		List<Comparable<?>> values;
@@ -177,6 +217,14 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		return add(values);
 	}
 
+	/**
+	 * Adds the specified record as a new row at the end of the table. In
+	 * contrast to the other {@code add} methods, only the number of values is
+	 * checked, not their types.
+	 * @param row Record to be added, with one value per column.
+	 * @throws IllegalArgumentException if the record does not have one value
+	 *         per column.
+	 */
 	public void add(Record row) {
 		if (row.size() != getColumnCount()) {
 			throw new IllegalArgumentException("Invalid element count in Record to be added. " +
@@ -196,7 +244,8 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Removes a specified row from the table.
+	 * Removes the row with the specified index. The rows after it move up by
+	 * one, so their indexes change.
 	 * @param row Index of the row to remove
 	 */
 	public void remove(int row) {
@@ -250,10 +299,12 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Returns the row with the specified index.
+	 * Returns the value at the specified column and row. Note that the column
+	 * index comes first. A row index beyond the last row yields {@code null}
+	 * rather than an exception.
 	 * @param col index of the column to return
 	 * @param row index of the row to return
-	 * @return the specified value of the data cell
+	 * @return the specified value of the data cell, which may be {@code null}
 	 */
 	public Comparable<?> get(int col, int row) {
 		Record r;
@@ -270,12 +321,15 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Sets the value of a cell specified by its column and row indexes.
+	 * Sets the value of a cell specified by its column and row indexes. Note
+	 * that the column index comes first. Writing the value the cell already
+	 * holds changes nothing and fires no notification. The type of the value is
+	 * not checked against the column type here.
 	 * @param <T> Data type of the cell.
 	 * @param col Column of the cell to change.
 	 * @param row Row of the cell to change.
 	 * @param value New value to be set.
-	 * @return Old value that was replaced.
+	 * @return Old value that was replaced, possibly {@code null}.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Comparable<T> set(int col, int row, Comparable<T> value) {
@@ -310,8 +364,11 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	}
 
 	/**
-	 * Sorts the table rows with the specified DataComparators.
-	 * The row values are compared in the way the comparators are specified.
+	 * Sorts the rows of this table in place. The first comparator decides the
+	 * order; each following one is only consulted for rows the previous ones
+	 * considered equal. Passing no comparator leaves the order unchanged.
+	 * Sorting does not fire a change notification, so a plot that is already
+	 * displayed will not repaint by itself.
 	 * @param comparators comparators used for sorting
 	 */
 	public void sort(DataComparator... comparators) {

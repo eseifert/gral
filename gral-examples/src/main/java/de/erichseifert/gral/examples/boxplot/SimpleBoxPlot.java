@@ -39,12 +39,23 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
+/**
+ * <p>A box-and-whisker plot of three columns of random values.</p>
+ *
+ * <p>Shows how {@link de.erichseifert.gral.plots.BoxPlot#createBoxData(
+ * de.erichseifert.gral.data.DataSource)} turns raw observations into the
+ * six-column summary the plot expects, and how the boxes and whiskers are
+ * styled through {@code BoxPlot.BoxWhiskerRenderer}.</p>
+ */
 public class SimpleBoxPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5228891435595348789L;
 	private static final int SAMPLE_COUNT = 50;
 	private static final Random random = new Random();
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public SimpleBoxPlot() {
 		setPreferredSize(new Dimension(400, 600));
@@ -104,6 +115,10 @@ public class SimpleBoxPlot extends ExamplePanel {
 		return String.format("Three box-and-whisker plots created from %d random samples", SAMPLE_COUNT);
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new SimpleBoxPlot().showInFrame();
 	}

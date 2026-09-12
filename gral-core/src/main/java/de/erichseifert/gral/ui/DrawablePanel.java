@@ -34,8 +34,23 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 /**
- * A class that represents an adapter between the components of this library
- * and Swing. It displays a single {@code Drawable} in a {@code JPanel}.
+ * <p>A {@code JPanel} that displays a single {@link Drawable}. This is the
+ * bridge between GRAL and Swing: the panel keeps the bounds of the drawable in
+ * step with its own size and paints it on every repaint.</p>
+ *
+ * <pre>
+ * JFrame frame = new JFrame();
+ * frame.getContentPane().add(new DrawablePanel(plot));
+ * frame.setSize(800, 600);
+ * frame.setVisible(true);
+ * </pre>
+ *
+ * <p>The panel is non-opaque and its preferred size is that of the drawable, so
+ * {@code pack()} sizes a window to the plot. The drawable is fixed for the
+ * lifetime of the panel; to display a different one, create a new panel.</p>
+ *
+ * <p>Use {@link InteractivePanel} instead if zooming, panning, printing and
+ * export are wanted.</p>
  */
 public class DrawablePanel extends JPanel {
 	/** Version id for serialization. */
@@ -48,8 +63,8 @@ public class DrawablePanel extends JPanel {
 	private boolean antialiased;
 
 	/**
-	 * Initializes a new instance with the specified {@code Drawable}.
-	 * Antialiasing is enabled by default.
+	 * Initializes a new panel showing the specified drawable. Antialiasing is
+	 * enabled by default.
 	 * @param drawable {@code Drawable} to be displayed
 	 */
 	public DrawablePanel(Drawable drawable) {

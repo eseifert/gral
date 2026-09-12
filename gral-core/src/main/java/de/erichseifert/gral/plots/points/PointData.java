@@ -30,7 +30,27 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 
 
 /**
- * Class for storing data that will be used to create a data point in a plot.
+ * <p>Everything a {@link PointRenderer} needs in order to draw one data point:
+ * the row, which column of it holds the value, and the axes and axis renderers
+ * that project it.</p>
+ *
+ * <p>The lists of axes and axis renderers are parallel and in the order of the
+ * columns of the row, so {@code axes.get(0)} and {@code axisRenderers.get(0)}
+ * belong to column 0. For an {@code XYPlot} that means index 0 is the x axis
+ * and index 1 the y axis. Both lists are unmodifiable.</p>
+ *
+ * <pre>
+ * public Drawable getPoint(PointData data, Shape shape) {
+ *     Comparable&lt;?&gt; value = data.row.get(data.col);
+ *     Axis axisY = data.axes.get(1);
+ *     AxisRenderer rendererY = data.axisRenderers.get(1);
+ *     double y = rendererY.worldToView(axisY, (Number) value, true);
+ *     …
+ * }
+ * </pre>
+ *
+ * <p>Instances are immutable and their fields are public, which is deliberate:
+ * one is created for every point of every repaint.</p>
  */
 public class PointData {
 	/** Axes that will be used to project the point. */

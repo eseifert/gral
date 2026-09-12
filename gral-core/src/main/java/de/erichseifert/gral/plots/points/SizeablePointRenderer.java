@@ -30,8 +30,22 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that provides {@code Drawable}s, which are sized accordingly to
- * the data.
+ * <p>A {@link DefaultPointRenderer2D} that scales the point shape by the value
+ * of a further column, so that a third variable is shown as the size of the
+ * mark &mdash; a bubble chart.</p>
+ *
+ * <pre>
+ * // Columns of the series: x, y, size
+ * SizeablePointRenderer points = new SizeablePointRenderer();
+ * points.setColumn(2);   // which column holds the size; 2 is the default
+ * plot.setPointRenderers(series, points);
+ * </pre>
+ *
+ * <p>The value is used as a linear scaling factor of the configured shape, so
+ * 1.0 leaves the shape at its normal size and 2.0 doubles it in both
+ * directions. A value that is zero, negative or not a number hides the point
+ * altogether. If the configured column does not exist or is not numeric, the
+ * shape is drawn at its normal size instead.</p>
  */
 public class SizeablePointRenderer extends DefaultPointRenderer2D {
 	/** Version id for serialization. */

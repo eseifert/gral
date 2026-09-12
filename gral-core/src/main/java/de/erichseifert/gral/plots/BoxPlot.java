@@ -62,33 +62,38 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * <p>Class that displays data as a box-and-whisker plot showing summaries of
- * important statistical values. The data source must provide six columns to
- * the {@code BoxPlot}:</p>
- * <ul>
- *   <li>Box position (for multiple boxes)</li>
- *   <li>Position of the center bar (e.g. median)</li>
- *   <li>Length of the lower whisker and position of the bottom bar
- *   (e.g. minimum)</li>
- *   <li>Position of the bottom edge of the box (e.g. first quartile)</li>
- *   <li>Position of the top edge of the box (e.g. third quartile)</li>
- *   <li>Length of the upper whisker and position of the top bar
- *   (e.g. maximum)</li>
- * </ul>
- * <p>The utility method {@link #createBoxData(DataSource)} can be used to
- * obtain common statistics for these properties from the each column of an
- * existing data source.</p>
+ * <p>An {@link XYPlot} that draws one box-and-whisker summary per row. It does
+ * not compute the summary itself: the data source it is given must already
+ * contain, in this order, six columns per box:</p>
+ * <ol>
+ *   <li>position of the box on the x axis;</li>
+ *   <li>position of the center bar, usually the median;</li>
+ *   <li>lower end of the lower whisker, usually the minimum;</li>
+ *   <li>bottom edge of the box, usually the first quartile;</li>
+ *   <li>top edge of the box, usually the third quartile;</li>
+ *   <li>upper end of the upper whisker, usually the maximum.</li>
+ * </ol>
  *
- * <p>To create a new {@code BoxPlot} simply create a new instance using
- * a data source. Example:</p>
+ * <p>{@link #createBoxData(DataSource)} produces exactly that layout from raw
+ * observations, taking one box per <em>column</em> of the original:</p>
  * <pre>
+ * // Two columns of observations become two boxes.
  * DataTable data = new DataTable(Double.class, Double.class);
  * data.add(10.98, -12.34);
  * data.add( 7.65,  45.67);
  * data.add(43.21,  89.01);
+ *
  * DataSource boxData = BoxPlot.createBoxData(data);
  * BoxPlot plot = new BoxPlot(boxData);
  * </pre>
+ *
+ * <p>Supplying the six columns directly is what allows other summaries &mdash;
+ * for example whiskers at the 5th and 95th percentile instead of at the
+ * extremes.</p>
+ *
+ * <p>Drawing is done by {@link BoxPlot.BoxWhiskerRenderer}, an ordinary
+ * {@link de.erichseifert.gral.plots.points.PointRenderer} whose column indexes
+ * can be changed if the columns are in a different order.</p>
  */
 public class BoxPlot extends XYPlot {
 	/** Version id for serialization. */

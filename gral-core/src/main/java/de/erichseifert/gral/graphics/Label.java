@@ -36,9 +36,34 @@ import de.erichseifert.gral.util.MathUtils;
 
 
 /**
- * Class that draws a label to a specific location.
- * A Label is able to manage its settings and to set and get the
- * displayed text, as well as calculating its bounds.
+ * <p>A {@link Drawable} that draws a piece of text. Plot titles, axis labels
+ * and legend entries are all labels, so this is the class to reach for when
+ * text has to be styled or turned.</p>
+ *
+ * <pre>
+ * Label label = new Label("Time in seconds");
+ * label.setFont(Font.decode(null).deriveFont(14f));
+ * label.setColor(Color.DARK_GRAY);
+ * label.setRotation(90);      // reading bottom-to-top, for a y axis
+ * plot.getAxisRenderer(XYPlot.AXIS_Y).setLabel(label);
+ * </pre>
+ *
+ * <p>Two different alignments are involved, and they are easy to confuse:</p>
+ * <ul>
+ *   <li>{@link #setAlignmentX(double)} and {@link #setAlignmentY(double)}
+ *   position the block of text within the bounds of the label, from 0.0 (left,
+ *   top) to 1.0 (right, bottom).</li>
+ *   <li>{@link #setTextAlignment(double)} aligns the lines against each other
+ *   within that block, which only has an effect on text of more than one
+ *   line.</li>
+ * </ul>
+ *
+ * <p>The rotation is given in degrees counter-clockwise and is applied around
+ * the center of the text; the preferred size grows accordingly, so a rotated
+ * label still claims the right amount of space in a layout. With
+ * {@link #setWordWrapEnabled(boolean)} the text is broken to the width of the
+ * bounds instead of overflowing them. An empty text produces an empty
+ * preferred size, so a title that has not been set takes no space at all.</p>
  */
 public class Label extends AbstractDrawable {
 	/** Version id for serialization. */

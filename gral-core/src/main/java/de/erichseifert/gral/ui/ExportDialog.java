@@ -41,8 +41,23 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.util.Messages;
 
 /**
- * A dialog implementation for exporting plots. It allows the user to
- * specify the document dimensions.
+ * <p>The dialog that {@link InteractivePanel} shows before exporting a plot. It
+ * asks for the position and size of the exported document, so that the export
+ * size is independent of the size on screen.</p>
+ *
+ * <p>It is a modal dialog: show it, then read the result.</p>
+ * <pre>
+ * ExportDialog dialog = new ExportDialog(parent, plot);
+ * dialog.setVisible(true);
+ * if (dialog.getUserAction() == ExportDialog.UserAction.APPROVE) {
+ *     Rectangle2D bounds = dialog.getDocumentBounds();
+ *     writer.write(plot, out, bounds.getX(), bounds.getY(),
+ *         bounds.getWidth(), bounds.getHeight());
+ * }
+ * </pre>
+ *
+ * <p>The dialog needs a display, so code that has to run headless should build
+ * the bounds itself and call the writer directly.</p>
  */
 public class ExportDialog extends JDialog {
 	/** Version id for serialization. */

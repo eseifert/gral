@@ -45,6 +45,14 @@ import de.erichseifert.gral.examples.xyplot.SimpleXYPlot;
 import de.erichseifert.gral.examples.xyplot.SpiralPlot;
 import de.erichseifert.gral.examples.xyplot.StackedPlots;
 
+/**
+ * <p>A window that lists every example on the left and shows the selected one
+ * on the right. This is the {@code Main-Class} of the examples JAR, so it is
+ * what {@code ./gradlew :gral-examples:run} starts.</p>
+ *
+ * <p>The examples are all constructed up front, which means starting the
+ * browser also serves as a rough check that none of them is broken.</p>
+ */
 public class Browser extends JFrame implements ListSelectionListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -3734045121668893200L;
@@ -85,6 +93,9 @@ public class Browser extends JFrame implements ListSelectionListener {
 	private final JList examplesList;
 	private final JScrollPane exampleScrollPane;
 
+	/**
+	 * Creates the browser window and instantiates every example.
+	 */
 	public Browser() {
 		super("GRAL examples");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,6 +124,10 @@ public class Browser extends JFrame implements ListSelectionListener {
 		examplesList.setSelectedValue(example, true);
 	}
 
+	/**
+	 * Reacts to a selection in the list by showing the corresponding example.
+	 * @param e Event describing the selection.
+	 */
 	public void valueChanged(ListSelectionEvent e) {
 		Object source = e.getSource();
 		if (source == examplesList) {
@@ -120,6 +135,10 @@ public class Browser extends JFrame implements ListSelectionListener {
 		}
 	}
 
+	/**
+	 * Opens the example browser.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		var frame = new Browser();
 		frame.setVisible(true);

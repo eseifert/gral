@@ -21,5 +21,28 @@
  */
 package de.erichseifert.gral.data.filters;
 
+/**
+ * <p>A sequence of {@code double} values derived from another sequence, for
+ * example a smoothed or accumulated version of a data column. This is the newer
+ * of the two filter APIs in this package; the older one,
+ * {@link Filter2D}, decorates a whole data source instead.</p>
+ *
+ * <pre>
+ * Iterable&lt;Double&gt; values = Arrays.asList(3.0, 8.0, 5.0, 6.0, 4.0, 9.0);
+ * for (double accumulated : new Accumulation&lt;&gt;(values)) {
+ *     // 3.0, 11.0, 16.0, 22.0, 26.0, 35.0
+ * }
+ * </pre>
+ *
+ * <p>A filter is not required to produce as many values as it consumes. Filters
+ * that need a window of neighboring values, such as
+ * {@link MedianFilter} and {@link ConvolutionFilter}, yield
+ * <i>m&nbsp;&minus;&nbsp;n&nbsp;+&nbsp;1</i> results for <i>m</i> input values
+ * and a window of <i>n</i>: there is no padding at the ends, and the result is
+ * empty if the input is shorter than the window. Use {@link Filter2D} where a
+ * value is needed for every row.</p>
+ *
+ * @param <T> Type of the values being filtered.
+ */
 public interface Filter<T extends Comparable<T>> extends Iterable<Double> {
 }

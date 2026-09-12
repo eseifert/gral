@@ -39,8 +39,31 @@ import java.text.AttributedString;
 import java.util.LinkedList;
 
 /**
- * Abstract class that contains utility functions for working with graphics.
- * For example, this includes font handling or color space conversion.
+ * <p>Helpers for drawing with Java 2D. The class is not meant to be
+ * instantiated.</p>
+ *
+ * <p>The two that renderers use constantly are
+ * {@link #fillPaintedShape(java.awt.Graphics2D, java.awt.Shape,
+ * java.awt.Paint, java.awt.geom.Rectangle2D)} and
+ * {@link #drawPaintedShape(java.awt.Graphics2D, java.awt.Shape,
+ * java.awt.Paint, java.awt.geom.Rectangle2D, java.awt.Stroke)}.
+ * They fill or stroke a shape with a paint that is aligned to a given
+ * rectangle, so that a gradient spans the shape rather than the whole canvas;
+ * passing {@code null} for the bounds uses the bounds of the shape itself.</p>
+ *
+ * <p>{@link #getOutline(String, java.awt.Font, float, double)} turns text into
+ * a {@code Shape}, which is what lets a {@link
+ * de.erichseifert.gral.graphics.Label} be rotated and transformed like any
+ * other geometry, and word-wrapped to a given width.</p>
+ *
+ * <p>The remaining methods are about color:
+ * {@link #deriveBrighter(java.awt.Color)} and
+ * {@link #deriveDarker(java.awt.Color)} preserve the alpha channel, which
+ * {@code Color.brighter()} and {@code Color.darker()} do not;
+ * {@link #blend(java.awt.Color, java.awt.Color, double)} mixes two colors; and
+ * the {@code rgb2luv} family converts between RGB and the perceptually uniform
+ * CIE L*u*v* space, where a step of a given size looks equally large no matter
+ * where in the space it is taken.</p>
  */
 public abstract class GraphicsUtils {
 	/** Default font render context. */

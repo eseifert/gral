@@ -32,10 +32,22 @@ import de.erichseifert.gral.graphics.Insets2D;
 
 
 /**
- * Implementation of Layout that arranges a {@link Container}'s components
- * according to a tabular grid with a fixed number of columns. This is similar
- * to Java's {@link java.awt.GridLayout}, but the cells in the grid may have
- * different dimensions.
+ * <p>A layout that arranges the components of a container in a grid with a
+ * fixed number of columns, filling it row by row in the order the components
+ * were added. It is similar to {@link java.awt.GridLayout}, except that the
+ * cells are not forced to a uniform size: each column is as wide, and each row
+ * as tall, as its widest or tallest component.</p>
+ *
+ * <pre>
+ * DrawableContainer container = new DrawableContainer(new TableLayout(3));
+ * container.add(a);  // row 0, column 0
+ * container.add(b);  // row 0, column 1
+ * container.add(c);  // row 0, column 2
+ * container.add(d);  // row 1, column 0
+ * </pre>
+ *
+ * <p>The number of rows follows from the number of components; a partly filled
+ * last row simply stays short. Components take no layout constraints.</p>
  */
 public class TableLayout extends AbstractLayout {
 	/** Version id for serialization. */
@@ -107,6 +119,8 @@ public class TableLayout extends AbstractLayout {
 	 * Calculates the preferred dimensions for all columns and rows.
 	 * @param container The container for which the dimension should be
 	 *        calculated.
+	 * @return An array of two elements, the column values at index
+	 *         {@link #COLS} and the row values at index {@link #ROWS}.
 	 * @see #COLS
 	 * @see #ROWS
 	 */

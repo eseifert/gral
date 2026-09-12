@@ -35,7 +35,20 @@ import de.erichseifert.gral.util.GraphicsUtils;
 
 
 /**
- * Class that connects two dimensional data points with a straight line.
+ * <p>The standard {@link LineRenderer}: it connects consecutive data points
+ * with straight segments, in the order the rows appear in the data source.</p>
+ *
+ * <pre>
+ * DefaultLineRenderer2D line = new DefaultLineRenderer2D();
+ * line.setColor(Color.BLACK);
+ * line.setStroke(new BasicStroke(1.5f));
+ * plot.setLineRenderers(series, line);
+ * </pre>
+ *
+ * <p>Since the rows are joined in their stored order, a line plot of unsorted
+ * data zig-zags; sort the data source by the x column first if that is not
+ * wanted. Points whose value cannot be projected are skipped, and the line is
+ * drawn straight across the gap.</p>
  */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	/** Version id for serialization. */

@@ -65,8 +65,32 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * Basic implementation of a plot that can listen to changes of data sources
- * and settings.
+ * <p>Base class for all plots. It extends
+ * {@link de.erichseifert.gral.graphics.DrawableContainer}, so a plot is a
+ * container whose children are the plot area, the title, the legend and one
+ * drawable per axis, arranged by an
+ * {@link de.erichseifert.gral.graphics.layout.EdgeLayout}.</p>
+ *
+ * <p>This class owns everything that is common to the plot types:</p>
+ * <ul>
+ *   <li>the list of data sources and which of them are visible;</li>
+ *   <li>the axes, their renderers and their drawables, each held by name;</li>
+ *   <li>the mapping from a column of a data source to an axis name, and the
+ *   auto-scaled minimum and maximum derived from it;</li>
+ *   <li>the title, the legend and its placement, and the background, border
+ *   and base font of the plot.</li>
+ * </ul>
+ *
+ * <p>It implements {@link DataListener} and registers itself on every data
+ * source added to it, so a change to the data invalidates the affected axis
+ * ranges. Subclasses supply a {@link PlotArea} that knows how to draw the data
+ * itself, and define the axis name constants they use.</p>
+ *
+ * <p>Several properties hold AWT types that are not serializable and are
+ * therefore {@code transient}; they are round-tripped through
+ * {@link SerializationUtils} in the hand-written {@code readObject} and
+ * {@code writeObject} methods. A subclass that adds such a field has to do the
+ * same.</p>
  */
 public abstract class AbstractPlot extends DrawableContainer
 		implements Plot, DataListener {
@@ -125,8 +149,9 @@ public abstract class AbstractPlot extends DrawableContainer
 	private double legendDistance;
 
 	/**
-	 * Initializes a new {@code AbstractPlot} instance with the specified data series.
-	 * The series will be visible by default.
+	 * Initializes a new plot showing the specified data sources, all of them
+	 * visible. Axes, renderers and column mappings are not set up here; that is
+	 * the job of the concrete subclass.
 	 * @param series Initial data series to be displayed.
 	 */
 	public AbstractPlot(DataSource... series) {

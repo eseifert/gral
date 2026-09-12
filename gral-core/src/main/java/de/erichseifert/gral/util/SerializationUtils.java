@@ -28,7 +28,38 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 /**
- * An abstract class containing utility functions for serialization.
+ * <p>Helpers for serializing the AWT types that are not themselves
+ * serializable. Plots and data sources are fully serializable, and this is how
+ * they keep their strokes, shapes and points across a round trip.</p>
+ *
+ * <p>A field of such a type is declared {@code transient} and handled by hand
+ * in a pair of methods:</p>
+ * <pre>
+ * private transient Stroke borderStroke;
+ *
+ * private void writeObject(ObjectOutputStream out) throws IOException {
+ *     out.defaultWriteObject();
+ *     out.writeObject(SerializationUtils.wrap(borderStroke));
+ * }
+ *
+ * private void readObject(ObjectInputStream in)
+ *         throws ClassNotFoundException, IOException {
+ *     in.defaultReadObject();
+ *     borderStroke = (Stroke) SerializationUtils.unwrap(
+ *         (Serializable) in.readObject());
+ * }
+ * </pre>
+ *
+ * <p>{@link #wrap(Object)} passes objects that are already serializable
+ * through unchanged and substitutes a stand-in for the others, so it is safe to
+ * apply to anything; {@link #unwrap(Serializable)} reverses it. Wrappers exist
+ * for {@code BasicStroke}, {@code Shape}, {@code Area} and {@code Point2D}; an
+ * object of some other non-serializable type is returned as it is and will
+ * still fail to serialize.</p>
+ *
+ * <p>Forgetting this for a newly added field is easy and fails silently until
+ * something is actually serialized, which is why every serializable class in
+ * GRAL has a round-trip test.</p>
  */
 public abstract class SerializationUtils {
 	/**

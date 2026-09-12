@@ -36,8 +36,14 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * <pre>
  * DataWriterFactory factory = DataWriterFactory.getInstance();
  * DataWriter writer = factory.get("image/png");
- * writer.write(data);
+ * writer.write(data, new FileOutputStream(filename));
  * </pre>
+ * <p>The supported MIME types are {@code text/csv},
+ * {@code text/tab-separated-values} and the bitmap types {@code image/png},
+ * {@code image/jpeg}, {@code image/bmp}, {@code image/gif} and
+ * {@code image/vnd.wap.wbmp}. Asking for an unsupported type throws
+ * {@code IllegalArgumentException}, which
+ * {@link #isFormatSupported(String)} can be used to avoid.</p>
  */
 public final class DataWriterFactory extends AbstractIOFactory<DataWriter> {
 	/** Singleton instance. */

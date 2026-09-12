@@ -25,9 +25,31 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * <p>An iterator that visits the elements of several other iterators, one
+ * source after the other.</p>
+ *
+ * <pre>
+ * Iterator&lt;String&gt; all = new ConcatenationIterator&lt;&gt;(
+ *     first.iterator(), second.iterator());
+ * </pre>
+ *
+ * <p>{@link #remove()} is a no-op rather than an exception. That is deliberate:
+ * it predates Java 8, where {@code Iterator.remove} gained a throwing default,
+ * and removing the override would turn a silent no-op into an
+ * {@code UnsupportedOperationException} for existing callers.</p>
+ *
+ * @param <T> Type of the elements.
+ */
 public class ConcatenationIterator<T> implements Iterator<T> {
+	/** Sources to be visited, in order. */
 	private final Iterator<T>[] inputIterators;
 
+	/**
+	 * Initializes a new iterator over the specified sources. The array is
+	 * copied, but the iterators in it are used directly.
+	 * @param inputIterators Sources to be visited in the given order.
+	 */
 	public ConcatenationIterator(Iterator<T>... inputIterators) {
 		this.inputIterators = Arrays.copyOf(inputIterators, inputIterators.length);
 	}
@@ -52,6 +74,10 @@ public class ConcatenationIterator<T> implements Iterator<T> {
 		throw new NoSuchElementException("No elements left in concatenated iterator.");
 	}
 
+	/**
+	 * Does nothing. See the class documentation for why this is not an
+	 * {@code UnsupportedOperationException}.
+	 */
 	@Override
 	public void remove() {
 	}

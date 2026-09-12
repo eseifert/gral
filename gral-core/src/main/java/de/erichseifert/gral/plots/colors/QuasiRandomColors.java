@@ -30,7 +30,20 @@ import de.erichseifert.gral.util.HaltonSequence;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates seemingly random colors for specified index values.
+ * <p>An {@link IndexedColorMapper} that spreads hues using a
+ * {@link de.erichseifert.gral.util.HaltonSequence}. The colors look arbitrary
+ * but are evenly distributed, so each new index lands in a gap left by the
+ * previous ones and consecutive series stay easy to tell apart.</p>
+ *
+ * <pre>
+ * QuasiRandomColors colors = new QuasiRandomColors();
+ * pointRenderer.setColor(colors);
+ * </pre>
+ *
+ * <p>The sequence is deterministic: the same index always yields the same
+ * color, so a plot looks the same on every run. That is the practical
+ * difference to {@link RandomColors}. The permitted spread of hue, saturation
+ * and brightness is set with {@link #setColorVariance(float[])}.</p>
  */
 public class QuasiRandomColors extends IndexedColorMapper {
 	/** Version id for serialization. */

@@ -33,6 +33,11 @@ import de.erichseifert.gral.plots.PlotsTests;
 import de.erichseifert.gral.ui.UiTests;
 import de.erichseifert.gral.util.UtilTests;
 
+/**
+ * Runs the complete test suite by aggregating the per-package suites. A new
+ * test class has to be added to the suite of its own package, which is then
+ * picked up here.
+ */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	TestUtilsTest.class,

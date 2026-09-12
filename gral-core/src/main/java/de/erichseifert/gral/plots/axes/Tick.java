@@ -29,7 +29,20 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * Class for storing the tick mark of an axis.
+ * <p>One tick mark of an axis, as produced by
+ * {@link AxisRenderer#getTicks(Axis)}: where it sits, which way it points, what
+ * it looks like, and the text of its label.</p>
+ *
+ * <p>The {@link Tick.TickType} distinguishes the three kinds: {@code MAJOR}
+ * ticks are the labeled ones at the regular tick spacing, {@code MINOR} ticks
+ * the unlabelled subdivisions between them, and {@code CUSTOM} ticks the ones
+ * placed explicitly through {@code setCustomTicks(Map)}. A renderer styles the
+ * three differently, so anything iterating over ticks usually switches on the
+ * type.</p>
+ *
+ * <p>A tick extends {@link de.erichseifert.gral.plots.DataPoint} but does not
+ * come from a data row, so its {@code data} field is {@code null}. Instances
+ * are immutable and their fields are public.</p>
  */
 public class Tick extends DataPoint {
 	/** Type of tick mark. */

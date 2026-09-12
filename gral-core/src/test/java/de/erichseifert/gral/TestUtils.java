@@ -40,8 +40,40 @@ import java.util.List;
 import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GeometryUtils.PathSegment;
 
+/**
+ * <p>Shared helpers for the unit tests. Beyond saving typing, they define the
+ * conventions the test suite follows.</p>
+ *
+ * <p><b>Rendering is checked by painting, not by comparison.</b> A test draws a
+ * {@link de.erichseifert.gral.graphics.Drawable} into the image from
+ * {@link #createTestImage()} and then asserts with {@link #assertNotEmpty(
+ * java.awt.image.BufferedImage)} that something was painted. There are no
+ * reference images anywhere in the suite, so the tests stay robust against
+ * differences in font rendering and antialiasing between platforms and JDKs;
+ * the price is that they catch "nothing was drawn", not "the wrong thing was
+ * drawn".</p>
+ *
+ * <pre>
+ * BufferedImage image = TestUtils.createTestImage();
+ * drawable.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
+ * drawable.draw(new DrawingContext((Graphics2D) image.getGraphics()));
+ * TestUtils.assertNotEmpty(image);
+ * </pre>
+ *
+ * <p><b>Anything serializable gets a round trip.</b> Serialization is a
+ * supported feature of the plots and data sources, and it breaks silently when
+ * a new field of a non-serializable AWT type is added without being handled in
+ * {@code readObject} and {@code writeObject}. A new plot, renderer or data
+ * source is therefore expected to be put through
+ * {@link #serializeAndDeserialize(Object)} and compared property by
+ * property.</p>
+ *
+ * <p>{@link #assertSetting(String, Object, Object)} exists because some AWT
+ * types compare badly: {@code Line2D} has no {@code equals}, and shapes have to
+ * be compared segment by segment.</p>
+ */
 public class TestUtils {
-	/** Default precision for unit tests. **/
+	/** Default precision for floating-point assertions in unit tests. **/
 	public static final double DELTA = 1e-15;
 
 	/**
@@ -190,6 +222,16 @@ public class TestUtils {
 		return true;
 	}
 
+	/**
+	 * Serializes an object and deserializes it again, which is the standard way
+	 * of checking that a class survives a round trip. Fails if nothing was
+	 * written, and asserts that the result is a different instance.
+	 * @param <T> Type of the object.
+	 * @param original Object to be serialized.
+	 * @return A deserialized copy of the object.
+	 * @throws IOException if reading or writing the object failed.
+	 * @throws ClassNotFoundException if a serialized class no longer exists.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T serializeAndDeserialize(T original)
 			throws IOException, ClassNotFoundException {
@@ -212,11 +254,27 @@ public class TestUtils {
 	    return (T) o;
 	}
 
+	/**
+	 * Fails if two lines have different end points. {@code Line2D} does not
+	 * implement {@code equals}, so it cannot be compared directly.
+	 * @param message Custom message.
+	 * @param expected Expected line.
+	 * @param actual Actual line.
+	 */
 	public static void assertEquals(String message, Line2D expected, Line2D actual) {
 		org.junit.Assert.assertEquals(message, expected.getP1(), actual.getP1());
 		org.junit.Assert.assertEquals(message, expected.getP2(), actual.getP2());
 	}
 
+	/**
+	 * Fails if two property values differ, comparing AWT types that have no
+	 * usable {@code equals} in a type-specific way: lines by their end points,
+	 * and other shapes segment by segment.
+	 * @param <T> Type of the values.
+	 * @param message Custom message.
+	 * @param expected Expected value.
+	 * @param actual Actual value.
+	 */
 	public static <T> void assertSetting(String message, T expected, T actual) {
 		// Line2D instances can't be compared. See Java bug 5057070
 		// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>

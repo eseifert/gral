@@ -54,13 +54,21 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * <p>Abstract class that serves as a base for legends in plots.
- * It stores a list of of items that are used to display a symbol and label for
- * each (visible) data source.</p>
- * <p>Like other elements legends can be styled using various settings. The
- * settings are used to control to control how the legend, and its items
- * are displayed. The actual rendering of symbols has to be implemented by
- * derived classes.</p>
+ * <p>Base class for legends. It is a {@link DrawableContainer} whose children
+ * are the legend entries, each an {@link AbstractLegend.Item} pairing a symbol
+ * with a label, arranged by a
+ * {@link de.erichseifert.gral.graphics.layout.StackedLayout} in the configured
+ * orientation.</p>
+ *
+ * <p>This class handles the container, the background, the border, the fonts
+ * and the layout. It leaves two decisions to subclasses: how many entries a
+ * data source contributes, and what the symbol of an entry looks like. The
+ * symbol is an ordinary {@link de.erichseifert.gral.graphics.Drawable}, usually
+ * derived from {@link AbstractLegend.AbstractSymbol}, which is what lets a plot
+ * draw a symbol matching the marks and lines it actually uses.</p>
+ *
+ * @see SeriesLegend
+ * @see ValueLegend
  */
 public abstract class AbstractLegend extends DrawableContainer
 		implements Legend {
@@ -159,10 +167,20 @@ public abstract class AbstractLegend extends DrawableContainer
 			add(label, Location.CENTER);
 		}
 
+		/**
+		 * Returns the label component of this item, which can be used to change
+		 * the text or its formatting.
+		 * @return The label of this item.
+		 */
 		public Label getLabel() {
 			return label;
 		}
 
+		/**
+		 * Returns the symbol component of this item, i.e. the small graphic
+		 * shown to the left of the label.
+		 * @return The symbol of this item.
+		 */
 		public Drawable getSymbol() {
 			return symbol;
 		}

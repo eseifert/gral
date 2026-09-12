@@ -131,14 +131,27 @@ Statistics
 ~~~~~~~~~~
 
 The most basic statistical functionality of GRAL is to query various aggregated
-measures for columns using the class Statistics. It is part of every
-``DataSource`` instance and can be easily accessed with the method
-``getStatistics(int)``.
+measures using the class ``Statistics``. Measures are named by string constants
+on that class and computed the first time they are asked for.
+
+Every ``DataSource`` can report measures over all of its values at once, per
+column, or per row:
 
 .. code:: java
 
-    // Get the maximum for the second column
+    // Over all values of the data source
+    double meanAll = table.getStatistics().get(Statistics.MEAN);
+
+    // For one column
     double max = table.getColumn(1).getStatistics(Statistics.MAX);
+
+    // One value per column, as a single-row data source
+    DataSource means = table.getColumnStatistics(Statistics.MEAN);
+
+Values that are not numbers, and numbers that are ``null``, ``NaN`` or
+infinite, are skipped; ``N`` therefore counts only the values that actually
+contributed. Asking for an unknown measure, or for one that cannot be computed
+because there is no usable value, yields ``NaN`` rather than an error.
 
 ``N``
     The number of values in the column.
@@ -160,7 +173,11 @@ measures for columns using the class Statistics. It is part of every
     halves.
 
 ``VARIANCE``
-    The variance value describing the dispersion of the column's values.
+    The sample variance describing the dispersion of the column's values.
+
+``POPULATION_VARIANCE``
+    The population variance, i.e. the same sum of squared differences divided
+    by ``N`` instead of ``N - 1``.
 
 ``SKEWNESS``
     The skewness value describing the asymmetry of the probability
@@ -182,24 +199,43 @@ measures for columns using the class Statistics. It is part of every
     The value that delimits the upper 25% of all data values.
 
 Histograms are a more complex way for aggregating data. In a histogram all
-values are assigned to specified categories. In GRAL's ``Histogram`` class
-categories are defined as value ranges. For example all values from 0 to 5 would
-be in category A and all values from 5 to 10 in category B. Then, the histogram
-would generate two rows for each column that contain the number of values in
-category A and B, respectively.
+values are assigned to bins that are defined as value ranges. For example all
+values from 0 to 5 would fall into the first bin and all values from 5 to 10
+into the second. A bin holds the values that are greater than or equal to its
+lower limit and smaller than its upper limit; the last bin also includes its
+upper limit, so that the largest value is counted.
+
+GRAL has two histogram classes. ``Histogram2D`` aggregates a whole data source
+and is a ``DataSource`` itself, so its counts can be handed straight to a plot:
 
 .. code:: java
 
-    // Use 4 equally spaced breaks
-    Histogram histogram = new Histogram1D(table, Orientation.VERTICAL, 4);
+    // Use 4 equally wide bins per column
+    DataSource histogram = new Histogram2D(table, Orientation.VERTICAL, 4);
 
 .. code:: java
 
     // Use custom breaks for each column
     Number[] breaksCol1 = {1.0, 2.0, 3.0, 4.0, 5.0};
     Number[] breaksCol2 = {1.0, 3.0, 5.0, 7.0, 9.0};
-    Histogram histogram = new Histogram1D(table, Orientation.VERTICAL,
+    DataSource histogram = new Histogram2D(table, Orientation.VERTICAL,
         breaksCol1, breaksCol2);
+
+The ``Orientation`` decides in which direction the values are aggregated:
+``VERTICAL`` produces one histogram per column, ``HORIZONTAL`` one per row.
+Since a histogram has counts but no positions, an ``EnumeratedData`` view is
+usually wrapped around it to supply the bin index as a leading column before it
+is plotted.
+
+``Histogram`` is the simpler variant. It counts a plain sequence of values, is
+not a data source, and is iterated to read the counts:
+
+.. code:: java
+
+    Histogram histogram = new Histogram(table.getColumn(1), 4);
+    for (int count : histogram) {
+        // one count per bin, in order
+    }
 
 Convolution
 ~~~~~~~~~~~
@@ -222,23 +258,45 @@ convolution: the class ``Kernel`` defines the kernel function and the class
     // Create a moving average of width 3
     Kernel kernel = new Kernel(1.0, 1.0, 1.0).normalize();
     // Filter columns 0 and 1 and omit boundary values if necessary
-    Convolution filter = new Convolution(table, kernel, Filter.Mode.OMIT, 0, 1);
+    Convolution filter = new Convolution(table, kernel, Filter2D.Mode.OMIT, 0, 1);
 
 .. code:: java
 
     // Create a smoothing kernel with a variance of 2
-    Kernel kernel = KernelUtils.getBinomial(2.0).normalize();
+    Kernel kernel = Kernel.getBinomial(2.0);
     // Filter column 1 and start over for boundary values if necessary
-    Convolution filter = new Convolution(table, kernel, Filter.Mode.CIRCULAR, 1);
+    Convolution filter = new Convolution(table, kernel, Filter2D.Mode.CIRCULAR, 1);
 
 .. code:: java
 
     // Create a smoothing kernel with a variance of 3
-    Kernel kernel = KernelUtils.getBinomial(3.0).normalize()
-    // Subtract the original values
+    Kernel kernel = Kernel.getBinomial(3.0);
+    // Subtract the original values, which turns smoothing into sharpening
     kernel = kernel.negate().add(new Kernel(1.0));
     // Filter column 1 and repeat boundary values if necessary
-    Convolution filter = new Convolution(table, kernel, Filter.Mode.REPEAT, 1);
+    Convolution filter = new Convolution(table, kernel, Filter2D.Mode.REPEAT, 1);
+
+The ``Filter2D.Mode`` decides what stands in for the neighboring values that
+are missing at the start and the end of a column: ``OMIT`` produces ``null``,
+``ZERO`` substitutes zero, ``REPEAT`` the nearest value, ``MIRROR`` the values
+reflected at that end, and ``CIRCULAR`` the values from the other end of the
+column.
+
+Kernels are immutable, so ``normalize``, ``negate``, ``add`` and ``mul`` all
+return a new kernel. A kernel that does not sum to one scales the data as well
+as filtering it; binomial kernels are already normalized.
+
+There is a second, newer filter API alongside this one. Its filters --
+``ConvolutionFilter``, ``MedianFilter`` and ``Accumulation`` -- implement
+``Filter`` and are plain sequences of values rather than data sources. They need
+no mode, because instead of substituting values at the boundaries they simply
+yield fewer results than they consume:
+
+.. code:: java
+
+    for (double smoothed : new ConvolutionFilter<>(values, kernel)) {
+        // m - n + 1 values for m inputs and a kernel of n weights
+    }
 
 Exchanging data
 ---------------
@@ -325,33 +383,73 @@ The components of a plot in GRAL are:
 Plot types
 ----------
 
-Currently, GRAL has three main plot types: xy-plot, bar plot, and pie plot.
-This section presents those plot types and show how to adjust their visual
-settings and to derive many more types. For example, xy-plots can be turned into
-line plots, or area plots and a pie chart can be made into a doughnut plot with
-just one command.
+GRAL has five plot types: xy-plot, bar plot, box-and-whisker plot, pie plot,
+and raster plot. The first four of these cover many more chart types than their
+names suggest, because what a plot looks like is decided by the renderers set on
+its series rather than by the plot class: an xy-plot becomes a line plot, a
+scatter plot, a bubble plot or an area plot depending on which renderers it is
+given, and a pie plot becomes a doughnut plot by setting an inner radius.
+
+All plot types except ``PiePlot`` derive from ``XYPlot``.
 
 XY-Plot
 ~~~~~~~
 
-``XYPlot``: XY-Plots are usually the most common plot type. Used it whenever you
-want to create a line plot, a scatter plot, a bubble plot, or an area plot.
+``XYPlot`` is the most common plot type. Each series contributes one set of
+data points, whose first mapped column is the x coordinate and whose second is
+the y coordinate.
 
 .. code:: java
 
     Plot plot = new XYPlot(series1, series2);
 
-Legends
-^^^^^^^
-
-Legends explain the symbols used in plot by the symbols and a description in a
-table-like representation. GRAL's ``Legend`` class can be either vertically
-(default) or horizontally oriented. Its options determine the positioning inside
-the plot as well as its background color, its border, or its spacings.
+A series added this way starts out with a point renderer only, so the plot shows
+marks but no connecting line. Lines and filled areas are switched on by giving
+the series a renderer, which is what turns the same plot class into a line plot
+or an area plot:
 
 .. code:: java
 
+    XYPlot plot = new XYPlot(series1);
+    plot.setLineRenderers(series1, new DefaultLineRenderer2D());
+    plot.setAreaRenderers(series1, new DefaultAreaRenderer2D());
+
+Each of the three layers accepts several renderers for one series, which are
+drawn in the order given; that is how effects like drop shadows are built. Areas
+are drawn first, then lines, then points.
+
+An ``XYPlot`` offers four axes by name: ``AXIS_X`` and ``AXIS_Y``, which are
+created and mapped for every series that is added, and the secondary axes
+``AXIS_X2`` and ``AXIS_Y2``, which are only drawn once a series is mapped to
+them:
+
+.. code:: java
+
+    plot.setAxis(XYPlot.AXIS_Y2, new Axis(0.0, 100.0));
+    plot.setAxisRenderer(XYPlot.AXIS_Y2, new LinearRenderer2D());
+    plot.setMapping(series2, XYPlot.AXIS_X, XYPlot.AXIS_Y2);
+
+Legends
+^^^^^^^
+
+Legends explain the series of a plot by pairing a symbol with a description.
+Every plot already builds and fills its own legend; it only has to be switched
+on, since it is hidden by default. The text of an entry is the name of the data
+source, so naming the series is the step that is easy to forget:
+
+.. code:: java
+
+    DataSeries series = new DataSeries("Temperature", table, 0, 1);
+    XYPlot plot = new XYPlot(series);
     plot.setLegendVisible(true);
+
+A legend can be oriented vertically (the default) or horizontally, and placed at
+any of the nine positions of ``Location``:
+
+.. code:: java
+
+    plot.setLegendLocation(Location.NORTH_EAST);
+    plot.getLegend().setOrientation(Orientation.HORIZONTAL);
 
 Bar plot
 ~~~~~~~~
@@ -377,31 +475,49 @@ minimum, maximum, median, or quantiles in a concise plot. GRAL's class
 
 The data series must provide six columns for each plot element:
 
-- x position of the box-whisker-plot
+- x position of the box-and-whisker element
 - y position of the center bar (e.g. median)
 - y position of the lower whisker (e.g. minimum)
-- upper edge of the box (e.g. first quartile)
-- lower edge of the box (e.g. third quartile)
+- lower edge of the box (e.g. first quartile)
+- upper edge of the box (e.g. third quartile)
 - y position of the upper whisker (e.g. maximum)
 
-A utility method of ``BoxPlot`` can be used to generate a suitable data source
-from an existing data source:
+A utility method of ``BoxPlot`` generates exactly that layout from raw
+observations, producing one box per *column* of the original data source:
 
 .. code:: java
 
     DataSource series = BoxPlot.createBoxData(data);
     Plot plot = new BoxPlot(series);
 
+Supplying the six columns yourself is what allows other summaries, for example
+whiskers at the 5th and 95th percentile instead of at the extremes.
+
 Pie plot
 ~~~~~~~~
 
 Pie plots are circles divided into sectors to illustrate the proportions of the
 corresponding data values. GRAL's class ``PiePlot`` is used to create this type
-of plot.
+of plot. It does not derive from ``XYPlot`` and has no visible axes; one row of
+a single-column data source becomes one slice.
+
+The data source has to be prepared with a utility method that computes the
+running total the renderer needs:
 
 .. code:: java
 
-    Plot plot = new PiePlot(series);
+    DataSource series = PiePlot.createPieData(data);
+    PiePlot plot = new PiePlot(series);
+
+A slice always covers a positive part of the pie, so the values are taken by
+absolute value when the sizes are computed; the sign decides only whether a
+slice is filled or left empty. Setting an inner radius turns the pie into a
+doughnut:
+
+.. code:: java
+
+    PieSliceRenderer slices = (PieSliceRenderer) plot.getPointRenderer(series);
+    slices.setInnerRadius(0.4);
 
 Raster plot
 ~~~~~~~~~~~
@@ -419,13 +535,24 @@ The data series must provide three columns for each grid tile:
 - y position of the grid tile
 - value of the grid tile
 
-A utility method of ``RasterPlot`` can be used to generate a suitable data
-source from an existing data source:
+A utility method of ``RasterPlot`` converts a matrix of values -- one where the
+position of a value is its position in the table rather than a pair of
+coordinates -- into that form:
 
 .. code:: java
 
-    DataSource series = RasterPlot.createBoxData(data);
-    Plot plot = new RasterPlot(series);
+    DataSource series = RasterPlot.createRasterData(data);
+    RasterPlot plot = new RasterPlot(series);
+
+The conversion also rescales the values to the range from 0 to 1, so the color
+mapping does not have to know the range of the original data:
+
+.. code:: java
+
+    plot.setColors(new HeatMap());
+
+An image file can be read straight into the matrix form with ``ImageReader``,
+which is how a bitmap is displayed as a raster plot.
 
 Customization
 -------------
@@ -461,16 +588,25 @@ whole plot.
     );
     plot.setBackground(gradient);
 
-The ``PlotArea`` is the container for plotting the data. It must be fetched
-from a plot with the method, ``getPlotArea`` as each ``Plot`` type can also have
-its own plot area type. In the following example you can see how to hide the
-plot area itself completely.
+The ``PlotArea`` is the region in which the data itself is drawn, i.e. the plot
+without its title, legend and axis labels. Each plot type has its own plot area
+class, so it is fetched from the plot rather than constructed. In the following
+example you can see how to hide the plot area frame completely.
 
 .. code:: java
 
     PlotArea plotArea = plot.getPlotArea();
     plotArea.setBackground(null);
-    plotArea.setBorder(null);
+    plotArea.setBorderStroke(null);
+
+The space the plot keeps free around the plot area -- for the tick labels and
+the axis titles -- is set as insets on the plot itself. The arguments start at
+the top and go clockwise, so the left inset, usually the largest because it has
+to hold the y tick labels, is the second value:
+
+.. code:: java
+
+    plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
 
 Often, a legend has to added to a plot. Every plot already has a ``Legend``
 which just has to be turned on explicitly. Then, the positioning, orientation,
@@ -498,22 +634,35 @@ instance and can have different settings.
     AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
     axisRendererX.setTickSpacing(5.0);
 
-There are to implementations of ``AxisRenderer``: for axes with a linear scale
-(the default case) ``LinearRenderer2D`` is used; for axes with a logarithmic
-scale the class ``LogarithmicRenderer2D`` is used:
+Note the division of labour: an ``Axis`` holds nothing but the displayed value
+range, while the ``AxisRenderer`` owns the scale, the ticks and the drawing.
+Because the scale lives in the renderer, switching from a linear to a
+logarithmic axis means substituting one object. Two implementations ship with
+GRAL: ``LinearRenderer2D`` for a linear scale, which is what plots use by
+default, and ``LogarithmicRenderer2D`` for a base-10 logarithmic one.
 
 .. code:: java
 
     XYPlot plot = new XYPlot(seriesLog, seriesLin);
-    AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
-    axisRendererX.setLabel("Logarithmic data");
+    AxisRenderer axisRendererX = new LogarithmicRenderer2D();
+    axisRendererX.setLabel(new Label("Logarithmic data"));
     plot.setAxisRenderer(XYPlot.AXIS_X, axisRendererX);
+
+A logarithm is only defined for positive values, so the range of a logarithmic
+axis must not be negative; converting a value against a negative bound throws an
+``IllegalStateException``.
+
+The tick labels are produced by a ``java.text.Format``, so an axis of
+timestamps can be labeled with dates:
 
 .. code:: java
 
-    AxisRenderer2D axisRendererX = new LogarithmicRenderer2D();
+    AxisRenderer axisRendererX = plot.getAxisRenderer(XYPlot.AXIS_X);
     Format dateFormat = DateFormat.getTimeInstance();
     axisRendererX.setTickLabelFormat(dateFormat);
+
+Individual positions can also be labeled explicitly. Custom ticks are drawn in
+addition to the regular ones:
 
 .. code:: java
 
@@ -522,25 +671,57 @@ scale the class ``LogarithmicRenderer2D`` is used:
     labels.put(1.5, "One and a half times");
     axisRendererX.setCustomTicks(labels);
 
+The renderer also converts between data values and screen positions, which is
+what a program needs when it has to place something of its own on the plot:
+
+.. code:: java
+
+    Axis axisX = plot.getAxis(XYPlot.AXIS_X);
+    // Distance along the axis, measured from its start
+    double pixels = axisRendererX.worldToView(axisX, 4.2, false);
+    // And back again
+    Number value = axisRendererX.viewToWorld(axisX, pixels, false);
+
+The last argument decides what happens to values outside the axis range: with
+``false`` the result is clamped to the ends of the axis, with ``true`` the
+transform continues beyond them.
+
 Customizing points
 ~~~~~~~~~~~~~~~~~~
 
 The display of data points in a plot is done by instances of ``PointRenderer``.
 A point renderer defines the shape, the color, the size, and even the position
-of each point. A custom renderer can be implemented using either the interface
-``PointRenderer`` itself or using the abstract class ``AbstractPointRenderer``
-which is the preferred way.
+of each point. Before writing one, check whether configuring an existing
+renderer is enough:
 
-Every point renderer has to implement two methods:
+.. code:: java
+
+    DefaultPointRenderer2D points = new DefaultPointRenderer2D();
+    points.setShape(new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
+    points.setColor(Color.RED);
+    points.setValueVisible(true);
+    plot.setPointRenderers(series, points);
+
+Shapes are expressed in the coordinate system of the point, with (0, 0) at the
+data point itself, which is why the ellipse above is offset by half its size in
+order to be centered.
+
+A custom renderer implements two methods:
 ``Shape getPointShape(PointData)`` returns the vector shape of a specified data
 point, and ``Drawable getPoint(PointData, Shape)`` returns a drawable component
-which then renders the points.
+which then renders the point. Everything about the current point -- the row, the
+column holding the value, and the axes needed to project it -- arrives in the
+``PointData`` argument. One renderer instance serves every row of a series, so
+it must not keep per-point state.
 
 The class ``AbstractPointRenderer`` implements the interface ``PointRenderer``
-and additionally it provides everything that's necessary to manage settings and
-draw basic elements.
+and provides everything that is necessary to manage settings and draw basic
+elements, so custom renderers usually derive from it or from an existing
+implementation.
 
-In the following example you can see how to implement a simple renderer.
+In the following example you can see how to implement a simple renderer. Note
+that a point renderer's color is a ``ColorMapper`` rather than a ``Paint``, so
+that it can depend on the value:
 
 .. code:: java
 
@@ -550,7 +731,8 @@ In the following example you can see how to implement a simple renderer.
             Drawable drawable = new AbstractDrawable() {
                 @Override
                 public void draw(DrawingContext context) {
-                    Paint paint = SimplePointRenderer.this.getColor();
+                    ColorMapper colors = SimplePointRenderer.this.getColor();
+                    Paint paint = colors.get(data.index);
                     Shape point = getPointShape(data);
 
                     // Put your custom code here ...
@@ -575,7 +757,14 @@ which is the preferred way for two-dimensional applications.
 Every line renderer has to implement two methods:
 ``Shape getLineShape(List<DataPoint>)`` returns a vector shape for the line, and
 ``Drawable getLine(List<DataPoint>, Shape)`` returns a drawable component to
-display the line.
+display the line. The data points arrive already projected, so a line renderer
+works in screen coordinates and never touches the axes. Splitting shape and
+drawable apart is what allows the shape to be reused, which is how an area
+renderer builds on a line.
+
+The ``punch`` method used in the example below is provided by
+``AbstractLineRenderer2D``: it cuts a hole out of the shape around every data
+point, so that the point marks stay visible through the line.
 
 The class ``AbstractLineRenderer2D`` implements the interface ``LineRenderer``
 for two-dimensional data and additionally provides everything that's necessary
@@ -624,10 +813,12 @@ renderers can be easily implemented using either the interface ``AreaRenderer``
 itself or using the abstract class ``AbstractAreaRenderer`` which is the
 preferred way.
 
-Every area renderer has to implement one method:
+Every area renderer has to implement two methods:
 ``Shape getAreaShape(List<DataPoint>)`` returns a vector shape for the area, and
 ``Drawable getArea(List<DataPoint>, Shape)`` returns a drawable component to
-display the area.
+display the area. As with lines, the data points arrive already projected. Areas
+are drawn before lines and points, so a translucent fill does not hide the marks
+on top of it.
 
 The class ``AbstractAreaRenderer`` implements the interface ``AreaRenderer`` and
 additionally it provides everything that's necessary to manage settings and draw
@@ -660,11 +851,54 @@ In the following example you can see how to implement a simple renderer.
         }
     }
 
+Showing a plot on screen
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A plot is a ``Drawable``, not a ``java.awt.Component``, so it is put on screen
+through an adapter. ``DrawablePanel`` is a ``JPanel`` that displays one
+drawable and keeps its bounds in step with its own size:
+
+.. code:: java
+
+    JFrame frame = new JFrame();
+    frame.getContentPane().add(new DrawablePanel(plot));
+    frame.setSize(800, 600);
+    frame.setVisible(true);
+
+``InteractivePanel`` adds the behavior expected of a plot on screen: dragging
+pans, the mouse wheel and a double click zoom, and a right click opens a context
+menu offering to reset the view, to print, and to export to any supported file
+format.
+
+.. code:: java
+
+    frame.getContentPane().add(new InteractivePanel(plot));
+
+Zooming and panning are applied through the ``Navigator`` of the plot, which
+works by changing the ranges of its axes. Navigators can be driven directly, and
+two of them can be connected so that several plots move together:
+
+.. code:: java
+
+    Navigator navigator1 = plot1.getNavigator();
+    Navigator navigator2 = plot2.getNavigator();
+    navigator1.connect(navigator2);
+
+    // Restrict interaction to one direction, or switch it off entirely
+    navigator1.setDirection(XYPlot.XYNavigationDirection.HORIZONTAL);
+    navigator1.setPannable(false);
+
+    // Back to the default state
+    navigator1.reset();
+
 Exporting plot images
 ~~~~~~~~~~~~~~~~~~~~~
 
-Usage similar to data import/export. Bitmap formats like PNG, JPEG, BMP, or GIF
-and vector formats like SVG, PDF, or EPS.
+Writing a plot to a file works like writing data: a writer is fetched from a
+factory by MIME type. ``DrawableWriterFactory`` supports the bitmap formats
+``image/png``, ``image/jpeg``, ``image/bmp``, ``image/gif`` and
+``image/vnd.wap.wbmp``, and the vector formats ``image/svg+xml``,
+``application/pdf`` and ``application/postscript`` (EPS).
 
 .. code:: java
 
@@ -674,6 +908,16 @@ and vector formats like SVG, PDF, or EPS.
     try (OutputStream file = new FileOutputStream("xyplot.svg")) {
         writer.write(plot, file, width, height);
     }
+
+The writer sets the bounds of the plot to the requested size for the duration of
+the call and restores them afterwards, so the same plot object can be shown on
+screen and exported at a different size without interference. No window and no
+display are involved, which makes this the way to produce figures on a headless
+machine.
+
+The vector formats need the VectorGraphics2D library on the runtime class path.
+GRAL loads it reflectively, so it compiles and runs without it; a vector format
+then fails at the moment it is written, not at start-up.
 
 Extending GRAL
 ==============
@@ -686,151 +930,207 @@ interface to tailor it for your requirements.
 Writing a new plot type
 -----------------------
 
-``Plot`` class, ``DataListener`` interface.
+A plot derives from ``AbstractPlot``, which already provides the axes, the
+column-to-axis mapping, the title, the legend and the layout. Two things have to
+be supplied: a ``PlotArea`` subclass that knows how to draw the data, and the
+axes the plot uses. ``AbstractPlot`` implements ``DataListener`` and registers
+itself on every data source that is added, so a plot is notified of changes to
+its data without any further work.
 
 .. code:: java
 
-    public class MyPlot extends Plot implements DataListener {
-        private double mySetting;
+    public class MyPlot extends AbstractPlot {
+        /** Name of the horizontal axis of this plot type. */
+        public static final String AXIS_X = "x";
 
-        public MyPlot(DataSource data) {
+        public MyPlot(DataSource... data) {
             super(data);
-            mySetting = 1.0;
-            ...
-            dataChanged(data);
-            data.addDataListener(this);
+            setPlotArea(new MyPlotArea(this));
+            for (DataSource source : data) {
+                setMapping(source, AXIS_X);
+            }
+            createDefaultAxes();
+            autoscaleAxes();
         }
 
         @Override
-        public void dataChanged(DataSource data) {
-            ...
+        protected void dataChanged(DataSource source, DataChangeEvent... events) {
+            super.dataChanged(source, events);
+            autoscaleAxes();
         }
     }
+
+Note that ``DataListener`` has three methods -- ``dataAdded``, ``dataUpdated``
+and ``dataRemoved``, each taking a ``DataSource`` and a varargs array of
+``DataChangeEvent`` -- so it cannot be implemented with a lambda. Overriding the
+``dataChanged`` hook of ``AbstractPlot``, as above, covers all three at once.
+
+Before reaching for a new plot type, consider whether a new ``PointRenderer``
+is enough: ``BarPlot`` and ``BoxPlot`` are both ordinary xy-plots that differ
+from a scatter plot only in the renderer they use.
 
 Writing a data importer
 -----------------------
 
-``DataReaderFactory`` and ``DataReader``.
+A reader derives from ``AbstractDataReader``, which handles the MIME type and
+the settings, and implements the single method ``read``. Its capabilities are
+announced in a static initializer, which is how the factory can list the format
+without loading a file first:
 
 .. code:: java
 
-    public class MyReader extends IOCapabilitiesStorage implements DataReader {
+    public class MyReader extends AbstractDataReader {
         static {
             addCapabilities(new IOCapabilities(
                 "My Format",
                 "My custom file format",
                 "application/x-myformat",
-                "myf"
+                new String[] {"myf"}
             ));
         }
 
-        private final Map<String, Object> settings;
-        private final Map<String, Object> defaults;
-        private final String mimeType;
-
         public MyReader(String mimeType) {
-            this.mimeType = mimeType;
-            settings = new HashMap<String, Object>();
-            defaults = new HashMap<String, Object>();
-            defaults.put("my setting", "foobar");
+            super(mimeType);
+            setDefault("my setting", "foobar");
         }
 
         @Override
         public DataSource read(InputStream input, Class<? extends Comparable<?>>... types)
-                throws IOException, ParseException;
-            ...
-        }
-
-        /**
-         * Returns the MIME type.
-         * @return MIME type string.
-         */
-        public String getMimeType() {
-            return mimeType;
-        }
-
-        @Override
-        public <T> T getSetting(String key) {
-            if (!settings.containsKey(key)) {
-                return (T) defaults.get(key);
-            }
-            return (T) settings.get(key);
-        }
-
-        @Override
-        public <T> void setSetting(String key, T value) {
-            settings.put(key, value);
+                throws IOException {
+            String setting = this.<String>getSetting("my setting");
+            DataTable data = new DataTable(types);
+            // Read the values from the stream and add them to the table ...
+            return data;
         }
     }
+
+The class alone is not enough: the factory builds its mapping from properties
+files on the class path, so the format also has to be registered by adding a
+line to ``datareaders.properties``::
+
+    application/x-myformat=com.example.MyReader
+
+All copies of that file that are visible on the class path are read, so a
+separate JAR can contribute formats without any change to GRAL itself. After
+that, the new format is available like any other:
+
+.. code:: java
+
+    DataReader reader = DataReaderFactory.getInstance().get("application/x-myformat");
 
 Writing a data exporter
 -----------------------
 
-``DataWriterFactory`` and ``DataWriter``.
+A writer works the same way, deriving from ``AbstractDataWriter`` and
+implementing ``write``:
 
 .. code:: java
 
-    public class MyWriter extends IOCapabilitiesStorage implements DataWriter {
+    public class MyWriter extends AbstractDataWriter {
         static {
             addCapabilities(new IOCapabilities(
                 "My Format",
                 "My custom file format",
                 "application/x-myformat",
-                "myf"
+                new String[] {"myf"}
             ));
         }
 
-        private final Map<String, Object> settings;
-        private final Map<String, Object> defaults;
-        private final String mimeType;
-
         public MyWriter(String mimeType) {
-            this.mimeType = mimeType;
-            settings = new HashMap<String, Object>();
-            defaults = new HashMap<String, Object>();
-            defaults.put("my setting", "foobar");
+            super(mimeType);
+            setDefault("my setting", "foobar");
         }
 
         @Override
         public void write(DataSource data, OutputStream output) throws IOException {
-            ...
+            // Write the values of the data source to the stream ...
+        }
+    }
+
+It is registered in ``datawriters.properties``::
+
+    application/x-myformat=com.example.MyWriter
+
+Writing a plot exporter
+-----------------------
+
+Writers for whole plots implement ``DrawableWriter`` and are looked up through
+``DrawableWriterFactory``. The two shipped implementations show the two
+approaches: ``BitmapWriter`` renders into a ``BufferedImage`` and encodes it
+with ``javax.imageio``, while ``VectorWriter`` passes a ``Graphics2D`` that
+records its commands and turns them into a vector document.
+
+The recurring detail is the bounds: a writer sets the bounds of the drawable to
+the requested size, draws it, and restores the previous bounds, so that
+exporting does not disturb a plot that is also on screen.
+
+.. code:: java
+
+    public class MyDrawableWriter extends IOCapabilitiesStorage implements DrawableWriter {
+        static {
+            addCapabilities(new IOCapabilities(
+                "My Format",
+                "My custom vector format",
+                "application/x-mydrawable",
+                new String[] {"myd"}
+            ));
         }
 
-        /**
-         * Returns the MIME type.
-         * @return MIME type string.
-         */
+        private final String mimeType;
+
+        public MyDrawableWriter(String mimeType) {
+            this.mimeType = mimeType;
+        }
+
+        @Override
         public String getMimeType() {
             return mimeType;
         }
 
         @Override
-        public <T> T getSetting(String key) {
-            if (!settings.containsKey(key)) {
-                return (T) defaults.get(key);
-            }
-            return (T) settings.get(key);
+        public void write(Drawable d, OutputStream destination,
+                double width, double height) throws IOException {
+            write(d, destination, 0.0, 0.0, width, height);
         }
 
         @Override
-        public <T> void setSetting(String key, T value) {
-            settings.put(key, value);
+        public void write(Drawable d, OutputStream destination,
+                double x, double y, double width, double height) throws IOException {
+            Rectangle2D boundsOld = d.getBounds();
+            d.setBounds(x, y, width, height);
+            try {
+                // Draw the plot and write the result to the stream. Check
+                // context.getTarget() in your renderers if the distinction
+                // between raster and vector output matters.
+                d.draw(new DrawingContext(graphics, Quality.QUALITY, Target.VECTOR));
+            } finally {
+                d.setBounds(boundsOld);
+            }
         }
     }
 
-Writing a plot exporter
------------------------
+The format is registered in ``drawablewriters.properties``::
 
-``DrawableWriterFactory`` and ``DrawableWriter``. Either ``BitmapWriter`` or
-``VectorWriter``.
+    application/x-mydrawable=com.example.MyDrawableWriter
+
+Note that the factory instantiates a writer through a constructor taking the
+MIME type as its only argument, so that one class can serve several formats;
+that constructor has to exist.
 
 Limitations
 ===========
 
-Due to its early stage of development, GRAL still has several limitations:
+GRAL has not reached version 1.0, and a few limitations are worth knowing about
+before you commit to it:
 
-- At the moment it's not very fast for large data sets
+- Rendering is not optimized for very large data sets. Every visible point is
+  projected and drawn on each repaint, so plots of hundreds of thousands of
+  points are noticeably slow to pan and zoom.
 
-- The API isn't stable yet, and major changes can happen before version 1.0
+- The API is not stable yet. Names and signatures can still change between
+  releases, and two generations of the filter API currently coexist.
 
-- Despite we try our best to ensure code quality there can always be bugs
+- Sorting a data source does not fire a change notification, so a plot that is
+  already on screen has to be repainted by the caller.
+
+- Despite our best efforts to ensure code quality, there can always be bugs.

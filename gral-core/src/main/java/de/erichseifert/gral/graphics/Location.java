@@ -23,7 +23,16 @@ package de.erichseifert.gral.graphics;
 
 
 /**
- * Indicates the location of components.
+ * <p>One of the nine anchor points of a rectangle: the center, the four edges
+ * and the four corners. Used as the layout constraint of
+ * {@link de.erichseifert.gral.graphics.layout.EdgeLayout} and
+ * {@link de.erichseifert.gral.graphics.layout.OuterEdgeLayout}, and to position
+ * a plot legend.</p>
+ *
+ * <p>Each constant also carries the alignment it stands for as two numbers
+ * between 0 and 1, where 0 is left or top and 1 is right or bottom. For
+ * example, {@link #SOUTH_EAST} has a horizontal alignment of 1.0 and a vertical
+ * alignment of 1.0.</p>
  */
 public enum Location {
 	/** Central location. */
@@ -61,14 +70,16 @@ public enum Location {
 	}
 
 	/**
-	 * Returns the horizontal alignment as a double value.
+	 * Returns the horizontal alignment this location stands for: 0.0 at the
+	 * left edge, 0.5 in the middle, 1.0 at the right edge.
 	 * @return horizontal alignment
 	 */
 	public double getAlignmentH() {
 		return alignH;
 	}
 	/**
-	 * Returns the vertical alignment as a double value.
+	 * Returns the vertical alignment this location stands for: 0.0 at the top
+	 * edge, 0.5 in the middle, 1.0 at the bottom edge.
 	 * @return vertical alignment
 	 */
 	public double getAlignmentV() {

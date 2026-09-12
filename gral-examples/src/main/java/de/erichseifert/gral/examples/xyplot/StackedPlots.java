@@ -38,6 +38,14 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
+/**
+ * <p>Two plots above each other that pan and zoom together.</p>
+ *
+ * <p>Shows how {@link de.erichseifert.gral.navigation.Navigator#connect(
+ * de.erichseifert.gral.navigation.Navigator)} links the navigators of two
+ * plots, and how a {@link de.erichseifert.gral.graphics.layout.TableLayout}
+ * arranges several drawables in one container.</p>
+ */
 public class StackedPlots extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 6832343098989019088L;
@@ -45,6 +53,9 @@ public class StackedPlots extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	/**
+	 * Creates the example and both of its plots.
+	 */
 	@SuppressWarnings("unchecked")
 	public StackedPlots() {
 		// Generate data
@@ -101,6 +112,10 @@ public class StackedPlots extends ExamplePanel {
 		return "An area and a line plot with synchronized actions.";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new StackedPlots().showInFrame();
 	}

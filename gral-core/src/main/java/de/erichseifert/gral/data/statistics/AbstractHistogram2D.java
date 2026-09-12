@@ -30,9 +30,15 @@ import de.erichseifert.gral.data.DataListener;
 import de.erichseifert.gral.data.DataSource;
 
 /**
- * Abstract base class for histograms. Derived classes must
- * make sure the {@code getColumnTypes()} method returns a correct array
- * with column types.
+ * <p>Base class of the data-source-shaped histograms. It stores the data source
+ * being aggregated and registers as a listener on it, so the counts are
+ * recomputed when the underlying data changes.</p>
+ *
+ * <p>A subclass has to declare its own columns, since they are the bins and
+ * therefore not known here; see
+ * {@link AbstractDataSource#setColumnTypes(Class...)}.
+ * {@link Histogram2D} is the implementation.</p>
+ *
  * @see AbstractDataSource#setColumnTypes(Class...)
  */
 public abstract class AbstractHistogram2D extends AbstractDataSource

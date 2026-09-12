@@ -26,13 +26,26 @@ import java.util.List;
 import de.erichseifert.gral.data.comparators.DataComparator;
 
 /**
- * <p>Interface for write access to tabular data. The access includes adding,
- * modifying, and deleting of the data.</p>
- * <p>All data can be sorted row-wise with the method
- * {@code sort(DataComparator...)}. For example, this way column 1 could be
- * sorted ascending and column 3 descending.
+ * <p>A {@link DataSource} that can also be written to: rows can be added and
+ * removed, individual cells can be changed, and the rows can be sorted.</p>
+ *
+ * <p>Rows are always appended and removed as a whole; the set of columns is
+ * fixed when the source is created. Every value must match the declared type of
+ * its column, or an {@code IllegalArgumentException} is thrown. Each successful
+ * modification notifies the registered
+ * {@link DataListener}s, which is what makes a displayed plot follow the
+ * data.</p>
+ *
+ * <pre>
+ * DataTable data = new DataTable(Double.class, String.class);
+ * data.add(1.0, "one");
+ * data.add(2.0, "two");
+ * data.set(1, 0, "uno");                 // column 1, row 0
+ * data.sort(new Ascending(0), new Descending(1));
+ * </pre>
  *
  * @see DataSource
+ * @see DataTable
  */
 public interface MutableDataSource extends DataSource {
 	/**
@@ -80,25 +93,30 @@ public interface MutableDataSource extends DataSource {
 	void clear();
 
 	/**
-	 * Sets the value of a cell specified by its column and row indexes.
+	 * Sets the value of a cell specified by its column and row indexes. Note
+	 * that the column index comes first. Setting a cell to the value it already
+	 * holds changes nothing and fires no notification.
 	 * @param <T> Data type of the cell.
 	 * @param col Column of the cell to change.
 	 * @param row Row of the cell to change.
 	 * @param value New value to be set.
-	 * @return Old value that was replaced.
+	 * @return Old value that was replaced, possibly {@code null}.
 	 */
 	<T> Comparable<T> set(int col, int row, Comparable<T> value);
 
 	/**
-	 * Sorts the data sink rows with the specified sorting rules. The row
-	 * values are compared in the way the comparators are specified.
+	 * Sorts the rows in place. The first comparator decides the order; each
+	 * following one is only consulted for rows the previous ones considered
+	 * equal. Passing no comparator leaves the order unchanged. Sorting does not
+	 * fire a change notification.
 	 * @param comparators Comparators used for sorting.
 	 */
 	void sort(final DataComparator... comparators);
 
 	/**
-	 * Sets the name of this series.
-	 * @param name name to be set
+	 * Sets the name of this data source. Legends display this name for the
+	 * series they show.
+	 * @param name name to be set, or {@code null} for no name
 	 */
 	void setName(String name);
 }

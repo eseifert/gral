@@ -27,17 +27,29 @@ import java.util.Set;
 import de.erichseifert.gral.util.PointND;
 
 /**
- * Abstract base class that can be used to control the zoom and panning of an
- * object. The navigator translates actions to operations on the object.
- * The class provides implementations for zooming using a zoom factor,
- * management of listeners, getting and setting a main direction for actions,
- * and synchronizing actions with another navigator.
+ * <p>Base class for {@link Navigator} implementations. It provides everything
+ * that does not depend on the navigated object: the zoom factor and its limits,
+ * the {@code zoomable} and {@code pannable} flags, the current
+ * {@link NavigationDirection}, the listener list, and the connection to other
+ * navigators.</p>
  *
- * Derived classes must use the methods
+ * <p>A subclass supplies the object-specific part &mdash; reading and writing
+ * the actual zoom level and center of view, and the default state to return to
+ * on {@link Navigator#reset()}. {@link de.erichseifert.gral.plots.PlotNavigator}
+ * does that for plots by changing the ranges of their axes.</p>
+ *
+ * <p>Changes have to be announced with
  * {@link #fireCenterChanged(NavigationEvent)} and
- * {@link #fireZoomChanged(NavigationEvent)} to notify listeners of changes to
- * the center or zoom level. To avoid loop states these methods must only be
- * called if a value has really been changed.
+ * {@link #fireZoomChanged(NavigationEvent)}, and <em>only</em> when a value has
+ * really changed. Calling them unconditionally makes two connected navigators
+ * notify each other back and forth without end.</p>
+ *
+ * <p>{@link Navigator#zoomIn()} and {@link Navigator#zoomOut()} multiply and
+ * divide the current zoom level by the zoom factor, which defaults to
+ * {@link #DEFAULT_ZOOM_FACTOR}. The allowed range of zoom levels is held here
+ * as well, initially {@link #DEFAULT_ZOOM_MIN} to {@link #DEFAULT_ZOOM_MAX},
+ * but it is the subclass that has to clamp to it when it applies a new
+ * level.</p>
  */
 public abstract class AbstractNavigator implements Navigator {
 	/** Default zoom factor. */
@@ -65,8 +77,8 @@ public abstract class AbstractNavigator implements Navigator {
 	private NavigationDirection direction;
 
 	/**
-	 * Initializes a new instance that is responsible for zooming and panning
-	 * the axes with the specified names of the specified plot.
+	 * Initializes a new navigator with the default zoom factor and limits, with
+	 * zooming and panning both enabled and no direction restriction.
 	 */
 	public AbstractNavigator() {
 		navigationListeners = new HashSet<>();

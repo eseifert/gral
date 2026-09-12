@@ -27,19 +27,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Abstract class that represents a view on several rows of a data source.
- * Implementations must implement the method {@code accept(Row)} which
- * decides whether a specific row should be contained in this filtered data
- * source.</p>
+ * <p>A view that hides some of the rows of another data source. Subclasses
+ * implement {@link #accept(Row)} to decide, row by row, which rows the view
+ * contains. The columns are unchanged.</p>
  *
  * <p>Example that keeps only every second row:</p>
  * <pre>
- * DataSource filtered = new RowSubset() {
+ * DataSource filtered = new RowSubset(data) {
  *     public boolean accept(Row row) {
  *         return row.getIndex()%2 == 0;
  *     }
  * };
  * </pre>
+ *
+ * <p>The view listens to the original data source and re-evaluates
+ * {@code accept} for every row whenever the data changes, so it stays in step
+ * with the source. The decision must therefore depend only on the row that is
+ * passed in; it must not, for instance, count how often it has been called.</p>
+ *
+ * <p>The row indexes of the view are its own: row 0 of the view is the first
+ * accepted row of the original, whatever index it had there. Note that this is
+ * one of the few places where an anonymous class is still required, since
+ * {@code RowSubset} is a class and not a functional interface.</p>
  */
 public abstract class RowSubset extends AbstractDataSource
 		implements DataListener {
@@ -52,7 +61,9 @@ public abstract class RowSubset extends AbstractDataSource
 	private transient List<Integer> accepted;
 
 	/**
-	 * Creates a new instance with the specified data source.
+	 * Creates a new instance with the specified data source. The constructor
+	 * already evaluates {@link #accept(Row)} for every row, so a subclass must
+	 * not rely on its own fields being initialized at that point.
 	 * @param original DataSource to be filtered.
 	 */
 	@SuppressWarnings("unchecked")

@@ -28,7 +28,16 @@ import javax.swing.JFileChooser;
 import de.erichseifert.gral.io.IOCapabilities;
 
 /**
- * A file chooser implementation that can be for export purposes.
+ * <p>A {@code JFileChooser} whose file filters are built from a list of
+ * {@link de.erichseifert.gral.io.IOCapabilities}, one filter per format. This is
+ * the chooser {@link InteractivePanel} opens for its export action, passing the
+ * capabilities that
+ * {@link de.erichseifert.gral.io.plots.DrawableWriterFactory} reports, so the
+ * list of choices follows the registered formats rather than being
+ * hard-coded.</p>
+ *
+ * <p>Passing {@code true} for {@code strict} in the constructor removes the
+ * "all files" option, so that only one of those formats can be chosen.</p>
  */
 public class ExportChooser extends JFileChooser {
 	/** Version id for serialization. */

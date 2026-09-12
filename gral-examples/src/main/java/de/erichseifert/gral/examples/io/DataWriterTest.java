@@ -32,9 +32,20 @@ import de.erichseifert.gral.io.data.DataWriter;
 import de.erichseifert.gral.io.data.DataWriterFactory;
 
 
+/**
+ * <p>Writes a data source to standard output as comma separated values.</p>
+ *
+ * <p>Shows the use of
+ * {@link de.erichseifert.gral.io.data.DataWriterFactory}: the format is chosen
+ * by MIME type, so the same code writes a different format by passing a
+ * different type.</p>
+ */
 public class DataWriterTest {
 	private final DataTable data;
 
+	/**
+	 * Creates the example and writes the data.
+	 */
 	@SuppressWarnings("unchecked")
 	public DataWriterTest() {
 		data = new DataTable(Double.class, Double.class, Double.class, Double.class);
@@ -44,6 +55,11 @@ public class DataWriterTest {
 		data.add(4.0, 4.7, 4.5, 4.3);
 	}
 
+	/**
+	 * Asks for a file name and writes the data source to that file as comma
+	 * separated values.
+	 * @throws IOException if the file could not be written.
+	 */
 	public void save() throws IOException {
 		var chooser = new JFileChooser();
 		int option = chooser.showSaveDialog(null);
@@ -55,6 +71,10 @@ public class DataWriterTest {
 		}
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		var test = new DataWriterTest();
 		try {

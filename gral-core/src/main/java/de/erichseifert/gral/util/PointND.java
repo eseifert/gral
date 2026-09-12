@@ -27,7 +27,26 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 
 /**
- * Class for storing n-dimensional points.
+ * <p>A point with an arbitrary number of dimensions. The AWT offers only
+ * {@code Point2D}, but axis renderers in GRAL are not restricted to two
+ * dimensions, so positions are passed around as this type.</p>
+ *
+ * <pre>
+ * PointND&lt;Double&gt; p = new PointND&lt;&gt;(1.0, 2.0);
+ * double x = p.get(PointND.X);
+ * double y = p.get(PointND.Y);
+ * Point2D awt = p.getPoint2D();   // for handing over to Java 2D
+ * </pre>
+ *
+ * <p>{@link #X}, {@link #Y} and {@link #Z} are just the constants 0, 1 and 2,
+ * spelled out for readability. There is no check that a point actually has that
+ * many dimensions, so reading past the end throws
+ * {@code ArrayIndexOutOfBoundsException}.</p>
+ *
+ * <p>In contrast to most value types in this package a point is mutable:
+ * {@link #set(int, Number)} and {@link #setLocation(Number...)} change it in
+ * place.</p>
+ *
  * @param <T> Data type of the coordinates.
  */
 public class PointND<T extends Number> implements Serializable {
@@ -45,8 +64,9 @@ public class PointND<T extends Number> implements Serializable {
 	private final T[] coordinates;
 
 	/**
-	 * Constructor that initializes the point with a list of coordinates.
-	 * @param coordinates Coordinate values.
+	 * Initializes a point with the specified coordinates. The number of values
+	 * given is the number of dimensions the point has; the array is copied.
+	 * @param coordinates Coordinate values, one per dimension.
 	 */
 	public PointND(T... coordinates) {
 		this.coordinates = Arrays.copyOf(coordinates, coordinates.length);

@@ -31,6 +31,14 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
+/**
+ * <p>A scatter plot of random points.</p>
+ *
+ * <p>The smallest complete {@link de.erichseifert.gral.plots.XYPlot} example:
+ * fill a {@link de.erichseifert.gral.data.DataTable}, hand it to the plot, and
+ * display the plot in an
+ * {@link de.erichseifert.gral.ui.InteractivePanel}.</p>
+ */
 public class ScatterPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -412699430625953887L;
@@ -39,6 +47,9 @@ public class ScatterPlot extends ExamplePanel {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public ScatterPlot() {
 		// Generate 100,000 data points
@@ -71,6 +82,10 @@ public class ScatterPlot extends ExamplePanel {
 		return String.format("Scatter plot with %d data points", SAMPLE_COUNT);
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new ScatterPlot().showInFrame();
 	}

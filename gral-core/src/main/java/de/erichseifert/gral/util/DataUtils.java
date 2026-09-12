@@ -25,8 +25,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract class that contains utility functions for creating data structures
- * and for working with data sources and values.
+ * <p>Small conversions between arrays, lists and maps, and null-safe access to
+ * numbers. The class is not meant to be instantiated.</p>
+ *
+ * <p>{@link #getValueOrDefault(Number, double)} is the one that appears most
+ * often in the library: it turns a {@code Number} that may be {@code null} into
+ * a {@code double}, substituting a fallback. Renderers use it with
+ * {@code Double.NaN} so that an empty cell propagates as "not a number" rather
+ * than throwing.</p>
+ *
+ * <pre>
+ * double value = DataUtils.getValueOrDefault((Number) row.get(col), Double.NaN);
+ * if (!MathUtils.isCalculatable(value)) {
+ *     return null;   // nothing to draw for this row
+ * }
+ * </pre>
  */
 public abstract class DataUtils {
 	/**

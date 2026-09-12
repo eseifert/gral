@@ -72,10 +72,11 @@ import de.erichseifert.gral.util.PointND;
 
 
 /**
- * <p>Class that displays data in an two dimensional coordinate system
- * (x-y plot). It also serves as a base class for many other plot types.</p>
- * <p>To create a new {@code XYPlot} simply create a new instance
- * using one or more data sources. Example:</p>
+ * <p>Data drawn in a two-dimensional Cartesian coordinate system. Each data
+ * source contributes one series, whose first mapped column is the x coordinate
+ * and whose second is the y coordinate. This is also the base class of
+ * {@link BarPlot}, {@link BoxPlot} and {@link RasterPlot}.</p>
+ *
  * <pre>
  * DataTable data = new DataTable(Integer.class, Integer.class);
  * data.add( 1, 2);
@@ -83,6 +84,27 @@ import de.erichseifert.gral.util.PointND;
  *
  * XYPlot plot = new XYPlot(data);
  * </pre>
+ *
+ * <p>Every series added this way starts out with a point renderer only, so the
+ * plot shows marks but no connecting line. Lines and filled areas are switched
+ * on by giving the series a renderer:</p>
+ * <pre>
+ * plot.setLineRenderers(data, new DefaultLineRenderer2D());
+ * plot.setAreaRenderers(data, new DefaultAreaRenderer2D());
+ * </pre>
+ * <p>Each of the three layers accepts several renderers for one series, which
+ * are drawn in the order given. Areas are drawn first, then lines, then
+ * points.</p>
+ *
+ * <p>Four axes are available by name: {@link #AXIS_X} and {@link #AXIS_Y} are
+ * created and mapped for every series that is added, while {@link #AXIS_X2} and
+ * {@link #AXIS_Y2} exist for secondary scales and are only drawn once a series
+ * is mapped to them with
+ * {@link #setMapping(de.erichseifert.gral.data.DataSource, String...)}.</p>
+ *
+ * <p>An {@code XYPlot} is {@link Navigable}: its
+ * {@link XYPlot.XYPlotNavigator} zooms and pans by changing the axis ranges,
+ * and {@link XYPlot.XYNavigationDirection} restricts that to one direction.</p>
  */
 public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	/** Version id for serialization. */

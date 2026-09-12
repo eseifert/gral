@@ -39,6 +39,15 @@ import de.erichseifert.gral.plots.colors.LinearGradient;
 import de.erichseifert.gral.ui.InteractivePanel;
 
 
+/**
+ * <p>A pie plot whose data changes while it is displayed, driven by a
+ * slider.</p>
+ *
+ * <p>Shows that a plot follows its data source: adding and removing rows of the
+ * {@link de.erichseifert.gral.data.DataTable} is enough to update the pie, no
+ * repaint call is needed. Also demonstrates the inner radius, which turns the
+ * pie into a ring, and how negative values leave their slice empty.</p>
+ */
 public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 6216017404657972412L;
@@ -51,6 +60,9 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 	private final PiePlot plot;
 	private final JSlider valueCountSlider;
 
+	/**
+	 * Creates the example, its plot and the slider that drives it.
+	 */
 	@SuppressWarnings("unchecked")
 	public DynamicPiePlot() {
 		// Create initial data
@@ -120,6 +132,10 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		}
 	}
 
+	/**
+	 * Reacts to a movement of the slider by changing the number of data values.
+	 * @param e Event describing the change.
+	 */
 	public void stateChanged(ChangeEvent e) {
 		Object source = e.getSource();
 		if (source == valueCountSlider) {
@@ -129,6 +145,10 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		}
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new DynamicPiePlot().showInFrame();
 	}

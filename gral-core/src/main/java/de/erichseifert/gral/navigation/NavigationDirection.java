@@ -22,8 +22,18 @@
 package de.erichseifert.gral.navigation;
 
 /**
- * Marker interface for implementation specific navigation direction,
- * such as horizontal, vertical for two dimensional objects.
+ * <p>Marker interface for the directions in which an object can be zoomed and
+ * panned. The set of directions depends on the object, so each implementation
+ * defines its own, usually as an enum:
+ * {@link de.erichseifert.gral.plots.XYPlot.XYNavigationDirection} offers
+ * {@code HORIZONTAL}, {@code VERTICAL} and {@code ARBITRARY}.</p>
+ *
+ * <pre>
+ * navigator.setDirection(XYPlot.XYNavigationDirection.HORIZONTAL);
+ * </pre>
+ *
+ * <p>Passing a direction that the navigator does not recognize causes an
+ * {@code IllegalArgumentException}.</p>
  */
 public interface NavigationDirection {
 }

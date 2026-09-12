@@ -41,18 +41,36 @@ import de.erichseifert.gral.util.StatefulTokenizer.Token;
 
 
 /**
- * <p>Class that creates a {@code DataSource} from file contents which are
- * separated by a certain delimiter character. The delimiter is chosen based on
- * the file type but can also be set manually. By default the comma character
- * will be used as a delimiter for separating columns.</p>
- * <p>{@code CSVReader} instances should be obtained by the
- * {@link DataReaderFactory} rather than being created manually:</p>
+ * <p>Reads a {@link de.erichseifert.gral.data.DataSource} from a text file
+ * whose values are separated by a delimiter character. The delimiter follows
+ * from the MIME type &mdash; a comma for {@code text/csv}, a tab for
+ * {@code text/tab-separated-values} &mdash; and can be overridden with the
+ * {@link #SEPARATOR_CHAR} setting.</p>
+ *
+ * <p>Instances should be obtained from the {@link DataReaderFactory} rather
+ * than created directly:</p>
  * <pre>
  * DataReaderFactory factory = DataReaderFactory.getInstance();
  * DataReader reader = factory.get("text/csv");
- * reader.read(new FileInputStream(filename), Integer.class, Double.class);
+ * DataSource data = reader.read(
+ *     new FileInputStream(filename), Integer.class, Double.class);
  * </pre>
+ *
+ * <p>The file carries no type information, so the column types are given by the
+ * caller and every cell is converted accordingly. The conversion uses a static
+ * {@code parse…(String)} method of the column type, for example
+ * {@code Integer.parseInt} or {@code Double.parseDouble}; {@code String}
+ * columns are taken verbatim. Surrounding whitespace is trimmed, and an empty
+ * cell becomes {@code null}.</p>
+ *
+ * <p>Every line must hold exactly as many values as there are column types, or
+ * an {@code IllegalArgumentException} is thrown; a value that does not parse
+ * raises an {@code IOException} naming the line and column. Values may be
+ * enclosed in double quotes, which is how a value containing the delimiter, a
+ * quote or a line break is represented.</p>
+ *
  * @see <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
+ * @see CSVWriter
  */
 public class CSVReader extends AbstractDataReader {
 	/** Key for specifying a {@link Character} value that defines the

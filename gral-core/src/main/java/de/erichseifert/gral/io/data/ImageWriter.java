@@ -37,8 +37,25 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that writes a data source to a binary image file. This class
- * shouldn't be used directly but using the {@link DataWriterFactory}.
+ * <p>Writes a {@link de.erichseifert.gral.data.DataSource} as a grayscale
+ * bitmap image, one pixel per cell: the value of a cell becomes the brightness
+ * of its pixel. This is the counterpart of {@link ImageReader}.</p>
+ *
+ * <p>Instances should be obtained from the {@link DataWriterFactory}:</p>
+ * <pre>
+ * DataWriter writer = DataWriterFactory.getInstance().get("image/png");
+ * writer.setSetting("factor", 255.0);   // values in 0..1 become 0..255
+ * try (OutputStream out = new FileOutputStream("image.png")) {
+ *     writer.write(data, out);
+ * }
+ * </pre>
+ *
+ * <p>Each value is multiplied by the {@code factor} setting, shifted by
+ * {@code offset}, and then clamped to the range from 0 to 255, so values
+ * outside it are not an error but are flattened to black or white.
+ * Non-numeric cells are skipped, which shifts the remaining pixels. To write a
+ * plot rather than data, use
+ * {@link de.erichseifert.gral.io.plots.BitmapWriter}.</p>
  */
 public class ImageWriter extends AbstractDataWriter {
 	static {

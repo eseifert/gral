@@ -31,7 +31,21 @@ import java.util.List;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Maps index values to a specified color palette.
+ * <p>An {@link IndexedColorMapper} over an explicit palette: index 0 gets the
+ * first color, index 1 the second, and so on. This is the mapper to use when
+ * the colors are prescribed, for example by a house style.</p>
+ *
+ * <pre>
+ * IndexedColors colors = new IndexedColors(
+ *     new Color(0x1f, 0x77, 0xb4),
+ *     new Color(0xff, 0x7f, 0x0e),
+ *     new Color(0x2c, 0xa0, 0x2c));
+ * </pre>
+ *
+ * <p>Indexes beyond the end of the palette are handled according to the
+ * {@link ColorMapper.Mode}, which defaults to {@link ColorMapper.Mode#REPEAT}
+ * and therefore clamps to the first or last color. Set
+ * {@link ColorMapper.Mode#CIRCULAR} to cycle through the palette instead.</p>
  */
 public class IndexedColors extends IndexedColorMapper {
 	/** Version id for serialization. */

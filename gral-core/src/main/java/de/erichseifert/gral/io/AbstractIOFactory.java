@@ -37,8 +37,25 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Abstract implementation of {@code IOFactory} which provides basic
- * functionality.
+ * <p>Base class of the format factories. It builds its MIME type to class
+ * mapping by reading every properties file of a given name that is visible on
+ * the class path, and instantiating the named classes by reflection.</p>
+ *
+ * <p>Each line of such a file maps one MIME type to one class name:</p>
+ * <pre>
+ * text/csv=de.erichseifert.gral.io.data.CSVReader
+ * </pre>
+ *
+ * <p>Because all copies of the file on the class path are read, a separate JAR
+ * can contribute formats without any change to GRAL. Adding a format therefore
+ * means writing the class <em>and</em> adding a line to the matching properties
+ * file &mdash; {@code datareaders.properties},
+ * {@code datawriters.properties} or {@code drawablewriters.properties}.</p>
+ *
+ * <p>Capabilities are read reflectively as well, by calling the static
+ * {@code getCapabilities()} that every reader and writer inherits from
+ * {@link IOCapabilitiesStorage}. That is what lets the factory list the
+ * supported formats without a file being opened first.</p>
  *
  * @param <T> The type of objects which should be produced by this factory
  */

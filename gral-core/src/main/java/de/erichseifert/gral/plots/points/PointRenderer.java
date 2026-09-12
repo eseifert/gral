@@ -32,13 +32,33 @@ import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.graphics.Location;
 
 /**
- * <p>An interface providing functions for rendering points in a plot.
- * It defines methods for:</p>
- * <ul>
- *   <li>Retrieving the point of a certain row in a DataTable</li>
- *   <li>Getting and setting the points color</li>
- *   <li>Getting and setting the bounds of the points</li>
- * </ul>
+ * <p>Draws the individual data points of a series. A plot asks the renderer,
+ * once per row, for the {@code Shape} of the point and then for a
+ * {@link Drawable} that paints it; the row and the axes needed to project it
+ * arrive as a {@link PointData}.</p>
+ *
+ * <pre>
+ * DefaultPointRenderer2D points = new DefaultPointRenderer2D();
+ * points.setShape(new Ellipse2D.Double(-3.0, -3.0, 6.0, 6.0));
+ * points.setColor(Color.RED);
+ * plot.setPointRenderers(series, points);
+ * </pre>
+ *
+ * <p>Shapes are expressed in the coordinate system of the point, with
+ * (0,&nbsp;0) at the data point itself, which is why the ellipse above is
+ * offset by half its size in order to be centered. The plot translates the
+ * shape to the projected position before it is drawn.</p>
+ *
+ * <p>The color is a {@link ColorMapper} rather than a single {@code Paint}, so
+ * that it may depend on the value; {@link #setColor(Paint)} is the shortcut for
+ * a constant color. A renderer may return {@code null} from
+ * {@link #getPointShape(PointData)} to skip a row, which is what happens for
+ * values that fall outside the range of a color mapper in {@code OMIT}
+ * mode.</p>
+ *
+ * <p>One renderer instance is shared by all rows of a series, so it must not
+ * keep per-point state. Implementations normally extend
+ * {@link AbstractPointRenderer}.</p>
  */
 public interface PointRenderer {
 	/**

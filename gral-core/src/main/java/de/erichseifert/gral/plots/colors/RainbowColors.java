@@ -27,7 +27,19 @@ import java.awt.Paint;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that generates the colors of a rainbow.
+ * <p>A gradient that sweeps through the hues of the color wheel for values
+ * between 0.0 and 1.0, at full saturation and brightness.</p>
+ *
+ * <pre>
+ * RainbowColors colors = new RainbowColors();
+ * colors.setRange(0.0, 1.0);
+ * </pre>
+ *
+ * <p>The hues are easy to tell apart but their perceived brightness does not
+ * rise with the value, so the ordering of the colors is not obvious to a
+ * reader and is lost in grayscale. Prefer {@link HeatMap} or
+ * {@link Grayscale} where the values are to be compared rather than merely
+ * distinguished.</p>
  */
 public class RainbowColors extends ScaledContinuousColorMapper {
 	/** Version id for serialization. */

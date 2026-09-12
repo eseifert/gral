@@ -34,7 +34,28 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 /**
- * Data source for database tables accessed through a JDBC connection.
+ * <p>A {@link DataSource} backed by a table of a relational database, read
+ * through a JDBC {@code Connection}. Values are fetched from the database as
+ * they are requested rather than loaded up front, so a large table does not
+ * have to fit in memory.</p>
+ *
+ * <pre>
+ * Connection connection = DriverManager.getConnection(url, user, password);
+ * DataSource data = new JdbcData(connection, "measurements");
+ * XYPlot plot = new XYPlot(new DataSeries(data, 0, 1));
+ * </pre>
+ *
+ * <p>The columns and their types are read once from the metadata of the table,
+ * so the table must not change its shape while the data source is in use. The
+ * integer, floating-point, character and date/time SQL types map to the
+ * corresponding Java classes; a column of any other type keeps its position but
+ * has no type, and its values read back as {@code null}.</p>
+ *
+ * <p>The two-argument constructor turns on buffering of the query, which is
+ * what makes sequential access reasonably fast; pass {@code false} to query
+ * each value separately. The connection has to stay open for as long as the
+ * data source is used, and this class is read-only: writing back to the
+ * database is not supported.</p>
  */
 public class JdbcData extends AbstractDataSource {
 	/** Version id for serialization. */

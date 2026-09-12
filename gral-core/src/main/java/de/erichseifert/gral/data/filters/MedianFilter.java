@@ -28,10 +28,35 @@ import java.util.List;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.util.WindowIterator;
 
+/**
+ * <p>A {@link Filter} that replaces each value by the median of a window of
+ * neighboring values. Unlike averaging, this removes isolated outliers without
+ * smearing them over their neighbors, which makes it a good first choice for
+ * spiky data.</p>
+ *
+ * <pre>
+ * for (double smoothed : new MedianFilter&lt;&gt;(values, 3)) {
+ *     …
+ * }
+ * </pre>
+ *
+ * <p>There is no padding at the ends: <i>m</i> input values and a window of
+ * <i>n</i> yield <i>m&nbsp;&minus;&nbsp;n&nbsp;+&nbsp;1</i> results, and none
+ * at all if the input is shorter than the window. Use
+ * {@link Median} if a value is needed for every row of a data source.</p>
+ *
+ * @param <T> Type of the values being filtered.
+ */
 public class MedianFilter<T extends Number & Comparable<T>> implements Filter<T> {
+	/** Filtered values. */
 	private final List<Double> filtered;
 	private final Iterator<List<T>> windowIterator;
 
+	/**
+	 * Initializes a new filter and computes all of its values immediately.
+	 * @param data Values to be filtered.
+	 * @param windowSize Number of values the median is taken over.
+	 */
 	public MedianFilter(Iterable<T> data, int windowSize) {
 		filtered = new LinkedList<>();
 

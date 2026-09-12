@@ -37,8 +37,17 @@ import de.erichseifert.gral.io.AbstractIOFactory;
  * <pre>
  * DrawableWriterFactory factory = DrawableWriterFactory.getInstance();
  * DrawableWriter writer = factory.get("application/pdf");
- * writer.write(plot, new FileOutputStream(filename));
+ * writer.write(plot, new FileOutputStream(filename), 800.0, 600.0);
  * </pre>
+ *
+ * <p>The supported MIME types are the bitmap formats {@code image/png},
+ * {@code image/jpeg}, {@code image/bmp}, {@code image/gif} and
+ * {@code image/vnd.wap.wbmp}, and the vector formats {@code image/svg+xml},
+ * {@code application/pdf} and {@code application/postscript}. The vector
+ * formats additionally need the VectorGraphics2D library at run time; without
+ * it the factory still returns a writer, and the failure only appears when it
+ * is used. Asking for an unsupported type throws
+ * {@code IllegalArgumentException}.</p>
  *
  * @see DrawableWriter
  */

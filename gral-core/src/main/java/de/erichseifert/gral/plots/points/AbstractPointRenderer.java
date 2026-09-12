@@ -42,7 +42,17 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * Abstract class implementing functions for the administration of settings.
+ * <p>Base class for {@link PointRenderer} implementations. It holds the
+ * properties every point renderer has &mdash; the shape, the color mapper, and
+ * everything to do with the optional value label and error bars &mdash; and
+ * leaves the drawing itself to subclasses.</p>
+ *
+ * <p>A subclass implements {@link PointRenderer#getPointShape(PointData)} to
+ * say what the point looks like and
+ * {@link PointRenderer#getPoint(PointData, java.awt.Shape)} to paint it.
+ * Because one instance serves every row of a series, neither may keep
+ * per-point state; everything about the current point arrives in the
+ * {@link PointData}.</p>
  */
 public abstract class AbstractPointRenderer
 		implements PointRenderer, Serializable {

@@ -19,7 +19,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
- * Classes for converting instances of {@code Drawable} to various file formats.
+ * <p>Writing a {@link de.erichseifert.gral.graphics.Drawable} &mdash; usually a
+ * plot &mdash; to an image or document file.</p>
+ *
+ * <pre>
+ * DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/png");
+ * try (OutputStream out = new FileOutputStream("plot.png")) {
+ *     writer.write(plot, out, 800.0, 600.0);
+ * }
+ * </pre>
+ *
+ * <p>The writer sets the bounds of the drawable to the requested size for the
+ * duration of the call and restores them afterwards, so the same plot object
+ * can be displayed on screen and exported at a different size without
+ * interference. No window and no display are involved, which makes this the
+ * path to use on a headless machine.</p>
+ *
+ * <p>{@link de.erichseifert.gral.io.plots.BitmapWriter} renders into a
+ * {@code BufferedImage} and encodes it with {@code javax.imageio}; it handles
+ * {@code image/png} (with transparency), {@code image/jpeg}, {@code image/bmp},
+ * {@code image/gif} and {@code image/vnd.wap.wbmp}.</p>
+ *
+ * <p>{@link de.erichseifert.gral.io.plots.VectorWriter} produces
+ * {@code application/pdf}, {@code application/postscript} (EPS) and
+ * {@code image/svg+xml}. It needs the VectorGraphics2D library at run time and
+ * talks to it purely by reflection: GRAL compiles without it, and a missing
+ * library surfaces as an exception when a vector format is written, not at
+ * class-loading time. Either the original {@code de.erichseifert.vectorgraphics2d}
+ * or the Eclipse SWTChart fork {@code org.eclipse.swtchart.vectorgraphics2d}
+ * will do.</p>
  */
 package de.erichseifert.gral.io.plots;

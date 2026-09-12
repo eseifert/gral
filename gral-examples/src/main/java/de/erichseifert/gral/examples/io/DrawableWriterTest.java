@@ -37,9 +37,20 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
+/**
+ * <p>Renders a plot to image files without opening a window.</p>
+ *
+ * <p>Shows the use of
+ * {@link de.erichseifert.gral.io.plots.DrawableWriterFactory} and that plotting
+ * needs no display: the same plot object is written at whatever size is asked
+ * for, which is how figures are produced on a headless machine.</p>
+ */
 public class DrawableWriterTest {
 	private final XYPlot plot;
 
+	/**
+	 * Creates the example and writes the files.
+	 */
 	@SuppressWarnings("unchecked")
 	public DrawableWriterTest() {
 		var data = new DataTable(Double.class, Double.class, Double.class, Double.class);
@@ -68,6 +79,10 @@ public class DrawableWriterTest {
 		plot.setLineRenderers(s3, lr3);
 	}
 
+	/**
+	 * Asks for a file name and writes the plot to that file as Encapsulated
+	 * PostScript. Errors are reported on the console.
+	 */
 	public void save() {
 		var chooser = new JFileChooser();
 		int option = chooser.showSaveDialog(null);
@@ -82,6 +97,10 @@ public class DrawableWriterTest {
 		}
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		var test = new DrawableWriterTest();
 		test.save();

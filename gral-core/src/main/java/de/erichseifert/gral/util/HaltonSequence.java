@@ -25,7 +25,25 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 /**
- * Class that calculates the values of the Halton sequence.
+ * <p>An endless iterator over the Halton sequence: a quasi-random sequence of
+ * values in the interval [0,&nbsp;1) that fills the interval more evenly than
+ * independent random numbers would, because every new value avoids the gaps
+ * left by the previous ones.</p>
+ *
+ * <pre>
+ * Iterator&lt;Double&gt; sequence = new HaltonSequence(2);
+ * // 0.5, 0.25, 0.75, 0.125, 0.625, …
+ * </pre>
+ *
+ * <p>That property is what makes it useful for choosing colors:
+ * {@link de.erichseifert.gral.plots.colors.QuasiRandomColors} draws hues from
+ * this sequence so that series added one after another stay easy to tell
+ * apart.</p>
+ *
+ * <p>{@link #hasNext()} is always {@code true}; the internal counter wraps
+ * around after {@code Long.MAX_VALUE} steps and the sequence starts over.
+ * Different bases give different sequences, and a base that is a prime number
+ * gives the best spread.</p>
  */
 public class HaltonSequence implements Iterator<Double>, Serializable {
 	/** Version id for serialization. */
@@ -37,15 +55,16 @@ public class HaltonSequence implements Iterator<Double>, Serializable {
 	private long c;
 
 	/**
-	 * Creates a new HaltonSequence object to the base of two.
+	 * Creates a new sequence to the base of two.
 	 */
 	public HaltonSequence() {
 		this(2);
 	}
 
 	/**
-	 * Creates a new instance with the specified base.
-	 * @param base Base value.
+	 * Creates a new sequence with the specified base. Prime numbers give the
+	 * most even spread.
+	 * @param base Base value, greater than one.
 	 */
 	public HaltonSequence(int base) {
 		this.base = base;
@@ -88,7 +107,9 @@ public class HaltonSequence implements Iterator<Double>, Serializable {
 	}
 
 	/**
-	 * Stub method to fulfill {@code Iterator} interface.
+	 * Does nothing. A sequence has no elements to remove; this is a no-op
+	 * rather than an exception because it predates the throwing default that
+	 * {@code Iterator.remove} gained in Java 8.
 	 */
 	public void remove() {
 	}

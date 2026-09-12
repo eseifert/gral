@@ -31,17 +31,35 @@ import de.erichseifert.gral.graphics.Orientation;
 
 
 /**
- * Class that represents a layout manager which arranges its components
- * as horizontal or vertical stacks.
+ * <p>A layout that places the components of a container in a single row or
+ * column, in the order they were added.</p>
+ *
+ * <pre>
+ * DrawableContainer container =
+ *     new DrawableContainer(new StackedLayout(Orientation.VERTICAL, 0.0, 4.0));
+ * container.add(first);                                   // default constraints
+ * container.add(second, new StackedLayout.Constraints(false, 0.0, 0.5));
+ * </pre>
+ *
+ * <p>A component may be given {@link StackedLayout.Constraints}; components
+ * added without any use the default, which stretches them across the container
+ * and centers them. This is the layout a legend uses for its entries.</p>
  */
 public class StackedLayout extends AbstractOrientedLayout {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -3183337606556363756L;
 
-	/** Default layout behaviour for components. */
+	/** Default layout behavior for components. */
 	private final Constraints defaultConstraints;
 
+	/**
+	 * How a single component is placed within a {@link StackedLayout}. An
+	 * instance is passed as the constraints argument of
+	 * {@link de.erichseifert.gral.graphics.Container#add(de.erichseifert.gral.graphics.Drawable, Object)};
+	 * components added without one are laid out stretched and centered.
+	 */
 	public static class Constraints implements Serializable {
+		/** Version id for serialization. */
 		private static final long serialVersionUID = -3375316557720116460L;
 		/**
 		 * Whether the component is stretched to the container's width (vertical layout)
@@ -53,6 +71,18 @@ public class StackedLayout extends AbstractOrientedLayout {
 		/** Vertical alignment of the component. */
 		private final double alignmentY;
 
+		/**
+		 * Initializes a new set of constraints.
+		 * @param stretched {@code true} to stretch the component across the
+		 *        container, i.e. to its width in a vertical layout and to its
+		 *        height in a horizontal one.
+		 * @param alignmentX Horizontal position within the remaining space,
+		 *        from 0.0 (left) to 1.0 (right). Only has an effect if the
+		 *        component does not fill the width.
+		 * @param alignmentY Vertical position within the remaining space, from
+		 *        0.0 (top) to 1.0 (bottom). Only has an effect if the component
+		 *        does not fill the height.
+		 */
 		public Constraints(boolean stretched, double alignmentX, double alignmentY) {
 			this.stretched = stretched;
 			this.alignmentX = alignmentX;

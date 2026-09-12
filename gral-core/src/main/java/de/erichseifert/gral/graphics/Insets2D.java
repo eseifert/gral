@@ -25,9 +25,24 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Abstract class that stores insets for all four directions.
- * <p>Please use this instead of java.awt.Insets, as the java class does not
- * support double values.</p>
+ * <p>Space to be kept free at the four edges of a container, in
+ * {@code double} precision. This exists because {@code java.awt.Insets} stores
+ * only {@code int} values, which is not enough for the fractional coordinates
+ * plots are laid out in.</p>
+ *
+ * <p>The class itself is abstract; {@link Insets2D.Double} is the
+ * implementation:</p>
+ * <pre>
+ * // top, left, bottom, right — the same order as java.awt.Insets
+ * plot.setInsets(new Insets2D.Double(20.0, 60.0, 40.0, 20.0));
+ *
+ * // The same amount on every side.
+ * container.setInsets(new Insets2D.Double(10.0));
+ * </pre>
+ *
+ * <p>Note the argument order: it starts at the top and goes clockwise, so the
+ * left inset &mdash; usually the largest one, since it has to hold the tick
+ * labels of the y axis &mdash; is the second value, not the first.</p>
  */
 public abstract class Insets2D implements Serializable {
 	/** Version id for serialization. */

@@ -30,8 +30,38 @@ import de.erichseifert.gral.util.SortedList;
 
 
 /**
- * A class that computes and stores various statistical information
- * for an Iterable of values.
+ * <p>Statistical measures over a sequence of values. Measures are requested by
+ * name, using the string constants declared on this class, and computed on
+ * first request:</p>
+ *
+ * <pre>
+ * Statistics stats = data.getStatistics();
+ * double mean = stats.get(Statistics.MEAN);
+ * double iqr  = stats.get(Statistics.QUARTILE_3) - stats.get(Statistics.QUARTILE_1);
+ * </pre>
+ *
+ * <p>The measures fall into two groups that are computed together: the moment
+ * based ones ({@link #N}, the sums, {@link #MIN}, {@link #MAX}, {@link #MEAN},
+ * the central moments, {@link #VARIANCE}, {@link #SKEWNESS},
+ * {@link #KURTOSIS}), which need one pass over the values, and the
+ * distribution based ones ({@link #MEDIAN} and the quartiles), which need the
+ * values sorted. Asking for one measure of a group computes the whole
+ * group.</p>
+ *
+ * <p>Values that are not numbers, and numbers that are {@code null},
+ * {@code NaN} or infinite, are skipped, so {@link #N} counts only the values
+ * that actually contributed. An unknown key, or a measure that cannot be
+ * computed because there are no usable values, yields {@code NaN} rather than
+ * an exception.</p>
+ *
+ * <p>The values are read from the {@code Iterable} that was passed in, and the
+ * results are cached afterwards. An instance is therefore a snapshot: it does
+ * not notice later changes to the data. This is why
+ * {@link de.erichseifert.gral.data.AbstractDataSource} discards its
+ * {@code Statistics} object whenever its values change.</p>
+ *
+ * <p>Note that {@link #MEDIAN} and {@link #QUARTILE_2} are the same measure and
+ * share a key.</p>
  */
 public class Statistics {
 	/** Key for specifying the total number of elements.
@@ -91,8 +121,14 @@ public class Statistics {
 	private final Map<String, Double> statistics;
 
 	/**
-	 * Initializes a new object with the specified data values.
-	 * @param data Data to be analyzed.
+	 * Initializes a new instance over the specified values. Nothing is computed
+	 * or read here; the values are only traversed when a measure is first
+	 * requested.
+	 * @param data Data to be analyzed. This may be a whole
+	 *        {@link de.erichseifert.gral.data.DataSource}, a single
+	 *        {@link de.erichseifert.gral.data.Column}, a
+	 *        {@link de.erichseifert.gral.data.Record}, or any other
+	 *        {@code Iterable}.
 	 */
 	public Statistics(Iterable<? extends Comparable<?>> data) {
 		statistics = new HashMap<>();
@@ -174,6 +210,7 @@ public class Statistics {
 	/**
 	 * Utility method that calculates quantiles for the given data values and
 	 * stores the results in {@code stats}.
+	 * @param data Data values used to calculate statistics
 	 * @param stats {@code Map} for storing results
 	 * @see de.erichseifert.gral.util.MathUtils#quantile(java.util.List,double)
 	 */
@@ -202,10 +239,11 @@ public class Statistics {
 	}
 
 	/**
-	 * Returns the specified statistics value.
+	 * Returns the value of the named measure, computing it on the first
+	 * request. The key is one of the string constants of this class.
 	 * @param key Requested information.
-	 * @return The value for the specified key as value, or <i>NaN</i>
-	 *         if the specified statistical value does not exist
+	 * @return The value of the measure, or {@code NaN} if the key is unknown or
+	 *         the measure could not be computed from the data.
 	 */
 	public double get(String key) {
 		if (!statistics.containsKey(key)) {

@@ -36,10 +36,20 @@ import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Location;
 
 
+/**
+ * <p>A bar plot with positive and negative values.</p>
+ *
+ * <p>Shows how the bars are styled with a
+ * {@link de.erichseifert.gral.plots.colors.LinearGradient}, how the value of
+ * each bar is printed on top of it, and how the legend is placed.</p>
+ */
 public class SimpleBarPlot extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -2793954497895054530L;
 
+	/**
+	 * Creates the example and its plot.
+	 */
 	@SuppressWarnings("unchecked")
 	public SimpleBarPlot() {
 		// Create example data
@@ -95,6 +105,10 @@ public class SimpleBarPlot extends ExamplePanel {
 		return "Bar plot with example data and color gradients";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new SimpleBarPlot().showInFrame();
 	}

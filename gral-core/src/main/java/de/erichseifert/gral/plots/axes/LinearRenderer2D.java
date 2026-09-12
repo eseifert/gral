@@ -28,7 +28,21 @@ import de.erichseifert.gral.plots.axes.Tick.TickType;
 import de.erichseifert.gral.util.MathUtils;
 
 /**
- * Class that renders axes with a linear scale in two dimensional space.
+ * <p>An {@link AxisRenderer} with a linear scale: equal differences in value
+ * take equal distances on screen. This is the renderer plots create by
+ * default.</p>
+ *
+ * <pre>
+ * LinearRenderer2D renderer = new LinearRenderer2D();
+ * renderer.setLabel(new Label("Time in seconds"));
+ * renderer.setTickSpacing(5.0);
+ * plot.setAxisRenderer(XYPlot.AXIS_X, renderer);
+ * </pre>
+ *
+ * <p>Ticks are placed at multiples of the tick spacing, and
+ * {@code setMinorTicksCount(int)} subdivides the space between two of them.
+ * There are no restrictions on the axis range: it may include zero and negative
+ * values, and a minimum greater than the maximum reverses the direction.</p>
  */
 public class LinearRenderer2D extends AbstractAxisRenderer2D {
 	/** Version id for serialization. */

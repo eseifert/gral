@@ -25,8 +25,18 @@ import java.util.Arrays;
 
 
 /**
- * Class that represents a data source containing the same value in each cell.
- * It can be used for test purposes or for efficiently creating constant data.
+ * <p>A data source of a given size in which every cell holds the same value.
+ * Nothing is stored, so it costs the same whether it has ten rows or ten
+ * million.</p>
+ *
+ * <pre>
+ * // 3 columns by 100 rows, every cell 1.0
+ * DataSource constant = new DummyData(3, 100, 1.0);
+ * </pre>
+ *
+ * <p>It is mostly useful in tests, as a stand-in for real data, and as a
+ * constant column to combine with other sources. The contents never change, so
+ * it never fires a change notification.</p>
  */
 public class DummyData extends AbstractDataSource {
 	/** Version id for serialization. */

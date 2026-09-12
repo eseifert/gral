@@ -35,8 +35,23 @@ import de.erichseifert.gral.util.Messages;
 
 
 /**
- * Class that reads a data source from a binary image file. This class
- * shouldn't be used directly but using the {@link DataReaderFactory}.
+ * <p>Reads a WAV audio file into a single-column
+ * {@link de.erichseifert.gral.data.DataSource} of sample values, one row per
+ * sample, which is how a waveform is plotted.</p>
+ *
+ * <p>Instances should be obtained from the {@link DataReaderFactory}:</p>
+ * <pre>
+ * DataReader reader = DataReaderFactory.getInstance().get("audio/wav");
+ * try (InputStream in = new FileInputStream("sound.wav")) {
+ *     DataSource data = reader.read(in);
+ * }
+ * </pre>
+ *
+ * <p>Samples are scaled with the {@code factor} and {@code offset} settings,
+ * which default to 1.0 and 0.0. Note that the column types passed to
+ * {@code read} are ignored: the result always has one {@code Double} column.
+ * Multi-channel files are read sample by sample without separating the
+ * channels.</p>
  */
 public class AudioReader extends AbstractDataReader {
 	static {

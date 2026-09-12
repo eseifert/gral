@@ -36,6 +36,7 @@ Data I/O:
 
 General:
     - Releases are published through the Central Portal publisher API
+    - Expanded and corrected the API documentation and the manual
 
 GRAL 0.12 (2026-09-11)
 ======================

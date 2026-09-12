@@ -31,13 +31,30 @@ import de.erichseifert.gral.plots.DataPoint;
 
 
 /**
- * <p>Interface that provides functions for rendering a line in two dimensional
- * space.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Punching data points out of the line's shape</li>
- *   <li>Administration of settings</li>
- * </ul>
+ * <p>Connects the data points of a series with a line. The plot projects the
+ * rows first and hands over the resulting {@link DataPoint}s, so a line
+ * renderer works purely in view coordinates and never touches the axes.</p>
+ *
+ * <p>Rendering happens in two steps: {@link #getLineShape(List)} builds the
+ * geometry, and {@link #getLine(List, Shape)} wraps it in a {@link Drawable}
+ * that strokes it. Splitting them allows a caller to reuse or modify the shape
+ * &mdash; which is what an {@link de.erichseifert.gral.plots.areas.AreaRenderer}
+ * does.</p>
+ *
+ * <pre>
+ * DefaultLineRenderer2D line = new DefaultLineRenderer2D();
+ * line.setColor(Color.BLACK);
+ * line.setStroke(new BasicStroke(2f));
+ * // Leave a hole of 2 pixels around each data point so the marks stay visible.
+ * line.setGap(2.0);
+ * line.setGapRounded(true);
+ * plot.setLineRenderers(series, line);
+ * </pre>
+ *
+ * <p>A series has no line at all unless a renderer is set for it. Like the
+ * other renderers, one instance serves every point of a series and must not
+ * keep per-point state; implementations normally extend
+ * {@link AbstractLineRenderer2D}.</p>
  */
 public interface LineRenderer {
 	/**

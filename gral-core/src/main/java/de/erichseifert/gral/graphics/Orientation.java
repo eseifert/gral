@@ -23,7 +23,10 @@ package de.erichseifert.gral.graphics;
 
 
 /**
- * Enumeration type to describe the orientation of a arbitrary elements.
+ * The direction along which elements are arranged, for example the entries of a
+ * legend, the components of a
+ * {@link de.erichseifert.gral.graphics.layout.StackedLayout}, or the bars of a
+ * bar plot.
  */
 public enum Orientation {
 	/** Horizontal orientation. */

@@ -38,8 +38,26 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Abstract class that represents a collection of utility functions
- * concerning geometry.
+ * <p>Helpers for working with {@code java.awt.Shape}s. The class is not meant
+ * to be instantiated.</p>
+ *
+ * <p>{@link #shapeToLines(java.awt.Shape, boolean)} flattens a shape into
+ * straight segments, which is how an axis renderer walks along an axis shape to
+ * place ticks and compute normals. {@link #intersection(java.awt.geom.Line2D,
+ * java.awt.geom.Line2D)} and its shape-to-shape counterpart find crossing
+ * points, and {@link #punch(java.awt.geom.Area, double, boolean,
+ * java.awt.geom.Point2D, java.awt.Shape)} cuts a hole around a data point out
+ * of a line or area, which is what keeps the point marks visible.</p>
+ *
+ * <p>{@link #getSegments(java.awt.Shape)} and
+ * {@link #getShape(java.util.List, boolean)} convert a shape to a list of
+ * {@link GeometryUtils.PathSegment}s and back. That round trip is what makes an
+ * otherwise unserializable {@code Shape} storable, and it is used by
+ * {@link SerializableShape}.</p>
+ *
+ * <p>{@link #EPSILON} is the tolerance the intersection tests work with;
+ * geometry here is deliberately approximate, since the results end up as
+ * pixels.</p>
  */
 public abstract class GeometryUtils {
 	/** Precision. */

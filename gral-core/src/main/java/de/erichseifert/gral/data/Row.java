@@ -22,25 +22,35 @@
 package de.erichseifert.gral.data;
 
 /**
- * <p>Class for easily accessing a row of a data source.</p>
+ * <p>A live view of one row of a data source. Reading from it reads through to
+ * the source, so a row reflects later changes to the data &mdash; in contrast
+ * to {@link Record}, which is a snapshot, and to {@link Column}, which copies
+ * its values.</p>
  *
- * <p>Example:</p>
  * <pre>
- * Row row = new Row(data, 2);
- * Number value = row.get(3);
+ * Row row = data.getRow(2);
+ * Comparable&lt;?&gt; value = row.get(3);   // column 3 of row 2
+ * int columns = row.size();
  * </pre>
  *
- * @see DataSource
+ * <p>Because the row keeps only the source and an index, it does not notice
+ * when rows are inserted or removed before it: it then refers to whatever row
+ * now sits at that index. Nothing checks that the index is still valid, so a
+ * row that outlives the data it points into will return {@code null} or throw
+ * when read.</p>
+ *
+ * @see DataSource#getRow(int)
+ * @see Record
  */
 public class Row extends DataAccessor {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 2725146484866525573L;
 
 	/**
-	 * Initializes a new instances with the specified data source and
-	 * row index.
-	 * @param source Data source.
-	 * @param row Row index.
+	 * Initializes a new view on the specified row of a data source. The index
+	 * is not validated here; an invalid one only shows when the row is read.
+	 * @param source Data source to read through to.
+	 * @param row Row index, starting at 0.
 	 */
 	public Row(DataSource source, int row) {
 		super(source, row);

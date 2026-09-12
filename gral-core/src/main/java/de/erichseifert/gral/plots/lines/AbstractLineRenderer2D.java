@@ -35,12 +35,15 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * <p>Abstract class that renders a line in two-dimensional space.</p>
- * <p>Functionality includes:</p>
- * <ul>
- *   <li>Punching data points out of the line's shape</li>
- *   <li>Administration of settings</li>
- * </ul>
+ * <p>Base class for {@link LineRenderer} implementations. It holds the stroke,
+ * the color and the gap settings, and it implements
+ * {@link LineRenderer#getLine(java.util.List, java.awt.Shape)}: the shape
+ * produced by the subclass is stroked, and a hole is punched around every data
+ * point so that the marks stay visible through the line.</p>
+ *
+ * <p>A subclass therefore only has to implement
+ * {@link LineRenderer#getLineShape(java.util.List)}, i.e. decide how the points
+ * are connected.</p>
  */
 public abstract class AbstractLineRenderer2D implements LineRenderer, Serializable {
 	/** Version id for serialization. */

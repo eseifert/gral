@@ -39,9 +39,29 @@ import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
- * Abstract class that represents a canvas on which plot data will be drawn.
- * It serves as base for specialized implementations for different plot types.
- * Derived classes have to implement how the actual drawing is done.
+ * <p>The region of a plot in which the data itself is drawn &mdash; everything
+ * inside the axes, without the title, the legend and the axis labels. Each plot
+ * type has its own subclass that knows how to render its data; what this class
+ * provides is the frame around it: background, border, base font and
+ * clipping.</p>
+ *
+ * <pre>
+ * PlotArea area = plot.getPlotArea();
+ * area.setBackground(new Color(0xf8, 0xf8, 0xf8));
+ * area.setBorderStroke(null);  // no border at all
+ * </pre>
+ *
+ * <p>The clipping offset controls how far beyond the plot area data may be
+ * painted. It is given as {@link Insets2D} relative to the outline, where
+ * positive values shrink the visible region; this is what keeps a line that
+ * runs off the axis range from being drawn across the labels. Setting it to
+ * {@code null} disables clipping.</p>
+ *
+ * <p>A subclass implements
+ * {@link #drawPlot(de.erichseifert.gral.graphics.DrawingContext)} and typically
+ * calls {@link #drawBackground(de.erichseifert.gral.graphics.DrawingContext)}
+ * and {@link #drawBorder(de.erichseifert.gral.graphics.DrawingContext)} from
+ * its {@code draw} method.</p>
  */
 public abstract class PlotArea extends AbstractDrawable {
 	/** Version id for serialization. */

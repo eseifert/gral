@@ -28,9 +28,23 @@ import de.erichseifert.gral.graphics.Drawable;
 
 
 /**
- * Interface providing functions for rendering {@code Drawable}
- * instances and writing them to an output stream. As an example: a plot
- * can be saved into a bitmap file.
+ * <p>Renders a {@link Drawable} at a given size and writes the result to a
+ * stream, for example to save a plot as a PNG or a PDF. Obtain an instance
+ * from {@link DrawableWriterFactory} rather than constructing one:</p>
+ *
+ * <pre>
+ * DrawableWriter writer = DrawableWriterFactory.getInstance().get("image/png");
+ * try (OutputStream out = new FileOutputStream("plot.png")) {
+ *     writer.write(plot, out, 800.0, 600.0);
+ * }
+ * </pre>
+ *
+ * <p>The writer sets the bounds of the drawable to the requested size for the
+ * duration of the call and restores them afterwards, so a plot that is
+ * displayed on screen can be exported at a different size without disturbing
+ * the view. No window and no display are needed, which makes this the way to
+ * produce plots on a headless machine.</p>
+ *
  * @see DrawableWriterFactory
  */
 public interface DrawableWriter {
@@ -41,7 +55,8 @@ public interface DrawableWriter {
 	String getMimeType();
 
 	/**
-	 * Stores the specified {@code Drawable} instance.
+	 * Writes the specified drawable at the given size, positioned at the
+	 * origin. The stream is not closed by this method.
 	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param width Width of the image.
@@ -52,7 +67,10 @@ public interface DrawableWriter {
 			   double width, double height) throws IOException;
 
 	/**
-	 * Stores the specified {@code Drawable} instance.
+	 * Writes the specified drawable at the given position and size. The output
+	 * itself is {@code width} by {@code height}, so a non-zero position shifts
+	 * the drawable within it rather than enlarging it. The stream is not closed
+	 * by this method.
 	 * @param d {@code Drawable} to be written.
 	 * @param destination Stream to write to
 	 * @param x Horizontal position.

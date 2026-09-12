@@ -130,6 +130,15 @@ final class UpdateTask implements ActionListener {
 	}
 }
 
+/**
+ * <p>Plots the memory usage of the running JVM, updating ten times a
+ * second.</p>
+ *
+ * <p>Shows how a plot is kept up to date from a background task: rows are
+ * appended to the {@link de.erichseifert.gral.data.DataTable} and the axis
+ * range is moved along, and the change notification of the data source takes
+ * care of the rest.</p>
+ */
 public class MemoryUsage extends ExamplePanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 5914124874301980251L;
@@ -139,6 +148,9 @@ public class MemoryUsage extends ExamplePanel {
 	/** Update interval in milliseconds */
 	private static final int INTERVAL = 100;
 
+	/**
+	 * Creates the example, its plot and the task that feeds it.
+	 */
 	@SuppressWarnings("unchecked")
 	public MemoryUsage() {
 		var data = new DataTable(Double.class, Long.class, Long.class, Long.class);
@@ -237,6 +249,10 @@ public class MemoryUsage extends ExamplePanel {
 			"other VMs too.";
 	}
 
+	/**
+	 * Runs this example on its own.
+	 * @param args Command line arguments; none are used.
+	 */
 	public static void main(String[] args) {
 		new MemoryUsage().showInFrame();
 	}

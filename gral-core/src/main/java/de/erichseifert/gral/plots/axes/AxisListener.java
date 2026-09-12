@@ -22,7 +22,19 @@
 package de.erichseifert.gral.plots.axes;
 
 /**
- * Interface that provides a function to listen for changes in axes.
+ * <p>Receives a notification whenever the value range of an {@link Axis}
+ * changes. A plot listens to its own axes this way, which is how zooming and
+ * panning &mdash; both of which work by changing axis ranges &mdash; cause a
+ * repaint.</p>
+ *
+ * <p>This is a single-method interface, so a lambda will do:</p>
+ * <pre>
+ * axis.addAxisListener((a, min, max) -&gt;
+ *     System.out.println("Range is now " + min + " to " + max));
+ * </pre>
+ *
+ * <p>The notification is sent after the range has been changed, and only when
+ * it really differs from the previous one.</p>
  */
 public interface AxisListener {
 	/**
