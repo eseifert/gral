@@ -25,6 +25,7 @@ General:
     - Added ``Navigables.getNavigableAt`` to look up a navigable
     - Added a ``gral-javafx`` module for JavaFX applications
     - Added a runnable JavaFX example application
+    - Scrolling zooms the JavaFX canvas one step per wheel notch
     - Added an aggregate ``gral`` artifact for core and Swing
     - Documented how to draw a plot with any Graphics2D
     - CI installs the GTK libraries that the JavaFX tests need
