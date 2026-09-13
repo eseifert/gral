@@ -19,6 +19,7 @@ General:
     - Tests assert the order and number of returned values, not just presence
     - The ``data`` serialization tests compare the restored properties
     - Tests use Hamcrest 2.2, which has order-sensitive matchers
+    - The shared test helpers live in a Gradle test fixture
 
 GRAL 0.13 (2026-09-13)
 ======================
