@@ -1,4 +1,4 @@
-GRAL 0.13 (unreleased)
+GRAL 0.13 (2026-09-13)
 ======================
 
 Data:
@@ -45,6 +45,7 @@ Data I/O:
       or a line break, so that they can be read again
 
 General:
+    - The library sources use the syntax of the Java 11 baseline now
     - Releases are published through the Central Portal publisher API
     - The example applications are released to Maven Central as well, in
       the same deployment as the library (#182)

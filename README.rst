@@ -91,7 +91,7 @@ a dependency in your ``pom.xml``:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral-core</artifactId>
-        <version>0.12</version>
+        <version>0.13</version>
     </dependency>
 
 Using GRAL with Gradle
@@ -100,7 +100,7 @@ Using GRAL with Gradle
 .. code:: groovy
 
     dependencies {
-        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.12'
+        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.13'
     }
 
 Using GRAL with sbt
@@ -108,7 +108,11 @@ Using GRAL with sbt
 
 .. code:: scala
 
-    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.12"
+    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.13"
+
+The example applications are published as ``de.erichseifert.gral:gral-examples``
+under the same version. The JAR is runnable and opens a browser for all example
+plots.
 
 
 Building GRAL from source code
