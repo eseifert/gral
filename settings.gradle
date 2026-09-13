@@ -30,4 +30,4 @@ nmcpSettings {
 
 rootProject.name = 'GRAL'
 
-include ':gral-core', ':gral-examples'
+include ':gral-core', ':gral-swing', ':gral-examples'

@@ -67,6 +67,5 @@
  * types that the AWT lacks in {@code double} precision or at all.</p>
  *
  * @see de.erichseifert.gral.graphics.layout
- * @see de.erichseifert.gral.ui
  */
 package de.erichseifert.gral.graphics;

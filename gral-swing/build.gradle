@@ -1,0 +1,29 @@
+description = 'GRAL Swing components'
+
+ext.pomName = 'GRAL Swing'
+ext.pomDescription = 'Swing components for displaying GRAL plots'
+
+dependencies {
+	/*
+	 * Part of the API: DrawablePanel takes a Drawable, and InteractivePanel
+	 * hands out the Navigator of the plot it displays.
+	 */
+	api project(':gral-core')
+
+	/*
+	 * The test conventions of the library live in the test fixture of the
+	 * core, which also brings JUnit and Hamcrest along.
+	 */
+	testImplementation testFixtures(project(':gral-core'))
+}
+
+jar {
+	manifest {
+		attributes(
+			'Automatic-Module-Name': 'de.erichseifert.gral.swing',
+			'Implementation-Title': project.description,
+			'Implementation-Version': project.version,
+			'Implementation-Vendor': owner1_name,
+		)
+	}
+}

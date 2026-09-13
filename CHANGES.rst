@@ -20,6 +20,8 @@ General:
     - The ``data`` serialization tests compare the restored properties
     - Tests use Hamcrest 2.2, which has order-sensitive matchers
     - The shared test helpers live in a Gradle test fixture
+    - The Swing components moved into a ``gral-swing`` module
+    - The library core no longer depends on ``javax.swing``
 
 GRAL 0.13 (2026-09-13)
 ======================

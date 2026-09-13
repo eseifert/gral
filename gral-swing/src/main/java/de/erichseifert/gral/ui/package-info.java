@@ -24,9 +24,11 @@
  * <p>Swing components that display a
  * {@link de.erichseifert.gral.graphics.Drawable}.</p>
  *
- * <p>This is the only package of the library that depends on
- * {@code javax.swing}, and nothing else in the library depends on this package
- * &mdash; plots can be created, drawn and exported without ever loading it.</p>
+ * <p>This is the whole of {@code de.erichseifert.gral:gral-swing}, and the
+ * only part of GRAL that depends on {@code javax.swing}. Nothing in the core
+ * depends on it &mdash; plots can be created, drawn and exported without a
+ * user interface toolkit, which is why the components are an artifact of their
+ * own.</p>
  *
  * <p>{@link de.erichseifert.gral.ui.DrawablePanel} is a {@code JPanel} that
  * paints one drawable and keeps its bounds in step with the panel size:</p>

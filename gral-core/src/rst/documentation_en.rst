@@ -855,8 +855,10 @@ Showing a plot on screen
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 A plot is a ``Drawable``, not a ``java.awt.Component``, so it is put on screen
-through an adapter. ``DrawablePanel`` is a ``JPanel`` that displays one
-drawable and keeps its bounds in step with its own size:
+through an adapter. The Swing adapters are not part of the library core; they
+are the module ``gral-swing``, which has to be on the class path in addition to
+``gral-core``. ``DrawablePanel`` is a ``JPanel`` that displays one drawable and
+keeps its bounds in step with its own size:
 
 .. code:: java
 

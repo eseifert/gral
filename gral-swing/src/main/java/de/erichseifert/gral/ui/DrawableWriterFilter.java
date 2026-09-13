@@ -27,7 +27,6 @@ import java.text.MessageFormat;
 import javax.swing.filechooser.FileFilter;
 
 import de.erichseifert.gral.io.IOCapabilities;
-import de.erichseifert.gral.util.Messages;
 
 /**
  * <p>A {@code javax.swing.filechooser.FileFilter} for one output format,
@@ -73,7 +72,7 @@ public class DrawableWriterFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return MessageFormat.format(Messages.getString("IO.formatDescription"), //$NON-NLS-1$
+		return MessageFormat.format(UiMessages.getString("IO.formatDescription"), //$NON-NLS-1$
 				capabilities.getFormat(), capabilities.getName());
 	}
 
