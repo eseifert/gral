@@ -30,7 +30,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -260,10 +259,7 @@ public abstract class GeometryUtils {
     /**
      * Utility data class for the values of the segments in a geometric shape.
      */
-    public static final class PathSegment implements Serializable {
-    	/** Version id for serialization. */
-		private static final long serialVersionUID = 526444553637955799L;
-
+    public static final class PathSegment {
 		/** Segment type id as defined in {@link PathIterator}. */
     	public final int type;
     	/** Starting point. */

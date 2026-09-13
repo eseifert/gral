@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.util;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -45,10 +44,7 @@ import java.util.Iterator;
  * Different bases give different sequences, and a base that is a prime number
  * gives the best spread.</p>
  */
-public class HaltonSequence implements Iterator<Double>, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 7466395251522942013L;
-
+public class HaltonSequence implements Iterator<Double> {
 	/** Base. */
 	private final int base;
 	/** Current count. */

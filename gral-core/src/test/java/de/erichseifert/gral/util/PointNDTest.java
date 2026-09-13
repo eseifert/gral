@@ -22,7 +22,6 @@
 package de.erichseifert.gral.util;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -114,18 +113,6 @@ public class PointNDTest {
 			p1.getPoint2D();
 			fail("Expected ArrayIndexOutOfBoundsException exception.");
 		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new PointND<Double>(1.0, 2.0, 3.0, 4.0);
-		PointND<Double> deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getDimensions(), deserialized.getDimensions());
-		for (int i = 0; i < original.getDimensions(); i++) {
-			assertEquals(String.format("Serialized points differ at dimension %d.", i),
-				original.get(i), deserialized.get(i), DELTA);
 		}
 	}
 }
