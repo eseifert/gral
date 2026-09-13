@@ -342,21 +342,25 @@ public class XYPlotTest {
 		assertEquals(Math.pow(8.0, 0.75), axisX.getMax().doubleValue(), 1e-9);
 	}
 
+	@Test
+	public void testAutoscaleOfSinglePoint() {
+		// A single data point maps every axis onto one value. The range must
+		// still have an extent, or the conversion between world and view
+		// coordinates is undefined and produces NaN.
+		var data = new DataTable(Double.class, Double.class);
+		data.add(2.0, 3.0);
+		var plot = new XYPlot(data);
+
+		for (String axisName : new String[] {XYPlot.AXIS_X, XYPlot.AXIS_Y}) {
+			Axis axis = plot.getAxis(axisName);
+			assertTrue("Axis " + axisName + " collapsed to a single point.",
+				axis.getMax().doubleValue() > axis.getMin().doubleValue());
+		}
+	}
+
 	private static void drawPlot(Plot plot) {
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		plot.draw(new DrawingContext((Graphics2D) image.getGraphics()));
-	}
-
-	private static void testPlotAreaSerialization(PlotArea originalPlotArea, PlotArea deserializedPlotArea) {
-		XYPlotArea2D original = (XYPlotArea2D) originalPlotArea;
-		XYPlotArea2D deserialized = (XYPlotArea2D) deserializedPlotArea;
-
-		assertEquals(original.isMajorGridX(), deserialized.isMajorGridX());
-		assertEquals(original.isMajorGridY(), deserialized.isMajorGridY());
-		assertEquals(original.getMajorGridColor(), deserialized.getMajorGridColor());
-		assertEquals(original.isMinorGridX(), deserialized.isMinorGridX());
-		assertEquals(original.isMinorGridY(), deserialized.isMinorGridY());
-		assertEquals(original.getMinorGridColor(), deserialized.getMinorGridColor());
 	}
 }

@@ -2,6 +2,17 @@ GRAL 0.14 (unreleased)
 ======================
 
 Plotting:
+    - A box plot whose observations are all zero or all negative no longer
+      pulls the vertical axis up to zero. The maximum was accumulated from
+      ``Double.MIN_VALUE``, which is the smallest *positive* value and so
+      survived every comparison with data that was not positive
+    - Drawing or exporting a box plot whose observations are all zero no
+      longer hangs. The axis collapsed to a range of one denormal number, for
+      which the linear axis renderer asked for ``Integer.MAX_VALUE`` ticks
+    - An auto-scaled axis whose values are all identical is given an extent
+      instead of collapsing to a single point, so that the conversion between
+      world and view coordinates stays defined. A collapsed range used to
+      yield ``NaN`` coordinates, which no vector format can express (#142)
     - Plots, plot areas, legends, axes and the point, line, area and axis
       renderers are no longer serializable (#151). Java serialization is kept
       where it is a feature of its own, which is the ``data`` package; a plot
@@ -12,6 +23,8 @@ Plotting:
       nothing that holds them serializes any more
 
 General:
+    - Added an export test that writes degenerate plots to EPS, PDF and SVG
+      and rejects ``NaN`` or infinite coordinates in the result
     - ``PointND``, ``HaltonSequence`` and ``GeometryUtils.PathSegment`` are
       no longer serializable, so the ``data`` package is the only part of the
       library that writes objects to a stream

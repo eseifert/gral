@@ -72,6 +72,12 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 				return getShapeLength();
 			}
 		}
+		if (max == min) {
+			// An axis whose range is a single point has no direction to
+			// project onto. Returning the start of the shape keeps the result
+			// usable instead of NaN, which no vector format can express.
+			return 0.0;
+		}
 		return (val - min)/(max - min)*getShapeLength();
 	}
 
@@ -131,7 +137,14 @@ public class LinearRenderer2D extends AbstractAxisRenderer2D {
 		double minTickMajor = MathUtils.ceil(min, tickSpacing);
 		double minTickMinor = MathUtils.ceil(min, tickSpacingMinor);
 
-		int ticksTotal = (int) Math.ceil((max - min)/tickSpacingMinor);
+		double ticksTotalExact = (max - min)/tickSpacingMinor;
+		if (!MathUtils.isCalculatable(ticksTotalExact)) {
+			// A range that is too small to be divided by the tick spacing
+			// yields an infinite tick count, which would be truncated to
+			// Integer.MAX_VALUE and spin here for hours.
+			return;
+		}
+		int ticksTotal = (int) Math.ceil(ticksTotalExact);
 		int initialTicksMinor = (int) ((minTickMajor - min)/tickSpacingMinor);
 
 		// Add major and minor ticks

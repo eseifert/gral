@@ -25,6 +25,7 @@ import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -97,6 +98,27 @@ public class LinearRenderer2DTest {
 			double view = renderer.worldToView(axis, world, true);
 			assertEquals(v, view, DELTA);
 		}
+	}
+
+	@Test
+	public void testWorldToViewOfCollapsedRange() {
+		// A range of a single point leaves the projection undefined. The
+		// result has to stay a real number, because NaN coordinates cannot be
+		// expressed in EPS, PDF or SVG, which is the failure reported in #142.
+		axis.setRange(0.0, 0.0);
+		for (double v : new double[] {-1.0, 0.0, 1.0}) {
+			double view = renderer.worldToView(axis, v, true);
+			assertTrue("worldToView returned " + view + " for a collapsed range.",
+				!Double.isNaN(view) && !Double.isInfinite(view));
+		}
+	}
+
+	@Test(timeout = 10000)
+	public void testTicksOfDenormalRange() {
+		// A range too small to be divided by the tick spacing used to ask for
+		// Integer.MAX_VALUE ticks and never finish.
+		axis.setRange(0.0, Double.MIN_VALUE);
+		assertTrue(renderer.getTicks(axis).isEmpty());
 	}
 
 	@Test

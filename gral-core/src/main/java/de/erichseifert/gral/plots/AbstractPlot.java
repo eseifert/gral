@@ -330,7 +330,15 @@ public abstract class AbstractPlot extends DrawableContainer
 		}
 		double min = getAxisMin(axisName);
 		double max = getAxisMax(axisName);
-		double margin = 0.0*(max - min);
+		double margin = 0.0;
+		if (min == max && !getData().isEmpty()) {
+			// All values mapped to this axis are identical, e.g. because there
+			// is only a single data point. Without a margin the axis would
+			// collapse to a single point, which leaves the conversion between
+			// world and view coordinates undefined. A plot without data keeps
+			// its empty range, which is what clearing a plot relies on.
+			margin = (min == 0.0) ? 1.0 : Math.abs(min)/2.0;
+		}
 		axis.setRange(min - margin, max + margin);
 	}
 

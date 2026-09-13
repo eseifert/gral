@@ -739,7 +739,9 @@ public class BoxPlot extends XYPlot {
 		boolean isXAxis = AXIS_X.equals(axisName);
 
 		double min = Double.MAX_VALUE;
-		double max = Double.MIN_VALUE;
+		// Not Double.MIN_VALUE, which is the smallest positive value and would
+		// survive Math.max for any data that is zero or negative
+		double max = -Double.MAX_VALUE;
 		for (DataSource data : sources) {
 			BoxWhiskerRenderer pointRenderer = null;
 			for (PointRenderer p : getPointRenderers(data)) {
@@ -768,6 +770,12 @@ public class BoxPlot extends XYPlot {
 					.getStatistics(Statistics.MAX));
 		}
 		double spacing = (isXAxis) ? 0.5 : 0.05*(max - min);
+		if (spacing == 0.0) {
+			// Every observation of every column has the same value, so the
+			// axis would collapse to a single point and the conversion between
+			// world and view coordinates would be undefined.
+			spacing = (max == 0.0) ? 1.0 : Math.abs(max)/2.0;
+		}
 		axis.setRange(min - spacing, max + spacing);
 	}
 }

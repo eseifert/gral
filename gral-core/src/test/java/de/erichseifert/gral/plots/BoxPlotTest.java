@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
@@ -33,11 +32,11 @@ import static org.junit.Assert.fail;
 
 import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
+import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
+import de.erichseifert.gral.plots.axes.Axis;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,26 +91,34 @@ public class BoxPlotTest {
 		}
 	}
 
-	private static void testPointRendererSerialization(
-			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {
-		for (int rendererIndex = 0; rendererIndex < originalRenderers.size(); rendererIndex++) {
-			BoxWhiskerRenderer original = (BoxWhiskerRenderer) originalRenderers.get(rendererIndex);
-			BoxWhiskerRenderer deserialized = (BoxWhiskerRenderer) deserializedRenderers.get(rendererIndex);
-			assertEquals(original.getPositionColumn(), deserialized.getPositionColumn());
-			assertEquals(original.getCenterBarColumn(), deserialized.getCenterBarColumn());
-			assertEquals(original.getBottomBarColumn(), deserialized.getBottomBarColumn());
-			assertEquals(original.getBoxBottomColumn(), deserialized.getBoxBottomColumn());
-			assertEquals(original.getBoxTopColumn(), deserialized.getBoxTopColumn());
-			assertEquals(original.getTopBarColumn(), deserialized.getTopBarColumn());
-			assertEquals(original.getBoxWidth(), deserialized.getBoxWidth(), DELTA);
-			assertEquals(original.getBoxBackground(), deserialized.getBoxBackground());
-			assertEquals(original.getBoxBorderColor(), deserialized.getBoxBorderColor());
-			assertEquals(original.getBoxBorderStroke(), deserialized.getBoxBorderStroke());
-			assertEquals(original.getWhiskerColor(), deserialized.getWhiskerColor());
-			assertEquals(original.getWhiskerStroke(), deserialized.getWhiskerStroke());
-			assertEquals(original.getBarWidth(), deserialized.getBarWidth(), DELTA);
-			assertEquals(original.getCenterBarColor(), deserialized.getCenterBarColor());
-			assertEquals(original.getCenterBarStroke(), deserialized.getCenterBarStroke());
+	@Test
+	public void testAutoscaleOfConstantObservations() {
+		// Every observation has the same value, so the statistics collapse
+		// onto one point. The vertical axis must still have an extent.
+		var observations = new DataTable(Double.class, Double.class);
+		for (int i = 0; i < 16; i++) {
+			observations.add(0.0, 0.0);
 		}
+		var constantPlot = new BoxPlot(BoxPlot.createBoxData(observations));
+
+		Axis axisY = constantPlot.getAxis(BoxPlot.AXIS_Y);
+		assertTrue("Vertical axis collapsed to a single point.",
+			axisY.getMax().doubleValue() > axisY.getMin().doubleValue());
+	}
+
+	@Test
+	public void testAutoscaleOfNonPositiveObservations() {
+		// Double.MIN_VALUE is the smallest positive value, so using it as the
+		// lower bound of a maximum let negative data produce a range that
+		// ended just above zero.
+		var observations = new DataTable(Double.class);
+		for (double value : new double[] {-4.0, -3.0, -2.0, -1.0}) {
+			observations.add(value);
+		}
+		var negativePlot = new BoxPlot(BoxPlot.createBoxData(observations));
+
+		Axis axisY = negativePlot.getAxis(BoxPlot.AXIS_Y);
+		assertTrue("Maximum " + axisY.getMax() + " is not near the data.",
+			axisY.getMax().doubleValue() < 0.0);
 	}
 }
