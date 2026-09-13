@@ -87,14 +87,9 @@ public class JdbcDataTest {
 		}
 	}
 
-	@Test
-	public void testXyz() {
-	}
-
 	@Test(expected=UnsupportedOperationException.class)
-	@SuppressWarnings("unused")
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		var original = new JdbcData(connection, "foobar");
-		DataSource deserialized = TestUtils.serializeAndDeserialize(original);
-    }
+		TestUtils.serializeAndDeserialize(original);
+	}
 }
