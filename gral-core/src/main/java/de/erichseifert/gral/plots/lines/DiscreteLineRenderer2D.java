@@ -55,9 +55,6 @@ import de.erichseifert.gral.graphics.Orientation;
  * steps immediately and 1.0 at the very end.</p>
  */
 public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 4648286099838467355L;
-
 	/** Primary direction of the "steps". */
 	private Orientation ascentDirection;
 	/** Relative distance between points, where the orientation changes. */
@@ -81,9 +78,6 @@ public class DiscreteLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = -1686744943386843195L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

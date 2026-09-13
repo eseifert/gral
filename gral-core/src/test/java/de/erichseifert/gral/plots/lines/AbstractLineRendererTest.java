@@ -30,7 +30,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
@@ -51,9 +50,6 @@ public class AbstractLineRendererTest {
 	private PointData data;
 
 	private static class MockLineRenderer extends AbstractLineRenderer2D {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 7510746091876293498L;
-
 		private final Shape shape;
 
 		public MockLineRenderer() {
@@ -128,15 +124,4 @@ public class AbstractLineRendererTest {
 		assertEquals(color, r.getColor());
 		assertEquals(stroke, r.getStroke());
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockLineRenderer();
-		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getStroke(), deserialized.getStroke());
-		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
-		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
-		assertEquals(original.getColor(), deserialized.getColor());
-    }
 }

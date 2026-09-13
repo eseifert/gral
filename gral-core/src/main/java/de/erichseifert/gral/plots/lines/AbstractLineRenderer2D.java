@@ -26,13 +26,6 @@ import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>Base class for {@link LineRenderer} implementations. It holds the stroke,
@@ -45,12 +38,9 @@ import de.erichseifert.gral.util.SerializationUtils;
  * {@link LineRenderer#getLineShape(java.util.List)}, i.e. decide how the points
  * are connected.</p>
  */
-public abstract class AbstractLineRenderer2D implements LineRenderer, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -4172505541305453796L;
-
+public abstract class AbstractLineRenderer2D implements LineRenderer {
 	/** Stroke to draw the line. */
-	private transient Stroke stroke;
+	private Stroke stroke;
 	/** Gap between points and the line. */
 	private double gap;
 	/** Decides whether the shape of the gap between points and the line is
@@ -81,37 +71,6 @@ public abstract class AbstractLineRenderer2D implements LineRenderer, Serializab
 		}
 		Stroke stroke = getStroke();
 		return stroke.createStrokedShape(line);
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-		// Custom deserialization
-		stroke = (Stroke) SerializationUtils.unwrap(
-				(Serializable) in.readObject());
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		// Default serialization
-		out.defaultWriteObject();
-		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(stroke));
 	}
 
 	@Override

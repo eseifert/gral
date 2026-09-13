@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -74,15 +73,5 @@ public class AbstractAreaRendererTest {
 		assertEquals(gap, r.getGap(), DELTA);
 		assertEquals(gapRounded, r.isGapRounded());
 		assertEquals(color, r.getColor());
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockAbstractAreaRenderer();
-		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
-		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
-		assertEquals(original.getColor(), deserialized.getColor());
 	}
 }

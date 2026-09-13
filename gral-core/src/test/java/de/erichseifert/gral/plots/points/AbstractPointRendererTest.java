@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots.points;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.BasicStroke;
@@ -35,7 +34,6 @@ import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 
@@ -43,7 +41,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -57,8 +54,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
 
 public class AbstractPointRendererTest {
-	private static final double DELTA = TestUtils.DELTA;
-
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
@@ -93,13 +88,9 @@ public class AbstractPointRendererTest {
 	}
 
 	private static final class MockPointRenderer extends AbstractPointRenderer {
-		private static final long serialVersionUID = -3361506388079000948L;
-
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				private static final long serialVersionUID = 8239109584500117586L;
-
 				public void draw(DrawingContext context) {
 					MockPointRenderer renderer = MockPointRenderer.this;
 					Graphics2D g = context.getGraphics();
@@ -187,31 +178,4 @@ public class AbstractPointRendererTest {
 		point.draw(context);
 		assertNotEmpty(image);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		PointRenderer original = r;
-		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getShape(), deserialized.getShape());
-		assertEquals(original.getColor(), deserialized.getColor());
-
-		assertEquals(original.isValueVisible(), deserialized.isValueVisible());
-		assertEquals(original.getValueColumn(), deserialized.getValueColumn());
-		assertEquals(original.getValueFormat(), deserialized.getValueFormat());
-		assertEquals(original.getValueLocation(), deserialized.getValueLocation());
-		assertEquals(original.getValueAlignmentX(), deserialized.getValueAlignmentX(), DELTA);
-		assertEquals(original.getValueAlignmentY(), deserialized.getValueAlignmentY(), DELTA);
-		assertEquals(original.getValueRotation(), deserialized.getValueRotation(), DELTA);
-		assertEquals(original.getValueDistance(), deserialized.getValueDistance(), DELTA);
-		assertEquals(original.getValueColor(), deserialized.getValueColor());
-		assertEquals(original.getValueFont(), deserialized.getValueFont());
-
-		assertEquals(original.isErrorVisible(), deserialized.isErrorVisible());
-		assertEquals(original.getErrorColumnTop(), deserialized.getErrorColumnTop());
-		assertEquals(original.getErrorColumnBottom(), deserialized.getErrorColumnBottom());
-		assertEquals(original.getErrorColor(), deserialized.getErrorColor());
-		TestUtils.assertEquals(original.getErrorShape(), deserialized.getErrorShape());
-		assertEquals(original.getErrorStroke(), deserialized.getErrorStroke());
-    }
 }

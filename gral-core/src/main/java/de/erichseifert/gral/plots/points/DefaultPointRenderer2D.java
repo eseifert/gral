@@ -68,15 +68,9 @@ import de.erichseifert.gral.util.PointND;
  * on the data point is offset by half its size, as above.</p>
  */
 public class DefaultPointRenderer2D extends AbstractPointRenderer {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -895832597380598383L;
-
 	@Override
 	public Drawable getPoint(final PointData data, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = 1915778739867091906L;
-
 			public void draw(DrawingContext context) {
 				PointRenderer renderer = DefaultPointRenderer2D.this;
 
@@ -249,9 +243,6 @@ public class DefaultPointRenderer2D extends AbstractPointRenderer {
 	 */
 	public Drawable getValue(final PointData data, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = -2568531344817590175L;
-
 			public void draw(DrawingContext context) {
 				PointRenderer renderer = DefaultPointRenderer2D.this;
 				Row row = data.row;

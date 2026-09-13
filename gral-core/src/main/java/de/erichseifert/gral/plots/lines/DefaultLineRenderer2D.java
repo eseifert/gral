@@ -51,8 +51,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * drawn straight across the gap.</p>
  */
 public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -1728830281555843667L;
 	/** Number of line segments which will be reserved to avoid unnecessary
 	copying of array data. */
 	private static final int INITIAL_LINE_CAPACITY = 10000;
@@ -72,9 +70,6 @@ public class DefaultLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = 7995515716470892483L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

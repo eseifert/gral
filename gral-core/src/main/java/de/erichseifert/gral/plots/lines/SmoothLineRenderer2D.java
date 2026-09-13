@@ -40,9 +40,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * with Bezier Curves</a> for more information.</p>
  */
 public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -6390029474886495264L;
-
 	/** Degree of "smoothness", where 0.0 means no smoothing, and 1.0 means
 	 * maximal smoothing. */
 	private Number smoothness;
@@ -64,9 +61,6 @@ public class SmoothLineRenderer2D extends AbstractLineRenderer2D {
 	 */
 	public Drawable getLine(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = 3641589240264518755L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

@@ -21,23 +21,18 @@
  */
 package de.erichseifert.gral.plots.lines;
 
-import static org.junit.Assert.assertEquals;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.Color;
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
@@ -109,21 +104,5 @@ public class DefaultLineRendererTest {
 				assertNotEmpty(image);
 			}
 		}
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new DefaultLineRenderer2D();
-		original.setStroke(new BasicStroke(2f));
-		original.setGap(1.5);
-		original.setGapRounded(true);
-		original.setColor(Color.RED);
-
-		LineRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getStroke(), deserialized.getStroke());
-		assertEquals(original.getGap(), deserialized.getGap(), TestUtils.DELTA);
-		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
-		assertEquals(original.getColor(), deserialized.getColor());
 	}
 }

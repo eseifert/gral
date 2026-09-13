@@ -49,9 +49,6 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * their {@code toString}.</p>
  */
 public class LabelPointRenderer extends DefaultPointRenderer2D {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -2612520977245369774L;
-
 	/** Index of the column for the label content. */
 	private int column;
 	/** Format for the label content. */

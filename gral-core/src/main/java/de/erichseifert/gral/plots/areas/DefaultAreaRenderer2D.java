@@ -53,9 +53,6 @@ import de.erichseifert.gral.util.PointND;
  * rather than to an invisible line outside it.</p>
  */
 public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -202003022764142849L;
-
 	/**
 	 * Returns the graphical representation to be drawn for the specified
 	 * data points.
@@ -65,9 +62,6 @@ public class DefaultAreaRenderer2D extends AbstractAreaRenderer {
 	 */
 	public Drawable getArea(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID = -3659798228877496727L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

@@ -27,10 +27,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.List;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -42,7 +38,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SerializationUtils;
 
 /**
  * <p>An {@link AreaRenderer} that draws one stroked line per data point, from
@@ -60,49 +55,15 @@ import de.erichseifert.gral.util.SerializationUtils;
  * value zero clamped into the range of the axis.</p>
  */
 public class LineAreaRenderer2D extends AbstractAreaRenderer {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -8396097579938931392L;
-
 	/** Stroke that is used to draw the lines from the data points to the
 	 * axis. */
-	private transient Stroke stroke;
+	private Stroke stroke;
 
 	/**
 	 * Standard constructor that initializes a new instance.
 	 */
 	public LineAreaRenderer2D() {
 		stroke = new BasicStroke(1f);
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-		// Custom deserialization
-		stroke = (Stroke) SerializationUtils.unwrap(
-				(Serializable) in.readObject());
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		// Default serialization
-		out.defaultWriteObject();
-		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(stroke));
 	}
 
 	/**
@@ -114,9 +75,6 @@ public class LineAreaRenderer2D extends AbstractAreaRenderer {
 	 */
 	public Drawable getArea(final List<DataPoint> points, final Shape shape) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID = 5492321759151727458L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing

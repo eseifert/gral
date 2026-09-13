@@ -28,13 +28,11 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -138,13 +136,5 @@ public class SizeablePointsRendererTest {
 		r.setColumn(-1);
 		path = r.getPointShape(data);
 		assertEquals(shape, path);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new SizeablePointRenderer();
-		SizeablePointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getColumn(), deserialized.getColumn());
 	}
 }

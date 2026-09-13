@@ -24,19 +24,16 @@ package de.erichseifert.gral.plots.lines;
 import static de.erichseifert.gral.TestUtils.assertEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.DataPoint;
@@ -110,12 +107,4 @@ public class SmoothLineRendererTest {
 		line.draw(context);
 		assertEmpty(image);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new SmoothLineRenderer2D();
-		SmoothLineRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getSmoothness(), deserialized.getSmoothness());
-    }
 }

@@ -21,19 +21,16 @@
  */
 package de.erichseifert.gral.plots.points;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.awt.Shape;
 import java.awt.geom.Line2D;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.plots.axes.Axis;
@@ -41,8 +38,6 @@ import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.axes.LinearRenderer2D;
 
 public class LabelPointsRendererTest {
-	private static final double DELTA = TestUtils.DELTA;
-
 	private static DataTable table;
 	private static Row row;
 	private static Axis axis;
@@ -90,16 +85,4 @@ public class LabelPointsRendererTest {
 		Shape path = r.getPointShape(data2);
 		assertNull(path);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new LabelPointRenderer();
-		LabelPointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getColumn(), deserialized.getColumn());
-		assertEquals(original.getFormat(), deserialized.getFormat());
-		assertEquals(original.getFont(), deserialized.getFont());
-		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
-		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY(), DELTA);
-    }
 }

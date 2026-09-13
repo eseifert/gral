@@ -21,20 +21,16 @@
  */
 package de.erichseifert.gral.plots.points;
 
-import static org.junit.Assert.assertEquals;
 import static de.erichseifert.gral.TestUtils.assertEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.assertNotEquals;
 import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -44,7 +40,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.Drawable;
@@ -242,27 +237,5 @@ public class DefaultPointRenderer2DTest {
 		point = r.getPoint(data, r.getPointShape(data));
 		point.draw(context);
 		assertEmpty(image);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		PointRenderer original = r;
-		original.setShape(new Rectangle2D.Double(-1.0, -2.0, 3.0, 4.0));
-		original.setColor(Color.RED);
-		original.setValueVisible(true);
-		original.setValueColumn(2);
-		original.setValueDistance(1.5);
-		original.setErrorVisible(true);
-		original.setErrorColor(Color.BLUE);
-
-		PointRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		TestUtils.assertEquals(original.getShape(), deserialized.getShape());
-		assertEquals(original.getColor(), deserialized.getColor());
-		assertEquals(original.isValueVisible(), deserialized.isValueVisible());
-		assertEquals(original.getValueColumn(), deserialized.getValueColumn());
-		assertEquals(original.getValueDistance(), deserialized.getValueDistance(), TestUtils.DELTA);
-		assertEquals(original.isErrorVisible(), deserialized.isErrorVisible());
-		assertEquals(original.getErrorColor(), deserialized.getErrorColor());
 	}
 }

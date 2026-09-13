@@ -29,17 +29,11 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.text.Format;
 
 import de.erichseifert.gral.plots.colors.ColorMapper;
 import de.erichseifert.gral.plots.colors.SingleColor;
 import de.erichseifert.gral.graphics.Location;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>Base class for {@link PointRenderer} implementations. It holds the
@@ -54,11 +48,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * per-point state; everything about the current point arrives in the
  * {@link PointData}.</p>
  */
-public abstract class AbstractPointRenderer
-		implements PointRenderer, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -408976260196287753L;
-
+public abstract class AbstractPointRenderer implements PointRenderer {
 	/** Shape to draw for the points. */
 	private Shape shape;
 	/** Color mapping used to fill the points. */
@@ -96,7 +86,7 @@ public abstract class AbstractPointRenderer
 	/** Shape to draw the error indicators. */
 	private Shape errorShape;
 	/** Stroke to the shapes of the error indicators. */
-	private transient Stroke errorStroke;
+	private Stroke errorStroke;
 
 	/**
 	 * Creates a new AbstractPointRenderer object with default shape and
@@ -122,37 +112,6 @@ public abstract class AbstractPointRenderer
 		errorColor = new SingleColor(Color.BLACK);
 		errorShape = new Line2D.Double(-2.0, 0.0, 2.0, 0.0);
 		errorStroke = new BasicStroke(1f);
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-		// Custom deserialization
-		errorStroke = (Stroke) SerializationUtils.unwrap(
-				(Serializable) in.readObject());
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		// Default serialization
-		out.defaultWriteObject();
-		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(errorStroke));
 	}
 
 	@Override

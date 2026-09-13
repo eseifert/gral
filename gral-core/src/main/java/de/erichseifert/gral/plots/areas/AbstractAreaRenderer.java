@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots.areas;
 
 import java.awt.Color;
 import java.awt.Paint;
-import java.io.Serializable;
 
 /**
  * <p>Base class for {@link AreaRenderer} implementations. It holds the gap and
@@ -35,10 +34,7 @@ import java.io.Serializable;
  * {@link AreaRenderer#getAreaShape(java.util.List)} and
  * {@link AreaRenderer#getArea(java.util.List, java.awt.Shape)}.</p>
  */
-public abstract class AbstractAreaRenderer implements AreaRenderer, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -9064749128190128428L;
-
+public abstract class AbstractAreaRenderer implements AreaRenderer {
 	/** Gap between points and the area. */
 	private double gap;
 	/** Decides whether the shape of the gap between points and the area is
