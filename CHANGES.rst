@@ -1,3 +1,20 @@
+GRAL 0.14 (unreleased)
+======================
+
+Plotting:
+    - Serializing a ``LineAreaRenderer2D`` no longer fails with a
+      ``NotSerializableException``, because its stroke is stored like the
+      stroke of ``AbstractLineRenderer2D``
+
+General:
+    - Tests assert the order and the number of the values returned by
+      filters, histograms, statistics and iterators, instead of only
+      checking that the expected values occur somewhere
+    - Serialization tests compare the restored properties, so that a field
+      that loses its value is no longer mistaken for a restored default
+    - Tests are compiled against Hamcrest 2.2 rather than the Hamcrest 1.3
+      that JUnit pulls in, which has no order-sensitive matchers
+
 GRAL 0.13 (2026-09-13)
 ======================
 
