@@ -2,48 +2,21 @@ GRAL 0.14 (unreleased)
 ======================
 
 Plotting:
-    - A box plot whose observations are all zero or all negative no longer
-      pulls the vertical axis up to zero. The maximum was accumulated from
-      ``Double.MIN_VALUE``, which is the smallest *positive* value and so
-      survived every comparison with data that was not positive
-    - Drawing or exporting a box plot whose observations are all zero no
-      longer hangs. The axis collapsed to a range of one denormal number, for
-      which the linear axis renderer asked for ``Integer.MAX_VALUE`` ticks
-    - A point shape without extent no longer turns the box of a box plot
-      into NaN coordinates. Such a shape is drawn at its natural size
-      instead of being scaled onto the box
-    - An auto-scaled axis whose values are all identical is given an extent
-      instead of collapsing to a single point, so that the conversion between
-      world and view coordinates stays defined. A collapsed range used to
-      yield ``NaN`` coordinates, which no vector format can express (#142)
-    - Plots, plot areas, legends, axes and the point, line, area and axis
-      renderers are no longer serializable (#151). Java serialization is kept
-      where it is a feature of its own, which is the ``data`` package; a plot
-      is described by its bean properties and is meant to be rebuilt from
-      them, not restored from a stream
-    - The color mappers and ``Drawable``, ``Layout``, ``Label``,
-      ``Dimension2D`` and ``Insets2D`` lost the interface as well, since
-      nothing that holds them serializes any more
+    - Box plots of non-positive observations no longer stretch the axis to zero
+    - Drawing or exporting a box plot of constant observations no longer hangs
+    - A point shape without extent no longer collapses a box plot's box
+    - Auto-scaled axes no longer collapse when all values are equal (#142)
+    - Plots, axes, renderers, legends and color mappers are no longer
+      serializable (#151)
 
 General:
-    - Added an export test that writes degenerate plots to EPS, PDF and SVG
-      and rejects ``NaN`` or infinite coordinates in the result
-    - ``PointND``, ``HaltonSequence`` and ``GeometryUtils.PathSegment`` are
-      no longer serializable, so the ``data`` package is the only part of the
-      library that writes objects to a stream
-    - Removed ``SerializationUtils``, ``SerializationWrapper`` and the
-      ``Serializable`` wrappers for ``BasicStroke``, ``Shape``, ``Area`` and
-      ``Point2D``, which existed only to carry those AWT types through a
-      round trip. Fields that were ``transient`` for that reason are ordinary
-      fields again
-    - Tests assert the order and the number of the values returned by
-      filters, histograms, statistics and iterators, instead of only
-      checking that the expected values occur somewhere
-    - The serialization tests of the ``data`` package compare the restored
-      properties, so that a field that loses its value is no longer mistaken
-      for a restored default
-    - Tests are compiled against Hamcrest 2.2 rather than the Hamcrest 1.3
-      that JUnit pulls in, which has no order-sensitive matchers
+    - Drawables, layouts and the utility types are no longer serializable
+    - Only the ``data`` package is still serializable
+    - Removed ``SerializationUtils`` and its ``Serializable`` AWT wrappers
+    - Added an export test that rejects ``NaN`` coordinates in EPS, PDF and SVG
+    - Tests assert the order and number of returned values, not just presence
+    - The ``data`` serialization tests compare the restored properties
+    - Tests use Hamcrest 2.2, which has order-sensitive matchers
 
 GRAL 0.13 (2026-09-13)
 ======================
