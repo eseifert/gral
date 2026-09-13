@@ -940,6 +940,11 @@ public class PiePlot extends AbstractPlot implements Navigable {
 			throw new IllegalArgumentException(
 				"This plot type only supports a single data source."); //$NON-NLS-1$
 		}
+		if (!isPieData(source)) {
+			throw new IllegalArgumentException(
+				"This plot type only supports data sources that have been " + //$NON-NLS-1$
+				"prepared with PiePlot.createPieData(DataSource)."); //$NON-NLS-1$
+		}
 
 		var pointRendererDefault = new PieSliceRenderer(this);
 		setPointRenderer(source, pointRendererDefault);
@@ -1114,6 +1119,23 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 */
 	public static DataSource createPieData(DataSource data) {
 		return new PieData(data);
+	}
+
+	/**
+	 * Returns whether a data source has the column layout that
+	 * {@link #createPieData(DataSource)} produces, i.e. the start and the end
+	 * of a slice followed by its visibility.
+	 * @param data Data source to check.
+	 * @return {@code true} if the data source can be displayed as a pie.
+	 */
+	private static boolean isPieData(DataSource data) {
+		if (data.getColumnCount() < 3) {
+			return false;
+		}
+		Class<? extends Comparable<?>>[] types = data.getColumnTypes();
+		return Number.class.isAssignableFrom(types[0])
+			&& Number.class.isAssignableFrom(types[1])
+			&& Boolean.class.isAssignableFrom(types[2]);
 	}
 
 	@Override

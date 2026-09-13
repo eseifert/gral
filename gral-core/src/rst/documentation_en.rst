@@ -579,7 +579,7 @@ whole plot.
 
 .. code:: java
 
-    Plot plot = new PiePlot(data);
+    Plot plot = new PiePlot(PiePlot.createPieData(data));
     Paint gradient = new LinearGradientPaint(
         0f,0f,                 // Coordinates of gradient start point
         1f,0f,                 // Coordinates of gradient end point

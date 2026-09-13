@@ -100,6 +100,23 @@ public class PiePlotTest {
 		}
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testRawDataSourceIsRejected() {
+		var rawData = new DataTable(Double.class);
+		rawData.add(1.0);
+		rawData.add(2.0);
+
+		new PiePlot(rawData);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testDataSourceWithWrongColumnTypesIsRejected() {
+		var rawData = new DataTable(Double.class, Double.class, Double.class);
+		rawData.add(0.0, 1.0, 1.0);
+
+		new PiePlot(rawData);
+	}
+
 	@Test
 	public void testCreatePieDataReplacesNumericColumnWithTwoDoubleAndOneIntegerColumns() {
 		var data = new DataTable(Integer.class);
