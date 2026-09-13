@@ -893,6 +893,62 @@ two of them can be connected so that several plots move together:
     // Back to the default state
     navigator1.reset();
 
+Showing a plot in JavaFX
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The module ``gral-javafx`` is the same bridge for JavaFX. ``DrawableCanvas`` is
+a resizable ``Canvas`` that paints one drawable, and ``InteractiveCanvas`` adds
+dragging to pan and scrolling or double-clicking to zoom:
+
+.. code:: java
+
+    StackPane root = new StackPane(new InteractiveCanvas(plot));
+    stage.setScene(new Scene(root, 800.0, 600.0));
+    stage.show();
+
+The plot is built exactly as it is for a Swing window, for a PNG or for a PDF.
+Painting goes through `FXGraphics2D <https://github.com/jfree/fxgraphics2d>`__,
+a ``Graphics2D`` implementation that writes to a JavaFX canvas.
+
+JavaFX itself is not a dependency of the module: the OpenJFX artifacts are
+specific to a platform, and which version to run on is the decision of the
+application, which has a JavaFX runtime anyway.
+
+Zooming and panning go through the same ``Navigator`` as in Swing, so the
+navigators of a JavaFX view and a Swing view of the same data can be connected
+and will move together.
+
+Showing a plot in other toolkits
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Neither adapter is privileged. A ``Drawable`` paints itself into a
+``java.awt.Graphics2D`` and knows nothing else, so every toolkit that has a
+``Graphics2D`` implementation can display a GRAL plot in about ten lines: set
+the bounds of the drawable to the area to fill, wrap the graphics in a
+``DrawingContext`` and call ``draw``.
+
+For Compose Desktop, which draws through Skia, that implementation is
+`SkikoGraphics2D <https://github.com/jfree/skikographics2d>`__. It wraps the
+``org.jetbrains.skia.Canvas`` that a Compose ``Canvas`` hands out:
+
+.. code:: kotlin
+
+    @Composable
+    fun PlotCanvas(plot: Drawable, modifier: Modifier = Modifier) {
+        Canvas(modifier) {
+            drawIntoCanvas { canvas ->
+                plot.bounds = Rectangle2D.Double(
+                    0.0, 0.0, size.width.toDouble(), size.height.toDouble())
+                plot.draw(DrawingContext(SkikoGraphics2D(canvas.nativeCanvas)))
+            }
+        }
+    }
+
+This is a documented example rather than a module of the build: Compose Desktop
+is built with the Kotlin and Compose Gradle plugins, and SkikoGraphics2D is not
+published to Maven Central, so it has to be built from its sources. What the
+example shows is that nothing beyond a ``Graphics2D`` is needed.
+
 Exporting plot images
 ~~~~~~~~~~~~~~~~~~~~~
 
