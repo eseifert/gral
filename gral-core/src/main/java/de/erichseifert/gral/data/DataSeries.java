@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * <p>A view that selects columns of another data source, optionally reordering
@@ -208,9 +209,20 @@ public class DataSeries extends AbstractDataSource implements DataListener {
 		return mappedEvents.toArray(new DataChangeEvent[0]);
 	}
 
+	/**
+	 * Returns the name of this series, or a description of the selected
+	 * columns if the series is unnamed.
+	 * @return A textual representation of this series.
+	 */
 	@Override
 	public String toString() {
-		return getName();
+		String name = getName();
+		if (name != null) {
+			return name;
+		}
+		return String.format(Locale.US,
+			"%s[data=%s,cols=%s]", //$NON-NLS-1$
+			getClass().getName(), data, cols);
 	}
 
 	/**

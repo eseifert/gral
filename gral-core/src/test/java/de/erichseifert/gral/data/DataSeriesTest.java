@@ -193,4 +193,12 @@ public class DataSeriesTest {
 		assertEquals(series.getName(), series.toString());
 	}
 
+	@Test
+	public void testToStringOfUnnamedSeries() {
+		var series = new DataSeries(table, 2, 1);
+		assertNull(series.getName());
+		assertNotNull(series.toString());
+		assertTrue(series.toString().contains(DataSeries.class.getName()));
+	}
+
 }
