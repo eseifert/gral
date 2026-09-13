@@ -109,6 +109,18 @@ in a JavaFX application ``gral-javafx``:
         <version>0.14</version>
     </dependency>
 
+A project that used ``gral-core`` before the Swing components were split off can
+depend on ``de.erichseifert.gral:gral`` instead, which is the two of them
+together:
+
+.. code:: xml
+
+    <dependency>
+        <groupId>de.erichseifert.gral</groupId>
+        <artifactId>gral</artifactId>
+        <version>0.13</version>
+    </dependency>
+
 Using GRAL with Gradle
 ----------------------
 

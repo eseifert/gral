@@ -1,0 +1,36 @@
+description = 'GRAL, the library core and the Swing components'
+
+ext.pomName = rootProject.name
+ext.pomDescription = 'Aggregate of the modules that GRAL used to be one of'
+
+/*
+ * The published artifact is 'gral', the coordinate the library had before it
+ * was split into modules. The Gradle project cannot be called that: the
+ * aggregation of the Central Portal publisher refuses a build in which two
+ * projects share a name, and the root project is 'GRAL'.
+ */
+base.archivesName = 'gral'
+publishing.publications.named('mavenJava') {
+	artifactId = 'gral'
+}
+
+/*
+ * This module has no code of its own. It exists so that a project that depended
+ * on 'de.erichseifert.gral:gral-core' before the Swing components were split off
+ * can keep a single dependency: it resolves to what that artifact used to
+ * contain. New projects are better off naming the modules they actually use.
+ */
+dependencies {
+	api project(':gral-core')
+	api project(':gral-swing')
+}
+
+jar {
+	manifest {
+		attributes(
+			'Implementation-Title': project.description,
+			'Implementation-Version': project.version,
+			'Implementation-Vendor': owner1_name,
+		)
+	}
+}
