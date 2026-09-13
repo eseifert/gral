@@ -87,7 +87,7 @@ public class TestUtils {
 	/**
 	 * Fails if the image is not empty and prints a specified message. The
 	 * image is considered as empty when it contains only transparent pixels
-	 * (alpha &lt; 0).
+	 * (alpha == 0).
 	 * @param message Custom message.
 	 * @param image Image to test.
 	 */
@@ -99,7 +99,7 @@ public class TestUtils {
 
 	/**
 	 * Fails if the image is not empty. The image is considered as empty when
-	 * it contains only transparent pixels (alpha &lt; 0).
+	 * it contains only transparent pixels (alpha == 0).
 	 * @param image Image to test.
 	 */
 	public static void assertEmpty(BufferedImage image) {
@@ -108,8 +108,8 @@ public class TestUtils {
 
 	/**
 	 * Fails if the image is empty and prints a specified message. The image is
-	 * considered as not empty when it contains at least one transparent pixel
-	 * (alpha &gt; 0).
+	 * considered as not empty when it contains at least one non-transparent
+	 * pixel (alpha &gt; 0).
 	 * @param message Custom message.
 	 * @param image Image to test.
 	 */
@@ -125,7 +125,7 @@ public class TestUtils {
 
 	/**
 	 * Fails if the image is empty. The image is considered as not empty when
-	 * it contains at least one transparent pixel (alpha &gt; 0).
+	 * it contains at least one non-transparent pixel (alpha &gt; 0).
 	 * @param image Image to test.
 	 */
 	public static void assertNotEmpty(BufferedImage image) {
@@ -134,7 +134,7 @@ public class TestUtils {
 
 	/**
 	 * Returns whether the specified image is empty. The image is considered
-	 * as empty when it contains only transparent pixels (alpha &lt; 0).
+	 * as empty when it contains only transparent pixels (alpha == 0).
 	 * @param image Image to test.
 	 * @return {@code true} when the image is empty, otherwise {@code false}
 	 */
@@ -240,7 +240,8 @@ public class TestUtils {
 		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(original);
 		} catch (NotSerializableException e) {
-			e.printStackTrace();
+			throw new AssertionError("Unable to serialize "
+				+ original.getClass().getName() + ".", e);
 		}
 		assertTrue("Serialization failed.", out.size() > 0);
 
