@@ -21,15 +21,16 @@
  */
 package de.erichseifert.gral.data.statistics;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import org.hamcrest.CoreMatchers;
 
 public class StatisticsTest {
 	private static final double DELTA = 1e-10;
@@ -52,94 +53,130 @@ public class StatisticsTest {
 		stats = table.getStatistics();
 	}
 
+	/**
+	 * Returns the statistic of every row of the test table as a plain array,
+	 * so that a test can assert all rows at once.
+	 * @param key Statistical key.
+	 * @return One value per row of the table.
+	 */
+	private double[] rowStatistics(String key) {
+		DataSource stats = table.getRowStatistics(key);
+		var values = new double[stats.getRowCount()];
+		for (int row = 0; row < values.length; row++) {
+			values[row] = ((Number) stats.get(0, row)).doubleValue();
+		}
+		return values;
+	}
+
+	/**
+	 * Returns the statistic of every column of the test table as a plain
+	 * array, so that a test can assert all columns at once.
+	 * @param key Statistical key.
+	 * @return One value per column of the table.
+	 */
+	private double[] columnStatistics(String key) {
+		DataSource stats = table.getColumnStatistics(key);
+		var values = new double[stats.getColumnCount()];
+		for (int col = 0; col < values.length; col++) {
+			values[col] = ((Number) stats.get(col, 0)).doubleValue();
+		}
+		return values;
+	}
+
 	@Test
 	public void testSum() {
 		assertEquals(85.0, stats.get(Statistics.SUM), DELTA);
 
-		assertThat(table.getRowStatistics(Statistics.SUM),
-				CoreMatchers.<Comparable<?>>hasItems(3.0, 7.0, 8.0));
-		assertThat(table.getColumnStatistics(Statistics.SUM),
-				CoreMatchers.<Comparable<?>>hasItems(17.0, 24.0, 44.0));
+		assertArrayEquals(new double[] {3.0, 7.0, 8.0, 9.0, 15.0, 10.0, 19.0, 14.0},
+				rowStatistics(Statistics.SUM), DELTA);
+		assertArrayEquals(new double[] {17.0, 24.0, 44.0},
+				columnStatistics(Statistics.SUM), DELTA);
 	}
 
 	@Test
 	public void testMean() {
 		assertEquals(85.0/24.0, stats.get(Statistics.MEAN), DELTA);
 
-		assertThat(table.getRowStatistics(Statistics.MEAN),
-				CoreMatchers.<Comparable<?>>hasItems(3.0/3.0, 7.0/3.0, 8.0/3.0));
-		assertThat(table.getColumnStatistics(Statistics.MEAN),
-				CoreMatchers.<Comparable<?>>hasItems(17.0/8.0, 24.0/8.0, 44.0/8.0));
+		assertArrayEquals(new double[] {3.0/3.0, 7.0/3.0, 8.0/3.0, 9.0/3.0,
+				15.0/3.0, 10.0/3.0, 19.0/3.0, 14.0/3.0},
+				rowStatistics(Statistics.MEAN), DELTA);
+		assertArrayEquals(new double[] {17.0/8.0, 24.0/8.0, 44.0/8.0},
+				columnStatistics(Statistics.MEAN), DELTA);
 	}
 
 	@Test
 	public void testMin() {
 		assertEquals(0.0, stats.get(Statistics.MIN), DELTA);
 
-		assertThat(table.getRowStatistics(Statistics.MIN),
-				CoreMatchers.<Comparable<?>>hasItems(0.0, 1.0, 2.0));
-		assertThat(table.getColumnStatistics(Statistics.MIN),
-				CoreMatchers.<Comparable<?>>hasItems(0.0, 1.0, 2.0));
+		assertArrayEquals(new double[] {0.0, 1.0, 2.0, 2.0, 4.0, 1.0, 2.0, 1.0},
+				rowStatistics(Statistics.MIN), DELTA);
+		assertArrayEquals(new double[] {0.0, 1.0, 2.0},
+				columnStatistics(Statistics.MIN), DELTA);
 	}
 
 	@Test
 	public void testMax() {
 		assertEquals(9.0, stats.get(Statistics.MAX), DELTA);
 
-		assertThat(table.getRowStatistics(Statistics.MAX),
-				CoreMatchers.<Comparable<?>>hasItems(2.0, 3.0, 4.0));
-		assertThat(table.getColumnStatistics(Statistics.MAX),
-				CoreMatchers.<Comparable<?>>hasItems(5.0, 9.0, 9.0));
+		assertArrayEquals(new double[] {2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 9.0, 9.0},
+				rowStatistics(Statistics.MAX), DELTA);
+		assertArrayEquals(new double[] {5.0, 9.0, 9.0},
+				columnStatistics(Statistics.MAX), DELTA);
 	}
 
 	@Test
 	public void testN() {
 		assertEquals(24.0, stats.get(Statistics.N), DELTA);
 
-		assertThat(table.getRowStatistics(Statistics.N),
-				CoreMatchers.<Comparable<?>>hasItems(3.0, 3.0, 3.0));
-		assertThat(table.getColumnStatistics(Statistics.N),
-				CoreMatchers.<Comparable<?>>hasItems(8.0, 8.0, 8.0));
+		assertArrayEquals(new double[] {3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0},
+				rowStatistics(Statistics.N), DELTA);
+		assertArrayEquals(new double[] {8.0, 8.0, 8.0},
+				columnStatistics(Statistics.N), DELTA);
 	}
 
 	@Test
 	public void testSumOfDiffSquares() {
 		assertEquals(157.95833333333337, stats.get(Statistics.SUM_OF_DIFF_SQUARES), DELTA);
 
-		// Horizontal
-		assertEquals(2.00000000000000, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(2.66666666666666, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(2.66666666666666, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(18.87500000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(48.00000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(42.00000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_SQUARES).get(2, 0)).doubleValue(), DELTA);
+		double[] byRow = rowStatistics(Statistics.SUM_OF_DIFF_SQUARES);
+		assertEquals(2.00000000000000, byRow[0], DELTA);
+		assertEquals(2.66666666666666, byRow[1], DELTA);
+		assertEquals(2.66666666666666, byRow[2], DELTA);
+
+		double[] byColumn = columnStatistics(Statistics.SUM_OF_DIFF_SQUARES);
+		assertEquals(18.87500000000000, byColumn[0], DELTA);
+		assertEquals(48.00000000000000, byColumn[1], DELTA);
+		assertEquals(42.00000000000000, byColumn[2], DELTA);
 	}
 
 	@Test
 	public void testSumOfDiffCubics() {
 		assertEquals(340.50347222222221, stats.get(Statistics.SUM_OF_DIFF_CUBICS), DELTA);
-		// Horizontal
-		assertEquals( 0.00000000000000, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(-1.77777777777777, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(0, 1)).doubleValue(), DELTA);
-		assertEquals( 1.77777777777777, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals( 17.90625000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(198.00000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(  0.00000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_CUBICS).get(2, 0)).doubleValue(), DELTA);
+
+		double[] byRow = rowStatistics(Statistics.SUM_OF_DIFF_CUBICS);
+		assertEquals( 0.00000000000000, byRow[0], DELTA);
+		assertEquals(-1.77777777777777, byRow[1], DELTA);
+		assertEquals( 1.77777777777777, byRow[2], DELTA);
+
+		double[] byColumn = columnStatistics(Statistics.SUM_OF_DIFF_CUBICS);
+		assertEquals( 17.90625000000000, byColumn[0], DELTA);
+		assertEquals(198.00000000000000, byColumn[1], DELTA);
+		assertEquals(  0.00000000000000, byColumn[2], DELTA);
 	}
 
 	@Test
 	public void testSumOfDiffQuads() {
 		assertEquals(2723.1039496527756, stats.get(Statistics.SUM_OF_DIFF_QUADS), DELTA);
-		// Horizontal
-		assertEquals(   2.0000000000000, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_QUADS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(   3.5555555555555, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_QUADS).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(   3.5555555555555, ((Number) table.getRowStatistics(Statistics.SUM_OF_DIFF_QUADS).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals( 104.2753906250000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_QUADS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(1332.0000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_QUADS).get(1, 0)).doubleValue(), DELTA);
-		assertEquals( 388.5000000000000, ((Number) table.getColumnStatistics(Statistics.SUM_OF_DIFF_QUADS).get(2, 0)).doubleValue(), DELTA);
+
+		double[] byRow = rowStatistics(Statistics.SUM_OF_DIFF_QUADS);
+		assertEquals(2.0000000000000, byRow[0], DELTA);
+		assertEquals(3.5555555555555, byRow[1], DELTA);
+		assertEquals(3.5555555555555, byRow[2], DELTA);
+
+		double[] byColumn = columnStatistics(Statistics.SUM_OF_DIFF_QUADS);
+		assertEquals( 104.2753906250000, byColumn[0], DELTA);
+		assertEquals(1332.0000000000000, byColumn[1], DELTA);
+		assertEquals( 388.5000000000000, byColumn[2], DELTA);
 	}
 
 	/**
@@ -148,15 +185,17 @@ public class StatisticsTest {
 	 */
 	@Test
 	public void testSkewness() {
-		assertEquals(   0.8402593459494, stats.get(Statistics.SKEWNESS), DELTA);
-		// Horizontal
-		assertEquals(   0.0000000000000, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(  -0.7071067811865, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(   0.7071067811865, ((Number) table.getRowStatistics(Statistics.SKEWNESS).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(   0.6176169362594, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(   1.6840241981634, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(   0.0000000000000, ((Number) table.getColumnStatistics(Statistics.SKEWNESS).get(2, 0)).doubleValue(), DELTA);
+		assertEquals(0.8402593459494, stats.get(Statistics.SKEWNESS), DELTA);
+
+		double[] byRow = rowStatistics(Statistics.SKEWNESS);
+		assertEquals( 0.0000000000000, byRow[0], DELTA);
+		assertEquals(-0.7071067811865, byRow[1], DELTA);
+		assertEquals( 0.7071067811865, byRow[2], DELTA);
+
+		double[] byColumn = columnStatistics(Statistics.SKEWNESS);
+		assertEquals(0.6176169362594, byColumn[0], DELTA);
+		assertEquals(1.6840241981634, byColumn[1], DELTA);
+		assertEquals(0.0000000000000, byColumn[2], DELTA);
 	}
 
 	/**
@@ -182,51 +221,41 @@ public class StatisticsTest {
 	 */
 	@Test
 	public void testKurtosis() {
-		assertEquals(  -0.3806690393420, stats.get(Statistics.KURTOSIS), DELTA);
-		// Horizontal
-		assertEquals(  -1.5000000000000, ((Number) table.getRowStatistics(Statistics.KURTOSIS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(  -1.5000000000000, ((Number) table.getRowStatistics(Statistics.KURTOSIS).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(  -1.5000000000000, ((Number) table.getRowStatistics(Statistics.KURTOSIS).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(  -0.6584798912328, ((Number) table.getColumnStatistics(Statistics.KURTOSIS).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(   1.6250000000000, ((Number) table.getColumnStatistics(Statistics.KURTOSIS).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(  -1.2380952380952, ((Number) table.getColumnStatistics(Statistics.KURTOSIS).get(2, 0)).doubleValue(), DELTA);
+		assertEquals(-0.3806690393420, stats.get(Statistics.KURTOSIS), DELTA);
+
+		double[] byRow = rowStatistics(Statistics.KURTOSIS);
+		assertEquals(-1.5000000000000, byRow[0], DELTA);
+		assertEquals(-1.5000000000000, byRow[1], DELTA);
+		assertEquals(-1.5000000000000, byRow[2], DELTA);
+
+		double[] byColumn = columnStatistics(Statistics.KURTOSIS);
+		assertEquals(-0.6584798912328, byColumn[0], DELTA);
+		assertEquals( 1.6250000000000, byColumn[1], DELTA);
+		assertEquals(-1.2380952380952, byColumn[2], DELTA);
 	}
 
 	@Test
 	public void testQuartiles() {
 		// Quartile 1
 		assertEquals(2.00, stats.get(Statistics.QUARTILE_1), DELTA);
-		// Horizontal
-		assertEquals(0.50, ((Number) table.getRowStatistics(Statistics.QUARTILE_1).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(2.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_1).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(2.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_1).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(1.00, ((Number) table.getColumnStatistics(Statistics.QUARTILE_1).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(1.75, ((Number) table.getColumnStatistics(Statistics.QUARTILE_1).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(3.75, ((Number) table.getColumnStatistics(Statistics.QUARTILE_1).get(2, 0)).doubleValue(), DELTA);
+		assertArrayEquals(new double[] {0.50, 2.00, 2.00},
+				Arrays.copyOf(rowStatistics(Statistics.QUARTILE_1), 3), DELTA);
+		assertArrayEquals(new double[] {1.00, 1.75, 3.75},
+				columnStatistics(Statistics.QUARTILE_1), DELTA);
 
 		// Quartile 2
 		assertEquals(2.50, stats.get(Statistics.QUARTILE_2), DELTA);
-		// Horizontal
-		assertEquals(1.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_2).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(3.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_2).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(2.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_2).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(2.00, ((Number) table.getColumnStatistics(Statistics.QUARTILE_2).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(2.00, ((Number) table.getColumnStatistics(Statistics.QUARTILE_2).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(5.50, ((Number) table.getColumnStatistics(Statistics.QUARTILE_2).get(2, 0)).doubleValue(), DELTA);
+		assertArrayEquals(new double[] {1.00, 3.00, 2.00},
+				Arrays.copyOf(rowStatistics(Statistics.QUARTILE_2), 3), DELTA);
+		assertArrayEquals(new double[] {2.00, 2.00, 5.50},
+				columnStatistics(Statistics.QUARTILE_2), DELTA);
 
 		// Quartile 3
 		assertEquals(5.00, stats.get(Statistics.QUARTILE_3), DELTA);
-		// Horizontal
-		assertEquals(1.50, ((Number) table.getRowStatistics(Statistics.QUARTILE_3).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(3.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_3).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(3.00, ((Number) table.getRowStatistics(Statistics.QUARTILE_3).get(0, 2)).doubleValue(), DELTA);
-		// Vertical
-		assertEquals(2.50, ((Number) table.getColumnStatistics(Statistics.QUARTILE_3).get(0, 0)).doubleValue(), DELTA);
-		assertEquals(3.25, ((Number) table.getColumnStatistics(Statistics.QUARTILE_3).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(7.25, ((Number) table.getColumnStatistics(Statistics.QUARTILE_3).get(2, 0)).doubleValue(), DELTA);
+		assertArrayEquals(new double[] {1.50, 3.00, 3.00},
+				Arrays.copyOf(rowStatistics(Statistics.QUARTILE_3), 3), DELTA);
+		assertArrayEquals(new double[] {2.50, 3.25, 7.25},
+				columnStatistics(Statistics.QUARTILE_3), DELTA);
 
 		// Median == Quartile 2
 		assertEquals(stats.get(Statistics.MEDIAN), stats.get(Statistics.QUARTILE_2), DELTA);
@@ -250,15 +279,15 @@ public class StatisticsTest {
 		assertEquals( 42.0, stats.get(Statistics.MAX), DELTA);
 		assertEquals( 95.0, stats.get(Statistics.SUM), DELTA);
 		// Horizontal
-		assertEquals(  3.0, ((Number) table.getRowStatistics(Statistics.N  ).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(-42.0, ((Number) table.getRowStatistics(Statistics.MIN).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(  3.0, ((Number) table.getRowStatistics(Statistics.MAX).get(0, 1)).doubleValue(), DELTA);
-		assertEquals(-38.0, ((Number) table.getRowStatistics(Statistics.SUM).get(0, 1)).doubleValue(), DELTA);
+		assertEquals(  3.0, rowStatistics(Statistics.N  )[1], DELTA);
+		assertEquals(-42.0, rowStatistics(Statistics.MIN)[1], DELTA);
+		assertEquals(  3.0, rowStatistics(Statistics.MAX)[1], DELTA);
+		assertEquals(-38.0, rowStatistics(Statistics.SUM)[1], DELTA);
 		// Vertical
-		assertEquals(  9.0, ((Number) table.getColumnStatistics(Statistics.N  ).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(-42.0, ((Number) table.getColumnStatistics(Statistics.MIN).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(  9.0, ((Number) table.getColumnStatistics(Statistics.MAX).get(1, 0)).doubleValue(), DELTA);
-		assertEquals(-32.0, ((Number) table.getColumnStatistics(Statistics.SUM).get(1, 0)).doubleValue(), DELTA);
+		assertEquals(  9.0, columnStatistics(Statistics.N  )[1], DELTA);
+		assertEquals(-42.0, columnStatistics(Statistics.MIN)[1], DELTA);
+		assertEquals(  9.0, columnStatistics(Statistics.MAX)[1], DELTA);
+		assertEquals(-32.0, columnStatistics(Statistics.SUM)[1], DELTA);
 	}
 
 	// TODO Add tests for dataAdded and dataRemoved
