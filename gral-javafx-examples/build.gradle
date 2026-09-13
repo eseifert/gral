@@ -1,0 +1,56 @@
+description = 'GRAL JavaFX example application'
+
+ext.pomName = 'GRAL JavaFX examples'
+ext.pomDescription = description
+
+apply plugin: 'application'
+apply from: rootProject.file('gradle/javafx.gradle')
+
+/*
+ * JavaFX is not a dependency of the published artifact, for the same reason it
+ * is not one of :gral-javafx: the OpenJFX artifacts are platform-specific, and
+ * a POM that names one platform is wrong everywhere else. A JavaFX application
+ * brings its own runtime; this configuration is what supplies it to the 'run'
+ * task of this build.
+ */
+configurations {
+	javafxRuntime
+	// The example is compiled against the same artifacts that run it.
+	compileOnly.extendsFrom javafxRuntime
+}
+
+dependencies {
+	implementation project(':gral-core')
+	implementation project(':gral-javafx')
+
+	javafxRuntime javafx('javafx-base')
+	javafxRuntime javafx('javafx-graphics')
+	/*
+	 * FXGraphics2D draws images through SwingFXUtils, which is in javafx-swing.
+	 */
+	javafxRuntime javafx('javafx-swing')
+}
+
+application {
+	/*
+	 * Not the Application subclass itself: the Java launcher rejects a main
+	 * class that extends it when JavaFX is on the class path instead of the
+	 * module path. See the javadoc of Launcher.
+	 */
+	mainClass = 'de.erichseifert.gral.examples.javafx.Launcher'
+}
+
+tasks.named('run') {
+	classpath += configurations.javafxRuntime
+}
+
+jar {
+	manifest {
+		attributes(
+			'Main-Class': application.mainClass.get(),
+			'Automatic-Module-Name': 'de.erichseifert.gral.examples.javafx',
+			'Implementation-Title': project.description,
+			'Implementation-Version': project.version,
+		)
+	}
+}

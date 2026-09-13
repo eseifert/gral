@@ -1,0 +1,50 @@
+/*
+ * GRAL: GRAphing Library for Java(R)
+ *
+ * (C) Copyright 2009-2026 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <mseifert[at]error-reports.org>
+ *
+ * This file is part of GRAL.
+ *
+ * GRAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GRAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package de.erichseifert.gral.examples.javafx;
+
+import javafx.application.Application;
+
+/**
+ * <p>Starts the JavaFX example.</p>
+ *
+ * <p>The launcher exists because a main class that extends
+ * {@code javafx.application.Application} is rejected by the Java launcher when
+ * JavaFX is on the class path instead of the module path, with the message
+ * that the JavaFX runtime components are missing. Calling
+ * {@link Application#launch(Class, String...)} from a class that does not
+ * extend {@code Application} works either way.</p>
+ */
+public class Launcher {
+	/**
+	 * Private constructor.
+	 */
+	private Launcher() {
+	}
+
+	/**
+	 * Starts the example application.
+	 * @param args Command line arguments, passed on to JavaFX.
+	 */
+	public static void main(String[] args) {
+		Application.launch(ScatterPlotExample.class, args);
+	}
+}
