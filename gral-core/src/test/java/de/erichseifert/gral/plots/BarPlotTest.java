@@ -24,11 +24,9 @@ package de.erichseifert.gral.plots;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import de.erichseifert.gral.data.DataSource;
@@ -37,7 +35,6 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.BarPlot.BarRenderer;
 import de.erichseifert.gral.plots.axes.Axis;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -99,15 +96,5 @@ public class BarPlotTest {
 		plot.draw(context);
 
 		assertNotEmpty(image);
-	}
-
-	private static void testPointRendererSerialization(
-			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {
-		for (int rendererIndex = 0; rendererIndex < originalRenderers.size(); rendererIndex++) {
-			BarRenderer original = (BarRenderer) originalRenderers.get(rendererIndex);
-			BarRenderer deserialized = (BarRenderer) deserializedRenderers.get(rendererIndex);
-			assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-			assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		}
 	}
 }

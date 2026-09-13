@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
@@ -34,8 +33,6 @@ import static org.junit.Assert.fail;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.RasterPlot.RasterRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,17 +82,6 @@ public class RasterPlotTest {
 			plot.add(data);
 			fail();
 		} catch (IllegalArgumentException e) {
-		}
-	}
-
-	private static void testPointRendererSerialization(
-			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {
-		for (int rendererIndex = 0; rendererIndex < originalRenderers.size(); rendererIndex++) {
-			RasterRenderer original = (RasterRenderer) originalRenderers.get(rendererIndex);
-			RasterRenderer deserialized = (RasterRenderer) deserializedRenderers.get(rendererIndex);
-			assertEquals(original.getXColumn(), deserialized.getXColumn());
-			assertEquals(original.getYColumn(), deserialized.getYColumn());
-			assertEquals(original.getValueColumn(), deserialized.getValueColumn());
 		}
 	}
 }

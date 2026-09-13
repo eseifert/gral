@@ -42,8 +42,6 @@ import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
-import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
-import de.erichseifert.gral.plots.points.PointRenderer;
 import org.hamcrest.Matchers;
 
 public class PiePlotTest {
@@ -257,14 +255,5 @@ public class PiePlotTest {
 		data.add(0);
 
 		assertThat(pieData.getRowCount(), is(data.getRowCount()));
-	}
-
-	private static void testPointRendererSerialization(
-			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {
-		PieSliceRenderer original = (PieSliceRenderer) originalRenderer;
-		PieSliceRenderer deserialized = (PieSliceRenderer) deserializedRenderer;
-		assertEquals(original.getInnerRadius(), deserialized.getInnerRadius(), DELTA);
-		assertEquals(original.getOuterRadius(), deserialized.getOuterRadius(), DELTA);
-		assertEquals(original.getGap(), deserialized.getGap(), DELTA);
 	}
 }
