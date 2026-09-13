@@ -1,0 +1,42 @@
+description = 'GRAL JavaFX components'
+
+ext.pomName = 'GRAL JavaFX'
+ext.pomDescription = 'JavaFX components for displaying GRAL plots'
+
+apply from: rootProject.file('gradle/javafx.gradle')
+
+dependencies {
+	/*
+	 * Part of the API: DrawableCanvas takes a Drawable, and InteractiveCanvas
+	 * hands the gesture to the Navigator of the plot it displays.
+	 */
+	api project(':gral-core')
+
+	/*
+	 * FXGraphics2D implements Graphics2D on top of a JavaFX canvas and is
+	 * BSD-licensed. It is part of the API as well, because the canvas paints
+	 * through it.
+	 */
+	api 'org.jfree:org.jfree.fxgraphics2d:2.1.4'
+
+	/*
+	 * JavaFX is not redistributed with this module and does not appear in its
+	 * POM: the artifacts are platform-specific, and which version and which
+	 * platform to run on is the decision of the application. It is expected on
+	 * the class path or the module path at run time, the way a JavaFX
+	 * application has it anyway.
+	 */
+	compileOnly javafx('javafx-base')
+	compileOnly javafx('javafx-graphics')
+}
+
+jar {
+	manifest {
+		attributes(
+			'Automatic-Module-Name': 'de.erichseifert.gral.javafx',
+			'Implementation-Title': project.description,
+			'Implementation-Version': project.version,
+			'Implementation-Vendor': owner1_name,
+		)
+	}
+}
