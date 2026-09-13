@@ -12,6 +12,16 @@ ext.pomDescription = rootProject.description
 apply plugin: 'java-test-fixtures'
 
 dependencies {
+	/*
+	 * VectorGraphics2D is loaded reflectively by
+	 * de.erichseifert.gral.io.plots.VectorWriter, so it must stay off the
+	 * compile classpath. Without it GRAL simply doesn't offer EPS, PDF and
+	 * SVG export. It is declared here rather than for every module, because
+	 * this is the only one that reaches for it; the others inherit it along
+	 * with the core.
+	 */
+	runtimeOnly 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13'
+
 	// JUnit pulls in Hamcrest 1.3, which lacks the order-sensitive collection
 	// matchers (contains, containsInAnyOrder). Exclude it in favour of the
 	// standalone Hamcrest artifact, which supersedes hamcrest-core.
