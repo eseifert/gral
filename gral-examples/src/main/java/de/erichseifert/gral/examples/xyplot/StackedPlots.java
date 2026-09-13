@@ -26,8 +26,8 @@ import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.layout.TableLayout;
@@ -35,7 +35,6 @@ import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
@@ -46,10 +45,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * plots, and how a {@link de.erichseifert.gral.graphics.layout.TableLayout}
  * arranges several drawables in one container.</p>
  */
-public class StackedPlots extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 6832343098989019088L;
-
+public class StackedPlots extends Example {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
@@ -98,8 +94,7 @@ public class StackedPlots extends ExamplePanel {
 		// Connect the two plots, i.e. user (mouse) actions affect both plots
 		plotUpper.getNavigator().connect(plotLower.getNavigator());
 
-		var panel = new InteractivePanel(plots);
-		add(panel);
+		setDrawable(plots);
 	}
 
 	@Override
@@ -110,13 +105,5 @@ public class StackedPlots extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "An area and a line plot with synchronized actions.";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new StackedPlots().showInFrame();
 	}
 }

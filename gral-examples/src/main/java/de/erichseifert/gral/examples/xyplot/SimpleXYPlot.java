@@ -22,16 +22,15 @@
 package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
@@ -39,7 +38,6 @@ import de.erichseifert.gral.plots.axes.LogarithmicRenderer2D;
 import de.erichseifert.gral.plots.lines.DiscreteLineRenderer2D;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Orientation;
@@ -52,10 +50,7 @@ import de.erichseifert.gral.graphics.Orientation;
  * error bars, value-dependent point sizes, a step line, and a gradient
  * background for the plot area.</p>
  */
-public class SimpleXYPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -5263057758564264676L;
-
+public class SimpleXYPlot extends Example {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
@@ -140,7 +135,7 @@ public class SimpleXYPlot extends ExamplePanel {
 		discreteRenderer.setAscendingPoint(0.5);
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		setDrawable(plot);
 	}
 
 	@Override
@@ -151,13 +146,5 @@ public class SimpleXYPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Styled x-y plot with example data";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SimpleXYPlot().showInFrame();
 	}
 }

@@ -21,22 +21,16 @@
  */
 package de.erichseifert.gral.examples.pieplot;
 
-import java.awt.BorderLayout;
 import java.text.MessageFormat;
 import java.util.Random;
-import javax.swing.JSlider;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
-import de.erichseifert.gral.ui.InteractivePanel;
 
 
 /**
@@ -48,20 +42,16 @@ import de.erichseifert.gral.ui.InteractivePanel;
  * repaint call is needed. Also demonstrates the inner radius, which turns the
  * pie into a ring, and how negative values leave their slice empty.</p>
  */
-public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 6216017404657972412L;
-
+public class DynamicPiePlot extends Example implements Example.Adjustable {
 	private static final int SAMPLE_COUNT = 5;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
 	private final DataTable data;
 	private final PiePlot plot;
-	private final JSlider valueCountSlider;
 
 	/**
-	 * Creates the example, its plot and the slider that drives it.
+	 * Creates the example and its plot.
 	 */
 	@SuppressWarnings("unchecked")
 	public DynamicPiePlot() {
@@ -86,21 +76,28 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 		var colors = new LinearGradient(COLOR1, COLOR2);
 		pointRenderer.setColor(colors);
 
-		// Add plot to Swing component
-		var panel = new InteractivePanel(plot);
-		add(panel, BorderLayout.CENTER);
-
+		setDrawable(plot);
 		setValueCount(SAMPLE_COUNT);
+	}
 
-		// Create a slider to change the number of data values
-		valueCountSlider = new JSlider(0, 50, SAMPLE_COUNT);
-		valueCountSlider.setBorder(new EmptyBorder(15, 15, 5, 15));
-		valueCountSlider.setMajorTickSpacing(10);
-		valueCountSlider.setMinorTickSpacing(1);
-		valueCountSlider.setSnapToTicks(true);
-		valueCountSlider.setPaintTicks(true);
-		valueCountSlider.addChangeListener(this);
-		add(valueCountSlider, BorderLayout.SOUTH);
+	@Override
+	public int getMinimum() {
+		return 0;
+	}
+
+	@Override
+	public int getMaximum() {
+		return 50;
+	}
+
+	@Override
+	public int getTickSpacing() {
+		return 10;
+	}
+
+	@Override
+	public int getValue() {
+		return data.getRowCount();
 	}
 
 	@Override
@@ -111,6 +108,11 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 	@Override
 	public String getDescription() {
 		return "Pie with a changeable number of random data values";
+	}
+
+	@Override
+	public void setValue(int count) {
+		setValueCount(count);
 	}
 
 	private void setValueCount(int count) {
@@ -130,26 +132,5 @@ public class DynamicPiePlot extends ExamplePanel implements ChangeListener {
 			String title = MessageFormat.format("{0,number,integer} random values", data.getRowCount());
 			plot.getTitle().setText(title);
 		}
-	}
-
-	/**
-	 * Reacts to a movement of the slider by changing the number of data values.
-	 * @param e Event describing the change.
-	 */
-	public void stateChanged(ChangeEvent e) {
-		Object source = e.getSource();
-		if (source == valueCountSlider) {
-			int countNew = valueCountSlider.getValue();
-			setValueCount(countNew);
-			repaint();
-		}
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new DynamicPiePlot().showInFrame();
 	}
 }

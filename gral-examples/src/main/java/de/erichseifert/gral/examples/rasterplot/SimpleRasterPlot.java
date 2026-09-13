@@ -24,12 +24,11 @@ package de.erichseifert.gral.examples.rasterplot;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.RasterPlot;
 import de.erichseifert.gral.plots.colors.LinearGradient;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
@@ -42,10 +41,7 @@ import de.erichseifert.gral.graphics.Insets2D;
  * (x, y, value) form the plot expects, and how the colors are chosen with a
  * {@link de.erichseifert.gral.plots.colors.ColorMapper}.</p>
  */
-public class SimpleRasterPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -2515812178479580541L;
-
+public class SimpleRasterPlot extends Example {
 	private static final int SIZE = 64;
 	private static final double ZOOM = 0.3;
 
@@ -80,10 +76,17 @@ public class SimpleRasterPlot extends ExamplePanel {
 		plot.setColors(new LinearGradient(GraphicsUtils.deriveDarker(COLOR1), COLOR1, Color.WHITE));
 
 		// Add plot to Swing component
-		var panel = new InteractivePanel(plot);
-		panel.setPannable(false);
-		panel.setZoomable(false);
-		add(panel);
+		setDrawable(plot);
+	}
+
+	/**
+	 * The plot fills the view at a fixed scale, so there is nothing to
+	 * navigate to.
+	 * @return Always {@code false}.
+	 */
+	@Override
+	public boolean isNavigable() {
+		return false;
 	}
 
 	@Override
@@ -94,13 +97,5 @@ public class SimpleRasterPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return String.format("Raster plot of %d×%d values", SIZE, SIZE);
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SimpleRasterPlot().showInFrame();
 	}
 }

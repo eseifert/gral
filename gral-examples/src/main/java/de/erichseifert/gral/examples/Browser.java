@@ -22,6 +22,9 @@
 package de.erichseifert.gral.examples;
 
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -30,25 +33,15 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.erichseifert.gral.examples.barplot.HistogramPlot;
-import de.erichseifert.gral.examples.barplot.SimpleBarPlot;
-import de.erichseifert.gral.examples.boxplot.SimpleBoxPlot;
-import de.erichseifert.gral.examples.pieplot.DynamicPiePlot;
-import de.erichseifert.gral.examples.pieplot.SimplePiePlot;
-import de.erichseifert.gral.examples.rasterplot.SimpleRasterPlot;
-import de.erichseifert.gral.examples.xyplot.AreaPlot;
-import de.erichseifert.gral.examples.xyplot.ConvolutionExample;
-import de.erichseifert.gral.examples.xyplot.MemoryUsage;
-import de.erichseifert.gral.examples.xyplot.MultiplePointRenderers;
-import de.erichseifert.gral.examples.xyplot.ScatterPlot;
-import de.erichseifert.gral.examples.xyplot.SimpleXYPlot;
-import de.erichseifert.gral.examples.xyplot.SpiralPlot;
-import de.erichseifert.gral.examples.xyplot.StackedPlots;
-
 /**
  * <p>A window that lists every example on the left and shows the selected one
  * on the right. This is the {@code Main-Class} of the examples JAR, so it is
  * what {@code ./gradlew :gral-examples:run} starts.</p>
+ *
+ * <p>The examples themselves are in {@link Examples} and know nothing about
+ * Swing, so the JavaFX browser of {@code gral-javafx-examples} shows the same
+ * ones. Naming an example on the command line opens the browser on it, for
+ * example {@code ScatterPlot}.</p>
  *
  * <p>The examples are all constructed up front, which means starting the
  * browser also serves as a rough check that none of them is broken.</p>
@@ -57,53 +50,43 @@ public class Browser extends JFrame implements ListSelectionListener {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = -3734045121668893200L;
 
-	private static class ExamplesList extends JList {
+	private static class ExamplesList extends JList<Example> {
 		/** Version id for serialization. */
 		private static final long serialVersionUID = -5904920699472899791L;
 
-		public ExamplesList(ExamplePanel[] examples) {
-			super(examples);
+		public ExamplesList(List<Example> examples) {
+			super(examples.toArray(new Example[0]));
 		}
 
 		@Override
 		public String getToolTipText(MouseEvent event) {
 			int index = locationToIndex(event.getPoint());
-			ExamplePanel item = (ExamplePanel) getModel().getElementAt(index);
-			return item.getDescription();
+			return getModel().getElementAt(index).getDescription();
 		}
 	}
 
-	private static final ExamplePanel[] examples = {
-		new HistogramPlot(),
-		new SimpleBarPlot(),
-		new SimpleBoxPlot(),
-		new DynamicPiePlot(),
-		new SimplePiePlot(),
-		new SimpleRasterPlot(),
-		new AreaPlot(),
-		new ConvolutionExample(),
-		new MemoryUsage(),
-		new ScatterPlot(),
-		new SimpleXYPlot(),
-		new SpiralPlot(),
-		new StackedPlots(),
-		new MultiplePointRenderers()
-	};
-
-	private final JList examplesList;
+	private final transient Map<Example, ExamplePanel> panels;
+	private final ExamplesList examplesList;
 	private final JScrollPane exampleScrollPane;
 
 	/**
 	 * Creates the browser window and instantiates every example.
+	 * @param selected Example to show first.
 	 */
-	public Browser() {
+	public Browser(Example selected) {
 		super("GRAL examples");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		List<Example> examples = Examples.createAll();
+		panels = new LinkedHashMap<>();
+		for (Example example : examples) {
+			panels.put(example, new ExamplePanel(example));
+		}
 
 		examplesList = new ExamplesList(examples);
 		examplesList.addListSelectionListener(this);
 		exampleScrollPane = new JScrollPane();
-		setExample(examples[0]);
+		setExample(selected);
 
 		var listExamplesSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		listExamplesSplitter.setLeftComponent(examplesList);
@@ -116,11 +99,12 @@ public class Browser extends JFrame implements ListSelectionListener {
 		setLocationRelativeTo(null);
 	}
 
-	private void setExample(ExamplePanel example) {
-		if (example == exampleScrollPane.getViewport().getView()) {
+	private void setExample(Example example) {
+		ExamplePanel panel = panels.get(example);
+		if (panel == exampleScrollPane.getViewport().getView()) {
 			return;
 		}
-		exampleScrollPane.getViewport().setView(example);
+		exampleScrollPane.getViewport().setView(panel);
 		examplesList.setSelectedValue(example, true);
 	}
 
@@ -131,16 +115,19 @@ public class Browser extends JFrame implements ListSelectionListener {
 	public void valueChanged(ListSelectionEvent e) {
 		Object source = e.getSource();
 		if (source == examplesList) {
-			setExample((ExamplePanel) examplesList.getSelectedValue());
+			setExample(examplesList.getSelectedValue());
 		}
 	}
 
 	/**
 	 * Opens the example browser.
-	 * @param args Command line arguments; none are used.
+	 * @param args Command line arguments. The first one, if given, is the
+	 *        simple class name of the example to open, like
+	 *        {@code ScatterPlot}.
 	 */
 	public static void main(String[] args) {
-		var frame = new Browser();
+		String name = (args.length > 0) ? args[0] : null;
+		var frame = new Browser(Examples.find(Examples.createAll(), name));
 		frame.setVisible(true);
 	}
 }

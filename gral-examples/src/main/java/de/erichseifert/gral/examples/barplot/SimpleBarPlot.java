@@ -26,11 +26,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.LinearGradientPaint;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.BarPlot.BarRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Location;
@@ -43,10 +42,7 @@ import de.erichseifert.gral.graphics.Location;
  * {@link de.erichseifert.gral.plots.colors.LinearGradient}, how the value of
  * each bar is printed on top of it, and how the legend is placed.</p>
  */
-public class SimpleBarPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -2793954497895054530L;
-
+public class SimpleBarPlot extends Example {
 	/**
 	 * Creates the example and its plot.
 	 */
@@ -92,7 +88,7 @@ public class SimpleBarPlot extends ExamplePanel {
 		pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot));
+		setDrawable(plot);
 	}
 
 	@Override
@@ -103,13 +99,5 @@ public class SimpleBarPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Bar plot with example data and color gradients";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SimpleBarPlot().showInFrame();
 	}
 }

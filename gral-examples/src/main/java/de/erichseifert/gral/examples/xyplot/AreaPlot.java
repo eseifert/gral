@@ -24,16 +24,15 @@ package de.erichseifert.gral.examples.xyplot;
 import java.awt.Color;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.areas.LineAreaRenderer2D;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
@@ -45,10 +44,7 @@ import de.erichseifert.gral.graphics.Insets2D;
  * independently for each series, including translucent fills so that
  * overlapping areas stay readable.</p>
  */
-public class AreaPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 3287044991898775949L;
-
+public class AreaPlot extends Example {
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
 
@@ -89,7 +85,7 @@ public class AreaPlot extends ExamplePanel {
 		formatLineArea(plot, data3, GraphicsUtils.deriveDarker(COLOR1));
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot));
+		setDrawable(plot);
 	}
 
 	private static void formatFilledArea(XYPlot plot, DataSource data, Color color) {
@@ -125,13 +121,5 @@ public class AreaPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Area plot of three series with different styling";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new AreaPlot().showInFrame();
 	}
 }

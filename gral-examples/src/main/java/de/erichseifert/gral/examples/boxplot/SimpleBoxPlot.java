@@ -26,14 +26,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.BoxPlot.BoxWhiskerRenderer;
 import de.erichseifert.gral.plots.XYPlot.XYNavigationDirection;
 import de.erichseifert.gral.plots.colors.LinearGradient;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.DataUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
@@ -47,9 +46,7 @@ import de.erichseifert.gral.graphics.Insets2D;
  * six-column summary the plot expects, and how the boxes and whiskers are
  * styled through {@code BoxPlot.BoxWhiskerRenderer}.</p>
  */
-public class SimpleBoxPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5228891435595348789L;
+public class SimpleBoxPlot extends Example {
 	private static final int SAMPLE_COUNT = 50;
 	private static final Random random = new Random();
 
@@ -101,8 +98,7 @@ public class SimpleBoxPlot extends ExamplePanel {
 		plot.getNavigator().setDirection(XYNavigationDirection.VERTICAL);
 
 		// Add plot to Swing component
-		var panel = new InteractivePanel(plot);
-		add(panel);
+		setDrawable(plot);
 	}
 
 	@Override
@@ -113,13 +109,5 @@ public class SimpleBoxPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return String.format("Three box-and-whisker plots created from %d random samples", SAMPLE_COUNT);
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SimpleBoxPlot().showInFrame();
 	}
 }

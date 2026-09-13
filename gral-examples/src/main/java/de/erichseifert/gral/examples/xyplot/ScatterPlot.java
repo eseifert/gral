@@ -21,13 +21,11 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.graphics.Insets2D;
 
 
@@ -35,14 +33,10 @@ import de.erichseifert.gral.graphics.Insets2D;
  * <p>A scatter plot of random points.</p>
  *
  * <p>The smallest complete {@link de.erichseifert.gral.plots.XYPlot} example:
- * fill a {@link de.erichseifert.gral.data.DataTable}, hand it to the plot, and
- * display the plot in an
- * {@link de.erichseifert.gral.ui.InteractivePanel}.</p>
+ * fill a {@link de.erichseifert.gral.data.DataTable} and hand it to the
+ * plot.</p>
  */
-public class ScatterPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -412699430625953887L;
-
+public class ScatterPlot extends Example {
 	private static final int SAMPLE_COUNT = 100000;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
@@ -69,7 +63,7 @@ public class ScatterPlot extends ExamplePanel {
 		plot.getPointRenderers(data).get(0).setColor(COLOR1);
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		setDrawable(plot);
 	}
 
 	@Override
@@ -80,14 +74,6 @@ public class ScatterPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return String.format("Scatter plot with %d data points", SAMPLE_COUNT);
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new ScatterPlot().showInFrame();
 	}
 
 }

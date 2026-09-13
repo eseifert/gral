@@ -21,14 +21,13 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
@@ -39,7 +38,6 @@ import de.erichseifert.gral.plots.points.AbstractPointRenderer;
 import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
 import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 
@@ -51,10 +49,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * series, the first drawing the offset shadow and the second the point
  * itself.</p>
  */
-public class MultiplePointRenderers extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -5263057758564264677L;
-
+public class MultiplePointRenderers extends Example {
 	private static class ShadowPointRenderer extends AbstractPointRenderer {
 		private final PointRenderer pointRenderer;
 
@@ -119,7 +114,7 @@ public class MultiplePointRenderers extends ExamplePanel {
 		plot.setLineRenderers(data, lineRenderer);
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		setDrawable(plot);
 	}
 
 	@Override
@@ -130,13 +125,5 @@ public class MultiplePointRenderers extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Plot with point shadows";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new MultiplePointRenderers().showInFrame();
 	}
 }
