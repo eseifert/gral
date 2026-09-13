@@ -78,11 +78,12 @@ public class BarPlotTest {
 	public void testDraw() {
 		plot.getAxis(BarPlot.AXIS_X).setRange(-1.0, 3.0);
 		plot.getAxis(BarPlot.AXIS_Y).setRange(-1.0, 2.0);
-		var image = new BufferedImage(320, 240, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		var context = new DrawingContext((Graphics2D) image.getGraphics());
 		plot.draw(context);
 		assertTrue(plot.isDrawn);
+		assertNotEmpty(image);
 	}
 
 	@Test
