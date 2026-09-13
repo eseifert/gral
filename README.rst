@@ -14,7 +14,7 @@ Features
 ========
 
 - Renders through ``java.awt.Graphics2D`` alone, with no dependency on a user
-  interface toolkit; the Swing components are a separate module
+  interface toolkit; the Swing and JavaFX components are separate modules
 - Ready-to-use classes for data management
 - Data processing and filtering (smoothing, rescaling, statistics, histograms)
 - Many different plot types: xy/scatter plot, bubble plot, line plot,
@@ -97,7 +97,8 @@ a dependency in your ``pom.xml``:
         <version>0.13</version>
     </dependency>
 
-Displaying a plot in a Swing window additionally requires ``gral-swing``:
+Displaying a plot in a Swing window additionally requires ``gral-swing``, and
+in a JavaFX application ``gral-javafx``:
 
 .. code:: xml
 
@@ -151,9 +152,11 @@ the following command in the project directory::
 
 This will generate a JAR archive named ``gral-core`` in the
 ``gral-core/build/libs`` directory. This JAR file can be added to the class path
-of your application. The Swing components are built separately::
+of your application. The components for a user interface toolkit are built
+separately::
 
   $ ./gradlew :gral-swing:assemble
+  $ ./gradlew :gral-javafx:assemble
 
 Building a JAR file of the examples
 -----------------------------------

@@ -1,0 +1,36 @@
+/*
+ * Shared JavaFX coordinates for the modules that need them.
+ *
+ * The OpenJFX artifacts on Maven Central are platform-specific: the artifact
+ * without a classifier is an empty JAR, and the classes and native libraries
+ * live in 'javafx-graphics-<version>-linux.jar' and its siblings. The classifier
+ * of the platform that the build runs on is therefore determined here. This is
+ * what the third-party JavaFX Gradle plugin does as well; it is a handful of
+ * lines, and the build declares no third-party plugins.
+ *
+ * The version is the JavaFX line that FXGraphics2D itself declares. Its class
+ * files are still Java 11, so the modules keep the Java 11 baseline of the rest
+ * of the build.
+ */
+
+ext.javafxVersion = '19'
+
+ext.javafxPlatform = {
+	String os = System.getProperty('os.name').toLowerCase(Locale.ROOT)
+	String arch = System.getProperty('os.arch').toLowerCase(Locale.ROOT)
+	boolean aarch64 = arch.contains('aarch64') || arch.contains('arm64')
+	if (os.contains('windows')) {
+		return aarch64 ? 'win-aarch64' : 'win'
+	}
+	if (os.contains('mac') || os.contains('darwin')) {
+		return aarch64 ? 'mac-aarch64' : 'mac'
+	}
+	return aarch64 ? 'linux-aarch64' : 'linux'
+}()
+
+/**
+ * Returns the coordinates of a JavaFX module for the platform of this build.
+ */
+ext.javafx = { String module ->
+	return "org.openjfx:${module}:${javafxVersion}:${javafxPlatform}"
+}
