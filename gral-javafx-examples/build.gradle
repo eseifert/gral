@@ -23,6 +23,15 @@ dependencies {
 	implementation project(':gral-core')
 	implementation project(':gral-javafx')
 
+	/*
+	 * The examples themselves, which the Swing browser shows as well. Its own
+	 * module is excluded: nothing here loads a Swing class, and leaving it out
+	 * keeps that true.
+	 */
+	implementation(project(':gral-examples')) {
+		exclude group: 'de.erichseifert.gral', module: 'gral-swing'
+	}
+
 	javafxRuntime javafx('javafx-base')
 	javafxRuntime javafx('javafx-graphics')
 	javafxRuntime javafx('javafx-controls')

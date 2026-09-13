@@ -24,7 +24,7 @@ package de.erichseifert.gral.examples.javafx;
 import javafx.application.Application;
 
 /**
- * <p>Starts the JavaFX example.</p>
+ * <p>Starts the JavaFX example browser.</p>
  *
  * <p>The launcher exists because a main class that extends
  * {@code javafx.application.Application} is rejected by the Java launcher when
@@ -41,10 +41,12 @@ public class Launcher {
 	}
 
 	/**
-	 * Starts the example application.
-	 * @param args Command line arguments, passed on to JavaFX.
+	 * Starts the example browser.
+	 * @param args Command line arguments. The first one, if given, is the
+	 *        simple class name of the example to open, like
+	 *        {@code ScatterPlot}.
 	 */
 	public static void main(String[] args) {
-		Application.launch(ScatterPlotExample.class, args);
+		Application.launch(Browser.class, args);
 	}
 }

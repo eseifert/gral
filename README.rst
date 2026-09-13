@@ -71,8 +71,10 @@ makes GRAL usable for generating figures on a server:
     }
 
 The ``gral-examples`` module contains a runnable example for every plot type;
-``./gradlew :gral-examples:run`` opens a browser for all of them. The same plot
-in a JavaFX window is ``./gradlew :gral-javafx-examples:run``.
+``./gradlew :gral-examples:run`` opens a browser for all of them.
+``./gradlew :gral-javafx-examples:run`` opens the same browser, with the same
+examples, built with JavaFX instead of Swing. Either one takes the name of an
+example to start on, for example ``--args=ScatterPlot``.
 
 
 Usage
@@ -184,7 +186,7 @@ be started directly with::
 
   $ ./gradlew :gral-examples:run
 
-The JavaFX example is a module of its own::
+The JavaFX browser is a module of its own::
 
   $ ./gradlew :gral-javafx-examples:run
 
