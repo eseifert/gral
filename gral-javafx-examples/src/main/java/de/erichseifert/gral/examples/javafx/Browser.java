@@ -67,8 +67,7 @@ public class Browser extends Application {
 		for (Example example : examples) {
 			views.put(example, new ExampleView(example));
 		}
-		Example selected = Examples.find(examples,
-				getParameters().getRaw().isEmpty() ? null : getParameters().getRaw().get(0));
+		Example selected = Examples.find(examples, getSelectedName());
 
 		var examplesList = new ListView<>(FXCollections.observableArrayList(examples));
 		examplesList.setCellFactory(view -> new ExampleCell());
@@ -88,6 +87,19 @@ public class Browser extends Application {
 			LIST_WIDTH + selected.getPreferredSize().getWidth(),
 			selected.getPreferredSize().getHeight()));
 		stage.show();
+	}
+
+	/**
+	 * Returns the name of the example that was named on the command line.
+	 * @return The name, or {@code null} when none was given or the browser was
+	 *         not started through {@link Launcher}.
+	 */
+	private String getSelectedName() {
+		Parameters parameters = getParameters();
+		if ((parameters == null) || parameters.getRaw().isEmpty()) {
+			return null;
+		}
+		return parameters.getRaw().get(0);
 	}
 
 	@Override
