@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.graphics;
 
-import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -38,11 +37,7 @@ import java.util.Locale;
  * name collides with {@code java.awt.geom.Dimension2D}, which is its
  * superclass, so one of the two usually has to be qualified.</p>
  */
-public abstract class Dimension2D extends java.awt.geom.Dimension2D
-		implements Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 6961198271520384282L;
-
+public abstract class Dimension2D extends java.awt.geom.Dimension2D {
 	/**
 	 * Creates a new Dimension2D object.
 	 */
@@ -53,9 +48,6 @@ public abstract class Dimension2D extends java.awt.geom.Dimension2D
 	 * Class that stores double values.
 	 */
 	public static class Double extends Dimension2D {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -4341712269787906650L;
-
 		/** Horizontal extension. */
 		private double width;
 		/** Vertical extension. */

@@ -24,7 +24,6 @@ package de.erichseifert.gral.plots;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
@@ -32,7 +31,6 @@ import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.DummyData;
@@ -44,14 +42,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class BarPlotTest {
-	private static final double DELTA = TestUtils.DELTA;
-
 	private MockBarPlot plot;
 
 	private static final class MockBarPlot extends BarPlot {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -6215127935611125964L;
-
 		public boolean isDrawn;
 
 		public MockBarPlot(DataSource... data) {
@@ -107,34 +100,6 @@ public class BarPlotTest {
 
 		assertNotEmpty(image);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		BarPlot original = plot;
-		BarPlot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
-		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
-		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
-
-		assertEquals(original.getBarWidth(), deserialized.getBarWidth(), DELTA);
-		assertEquals(original.getBarHeightMin(), deserialized.getBarHeightMin(), DELTA);
-		assertEquals(original.isPaintAllBars(), deserialized.isPaintAllBars());
-
-		List<DataSource> dataSourcesOriginal = original.getData();
-		List<DataSource> dataSourcesDeserialized = deserialized.getData();
-		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
-		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
-			List<PointRenderer> pointRenderersOriginal = original.getPointRenderers(
-					dataSourcesOriginal.get(index));
-			List<PointRenderer> pointRenderersDeserialized = deserialized.getPointRenderers(
-					dataSourcesDeserialized.get(index));
-			testPointRendererSerialization(pointRenderersOriginal, pointRenderersDeserialized);
-		}
-    }
 
 	private static void testPointRendererSerialization(
 			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {

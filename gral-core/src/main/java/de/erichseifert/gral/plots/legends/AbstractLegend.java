@@ -27,10 +27,6 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Dimension2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -50,8 +46,6 @@ import de.erichseifert.gral.graphics.layout.Layout;
 import de.erichseifert.gral.graphics.layout.OrientedLayout;
 import de.erichseifert.gral.graphics.layout.StackedLayout;
 import de.erichseifert.gral.util.GraphicsUtils;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>Base class for legends. It is a {@link DrawableContainer} whose children
@@ -72,9 +66,6 @@ import de.erichseifert.gral.util.SerializationUtils;
  */
 public abstract class AbstractLegend extends DrawableContainer
 		implements Legend {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -1561976879958765700L;
-
 	/** List of data sources displayed in this legend. */
 	private final Set<DataSource> sources;
 
@@ -85,7 +76,7 @@ public abstract class AbstractLegend extends DrawableContainer
 	private Paint background;
 	/** Stroke used to draw the border of the legend. */
 	// Property will be serialized using a wrapper
-	private transient Stroke borderStroke;
+	private Stroke borderStroke;
 	/** Font used to display the labels. */
 	private Font font;
 	/** Paint used to fill the border of the legend. */
@@ -105,9 +96,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * An abstract base class for drawable symbols.
 	 */
 	public static abstract class AbstractSymbol extends AbstractDrawable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 7475404103140652668L;
-
 		/** Settings for determining the visual of the symbol. */
 		private final Font font;
 		private final Dimension2D symbolSize;
@@ -136,9 +124,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	 * Class that displays a specific data source as an item of a legend.
 	 */
 	public static class Item extends DrawableContainer {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 3401141040936913098L;
-
 		/** Default font used for sub-components and the calculation of relative
 		 sizes. */
 		private Font baseFont;
@@ -330,31 +315,6 @@ public abstract class AbstractLegend extends DrawableContainer
 				item.label.setFont(font);
 			}
 		}
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		in.defaultReadObject();
-		borderStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a deserialized class does not exist.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		out.defaultWriteObject();
-		out.writeObject(SerializationUtils.wrap(borderStroke));
 	}
 
 	@Override

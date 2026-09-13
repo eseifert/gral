@@ -42,8 +42,6 @@ import de.erichseifert.gral.graphics.Drawable;
  * @see ValueLegend
  */
 public abstract class SeriesLegend extends AbstractLegend {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 1092110896986707546L;
 	/** Mapping of data rows to drawable components. */
 	private final Map<DataSource, Drawable> drawableByDataSource;
 

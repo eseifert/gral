@@ -21,8 +21,6 @@
  */
 package de.erichseifert.gral.graphics;
 
-import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -101,16 +99,5 @@ public class Insets2DTest {
 		assertFalse(insets2.equals(null));
 		// Hash code
 		assertEquals(insets1.hashCode(), insets2.hashCode());
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new Insets2D.Double(1.0, 2.0, 3.0, 4.0);
-		Insets2D deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getTop(), deserialized.getTop(), DELTA);
-		assertEquals(original.getLeft(), deserialized.getLeft(), DELTA);
-		assertEquals(original.getBottom(), deserialized.getBottom(), DELTA);
-		assertEquals(original.getRight(), deserialized.getRight(), DELTA);
 	}
 }

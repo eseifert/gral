@@ -24,12 +24,10 @@ package de.erichseifert.gral.graphics.layout;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Dimension2D;
-import java.io.IOException;
 
 import de.erichseifert.gral.graphics.Container;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Orientation;
 
 
@@ -39,8 +37,6 @@ public class AbstractOrientedLayoutTest {
 	private static final double GAP_V = 10.0;
 
 	private static class MockAbstractOrientedLayout extends AbstractOrientedLayout {
-		private static final long serialVersionUID = -1588960524707247633L;
-
 		public MockAbstractOrientedLayout(Orientation orientation, double gapX, double gapY) {
 			super(orientation, gapX, gapY);
 		}
@@ -60,13 +56,5 @@ public class AbstractOrientedLayoutTest {
 		var gapped = new MockAbstractOrientedLayout(Orientation.HORIZONTAL, GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockAbstractOrientedLayout(Orientation.VERTICAL, GAP_H, GAP_V);
-		AbstractOrientedLayout deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getOrientation(), deserialized.getOrientation());
 	}
 }

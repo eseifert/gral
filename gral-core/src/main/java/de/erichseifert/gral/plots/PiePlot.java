@@ -35,8 +35,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -120,16 +118,13 @@ import de.erichseifert.gral.util.PointND;
  * direction.</p>
  */
 public class PiePlot extends AbstractPlot implements Navigable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5486418164040578150L;
-
 	/** Key for specifying the tangential axis of a pie plot. */
 	public static final String AXIS_TANGENTIAL = "tangential"; //$NON-NLS-1$
 
 	/** Mapping from data source to point renderer. */
 	private final Map<DataSource, PointRenderer> pointRenderers;
 	/** Cache for the {@code Navigator} implementation. */
-	private transient PiePlotNavigator navigator;
+	private PiePlotNavigator navigator;
 
 	/** Position of the pie center. */
 	private final Point2D center;
@@ -252,9 +247,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * Class that represents the drawing area of a {@code PiePlot}.
 	 */
 	public static class PiePlotArea2D extends PlotArea {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 5646816099037852271L;
-
 		/** Pie plot that this renderer is associated to. */
 		private final PiePlot plot;
 
@@ -405,9 +397,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * A point renderer for a single slice in a pie plot.
 	 */
 	public static class PieSliceRenderer extends AbstractPointRenderer {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1135636437801090607L;
-
 		/** Pie plot this renderer is attached to. */
 		private final PiePlot plot;
 
@@ -505,9 +494,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = -1783451355453643712L;
-
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = PieSliceRenderer.this;
 
@@ -744,9 +730,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 		@Override
 		public Drawable getValue(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID1 = 8389872806138135038L;
-
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = PieSliceRenderer.this;
 
@@ -779,9 +762,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	 * value of a data source.
 	 */
 	public static class PiePlotLegend extends ValueLegend {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 309673490751330686L;
-
 		/** Plot that contains settings and renderers. */
 		private final PiePlot plot;
 
@@ -1000,7 +980,7 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	private static class PieData extends AbstractDataSource {
 		private final DataSource data;
 		/** Cached end values of all slices. */
-		private transient List<Double> sliceEnds;
+		private List<Double> sliceEnds;
 
 		public PieData(DataSource data) {
 			this.data = data;
@@ -1142,24 +1122,6 @@ public class PiePlot extends AbstractPlot implements Navigable {
 	protected void dataChanged(DataSource source, DataChangeEvent... events) {
 		super.dataChanged(source, events);
 		autoscaleAxes();
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-
-		// Update caches
-		for (DataSource source : getData()) {
-			dataUpdated(source);
-		}
 	}
 
 	/**

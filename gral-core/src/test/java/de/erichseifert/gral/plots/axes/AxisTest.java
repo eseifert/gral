@@ -23,8 +23,6 @@ package de.erichseifert.gral.plots.axes;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,14 +95,4 @@ public class AxisTest {
 		assertEquals(0.0, l.min.doubleValue(), DELTA);
 		assertEquals(1.0, l.max.doubleValue(), DELTA);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		Axis original = axis;
-		Axis deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getMin(), deserialized.getMin());
-		assertEquals(original.getMax(), deserialized.getMax());
-		assertEquals(original.getRange(), deserialized.getRange(), DELTA);
-    }
 }

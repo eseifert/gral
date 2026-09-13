@@ -32,8 +32,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -107,9 +105,6 @@ import de.erichseifert.gral.util.PointND;
  * and {@link XYPlot.XYNavigationDirection} restricts that to one direction.</p>
  */
 public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 4501074701747572783L;
-
 	/** Key for specifying the x-axis of an xy-plot. */
 	public static final String AXIS_X = "x"; //$NON-NLS-1$
 	/** Key for specifying the secondary x-axis of an xy-plot. */
@@ -127,10 +122,10 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	private final Map<DataSource, List<AreaRenderer>> areaRenderersByDataSource;
 
 	/** Cache for the {@code Navigator} implementation. */
-	private transient XYPlotNavigator navigator;
+	private XYPlotNavigator navigator;
 	/** A flag that shows whether the navigator has been properly
 	initialized. */
-	private transient boolean navigatorInitialized;
+	private boolean navigatorInitialized;
 
 	/**
 	 * Constants which determine the direction of zoom and pan actions.
@@ -210,9 +205,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * Class that represents the drawing area of an {@code XYPlot}.
 	 */
 	public static class XYPlotArea2D extends PlotArea {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -3673157774425536428L;
-
 		/** x-y plot this plot area is associated to. */
 		private final XYPlot plot;
 
@@ -652,9 +644,6 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 * Class that displays a legend in an {@code XYPlot}.
 	 */
 	public static class XYLegend extends SeriesLegend {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -4629928754001372002L;
-
 		/** Plot that contains settings and renderers. */
 		private final XYPlot plot;
 
@@ -1136,23 +1125,5 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 	 */
 	public void rangeChanged(Axis axis, Number min, Number max) {
 		layoutAxes();
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Normal deserialization
-		in.defaultReadObject();
-
-		// Restore listeners
-		for (String axisName : getAxesNames()) {
-			getAxis(axisName).addAxisListener(this);
-		}
 	}
 }

@@ -32,10 +32,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.List;
 
 import de.erichseifert.gral.data.Column;
@@ -58,8 +54,6 @@ import de.erichseifert.gral.plots.points.PointData;
 import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>An {@link XYPlot} that draws one box-and-whisker summary per row. It does
@@ -96,16 +90,10 @@ import de.erichseifert.gral.util.SerializationUtils;
  * can be changed if the columns are in a different order.</p>
  */
 public class BoxPlot extends XYPlot {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -3069831535208696337L;
-
 	/**
 	 * Class that renders a box and its whiskers in a box-and-whisker plot.
 	 */
 	public static class BoxWhiskerRenderer extends AbstractPointRenderer {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 2944482729753981341L;
-
 		/** Index of the column for the horizontal position of a box. */
 		private int positionColumn;
 		/** Index of the column for the vertical center bar. */
@@ -126,19 +114,19 @@ public class BoxPlot extends XYPlot {
 		/** Paint to fill the border of the boxes. */
 		private Paint boxBorderColor;
 		/** Stroke to draw the border of the boxes. */
-		private transient Stroke boxBorderStroke;
+		private Stroke boxBorderStroke;
 
 		/** Paint to fill the border of the whiskers. */
 		private Paint whiskerColor;
 		/** Stroke to draw the border of the whiskers. */
-		private transient Stroke whiskerStroke;
+		private Stroke whiskerStroke;
 
 		/** Relative width of the vertical bars. */
 		private double barWidth;
 		/** Paint to fill the center bar. */
 		private Paint centerBarColor;
 		/** Stroke to draw the center bar. */
-		private transient Stroke centerBarStroke;
+		private Stroke centerBarStroke;
 
 		/**
 		 * Constructor that creates a new instance and initializes it with a
@@ -161,43 +149,6 @@ public class BoxPlot extends XYPlot {
 			centerBarColor = Color.BLACK;
 			centerBarStroke = new BasicStroke(
 				2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-		}
-
-		/**
-		 * Custom deserialization method.
-		 * @param in Input stream.
-		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-		 * @throws IOException if there is an error while reading data from the
-		 *         input stream.
-		 */
-		private void readObject(ObjectInputStream in)
-				throws ClassNotFoundException, IOException {
-			// Default deserialization
-			in.defaultReadObject();
-			// Custom deserialization
-			boxBorderStroke = (Stroke) SerializationUtils.unwrap(
-					(Serializable) in.readObject());
-			whiskerStroke = (Stroke) SerializationUtils.unwrap(
-					(Serializable) in.readObject());
-			centerBarStroke = (Stroke) SerializationUtils.unwrap(
-					(Serializable) in.readObject());
-		}
-
-		/**
-		 * Custom serialization method.
-		 * @param out Output stream.
-		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-		 * @throws IOException if there is an error while writing data to the
-		 *         output stream.
-		 */
-		private void writeObject(ObjectOutputStream out)
-				throws ClassNotFoundException, IOException {
-			// Default serialization
-			out.defaultWriteObject();
-			// Custom serialization
-			out.writeObject(SerializationUtils.wrap(boxBorderStroke));
-			out.writeObject(SerializationUtils.wrap(whiskerStroke));
-			out.writeObject(SerializationUtils.wrap(centerBarStroke));
 		}
 
 		/**
@@ -487,9 +438,6 @@ public class BoxPlot extends XYPlot {
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = 2765031432328349977L;
-
 				public void draw(DrawingContext context) {
 					Axis axisX = data.axes.get(0);
 					Axis axisY = data.axes.get(1);
@@ -648,9 +596,6 @@ public class BoxPlot extends XYPlot {
 		 */
 		public Drawable getValue(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID1 = 6788431763837737592L;
-
 				public void draw(DrawingContext context) {
 					// TODO Implement rendering of value label
 				}
@@ -663,9 +608,6 @@ public class BoxPlot extends XYPlot {
 	 * values of the data source as items.
 	 */
 	public static class BoxPlotLegend extends ValueLegend {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1517792984459627757L;
-
 		/** Associated plot. */
 		private final BoxPlot plot;
 

@@ -31,7 +31,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,9 +41,6 @@ public class LabelTest {
 	private static final double DELTA = TestUtils.DELTA;
 
 	private static class MockLabel extends Label {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 7291791651477766692L;
-
 		public boolean isDrawn;
 
 		public MockLabel() {
@@ -162,18 +158,4 @@ public class LabelTest {
 		// Must not throw for null properties
 		nullProperties.hashCode();
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockLabel("foobar");
-		Label deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
-		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY(), DELTA);
-		assertEquals(original.getFont(), deserialized.getFont());
-		assertEquals(original.getRotation(), deserialized.getRotation(), DELTA);
-		assertEquals(original.getColor(), deserialized.getColor());
-		assertEquals(original.getTextAlignment(), deserialized.getTextAlignment(), DELTA);
-		assertEquals(original.isWordWrapEnabled(), deserialized.isWordWrapEnabled());
-    }
 }

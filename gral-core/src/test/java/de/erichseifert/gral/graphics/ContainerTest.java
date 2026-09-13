@@ -29,7 +29,6 @@ import static org.junit.Assert.assertTrue;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,16 +37,10 @@ import de.erichseifert.gral.graphics.layout.EdgeLayout;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
-
-
 public class ContainerTest {
 	private DrawableContainer container;
 
 	private static final class MockDrawable extends AbstractDrawable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1802598562530415902L;
-
 		private boolean isDrawn;
 		private final Dimension2D preferredSize = new de.erichseifert.gral.graphics.Dimension2D.Double();
 
@@ -264,16 +257,5 @@ public class ContainerTest {
 		container.add(d1);
 		Collections.reverse(resultList);
 		assertEquals(resultList, container.getDrawablesAt(point));
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		DrawableContainer original = container;
-		DrawableContainer deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.size(), deserialized.size());
-		assertEquals(original.getPreferredSize(), deserialized.getPreferredSize());
-		assertEquals(original.getInsets(), deserialized.getInsets());
-		assertEquals(original.getLayout(), deserialized.getLayout());
 	}
 }

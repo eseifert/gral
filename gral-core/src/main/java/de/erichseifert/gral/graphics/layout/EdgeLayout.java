@@ -39,9 +39,6 @@ import de.erichseifert.gral.graphics.Location;
  * each of the corners.
  */
 public class EdgeLayout extends AbstractLayout {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 3661169796145433549L;
-
 	/**
 	 * Initializes a layout manager object with the specified space between the
 	 * components.

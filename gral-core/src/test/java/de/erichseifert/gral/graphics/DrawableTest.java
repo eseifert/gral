@@ -23,7 +23,6 @@ package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -43,9 +42,6 @@ public class DrawableTest {
 	private MockDrawable drawable;
 
 	private static final class MockDrawable extends AbstractDrawable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 6148480638542875770L;
-
 		private boolean isDrawn;
 		private final Dimension2D preferredSize = new de.erichseifert.gral.graphics.Dimension2D.Double();
 
@@ -104,14 +100,5 @@ public class DrawableTest {
 		drawable.setPosition(-4.0, -2.0);
 		assertEquals(-4.0, drawable.getBounds().getX(), DELTA);
 		assertEquals(-2.0, drawable.getBounds().getY(), DELTA);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		MockDrawable original = drawable;
-		MockDrawable deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBounds(), deserialized.getBounds());
-		assertEquals(original.getPreferredSize(), deserialized.getPreferredSize());
 	}
 }

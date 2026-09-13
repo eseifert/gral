@@ -66,9 +66,6 @@ import de.erichseifert.gral.util.MathUtils;
  * preferred size, so a title that has not been set takes no space at all.</p>
  */
 public class Label extends AbstractDrawable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 374045708533704103L;
-
 	/** Text for this label. */
 	private String text;
 	/** Horizontal label alignment. */
@@ -89,9 +86,9 @@ public class Label extends AbstractDrawable {
 	private Paint background;
 
 	/** Cached outline of the label text with word wrapping. */
-	private transient Shape outlineWrapped;
+	private Shape outlineWrapped;
 	/** Cached outline of the label text without word wrapping. */
-	private transient Shape outlineUnwrapped;
+	private Shape outlineUnwrapped;
 
 	/**
 	 * Initializes a new empty {@code Label} instance.

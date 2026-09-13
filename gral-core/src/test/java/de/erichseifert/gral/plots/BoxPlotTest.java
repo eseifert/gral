@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
@@ -49,9 +48,6 @@ public class BoxPlotTest {
 	private MockBoxPlot plot;
 
 	private static final class MockBoxPlot extends BoxPlot {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 4497026503195874443L;
-
 		public boolean isDrawn;
 
 		public MockBoxPlot(DataSource data) {
@@ -95,30 +91,6 @@ public class BoxPlotTest {
 		} catch (IllegalArgumentException e) {
 		}
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		BoxPlot original = plot;
-		BoxPlot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
-		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
-		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
-
-		List<DataSource> dataSourcesOriginal = original.getData();
-		List<DataSource> dataSourcesDeserialized = deserialized.getData();
-		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
-		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
-			List<PointRenderer> pointRenderersOriginal = original.getPointRenderers(
-							dataSourcesOriginal.get(index));
-			List<PointRenderer> pointRenderersDeserialized = deserialized.getPointRenderers(
-							dataSourcesDeserialized.get(index));
-			testPointRendererSerialization(pointRenderersOriginal, pointRenderersDeserialized);
-		}
-    }
 
 	private static void testPointRendererSerialization(
 			List<PointRenderer> originalRenderers, List<PointRenderer> deserializedRenderers) {

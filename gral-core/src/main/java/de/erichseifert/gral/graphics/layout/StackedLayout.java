@@ -22,7 +22,6 @@
 package de.erichseifert.gral.graphics.layout;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
@@ -46,9 +45,6 @@ import de.erichseifert.gral.graphics.Orientation;
  * and centers them. This is the layout a legend uses for its entries.</p>
  */
 public class StackedLayout extends AbstractOrientedLayout {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -3183337606556363756L;
-
 	/** Default layout behavior for components. */
 	private final Constraints defaultConstraints;
 
@@ -58,9 +54,7 @@ public class StackedLayout extends AbstractOrientedLayout {
 	 * {@link de.erichseifert.gral.graphics.Container#add(de.erichseifert.gral.graphics.Drawable, Object)};
 	 * components added without one are laid out stretched and centered.
 	 */
-	public static class Constraints implements Serializable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -3375316557720116460L;
+	public static class Constraints {
 		/**
 		 * Whether the component is stretched to the container's width (vertical layout)
 		 * or height (horizontal layout).

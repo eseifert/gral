@@ -32,8 +32,6 @@ import static org.junit.Assert.fail;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,9 +53,6 @@ public class PiePlotTest {
 	private MockPiePlot plot;
 
 	private static final class MockPiePlot extends PiePlot {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -4466331273825538939L;
-
 		public boolean isDrawn;
 
 		public MockPiePlot(DataSource data) {
@@ -207,9 +202,6 @@ public class PiePlotTest {
 	 * A data source that counts how often its values are read.
 	 */
 	private static final class CountingDataSource extends AbstractDataSource {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1L;
-
 		private final DataSource data;
 		private int readCount;
 
@@ -266,35 +258,6 @@ public class PiePlotTest {
 
 		assertThat(pieData.getRowCount(), is(data.getRowCount()));
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		PiePlot original = plot;
-		PiePlot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
-		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
-		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
-
-		assertEquals(original.getCenter(), deserialized.getCenter());
-		assertEquals(original.getRadius(), deserialized.getRadius(), DELTA);
-		assertEquals(original.getStart(), deserialized.getStart(), DELTA);
-		assertEquals(original.isClockwise(), deserialized.isClockwise());
-
-		List<DataSource> dataSourcesOriginal = original.getData();
-		List<DataSource> dataSourcesDeserialized = deserialized.getData();
-		assertEquals(dataSourcesOriginal.size(), dataSourcesDeserialized.size());
-		for (int index = 0; index < dataSourcesOriginal.size(); index++) {
-			PointRenderer pointRendererOriginal = original.getPointRenderer(
-							dataSourcesOriginal.get(index));
-			PointRenderer pointRendererDeserialized = deserialized.getPointRenderer(
-							dataSourcesDeserialized.get(index));
-			testPointRendererSerialization(pointRendererOriginal, pointRendererDeserialized);
-		}
-    }
 
 	private static void testPointRendererSerialization(
 			PointRenderer originalRenderer, PointRenderer deserializedRenderer) {

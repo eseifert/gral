@@ -21,9 +21,6 @@
  */
 package de.erichseifert.gral.plots.axes;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,12 +56,9 @@ import de.erichseifert.gral.util.MathUtils;
  * minimum greater than the maximum is allowed and reverses the direction of the
  * axis.</p>
  */
-public class Axis implements Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5355772833362614591L;
-
+public class Axis {
 	/** Objects that will be notified when axis settings are changing. */
-	private transient Set<AxisListener> axisListeners;
+	private Set<AxisListener> axisListeners;
 
 	/** Minimal value on axis. */
 	private Number min;
@@ -228,21 +222,5 @@ public class Axis implements Serializable {
 	 */
 	public boolean isValid() {
 		return MathUtils.isCalculatable(min) && MathUtils.isCalculatable(max);
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Normal deserialization
-		in.defaultReadObject();
-
-		// Handle transient fields
-		axisListeners = new HashSet<>();
 	}
 }

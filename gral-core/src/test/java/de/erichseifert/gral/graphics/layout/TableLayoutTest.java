@@ -26,7 +26,6 @@ import static org.junit.Assert.fail;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -34,9 +33,6 @@ import de.erichseifert.gral.graphics.DrawableContainer;
 import de.erichseifert.gral.graphics.DrawingContext;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.erichseifert.gral.TestUtils;
-
 
 public class TableLayoutTest {
 	private static final double DELTA = 1e-15;
@@ -49,9 +45,6 @@ public class TableLayoutTest {
 	private Drawable a, b, c;
 
 	private static final class TestDrawable extends AbstractDrawable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -7959953164953997440L;
-
 		public void draw(DrawingContext context) {
 		}
 
@@ -156,13 +149,5 @@ public class TableLayoutTest {
 		assertEquals(bounds.getMinY(), c.getY(), DELTA);
 
 		// TODO Test width and height
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new TableLayout(3, GAP_X, GAP_Y);
-		TableLayout deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getColumns(), deserialized.getColumns());
 	}
 }

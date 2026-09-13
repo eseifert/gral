@@ -26,17 +26,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>The region of a plot in which the data itself is drawn &mdash; everything
@@ -64,9 +58,6 @@ import de.erichseifert.gral.util.SerializationUtils;
  * its {@code draw} method.</p>
  */
 public abstract class PlotArea extends AbstractDrawable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 2745982325709470005L;
-
 	/** Default font used for sub-components and the calculation of relative
 	sizes. */
 	private Font baseFont;
@@ -74,7 +65,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	private Paint background;
 	/** Stroke to draw the border.
 	Property will be serialized using a wrapper. */
-	private transient Stroke borderStroke;
+	private Stroke borderStroke;
 	/** Paint to fill the border. */
 	private Paint borderColor;
 	/** Offset to clip plot graphics in pixels, specified relative to the
@@ -124,31 +115,6 @@ public abstract class PlotArea extends AbstractDrawable {
 	 * @param context Environment used for drawing.
 	 */
 	protected abstract void drawPlot(DrawingContext context);
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		in.defaultReadObject();
-		borderStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a deserialized class does not exist.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		out.defaultWriteObject();
-		out.writeObject(SerializationUtils.wrap(borderStroke));
-	}
 
 	/**
 	 * Returns the current font used as a default for sub-components ans for

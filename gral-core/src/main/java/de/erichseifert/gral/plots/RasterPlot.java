@@ -83,9 +83,6 @@ import de.erichseifert.gral.util.PointND;
  * displayed as a raster plot.</p>
  */
 public class RasterPlot extends XYPlot {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5844862286358250831L;
-
 	/** Offset of the raster pixels to the origin. */
 	private final Point2D offset;
 	/** Size of the raster pixels. */
@@ -97,9 +94,6 @@ public class RasterPlot extends XYPlot {
 	 * Class that renders the grid points of a {@code RasterPlot}.
 	 */
 	protected static class RasterRenderer extends AbstractPointRenderer {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 1266585364126459761L;
-
 		/** Plot specific settings. */
 		private final RasterPlot plot;
 
@@ -182,9 +176,6 @@ public class RasterPlot extends XYPlot {
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = -1136689797647794969L;
-
 				public void draw(DrawingContext context) {
 					RasterRenderer renderer = RasterRenderer.this;
 
@@ -273,9 +264,6 @@ public class RasterPlot extends XYPlot {
 		 */
 		public Drawable getValue(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID1 = -8402945980942955359L;
-
 				public void draw(DrawingContext context) {
 					// TODO Implement rendering of value label
 				}

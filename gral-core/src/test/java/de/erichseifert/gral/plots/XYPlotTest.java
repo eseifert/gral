@@ -35,7 +35,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,9 +66,6 @@ public class XYPlotTest {
 	private List<MockXYPlot> plots;
 
 	private static class MockXYPlot extends XYPlot {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -4211015243684983841L;
-
 		private boolean drawn;
 
 		public MockXYPlot(DataSource... data) {
@@ -350,21 +346,6 @@ public class XYPlotTest {
 		BufferedImage image = createTestImage();
 		plot.setBounds(0.0, 0.0, image.getWidth(), image.getHeight());
 		plot.draw(new DrawingContext((Graphics2D) image.getGraphics()));
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		MockXYPlot original = plots.get(0);
-		MockXYPlot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
-		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
-		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
-
-		testPlotAreaSerialization(original.getPlotArea(), deserialized.getPlotArea());
 	}
 
 	private static void testPlotAreaSerialization(PlotArea originalPlotArea, PlotArea deserializedPlotArea) {

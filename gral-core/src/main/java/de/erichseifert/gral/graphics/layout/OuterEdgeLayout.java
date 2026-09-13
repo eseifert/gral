@@ -39,9 +39,6 @@ import de.erichseifert.gral.graphics.Location;
  * container.
  */
 public class OuterEdgeLayout extends AbstractLayout {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -2238929452967312857L;
-
 	/**
 	 * Initializes a layout manager object with the specified space between the
 	 * container's edges and the components.

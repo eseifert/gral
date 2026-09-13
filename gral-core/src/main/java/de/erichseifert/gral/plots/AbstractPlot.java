@@ -27,10 +27,6 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,7 +57,6 @@ import de.erichseifert.gral.plots.legends.Legend;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Location;
 import de.erichseifert.gral.util.MathUtils;
-import de.erichseifert.gral.util.SerializationUtils;
 
 
 /**
@@ -85,18 +80,9 @@ import de.erichseifert.gral.util.SerializationUtils;
  * source added to it, so a change to the data invalidates the affected axis
  * ranges. Subclasses supply a {@link PlotArea} that knows how to draw the data
  * itself, and define the axis name constants they use.</p>
- *
- * <p>Several properties hold AWT types that are not serializable and are
- * therefore {@code transient}; they are round-tripped through
- * {@link SerializationUtils} in the hand-written {@code readObject} and
- * {@code writeObject} methods. A subclass that adds such a field has to do the
- * same.</p>
  */
 public abstract class AbstractPlot extends DrawableContainer
 		implements Plot, DataListener {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -6609155385940228771L;
-
 	/** Default size of the plot title relative to the size of the base font. */
 	private static final float DEFAULT_TITLE_FONT_SIZE = 1.5f;
 	/** Default space between layout components relative to the size of the base font. */
@@ -133,7 +119,7 @@ public abstract class AbstractPlot extends DrawableContainer
 	/** Paint to fill the plot background. */
 	private Paint background;
 	/** Stroke to draw the plot border. */
-	private transient Stroke borderStroke;
+	private Stroke borderStroke;
 	/** Paint to fill the plot border. */
 	private Paint borderColor;
 
@@ -887,47 +873,6 @@ public abstract class AbstractPlot extends DrawableContainer
 					axisMax.put(axisName, max);
 				}
 			}
-		}
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-		// Custom deserialization
-		borderStroke = (Stroke) SerializationUtils.unwrap(
-				(Serializable) in.readObject());
-
-		// Restore listeners
-		for (DataSource source : getData()) {
-			source.addDataListener(this);
-		}
-	}
-
-	/**
-	 * Custom serialization method.
-	 * @param out Output stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist.
-	 * @throws IOException if there is an error while writing data to the
-	 *         output stream.
-	 */
-	private void writeObject(ObjectOutputStream out)
-			throws ClassNotFoundException, IOException {
-		// Default serialization
-		out.defaultWriteObject();
-		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(borderStroke));
-
-		// Restore listeners
-		for (DataSource source : getData()) {
-			source.addDataListener(this);
 		}
 	}
 }

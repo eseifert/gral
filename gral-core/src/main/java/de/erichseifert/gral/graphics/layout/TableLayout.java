@@ -50,9 +50,6 @@ import de.erichseifert.gral.graphics.Insets2D;
  * last row simply stays short. Components take no layout constraints.</p>
  */
 public class TableLayout extends AbstractLayout {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -6738742507926295041L;
-
 	/** Number of columns. */
 	private final int cols;
 

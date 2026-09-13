@@ -29,9 +29,6 @@ package de.erichseifert.gral.graphics.layout;
  * subclasses.
  */
 public abstract class AbstractLayout implements Layout {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5961215915010787754L;
-
 	/** Horizontal spacing of components. */
 	private double gapX;
 	/** Vertical spacing of components. */

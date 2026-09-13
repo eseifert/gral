@@ -21,7 +21,6 @@
  */
 package de.erichseifert.gral.graphics;
 
-import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -44,10 +43,7 @@ import java.util.Locale;
  * left inset &mdash; usually the largest one, since it has to hold the tick
  * labels of the y axis &mdash; is the second value, not the first.</p>
  */
-public abstract class Insets2D implements Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 8685228413052838087L;
-
+public abstract class Insets2D {
 	/**
 	 * Creates a new Insets2D object.
 	 */
@@ -114,9 +110,6 @@ public abstract class Insets2D implements Serializable {
 	 * Class that stores insets as double values.
 	 */
 	public static class Double extends Insets2D {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -6637052175330595647L;
-
 		/** Top. */
 		private double top;
 		/** Left. */

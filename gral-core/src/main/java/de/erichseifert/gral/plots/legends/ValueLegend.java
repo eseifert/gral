@@ -49,9 +49,6 @@ import de.erichseifert.gral.graphics.Drawable;
  */
 public abstract class ValueLegend extends AbstractLegend
 		implements DataListener {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -4274009997506638823L;
-
 	/** Mapping of data rows to drawable components. */
 	private final Map<Row, Drawable> components;
 	/** Column index containing the labels. */

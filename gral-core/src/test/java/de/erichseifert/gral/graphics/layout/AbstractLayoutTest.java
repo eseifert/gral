@@ -24,13 +24,9 @@ package de.erichseifert.gral.graphics.layout;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Dimension2D;
-import java.io.IOException;
 
 import de.erichseifert.gral.graphics.Container;
 import org.junit.Test;
-
-import de.erichseifert.gral.TestUtils;
-
 
 public class AbstractLayoutTest {
 	private static final double DELTA = 1e-15;
@@ -38,8 +34,6 @@ public class AbstractLayoutTest {
 	private static final double GAP_V = 10.0;
 
 	private static class MockAbstractLayout extends AbstractLayout {
-		private static final long serialVersionUID = 5812320021345698270L;
-
 		public MockAbstractLayout(double gapX, double gapY) {
 			super(gapX, gapY);
 		}
@@ -59,14 +53,5 @@ public class AbstractLayoutTest {
 		var gapped = new MockAbstractLayout(GAP_H, GAP_V);
 		assertEquals(GAP_H, gapped.getGapX(), DELTA);
 		assertEquals(GAP_V, gapped.getGapY(), DELTA);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockAbstractLayout(GAP_H, GAP_V);
-		AbstractLayout deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getGapX(), deserialized.getGapX(), DELTA);
-		assertEquals(original.getGapY(), deserialized.getGapY(), DELTA);
 	}
 }

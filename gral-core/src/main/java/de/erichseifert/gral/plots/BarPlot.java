@@ -30,10 +30,6 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.List;
 
 import de.erichseifert.gral.data.DataSource;
@@ -55,8 +51,6 @@ import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>An {@link XYPlot} that draws a bar from a baseline to each data value
@@ -86,9 +80,6 @@ import de.erichseifert.gral.util.SerializationUtils;
  * or configured like any other.</p>
  */
 public class BarPlot extends XYPlot {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 3177733647455649147L;
-
 	/** Relative width of the bars. 1.0 means the bars touch each other
 	 * without gap. */
 	private double barWidth;
@@ -102,15 +93,12 @@ public class BarPlot extends XYPlot {
 	 * Class that renders a bar in a bar plot.
 	 */
 	public static class BarRenderer extends DefaultPointRenderer2D {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 2183638342305398522L;
-
 		/** Plot that contains settings and renderers. */
 		private final BarPlot plot;
 
 		/** Stroke to draw the border of the bar. */
 		// Custom serialization will be done with a wrapper object
-		private transient Stroke borderStroke;
+		private Stroke borderStroke;
 		/** Color to fill the border of the bar. */
 		private Paint borderColor;
 
@@ -124,37 +112,6 @@ public class BarPlot extends XYPlot {
 			setValueLocation(Location.NORTH);
 			borderStroke = null;
 			borderColor = Color.BLACK;
-		}
-
-		/**
-		 * Custom deserialization method.
-		 * @param in Input stream.
-		 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-		 * @throws IOException if there is an error while reading data from the
-		 *         input stream.
-		 */
-		private void readObject(ObjectInputStream in)
-				throws ClassNotFoundException, IOException {
-			// Default deserialization
-			in.defaultReadObject();
-			// Custom deserialization
-			borderStroke = (Stroke) SerializationUtils.unwrap(
-					(Serializable) in.readObject());
-		}
-
-		/**
-		 * Custom serialization method.
-		 * @param out Output stream.
-		 * @throws ClassNotFoundException if a serialized class doesn't exist.
-		 * @throws IOException if there is an error while writing data to the
-		 *         output stream.
-		 */
-		private void writeObject(ObjectOutputStream out)
-				throws ClassNotFoundException, IOException {
-			// Default serialization
-			out.defaultWriteObject();
-			// Custom serialization
-			out.writeObject(SerializationUtils.wrap(borderStroke));
 		}
 
 		/**
@@ -192,9 +149,6 @@ public class BarPlot extends XYPlot {
 		@Override
 		public Drawable getPoint(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = -3145112034673683520L;
-
 				public void draw(DrawingContext context) {
 					BarRenderer renderer = BarRenderer.this;
 
@@ -326,9 +280,6 @@ public class BarPlot extends XYPlot {
 		@Override
 		public Drawable getValue(final PointData data, final Shape shape) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID1 = -1133369168849171793L;
-
 				public void draw(DrawingContext context) {
 					PointRenderer renderer = BarRenderer.this;
 					Row row = data.row;
@@ -347,9 +298,6 @@ public class BarPlot extends XYPlot {
 	 * data source as items.
 	 */
 	public static class BarPlotLegend extends ValueLegend {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 4752278896167602641L;
-
 		/** Plot that contains settings and renderers. */
 		private final BarPlot plot;
 

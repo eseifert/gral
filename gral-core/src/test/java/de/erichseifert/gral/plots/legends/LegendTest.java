@@ -23,7 +23,6 @@ package de.erichseifert.gral.plots.legends;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,11 +30,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.AbstractDrawable;
@@ -47,17 +44,11 @@ public class LegendTest {
 	private MockLegend legend;
 
 	private static class MockLegend extends SeriesLegend {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -6681407860400756446L;
-
 		private boolean isDrawn;
 
 		@Override
 		protected Drawable getSymbol(DataSource data) {
 			return new AbstractDrawable() {
-				/** Version id for serialization. */
-				private static final long serialVersionUID = 7336075728956564691L;
-
 				public void draw(DrawingContext context) {
 					isDrawn = true;
 				}
@@ -93,20 +84,4 @@ public class LegendTest {
 		assertTrue(legend.isDrawn);
 		assertNotEmpty(image);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		Legend original = legend;
-		Legend deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getFont(), deserialized.getFont());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.getOrientation(), deserialized.getOrientation());
-		assertEquals(original.getAlignmentX(), deserialized.getAlignmentX(), DELTA);
-		assertEquals(original.getAlignmentY(), deserialized.getAlignmentY(), DELTA);
-		assertEquals(original.getGap(), deserialized.getGap());
-		assertEquals(original.getSymbolSize(), deserialized.getSymbolSize());
-    }
 }

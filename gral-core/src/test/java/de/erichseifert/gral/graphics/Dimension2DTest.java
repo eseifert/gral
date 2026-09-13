@@ -22,13 +22,11 @@
 package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import de.erichseifert.gral.TestUtils;
 import org.junit.Test;
 
 public class Dimension2DTest {
@@ -81,14 +79,5 @@ public class Dimension2DTest {
 		assertFalse(dim2.equals(null));
 		// Hash code
 		assertEquals(dim1.hashCode(), dim2.hashCode());
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new de.erichseifert.gral.graphics.Dimension2D.Double(1.2, 3.4);
-		Dimension2D deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getWidth(), deserialized.getWidth(), DELTA);
-		assertEquals(original.getHeight(), deserialized.getHeight(), DELTA);
 	}
 }

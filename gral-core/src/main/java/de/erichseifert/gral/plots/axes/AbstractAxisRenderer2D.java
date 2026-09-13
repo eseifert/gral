@@ -33,10 +33,6 @@ import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -56,8 +52,6 @@ import de.erichseifert.gral.util.GeometryUtils;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.util.MathUtils;
 import de.erichseifert.gral.util.PointND;
-import de.erichseifert.gral.util.SerializationUtils;
-
 
 /**
  * <p>Base class for {@link AxisRenderer} implementations in two dimensions. It
@@ -88,9 +82,7 @@ import de.erichseifert.gral.util.SerializationUtils;
  * normals are computed by walking the segments of whatever {@code Shape} is
  * set, which is what {@link de.erichseifert.gral.plots.PiePlot} relies on.</p>
  */
-public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5623525683845512624L;
+public abstract class AbstractAxisRenderer2D implements AxisRenderer {
 	/** Line segments approximating the shape of the axis. */
 	private Line2D[] shapeLines;
 	/** Normals of the line segments approximating the axis. */
@@ -112,7 +104,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private Paint shapeColor;
 	/** Stroke used for drawing the axis shape. */
 	// Property will be serialized using a wrapper
-	private transient Stroke shapeStroke;
+	private Stroke shapeStroke;
 	/** Decides whether the axis direction will be changed. */
 	private boolean shapeDirectionSwapped;
 
@@ -126,7 +118,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private double tickLength;
 	/** Stroke which is used to draw all major ticks. */
 	// Property will be serialized using a wrapper
-	private transient Stroke tickStroke;
+	private Stroke tickStroke;
 	/** Alignment of major ticks relative to the axis. */
 	private double tickAlignment;
 	/** Font used to display the text of major ticks. */
@@ -152,7 +144,7 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	private double minorTickLength;
 	/** Stroke used to draw all minor ticks. */
 	// Property will be serialized using a wrapper
-	private transient Stroke minorTickStroke;
+	private Stroke minorTickStroke;
 	/** Minor tick alignment relative to the axis. */
 	private double minorTickAlignment;
 	/** Paint used to draw the shapes of minor ticks. */
@@ -216,9 +208,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 	 */
 	public Drawable getRendererComponent(final Axis axis) {
 		return new AbstractDrawable() {
-			/** Version id for serialization. */
-			private static final long serialVersionUID1 = 3605211198378801694L;
-
 			/**
 			 * Draws the {@code Drawable} with the specified drawing context.
 			 * @param context Environment used for drawing
@@ -691,32 +680,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer, Serializab
 				-(line.getX2() - line.getX1()) / segmentLength
 			);
 		}
-	}
-
-	/**
-	 * Custom deserialization method.
-	 * @param in Input stream.
-	 * @throws ClassNotFoundException if a serialized class doesn't exist anymore.
-	 * @throws IOException if there is an error while reading data from the
-	 *         input stream.
-	 */
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		// Default deserialization
-		in.defaultReadObject();
-		// Custom deserialization
-		shapeStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-		tickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-		minorTickStroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
-	}
-
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		// Default deserialization
-		out.defaultWriteObject();
-		// Custom serialization
-		out.writeObject(SerializationUtils.wrap(shapeStroke));
-		out.writeObject(SerializationUtils.wrap(tickStroke));
-		out.writeObject(SerializationUtils.wrap(minorTickStroke));
 	}
 
 	@Override

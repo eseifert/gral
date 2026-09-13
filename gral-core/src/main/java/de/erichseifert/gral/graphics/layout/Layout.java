@@ -22,7 +22,6 @@
 package de.erichseifert.gral.graphics.layout;
 
 import java.awt.geom.Dimension2D;
-import java.io.Serializable;
 
 import de.erichseifert.gral.graphics.Container;
 
@@ -31,7 +30,7 @@ import de.erichseifert.gral.graphics.Container;
  * Functionality includes the arrangement of components and returning the
  * preferred size of a specified container using this layout.
  */
-public interface Layout extends Serializable {
+public interface Layout {
 
 	/**
 	 * Returns the amount of horizontal space between two layed out components.

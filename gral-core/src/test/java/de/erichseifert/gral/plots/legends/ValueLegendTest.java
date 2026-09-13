@@ -23,11 +23,10 @@ package de.erichseifert.gral.plots.legends;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
+import java.text.DecimalFormat;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.Row;
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -45,11 +44,19 @@ public class ValueLegendTest {
 	}
 
 	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new MockValueLegend();
-		ValueLegend deserialized = TestUtils.serializeAndDeserialize(original);
+	public void testLabelColumn() {
+		var legend = new MockValueLegend();
+		assertEquals(0, legend.getLabelColumn());
+		legend.setLabelColumn(2);
+		assertEquals(2, legend.getLabelColumn());
+	}
 
-		assertEquals(original.getLabelColumn(), deserialized.getLabelColumn());
-		assertEquals(original.getLabelFormat(), deserialized.getLabelFormat());
-    }
+	@Test
+	public void testLabelFormat() {
+		var legend = new MockValueLegend();
+		assertEquals(null, legend.getLabelFormat());
+		var format = new DecimalFormat("0.00");
+		legend.setLabelFormat(format);
+		assertEquals(format, legend.getLabelFormat());
+	}
 }

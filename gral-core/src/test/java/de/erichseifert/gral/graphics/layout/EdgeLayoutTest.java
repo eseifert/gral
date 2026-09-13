@@ -25,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
 import de.erichseifert.gral.graphics.AbstractDrawable;
 import de.erichseifert.gral.graphics.Drawable;
@@ -34,7 +33,6 @@ import de.erichseifert.gral.graphics.DrawingContext;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.Location;
 
 
@@ -50,9 +48,6 @@ public class EdgeLayoutTest {
 	private Drawable nn, nw, ww, sw, ss, se, ee, ne, ce;
 
 	private static final class TestDrawable extends AbstractDrawable {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -8968220580916982445L;
-
 		public void draw(DrawingContext context) {
 		}
 
@@ -161,15 +156,5 @@ public class EdgeLayoutTest {
 
 		// Components must not overlap their neighbors
 		assertEquals(ss.getY(), ce.getY() + ce.getHeight() + GAP_V, DELTA);
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		EdgeLayout original = layout;
-
-		EdgeLayout deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getGapX(), deserialized.getGapX(), DELTA);
-		assertEquals(original.getGapY(), deserialized.getGapY(), DELTA);
 	}
 }

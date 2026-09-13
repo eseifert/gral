@@ -34,14 +34,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
@@ -57,9 +55,6 @@ public class PlotTest {
 	private Plot plot;
 
 	private static class MockPlot extends AbstractPlot  {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = -6303533550164303679L;
-
 		public boolean drawn;
 
 		public MockPlot(DataSource... data) {
@@ -259,18 +254,5 @@ public class PlotTest {
 		plot.setVisible(series1, false);
 		assertEquals(visible.size() - 1, plot.getVisibleData().size());
 		assertEquals(all.get(1), plot.getVisibleData().get(0));
-	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		Plot original = plot;
-		Plot deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.isLegendVisible(), deserialized.isLegendVisible());
-		assertEquals(original.getLegendLocation(), deserialized.getLegendLocation());
-		assertEquals(original.getLegendDistance(), deserialized.getLegendDistance(), DELTA);
 	}
 }

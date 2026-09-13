@@ -23,28 +23,22 @@ package de.erichseifert.gral.plots;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.graphics.DrawingContext;
 
 public class PlotAreaTest {
 	private MockPlotArea2D plotArea;
 
 	private static final class MockPlotArea2D extends PlotArea {
-		/** Version id for serialization. */
-		private static final long serialVersionUID = 9136184486930965257L;
-
 		public boolean isDrawn;
 
 		public void draw(DrawingContext context) {
@@ -76,15 +70,4 @@ public class PlotAreaTest {
 		assertTrue(plotArea.isDrawn);
 		assertNotEmpty(image);
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		MockPlotArea2D original = plotArea;
-		MockPlotArea2D deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getBackground(), deserialized.getBackground());
-		assertEquals(original.getBorderStroke(), deserialized.getBorderStroke());
-		assertEquals(original.getBorderColor(), deserialized.getBorderColor());
-		assertEquals(original.getClippingOffset(), deserialized.getClippingOffset());
-    }
 }

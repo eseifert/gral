@@ -23,8 +23,6 @@ package de.erichseifert.gral.graphics;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
-
 
 /**
  * <p>Base class for {@link Drawable} implementations. It stores the bounding
@@ -52,10 +50,7 @@ import java.io.Serializable;
  * override {@link #setBounds(double, double, double, double)}, which the other
  * bounds setters delegate to, and call the super implementation.</p>
  */
-public abstract class AbstractDrawable implements Drawable, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -684598008467326484L;
-
+public abstract class AbstractDrawable implements Drawable {
 	/** Boundaries of the drawable object. */
 	private final Rectangle2D bounds;
 
