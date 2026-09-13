@@ -46,9 +46,6 @@ import de.erichseifert.gral.util.MathUtils;
  * {@link SingleColor} is more direct.</p>
  */
 public class LinearGradient extends ScaledContinuousColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 4256873420364549677L;
-
 	/** Colors that will be used for blending. **/
 	private final List<Color> colors;
 

@@ -21,15 +21,11 @@
  */
 package de.erichseifert.gral.plots.colors;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
-import java.io.IOException;
 
 import org.junit.Test;
-
-import de.erichseifert.gral.TestUtils;
 
 public class RainbowColorsTest {
 	private static final float DELTA_FLOAT = 1e-7f;
@@ -41,13 +37,4 @@ public class RainbowColorsTest {
 			assertEquals(Color.getHSBColor((float) i, 1f, 1f), c.get(i));
 		}
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new QuasiRandomColors();
-		QuasiRandomColors deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getMode(), deserialized.getMode());
-		assertArrayEquals(original.getColorVariance(), deserialized.getColorVariance(), DELTA_FLOAT);
-    }
 }

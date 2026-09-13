@@ -21,9 +21,6 @@
  */
 package de.erichseifert.gral.plots.colors;
 
-import java.io.Serializable;
-
-
 /**
  * <p>Base class for {@link ColorMapper} implementations. It holds the
  * {@link ColorMapper.Mode} and implements the handling of values outside the
@@ -41,11 +38,7 @@ import java.io.Serializable;
  *
  * @param <T> Data type of input values.
  */
-public abstract class AbstractColorMapper<T extends Number>
-		implements ColorMapper, Serializable {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 8456831369409589441L;
-
+public abstract class AbstractColorMapper<T extends Number> implements ColorMapper {
 	/** Handling of values that are outside the mapping range. */
 	private Mode mode;
 

@@ -34,9 +34,6 @@ import java.awt.Paint;
  * of a series.</p>
  */
 public class SingleColor extends IndexedColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -3377452532555792998L;
-
 	/** The color that will be returned in any case. */
 	private Paint color;
 

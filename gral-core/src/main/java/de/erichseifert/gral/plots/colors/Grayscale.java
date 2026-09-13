@@ -41,9 +41,6 @@ import de.erichseifert.gral.util.MathUtils;
  * where color is already carrying some other meaning.</p>
  */
 public class Grayscale extends ScaledContinuousColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -1005712209663359529L;
-
 	/**
 	 * Returns the Paint object according to the specified value.
 	 * @param value Value of color.

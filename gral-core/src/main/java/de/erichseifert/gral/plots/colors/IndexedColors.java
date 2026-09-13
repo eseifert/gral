@@ -48,9 +48,6 @@ import de.erichseifert.gral.util.MathUtils;
  * {@link ColorMapper.Mode#CIRCULAR} to cycle through the palette instead.</p>
  */
 public class IndexedColors extends IndexedColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -8072979842165455075L;
-
 	/** Color palette that will be used for mapping. **/
 	private final List<Color> colors;
 

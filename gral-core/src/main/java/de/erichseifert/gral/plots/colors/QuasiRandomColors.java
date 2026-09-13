@@ -48,9 +48,6 @@ import de.erichseifert.gral.util.MathUtils;
  * or with {@link #setColorVariance(float[])} in one go.</p>
  */
 public class QuasiRandomColors extends IndexedColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 3320256963368776894L;
-
 	/** Object for mapping a plot value to a hue. */
 	private final HaltonSequence seqHue = new HaltonSequence(3);
 	/** Object for mapping a plot value to a saturation. */

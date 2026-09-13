@@ -43,9 +43,6 @@ import de.erichseifert.gral.util.MathUtils;
  * color-blind readers.</p>
  */
 public class HeatMap extends ScaledContinuousColorMapper {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -5398973874608239179L;
-
 	private static final Color[] COLORS = {
 	    new Color(0.0f, 0.0f, 0.0f),
 	    new Color(0.0f, 0.0f, 1.0f),

@@ -25,11 +25,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.awt.Color;
-import java.io.IOException;
 
 import org.junit.Test;
 
-import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.plots.colors.ColorMapper.Mode;
 
 public class IndexedColorsTest {
@@ -77,16 +75,4 @@ public class IndexedColorsTest {
 		assertEquals(Color.BLUE,  c.get(2));
 		assertEquals(Color.RED,   c.get(3));
 	}
-
-	@Test
-	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new IndexedColors(Color.RED, Color.GREEN, Color.BLUE);
-		IndexedColors deserialized = TestUtils.serializeAndDeserialize(original);
-
-		assertEquals(original.getMode(), deserialized.getMode());
-		assertEquals(original.getColors().size(), deserialized.getColors().size());
-		for (int i = -1; i <= 3; i++) {
-			assertEquals(original.get(i), deserialized.get(i));
-		}
-    }
 }
