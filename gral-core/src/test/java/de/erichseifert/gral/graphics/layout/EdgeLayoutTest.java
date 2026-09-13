@@ -166,6 +166,10 @@ public class EdgeLayoutTest {
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		EdgeLayout original = layout;
+
 		EdgeLayout deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getGapX(), deserialized.getGapX(), DELTA);
+		assertEquals(original.getGapY(), deserialized.getGapY(), DELTA);
 	}
 }

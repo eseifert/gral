@@ -26,6 +26,7 @@ import static de.erichseifert.gral.TestUtils.createTestImage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import de.erichseifert.gral.graphics.Label;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -124,7 +125,21 @@ public class LogarithmicRenderer2DTest {
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		AxisRenderer original = renderer;
-		@SuppressWarnings("unused")
+		original.setTickLength(3.5);
+		original.setTickLabelDistance(2.5);
+		original.setTicksAutoSpaced(false);
+		original.setTickSpacing(2.0);
+		original.setLabel(new Label("Axis"));
+
 		AxisRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-    }
+
+		assertEquals(original.getTickLength(), deserialized.getTickLength(), DELTA);
+		assertEquals(original.getTickLabelDistance(), deserialized.getTickLabelDistance(), DELTA);
+		assertEquals(original.isTicksAutoSpaced(), deserialized.isTicksAutoSpaced());
+		assertEquals(original.getTickSpacing(), deserialized.getTickSpacing());
+		assertEquals(original.getLabel().getText(), deserialized.getLabel().getText());
+		TestUtils.assertEquals(original.getShape(), deserialized.getShape());
+		assertEquals(original.getTickStroke(), deserialized.getTickStroke());
+		assertEquals(original.getTickFont(), deserialized.getTickFont());
+	}
 }
