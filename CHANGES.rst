@@ -28,6 +28,7 @@ General:
     - Added an aggregate ``gral`` artifact for core and Swing
     - Documented how to draw a plot with any Graphics2D
     - CI installs the GTK libraries that the JavaFX tests need
+    - Only ``gral-core`` declares the VectorGraphics2D dependency
 
 GRAL 0.13 (2026-09-13)
 ======================

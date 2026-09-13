@@ -78,16 +78,6 @@ subprojects {
 		javaRelease = 11
 	}
 
-	dependencies {
-		/*
-		 * VectorGraphics2D is loaded reflectively by
-		 * de.erichseifert.gral.io.plots.VectorWriter, so it must stay off the
-		 * compile classpath. Without it GRAL simply doesn't offer EPS, PDF and
-		 * SVG export.
-		 */
-		runtimeOnly 'de.erichseifert.vectorgraphics2d:VectorGraphics2D:0.13'
-	}
-
 	java {
 		withSourcesJar()
 		withJavadocJar()
