@@ -3,14 +3,33 @@ description = 'GRAL core'
 ext.pomName = rootProject.name
 ext.pomDescription = rootProject.description
 
+/*
+ * de.erichseifert.gral.TestUtils defines the conventions of the test suite and
+ * is needed by the tests of the other modules as well, so it lives in a test
+ * fixture instead of in src/test. The test source set depends on the fixtures
+ * automatically, which is why the test libraries are declared here only.
+ */
+apply plugin: 'java-test-fixtures'
+
 dependencies {
 	// JUnit pulls in Hamcrest 1.3, which lacks the order-sensitive collection
 	// matchers (contains, containsInAnyOrder). Exclude it in favour of the
 	// standalone Hamcrest artifact, which supersedes hamcrest-core.
-	testImplementation('junit:junit:4.13.2') {
+	testFixturesApi('junit:junit:4.13.2') {
 		exclude group: 'org.hamcrest'
 	}
-	testImplementation 'org.hamcrest:hamcrest:2.2'
+	testFixturesApi 'org.hamcrest:hamcrest:2.2'
+}
+
+/*
+ * The fixtures are an internal build artifact: they are consumed by the other
+ * modules of this build, but they are not part of the release.
+ */
+components.java.withVariantsFromConfiguration(configurations.testFixturesApiElements) {
+	skip()
+}
+components.java.withVariantsFromConfiguration(configurations.testFixturesRuntimeElements) {
+	skip()
 }
 
 jar {
