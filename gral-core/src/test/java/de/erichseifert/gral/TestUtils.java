@@ -263,68 +263,83 @@ public class TestUtils {
 	 * @param actual Actual line.
 	 */
 	public static void assertEquals(String message, Line2D expected, Line2D actual) {
+		if (expected == null || actual == null) {
+			org.junit.Assert.assertEquals(message, expected, actual);
+			return;
+		}
 		org.junit.Assert.assertEquals(message, expected.getP1(), actual.getP1());
 		org.junit.Assert.assertEquals(message, expected.getP2(), actual.getP2());
 	}
 
 	/**
-	 * Fails if two property values differ, comparing AWT types that have no
-	 * usable {@code equals} in a type-specific way: lines by their end points,
-	 * and other shapes segment by segment.
+	 * Fails if two lines have different end points.
+	 * @param expected Expected line.
+	 * @param actual Actual line.
+	 */
+	public static void assertEquals(Line2D expected, Line2D actual) {
+		assertEquals(null, expected, actual);
+	}
+
+	/**
+	 * Fails if two shapes describe different paths and prints a specified
+	 * message. Most AWT shapes do not implement {@code equals}, so they are
+	 * compared segment by segment.
+	 * @param message Custom message.
+	 * @param expected Expected shape.
+	 * @param actual Actual shape.
+	 */
+	public static void assertEquals(String message, Shape expected, Shape actual) {
+		// Line2D instances can't be compared. See Java bug 5057070
+		// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
+		if (expected instanceof Line2D && actual instanceof Line2D) {
+			assertEquals(message, (Line2D) expected, (Line2D) actual);
+			return;
+		}
+		if (expected == null || actual == null) {
+			org.junit.Assert.assertEquals(message, expected, actual);
+			return;
+		}
+		List<PathSegment> segsExpected = GeometryUtils.getSegments(expected);
+		List<PathSegment> segsActual = GeometryUtils.getSegments(actual);
+		org.junit.Assert.assertEquals(message,
+			segsExpected.size(), segsActual.size());
+		for (int i = 0; i < segsExpected.size(); i++) {
+			PathSegment segExpected = segsExpected.get(i);
+			PathSegment segActual = segsActual.get(i);
+			org.junit.Assert.assertEquals(message,
+				segExpected.type, segActual.type);
+			org.junit.Assert.assertEquals(message,
+				segExpected.start, segActual.start);
+			org.junit.Assert.assertEquals(message,
+				segExpected.end, segActual.end);
+			org.junit.Assert.assertArrayEquals(message,
+				segExpected.coords, segActual.coords, DELTA);
+		}
+	}
+
+	/**
+	 * Fails if two shapes describe different paths.
+	 * @param expected Expected shape.
+	 * @param actual Actual shape.
+	 */
+	public static void assertEquals(Shape expected, Shape actual) {
+		assertEquals(null, expected, actual);
+	}
+
+	/**
+	 * Fails if two property values differ, comparing AWT shapes—which have no
+	 * usable {@code equals}—by their path segments.
 	 * @param <T> Type of the values.
 	 * @param message Custom message.
 	 * @param expected Expected value.
 	 * @param actual Actual value.
 	 */
 	public static <T> void assertSetting(String message, T expected, T actual) {
-		// Line2D instances can't be compared. See Java bug 5057070
-		// <http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5057070>
-		if (expected instanceof Line2D) {
-			assertEquals(message, (Line2D) expected, (Line2D) actual);
-		} else if (expected instanceof Shape) {
-			List<PathSegment> segsExpected =
-				GeometryUtils.getSegments((Shape) expected);
-			List<PathSegment> segsActual =
-				GeometryUtils.getSegments((Shape) actual);
-			org.junit.Assert.assertEquals(message,
-				segsExpected.size(), segsActual.size());
-			for (int i = 0; i < segsExpected.size(); i++) {
-				PathSegment segExpected = segsExpected.get(i);
-				PathSegment segActual = segsActual.get(i);
-				org.junit.Assert.assertEquals(message,
-					segExpected.type, segActual.type);
-				org.junit.Assert.assertEquals(message,
-					segExpected.start, segActual.start);
-				org.junit.Assert.assertEquals(message,
-					segExpected.end, segActual.end);
-				org.junit.Assert.assertArrayEquals(message,
-					segExpected.coords, segActual.coords, DELTA);
-			}
+		if (expected instanceof Shape) {
+			assertEquals(message, (Shape) expected, (Shape) actual);
 		} else {
 			org.junit.Assert.assertEquals(message, expected, actual);
 		}
 	}
 
-	public static void assertEquals(Line2D expected, Line2D actual) {
-		if (expected == null && actual == null) {
-			return;
-		}
-		if (expected != null && expected.equals(actual)) {
-			return;
-		}
-		if (expected == null || actual == null) {
-			fail();
-		}
-
-		org.junit.Assert.assertEquals(expected.getP1(), actual.getP1());
-		org.junit.Assert.assertEquals(expected.getP2(), actual.getP2());
-	}
-
-	public static void assertEquals(Shape expected, Shape actual) {
-		if (expected instanceof Line2D && actual instanceof Line2D) {
-			assertEquals((Line2D) expected, (Line2D) actual);
-		} else {
-			org.junit.Assert.assertEquals(expected, actual);
-		}
-	}
 }
