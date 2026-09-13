@@ -38,6 +38,15 @@ allprojects {
 	version = gitVersion
 
 	ext.inceptionYear = 2009
+
+	/*
+	 * Declared for every project, not just for the modules: the NMCP task that
+	 * uploads the aggregated deployment runs in the root project and resolves
+	 * its own implementation from here.
+	 */
+	repositories {
+		mavenCentral()
+	}
 }
 
 subprojects {
@@ -54,15 +63,19 @@ subprojects {
 		website = 'https://github.com/eseifert/gral/'
 
 		/*
+		 * Name and description of the module in its POM. Read lazily further
+		 * down, because a module's own build script runs after this block and
+		 * may override them.
+		 */
+		pomName = rootProject.name
+		pomDescription = rootProject.description
+
+		/*
 		 * Lowest Java release the library is compiled for. The build itself
 		 * needs a much newer JDK (Gradle 9 requires Java 17 or later), but the
 		 * produced class files stay usable on older runtimes.
 		 */
 		javaRelease = 11
-	}
-
-	repositories {
-		mavenCentral()
 	}
 
 	dependencies {
@@ -160,4 +173,114 @@ subprojects {
 		}
 	}
 	tasks.named('check') { dependsOn(licenseCheck) }
+
+	/*
+	 * Both modules are released to Maven Central, so the publishing setup lives
+	 * here instead of in one of them. No remote repository is declared on
+	 * purpose: releases leave the build through the Central Portal publisher
+	 * API, which the NMCP plugin configured in settings.gradle drives. See the
+	 * 'publish' task in the root project below.
+	 */
+	apply plugin: 'maven-publish'
+	apply plugin: 'signing'
+
+	def module = project
+	def pomNameProvider = providers.provider { module.pomName }
+	def pomDescriptionProvider = providers.provider { module.pomDescription }
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+
+				pom {
+					name = pomNameProvider
+					description = pomDescriptionProvider
+					url = website
+					inceptionYear = project.inceptionYear.toString()
+					licenses {
+						license {
+							name = 'GNU Library or Lesser General Public License (LGPL)'
+							url = 'http://www.gnu.org/licenses/lgpl.txt'
+						}
+					}
+					developers {
+						developer {
+							id = owner1_id
+							name = owner1_name
+							email = owner1_email
+						}
+						developer {
+							id = owner2_id
+							name = owner2_name
+							email = owner2_email
+						}
+					}
+					scm {
+						connection = 'scm:git:git://github.com/eseifert/gral.git'
+						developerConnection = 'scm:git:git@github.com:eseifert/gral.git'
+						url = website
+					}
+					issueManagement {
+						system = 'GitHub Issues'
+						url = website
+					}
+				}
+			}
+		}
+	}
+
+	signing {
+		/*
+		 * Signing is required as soon as a key is configured. The condition used
+		 * to inspect the task graph for a PublishToMavenRepository as well,
+		 * which still holds with NMCP, but it ties the correctness of the
+		 * signatures to the shape of the graph and it reads the graph at
+		 * execution time, which the configuration cache does not allow. Ordinary
+		 * builds are unaffected, because 'build' does not depend on the signing
+		 * tasks.
+		 */
+		required = { project.hasProperty('signing.keyId') }
+		sign publishing.publications.mavenJava
+	}
+}
+
+/*
+ * The version comes from 'git describe', which yields something like
+ * 0.12-7-gdeadbee on a commit that isn't tagged. Such a version is not a
+ * snapshot, so nothing else would stop it from being released to Maven Central
+ * under a coordinate that can never be replaced afterwards.
+ */
+def checkReleaseVersion = tasks.register('checkReleaseVersion') {
+	description = 'Checks that the version was derived from a release tag.'
+	group = 'verification'
+
+	def candidate = project.version.toString()
+	doLast {
+		if (!(candidate ==~ ~/^\d+\.\d+(\.\d+)?$/)) {
+			throw new GradleException(
+				"Refusing to publish version '${candidate}'. Releases have to " +
+				'be built from a release tag, for example 0.13.')
+		}
+	}
+}
+
+/*
+ * All modules go into a single deployment, so that one release never appears in
+ * the Central Portal as two.
+ */
+def publishToCentralPortal = tasks.named('nmcpPublishAggregationToCentralPortal') {
+	dependsOn(checkReleaseVersion)
+}
+
+/*
+ * Makes the publisher API the default route out of the build, so that a release
+ * is a single 'gradlew publish' and needs no further step in the Central Portal.
+ * The 'publish' tasks of the modules do nothing, because neither of them
+ * declares a remote repository.
+ */
+tasks.register('publish') {
+	description = 'Publishes all modules to Maven Central.'
+	group = 'publishing'
+	dependsOn(publishToCentralPortal)
 }

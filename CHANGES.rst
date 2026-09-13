@@ -46,6 +46,8 @@ Data I/O:
 
 General:
     - Releases are published through the Central Portal publisher API
+    - The example applications are released to Maven Central as well, in
+      the same deployment as the library (#182)
     - Added ``HaltonSequence.get`` to read the element at a given position
     - Expanded and corrected the API documentation and the manual
 

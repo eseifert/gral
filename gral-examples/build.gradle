@@ -1,5 +1,8 @@
 description = 'GRAL example applications'
 
+ext.pomName = 'GRAL examples'
+ext.pomDescription = description
+
 apply plugin: 'application'
 
 dependencies {

@@ -6,7 +6,10 @@ commit. Publishing then takes a single command, which uploads the artifacts to
 the Central Portal, waits for them to be validated, and publishes them::
 
   $ git tag 0.13
-  $ ./gradlew :gral-core:publish
+  $ ./gradlew publish
+
+Both ``gral-core`` and ``gral-examples`` go into that one deployment, so a
+release never shows up in the Portal as two.
 
 The build refuses to publish a version that does not come from a release tag.
 Pass ``-PcentralPublishingType=USER_MANAGED`` to stop after validation and
