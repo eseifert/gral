@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	NavigatorTest.class,
+	NavigablesTest.class,
 	NavigationEventTest.class,
 	NavigationListenerTest.class
 })
