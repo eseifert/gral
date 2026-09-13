@@ -343,6 +343,17 @@ public class XYPlotTest {
 	}
 
 	@Test
+	public void testGridColorsAreOpaque() {
+		// EPS has no alpha channel, so a translucent grid was exported as
+		// solid black lines while it looked correct as a bitmap (#145).
+		var plotArea = new XYPlotArea2D(new MockXYPlot());
+		assertEquals("Major grid color is translucent.",
+			255, ((Color) plotArea.getMajorGridColor()).getAlpha());
+		assertEquals("Minor grid color is translucent.",
+			255, ((Color) plotArea.getMinorGridColor()).getAlpha());
+	}
+
+	@Test
 	public void testAutoscaleOfSinglePoint() {
 		// A single data point maps every axis onto one value. The range must
 		// still have an extent, or the conversion between world and view

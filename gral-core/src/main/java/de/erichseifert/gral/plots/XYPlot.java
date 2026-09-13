@@ -230,13 +230,17 @@ public class XYPlot extends AbstractPlot implements Navigable, AxisListener {
 		public XYPlotArea2D(XYPlot plot) {
 			this.plot = plot;
 
+			// The grid used to be translucent black. EPS has no alpha channel,
+			// so the exporter dropped the transparency and drew the grid as
+			// solid black lines. These are the opaque equivalents on a white
+			// background, which every output format can express.
 			majorGridX = true;
 			majorGridY = true;
-			majorGridColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+			majorGridColor = new Color(230, 230, 230);
 
 			minorGridX = false;
 			minorGridY = false;
-			minorGridColor = new Color(0.0f, 0.0f, 0.0f, 0.05f);
+			minorGridColor = new Color(242, 242, 242);
 		}
 
 		/**

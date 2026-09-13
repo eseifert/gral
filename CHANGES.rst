@@ -6,6 +6,8 @@ Plotting:
     - Drawing or exporting a box plot of constant observations no longer hangs
     - A point shape without extent no longer collapses a box plot's box
     - Auto-scaled axes no longer collapse when all values are equal (#142)
+    - The grid is opaque light grey now, so that EPS, which has no alpha
+      channel, no longer draws it as solid black lines (#145)
     - Plots, axes, renderers, legends and color mappers are no longer
       serializable (#151)
 
