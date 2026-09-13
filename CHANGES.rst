@@ -2,16 +2,30 @@ GRAL 0.14 (unreleased)
 ======================
 
 Plotting:
-    - Serializing a ``LineAreaRenderer2D`` no longer fails with a
-      ``NotSerializableException``, because its stroke is stored like the
-      stroke of ``AbstractLineRenderer2D``
+    - Plots, plot areas, legends, axes and the point, line, area and axis
+      renderers are no longer serializable (#151). Java serialization is kept
+      where it is a feature of its own, which is the ``data`` package; a plot
+      is described by its bean properties and is meant to be rebuilt from
+      them, not restored from a stream
+    - The color mappers and ``Drawable``, ``Layout``, ``Label``,
+      ``Dimension2D`` and ``Insets2D`` lost the interface as well, since
+      nothing that holds them serializes any more
 
 General:
+    - ``PointND``, ``HaltonSequence`` and ``GeometryUtils.PathSegment`` are
+      no longer serializable, so the ``data`` package is the only part of the
+      library that writes objects to a stream
+    - Removed ``SerializationUtils``, ``SerializationWrapper`` and the
+      ``Serializable`` wrappers for ``BasicStroke``, ``Shape``, ``Area`` and
+      ``Point2D``, which existed only to carry those AWT types through a
+      round trip. Fields that were ``transient`` for that reason are ordinary
+      fields again
     - Tests assert the order and the number of the values returned by
       filters, histograms, statistics and iterators, instead of only
       checking that the expected values occur somewhere
-    - Serialization tests compare the restored properties, so that a field
-      that loses its value is no longer mistaken for a restored default
+    - The serialization tests of the ``data`` package compare the restored
+      properties, so that a field that loses its value is no longer mistaken
+      for a restored default
     - Tests are compiled against Hamcrest 2.2 rather than the Hamcrest 1.3
       that JUnit pulls in, which has no order-sensitive matchers
 
