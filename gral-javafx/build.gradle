@@ -17,7 +17,14 @@ dependencies {
 	 * BSD-licensed. It is part of the API as well, because the canvas paints
 	 * through it.
 	 */
-	api 'org.jfree:org.jfree.fxgraphics2d:2.1.4'
+	api('org.jfree:org.jfree.fxgraphics2d:2.1.4') {
+		/*
+		 * FXGraphics2D declares the OpenJFX artifacts without a classifier,
+		 * which are empty JARs. Exclude them, so that they cannot end up on a
+		 * class path in front of the real, platform-specific ones.
+		 */
+		exclude group: 'org.openjfx'
+	}
 
 	/*
 	 * JavaFX is not redistributed with this module and does not appear in its
@@ -28,6 +35,16 @@ dependencies {
 	 */
 	compileOnly javafx('javafx-base')
 	compileOnly javafx('javafx-graphics')
+
+	/*
+	 * The tests need a real JavaFX to run against, and javafx-swing for
+	 * SwingFXUtils, which turns a canvas snapshot into the BufferedImage that
+	 * the assertions of the test fixture expect.
+	 */
+	testImplementation testFixtures(project(':gral-core'))
+	testImplementation javafx('javafx-base')
+	testImplementation javafx('javafx-graphics')
+	testImplementation javafx('javafx-swing')
 }
 
 jar {

@@ -71,7 +71,8 @@ makes GRAL usable for generating figures on a server:
     }
 
 The ``gral-examples`` module contains a runnable example for every plot type;
-``./gradlew :gral-examples:run`` opens a browser for all of them.
+``./gradlew :gral-examples:run`` opens a browser for all of them. The same plot
+in a JavaFX window is ``./gradlew :gral-javafx-examples:run``.
 
 
 Usage
@@ -171,14 +172,18 @@ be started directly with::
 
   $ ./gradlew :gral-examples:run
 
+The JavaFX example is a module of its own::
+
+  $ ./gradlew :gral-javafx-examples:run
+
 Running the tests
 -----------------
 ::
 
   $ ./gradlew build
 
-A handful of tests in the ``gral-swing`` module need a display and skip
-themselves when none is available. To run them on a headless machine, use a
+A handful of tests in the ``gral-swing`` and ``gral-javafx`` modules need a
+display and skip themselves when none is available. To run them on a headless machine, use a
 virtual frame buffer::
 
   $ xvfb-run --auto-servernum ./gradlew build
