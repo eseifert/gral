@@ -87,6 +87,31 @@ public class HaltonSequenceTest {
 	}
 
 	@Test
+	public void testGet() {
+		var seq = new HaltonSequence(3);
+		assertEquals(0.3333333333333333, seq.get(0), DELTA);
+		assertEquals(0.6666666666666666, seq.get(1), DELTA);
+		assertEquals(0.1111111111111111, seq.get(2), DELTA);
+	}
+
+	@Test
+	public void testGetIsIndependentOfQueryOrder() {
+		var seq = new HaltonSequence(3);
+		assertEquals(0.1111111111111111, seq.get(2), DELTA);
+		assertEquals(0.3333333333333333, seq.get(0), DELTA);
+		assertEquals(0.1111111111111111, seq.get(2), DELTA);
+	}
+
+	@Test
+	public void testGetMatchesNext() {
+		var seq = new HaltonSequence(5);
+		var indexed = new HaltonSequence(5);
+		for (int i = 0; i < 10; i++) {
+			assertEquals(seq.next(), indexed.get(i), DELTA);
+		}
+	}
+
+	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		var original = new HaltonSequence(3);
 		HaltonSequence deserialized = TestUtils.serializeAndDeserialize(original);

@@ -43,7 +43,9 @@ import de.erichseifert.gral.util.MathUtils;
  * <p>The sequence is deterministic: the same index always yields the same
  * color, so a plot looks the same on every run. That is the practical
  * difference to {@link RandomColors}. The permitted spread of hue, saturation
- * and brightness is set with {@link #setColorVariance(float[])}.</p>
+ * and brightness is set with {@link #setHue(float, float)},
+ * {@link #setSaturation(float, float)} and {@link #setBrightness(float, float)},
+ * or with {@link #setColorVariance(float[])} in one go.</p>
  */
 public class QuasiRandomColors extends IndexedColorMapper {
 	/** Version id for serialization. */
@@ -82,9 +84,9 @@ public class QuasiRandomColors extends IndexedColorMapper {
 	public Paint get(int index) {
 		return colorCache.computeIfAbsent(index, key -> {
 			float[] colorVariance = getColorVariance();
-			float hue = colorVariance[0] + colorVariance[1]*seqHue.next().floatValue();
-			float saturation = colorVariance[2] + colorVariance[3]*seqSat.next().floatValue();
-			float brightness = colorVariance[4] + colorVariance[5]*seqBrightness.next().floatValue();
+			float hue = colorVariance[0] + colorVariance[1]*seqHue.get(key).floatValue();
+			float saturation = colorVariance[2] + colorVariance[3]*seqSat.get(key).floatValue();
+			float brightness = colorVariance[4] + colorVariance[5]*seqBrightness.get(key).floatValue();
 			return Color.getHSBColor(
 				hue,
 				MathUtils.limit(saturation, 0f, 1f),
@@ -108,5 +110,54 @@ public class QuasiRandomColors extends IndexedColorMapper {
 	 */
 	public void setColorVariance(float[] colorVariance) {
 		this.colorVariance = colorVariance;
+		colorCache.clear();
+	}
+
+	/**
+	 * Sets the range of hues a color can have. A hue is an angle on the color
+	 * wheel expressed as a fraction of a full turn, so {@code 0.0} and
+	 * {@code 1.0} both stand for red.
+	 * @param min Smallest hue.
+	 * @param max Largest hue.
+	 */
+	public void setHue(float min, float max) {
+		setRange(0, min, max);
+	}
+
+	/**
+	 * Sets the range of saturations a color can have, from {@code 0.0} for
+	 * gray to {@code 1.0} for a fully saturated color.
+	 * @param min Smallest saturation.
+	 * @param max Largest saturation.
+	 */
+	public void setSaturation(float min, float max) {
+		setRange(2, min, max);
+	}
+
+	/**
+	 * Sets the range of brightnesses a color can have, from {@code 0.0} for
+	 * black to {@code 1.0} for a fully lit color.
+	 * @param min Smallest brightness.
+	 * @param max Largest brightness.
+	 */
+	public void setBrightness(float min, float max) {
+		setRange(4, min, max);
+	}
+
+	/**
+	 * Stores a range as the offset and the extent the color variance is made
+	 * of.
+	 * @param offset Index of the offset in the color variance.
+	 * @param min Smallest value of the range.
+	 * @param max Largest value of the range.
+	 */
+	private void setRange(int offset, float min, float max) {
+		if (max < min) {
+			throw new IllegalArgumentException(
+				"The upper bound must not be smaller than the lower bound."); //$NON-NLS-1$
+		}
+		colorVariance[offset] = min;
+		colorVariance[offset + 1] = max - min;
+		colorCache.clear();
 	}
 }

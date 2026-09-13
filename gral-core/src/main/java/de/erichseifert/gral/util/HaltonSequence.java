@@ -85,22 +85,30 @@ public class HaltonSequence implements Iterator<Double>, Serializable {
      * @return the next element in the iteration.
      */
 	public Double next() {
-		long i, digit;
-		double h, step;
-
 		if (++c == Long.MAX_VALUE) {
 			c = 0;
 		}
+		return get(c - 1);
+	}
 
-		i = c;
-		h = 0.0;
-		step = 1.0 / base;
+	/**
+	 * Returns the element at the specified position of the sequence, counted
+	 * from zero. In contrast to {@link #next()} this does not depend on how
+	 * often the sequence has been queried before, so the same position always
+	 * yields the same value.
+	 * @param index Position in the sequence.
+	 * @return Element at the specified position.
+	 */
+	public Double get(long index) {
+		long i = index + 1;
+		double h = 0.0;
+		double step = 1.0 / base;
 
 		while (i > 0) {
-			digit = i % base;
-		    h += digit * step;
-		    i = (i - digit) / base;
-		    step /= base;
+			long digit = i % base;
+			h += digit * step;
+			i = (i - digit) / base;
+			step /= base;
 		}
 
 		return h;
