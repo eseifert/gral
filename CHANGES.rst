@@ -9,6 +9,9 @@ Data:
       used in hash-based collections
     - The last bin of ``Histogram`` and the last cell of ``Histogram2D``
       include their upper limit, so that the largest value is counted
+    - Added ``DataTable.insert`` to insert a row at a given position (#75)
+    - ``DataSeries.toString`` describes an unnamed series instead of returning
+      ``null`` (#156)
 
 Plotting:
     - Horizontally stacked layouts report the height of their tallest
@@ -29,6 +32,13 @@ Plotting:
     - The slices of a pie plot are accumulated once per change of the data
       instead of once per read value, which made drawing a pie plot take a
       time that grows with the square of the number of values
+    - A pie plot rejects data sources that have not been prepared with
+      ``PiePlot.createPieData``, instead of failing later with an
+      ``ArrayIndexOutOfBoundsException`` (#173)
+    - Added ``QuasiRandomColors.setHue``, ``setSaturation`` and
+      ``setBrightness``, which take the bounds of a range (#91)
+    - A color of ``QuasiRandomColors`` depends on its index alone now, not on
+      how often the mapper has been queried before
 
 Data I/O:
     - ``CSVWriter`` quotes values that contain the column separator, a quote,
@@ -36,6 +46,7 @@ Data I/O:
 
 General:
     - Releases are published through the Central Portal publisher API
+    - Added ``HaltonSequence.get`` to read the element at a given position
     - Expanded and corrected the API documentation and the manual
 
 GRAL 0.12 (2026-09-11)
