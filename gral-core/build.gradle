@@ -4,7 +4,13 @@ ext.pomName = rootProject.name
 ext.pomDescription = rootProject.description
 
 dependencies {
-	testImplementation 'junit:junit:4.13.2'
+	// JUnit pulls in Hamcrest 1.3, which lacks the order-sensitive collection
+	// matchers (contains, containsInAnyOrder). Exclude it in favour of the
+	// standalone Hamcrest artifact, which supersedes hamcrest-core.
+	testImplementation('junit:junit:4.13.2') {
+		exclude group: 'org.hamcrest'
+	}
+	testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 jar {
