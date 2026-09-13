@@ -13,6 +13,8 @@ charts). The acronym GRAL simply stands for *GRAphing Library*.
 Features
 ========
 
+- Renders through ``java.awt.Graphics2D`` alone, with no dependency on a user
+  interface toolkit; the Swing components are a separate module
 - Ready-to-use classes for data management
 - Data processing and filtering (smoothing, rescaling, statistics, histograms)
 - Many different plot types: xy/scatter plot, bubble plot, line plot,
@@ -48,8 +50,8 @@ form a series, and hand the series to a plot.
     plot.setLineRenderers(series, new DefaultLineRenderer2D());
     plot.setLegendVisible(true);
 
-Displaying it in a window takes an adapter, because a GRAL plot is not a Swing
-component:
+Displaying it in a window takes an adapter from the ``gral-swing`` module,
+because a GRAL plot is not a Swing component:
 
 .. code:: java
 
@@ -78,7 +80,8 @@ Usage
 Without build management system
 -------------------------------
 
-You can just add ``gral-core.jar`` to the classpath of your project.
+You can just add ``gral-core.jar`` to the classpath of your project, plus
+``gral-swing.jar`` if you want to display plots in a Swing window.
 
 Using GRAL with Maven
 ---------------------
@@ -94,6 +97,16 @@ a dependency in your ``pom.xml``:
         <version>0.14</version>
     </dependency>
 
+Displaying a plot in a Swing window additionally requires ``gral-swing``:
+
+.. code:: xml
+
+    <dependency>
+        <groupId>de.erichseifert.gral</groupId>
+        <artifactId>gral-swing</artifactId>
+        <version>0.14</version>
+    </dependency>
+
 Using GRAL with Gradle
 ----------------------
 
@@ -101,6 +114,8 @@ Using GRAL with Gradle
 
     dependencies {
         implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.14'
+        // Only needed for the Swing components
+        implementation group: 'de.erichseifert.gral', name: 'gral-swing', version: '0.14'
     }
 
 Using GRAL with sbt
@@ -109,6 +124,7 @@ Using GRAL with sbt
 .. code:: scala
 
     libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.14"
+    libraryDependencies += "de.erichseifert.gral" % "gral-swing" % "0.14"
 
 The example applications are published as ``de.erichseifert.gral:gral-examples``
 under the same version. The JAR is runnable and opens a browser for all example
@@ -135,7 +151,9 @@ the following command in the project directory::
 
 This will generate a JAR archive named ``gral-core`` in the
 ``gral-core/build/libs`` directory. This JAR file can be added to the class path
-of your application.
+of your application. The Swing components are built separately::
+
+  $ ./gradlew :gral-swing:assemble
 
 Building a JAR file of the examples
 -----------------------------------
@@ -156,7 +174,7 @@ Running the tests
 
   $ ./gradlew build
 
-A handful of tests in ``de.erichseifert.gral.ui`` need a display and skip
+A handful of tests in the ``gral-swing`` module need a display and skip
 themselves when none is available. To run them on a headless machine, use a
 virtual frame buffer::
 

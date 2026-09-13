@@ -77,8 +77,10 @@
  *   {@code RasterPlot}) and their sub-packages of renderers.</li>
  *   <li>{@link de.erichseifert.gral.graphics} &ndash; the {@code Drawable}
  *   abstraction, containers and layout managers.</li>
- *   <li>{@link de.erichseifert.gral.ui} &ndash; Swing components that display a
- *   {@code Drawable}.</li>
+ *   <li>{@code de.erichseifert.gral.ui} &ndash; Swing components that display
+ *   a {@code Drawable}. They are a separate artifact,
+ *   {@code de.erichseifert.gral:gral-swing}, because the core does not depend
+ *   on a user interface toolkit.</li>
  *   <li>{@link de.erichseifert.gral.io.plots} &ndash; writing plots to bitmap
  *   and vector files.</li>
  * </ul>

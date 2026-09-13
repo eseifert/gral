@@ -57,7 +57,6 @@ import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigator;
-import de.erichseifert.gral.util.Messages;
 import de.erichseifert.gral.util.PointND;
 
 
@@ -177,29 +176,29 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		List<IOCapabilities> exportFormats = DrawableWriterFactory.getInstance()
 			.getCapabilities();
 		exportImageChooser = new ExportChooser(true, exportFormats);
-		exportImageChooser.setDialogTitle(Messages.getString(
+		exportImageChooser.setDialogTitle(UiMessages.getString(
 				"InteractivePanel.exportImageTitle")); //$NON-NLS-1$
 
 		actions = new ActionMap();
-		actions.put("zoomIn", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("zoomIn", new AbstractAction(UiMessages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomIn")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(popupMenuPos, 1);
 			}
 		});
-		actions.put("zoomOut", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("zoomOut", new AbstractAction(UiMessages.getString( //$NON-NLS-1$
 			"InteractivePanel.zoomOut")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				zoom(popupMenuPos, -1);
 			}
 		});
-		actions.put("resetView", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("resetView", new AbstractAction(UiMessages.getString( //$NON-NLS-1$
 				"InteractivePanel.resetView")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				resetZoom(popupMenuPos);
 			}
 		});
-		actions.put("exportImage", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("exportImage", new AbstractAction(UiMessages.getString( //$NON-NLS-1$
 				"InteractivePanel.exportImage")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				int ret = exportImageChooser.showSaveDialog(
@@ -220,8 +219,8 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 				else if (file.exists()) {
 					int retOverwrite = JOptionPane.showConfirmDialog(
 						InteractivePanel.this,
-						Messages.getString("InteractivePanel.exportExistsWarning"), //$NON-NLS-1$
-						Messages.getString("InteractivePanel.warning"), //$NON-NLS-1$
+						UiMessages.getString("InteractivePanel.exportExistsWarning"), //$NON-NLS-1$
+						UiMessages.getString("InteractivePanel.warning"), //$NON-NLS-1$
 						JOptionPane.YES_NO_OPTION
 					);
 					// Clear artifacts of the confirm dialog
@@ -245,7 +244,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 					file, ed.getDocumentBounds());
 			}
 		});
-		actions.put("print", new AbstractAction(Messages.getString( //$NON-NLS-1$
+		actions.put("print", new AbstractAction(UiMessages.getString( //$NON-NLS-1$
 				"InteractivePanel.print")) { //$NON-NLS-1$
 			public void actionPerformed(ActionEvent e) {
 				if (printerJob.printDialog()) {

@@ -30,8 +30,9 @@
  * zoom factor and the center of view, applies limits, and notifies
  * {@link de.erichseifert.gral.navigation.NavigationListener}s of every change.
  * Nothing in this package refers to AWT events; a caller decides what a mouse
- * drag or a key press means and calls the navigator accordingly. The Swing
- * bindings live in {@link de.erichseifert.gral.ui.InteractivePanel}.</p>
+ * drag or a key press means and calls the navigator accordingly. The bindings
+ * for a toolkit live in its own artifact, for example {@code InteractivePanel}
+ * in {@code de.erichseifert.gral:gral-swing}.</p>
  *
  * <pre>
  * Navigator navigator = plot.getNavigator();

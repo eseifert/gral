@@ -7,6 +7,8 @@ apply plugin: 'application'
 
 dependencies {
 	implementation project(':gral-core')
+	// The examples display their plots in a window.
+	implementation project(':gral-swing')
 }
 
 application {

@@ -38,7 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import de.erichseifert.gral.graphics.Drawable;
-import de.erichseifert.gral.util.Messages;
 
 /**
  * <p>The dialog that {@link InteractivePanel} shows before exporting a plot. It
@@ -93,7 +92,7 @@ public class ExportDialog extends JDialog {
 	 */
 	public ExportDialog(Component parent, Drawable drawable) {
 		super(JOptionPane.getFrameForComponent(parent), true);
-		setTitle(Messages.getString("ExportDialog.exportOptionsTitle")); //$NON-NLS-1$
+		setTitle(UiMessages.getString("ExportDialog.exportOptionsTitle")); //$NON-NLS-1$
 
 		documentBounds = new Rectangle2D.Double();
 		documentBounds.setFrame(drawable.getBounds());
@@ -120,20 +119,20 @@ public class ExportDialog extends JDialog {
 				((Number) inputW.getValue()).doubleValue(),
 				((Number) inputH.getValue()).doubleValue());
 
-		addInputField(inputX, Messages.getString("ExportDialog.left"), //$NON-NLS-1$
+		addInputField(inputX, UiMessages.getString("ExportDialog.left"), //$NON-NLS-1$
 				options, documentBounds.getX(), docBoundsListener);
-		addInputField(inputY, Messages.getString("ExportDialog.top"), //$NON-NLS-1$
+		addInputField(inputY, UiMessages.getString("ExportDialog.top"), //$NON-NLS-1$
 				options, documentBounds.getY(), docBoundsListener);
-		addInputField(inputW, Messages.getString("ExportDialog.width"), //$NON-NLS-1$
+		addInputField(inputW, UiMessages.getString("ExportDialog.width"), //$NON-NLS-1$
 				options, documentBounds.getWidth(), docBoundsListener);
-		addInputField(inputH, Messages.getString("ExportDialog.height"), //$NON-NLS-1$
+		addInputField(inputH, UiMessages.getString("ExportDialog.height"), //$NON-NLS-1$
 				options, documentBounds.getHeight(), docBoundsListener);
 
 		var controls = new JPanel(new FlowLayout());
 		cp.add(controls, BorderLayout.SOUTH);
 
 		var buttonConfirm = new JButton(
-				Messages.getString("ExportDialog.confirm")); //$NON-NLS-1$
+				UiMessages.getString("ExportDialog.confirm")); //$NON-NLS-1$
 		buttonConfirm.addActionListener(e -> {
 			setUserAction(UserAction.APPROVE);
 			dispose();
@@ -141,7 +140,7 @@ public class ExportDialog extends JDialog {
 		controls.add(buttonConfirm);
 
 		var buttonCancel = new JButton(
-				Messages.getString("ExportDialog.abort")); //$NON-NLS-1$
+				UiMessages.getString("ExportDialog.abort")); //$NON-NLS-1$
 		buttonCancel.addActionListener(e -> {
 			setUserAction(UserAction.CANCEL);
 			dispose();
