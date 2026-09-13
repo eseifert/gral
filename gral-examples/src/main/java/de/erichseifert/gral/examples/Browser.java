@@ -71,12 +71,18 @@ public class Browser extends JFrame implements ListSelectionListener {
 
 	/**
 	 * Creates the browser window and instantiates every example.
-	 * @param selected Example to show first.
+	 * @param name Simple class name of the example to show first, like
+	 *        {@code ScatterPlot}, or {@code null} for the first one.
 	 */
-	public Browser(Example selected) {
+	public Browser(String name) {
 		super("GRAL examples");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		/*
+		 * The examples are created once and kept: they are the keys of the
+		 * panel map and the elements of the list, which are compared by
+		 * identity.
+		 */
 		List<Example> examples = Examples.createAll();
 		panels = new LinkedHashMap<>();
 		for (Example example : examples) {
@@ -86,7 +92,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 		examplesList = new ExamplesList(examples);
 		examplesList.addListSelectionListener(this);
 		exampleScrollPane = new JScrollPane();
-		setExample(selected);
+		setExample(Examples.find(examples, name));
 
 		var listExamplesSplitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		listExamplesSplitter.setLeftComponent(examplesList);
@@ -101,7 +107,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 
 	private void setExample(Example example) {
 		ExamplePanel panel = panels.get(example);
-		if (panel == exampleScrollPane.getViewport().getView()) {
+		if ((panel == null) || (panel == exampleScrollPane.getViewport().getView())) {
 			return;
 		}
 		exampleScrollPane.getViewport().setView(panel);
@@ -126,8 +132,7 @@ public class Browser extends JFrame implements ListSelectionListener {
 	 *        {@code ScatterPlot}.
 	 */
 	public static void main(String[] args) {
-		String name = (args.length > 0) ? args[0] : null;
-		var frame = new Browser(Examples.find(Examples.createAll(), name));
+		var frame = new Browser((args.length > 0) ? args[0] : null);
 		frame.setVisible(true);
 	}
 }
