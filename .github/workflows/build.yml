@@ -32,11 +32,16 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # A few tests in de.erichseifert.gral.ui need a real display. They skip
-      # themselves when none is available, so run them under Xvfb to keep them
-      # covered.
-      - name: Install Xvfb
-        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends xvfb
+      # A few tests in gral-swing and gral-javafx need a real display. They
+      # skip themselves when none is available, so run them under Xvfb to keep
+      # them covered. JavaFX additionally loads GTK 3 at run time; the package
+      # was renamed in Ubuntu 24.04, so both names are tried.
+      - name: Install Xvfb and GTK
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends xvfb
+          sudo apt-get install -y --no-install-recommends libgtk-3-0t64 \
+            || sudo apt-get install -y --no-install-recommends libgtk-3-0
 
       - name: Build
         run: xvfb-run --auto-servernum ./gradlew build --stacktrace
