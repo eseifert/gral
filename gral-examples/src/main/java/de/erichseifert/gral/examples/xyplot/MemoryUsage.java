@@ -21,11 +21,8 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.LinearGradientPaint;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.InvocationTargetException;
@@ -33,14 +30,11 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 
-import javax.swing.JComponent;
-import javax.swing.Timer;
-
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.examples.ExamplePanel;
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.plots.Plot;
@@ -49,20 +43,17 @@ import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 import de.erichseifert.gral.plots.areas.DefaultAreaRenderer2D;
 import de.erichseifert.gral.plots.axes.AxisRenderer;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
-final class UpdateTask implements ActionListener {
+final class UpdateTask {
 	private final DataTable data;
 	private final Plot plot;
-	private final JComponent component;
 	private Method getTotalPhysicalMemorySize;
 	private Method getFreePhysicalMemorySize;
 
-	public UpdateTask(DataTable data, XYPlot plot, JComponent comp) {
+	public UpdateTask(DataTable data, XYPlot plot) {
 		this.data = data;
 		this.plot = plot;
-		this.component = comp;
 
 		// Check for VM specific methods getTotalPhysicalMemorySize() and
 		// getFreePhysicalMemorySize()
@@ -79,10 +70,7 @@ final class UpdateTask implements ActionListener {
 		}
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if (!component.isVisible()) {
-			return;
-		}
+	public void update() {
 		double time = System.currentTimeMillis();
 
 		// Physical system memory
@@ -125,8 +113,6 @@ final class UpdateTask implements ActionListener {
 				col3.getStatistics(Statistics.MAX)
 			)
 		);
-
-		component.repaint();
 	}
 }
 
@@ -139,14 +125,14 @@ final class UpdateTask implements ActionListener {
  * range is moved along, and the change notification of the data source takes
  * care of the rest.</p>
  */
-public class MemoryUsage extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5914124874301980251L;
-
+public class MemoryUsage extends Example implements Example.Animated {
 	/** Size of the data buffer in no. of element. */
 	private static final int BUFFER_SIZE = 400;
 	/** Update interval in milliseconds */
 	private static final int INTERVAL = 100;
+
+	/** Task that samples the memory usage and moves the axes along. */
+	private final UpdateTask updateTask;
 
 	/**
 	 * Creates the example, its plot and the task that feeds it.
@@ -224,17 +210,30 @@ public class MemoryUsage extends ExamplePanel {
 		));
 		plot.setAreaRenderers(memVmUsage, area3);
 
-		// Add plot to frame
-		var plotPanel = new InteractivePanel(plot);
-		plotPanel.setPannable(false);
-		plotPanel.setZoomable(false);
-		add(plotPanel, BorderLayout.CENTER);
+		setDrawable(plot);
 
 		// Start watching memory
-		var updateTask = new UpdateTask(data, plot, plotPanel);
-		var updateTimer = new Timer(INTERVAL, updateTask);
-		updateTimer.setCoalesce(false);
-		updateTimer.start();
+		updateTask = new UpdateTask(data, plot);
+	}
+
+	/**
+	 * The example moves its own axes, so navigating it by hand would only
+	 * fight the updates.
+	 * @return Always {@code false}.
+	 */
+	@Override
+	public boolean isNavigable() {
+		return false;
+	}
+
+	@Override
+	public int getUpdateInterval() {
+		return INTERVAL;
+	}
+
+	@Override
+	public void update() {
+		updateTask.update();
 	}
 
 	@Override
@@ -247,13 +246,5 @@ public class MemoryUsage extends ExamplePanel {
 		return "Area plot of the system's current memory usage. This example " +
 			"works best with Oracle VM, but it can show VM memory usage on " +
 			"other VMs too.";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new MemoryUsage().showInFrame();
 	}
 }

@@ -21,22 +21,20 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.filters.Convolution;
 import de.erichseifert.gral.data.filters.Filter2D;
 import de.erichseifert.gral.data.filters.Kernel;
 import de.erichseifert.gral.data.filters.Median;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Orientation;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 
 /**
@@ -48,10 +46,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
  * beside the original because it is a
  * {@link de.erichseifert.gral.data.DataSource} itself.</p>
  */
-public class ConvolutionExample extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 5084898568751883516L;
-
+public class ConvolutionExample extends Example {
 	private static final int SAMPLE_COUNT = 200;
 
 	/**
@@ -113,7 +108,7 @@ public class ConvolutionExample extends ExamplePanel {
 		formatLine(plot, dsMovingMedian, GraphicsUtils.deriveDarker(COLOR2));
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		setDrawable(plot);
 	}
 
 	private static void formatLine(XYPlot plot, DataSeries series, Color color) {
@@ -131,13 +126,5 @@ public class ConvolutionExample extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Line plot showing various ways of filtering data with convolution";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new ConvolutionExample().showInFrame();
 	}
 }

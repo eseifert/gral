@@ -21,18 +21,16 @@
  */
 package de.erichseifert.gral.examples.xyplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.geom.Ellipse2D;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSeries;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.plots.XYPlot.XYPlotArea2D;
 import de.erichseifert.gral.plots.points.SizeablePointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 
@@ -44,10 +42,7 @@ import de.erichseifert.gral.graphics.Insets2D;
  * which takes the size of each mark from a further column, so that a third
  * variable is shown without a third axis.</p>
  */
-public class SpiralPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 995084910079463763L;
-
+public class SpiralPlot extends Example {
 	/**
 	 * Creates the example and its plot.
 	 */
@@ -97,7 +92,7 @@ public class SpiralPlot extends ExamplePanel {
 		pointRenderer.setColumn(2);  // data column which determines the scaling of data point shapes
 		plot.setPointRenderers(series, pointRenderer);  // Assign the point renderer to the data series
 
-		add(new InteractivePanel(plot), BorderLayout.CENTER);  // Add the plot to the Swing component
+		setDrawable(plot);
 	}
 
 	@Override
@@ -108,13 +103,5 @@ public class SpiralPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Bubble plot showing data points in a spiral-like shape";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SpiralPlot().showInFrame();
 	}
 }

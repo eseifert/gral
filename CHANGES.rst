@@ -25,6 +25,9 @@ General:
     - Added ``Navigables.getNavigableAt`` to look up a navigable
     - Added a ``gral-javafx`` module for JavaFX applications
     - Added a runnable JavaFX example application
+    - The examples are toolkit-free and shared by both browsers
+    - The example browser opens the example named as an argument
+    - Examples are started through a browser, not their own main
     - Scrolling zooms the JavaFX canvas one step per wheel notch
     - Added an aggregate ``gral`` artifact for core and Swing
     - Documented how to draw a plot with any Graphics2D

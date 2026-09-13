@@ -21,19 +21,17 @@
  */
 package de.erichseifert.gral.examples.pieplot;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSource;
 import de.erichseifert.gral.data.DataTable;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.plots.PiePlot;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.colors.LinearGradient;
-import de.erichseifert.gral.ui.InteractivePanel;
 
 
 /**
@@ -43,10 +41,7 @@ import de.erichseifert.gral.ui.InteractivePanel;
  * de.erichseifert.gral.data.DataSource)}, the inner radius and gap settings of
  * {@code PiePlot.PieSliceRenderer}, and the labeling of the slices.</p>
  */
-public class SimplePiePlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = -3039317265508932299L;
-
+public class SimplePiePlot extends Example {
 	private static final int SAMPLE_COUNT = 10;
 	/** Instance to generate random data values. */
 	private static final Random random = new Random();
@@ -91,7 +86,7 @@ public class SimplePiePlot extends ExamplePanel {
 		pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
 
 		// Add plot to Swing component
-		add(new InteractivePanel(plot), BorderLayout.CENTER);
+		setDrawable(plot);
 	}
 
 	@Override
@@ -102,13 +97,5 @@ public class SimplePiePlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return String.format("Donut plot of %d random data values", SAMPLE_COUNT);
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new SimplePiePlot().showInFrame();
 	}
 }

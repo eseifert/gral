@@ -23,14 +23,13 @@ package de.erichseifert.gral.examples.barplot;
 
 import java.util.Random;
 
+import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
 import de.erichseifert.gral.data.statistics.Histogram2D;
 import de.erichseifert.gral.data.statistics.Statistics;
-import de.erichseifert.gral.examples.ExamplePanel;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import de.erichseifert.gral.ui.InteractivePanel;
 import de.erichseifert.gral.util.GraphicsUtils;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.util.MathUtils;
@@ -45,10 +44,7 @@ import de.erichseifert.gral.graphics.Orientation;
  * {@link de.erichseifert.gral.data.EnumeratedData} supplies the missing x
  * coordinate, and how the bar width is chosen so that the bars touch.</p>
  */
-public class HistogramPlot extends ExamplePanel {
-	/** Version id for serialization. */
-	private static final long serialVersionUID = 4458280577519421950L;
-
+public class HistogramPlot extends Example {
 	private static final int SAMPLE_COUNT = 1000;
 
 	/**
@@ -95,10 +91,17 @@ public class HistogramPlot extends ExamplePanel {
 		barRenderer.setValueVisible(true);
 
 		// Add plot to Swing component
-		var panel = new InteractivePanel(plot);
-		panel.setPannable(false);
-		panel.setZoomable(false);
-		add(panel);
+		setDrawable(plot);
+	}
+
+	/**
+	 * The plot fills the view at a fixed scale, so there is nothing to
+	 * navigate to.
+	 * @return Always {@code false}.
+	 */
+	@Override
+	public boolean isNavigable() {
+		return false;
 	}
 
 	@Override
@@ -109,13 +112,5 @@ public class HistogramPlot extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return String.format("AbstractHistogram2D of %d samples", SAMPLE_COUNT);
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new HistogramPlot().showInFrame();
 	}
 }

@@ -23,58 +23,111 @@ package de.erichseifert.gral.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
+
+import de.erichseifert.gral.ui.InteractivePanel;
 
 /**
- * <p>Base class of the visual examples. It supplies the parts that are the same
- * everywhere &mdash; a white 800x600 panel, the two colors the examples share,
- * and {@link #showInFrame()} for running one on its own &mdash; so that each
- * example is left with nothing but the plot it is meant to demonstrate.</p>
+ * <p>The Swing view of an {@link Example}: a white 800x600 panel showing the
+ * drawable of the example in an {@link InteractivePanel}, so that it can be
+ * zoomed, panned, exported and printed.</p>
  *
- * <p>A subclass builds its plot in the constructor, adds the resulting
- * component to itself, and returns a title and a description that
- * {@link Browser} lists it under.</p>
+ * <p>The interaction that an example declares without naming a toolkit is
+ * rendered here in Swing terms: {@link Example.Adjustable} becomes a
+ * {@code JSlider} below the plot, and {@link Example.Animated} a
+ * {@code javax.swing.Timer} that ticks while the panel is showing.</p>
  */
-public abstract class ExamplePanel extends JPanel {
+public class ExamplePanel extends JPanel {
 	/** Version id for serialization. */
 	private static final long serialVersionUID = 8221256658243821951L;
 
-	/** First corporate color used for normal coloring.*/
-	protected static final Color COLOR1 = new Color( 55, 170, 200);
-	/** Second corporate color used as signal color */
-	protected static final Color COLOR2 = new Color(200,  80,  75);
+	/** Example that is displayed. */
+	private final transient Example example;
+
+	/** Component showing the drawable of the example. */
+	private final InteractivePanel plotPanel;
 
 	/**
-	 * Performs basic initialization of an example,
-	 * like setting a default size.
+	 * Creates a panel showing the specified example.
+	 * @param example Example to display.
 	 */
-	public ExamplePanel() {
+	public ExamplePanel(Example example) {
 		super(new BorderLayout());
-		setPreferredSize(new Dimension(800, 600));
 		setBackground(Color.WHITE);
+
+		this.example = example;
+		setPreferredSize(example.getPreferredSize());
+
+		plotPanel = new InteractivePanel(example.getDrawable());
+		plotPanel.setZoomable(example.isNavigable());
+		plotPanel.setPannable(example.isNavigable());
+		add(plotPanel, BorderLayout.CENTER);
+
+		if (example instanceof Example.Adjustable) {
+			add(createSlider((Example.Adjustable) example), BorderLayout.SOUTH);
+		}
+		if (example instanceof Example.Animated) {
+			startTimer((Example.Animated) example);
+		}
 	}
 
 	/**
-	 * Returns a short title for the example.
-	 * @return A title text.
+	 * Returns the example that is displayed by this panel.
+	 * @return The example.
 	 */
-	public abstract String getTitle();
+	public Example getExample() {
+		return example;
+	}
 
 	/**
-	 * Returns a more detailed description of the example contents.
-	 * @return A description of the example.
+	 * Creates the slider that drives an adjustable example.
+	 * @param adjustable Example to drive.
+	 * @return A slider bound to the example.
 	 */
-	public abstract String getDescription();
+	private JSlider createSlider(Example.Adjustable adjustable) {
+		var slider = new JSlider(adjustable.getMinimum(), adjustable.getMaximum(),
+				adjustable.getValue());
+		slider.setBorder(new EmptyBorder(15, 15, 5, 15));
+		slider.setMajorTickSpacing(adjustable.getTickSpacing());
+		slider.setMinorTickSpacing(1);
+		slider.setSnapToTicks(true);
+		slider.setPaintTicks(true);
+		slider.addChangeListener(e -> {
+			adjustable.setValue(slider.getValue());
+			repaint();
+		});
+		return slider;
+	}
 
 	/**
-	 * Opens a frame and shows the example in it.
+	 * Starts the timer that refreshes an animated example. It keeps running
+	 * for the lifetime of the panel, but does nothing while the panel is
+	 * hidden, for example because another example is selected.
+	 * @param animated Example to refresh.
+	 */
+	private void startTimer(Example.Animated animated) {
+		var timer = new Timer(animated.getUpdateInterval(), e -> {
+			if (!isVisible()) {
+				return;
+			}
+			animated.update();
+			repaint();
+		});
+		timer.setCoalesce(false);
+		timer.start();
+	}
+
+	/**
+	 * Opens a frame and shows this panel in it.
 	 * @return the frame instance used for displaying the example.
 	 */
-	protected JFrame showInFrame() {
-		var frame = new JFrame(getTitle());
+	public JFrame showInFrame() {
+		var frame = new JFrame(getExample().getTitle());
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(getPreferredSize());
@@ -84,6 +137,6 @@ public abstract class ExamplePanel extends JPanel {
 
 	@Override
 	public String toString() {
-		return getTitle();
+		return getExample().getTitle();
 	}
 }

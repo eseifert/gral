@@ -22,37 +22,35 @@
 package de.erichseifert.gral.examples;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.geom.Point2D;
 
 import de.erichseifert.gral.graphics.Label;
-import de.erichseifert.gral.ui.InteractivePanel;
 
 
 /**
  * <p>A single {@link de.erichseifert.gral.graphics.Label} displayed on its
  * own.</p>
  *
- * <p>A reminder that a plot is not the only thing that can be drawn: any
- * {@link de.erichseifert.gral.graphics.Drawable} can be put into a
- * {@link de.erichseifert.gral.ui.DrawablePanel}. Shows the alignment, rotation
- * and background settings of a label.</p>
+ * <p>A reminder that a plot is not the only thing that can be drawn: the
+ * browsers display any {@link de.erichseifert.gral.graphics.Drawable}. Shows
+ * the alignment, rotation and background settings of a label.</p>
  */
-public class LabelExample extends ExamplePanel {
+public class LabelExample extends Example {
 
 	/**
 	 * Creates the example and its label.
 	 */
 	public LabelExample() {
 		var label = new Label("TestLabel");
-		label.setFont(getFont().deriveFont(20f));
+		label.setFont(Font.decode(null).deriveFont(20f));
 		label.setBackground(new GradientPaint(
 			new Point2D.Double(0.0, 0.0), Color.BLACK,
 			new Point2D.Double(1.0, 1.0), Color.WHITE
 		));
 
-		var panel = new InteractivePanel(label);
-		add(panel);
+		setDrawable(label);
 	}
 
 	@Override
@@ -63,13 +61,5 @@ public class LabelExample extends ExamplePanel {
 	@Override
 	public String getDescription() {
 		return "Label with colored background";
-	}
-
-	/**
-	 * Runs this example on its own.
-	 * @param args Command line arguments; none are used.
-	 */
-	public static void main(String[] args) {
-		new LabelExample().showInFrame();
 	}
 }
