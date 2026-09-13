@@ -21,10 +21,13 @@
  */
 
 /**
- * <p>Example application for the JavaFX components of GRAL.</p>
+ * <p>The JavaFX example browser: the same window as the Swing one of
+ * {@code gral-examples}, listing the same examples.</p>
  *
- * <p>{@code ScatterPlotExample} builds an ordinary {@code XYPlot} and displays
- * it in a {@link de.erichseifert.gral.javafx.InteractiveCanvas}, which is the
- * only JavaFX-specific line in it. {@code Launcher} starts it.</p>
+ * <p>That is the point of it. The examples themselves are in
+ * {@code de.erichseifert.gral.examples} and name no toolkit; only
+ * {@code Browser} and {@code ExampleView} here are JavaFX, and all the latter
+ * does is put the drawable of an example into a
+ * {@link de.erichseifert.gral.javafx.InteractiveCanvas}.</p>
  */
 package de.erichseifert.gral.examples.javafx;

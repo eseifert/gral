@@ -24,7 +24,7 @@ General:
     - The library core no longer depends on ``javax.swing``
     - Added ``Navigables.getNavigableAt`` to look up a navigable
     - Added a ``gral-javafx`` module for JavaFX applications
-    - Added a runnable JavaFX example application
+    - The JavaFX examples are the same browser as the Swing ones
     - The examples are toolkit-free and shared by both browsers
     - The example browser opens the example named as an argument
     - Examples are started through a browser, not their own main
