@@ -53,30 +53,5 @@
  *   {@link de.erichseifert.gral.util.ConcatenationIterator} &ndash; the
  *   iterators the newer filters are built from.</li>
  * </ul>
- *
- * <h2>Serialization</h2>
- * <p>Plots and data sources are serializable, but several AWT types they hold
- * are not. {@link de.erichseifert.gral.util.SerializationUtils} wraps such a
- * value in a serializable stand-in on writing and unwraps it on reading:</p>
- * <pre>
- * private void writeObject(ObjectOutputStream out) throws IOException {
- *     out.defaultWriteObject();
- *     out.writeObject(SerializationUtils.wrap(stroke));
- * }
- *
- * private void readObject(ObjectInputStream in)
- *         throws ClassNotFoundException, IOException {
- *     in.defaultReadObject();
- *     stroke = (Stroke) SerializationUtils.unwrap((Serializable) in.readObject());
- * }
- * </pre>
- * <p>The wrappers are
- * {@link de.erichseifert.gral.util.SerializableBasicStroke},
- * {@link de.erichseifert.gral.util.SerializableShape},
- * {@link de.erichseifert.gral.util.SerializableArea} and
- * {@link de.erichseifert.gral.util.SerializablePoint2D}. A field of one of
- * these types must be declared {@code transient} and handled in the pair of
- * methods above; adding such a field without doing so breaks serialization
- * silently.</p>
  */
 package de.erichseifert.gral.util;

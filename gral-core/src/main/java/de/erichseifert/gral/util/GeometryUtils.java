@@ -51,9 +51,8 @@ import java.util.ListIterator;
  *
  * <p>{@link #getSegments(java.awt.Shape)} and
  * {@link #getShape(java.util.List, boolean)} convert a shape to a list of
- * {@link GeometryUtils.PathSegment}s and back. That round trip is what makes an
- * otherwise unserializable {@code Shape} storable, and it is used by
- * {@link SerializableShape}.</p>
+ * {@link GeometryUtils.PathSegment}s and back, which is how a shape is
+ * inspected or rebuilt one segment at a time.</p>
  *
  * <p>{@link #EPSILON} is the tolerance the intersection tests work with;
  * geometry here is deliberately approximate, since the results end up as
