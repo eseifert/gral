@@ -23,9 +23,12 @@ package de.erichseifert.gral.plots.areas;
 
 import static de.erichseifert.gral.TestUtils.assertNotEmpty;
 import static de.erichseifert.gral.TestUtils.createTestImage;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -113,8 +116,17 @@ public class LineAreaRendererTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		var original = new DefaultAreaRenderer2D();
-		@SuppressWarnings("unused")
-		AreaRenderer deserialized = TestUtils.serializeAndDeserialize(original);
-    }
+		var original = new LineAreaRenderer2D();
+		original.setStroke(new BasicStroke(2f));
+		original.setGap(1.5);
+		original.setGapRounded(true);
+		original.setColor(Color.RED);
+
+		LineAreaRenderer2D deserialized = TestUtils.serializeAndDeserialize(original);
+
+		assertEquals(original.getStroke(), deserialized.getStroke());
+		assertEquals(original.getGap(), deserialized.getGap(), TestUtils.DELTA);
+		assertEquals(original.isGapRounded(), deserialized.isGapRounded());
+		assertEquals(original.getColor(), deserialized.getColor());
+	}
 }
