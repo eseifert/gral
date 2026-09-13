@@ -21,33 +21,33 @@
  */
 package de.erichseifert.gral.data;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.Test;
 
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
+
+import de.erichseifert.gral.TestUtils;
 
 public class RecordTest {
 	@Test
 	public void testCreateEmptyRecord() {
-		new Record();
+		var record = new Record();
+
+		assertThat(record.size(), is(0));
 	}
 
 	@Test
 	public void testCreatableFromComparables() {
-		new Record(-3.0, 1, "SomeString", null);
+		var record = new Record(-3.0, 1, "SomeString", null);
+
+		assertThat(record, Matchers.<Comparable<?>>contains(-3.0, 1, "SomeString", null));
 	}
 
 	@Test
@@ -58,7 +58,9 @@ public class RecordTest {
 		comparables.add("SomeString");
 		comparables.add(null);
 
-		new Record(comparables);
+		var record = new Record(comparables);
+
+		assertThat(record, Matchers.<Comparable<?>>contains(-3.0, 1, "SomeString", null));
 	}
 
 	@Test
@@ -75,7 +77,7 @@ public class RecordTest {
 	public void testIteratorReturnsValues() {
 		var record = new Record(-3.0, 1, "SomeString", null);
 
-		assertThat(record, CoreMatchers.<Comparable<?>>hasItems(-3.0, 1, "SomeString", null));
+		assertThat(record, Matchers.<Comparable<?>>contains(-3.0, 1, "SomeString", null));
 	}
 
 	@Test
@@ -86,16 +88,12 @@ public class RecordTest {
 	}
 
 	@Test
-	public void testIsSerializable() throws IOException {
+	public void testIsSerializable() throws IOException, ClassNotFoundException {
 		var record = new Record(-3.0, 1, "SomeString", null);
 
-		var out = new ByteArrayOutputStream();
-		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
-			oos.writeObject(record);
-		} catch (NotSerializableException e) {
-			fail("Unable to serialize " + Record.class.getName());
-		}
-		assertTrue(out.size() > 0);
+		Record deserialized = TestUtils.serializeAndDeserialize(record);
+
+		assertThat(deserialized, is(record));
 	}
 
 	@Test
@@ -192,6 +190,6 @@ public class RecordTest {
 
 		Record newRecord = record.insert(someComparable, somePosition);
 
-		assertThat(newRecord, hasItems(-3.0, 1, someComparable, "SomeString", null));
+		assertThat(newRecord, Matchers.<Comparable<?>>contains(-3.0, 1, someComparable, "SomeString", null));
 	}
 }
