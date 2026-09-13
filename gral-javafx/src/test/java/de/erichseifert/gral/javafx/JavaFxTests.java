@@ -27,7 +27,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	DrawableCanvasTest.class,
-	InteractiveCanvasTest.class
+	InteractiveCanvasTest.class,
+	InteractiveCanvasMenuTest.class
 })
 public class JavaFxTests {
 }

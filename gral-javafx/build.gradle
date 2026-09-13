@@ -35,6 +35,8 @@ dependencies {
 	 */
 	compileOnly javafx('javafx-base')
 	compileOnly javafx('javafx-graphics')
+	// The context menu, the export dialog and its fields.
+	compileOnly javafx('javafx-controls')
 
 	/*
 	 * The tests need a real JavaFX to run against, and javafx-swing for
@@ -44,6 +46,7 @@ dependencies {
 	testImplementation testFixtures(project(':gral-core'))
 	testImplementation javafx('javafx-base')
 	testImplementation javafx('javafx-graphics')
+	testImplementation javafx('javafx-controls')
 	testImplementation javafx('javafx-swing')
 }
 

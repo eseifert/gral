@@ -25,6 +25,7 @@ dependencies {
 
 	javafxRuntime javafx('javafx-base')
 	javafxRuntime javafx('javafx-graphics')
+	javafxRuntime javafx('javafx-controls')
 	/*
 	 * FXGraphics2D draws images through SwingFXUtils, which is in javafx-swing.
 	 */

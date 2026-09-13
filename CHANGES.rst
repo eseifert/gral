@@ -29,6 +29,8 @@ General:
     - The example browser opens the example named as an argument
     - Examples are started through a browser, not their own main
     - Scrolling zooms the JavaFX canvas one step per wheel notch
+    - The JavaFX canvas has a context menu like the Swing panel
+    - Plots can be exported and printed from a JavaFX application
     - Added an aggregate ``gral`` artifact for core and Swing
     - Documented how to draw a plot with any Graphics2D
     - CI installs the GTK libraries that the JavaFX tests need

@@ -21,13 +21,41 @@
  */
 package de.erichseifert.gral.javafx;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.DrawingContext;
+import de.erichseifert.gral.io.IOCapabilities;
+import de.erichseifert.gral.io.plots.DrawableWriter;
+import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.navigation.Navigable;
 import de.erichseifert.gral.navigation.Navigables;
 import de.erichseifert.gral.navigation.Navigator;
@@ -44,13 +72,19 @@ import de.erichseifert.gral.util.PointND;
  * <p>What it adds:</p>
  * <ul>
  *   <li>dragging with the primary mouse button pans the view;</li>
- *   <li>scrolling and a double click zoom in and out.</li>
+ *   <li>scrolling and a double click zoom in and out;</li>
+ *   <li>a context menu with <i>zoom in</i>, <i>zoom out</i>, <i>reset
+ *   view</i>, <i>export image</i> and <i>print</i>;</li>
+ *   <li>exporting offers every format registered with
+ *   {@link DrawableWriterFactory}, through {@link ExportDialog}; the exported
+ *   size is independent of the size on screen.</li>
  * </ul>
  *
  * <p>Panning and zooming require the displayed drawable to be
  * {@link Navigable}, which the plots are; for anything else the canvas
  * silently behaves like a {@code DrawableCanvas}. Both can be switched off
- * with {@link #setPannable(boolean)} and {@link #setZoomable(boolean)}.</p>
+ * with {@link #setPannable(boolean)} and {@link #setZoomable(boolean)}, and
+ * the context menu with {@link #setContextMenuEnabled(boolean)}.</p>
  *
  * <p>Interaction is applied through the {@link Navigator} of the drawable, the
  * same one the Swing components use, so connecting the navigators of two views
@@ -63,6 +97,12 @@ public class InteractiveCanvas extends DrawableCanvas {
 	 * distances instead, which are added up until they amount to a notch.
 	 */
 	private static final double SCROLL_NOTCH = 40.0;
+
+	/** Constant that can be used to convert from millimeters to points
+	(1/72 inch). */
+	private static final double MM_TO_PT = 72.0/25.4;
+	/** Constant that defines how many millimeters a pixel will be. */
+	private static final double MM_PER_PX = 0.2*MM_TO_PT;
 
 	/** Defines whether the displayed drawable can be zoomed. */
 	private boolean zoomable;
@@ -79,6 +119,15 @@ public class InteractiveCanvas extends DrawableCanvas {
 	/** Scroll distance that has not been turned into a zoom step yet. */
 	private double scrollOffset;
 
+	/** Defines whether a context menu is shown. */
+	private boolean contextMenuEnabled;
+
+	/** Cache for the context menu. */
+	private ContextMenu contextMenu;
+
+	/** Position the context menu was opened at. */
+	private Point2D contextMenuPosition;
+
 	/**
 	 * Initializes a new canvas showing the specified drawable. Zooming and
 	 * panning are enabled by default.
@@ -88,10 +137,12 @@ public class InteractiveCanvas extends DrawableCanvas {
 		super(drawable);
 		zoomable = true;
 		pannable = true;
+		contextMenuEnabled = true;
 		setOnMousePressed(this::handleMousePressed);
 		setOnMouseDragged(this::handleMouseDragged);
 		setOnMouseClicked(this::handleMouseClicked);
 		setOnScroll(this::handleScroll);
+		setOnContextMenuRequested(this::handleContextMenuRequested);
 	}
 
 	/**
@@ -231,6 +282,244 @@ public class InteractiveCanvas extends DrawableCanvas {
 		}
 
 		redraw();
+	}
+
+	/**
+	 * Returns whether a context menu is shown when the user asks for one.
+	 * @return {@code true} when a context menu will be shown,
+	 *         otherwise {@code false}.
+	 */
+	public boolean isContextMenuEnabled() {
+		return contextMenuEnabled;
+	}
+
+	/**
+	 * Sets whether a context menu is shown when the user asks for one.
+	 * @param contextMenuEnabled {@code true} when a context menu should be
+	 *        shown, otherwise {@code false}.
+	 */
+	public void setContextMenuEnabled(boolean contextMenuEnabled) {
+		this.contextMenuEnabled = contextMenuEnabled;
+	}
+
+	/**
+	 * Returns the context menu of this canvas, creating it on first use. The
+	 * menu is cached, so a subclass that wants different entries overrides
+	 * this method and builds its own.
+	 * @return The context menu, or {@code null} if none should be shown.
+	 */
+	protected ContextMenu getContextMenu() {
+		if (contextMenu == null) {
+			var zoomIn = new MenuItem(FxMessages.getString("InteractiveCanvas.zoomIn")); //$NON-NLS-1$
+			zoomIn.setOnAction(event -> zoom(getMenuPosition(), 1));
+			var zoomOut = new MenuItem(FxMessages.getString("InteractiveCanvas.zoomOut")); //$NON-NLS-1$
+			zoomOut.setOnAction(event -> zoom(getMenuPosition(), -1));
+			var resetView = new MenuItem(FxMessages.getString("InteractiveCanvas.resetView")); //$NON-NLS-1$
+			resetView.setOnAction(event -> resetZoom(getMenuPosition()));
+			var exportImage = new MenuItem(FxMessages.getString("InteractiveCanvas.exportImage")); //$NON-NLS-1$
+			exportImage.setOnAction(event -> exportImage());
+			var print = new MenuItem(FxMessages.getString("InteractiveCanvas.print")); //$NON-NLS-1$
+			print.setOnAction(event -> print());
+
+			zoomIn.setDisable(!isZoomable());
+			zoomOut.setDisable(!isZoomable());
+			resetView.setDisable(!isZoomable() && !isPannable());
+
+			contextMenu = new ContextMenu(zoomIn, zoomOut, resetView,
+					new SeparatorMenuItem(), exportImage, print);
+		}
+		return contextMenu;
+	}
+
+	/**
+	 * Returns the position the context menu was opened at, or the middle of
+	 * the canvas when it has not been opened by hand.
+	 * @return Position an entry of the menu acts on.
+	 */
+	private Point2D getMenuPosition() {
+		if (contextMenuPosition != null) {
+			return contextMenuPosition;
+		}
+		return new Point2D.Double(getWidth()/2.0, getHeight()/2.0);
+	}
+
+	/**
+	 * Opens the context menu where the user asked for it.
+	 * @param event Event that requested the menu.
+	 */
+	private void handleContextMenuRequested(ContextMenuEvent event) {
+		if (!isContextMenuEnabled()) {
+			return;
+		}
+		ContextMenu menu = getContextMenu();
+		if (menu == null) {
+			return;
+		}
+		contextMenuPosition = new Point2D.Double(event.getX(), event.getY());
+		menu.show(this, event.getScreenX(), event.getScreenY());
+	}
+
+	/**
+	 * Resets the view of the navigable object at the specified point.
+	 * @param point The location where the reset was triggered.
+	 */
+	private void resetZoom(Point2D point) {
+		if (!isZoomable()) {
+			return;
+		}
+
+		Navigable navigable = Navigables.getNavigableAt(getDrawable(), point);
+		if (navigable == null) {
+			return;
+		}
+
+		navigable.getNavigator().reset();
+		redraw();
+	}
+
+	/**
+	 * Asks for a file and for the bounds of the document, and writes the
+	 * drawable to it. The format is the one of the chosen file filter.
+	 */
+	private void exportImage() {
+		Window owner = (getScene() != null) ? getScene().getWindow() : null;
+
+		var chooser = new FileChooser();
+		chooser.setTitle(FxMessages.getString("InteractiveCanvas.exportImageTitle")); //$NON-NLS-1$
+		Map<FileChooser.ExtensionFilter, IOCapabilities> formats = createFilters();
+		chooser.getExtensionFilters().addAll(formats.keySet());
+
+		File file = chooser.showSaveDialog(owner);
+		if (file == null) {
+			return;
+		}
+		IOCapabilities capabilities = formats.get(chooser.getSelectedExtensionFilter());
+		if (capabilities == null) {
+			return;
+		}
+
+		var dialog = new ExportDialog(owner, getDrawable());
+		dialog.getDocumentBounds().ifPresent(
+				bounds -> export(capabilities.getMimeType(), file, bounds));
+	}
+
+	/**
+	 * Returns one file filter per format that can be written, in the order the
+	 * factory lists them.
+	 * @return The filters, each mapped to the format it stands for.
+	 */
+	private static Map<FileChooser.ExtensionFilter, IOCapabilities> createFilters() {
+		var formats = new LinkedHashMap<FileChooser.ExtensionFilter, IOCapabilities>();
+		for (IOCapabilities capabilities : DrawableWriterFactory.getInstance().getCapabilities()) {
+			String description = MessageFormat.format(
+					FxMessages.getString("IO.formatDescription"), //$NON-NLS-1$
+					capabilities.getFormat(), capabilities.getName());
+			List<String> patterns = new ArrayList<>();
+			for (String extension : capabilities.getExtensions()) {
+				patterns.add("*." + extension); //$NON-NLS-1$
+			}
+			formats.put(new FileChooser.ExtensionFilter(description, patterns), capabilities);
+		}
+		return formats;
+	}
+
+	/**
+	 * Writes the displayed drawable to a file.
+	 * @param mimeType File format as MIME type string.
+	 * @param file File to export to.
+	 * @param documentBounds Document boundary rectangle.
+	 */
+	private void export(String mimeType, File file, Rectangle2D documentBounds) {
+		try (OutputStream destination = new FileOutputStream(file)) {
+			DrawableWriter writer = DrawableWriterFactory.getInstance().get(mimeType);
+			writer.write(getDrawable(), destination,
+				documentBounds.getX(), documentBounds.getY(),
+				documentBounds.getWidth(), documentBounds.getHeight());
+		} catch (IOException | RuntimeException e) {
+			showError(FxMessages.getString("InteractiveCanvas.exportFailed"), e); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Prints the displayed drawable, asking for a printer first. Printing goes
+	 * through {@code java.awt.print}, so that the result is drawn rather than
+	 * photographed from the screen, and it runs on a thread of its own,
+	 * because the print dialog would otherwise block the display.
+	 */
+	private void print() {
+		Drawable drawable = getDrawable();
+		var printer = PrinterJob.getPrinterJob();
+		printer.setPrintable(new DrawablePrintable(drawable));
+		var thread = new Thread(() -> {
+			try {
+				if (printer.printDialog()) {
+					printer.print();
+				}
+			} catch (PrinterException | RuntimeException e) {
+				Platform.runLater(() -> showError(
+						FxMessages.getString("InteractiveCanvas.printFailed"), e)); //$NON-NLS-1$
+			}
+		}, "GRAL printing"); //$NON-NLS-1$
+		thread.setDaemon(true);
+		thread.start();
+	}
+
+	/**
+	 * Tells the user that an action failed.
+	 * @param message Text describing what did not work.
+	 * @param cause Exception that was caught.
+	 */
+	private static void showError(String message, Throwable cause) {
+		var alert = new Alert(Alert.AlertType.ERROR, message);
+		alert.setHeaderText(FxMessages.getString("InteractiveCanvas.error")); //$NON-NLS-1$
+		alert.setContentText(message + "\n" + cause.getLocalizedMessage()); //$NON-NLS-1$
+		alert.show();
+	}
+
+	/**
+	 * Draws a {@link Drawable} onto a printed page. The drawable is laid out
+	 * to the printable area for the duration of the call and restored
+	 * afterwards, so printing does not disturb what is on screen.
+	 */
+	private static final class DrawablePrintable implements Printable {
+		/** Drawable that is printed. */
+		private final Drawable drawable;
+
+		/**
+		 * Creates a printable for the specified drawable.
+		 * @param drawable Drawable to print.
+		 */
+		DrawablePrintable(Drawable drawable) {
+			this.drawable = drawable;
+		}
+
+		@Override
+		public int print(java.awt.Graphics graphics, PageFormat pageFormat, int pageIndex) {
+			if (pageIndex > 0) {
+				return Printable.NO_SUCH_PAGE;
+			}
+
+			var graphics2d = (Graphics2D) graphics;
+			AffineTransform transformOld = graphics2d.getTransform();
+			graphics2d.scale(MM_PER_PX, MM_PER_PX);
+
+			Rectangle2D boundsOld = drawable.getBounds();
+			var pageBounds = new Rectangle2D.Double(
+				pageFormat.getImageableX()/MM_PER_PX,
+				pageFormat.getImageableY()/MM_PER_PX,
+				pageFormat.getImageableWidth()/MM_PER_PX,
+				pageFormat.getImageableHeight()/MM_PER_PX
+			);
+
+			drawable.setBounds(pageBounds);
+			try {
+				drawable.draw(new DrawingContext(graphics2d));
+			} finally {
+				drawable.setBounds(boundsOld);
+			}
+			graphics2d.setTransform(transformOld);
+			return Printable.PAGE_EXISTS;
+		}
 	}
 
 	/**
