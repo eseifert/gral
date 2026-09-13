@@ -159,6 +159,56 @@ public class DataTableTest {
 	}
 
 	@Test
+	public void testInsert() {
+		int sizeBefore = table.getRowCount();
+
+		int rowIndex = table.insert(2, -1, -2);
+
+		assertEquals(sizeBefore + 1, table.getRowCount());
+		assertEquals(2, rowIndex);
+		assertEquals(-1, table.get(0, 2));
+		assertEquals(-2, table.get(1, 2));
+		// The rows that followed have moved down by one
+		assertEquals(3, table.get(0, 3));
+		assertEquals(2, table.get(1, 3));
+	}
+
+	@Test
+	public void testInsertAtTheEnd() {
+		int sizeBefore = table.getRowCount();
+
+		int rowIndex = table.insert(sizeBefore, -1, -2);
+
+		assertEquals(sizeBefore, rowIndex);
+		assertEquals(-1, table.get(0, sizeBefore));
+	}
+
+	@Test
+	public void testInsertNotifiesListeners() {
+		var listener = new MockDataListener();
+		table.addDataListener(listener);
+
+		table.insert(2, -1, -2);
+
+		assertNotNull(listener.added);
+		assertEquals(table.getColumnCount(), listener.added.length);
+		for (DataChangeEvent event : listener.added) {
+			assertEquals(2, event.getRow());
+			assertNull(event.getOld());
+		}
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testInsertBeyondTheLastRow() {
+		table.insert(table.getRowCount() + 1, -1, -2);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testInsertWithWrongNumberOfColumns() {
+		table.insert(0, -1);
+	}
+
+	@Test
 	public void testContainsARowAfterAddingARecord() {
 		var table = new DataTable();
 		var record = new Record();

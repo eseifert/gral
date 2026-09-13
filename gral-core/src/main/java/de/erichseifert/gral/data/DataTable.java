@@ -162,6 +162,40 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 	 *         number of columns, or a value does not fit its column type.
 	 */
 	public int add(List<? extends Comparable<?>> values) {
+		return insert(getRowCount(), values);
+	}
+
+	/**
+	 * Inserts a row with the specified values at the specified position. The
+	 * rows from that position on move down by one, so their indexes change.
+	 * The values are assigned to the columns in the order given. A
+	 * {@code null} is accepted in any column.
+	 * @param row Index the new row will have.
+	 * @param values values to be inserted as a row
+	 * @return Index of the row that has been inserted.
+	 * @throws IllegalArgumentException if the number of values differs from the
+	 *         number of columns, or a value does not fit its column type.
+	 * @throws IndexOutOfBoundsException if the index is negative or larger than
+	 *         the number of rows.
+	 */
+	public int insert(int row, Comparable<?>... values) {
+		return insert(row, Arrays.asList(values));
+	}
+
+	/**
+	 * Inserts a row with the elements of the specified list at the specified
+	 * position. The rows from that position on move down by one, so their
+	 * indexes change. The values are assigned to the columns in list order. A
+	 * {@code null} is accepted in any column.
+	 * @param row Index the new row will have.
+	 * @param values values to be inserted as a row
+	 * @return Index of the row that has been inserted.
+	 * @throws IllegalArgumentException if the number of values differs from the
+	 *         number of columns, or a value does not fit its column type.
+	 * @throws IndexOutOfBoundsException if the index is negative or larger than
+	 *         the number of rows.
+	 */
+	public int insert(int row, List<? extends Comparable<?>> values) {
 		DataChangeEvent[] events;
 		if (values.size() != getColumnCount()) {
 			throw new IllegalArgumentException(MessageFormat.format(
@@ -182,20 +216,18 @@ public class DataTable extends AbstractDataSource implements MutableDataSource {
 		}
 
 		// Add data to row
-		var row = new Record(values);
-		events = new DataChangeEvent[row.size()];
-		for (int columnIndex = 0; columnIndex < row.size(); columnIndex++) {
+		var record = new Record(values);
+		events = new DataChangeEvent[record.size()];
+		for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
 			Comparable<?> value = values.get(columnIndex);
-			events[columnIndex] = new DataChangeEvent(this, columnIndex, rows.size(), null, value);
+			events[columnIndex] = new DataChangeEvent(this, columnIndex, row, null, value);
 		}
 
-		int rowIndex;
 		synchronized (rows) {
-			rows.add(row);
-			rowIndex = rows.size();
+			rows.add(row, record);
 		}
 		notifyDataAdded(events);
-		return rowIndex - 1;
+		return row;
 	}
 
 	/**
