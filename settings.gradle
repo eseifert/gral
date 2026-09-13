@@ -30,5 +30,5 @@ nmcpSettings {
 
 rootProject.name = 'GRAL'
 
-include ':gral-core', ':gral-swing', ':gral-javafx',
+include ':gral-all', ':gral-core', ':gral-swing', ':gral-javafx',
 		':gral-examples', ':gral-javafx-examples'

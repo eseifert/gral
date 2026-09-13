@@ -25,6 +25,7 @@ General:
     - Added ``Navigables.getNavigableAt`` to look up a navigable
     - Added a ``gral-javafx`` module for JavaFX applications
     - Added a runnable JavaFX example application
+    - Added an aggregate ``gral`` artifact for core and Swing
 
 GRAL 0.13 (2026-09-13)
 ======================
