@@ -22,6 +22,7 @@ General:
     - The shared test helpers live in a Gradle test fixture
     - The Swing components moved into a ``gral-swing`` module
     - The library core no longer depends on ``javax.swing``
+    - Added ``Navigables.getNavigableAt`` to look up a navigable
 
 GRAL 0.13 (2026-09-13)
 ======================

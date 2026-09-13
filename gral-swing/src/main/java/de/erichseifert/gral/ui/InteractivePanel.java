@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -49,13 +48,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import de.erichseifert.gral.graphics.Container;
 import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.io.IOCapabilities;
 import de.erichseifert.gral.io.plots.DrawableWriter;
 import de.erichseifert.gral.io.plots.DrawableWriterFactory;
 import de.erichseifert.gral.navigation.Navigable;
+import de.erichseifert.gral.navigation.Navigables;
 import de.erichseifert.gral.navigation.Navigator;
 import de.erichseifert.gral.util.PointND;
 
@@ -320,7 +319,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			return;
 		}
 
-		Navigable navigable = InteractivePanel.getNavigableAt(getDrawable(), point);
+		Navigable navigable = Navigables.getNavigableAt(getDrawable(), point);
 		if (navigable == null) {
 			return;
 		}
@@ -344,7 +343,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 			return;
 		}
 
-		Navigable navigable = InteractivePanel.getNavigableAt(getDrawable(), point);
+		Navigable navigable = Navigables.getNavigableAt(getDrawable(), point);
 		if (navigable == null) {
 			return;
 		}
@@ -424,7 +423,7 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			Point point = e.getPoint();
-			navigable = InteractivePanel.getNavigableAt(panel.getDrawable(), point);
+			navigable = Navigables.getNavigableAt(panel.getDrawable(), point);
 			posPrev = point;
 		}
 
@@ -569,27 +568,4 @@ public class InteractivePanel extends DrawablePanel implements Printable {
 		actions.get("resetView").setEnabled(isZoomable() && isPannable()); //$NON-NLS-1$
 	}
 
-	/**
-	 * Returns a navigable area at the specified point, {@code null} if no
-	 * object could be found. If the specified container isn't navigable, its
-	 * children are recursively checked.
-	 * @param drawable The drawable container to check for navigable children.
-	 * @param point Position that should hit the navigable object.
-	 * @return A navigable object.
-	 */
-	private static Navigable getNavigableAt(Drawable drawable, Point2D point) {
-		List<Drawable> componentsToCheck;
-		if (drawable instanceof Container) {
-			componentsToCheck = ((Container) drawable).getDrawablesAt(point);
-		} else {
-			componentsToCheck = new ArrayList<>(1);
-			componentsToCheck.add(drawable);
-		}
-		for (Drawable component : componentsToCheck) {
-			if ((component instanceof Navigable) && component.getBounds().contains(point)) {
-				return (Navigable) component;
-			}
-		}
-		return null;
-	}
 }
