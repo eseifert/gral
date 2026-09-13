@@ -21,8 +21,8 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Arrays;
 import org.junit.Test;
@@ -35,6 +35,6 @@ public class AccumulationTest {
 
 		var accumulatedData = new Accumulation<Integer>(data);
 
-		assertThat(accumulatedData, hasItems(-5.0, -4.0, -3.0, -3.0, -1.0));
+		assertThat(accumulatedData, contains(-5.0, -4.0, -3.0, -3.0, -1.0));
 	}
 }

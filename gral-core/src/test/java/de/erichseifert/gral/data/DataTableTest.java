@@ -22,11 +22,11 @@
 package de.erichseifert.gral.data;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ import de.erichseifert.gral.TestUtils;
 import de.erichseifert.gral.data.comparators.Ascending;
 import de.erichseifert.gral.data.comparators.Descending;
 import de.erichseifert.gral.data.statistics.Statistics;
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 
 public class DataTableTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -120,7 +120,7 @@ public class DataTableTest {
 
 		var table = new DataTable(firstColumn, secondColumn);
 
-		assertThat(table.getRecord(1), CoreMatchers.<Comparable<?>>hasItems(firstColumn.get(someRowIndex), secondColumn.get(someRowIndex)));
+		assertThat(table.getRecord(1), Matchers.<Comparable<?>>contains(firstColumn.get(someRowIndex), secondColumn.get(someRowIndex)));
 	}
 
 	@Test

@@ -22,14 +22,14 @@
 package de.erichseifert.gral.util;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 import org.junit.Test;
 
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 
 public class WindowIteratorTest {
 	@Test
@@ -38,10 +38,10 @@ public class WindowIteratorTest {
 		Iterable<Object> iterable = Arrays.<Object>asList(0, 1, 2, 3, 4, 5);
 		var windowIterator = new WindowIterator<Object>(iterable.iterator(), windowSize);
 
-		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(0, 1, 2));
-		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(1, 2, 3));
-		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(2, 3, 4));
-		assertThat(windowIterator.next(), CoreMatchers.<Object>hasItems(3, 4, 5));
+		assertThat(windowIterator.next(), Matchers.<Object>contains(0, 1, 2));
+		assertThat(windowIterator.next(), Matchers.<Object>contains(1, 2, 3));
+		assertThat(windowIterator.next(), Matchers.<Object>contains(2, 3, 4));
+		assertThat(windowIterator.next(), Matchers.<Object>contains(3, 4, 5));
 	}
 
 	@Test

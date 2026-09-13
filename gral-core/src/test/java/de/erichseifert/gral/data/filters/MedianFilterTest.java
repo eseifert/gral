@@ -21,9 +21,9 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +38,7 @@ public class MedianFilterTest {
 
 		var medianFilter = new MedianFilter<Integer>(data, windowsSize);
 
-		assertThat(medianFilter, hasItems(5.0, 6.0, 5.0, 6.0));
+		assertThat(medianFilter, contains(5.0, 6.0, 5.0, 6.0));
 	}
 
 	@Test

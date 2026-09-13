@@ -46,7 +46,7 @@ import de.erichseifert.gral.data.DummyData;
 import de.erichseifert.gral.graphics.DrawingContext;
 import de.erichseifert.gral.plots.PiePlot.PieSliceRenderer;
 import de.erichseifert.gral.plots.points.PointRenderer;
-import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 
 public class PiePlotTest {
 	private static final double DELTA = TestUtils.DELTA;
@@ -135,8 +135,8 @@ public class PiePlotTest {
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertThat((Column<Double>) pieData.getColumn(0), CoreMatchers.hasItems(0.0, 1.0, 2.0));
-		assertThat((Column<Double>) pieData.getColumn(1), CoreMatchers.hasItems(1.0, 2.0, 3.0));
+		assertThat((Column<Double>) pieData.getColumn(0), Matchers.contains(0.0, 1.0, 2.0));
+		assertThat((Column<Double>) pieData.getColumn(1), Matchers.contains(1.0, 2.0, 3.0));
 	}
 
 	@Test
@@ -175,8 +175,8 @@ public class PiePlotTest {
 
 		DataSource pieData = PiePlot.createPieData(data);
 
-		assertThat((Column<Double>) pieData.getColumn(0), CoreMatchers.hasItems(0.0, 1.0, 3.0));
-		assertThat((Column<Double>) pieData.getColumn(1), CoreMatchers.hasItems(1.0, 3.0, 6.0));
+		assertThat((Column<Double>) pieData.getColumn(0), Matchers.contains(0.0, 1.0, 3.0));
+		assertThat((Column<Double>) pieData.getColumn(1), Matchers.contains(1.0, 3.0, 6.0));
 	}
 
 	@Test

@@ -21,9 +21,9 @@
  */
 package de.erichseifert.gral.data.statistics;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,14 +53,14 @@ public class HistogramTest {
 	public void testBucketsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
 		var histogram = new Histogram(data, 4);
-		assertThat(histogram, hasItems(3, 3, 0, 2));
+		assertThat(histogram, contains(3, 3, 0, 2));
 	}
 
 	@Test
 	public void testCustomBinsContainValueCounts() {
 		Iterable<Comparable<?>> data = createHistogramData();
 		var histogram = new Histogram(data, -1.0, 0.5, 2.0, 2.8, 5.0);
-		assertThat(histogram, hasItems(0, 3, 3, 2));
+		assertThat(histogram, contains(0, 3, 3, 2));
 	}
 
 	@Test

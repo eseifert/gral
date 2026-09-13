@@ -21,10 +21,9 @@
  */
 package de.erichseifert.gral.data.filters;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +37,7 @@ public class ConvolutionFilterTest {
 
 		var filter = new ConvolutionFilter<Integer>(data, kernel);
 
-		assertThat(filter, hasItems(16.0, 19.0, 15.0, 19.0));
+		assertThat(filter, contains(16.0, 19.0, 15.0, 19.0));
 	}
 
 	@Test

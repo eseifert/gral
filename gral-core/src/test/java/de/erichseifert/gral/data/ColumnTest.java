@@ -21,9 +21,9 @@
  */
 package de.erichseifert.gral.data;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -55,7 +55,7 @@ public class ColumnTest {
 
 		var column = new Column<Integer>(Integer.class, data);
 
-		assertThat(column, hasItems(1, 2, 3, 4));
+		assertThat(column, contains(1, 2, 3, 4));
 	}
 
 	@Test
