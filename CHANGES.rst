@@ -9,6 +9,9 @@ Plotting:
     - Drawing or exporting a box plot whose observations are all zero no
       longer hangs. The axis collapsed to a range of one denormal number, for
       which the linear axis renderer asked for ``Integer.MAX_VALUE`` ticks
+    - A point shape without extent no longer turns the box of a box plot
+      into NaN coordinates. Such a shape is drawn at its natural size
+      instead of being scaled onto the box
     - An auto-scaled axis whose values are all identical is given an extent
       instead of collapsing to a single point, so that the conversion between
       world and view coordinates stays defined. A collapsed range used to

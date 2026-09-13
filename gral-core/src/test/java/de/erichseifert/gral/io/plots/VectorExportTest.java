@@ -25,6 +25,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -37,6 +38,7 @@ import de.erichseifert.gral.graphics.Drawable;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.points.PointRenderer;
 
 /**
  * Checks that the vector formats receive geometry they can actually express.
@@ -141,6 +143,25 @@ public class VectorExportTest {
 		for (String format : VECTOR_FORMATS) {
 			assertNoInvalidNumbers("Xy plot over a single point exported to " + format,
 				export(createDegenerateXYPlot(), format));
+		}
+	}
+
+	@Test
+	public void testBoxPlotWithShapeWithoutExtent() throws IOException {
+		// Scaling a point shape that has no extent onto the box would divide
+		// by zero and turn every coordinate of the box into NaN.
+		var data = new DataTable(Double.class);
+		for (double value : new double[] {1.0, 2.0, 3.0, 4.0, 5.0}) {
+			data.add(value);
+		}
+		var plot = new BoxPlot(BoxPlot.createBoxData(data));
+		for (PointRenderer renderer : plot.getPointRenderers(plot.getData().get(0))) {
+			renderer.setShape(new Rectangle2D.Double(0.0, 0.0, 0.0, 0.0));
+		}
+
+		for (String format : VECTOR_FORMATS) {
+			assertNoInvalidNumbers("Box plot without a point shape exported to " + format,
+				export(plot, format));
 		}
 	}
 

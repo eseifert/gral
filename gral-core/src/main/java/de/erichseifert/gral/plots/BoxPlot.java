@@ -507,8 +507,15 @@ public class BoxPlot extends XYPlot {
 					Rectangle2D shapeBounds = shape.getBounds2D();
 					var tx = new AffineTransform();
 					tx.translate(boxBounds.getX(), boxBounds.getY());
-					tx.scale(boxBounds.getWidth()/shapeBounds.getWidth(),
-						boxBounds.getHeight()/shapeBounds.getHeight());
+					// A shape without extent in one direction cannot be scaled
+					// to the box, because the factor would be infinite and
+					// every coordinate derived from it NaN. Such a shape is
+					// drawn at its natural size instead.
+					tx.scale(
+						(shapeBounds.getWidth() == 0.0) ? 1.0
+							: boxBounds.getWidth()/shapeBounds.getWidth(),
+						(shapeBounds.getHeight() == 0.0) ? 1.0
+							: boxBounds.getHeight()/shapeBounds.getHeight());
 					tx.translate(-shapeBounds.getMinX(), -shapeBounds.getMinY());
 					Shape box = tx.createTransformedShape(shape);
 
