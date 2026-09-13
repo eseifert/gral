@@ -57,6 +57,13 @@ import de.erichseifert.gral.util.PointND;
  * makes them move together &mdash; across toolkits as well.</p>
  */
 public class InteractiveCanvas extends DrawableCanvas {
+	/**
+	 * Vertical distance that JavaFX reports for one notch of a mouse wheel.
+	 * A device that scrolls smoothly, like a touch pad, reports many smaller
+	 * distances instead, which are added up until they amount to a notch.
+	 */
+	private static final double SCROLL_NOTCH = 40.0;
+
 	/** Defines whether the displayed drawable can be zoomed. */
 	private boolean zoomable;
 
@@ -68,6 +75,9 @@ public class InteractiveCanvas extends DrawableCanvas {
 
 	/** Position of the previous drag event in canvas coordinates. */
 	private Point2D dragPosition;
+
+	/** Scroll distance that has not been turned into a zoom step yet. */
+	private double scrollOffset;
 
 	/**
 	 * Initializes a new canvas showing the specified drawable. Zooming and
@@ -165,11 +175,33 @@ public class InteractiveCanvas extends DrawableCanvas {
 	}
 
 	/**
-	 * Zooms in or out, depending on the direction of the scroll gesture.
+	 * Zooms in or out, depending on the direction of the scroll gesture. One
+	 * notch of a mouse wheel is one zoom step, as it is in Swing.
 	 * @param event Scroll event of the gesture.
 	 */
 	private void handleScroll(ScrollEvent event) {
-		zoom(getPosition(event), (event.getDeltaY() >= 0.0) ? 1 : -1);
+		double delta = event.getDeltaY();
+		/*
+		 * A notch of a mouse wheel arrives as two events, the first of which
+		 * reports no distance at all. Reading that one as a direction would
+		 * zoom in twice per notch upwards, and in and straight out again
+		 * downwards.
+		 */
+		if (delta == 0.0) {
+			return;
+		}
+		// What is left over from a gesture in the other direction is stale.
+		if (Math.signum(delta) != Math.signum(scrollOffset)) {
+			scrollOffset = 0.0;
+		}
+		scrollOffset += delta;
+
+		int notches = (int) (scrollOffset/SCROLL_NOTCH);
+		if (notches == 0) {
+			return;
+		}
+		scrollOffset -= notches*SCROLL_NOTCH;
+		zoom(getPosition(event), notches);
 	}
 
 	/**
