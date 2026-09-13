@@ -97,7 +97,6 @@ public class BarPlot extends XYPlot {
 		private final BarPlot plot;
 
 		/** Stroke to draw the border of the bar. */
-		// Custom serialization will be done with a wrapper object
 		private Stroke borderStroke;
 		/** Color to fill the border of the bar. */
 		private Paint borderColor;

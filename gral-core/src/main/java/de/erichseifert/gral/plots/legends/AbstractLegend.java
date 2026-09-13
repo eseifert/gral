@@ -75,7 +75,6 @@ public abstract class AbstractLegend extends DrawableContainer
 	/** Paint used to draw the background. */
 	private Paint background;
 	/** Stroke used to draw the border of the legend. */
-	// Property will be serialized using a wrapper
 	private Stroke borderStroke;
 	/** Font used to display the labels. */
 	private Font font;

@@ -63,8 +63,7 @@ public abstract class PlotArea extends AbstractDrawable {
 	private Font baseFont;
 	/** Paint to fill the background. */
 	private Paint background;
-	/** Stroke to draw the border.
-	Property will be serialized using a wrapper. */
+	/** Stroke to draw the border. */
 	private Stroke borderStroke;
 	/** Paint to fill the border. */
 	private Paint borderColor;

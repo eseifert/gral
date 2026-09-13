@@ -103,7 +103,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer {
 	/** Paint used to draw axis shape, ticks, and labels. */
 	private Paint shapeColor;
 	/** Stroke used for drawing the axis shape. */
-	// Property will be serialized using a wrapper
 	private Stroke shapeStroke;
 	/** Decides whether the axis direction will be changed. */
 	private boolean shapeDirectionSwapped;
@@ -117,7 +116,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer {
 	/** Tick length relative to the font */
 	private double tickLength;
 	/** Stroke which is used to draw all major ticks. */
-	// Property will be serialized using a wrapper
 	private Stroke tickStroke;
 	/** Alignment of major ticks relative to the axis. */
 	private double tickAlignment;
@@ -143,7 +141,6 @@ public abstract class AbstractAxisRenderer2D implements AxisRenderer {
 	/** Tick length relative to font height.*/
 	private double minorTickLength;
 	/** Stroke used to draw all minor ticks. */
-	// Property will be serialized using a wrapper
 	private Stroke minorTickStroke;
 	/** Minor tick alignment relative to the axis. */
 	private double minorTickAlignment;
