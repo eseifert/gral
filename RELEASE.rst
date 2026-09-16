@@ -5,11 +5,13 @@ The version is derived from ``git describe``, so a release starts by tagging the
 commit. Publishing then takes a single command, which uploads the artifacts to
 the Central Portal, waits for them to be validated, and publishes them::
 
-  $ git tag 0.13
+  $ git tag 0.15
   $ ./gradlew publish
 
-Both ``gral-core`` and ``gral-examples`` go into that one deployment, so a
-release never shows up in the Portal as two.
+All modules go into that one deployment, so a release never shows up in the
+Portal as two: ``gral-core``, ``gral-swing``, ``gral-javafx``,
+``gral-examples``, ``gral-javafx-examples`` and the aggregate ``gral``, which
+the ``gral-all`` project publishes.
 
 The build refuses to publish a version that does not come from a release tag.
 Pass ``-PcentralPublishingType=USER_MANAGED`` to stop after validation and
