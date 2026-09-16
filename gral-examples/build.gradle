@@ -9,6 +9,60 @@ dependencies {
 	implementation project(':gral-core')
 	// The examples display their plots in a window.
 	implementation project(':gral-swing')
+
+	/*
+	 * The test conventions of the library live in the test fixture of the
+	 * core, which also brings JUnit and Hamcrest along.
+	 */
+	testImplementation testFixtures(project(':gral-core'))
+}
+
+/*
+ * The golden-image harness. GoldenImageTest renders every entry of
+ * Examples.createAll() and compares it with an image checked in beside the
+ * test, which is the regression net the plot tests never were: they assert
+ * that something was painted, not that the right thing was.
+ *
+ * For that to work, everything an example would otherwise pick up from the
+ * machine has to be pinned. The random data and the two examples that read the
+ * clock go through Example.createRandom() and Example.currentTimeMillis(),
+ * which the seed property below fixes; the locale and the time zone are fixed
+ * here because tick labels are formatted through DateFormat and DecimalFormat.
+ * Headless mode is not an optimization: the export checks exist because issue
+ * #181 could hide behind the Xvfb the rest of the build runs under.
+ */
+def goldenImageDir = layout.projectDirectory
+		.dir('src/test/resources/de/erichseifert/gral/examples/golden')
+
+tasks.withType(Test).configureEach {
+	systemProperty 'java.awt.headless', 'true'
+	systemProperty 'de.erichseifert.gral.examples.reproducible', '20260916'
+	systemProperty 'user.language', 'en'
+	systemProperty 'user.country', 'US'
+	systemProperty 'user.timezone', 'UTC'
+	systemProperty 'de.erichseifert.gral.examples.golden.report',
+			layout.buildDirectory.dir('reports/golden').get().asFile.absolutePath
+}
+
+/*
+ * Rewrites the golden images from the current sources. Look at the result
+ * before committing it: a golden image regenerated without being looked at
+ * asserts nothing.
+ */
+tasks.register('updateGoldenImages', Test) {
+	description = 'Rewrites the golden images of the examples.'
+	group = 'verification'
+
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	filter {
+		includeTestsMatching 'de.erichseifert.gral.examples.GoldenImageTest'
+	}
+	// The images are an output of this task, never something to skip.
+	outputs.upToDateWhen { false }
+
+	systemProperty 'de.erichseifert.gral.examples.golden.update',
+			goldenImageDir.asFile.absolutePath
 }
 
 application {

@@ -1,0 +1,258 @@
+/*
+ * GRAL: GRAphing Library for Java(R)
+ *
+ * (C) Copyright 2009-2026 Erich Seifert <dev[at]erichseifert.de>,
+ * Michael Seifert <mseifert[at]error-reports.org>
+ *
+ * This file is part of GRAL.
+ *
+ * GRAL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GRAL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package de.erichseifert.gral.examples;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+import org.w3c.dom.Document;
+
+import de.erichseifert.gral.TestUtils;
+import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.io.plots.DrawableWriterFactory;
+
+/**
+ * <p>Exports every entry of {@link Examples#createAll()} to PNG, SVG, PDF and
+ * EPS with no display attached, and checks that the result is a document a
+ * reader would accept. This is what the headless figure claim rests on, and it
+ * is deliberately structural rather than visual: the assertions hold on any
+ * machine, whatever its fonts, which is what {@link GoldenImageTest} cannot
+ * promise.</p>
+ *
+ * <p>What is checked, per format:</p>
+ * <ul>
+ *   <li>the document is not a stub — issue #181 produced an empty file;</li>
+ *   <li>it contains no {@code NaN} and no infinite coordinate — that is the
+ *   signature of issue #142, and Java2D skips such a coordinate silently on
+ *   screen, so a plot can look right as a bitmap and still export a file that
+ *   no reader opens;</li>
+ *   <li>it starts and ends the way its format requires, and SVG parses as
+ *   well-formed XML;</li>
+ *   <li>PNG decodes back to an image of the requested size that is not
+ *   blank.</li>
+ * </ul>
+ */
+@RunWith(Parameterized.class)
+public class HeadlessExportTest {
+	/** Width of the exported page. */
+	private static final double WIDTH = 480.0;
+	/** Height of the exported page. */
+	private static final double HEIGHT = 360.0;
+
+	/**
+	 * Shortest document that is not considered a stub, in bytes. The smallest
+	 * example here is a single label, whose SVG is under a kilobyte; issue #181
+	 * produced files far below this.
+	 */
+	private static final int MINIMUM_LENGTH = 256;
+
+	/** Name of the example, which the test report is keyed by. */
+	@Parameter(0)
+	public String name;
+	/** Example that is exported. */
+	@Parameter(1)
+	public Example example;
+
+	/**
+	 * Returns one parameter set per example, named after its class.
+	 * @return The examples to export.
+	 */
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> examples() {
+		var parameters = new ArrayList<Object[]>();
+		for (Example example : Examples.createAll()) {
+			parameters.add(new Object[] {
+				example.getClass().getSimpleName(), example});
+		}
+		return parameters;
+	}
+
+	/**
+	 * Fails the whole class unless it really is running without a display.
+	 * Running these under Xvfb would defeat their purpose, and issue #181 is
+	 * exactly what goes unnoticed when they do.
+	 */
+	@BeforeClass
+	public static void requireHeadless() {
+		assertTrue("These tests have to run headless. Set "
+			+ "-Djava.awt.headless=true; the Gradle test tasks of this module "
+			+ "already do.", GraphicsEnvironment.isHeadless());
+	}
+
+	/**
+	 * Checks the PNG export, which also proves that the example paints
+	 * something without a display attached.
+	 * @throws IOException if writing or decoding the image failed.
+	 */
+	@Test
+	public void exportsPng() throws IOException {
+		byte[] document = export("image/png");
+		assertStructure("PNG", document);
+
+		BufferedImage image = ImageIO.read(new ByteArrayInputStream(document));
+		assertNotNull(name + " exported a PNG that cannot be decoded.", image);
+		assertEquals(name + " exported a PNG of the wrong width.",
+			(int) WIDTH, image.getWidth());
+		assertEquals(name + " exported a PNG of the wrong height.",
+			(int) HEIGHT, image.getHeight());
+
+		/*
+		 * TestUtils compares integer rasters, and ImageIO hands out whatever
+		 * the file uses, so the image is repainted into one.
+		 */
+		var raster = new BufferedImage(
+			image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		var graphics = raster.createGraphics();
+		try {
+			graphics.drawImage(image, 0, 0, null);
+		} finally {
+			graphics.dispose();
+		}
+		TestUtils.assertNotEmpty(name + " exported a blank PNG.", raster);
+	}
+
+	/**
+	 * Checks that the SVG export is a well-formed SVG document.
+	 * @throws Exception if writing or parsing the document failed.
+	 */
+	@Test
+	public void exportsSvg() throws Exception {
+		byte[] document = export("image/svg+xml");
+		assertStructure("SVG", document);
+
+		Document parsed = parseXml(document);
+		assertEquals(name + " exported SVG with the wrong root element.",
+			"svg", parsed.getDocumentElement().getLocalName());
+	}
+
+	/**
+	 * Checks that the PDF export carries a header and a trailer.
+	 * @throws IOException if writing the document failed.
+	 */
+	@Test
+	public void exportsPdf() throws IOException {
+		byte[] document = export("application/pdf");
+		assertStructure("PDF", document);
+
+		String text = text(document);
+		assertTrue(name + " exported a PDF without a header.",
+			text.startsWith("%PDF-"));
+		assertTrue(name + " exported a PDF without a trailer.",
+			text.contains("%%EOF"));
+	}
+
+	/**
+	 * Checks that the EPS export carries a header and a bounding box.
+	 * @throws IOException if writing the document failed.
+	 */
+	@Test
+	public void exportsEps() throws IOException {
+		byte[] document = export("application/postscript");
+		assertStructure("EPS", document);
+
+		String text = text(document);
+		assertTrue(name + " exported PostScript without a header.",
+			text.startsWith("%!PS-Adobe"));
+		assertTrue(name + " exported EPS without a bounding box.",
+			text.contains("%%BoundingBox:"));
+		assertFalse(name + " exported an EPS bounding box that is not a number.",
+			text.contains("%%BoundingBox: NaN"));
+	}
+
+	/**
+	 * Exports the example of this parameter set to the specified format.
+	 * @param mimeType Format to export to.
+	 * @return The bytes that were written.
+	 * @throws IOException if writing failed.
+	 */
+	private byte[] export(String mimeType) throws IOException {
+		Drawable drawable = example.getDrawable();
+		var destination = new ByteArrayOutputStream();
+		DrawableWriterFactory.getInstance().get(mimeType)
+			.write(drawable, destination, WIDTH, HEIGHT);
+		return destination.toByteArray();
+	}
+
+	/**
+	 * Fails when a document is a stub or holds a coordinate that no reader can
+	 * make sense of.
+	 * @param format Name of the format, for the failure message.
+	 * @param document Exported document.
+	 */
+	private void assertStructure(String format, byte[] document) {
+		String message = name + " exported to " + format;
+		assertTrue(message + " is only " + document.length + " bytes long.",
+			document.length >= MINIMUM_LENGTH);
+
+		String text = text(document);
+		assertFalse(message + " contains NaN coordinates.", text.contains("NaN"));
+		assertFalse(message + " contains infinite coordinates.",
+			text.contains("Infinity"));
+	}
+
+	/**
+	 * Returns a document as text, byte for byte. The vector formats are
+	 * text-based, and the byte-oriented parts of PDF and PNG are searched for
+	 * the same markers, so no character set may swallow a byte.
+	 * @param document Exported document.
+	 * @return The document as a string.
+	 */
+	private static String text(byte[] document) {
+		return new String(document, StandardCharsets.ISO_8859_1);
+	}
+
+	/**
+	 * Parses a document as XML without reaching out to the network.
+	 * @param document Exported document.
+	 * @return The parsed document.
+	 * @throws Exception if the document is not well-formed.
+	 */
+	private static Document parseXml(byte[] document) throws Exception {
+		var factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		// Keep the test offline: the SVG document type is not resolved.
+		factory.setFeature(
+			"http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		return factory.newDocumentBuilder().parse(
+			new ByteArrayInputStream(document));
+	}
+}
