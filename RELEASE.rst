@@ -5,7 +5,7 @@ The version is derived from ``git describe``, so a release starts by tagging the
 commit. Publishing then takes a single command, which uploads the artifacts to
 the Central Portal, waits for them to be validated, and publishes them::
 
-  $ git tag 0.15
+  $ git tag 0.16
   $ ./gradlew publish
 
 All modules go into that one deployment, so a release never shows up in the

@@ -84,7 +84,8 @@ Without build management system
 -------------------------------
 
 You can just add ``gral-core.jar`` to the classpath of your project, plus
-``gral-swing.jar`` if you want to display plots in a Swing window.
+``gral-swing.jar`` if you want to display plots in a Swing window, or
+``gral-javafx.jar`` in a JavaFX one.
 
 Using GRAL with Maven
 ---------------------
@@ -97,7 +98,7 @@ a dependency in your ``pom.xml``:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral-core</artifactId>
-        <version>0.14</version>
+        <version>0.15</version>
     </dependency>
 
 Displaying a plot in a Swing window additionally requires ``gral-swing``, and
@@ -108,8 +109,17 @@ in a JavaFX application ``gral-javafx``:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral-swing</artifactId>
-        <version>0.14</version>
+        <version>0.15</version>
     </dependency>
+
+    <dependency>
+        <groupId>de.erichseifert.gral</groupId>
+        <artifactId>gral-javafx</artifactId>
+        <version>0.15</version>
+    </dependency>
+
+The OpenJFX artifacts are specific to the platform they run on, so
+``gral-javafx`` does not depend on them; a JavaFX application brings its own.
 
 A project that used ``gral-core`` before the Swing components were split off can
 depend on ``de.erichseifert.gral:gral`` instead, which is the two of them
@@ -120,7 +130,7 @@ together:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral</artifactId>
-        <version>0.14</version>
+        <version>0.15</version>
     </dependency>
 
 Using GRAL with Gradle
@@ -129,9 +139,9 @@ Using GRAL with Gradle
 .. code:: groovy
 
     dependencies {
-        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.14'
+        implementation group: 'de.erichseifert.gral', name: 'gral-core', version: '0.15'
         // Only needed for the Swing components
-        implementation group: 'de.erichseifert.gral', name: 'gral-swing', version: '0.14'
+        implementation group: 'de.erichseifert.gral', name: 'gral-swing', version: '0.15'
     }
 
 Using GRAL with sbt
@@ -139,8 +149,8 @@ Using GRAL with sbt
 
 .. code:: scala
 
-    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.14"
-    libraryDependencies += "de.erichseifert.gral" % "gral-swing" % "0.14"
+    libraryDependencies += "de.erichseifert.gral" % "gral-core" % "0.15"
+    libraryDependencies += "de.erichseifert.gral" % "gral-swing" % "0.15"
 
 The example applications are published as ``de.erichseifert.gral:gral-examples``
 under the same version. The JAR is runnable and opens a browser for all example

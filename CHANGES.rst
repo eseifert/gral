@@ -1,4 +1,4 @@
-GRAL 0.15 (unreleased)
+GRAL 0.15 (2026-09-17)
 ======================
 
 Plotting:
@@ -28,6 +28,8 @@ General:
 Testing:
     - Every example is rendered and compared with a golden image
     - Every example is exported to PNG, SVG, PDF and EPS headless
+    - The export test inflates a PDF's compressed streams before it looks
+      for invalid coordinates in them
     - The examples render the same data and the same clock every run
     - CI runs a leg without a frame buffer and one without fonts
     - Documented the font packages a headless runtime needs
