@@ -21,8 +21,6 @@
  */
 package de.erichseifert.gral.examples.barplot;
 
-import java.util.Random;
-
 import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.data.EnumeratedData;
@@ -53,7 +51,7 @@ public class HistogramPlot extends Example {
 	@SuppressWarnings("unchecked")
 	public HistogramPlot() {
 		// Create example data
-		var random = new Random();
+		var random = createRandom();
 		var data = new DataTable(Double.class);
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			data.add(random.nextGaussian());

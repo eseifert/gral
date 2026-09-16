@@ -140,7 +140,7 @@ public class MemoryUsage extends Example implements Example.Animated {
 	@SuppressWarnings("unchecked")
 	public MemoryUsage() {
 		var data = new DataTable(Double.class, Long.class, Long.class, Long.class);
-		double time = System.currentTimeMillis();
+		double time = currentTimeMillis();
 		for (int i=BUFFER_SIZE - 1; i>=0; i--) {
 			data.add(time - i*INTERVAL, null, null, null);
 		}

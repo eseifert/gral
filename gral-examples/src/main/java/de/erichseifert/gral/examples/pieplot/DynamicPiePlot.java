@@ -45,7 +45,7 @@ import de.erichseifert.gral.plots.colors.LinearGradient;
 public class DynamicPiePlot extends Example implements Example.Adjustable {
 	private static final int SAMPLE_COUNT = 5;
 	/** Instance to generate random data values. */
-	private static final Random random = new Random();
+	private final Random random = createRandom();
 
 	private final DataTable data;
 	private final PiePlot plot;

@@ -23,6 +23,7 @@ package de.erichseifert.gral.examples;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Random;
 
 import de.erichseifert.gral.graphics.Drawable;
 
@@ -42,8 +43,35 @@ import de.erichseifert.gral.graphics.Drawable;
  * {@link Adjustable} for a single number the viewer can change, {@link Animated}
  * for an example that refreshes itself. A browser renders those with its own
  * controls.</p>
+ *
+ * <p>Most of the examples invent their data, and two of them read the clock,
+ * so no two runs look alike. That is what an example gallery wants and what a
+ * golden-image test cannot have, so both go through {@link #createRandom()}
+ * and {@link #currentTimeMillis()} rather than through {@code new Random()} and
+ * {@code System.currentTimeMillis()}. Setting the system property
+ * {@value #REPRODUCIBLE_PROPERTY} pins them, and every example then builds the
+ * same drawable every time.</p>
  */
 public abstract class Example {
+	/**
+	 * Name of the system property that pins the values which would otherwise
+	 * differ from run to run. Its value is the seed to draw random data from;
+	 * anything that is not a number selects a default seed. When the property
+	 * is absent, the examples are as random as they have always been.
+	 */
+	public static final String REPRODUCIBLE_PROPERTY =
+		"de.erichseifert.gral.examples.reproducible"; //$NON-NLS-1$
+
+	/** Seed used when the property above is set to something unparseable. */
+	private static final long DEFAULT_SEED = 20260916L;
+
+	/**
+	 * Instant the examples pretend it is while they are pinned, in milliseconds
+	 * since the epoch: 2026-01-01T00:00:00Z. Any fixed value would do; this one
+	 * gives readable tick labels.
+	 */
+	private static final long FIXED_TIME = 1767225600000L;
+
 	/** First corporate color used for normal coloring.*/
 	protected static final Color COLOR1 = new Color( 55, 170, 200);
 	/** Second corporate color used as signal color */
@@ -114,6 +142,45 @@ public abstract class Example {
 	@Override
 	public String toString() {
 		return getTitle();
+	}
+
+	/**
+	 * Returns whether the examples have been pinned to fixed data and a fixed
+	 * clock, which the system property {@value #REPRODUCIBLE_PROPERTY} does.
+	 * @return {@code true} when every run builds the same drawable.
+	 */
+	protected static boolean isReproducible() {
+		return System.getProperty(REPRODUCIBLE_PROPERTY) != null;
+	}
+
+	/**
+	 * Returns the source of random numbers an example should invent its data
+	 * from. It is seeded while the examples are pinned, so that the same
+	 * example always produces the same values, and unseeded otherwise.
+	 * @return A new random number generator.
+	 */
+	protected static Random createRandom() {
+		String value = System.getProperty(REPRODUCIBLE_PROPERTY);
+		if (value == null) {
+			return new Random();
+		}
+		long seed;
+		try {
+			seed = Long.parseLong(value.trim());
+		} catch (NumberFormatException e) {
+			seed = DEFAULT_SEED;
+		}
+		return new Random(seed);
+	}
+
+	/**
+	 * Returns the current time in milliseconds since the epoch, or a fixed
+	 * instant while the examples are pinned. An example that puts the clock on
+	 * an axis reads it from here, so that its tick labels can be compared.
+	 * @return The time an example should call now.
+	 */
+	protected static long currentTimeMillis() {
+		return isReproducible() ? FIXED_TIME : System.currentTimeMillis();
 	}
 
 	/**

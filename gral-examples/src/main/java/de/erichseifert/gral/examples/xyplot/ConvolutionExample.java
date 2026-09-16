@@ -22,7 +22,6 @@
 package de.erichseifert.gral.examples.xyplot;
 
 import java.awt.Color;
-import java.util.Random;
 
 import de.erichseifert.gral.examples.Example;
 import de.erichseifert.gral.data.DataSeries;
@@ -56,7 +55,7 @@ public class ConvolutionExample extends Example {
 	public ConvolutionExample() {
 		// Generate 200 data points
 		var data = new DataTable(Double.class, Double.class);
-		var r = new Random();
+		var r = createRandom();
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			double x = i/2.0/Math.PI;
 			double yError = Math.sqrt(3.0*0.1)*r.nextGaussian();

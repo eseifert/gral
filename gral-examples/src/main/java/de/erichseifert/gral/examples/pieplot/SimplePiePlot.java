@@ -44,7 +44,7 @@ import de.erichseifert.gral.plots.colors.LinearGradient;
 public class SimplePiePlot extends Example {
 	private static final int SAMPLE_COUNT = 10;
 	/** Instance to generate random data values. */
-	private static final Random random = new Random();
+	private final Random random = createRandom();
 
 	/**
 	 * Creates the example and its plot.

@@ -47,7 +47,7 @@ import de.erichseifert.gral.util.GraphicsUtils;
  */
 public class StackedPlots extends Example {
 	/** Instance to generate random data values. */
-	private static final Random random = new Random();
+	private final Random random = createRandom();
 
 	/**
 	 * Creates the example and both of its plots.

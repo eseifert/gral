@@ -52,7 +52,7 @@ import de.erichseifert.gral.graphics.Orientation;
  */
 public class SimpleXYPlot extends Example {
 	/** Instance to generate random data values. */
-	private static final Random random = new Random();
+	private final Random random = createRandom();
 
 	/**
 	 * Creates the example and its plot.

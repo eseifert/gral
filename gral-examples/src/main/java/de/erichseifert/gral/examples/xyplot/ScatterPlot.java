@@ -39,7 +39,7 @@ import de.erichseifert.gral.graphics.Insets2D;
 public class ScatterPlot extends Example {
 	private static final int SAMPLE_COUNT = 100000;
 	/** Instance to generate random data values. */
-	private static final Random random = new Random();
+	private final Random random = createRandom();
 
 	/**
 	 * Creates the example and its plot.
