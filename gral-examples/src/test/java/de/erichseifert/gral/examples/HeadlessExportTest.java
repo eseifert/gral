@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -223,21 +225,90 @@ public class HeadlessExportTest {
 		assertTrue(message + " is only " + document.length + " bytes long.",
 			document.length >= MINIMUM_LENGTH);
 
-		String text = text(document);
+		if ("PNG".equals(format)) {
+			/*
+			 * A bitmap holds no coordinates to be wrong, and looking for them
+			 * in its compressed bytes finds nothing but coincidences.
+			 */
+			return;
+		}
+		String text = "PDF".equals(format) ? pdfText(document) : text(document);
 		assertFalse(message + " contains NaN coordinates.", text.contains("NaN"));
 		assertFalse(message + " contains infinite coordinates.",
 			text.contains("Infinity"));
 	}
 
 	/**
-	 * Returns a document as text, byte for byte. The vector formats are
-	 * text-based, and the byte-oriented parts of PDF and PNG are searched for
-	 * the same markers, so no character set may swallow a byte.
+	 * Returns a document as text, byte for byte. SVG and EPS are text-based, so
+	 * this is the whole document; no character set may swallow a byte.
 	 * @param document Exported document.
 	 * @return The document as a string.
 	 */
 	private static String text(byte[] document) {
 		return new String(document, StandardCharsets.ISO_8859_1);
+	}
+
+	/**
+	 * <p>Returns a PDF with its content streams expanded, which is where its
+	 * coordinates are.</p>
+	 *
+	 * <p>Searching the file as it stands would be wrong twice over: a
+	 * coordinate inside a compressed stream would not be found, and the three
+	 * bytes of {@code NaN} turn up in compressed data by chance often enough to
+	 * fail a build for no reason — which is exactly what happened here.</p>
+	 *
+	 * @param document Exported document.
+	 * @return The parts of the document that hold coordinates as text.
+	 */
+	private static String pdfText(byte[] document) {
+		String raw = text(document);
+		var expanded = new StringBuilder();
+		int position = 0;
+		while (true) {
+			int start = raw.indexOf("stream", position);
+			int end = (start < 0) ? -1 : raw.indexOf("endstream", start);
+			if (end < 0) {
+				expanded.append(raw, position, raw.length());
+				return expanded.toString();
+			}
+			expanded.append(raw, position, start);
+			int from = start + "stream".length();
+			while (from < end && (raw.charAt(from) == '\r' || raw.charAt(from) == '\n')) {
+				from++;
+			}
+			expanded.append(inflate(document, from, end));
+			position = end;
+		}
+	}
+
+	/**
+	 * Returns a range of a document with the Flate compression undone, or an
+	 * empty string when it is not compressed at all — an embedded image, for
+	 * example, which carries no coordinates anyway.
+	 * @param document Exported document.
+	 * @param from First byte of the range.
+	 * @param to Byte after the range.
+	 * @return The expanded bytes as a string.
+	 */
+	private static String inflate(byte[] document, int from, int to) {
+		var inflater = new Inflater();
+		inflater.setInput(document, from, to - from);
+		var expanded = new ByteArrayOutputStream();
+		var buffer = new byte[4096];
+		try {
+			while (!inflater.finished()) {
+				int count = inflater.inflate(buffer);
+				if (count == 0) {
+					break;
+				}
+				expanded.write(buffer, 0, count);
+			}
+		} catch (DataFormatException e) {
+			// Not a Flate stream, so there is nothing to read out of it.
+		} finally {
+			inflater.end();
+		}
+		return text(expanded.toByteArray());
 	}
 
 	/**
