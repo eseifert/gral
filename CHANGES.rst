@@ -21,6 +21,13 @@ General:
     - CI installs the GTK libraries that the JavaFX tests need
     - Documented how to draw a plot with any Graphics2D
 
+Testing:
+    - Every example is rendered and compared with a golden image
+    - Every example is exported to PNG, SVG, PDF and EPS headless
+    - The examples render the same data and the same clock every run
+    - CI runs a leg without a frame buffer and one without fonts
+    - Documented the font packages a headless runtime needs
+
 GRAL 0.14 (2026-09-16)
 ======================
 

@@ -202,6 +202,24 @@ virtual frame buffer::
 
   $ xvfb-run --auto-servernum ./gradlew build
 
+The tests of ``gral-examples`` go the other way: they render every example
+without a display, export it to PNG, SVG, PDF and EPS, and compare the result
+with a golden image checked in beside them. They always run headless, whether or
+not a frame buffer is present, because that is the environment they exist to
+cover.
+
+Golden images record the font outlines of the machine that produced them, and
+those outlines decide the layout of the whole plot, not just its labels. Where
+the fonts differ, the comparison reports itself as skipped rather than failed;
+the examples are still rendered and exported everywhere. After a deliberate
+change to how something is drawn, rewrite the images with::
+
+  $ ./gradlew :gral-examples:updateGoldenImages
+
+and look at the result before committing it. A mismatch leaves the rendered
+image, the expected one and a difference image in
+``gral-examples/build/reports/golden``.
+
 Building the documentation
 --------------------------
 The GRAL Gradle project offers three sources for documentation:
@@ -237,6 +255,20 @@ Using GRAL requires Java 11 or later.
 Building GRAL from source requires a JDK 17 or later, because that is what the
 Gradle version used by the build needs. The library itself is still compiled for
 Java 11, independently of the JDK used to build it.
+
+GRAL needs a font, and that is the only thing it needs from the machine it runs
+on. Every label, tick and title is turned into a shape through the platform's
+font configuration, and the library's own defaults ask for the logical font
+``Dialog``. A minimal container image — the ``eclipse-temurin`` images among
+them — often ships neither fontconfig nor a single font file, and a plot drawn
+there either fails outright or comes out with no text in it. On a Debian or
+Ubuntu base, ``fontconfig`` together with any font package, for example
+``fonts-dejavu-core``, is enough::
+
+  apt-get install -y --no-install-recommends fontconfig fonts-dejavu-core
+
+on Alpine, ``fontconfig`` and ``ttf-dejavu``. Nothing needs to be configured
+afterwards; the logical fonts resolve to whatever is installed.
 
 Export to the vector formats EPS, PDF and SVG additionally requires
 VectorGraphics2D on the runtime class path. GRAL loads it reflectively, so those
