@@ -1,4 +1,4 @@
-GRAL 0.14 (unreleased)
+GRAL 0.14 (2026-09-16)
 ======================
 
 Plotting:
