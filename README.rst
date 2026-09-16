@@ -120,7 +120,7 @@ together:
     <dependency>
         <groupId>de.erichseifert.gral</groupId>
         <artifactId>gral</artifactId>
-        <version>0.13</version>
+        <version>0.14</version>
     </dependency>
 
 Using GRAL with Gradle

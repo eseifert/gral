@@ -1,3 +1,26 @@
+GRAL 0.15 (unreleased)
+======================
+
+Interaction:
+    - Added ``Navigables.getNavigableAt`` to look up a navigable
+    - Scrolling zooms the JavaFX canvas one step per wheel notch
+    - The JavaFX canvas has a context menu like the Swing panel
+    - Plots can be exported and printed from a JavaFX application
+
+General:
+    - The Swing components moved into a ``gral-swing`` module
+    - The library core no longer depends on ``javax.swing``
+    - Added a ``gral-javafx`` module for JavaFX applications
+    - Added an aggregate ``gral`` artifact for core and Swing
+    - Only ``gral-core`` declares the VectorGraphics2D dependency
+    - The examples are toolkit-free and shared by both browsers
+    - The JavaFX examples are the same browser as the Swing ones
+    - Examples are started through a browser, not their own main
+    - The example browser opens the example named as an argument
+    - The shared test helpers live in a Gradle test fixture
+    - CI installs the GTK libraries that the JavaFX tests need
+    - Documented how to draw a plot with any Graphics2D
+
 GRAL 0.14 (2026-09-16)
 ======================
 
@@ -19,22 +42,6 @@ General:
     - Tests assert the order and number of returned values, not just presence
     - The ``data`` serialization tests compare the restored properties
     - Tests use Hamcrest 2.2, which has order-sensitive matchers
-    - The shared test helpers live in a Gradle test fixture
-    - The Swing components moved into a ``gral-swing`` module
-    - The library core no longer depends on ``javax.swing``
-    - Added ``Navigables.getNavigableAt`` to look up a navigable
-    - Added a ``gral-javafx`` module for JavaFX applications
-    - The JavaFX examples are the same browser as the Swing ones
-    - The examples are toolkit-free and shared by both browsers
-    - The example browser opens the example named as an argument
-    - Examples are started through a browser, not their own main
-    - Scrolling zooms the JavaFX canvas one step per wheel notch
-    - The JavaFX canvas has a context menu like the Swing panel
-    - Plots can be exported and printed from a JavaFX application
-    - Added an aggregate ``gral`` artifact for core and Swing
-    - Documented how to draw a plot with any Graphics2D
-    - CI installs the GTK libraries that the JavaFX tests need
-    - Only ``gral-core`` declares the VectorGraphics2D dependency
 
 GRAL 0.13 (2026-09-13)
 ======================
