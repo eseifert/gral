@@ -21,10 +21,15 @@
  */
 package de.erichseifert.gral.io.plots;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,9 +37,11 @@ import java.nio.charset.StandardCharsets;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.graphics.Drawable;
+import de.erichseifert.gral.graphics.Label;
 import de.erichseifert.gral.plots.BarPlot;
 import de.erichseifert.gral.plots.BoxPlot;
 import de.erichseifert.gral.plots.XYPlot;
@@ -53,6 +60,9 @@ public class VectorExportTest {
 		"application/pdf",
 		"image/svg+xml"
 	};
+
+	/** Namespace the SVG elements are in. */
+	private static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 	/** Width of the exported page. */
 	private static final double WIDTH = 320.0;
@@ -167,13 +177,48 @@ public class VectorExportTest {
 
 	@Test
 	public void testSvgIsWellFormed() throws Exception {
-		byte[] document = export(createDegenerateBoxPlot(), "image/svg+xml");
+		parseSvg(export(createDegenerateBoxPlot(), "image/svg+xml"));
+	}
+
+	@Test
+	public void testTextIsNotRasterizedAfterAGradient() throws Exception {
+		/*
+		 * No vector format can express what Java 2D means by a gradient, so a
+		 * gradient fill has to be rasterized. VectorGraphics2D 0.13 then went on
+		 * rasterizing every later fill as well, which cost a plot with a
+		 * gradient background or gradient bars every axis line, tick and label:
+		 * they came out as blocks of flat color in SVG, PDF and EPS alike.
+		 * GraphicsUtils.fillPaintedShape paints a paint that is not a Color in a
+		 * graphics context of its own to keep that from spreading.
+		 */
+		var label = new Label("Test");
+		label.setBackground(new GradientPaint(
+			new Point2D.Double(0.0, 0.0), Color.BLACK,
+			new Point2D.Double(1.0, 1.0), Color.WHITE
+		));
+
+		Document svg = parseSvg(export(label, "image/svg+xml"));
+
+		assertEquals("Only the gradient background should have been rasterized.",
+			1, svg.getElementsByTagNameNS(SVG_NAMESPACE, "image").getLength());
+		assertTrue("The text of the label was rasterized instead of being "
+			+ "exported as an outline.",
+			svg.getElementsByTagNameNS(SVG_NAMESPACE, "path").getLength() > 0);
+	}
+
+	/**
+	 * Parses an exported document as XML without reaching out to the network.
+	 * @param document Exported document.
+	 * @return The parsed document.
+	 * @throws Exception if the document is not well-formed.
+	 */
+	private static Document parseSvg(byte[] document) throws Exception {
 		var factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		// The SVG document type is not resolved, so that the test stays offline
 		factory.setFeature(
 			"http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-		factory.newDocumentBuilder().parse(
-			new java.io.ByteArrayInputStream(document));
+		return factory.newDocumentBuilder().parse(
+			new ByteArrayInputStream(document));
 	}
 }

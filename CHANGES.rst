@@ -1,6 +1,10 @@
 GRAL 0.15 (unreleased)
 ======================
 
+Plotting:
+    - Text, axes and ticks are no longer rasterized in EPS, PDF and SVG
+      exports of a plot that uses a gradient anywhere
+
 Interaction:
     - Added ``Navigables.getNavigableAt`` to look up a navigable
     - Scrolling zooms the JavaFX canvas one step per wheel notch

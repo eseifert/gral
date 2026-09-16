@@ -80,6 +80,9 @@ public class HeadlessExportTest {
 	/** Height of the exported page. */
 	private static final double HEIGHT = 360.0;
 
+	/** Namespace the SVG elements are in. */
+	private static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+
 	/**
 	 * Shortest document that is not considered a stub, in bytes. The smallest
 	 * example here is a single label, whose SVG is under a kilobyte; issue #181
@@ -164,6 +167,18 @@ public class HeadlessExportTest {
 		Document parsed = parseXml(document);
 		assertEquals(name + " exported SVG with the wrong root element.",
 			"svg", parsed.getDocumentElement().getLocalName());
+
+		/*
+		 * A gradient has to be rasterized, because no vector format can express
+		 * what Java 2D means by one. Everything else has to survive as
+		 * geometry, and for a while none of it did: one gradient made
+		 * VectorGraphics2D rasterize every later fill, so all the text in every
+		 * export came out as blocks of flat color. A document that is nothing
+		 * but images is that bug again.
+		 */
+		assertTrue(name + " exported an SVG made only of raster images. "
+			+ "Text and lines have to stay geometry.",
+			parsed.getElementsByTagNameNS(SVG_NAMESPACE, "path").getLength() > 0);
 	}
 
 	/**

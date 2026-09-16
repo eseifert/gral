@@ -179,7 +179,21 @@ public abstract class GraphicsUtils {
 	}
 
 	/**
-	 * Fills a Shape with the specified Paint object.
+	 * <p>Fills a Shape with the specified Paint object.</p>
+	 *
+	 * <p>A paint that is not a plain {@code Color} is painted in a graphics
+	 * context of its own. No vector format can express a gradient the way Java
+	 * 2D does, so a vector backend rasterizes such a fill — but
+	 * VectorGraphics2D 0.13 then keeps rasterizing <em>every</em> later fill as
+	 * well, until it sees a context disposed: its
+	 * {@code FillPaintedShapeAsImageFilter} remembers the last {@code setPaint}
+	 * and clears that memory only on dispose, while {@code setPaint(Color)}
+	 * goes through a command it does not watch. A plot whose background or bars
+	 * use a gradient therefore lost every axis line, tick and label drawn after
+	 * it: they came out as blocks of flat color. Disposing the context keeps
+	 * the rasterization to the one fill that needs it. Plain colors, which is
+	 * what the per-point render paths use, take the cheap route.</p>
+	 *
 	 * @param graphics Graphics to be painted into.
 	 * @param shape Shape to be filled.
 	 * @param paint Paint to be used.
@@ -196,22 +210,30 @@ public abstract class GraphicsUtils {
 		if (paintBounds.getWidth() == 0.0 || paintBounds.getHeight() == 0.0) {
 			return;
 		}
-		AffineTransform txOrig = graphics.getTransform();
-		graphics.translate(paintBounds.getX(), paintBounds.getY());
-		graphics.scale(paintBounds.getWidth(), paintBounds.getHeight());
-		Paint paintOld = null;
-		if (paint != null) {
-			paintOld = graphics.getPaint();
-			graphics.setPaint(paint);
+		boolean isolated = paint != null && !(paint instanceof Color);
+		Graphics2D g = isolated ? (Graphics2D) graphics.create() : graphics;
+		try {
+			AffineTransform txOrig = g.getTransform();
+			g.translate(paintBounds.getX(), paintBounds.getY());
+			g.scale(paintBounds.getWidth(), paintBounds.getHeight());
+			Paint paintOld = null;
+			if (paint != null) {
+				paintOld = g.getPaint();
+				g.setPaint(paint);
+			}
+			AffineTransform tx = AffineTransform.getScaleInstance(
+					1.0/paintBounds.getWidth(), 1.0/paintBounds.getHeight());
+			tx.translate(-paintBounds.getX(), -paintBounds.getY());
+			g.fill(tx.createTransformedShape(shape));
+			if (paintOld != null) {
+				g.setPaint(paintOld);
+			}
+			g.setTransform(txOrig);
+		} finally {
+			if (isolated) {
+				g.dispose();
+			}
 		}
-		AffineTransform tx = AffineTransform.getScaleInstance(
-				1.0/paintBounds.getWidth(), 1.0/paintBounds.getHeight());
-		tx.translate(-paintBounds.getX(), -paintBounds.getY());
-		graphics.fill(tx.createTransformedShape(shape));
-		if (paintOld != null) {
-			graphics.setPaint(paintOld);
-		}
-		graphics.setTransform(txOrig);
 	}
 
 	/**
